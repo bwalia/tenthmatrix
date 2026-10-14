@@ -1,0 +1,125 @@
+@use '../../../../styles/mixins' as *;
+
+.crumbs {
+  order: -1;
+}
+
+.notice {
+  max-width: 72ch;
+  padding: var(--tm-space-5) var(--tm-space-6);
+  border: 1px solid var(--tm-line);
+  border-left: 3px solid var(--tm-secondary);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-secondary-soft);
+  color: var(--tm-text);
+  font-size: var(--tm-text-sm);
+}
+
+.noticeLabel {
+  @include eyebrow;
+  color: var(--tm-secondary);
+  margin-bottom: var(--tm-space-2);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin: 0 0 var(--tm-space-5);
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--tm-line);
+    border-radius: var(--tm-radius-pill);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-2xs);
+    color: var(--tm-text-muted);
+  }
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  font-size: var(--tm-text-sm);
+
+  th,
+  td {
+    padding: var(--tm-space-3) var(--tm-space-4);
+    border-bottom: 1px solid var(--tm-line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    background: var(--tm-sunken);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-2xs);
+    font-weight: var(--tm-weight-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tm-text-subtle);
+    white-space: nowrap;
+  }
+
+  tbody th {
+    font-weight: var(--tm-weight-semibold);
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  td {
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-muted);
+  }
+}
+
+.kind {
+  display: inline-block;
+  margin-bottom: var(--tm-space-1);
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--tm-radius-pill);
+  background: var(--tm-sunken);
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-2xs);
+
+  &[data-kind='independent'] {
+    background: var(--tm-accent-soft);
+    color: var(--tm-accent);
+  }
+
+  &[data-kind='vendor_reported'] {
+    background: var(--tm-secondary-soft);
+    color: var(--tm-secondary);
+  }
+}
+
+.src {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  font-family: var(--tm-font-body);
+}
+
+.caveat {
+  margin-top: var(--tm-space-4);
+  max-width: 72ch;
+  color: var(--tm-text-subtle);
+  font-size: var(--tm-text-sm);
+}

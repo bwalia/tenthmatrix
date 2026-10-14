@@ -1,4 +1,4 @@
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { getPostListPage, getBlogTags } from '@/lib/cms';
 import BlogListing from '@/app/components/blog/BlogListing';
@@ -8,7 +8,8 @@ export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
-  return { title: 'Blog', alternates: { canonical: `/${locale}/docs/blogs` } };
+  const t = await getTranslations({ locale, namespace: 'blog' });
+  return { title: t('title'), description: t('subtitle'), alternates: { canonical: `/${locale}/docs/blogs` } };
 }
 
 export default async function BlogsHome({ params }) {

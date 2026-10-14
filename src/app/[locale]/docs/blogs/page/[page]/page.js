@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { getPostListPage, getBlogTags } from '@/lib/cms';
 import BlogListing from '@/app/components/blog/BlogListing';
@@ -14,8 +14,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { page, locale } = await params;
   const n = parseInt(page || '1', 10);
+  const t = await getTranslations({ locale });
   return {
-    title: `Blog — page ${n}`,
+    title: t('blog.pageTitle', { page: n }),
     alternates: { canonical: `/${locale}/docs/blogs/page/${n}` },
   };
 }

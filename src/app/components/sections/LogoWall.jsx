@@ -19,7 +19,7 @@ export default function LogoWall({ items, locale, size = 'md' }) {
         const inner = (
           <>
             {logo ? (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img src={logo} alt="" loading="lazy" className={styles.logo} />
             ) : (
               it.icon &&

@@ -1,15 +1,30 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import ErrorState from '@/app/components/feedback/ErrorState';
+import { Button } from '@/app/components';
 
-export default function Error({ reset }) {
+export default function Error({ error, reset }) {
   const t = useTranslations('errors');
+  const locale = useLocale();
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
   return (
-    <section className="tm-container tm-error">
-      <h1>{t('somethingWrong')}</h1>
-      <button type="button" className="tm-button tm-tap" onClick={() => reset()}>
-        {t('tryAgain')}
-      </button>
-    </section>
+    <ErrorState
+      variant="error"
+      eyebrow={t('errorEyebrow')}
+      title={t('somethingWrong')}
+      body={t('errorBody')}
+      actions={
+        <>
+          <Button onClick={() => reset()}>{t('tryAgain')}</Button>
+          <Button href={`/${locale}/articles`} variant="secondary">
+            {t('browseArticles')}
+          </Button>
+        </>
+      }
+    />
   );
 }

@@ -1,47 +1,57 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { loadArticles } from '@/utils/articlesLocale';
-import { stripHtml, truncate } from '@/utils/text';
-import PostCard from '@/app/components/blog/PostCard';
+import { articleCard } from '@/lib/contentView';
+import { ArticleCard, Eyebrow } from '@/app/components';
 
 export const dynamic = 'force-static';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'articlesPage' });
-  return { title: t('title'), description: t('subtitle'), alternates: { canonical: `/${locale}/articles` } };
+  const tm = await getTranslations({ locale });
+  return { title: tm('articlesPage.title'), description: tm('articlesPage.subtitle'), alternates: { canonical: `/${locale}/articles` } };
 }
 
 export default async function ArticlesPage({ params }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = await getTranslations({ locale, namespace: 'articlesPage' });
+  const t = await getTranslations({ locale });
   const articles = await loadArticles(locale);
-  const items = (articles?.data?.content || []).map((a) => ({
-    slug: a.code,
-    title: a.title,
-    excerpt: truncate(stripHtml(a.sub_title || a.content || '')),
-    cover_image: a.image,
-    published_date: a.publish_date ? new Date(Number(a.publish_date) * 1000).toISOString() : null,
-  }));
+  const items = (articles?.data?.content || [])
+    .filter((a) => a?.code)
+    .map((a) => articleCard(a, locale, t))
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+  const [featured, ...rest] = items;
 
   return (
-    <div className="tm-container tm-listing">
-      <header className="tm-listing__head">
-        <p className="tm-eyebrow">{t('eyebrow')}</p>
-        <h1>{t('title')}</h1>
-        <p className="tm-lede">{t('subtitle')}</p>
+    <>
+      <header className="tm-page-head">
+        <div className="tm-page-head__inner">
+          <Eyebrow>{t('articlesPage.eyebrow')}</Eyebrow>
+          <h1>{t('articlesPage.title')}</h1>
+          <p className="tm-lede">{t('articlesPage.subtitle')}</p>
+          <p className="tm-eyebrow">{t('articlesPage.count', { count: items.length })}</p>
+        </div>
       </header>
-      {items.length ? (
-        <ul className="tm-post-list">
-          {items.map((a) => (
-            <li key={a.slug}>
-              <PostCard post={a} locale={locale} href={`/${locale}/articles/${a.slug}`} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>{t('empty')}</p>
-      )}
-    </div>
+      <div className="tm-page-body">
+        {items.length ? (
+          <>
+            {featured && rest.length > 2 ? (
+              <div style={{ marginBottom: 'var(--tm-grid-gap)' }}>
+                <ArticleCard {...featured} locale={locale} headingLevel="h2" variant="feature" />
+              </div>
+            ) : null}
+            <ul className="tm-grid">
+              {(rest.length > 2 ? rest : items).map((a) => (
+                <li key={a.href}>
+                  <ArticleCard {...a} locale={locale} headingLevel="h2" />
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <p className="tm-empty">{t('articlesPage.empty')}</p>
+        )}
+      </div>
+    </>
   );
 }

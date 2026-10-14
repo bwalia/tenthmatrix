@@ -109,8 +109,10 @@
   height: 40px;
   flex: none;
   border-radius: var(--tm-radius-sm);
-  object-fit: cover;
-  background: var(--tm-sunken);
+  object-fit: contain;
+  padding: 4px;
+  border: 1px solid var(--tm-line);
+  background: var(--tm-surface);
 }
 
 .tags {

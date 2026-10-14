@@ -3,6 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { Heart } from 'lucide-react';
+import s from './Engagement.module.scss';
 
 function subscribe(cb) {
   window.addEventListener('storage', cb);
@@ -57,10 +58,10 @@ export default function LikeButton({ slug }) {
   };
 
   return (
-    <button type="button" className="tm-like tm-tap" aria-pressed={liked} onClick={toggle}>
-      <Heart aria-hidden="true" size={18} fill={liked ? 'currentColor' : 'none'} />
+    <button type="button" className={`tm-like ${s.like}`} aria-pressed={liked} onClick={toggle}>
+      <Heart aria-hidden="true" size={18} strokeWidth={1.75} fill={liked ? 'currentColor' : 'none'} />
       <span>{liked ? t('liked') : t('like')}</span>
-      {typeof count === 'number' ? <span className="tm-like__count"> · {t('likes', { count })}</span> : null}
+      {typeof count === 'number' ? <span className={s.count}>{t('likes', { count })}</span> : null}
     </button>
   );
 }

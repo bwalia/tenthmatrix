@@ -4,12 +4,13 @@ import { locales } from '@/utils/getMessages';
 
 export const SITE_URL = 'https://www.tenthmatrix.com';
 
-/** Page JSON for a locale (falls back to en); null if the file is missing. */
+/** Page JSON for a locale (falls back to en); null only if the file is missing. */
 export async function loadPage(file, locale) {
   try {
     return await loadLocaleData(file, locale);
-  } catch {
-    return null;
+  } catch (err) {
+    if (err?.code === 'ENOENT') return null;
+    throw err; // broken JSON should fail the build, not render a 404
   }
 }
 

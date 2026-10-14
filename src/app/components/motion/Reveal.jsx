@@ -7,7 +7,7 @@ const EASE_OUT = [0.16, 1, 0.3, 1]; // --tm-ease-out
 /**
  * "The step" (BRAND.md §10): children arrive with a short rise + fade,
  * staggered 40ms like cells filling a row. Use `stagger` on a list wrapper and
- * <Reveal.Item> for each child, or plain <Reveal> for a single block.
+ * <RevealItem> for each child, or plain <Reveal> for a single block.
  * Reduced motion: renders static markup (no transforms, no opacity tween).
  *
  * props: as ('div'), stagger (bool), delay (s), y (px, default 10), once (default true), className
@@ -36,7 +36,7 @@ export default function Reveal({ as = 'div', stagger = false, delay = 0, y = 10,
   );
 }
 
-function RevealItem({ as = 'div', y = 10, className, children, ...rest }) {
+export function RevealItem({ as = 'div', y = 10, className, children, ...rest }) {
   const reduce = useReducedMotion();
   if (reduce) {
     const Plain = as;
@@ -58,4 +58,3 @@ function RevealItem({ as = 'div', y = 10, className, children, ...rest }) {
   );
 }
 
-Reveal.Item = RevealItem;

@@ -211,3 +211,10 @@
     overflow-wrap: anywhere;
   }
 }
+
+// Checklist inside the design CTA (night band): full width, inherits the band's text colour.
+.ctaList {
+  width: 100%;
+  max-width: 40rem;
+  margin-top: var(--tm-space-2);
+}

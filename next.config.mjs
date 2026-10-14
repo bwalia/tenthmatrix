@@ -14,8 +14,9 @@ const nextConfig = {
     // The CMS data layer reads committed JSON at runtime (fs) as the API-down
     // fallback. Runtime fs reads aren't auto-traced into the standalone bundle,
     // so include the data dir explicitly — else the fallback renders empty.
+    // src/lib/og-fonts: static TTFs read by src/lib/ogImage.js for ISR'd OG images.
     outputFileTracingIncludes: {
-        '/**': ['./src/app/data/**'],
+        '/**': ['./src/app/data/**', './src/lib/og-fonts/**'],
     },
     images: {
         unoptimized: true,

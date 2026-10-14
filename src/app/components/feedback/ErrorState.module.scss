@@ -1,0 +1,80 @@
+@use '../../styles/mixins' as *;
+
+.wrap {
+  background: var(--tm-gradient-wash);
+}
+
+.inner {
+  @include container;
+  display: grid;
+  gap: var(--tm-space-10);
+  align-items: center;
+  min-height: min(70vh, 640px);
+  padding-block: var(--tm-space-16);
+
+  @include up($bp-md) {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--tm-space-16);
+  }
+}
+
+.glyph {
+  width: clamp(120px, 20vw, 200px);
+  height: auto;
+}
+
+.cell {
+  fill: var(--tm-text);
+}
+
+.missing {
+  fill: none;
+  stroke: var(--tm-line-strong);
+  stroke-width: 0.5;
+  stroke-dasharray: 1 1;
+}
+
+.broken {
+  fill: var(--tm-danger);
+}
+
+.tenth {
+  fill: var(--tm-accent);
+}
+
+.copy {
+  display: grid;
+  gap: var(--tm-space-5);
+  justify-items: start;
+  max-width: 60ch;
+}
+
+.eyebrow {
+  @include eyebrow;
+  display: flex;
+  align-items: center;
+  gap: var(--tm-space-3);
+}
+
+.code {
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--tm-radius-xs);
+  background: var(--tm-text);
+  color: var(--tm-bg);
+}
+
+.title {
+  font-size: var(--tm-text-4xl);
+}
+
+.body {
+  font-size: var(--tm-text-md);
+  color: var(--tm-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-3);
+  margin-top: var(--tm-space-2);
+}

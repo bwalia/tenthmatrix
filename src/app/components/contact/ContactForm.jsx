@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { CheckCircle2, AlertCircle, Send } from 'lucide-react';
 import { leadsEndpoint } from '@/utils/opsapiEnv.mjs';
+import s from './ContactForm.module.scss';
 
 /* Where enquiries go: the OpsAPI public CRM lead-capture endpoint,
    POST {base}/api/v2/public/leads/tenthmatrix.
@@ -80,21 +82,27 @@ export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form
   };
 
   const field = (name, label, props = {}) => (
-    <div className="tm-field">
-      <label htmlFor={`tm-${name}`}>{label}</label>
+    <div className={`${s.field} ${props.wide ? s.wide : ''}`}>
+      <label className="tm-label" htmlFor={`tm-${name}`}>
+        {label}
+        {props.optional ? <span className={s.optional}> {t('optional')}</span> : null}
+      </label>
       {props.multiline ? (
         <textarea
           id={`tm-${name}`}
+          className="tm-input"
           name={name}
-          rows={5}
+          rows={6}
           value={form[name]}
           onChange={set(name)}
           aria-invalid={!!errors[name]}
-          aria-describedby={errors[name] ? `tm-${name}-err` : undefined}
+          aria-describedby={errors[name] ? `tm-${name}-err` : props.hint ? `tm-${name}-hint` : undefined}
+          aria-required={!props.optional}
         />
       ) : (
         <input
           id={`tm-${name}`}
+          className="tm-input"
           name={name}
           type={props.type || 'text'}
           autoComplete={props.autoComplete}
@@ -102,10 +110,17 @@ export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form
           onChange={set(name)}
           aria-invalid={!!errors[name]}
           aria-describedby={errors[name] ? `tm-${name}-err` : undefined}
+          aria-required={!props.optional}
         />
       )}
+      {props.hint && !errors[name] ? (
+        <p id={`tm-${name}-hint`} className={s.hint}>
+          {props.hint}
+        </p>
+      ) : null}
       {errors[name] ? (
-        <p id={`tm-${name}-err`} className="tm-field__error">
+        <p id={`tm-${name}-err`} className={s.error}>
+          <AlertCircle aria-hidden="true" size={14} />
           {errors[name]}
         </p>
       ) : null}
@@ -113,21 +128,35 @@ export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form
   );
 
   return (
-    <form className="tm-form tm-contact-form" onSubmit={submit} noValidate>
+    <form className={`tm-form tm-contact-form ${s.form}`} onSubmit={submit} noValidate>
       {field('name', t('name'), { autoComplete: 'name' })}
       {field('email', t('email'), { type: 'email', autoComplete: 'email' })}
-      {field('phone', t('phone'), { type: 'tel', autoComplete: 'tel' })}
-      {field('comments', t('message'), { multiline: true })}
+      {field('phone', t('phone'), { type: 'tel', autoComplete: 'tel', optional: true, wide: true })}
+      {field('comments', t('message'), { multiline: true, wide: true, hint: t('messageHint') })}
       <div className="tm-visually-hidden" aria-hidden="true">
         <label htmlFor="tm-website">Website</label>
         <input id="tm-website" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
       </div>
-      <button type="submit" className="tm-button tm-tap" disabled={status === 'sending'}>
-        {status === 'sending' ? t('sending') : t('submit')}
-      </button>
-      <p role="status" aria-live="polite" className="tm-form__status">
-        {status === 'done' ? t('submitSuccess') : status === 'error' ? t('submitError') : ''}
-      </p>
+      <div className={s.foot}>
+        <button type="submit" className={s.submit} disabled={status === 'sending'}>
+          <Send aria-hidden="true" size={18} strokeWidth={1.75} />
+          {status === 'sending' ? t('sending') : t('submit')}
+        </button>
+        <p className={s.privacy}>{t('privacy')}</p>
+      </div>
+      <div role="status" aria-live="polite" className={s.statusWrap}>
+        {status === 'done' ? (
+          <p className={s.success}>
+            <CheckCircle2 aria-hidden="true" size={18} />
+            {t('submitSuccess')}
+          </p>
+        ) : status === 'error' ? (
+          <p className={s.failure}>
+            <AlertCircle aria-hidden="true" size={18} />
+            {t('submitError')}
+          </p>
+        ) : null}
+      </div>
     </form>
   );
 }

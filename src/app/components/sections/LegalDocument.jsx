@@ -43,12 +43,13 @@ export function ContactMethods({ methods, locale }) {
 }
 
 function Items({ items }) {
-  if (!items?.length) return null;
+  if (!Array.isArray(items) || !items.length) return null;
   return (
     <ul className={styles.items}>
       {items.map((it, i) => (
         <li key={i}>
-          <RichText as="span" text={typeof it === 'string' ? it : it.title || it.name} />
+          {(typeof it === 'string' || it.title || it.name) && <RichText as="span" text={typeof it === 'string' ? it : it.title || it.name} />}
+          {typeof it === 'object' && it.right && <strong>{it.right}</strong>}
           {typeof it === 'object' && it.description && <> — <RichText as="span" text={it.description} /></>}
         </li>
       ))}
@@ -92,6 +93,14 @@ export default function LegalDocument({ data, ui, locale, extraSections = [] }) 
             {s.content && <Paragraphs text={s.content} />}
             {s.description && <Paragraphs text={s.description} />}
             <Items items={s.items} />
+            <Items items={s.rights} />
+            <Items items={s.details} />
+            <Items items={s.safeguards} />
+            {[s.howToExercise, s.contact, s.recommendation, s.disclaimer]
+              .filter((t) => typeof t === 'string' && t)
+              .map((t, k) => (
+                <RichText key={k} text={t} className={styles.details} />
+              ))}
             {s.subsections?.map((sub, j) => (
               <div key={j} className={styles.sub}>
                 {sub.subtitle && <h3 className={styles.h3}>{sub.subtitle}</h3>}

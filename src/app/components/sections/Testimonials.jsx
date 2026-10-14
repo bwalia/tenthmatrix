@@ -38,7 +38,7 @@ export default function Testimonials({ items, columns = 3, metricLabels = {} }) 
               {(who || org) && (
                 <figcaption className={styles.cite}>
                   {img && (
-                    // eslint-disable-next-line @next/next/no-img-element
+                     
                     <img src={img} alt="" loading="lazy" className={styles.avatar} />
                   )}
                   <span>

@@ -1,0 +1,114 @@
+@use '../../styles/mixins' as *;
+
+.page {
+  background: var(--tm-gradient-wash);
+}
+
+.inner {
+  @include container;
+  display: grid;
+  gap: var(--tm-space-10);
+  padding-block: clamp(2.5rem, 1.6rem + 3.6vw, 5rem) var(--tm-space-section);
+
+  @include up($bp-lg) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--tm-space-16);
+    align-items: start;
+  }
+}
+
+.intro {
+  display: grid;
+  gap: var(--tm-space-5);
+  justify-items: start;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--tm-text-4xl);
+}
+
+.facts {
+  display: grid;
+  gap: var(--tm-space-3);
+  margin: var(--tm-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-3);
+    color: var(--tm-text-muted);
+  }
+
+  svg {
+    flex: none;
+    color: var(--tm-accent);
+  }
+
+  a {
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-sm);
+  }
+}
+
+.next {
+  margin-top: var(--tm-space-4);
+  padding-top: var(--tm-space-6);
+  border-top: 1px solid var(--tm-line);
+  width: 100%;
+
+  ol {
+    display: grid;
+    gap: var(--tm-space-3);
+    margin: var(--tm-space-4) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: n;
+  }
+
+  li {
+    position: relative;
+    padding-left: var(--tm-space-10);
+    color: var(--tm-text-muted);
+    counter-increment: n;
+
+    &::before {
+      content: counter(n, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 0.1em;
+      font-family: var(--tm-font-mono);
+      font-size: var(--tm-text-sm);
+      color: var(--tm-accent);
+    }
+  }
+}
+
+.nextTitle {
+  font-size: var(--tm-text-lg);
+  font-family: var(--tm-font-body);
+  letter-spacing: 0;
+}
+
+.art {
+  width: 100%;
+  max-width: 320px;
+  margin-top: var(--tm-space-6);
+
+  @include down($bp-lg) {
+    display: none;
+  }
+}
+
+.formCard {
+  @include card-surface;
+  padding: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  min-width: 0;
+}
+
+.formTitle {
+  margin-bottom: var(--tm-space-6);
+  font-size: var(--tm-text-xl);
+}

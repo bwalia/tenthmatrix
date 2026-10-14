@@ -22,7 +22,6 @@ export default function MarketingLanding({ data, locale }) {
   const h = data.header || {};
   const visual = h.visual?.src ? (
     <figure className={s.heroMedia}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={h.visual.src} alt={h.visual.alt || ''} width={h.visual.width || 1400} height={h.visual.height || 720} fetchPriority="high" />
     </figure>
   ) : (

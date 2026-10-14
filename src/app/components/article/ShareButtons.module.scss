@@ -1,0 +1,43 @@
+@use '../../styles/mixins' as *;
+
+.share {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--tm-space-3);
+}
+
+.label {
+  @include eyebrow;
+}
+
+.list {
+  display: flex;
+  gap: var(--tm-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.btn {
+  display: inline-grid;
+  place-items: center;
+  width: var(--tm-tap-target);
+  height: var(--tm-tap-target);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface);
+  color: var(--tm-text-muted);
+  transition:
+    color var(--tm-duration-fast) var(--tm-ease-standard),
+    border-color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &:hover {
+    color: var(--tm-accent);
+    border-color: var(--tm-accent-line);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

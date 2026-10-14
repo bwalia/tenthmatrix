@@ -45,7 +45,7 @@ function Video({ v, playLabel, watchLabel, headingLevel }) {
         ) : (
           <>
             {thumb ? (
-              // eslint-disable-next-line @next/next/no-img-element
+               
               <img src={thumb} alt={v.thumbnailAlt || ''} loading="lazy" className={styles.thumb} />
             ) : (
               <div className={styles.placeholder} aria-hidden="true">
