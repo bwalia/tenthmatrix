@@ -1,0 +1,330 @@
+{
+  "slug": "building-jev-agent-harness",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "Building a Jev agent harness",
+  "subtitle": "TenthMatrix’s reference architecture for planners, fast decision layers, routers, tool gates and evaluators — inspired by public LangChain patterns, implemented as our own design.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "20 min",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": null,
+  "hero_image": "/img/insights/agent-harness.svg",
+  "hero_alt": "Building a Jev agent harness",
+  "meta": {
+    "title": "Building a Jev agent harness | TenthMatrix Insights",
+    "description": "TenthMatrix’s reference architecture for planners, fast decision layers, routers, tool gates and evaluators — inspired by public LangChain patterns, implem",
+    "keywords": "Jev, System One, AI agents, model routing, TenthMatrix Insights, LLM",
+    "og_image": "/img/insights/agent-harness.svg"
+  },
+  "takeaways": [
+    "Keep the planner generative; insert decision models at routing, safety and evaluation seams.",
+    "Middleware beats prompt-only policy for tool risk.",
+    "Record distributions, versions and gate outcomes for every decision."
+  ],
+  "toc": [
+    {
+      "id": "why",
+      "label": "Why this matters"
+    },
+    {
+      "id": "loop",
+      "label": "Reference loop"
+    },
+    {
+      "id": "layer",
+      "label": "Fast decision layer responsibilities"
+    },
+    {
+      "id": "code",
+      "label": "Original TenthMatrix sketch (TypeScript-ish)"
+    },
+    {
+      "id": "otel",
+      "label": "Observability"
+    },
+    {
+      "id": "limits",
+      "label": "Limitations"
+    },
+    {
+      "id": "extended-notes",
+      "label": "Extended implementation notes"
+    },
+    {
+      "id": "conclusion",
+      "label": "Conclusion"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "Why this matters",
+      "id": "why"
+    },
+    {
+      "type": "p",
+      "text": "Harnesses are where agents become software. The planner can be clever and still be unsafe, slow or bankrupt if every micro-decision is another frontier completion. LangChain’s public Jev post shows two concrete seams — model routing middleware and Auto Mode tool gating. TenthMatrix generalises those seams into a full loop you can implement with Jev or with any calibrated decision backend."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/agent-harness.svg",
+      "caption": "TenthMatrix original harness: planner → fast decisions → tools/models → evaluator.",
+      "alt": "TenthMatrix original harness: planner → fast decisions → tools/models → evaluator."
+    },
+    {
+      "type": "h2",
+      "text": "Reference loop",
+      "id": "loop"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Ingest user request and memory/context.",
+        "Planner (LLM/reasoning) proposes next action.",
+        "Fast decision layer scores routing, risk and stop conditions.",
+        "Execute tool or generative step.",
+        "Observe results.",
+        "Evaluator classifies healthy / retry / escalate / failed.",
+        "Repeat with budget caps."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Fast decision layer responsibilities",
+      "id": "layer"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Seam",
+        "Question shape",
+        "Action"
+      ],
+      "rows": [
+        [
+          "Model routing",
+          "Choice over model tiers",
+          "Bind model for the run or step"
+        ],
+        [
+          "Tool safety",
+          "Noul/Score on risk",
+          "Allow / deny / escalate"
+        ],
+        [
+          "Failure detection",
+          "Choice over health labels",
+          "Retry policy or handoff"
+        ],
+        [
+          "RAG answerability",
+          "Noul + Score on support",
+          "Answer, abstain, retrieve more"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Original TenthMatrix sketch (TypeScript-ish)",
+      "id": "code"
+    },
+    {
+      "type": "code",
+      "text": "type Gate = 'act' | 'review' | 'escalate'\n\nasync function safetyGate(toolCall, state): Promise<Gate> {\n  const ans = await decisionModel.ask({\n    state: { toolCall, transcripts: state.trace.slice(-6) },\n    questions: {\n      irreversible: { type: 'noul', instructions: 'Irreversible prod mutation?' },\n      risk: { type: 'score', levels: ['low','medium','high','critical'] },\n    },\n  })\n  if (ans.noul.irreversible > 0.8 || ans.score.risk >= 3) return 'escalate'\n  if (ans.confidence < 0.65) return 'review'\n  return 'act'\n}"
+    },
+    {
+      "type": "callout",
+      "label": "Independence",
+      "text": "This is TenthMatrix sample logic. It is not a copy of LangChain AutoModeMiddleware source, and it is not an official TypeSafe cookbook."
+    },
+    {
+      "type": "h2",
+      "text": "Observability",
+      "id": "otel"
+    },
+    {
+      "type": "p",
+      "text": "Emit OpenTelemetry spans for each decision with attributes: model_version, question_ids, latency_ms, network_ms, argmax, confidence, gate_result, benchmark_suite_version. Without that, you cannot debug silent policy drift when jev-latest moves."
+    },
+    {
+      "type": "h2",
+      "text": "Limitations",
+      "id": "limits"
+    },
+    {
+      "type": "p",
+      "text": "A harness cannot invent ground truth. If your safety labels are wrong, a fast model will reliably enforce the wrong policy. Start with synthetic + shadowed production traces before enforcing denies."
+    },
+    {
+      "type": "h2",
+      "text": "Extended implementation notes",
+      "id": "extended-notes"
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 1: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 2: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 3: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 4: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 5: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 6: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 7: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 8: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 9: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 10: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 11: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 12: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 13: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 14: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 15: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 16: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 17: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Building a Jev agent harness: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 18: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "type": "p",
+      "text": "The harness is the product. Jev is one possible engine for the decision seams. The architecture remains valuable even if you swap engines."
+    }
+  ],
+  "related": [
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": ""
+    },
+    {
+      "href": "/insights/jev/benchmarks",
+      "label": "Benchmark lab",
+      "note": ""
+    },
+    {
+      "href": "/insights/ai-model-selection",
+      "label": "Model selection",
+      "note": ""
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobs",
+      "note": ""
+    },
+    {
+      "href": "/applied-ai",
+      "label": "Applied AI",
+      "note": ""
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Vendor announcement."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Harness patterns."
+    },
+    {
+      "title": "TypeSafe docs index",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Official primitives and API."
+    },
+    {
+      "title": "LangChain — Jev as agent evaluator",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "Judge variance experiment."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Triage tables."
+    },
+    {
+      "title": "AyAutomate independent benchmark",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 decisions."
+    },
+    {
+      "title": "JevBench RESULTS",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public harness."
+    },
+    {
+      "title": "OpenAI — Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "note": "Agent platform context in the wider landscape."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How do I implement this in Rust?",
+      "a": "Model the gate as a pure function over DecisionResponse → Enum, call the HTTP System One API with reqwest, and keep criteria in versioned config. Unofficial crates like jev-sdk exist; prefer official SDKs when available for your stack."
+    },
+    {
+      "q": "Show me benchmark code",
+      "a": "See /insights/benchmarks/v1/ and the Benchmark Lab page for suite definitions and JSONL schemas."
+    }
+  ]
+}

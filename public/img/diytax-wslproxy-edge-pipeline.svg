@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="t d">
+  <title id="t">WSLProxy Edge api_gw pipeline in front of the Payments Secure API</title>
+  <desc id="d">Each request passes, in order, through real client IP, correlation ID, invalid-traffic checks, request hygiene, route-aware rate limits and an audit log line before it is proxied to the tax API. The first stage that says no ends the request.</desc>
+  <rect width="1200" height="560" fill="#f8fafc"/>
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="600" y="48" font-size="26" font-weight="800" fill="#0f172a" text-anchor="middle">One request, six checks, one front door</text>
+    <text x="600" y="80" font-size="17" fill="#475569" text-anchor="middle">The first stage that says no ends the request, so bad traffic never reaches the app</text>
+
+    <!-- client -->
+    <rect x="30" y="200" width="120" height="110" rx="14" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+    <text x="90" y="248" font-size="17" font-weight="700" fill="#312e81" text-anchor="middle">Browser</text>
+    <text x="90" y="272" font-size="14" fill="#3730a3" text-anchor="middle">via CDN</text>
+    <path d="M150 255H178" stroke="#64748b" stroke-width="3"/>
+    <path d="M174 248l10 7-10 7z" fill="#64748b"/>
+
+    <!-- gateway frame -->
+    <rect x="186" y="130" width="818" height="250" rx="18" fill="#ecfdf5" stroke="#059669" stroke-width="2" stroke-dasharray="8 6"/>
+    <text x="595" y="160" font-size="16" font-weight="700" fill="#065f46" text-anchor="middle">WSLProxy Edge · api_gw (London edge node)</text>
+
+    <g font-size="15" text-anchor="middle">
+      <rect x="200" y="185" width="120" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="260" y="215" font-size="28" font-weight="800" fill="#059669">1</text>
+      <text x="260" y="248" font-weight="700" fill="#0f172a">Real IP</text>
+      <text x="260" y="272" font-size="13" fill="#475569">trust only</text>
+      <text x="260" y="290" font-size="13" fill="#475569">known proxies</text>
+
+      <rect x="332" y="185" width="120" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="392" y="215" font-size="28" font-weight="800" fill="#059669">2</text>
+      <text x="392" y="248" font-weight="700" fill="#0f172a">Correlation</text>
+      <text x="392" y="272" font-size="13" fill="#475569">X-Correlation-ID</text>
+      <text x="392" y="290" font-size="13" fill="#475569">on every line</text>
+
+      <rect x="464" y="185" width="120" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="524" y="215" font-size="28" font-weight="800" fill="#059669">3</text>
+      <text x="524" y="248" font-weight="700" fill="#0f172a">IVT guard</text>
+      <text x="524" y="272" font-size="13" fill="#475569">scanners, spoofed</text>
+      <text x="524" y="290" font-size="13" fill="#475569">headers, bursts</text>
+
+      <rect x="596" y="185" width="120" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="656" y="215" font-size="28" font-weight="800" fill="#059669">4</text>
+      <text x="656" y="248" font-weight="700" fill="#0f172a">Hygiene</text>
+      <text x="656" y="272" font-size="13" fill="#475569">content type,</text>
+      <text x="656" y="290" font-size="13" fill="#475569">body size caps</text>
+
+      <rect x="728" y="185" width="120" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="788" y="215" font-size="28" font-weight="800" fill="#059669">5</text>
+      <text x="788" y="248" font-weight="700" fill="#0f172a">Rate limit</text>
+      <text x="788" y="272" font-size="13" fill="#475569">per route</text>
+      <text x="788" y="290" font-size="13" fill="#475569">sliding window</text>
+
+      <rect x="860" y="185" width="130" height="140" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+      <text x="925" y="215" font-size="28" font-weight="800" fill="#059669">6</text>
+      <text x="925" y="248" font-weight="700" fill="#0f172a">Audit</text>
+      <text x="925" y="272" font-size="13" fill="#475569">one redacted</text>
+      <text x="925" y="290" font-size="13" fill="#475569">JSON line</text>
+    </g>
+
+    <path d="M1004 255H1032" stroke="#059669" stroke-width="3"/>
+    <path d="M1028 248l10 7-10 7z" fill="#059669"/>
+
+    <!-- app -->
+    <rect x="1040" y="190" width="140" height="130" rx="14" fill="#0f172a"/>
+    <text x="1110" y="240" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">Payments</text>
+    <text x="1110" y="262" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">Return API</text>
+    <text x="1110" y="290" font-size="13" fill="#94a3b8" text-anchor="middle">OpsAPI · FastAPI</text>
+
+    <!-- rejects -->
+    <path d="M524 325V420" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <path d="M656 325V420" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <path d="M788 325V420" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 5"/>
+    <rect x="440" y="420" width="430" height="100" rx="14" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+    <text x="655" y="455" font-size="17" font-weight="700" fill="#991b1b" text-anchor="middle">Stopped at the edge</text>
+    <text x="655" y="480" font-size="14" fill="#7f1d1d" text-anchor="middle">/.env, /.git, /wp-admin probes · TRACE/CONNECT · oversized bodies</text>
+    <text x="655" y="502" font-size="14" fill="#7f1d1d" text-anchor="middle">login floods · forged X-Internal-* headers</text>
+  </g>
+</svg>

@@ -1,0 +1,326 @@
+[
+  {
+    "uuid": "blog-llms-explained-001",
+    "title": "Large Language Models Explained: How LLMs Work and How to Run Your Own on Kubernetes",
+    "slug": "large-language-models-explained-run-your-own-on-kubernetes",
+    "excerpt": "What are Large Language Models and how do they work? A clear, non-technical explainer for managers and engineers — tokens, embeddings, transformers, training and inference — plus production Kubernetes YAML to deploy your own LLM with Ollama and vLLM.",
+    "published_date": "2026-06-05",
+    "tags": [
+      {
+        "name": "ai",
+        "slug": "ai"
+      },
+      {
+        "name": "llm",
+        "slug": "llm"
+      },
+      {
+        "name": "machine-learning",
+        "slug": "machine-learning"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "mlops",
+        "slug": "mlops"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "gpu",
+        "slug": "gpu"
+      }
+    ],
+    "cover_image": "/img/llms-explained-cover.png?v=20260605a",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Balinder Walia",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+    "title": "Couchbase upgrades with CAO pause gates: a support-friendly overview",
+    "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+    "excerpt": "A support-friendly, SRE-ready overview of Couchbase Server rolling upgrades under the Couchbase Autonomous Operator (CAO), using spec.paused to gate swap-rebalance one node at a time—so you can stabilize, validate health, and keep rollback options open.",
+    "published_date": "2026-04-22",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "sre",
+        "slug": "sre"
+      },
+      {
+        "name": "observability",
+        "slug": "observability"
+      }
+    ],
+    "cover_image": "/img/couchbase-upgrade-cover.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": null
+  },
+  {
+    "uuid": "blog-nebuladns-features-002",
+    "title": "NebulaDNS Complete Feature Guide: k3s, Route53, Observability, and Enterprise DNS",
+    "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+    "excerpt": "Complete tour of NebulaDNS features: API-first control plane, Prometheus metrics, propagation gates, peer fingerprinting, DNSSEC roadmap, Helm/k3s operator story, and how to integrate with AWS Route 53 and CoreDNS.",
+    "published_date": "2026-04-19",
+    "tags": [
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "security",
+        "slug": "security"
+      },
+      {
+        "name": "ai",
+        "slug": "ai"
+      }
+    ],
+    "cover_image": "/img/nebuladns-cover.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": null
+  },
+  {
+    "uuid": "blog-nebuladns-launch-001",
+    "title": "NebulaDNS: Why Authoritative DNS Is a Game Changer in the AI Era",
+    "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+    "excerpt": "NebulaDNS is a safe-Rust authoritative DNS server with an API-first control plane, Prometheus metrics, propagation gates, and Kubernetes-native operations—built for visibility when AI services and agents depend on DNS more than ever.",
+    "published_date": "2026-04-19",
+    "tags": [
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "security",
+        "slug": "security"
+      },
+      {
+        "name": "ai",
+        "slug": "ai"
+      }
+    ],
+    "cover_image": "/img/nebuladns-cover.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": null
+  },
+  {
+    "uuid": "blog-couchbase-ha-001",
+    "title": "Couchbase High Availability in Production: XDCR, Kubernetes Operator, and Multi-Region Deployment",
+    "slug": "couchbase-ha-production-multi-region",
+    "excerpt": "Complete guide to running Couchbase Server in high availability production environments with XDCR multi-region replication, Couchbase Autonomous Operator on Kubernetes, across AWS, Azure, GCP, and bare metal k3s with Rancher.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/couchbase-ha-architecture.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Super User",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-db-backup-strat-001",
+    "title": "Production Database Backup Strategies That Actually Work: MySQL and PostgreSQL",
+    "slug": "database-backup-strategies-production",
+    "excerpt": "Battle-tested database backup strategies for MySQL and PostgreSQL in production. Covers physical and logical backups, PITR, WAL archiving, automated scheduling, cloud storage, and disaster recovery across AWS, Azure, GCP, and k3s.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/database-backup-strategies.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Super User",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-longhorn-k3s-001",
+    "title": "Longhorn Storage for Production k3s Clusters: Dynamic PVC Expansion, Replication, and Disaster Recovery",
+    "slug": "longhorn-k3s-storage-production-pvc-expansion",
+    "excerpt": "Complete production guide for Longhorn distributed storage on k3s/Rancher clusters. Covers dynamic PVC expansion, multi-region replication, backup to S3/GCS/Azure, disaster recovery, and performance tuning for database workloads.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/longhorn-k3s-storage.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Super User",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-mongodb-ha-001",
+    "title": "MongoDB High Availability in Production: Replica Sets, Sharding, and Kubernetes Operators",
+    "slug": "mongodb-ha-production-replica-sharding",
+    "excerpt": "Complete production guide for MongoDB high availability using Replica Sets, Sharding, MongoDB Community Kubernetes Operator, and Percona Operator across AWS, Azure, GCP, and bare metal k3s with Rancher.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/mongodb-ha-architecture.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Super User",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-mysql-ha-prod-001",
+    "title": "MySQL High Availability in Production: InnoDB Cluster, Group Replication, and Kubernetes Operators",
+    "slug": "mysql-ha-production-kubernetes-cloud",
+    "excerpt": "Complete guide to running MySQL in high availability production environments using InnoDB Cluster, Group Replication, MySQL Operator, and Percona XtraDB Cluster across AWS, Azure, GCP, and bare metal k3s with Rancher.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/mysql-ha-architecture.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": {
+      "name": "Super User",
+      "avatar": null
+    }
+  },
+  {
+    "uuid": "blog-nebulacb-enterprise-001",
+    "title": "NebulaCB: Enterprise-Grade Couchbase Management That Saves the Day",
+    "slug": "nebulacb-enterprise-couchbase-management",
+    "excerpt": "How NebulaCB, the open-source Couchbase mission control from nebulacb.org, helps enterprises upgrade fearlessly, validate XDCR and data integrity, run Kubernetes-native operations, and use local AI (Ollama) for RCA—so teams ship changes without losing data or sleep.",
+    "published_date": "2026-04-12",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "backend",
+        "slug": "backend"
+      }
+    ],
+    "cover_image": "/img/nebulacb-cover.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": null
+  }
+]

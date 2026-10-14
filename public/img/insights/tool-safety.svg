@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="tool-safety.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">TOOL SAFETY</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="34">Gate risky actions before execution</text>
+  <rect x="80" y="240" width="220" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="96" y="268" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Agent proposes tool</text>
+<text x="96" y="292" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">shell / deploy / delete</text>
+  <rect x="420" y="240" width="280" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="436" y="268" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Safety decision</text>
+<text x="436" y="292" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">allow / deny / escalate</text>
+  <rect x="820" y="180" width="260" height="80" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="836" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Allow �→ execute</text>
+  <rect x="820" y="290" width="260" height="80" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="836" y="318" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Deny �→ refuse</text>
+  <rect x="820" y="400" width="260" height="80" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="836" y="428" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Escalate �→ human</text>
+  <path d="M300,290 L420,290" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M700,270 L820,220" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M700,290 L820,330" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M700,310 L820,440" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+
+</svg>

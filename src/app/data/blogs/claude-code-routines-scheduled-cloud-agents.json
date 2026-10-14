@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: Scheduled Cloud Agents, Sub-Routines and Co-Routines",
+  "sub_title": "Run Claude Code on a schedule, from an API call or on GitHub events, with no laptop and no server. The five-minute guide.",
+  "excerpt": "Claude Code Routines run saved agent tasks on Anthropic's cloud on a schedule, via API or on GitHub events. How they work, how to set one up, and how to chain them.",
+  "meta_title": "Claude Code Routines: Scheduled Cloud Agents Explained | TenthMatrix",
+  "meta_description": "Claude Code Routines explained: schedule, API and GitHub triggers, setup, prompt design, sub-routines with subagents, co-routine pipelines, security and plan limits.",
+  "meta_keywords": "Claude Code Routines, scheduled AI agents, Claude Code schedule, /schedule, cloud agents, GitHub trigger, API trigger, subagents, sub-routines, co-routines, Anthropic, AI automation, DevOps automation",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code no longer needs you at the keyboard. <strong>Routines</strong> run saved agent tasks on Anthropic's cloud on a schedule, from an API call or when something happens on GitHub. Here is what they are, how to set one up, and two patterns we call sub-routines and co-routines. For the full guide, read the <a href=\"/en/articles/claude-code-routines-scheduled-cloud-agents\">long article</a>.</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: scheduled cloud agents, sub-routines and co-routines\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> A routine is a Claude Code task you configure once (prompt, repositories, cloud environment, connectors) and trigger automatically. It runs as a full autonomous session in the cloud, so your laptop can stay closed. Routines are in research preview (since 14 April 2026) on the Pro, Max, Team and Enterprise plans.\n</div>\n\n<h2>Three ways to start a routine</h2>\n<ul>\n  <li><strong>Schedule:</strong> hourly, daily, weekdays, weekly or a one-off time, entered in your local time zone. Custom cron is available via <code>/schedule update</code>, with a minimum interval of one hour.</li>\n  <li><strong>API:</strong> a per-routine HTTPS endpoint with its own bearer token. Your alerting tool or deployment pipeline POSTs to it, optionally with context text. That text arrives labelled as untrusted, so a leaked token cannot rewrite the routine's instructions.</li>\n  <li><strong>GitHub:</strong> pull request or release events, filtered by branch, label, author, draft or merged state.</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"Anatomy of a routine run: triggers, saved routine, cloud session and outcomes\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Set one up in two minutes</h2>\n<ol>\n  <li>Open <code>claude.ai/code/routines</code> and choose <strong>New routine</strong>, or type <code>/schedule</code> in the Claude Code CLI.</li>\n  <li>Write a self-contained prompt: scope, allowed actions, output destination and what to do when there is nothing to do.</li>\n  <li>Pick repositories and an environment. Remove connectors the task does not need, because all of them are included by default.</li>\n  <li>Add a trigger, choose <strong>Run now</strong> to test, then read the transcript. A green badge only means the session ran, not that the task succeeded.</li>\n</ol>\n\n<h2>Sub-routines: one run, many helpers</h2>\n<p>This is our name for a pattern, not an Anthropic feature. The routine's prompt orchestrates, and it hands each step to a <strong>subagent</strong> (<code>.claude/agents/</code>) or a <strong>skill</strong> committed to the repository. Each helper gets its own context window and only the tools it needs, which keeps long unattended runs focused, cheaper and safer.</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"Sub-routines: an orchestrator prompt delegating to subagents and skills\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Co-routines: routines that hand off work</h2>\n<p>Routines cannot call each other directly, but they can cooperate through durable artefacts. For example, a nightly routine opens a draft PR, a GitHub-triggered routine reviews it, a human merges it, a merge-triggered routine updates the docs, and your deployment pipeline calls a verification routine. Use filters so no routine fires on its own output, and keep a human merge gate in the chain.</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"Co-routines: four routines cooperating through GitHub events, labels and API calls\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Limits worth knowing</h2>\n<ul>\n  <li>Daily run caps at launch were 5 on Pro, 15 on Max and 25 on Team and Enterprise, on top of normal subscription usage. One-off runs do not count.</li>\n  <li>Routines act as <strong>you</strong>. Commits, PRs and Slack messages carry your identity. Claude pushes only to <code>claude/</code> branches unless told otherwise, and never to protected ones.</li>\n  <li>Need minute-level polling or local files? Use <code>/loop</code> or Desktop scheduled tasks instead.</li>\n</ul>\n\n<p><strong>Read next:</strong> the <a href=\"/en/articles/claude-code-routines-scheduled-cloud-agents\">complete guide</a> covers API payload security, prompt templates, subagent examples, comparisons with GitHub Actions, n8n and Trigger.dev, and a governance checklist. Sources: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">Anthropic announcement</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code docs</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

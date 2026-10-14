@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "title": "Enterprise AI Lab — Capability That Lasts | TenthMatrix",
+    "description": "Build an Enterprise AI Lab with clear outcomes: people, process, platform, and governance. A leader-friendly blueprint from TenthMatrix — from first wins to lasting capability.",
+    "keywords": "enterprise AI lab, AI capability, AI governance, corporate AI programme, TenthMatrix",
+    "cover_image": "/img/enterprise-ai-lab-cover.png?v=20260828"
+  },
+  "header": {
+    "title": "企业 AI 实验室"
+  },
+  "hero": {
+    "title": "Build lasting AI capability — not another stalled pilot",
+    "subtitle": "An Enterprise AI Lab gives your organisation a home for Applied AI, Generative AI, and AI Agents — with people, process, and platform that leaders can sponsor.",
+    "description": "Setting up an Enterprise AI Lab is a business decision as much as a technology one. Done well, it accelerates useful products, shortens time from idea to value, and creates advantage that compounds. This page explains the blueprint in language executives and delivery teams can share.",
+    "stats": [
+      {
+        "icon": "fas fa-rocket",
+        "number": "Faster",
+        "label": "Path from idea to usable AI"
+      },
+      {
+        "icon": "fas fa-users",
+        "number": "6-12",
+        "label": "Core roles to staff thoughtfully"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "number": "Governed",
+        "label": "Risk managed from day one"
+      },
+      {
+        "icon": "fas fa-chart-line",
+        "number": "Measurable",
+        "label": "Outcomes the board can track"
+      }
+    ]
+  },
+  "labDesign": {
+    "title": "What the lab must get right",
+    "subtitle": "Practical foundations — explained for sponsors, not only facilities teams",
+    "items": [
+      {
+        "icon": "fas fa-bolt",
+        "title": "Reliable capacity",
+        "description": "Whether you start with workstations or a larger cluster, plan power, cooling, and growth early so projects are not blocked by waiting for machines."
+      },
+      {
+        "icon": "fas fa-snowflake",
+        "title": "A place teams can work",
+        "description": "The lab should be comfortable, secure, and available — so specialists collaborate instead of fighting for scarce access windows."
+      },
+      {
+        "icon": "fas fa-network-wired",
+        "title": "Connections you can trust",
+        "description": "Fast, well-segmented networks keep training, data, and serving environments safe and performant without mystery outages."
+      },
+      {
+        "icon": "fas fa-lock",
+        "title": "Security and compliance",
+        "description": "Access control, monitoring, and standards (such as ISO 27001 or sector rules) belong in the design — not as an afterthought."
+      }
+    ]
+  },
+  "teamStructure": {
+    "title": "The people who make enterprise AI work",
+    "subtitle": "A lean core team beats a large group without clear ownership",
+    "roles": [
+      {
+        "icon": "fas fa-brain",
+        "title": "ML Engineers",
+        "count": "2-3",
+        "responsibilities": [
+          "Design how models are built and improved",
+          "Keep training and serving reliable",
+          "Benchmark performance for real use",
+          "Partner with product on what 'good' means"
+        ]
+      },
+      {
+        "icon": "fas fa-chart-bar",
+        "title": "Data Scientists",
+        "count": "2-3",
+        "responsibilities": [
+          "Turn business questions into experiments",
+          "Shape features and evaluation",
+          "Explain results to sponsors",
+          "Align metrics with commercial goals"
+        ]
+      },
+      {
+        "icon": "fas fa-cogs",
+        "title": "MLOps Engineers",
+        "count": "1-2",
+        "responsibilities": [
+          "Automate safe releases of AI systems",
+          "Watch for drift and failures",
+          "Treat infrastructure as code",
+          "Enable controlled retraining"
+        ]
+      },
+      {
+        "icon": "fas fa-database",
+        "title": "Data Engineers",
+        "count": "1-2",
+        "responsibilities": [
+          "Build trustworthy data pipelines",
+          "Keep quality visible",
+          "Feed features and knowledge stores",
+          "Reduce manual data wrangling"
+        ]
+      },
+      {
+        "icon": "fas fa-project-diagram",
+        "title": "AI Product Manager",
+        "count": "1",
+        "responsibilities": [
+          "Prioritise the roadmap",
+          "Keep stakeholders aligned",
+          "Track value and adoption",
+          "Stop work that is not earning its keep"
+        ]
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "title": "AI Ethics & Governance Lead",
+        "count": "1",
+        "responsibilities": [
+          "Fairness and bias reviews",
+          "Regulatory readiness",
+          "Clear documentation",
+          "Risk frameworks leaders can use"
+        ]
+      }
+    ]
+  },
+  "infrastructureStack": {
+    "title": "Platform building blocks",
+    "subtitle": "Four layers sponsors should recognise — TenthMatrix helps you size and sequence them",
+    "layers": [
+      {
+        "icon": "fas fa-microchip",
+        "title": "算力",
+        "color": "#dc3545",
+        "items": [
+          "GPU workstations and clusters sized to demand",
+          "CPU capacity for preparation work",
+          "Specialised options when volume is extreme",
+          "Cloud burst when peaks arrive"
+        ]
+      },
+      {
+        "icon": "fas fa-hdd",
+        "title": "存储",
+        "color": "#0d6efd",
+        "items": [
+          "Fast storage for active projects",
+          "Object storage for datasets",
+          "Scratch space for heavy training runs",
+          "Archival for models and audit history"
+        ]
+      },
+      {
+        "icon": "fas fa-sitemap",
+        "title": "网络",
+        "color": "#198754",
+        "items": [
+          "High-speed links between GPUs when needed",
+          "Enterprise ethernet backbone",
+          "Software-defined control",
+          "Zero-trust segmentation"
+        ]
+      },
+      {
+        "icon": "fas fa-layer-group",
+        "title": "编排",
+        "color": "#6f42c1",
+        "items": [
+          "Kubernetes with GPU awareness",
+          "Job scheduling for heavy workloads",
+          "Experiment tracking for reproducibility",
+          "Infrastructure as code for consistency"
+        ]
+      }
+    ]
+  },
+  "buildVsBuy": {
+    "title": "Build vs. Buy Decisions",
+    "subtitle": "Framework for making the right infrastructure choices",
+    "items": [
+      {
+        "aspect": "GPU Compute",
+        "build": "Full control, amortized cost at scale, data sovereignty",
+        "buy": "Elastic scaling, zero maintenance, rapid provisioning",
+        "recommendation": "Hybrid: on-prem for steady-state, cloud for burst"
+      },
+      {
+        "aspect": "ML Platform",
+        "build": "Custom workflows, deep integration with internal tools",
+        "buy": "Faster time to value, vendor support, regular updates",
+        "recommendation": "Buy platform, customize integrations"
+      },
+      {
+        "aspect": "Data Pipeline",
+        "build": "Tailored to proprietary data formats and compliance",
+        "buy": "Pre-built connectors, managed scaling, lower ops burden",
+        "recommendation": "Build core pipelines, buy connectors"
+      },
+      {
+        "aspect": "Model Monitoring",
+        "build": "Custom metrics aligned to business KPIs",
+        "buy": "Industry-standard drift detection, alerting out of the box",
+        "recommendation": "Buy platform, extend with custom dashboards"
+      }
+    ]
+  },
+  "governance": {
+    "title": "Governance & Compliance Checklist",
+    "subtitle": "Essential policies and controls for responsible enterprise AI",
+    "categories": [
+      {
+        "title": "Data Governance",
+        "items": [
+          "Data classification and sensitivity labeling",
+          "Access control policies with role-based permissions",
+          "Data lineage tracking and audit trails",
+          "PII detection and automated redaction",
+          "Data retention and deletion policies"
+        ]
+      },
+      {
+        "title": "Model Governance",
+        "items": [
+          "Model registry with version control and metadata",
+          "Bias and fairness testing before deployment",
+          "Explainability requirements by risk tier",
+          "A/B testing and canary deployment protocols",
+          "Incident response plan for model failures"
+        ]
+      },
+      {
+        "title": "Regulatory Compliance",
+        "items": [
+          "GDPR / CCPA data processing agreements",
+          "EU AI Act risk classification alignment",
+          "SOC 2 Type II audit readiness",
+          "Industry-specific standards (HIPAA, PCI-DSS, etc.)",
+          "Cross-border data transfer mechanisms"
+        ]
+      }
+    ]
+  },
+  "budget": {
+    "title": "ROI & Budget Planning",
+    "subtitle": "Typical investment ranges for a mid-size enterprise AI lab",
+    "rows": [
+      {
+        "category": "GPU Compute (8-node cluster)",
+        "year1": "$400K - $800K",
+        "year2": "$100K - $200K",
+        "notes": "Capex in Y1, maintenance in Y2"
+      },
+      {
+        "category": "Storage Infrastructure",
+        "year1": "$80K - $150K",
+        "year2": "$30K - $60K",
+        "notes": "Scale with data growth"
+      },
+      {
+        "category": "Networking (InfiniBand + Ethernet)",
+        "year1": "$60K - $120K",
+        "year2": "$15K - $30K",
+        "notes": "One-time install, annual support"
+      },
+      {
+        "category": "Software Licensing (ML platform, monitoring)",
+        "year1": "$50K - $120K",
+        "year2": "$50K - $120K",
+        "notes": "Annual subscription"
+      },
+      {
+        "category": "Team Compensation (6-8 FTEs)",
+        "year1": "$900K - $1.5M",
+        "year2": "$950K - $1.6M",
+        "notes": "Largest ongoing cost"
+      },
+      {
+        "category": "Facilities (power, cooling, space)",
+        "year1": "$60K - $100K",
+        "year2": "$60K - $100K",
+        "notes": "Varies by geography"
+      },
+      {
+        "category": "Training & Enablement",
+        "year1": "$30K - $50K",
+        "year2": "$20K - $40K",
+        "notes": "Conferences, certifications, upskilling"
+      }
+    ],
+    "totalYear1": "$1.58M - $2.84M",
+    "totalYear2": "$1.23M - $2.15M",
+    "roiNote": "Organizations typically see 3-5x ROI within 24 months through operational efficiency gains, new revenue streams, and reduced vendor dependency."
+  },
+  "phasedRollout": {
+    "title": "Phased Rollout Plan",
+    "subtitle": "A pragmatic 12-month timeline to go from zero to production",
+    "phases": [
+      {
+        "phase": "Phase 1",
+        "title": "Foundation",
+        "duration": "Months 1-3",
+        "icon": "fas fa-drafting-compass",
+        "color": "#0d6efd",
+        "tasks": [
+          "Secure executive sponsorship and funding approval",
+          "Hire core team (ML lead, 2 engineers, 1 MLOps)",
+          "Procure and install compute and storage hardware",
+          "Establish networking and security baselines",
+          "Set up development environments and toolchains"
+        ]
+      },
+      {
+        "phase": "Phase 2",
+        "title": "Platform Build",
+        "duration": "Months 4-6",
+        "icon": "fas fa-tools",
+        "color": "#198754",
+        "tasks": [
+          "Deploy Kubernetes cluster with GPU scheduling",
+          "Implement CI/CD pipelines for ML workflows",
+          "Build data ingestion and feature store pipelines",
+          "Configure experiment tracking and model registry",
+          "Complete SOC 2 readiness assessment"
+        ]
+      },
+      {
+        "phase": "Phase 3",
+        "title": "Pilot Projects",
+        "duration": "Months 7-9",
+        "icon": "fas fa-flask",
+        "color": "#fd7e14",
+        "tasks": [
+          "Launch 2-3 pilot ML projects with business units",
+          "Establish model deployment and monitoring workflows",
+          "Conduct bias and fairness audits on pilot models",
+          "Gather feedback and iterate on platform tooling",
+          "Expand team with data scientists and product manager"
+        ]
+      },
+      {
+        "phase": "Phase 4",
+        "title": "Scale & Optimize",
+        "duration": "Months 10-12",
+        "icon": "fas fa-rocket",
+        "color": "#dc3545",
+        "tasks": [
+          "Promote pilot models to production serving",
+          "Implement automated retraining and drift detection",
+          "Onboard additional business units and use cases",
+          "Publish internal AI playbook and best practices",
+          "Present ROI report to leadership, plan Y2 expansion"
+        ]
+      }
+    ]
+  },
+  "cta": {
+    "title": "Ready to Build Your Enterprise AI Lab?",
+    "description": "Our team of AI infrastructure experts can help you design, build, and operationalize a world-class AI lab tailored to your business objectives. From initial assessment to production deployment, we are with you at every step.",
+    "buttonText": "Plan Your Enterprise AI Lab",
+    "buttonLink": "/contact-us"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "ڈیپ لرننگ سسٹمز: انجینئرز اور ایجنٹس کے لیے تکنیکی بریف",
+  "sub_title": "ریپریزنٹیشن لرننگ، ڈسکریمنیٹو بمقابلہ جنریٹو راستے، میٹرکس اور buy/build روٹنگ — پروڈکشن ٹیموں کے لیے دوبارہ لکھی گئی AWS تصورات",
+  "excerpt": "ڈیپ لرننگ پر TenthMatrix تکنیکی بریف: گریڈینٹ سے تربیت یافتہ ڈیپ نیٹس، ڈسکریمنیٹو بمقابلہ جنریٹو ماڈلز، ٹاسک میٹرکس، اور Bedrock بمقابلہ Kubernetes serving۔",
+  "meta_title": "ڈیپ لرننگ سسٹمز — تکنیکی بریف (TenthMatrix)",
+  "meta_description": "تکنیکی ڈیپ لرننگ بریف: نیورل نیٹس، backprop، ڈسکریمنیٹو بمقابلہ جنریٹو AI، ٹاسک میٹرکس، اور انجینئرز و AI ایجنٹس کے لیے Bedrock بمقابلہ self-host روٹنگ۔",
+  "meta_keywords": "deep learning, neural networks, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>تکنیکی ڈائجسٹ: ڈیپ لرننگ کو کثیر پرتی نیورل آپٹیمائزیشن، ڈسکریمنیٹو بمقابلہ جنریٹو راستے، اور classic ML، تربیت یافتہ DL یا foundation-model APIs تک کام روٹ کرنے کے طور پر سمجھیں۔ مکمل مساوات، اشکال اور ایجنٹ چیک لسٹ <a href=\"/ur/articles/what-is-deep-learning-workstation-guide\">طویل مضمون</a> میں۔</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"ڈیپ لرننگ سسٹمز تکنیکی بریف — ٹرین، آپٹیمائز، سرو\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>تعریف۔</strong> ڈیپ لرننگ گہرے نیورل نیٹس کی گریڈینٹ پر مبنی تربیت ہے تاکہ f_&#x3b8;(x) اعلیٰ جہتی x سے درجہ بندی فیچرز سیکھے۔ یہ جدید vision/ASR/NLP کی بنیاد ہے اور generative AI (transformers / diffusion) کا سبسٹریٹ۔ لاگت کے محرکات: صاف ڈیٹا کا حجم، ایکسلریٹر وقت، اور inference OpEx — سلائیڈ ویئر نہیں۔\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>ایجنٹ ڈائجسٹ۔</strong> DL ⊂ ML۔ Discriminative = p(y|x)۔ Generative = sample x یا x|c۔ مضبوط tabular فیچرز کے لیے GBM ترجیح دیں؛ perception کے لیے DL ٹرین کریں؛ زبان کے ایجنٹس کے لیے Bedrock/vLLM۔ GitOps serving؛ money/auth/prod گیٹ کریں۔\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">AWS سے ماخوذ — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a> انجینئرنگ ٹیموں کے لیے۔</p>\n\n<h2>صلاحیت کی تقسیم</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"ML بمقابلہ ڈیپ لرننگ بمقابلہ generative AI اسٹیک\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — engineered features؛ trees/linear ماڈلز؛ گھنے tabular SLAs کے لیے بہترین ڈیفالٹ۔</li>\n  <li><strong>Deep learning</strong> — images/text/audio پر end-to-end نیٹس؛ backprop + GPUs؛ Triton/KServe/SageMaker سے serve۔</li>\n  <li><strong>Generative AI</strong> — نیا مواد sample کریں؛ LLMs/diffusion + RAG/tools؛ Bedrock API یا open-weight inference۔</li>\n</ul>\n\n<h2>ٹاسک خاندان (میٹرکس اہم ہیں)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">خاندان</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">عام مقصد / میٹرک</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">detect/classify — mAP, IoU, p99 latency</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER, real-time factor</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">classify / generate — F1, exact-match, groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">rank — NDCG, CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">task success + safety + $/request</td></tr>\n</tbody>\n</table>\n\n<h2>رکاوٹیں</h2>\n<ul>\n  <li><strong>Data</strong> — لیبل شور اور shift غالب؛ datasets ورژن کریں۔</li>\n  <li><strong>Compute</strong> — training اور LLM decode ایکسلریٹر سے بندھے ہیں۔</li>\n  <li><strong>Ops</strong> — eval harness، drift، cost، وسیع promote سے پہلے GitOps rollback۔</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"Train بمقابلہ buy بمقابلہ hybrid فیصلہ بہاؤ\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>TenthMatrix سفارش</h2>\n<p>پہلے discriminative بمقابلہ generative درجہ بندی کریں۔ residency/cost کھلے weights نہ تھوپیں تو زبان کے ایجنٹس کے لیے managed foundation models ترجیح دیں۔ tabular کے لیے classic ML رکھیں۔ تفصیلات، لیئر ڈایاگرام اور چیک لسٹ: <a href=\"/ur/articles/what-is-deep-learning-workstation-guide\">طویل مضمون</a>۔ شائع کردہ <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>۔</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

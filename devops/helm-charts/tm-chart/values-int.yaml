@@ -1,0 +1,21 @@
+# int — https://int.tenthmatrix.com (lead form → https://int-api.tenthmatrix.com)
+env: int
+
+appConfig:
+  SITE_URL: "https://int.tenthmatrix.com"
+  WEBSITE_NAMESPACE: "tenthmatrix"
+  WEBSITE_CATEGORY: ""
+  CMS_CONTENT_MODE: "overlay"
+  OPSAPI_URL: "http://workstation-opsapi/"
+  CMS_REVALIDATE_SECONDS: "3600"
+  ENGAGEMENT_STORE_DIR: "/tmp/engagement"
+  ROBOTS_DISALLOW_ALL: "true"
+
+ingress:
+  enabled: true
+  className: "traefik-edge"
+  hosts:
+    - host: int.tenthmatrix.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific

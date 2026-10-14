@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="Feed-forward deep neural network layers">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .layer { fill: #f1f5f9; stroke: #64748b; stroke-width: 1.5; }
+      .in { fill: #ccfbf1; stroke: #0f766e; stroke-width: 2; }
+      .hid { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; }
+      .out { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .nl { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ns { fill: #334155; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .edge { stroke: #94a3b8; stroke-width: 1.2; fill: none; opacity: 0.7; }
+      .note { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .tag { fill: #0f766e; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="700"/>
+  <text class="tag" x="40" y="36">FIGURE A  -  FORWARD PASS</text>
+  <text class="title" x="40" y="68">Deep neural network: input -&gt; hidden x N -&gt; output</text>
+  <text class="cap" x="40" y="94">Each node computes a weighted sum + nonlinearity (ReLU/GELU/sigmoid). Depth = stacked nonlinear transforms.</text>
+
+  <!-- Input column -->
+  <rect class="in" x="80" y="160" width="160" height="380" rx="8"/>
+  <text class="nl" x="110" y="195">INPUT</text>
+  <text class="ns" x="100" y="220">x in R^d</text>
+  <circle cx="160" cy="280" r="14" fill="#0f766e"/>
+  <circle cx="160" cy="340" r="14" fill="#0f766e"/>
+  <circle cx="160" cy="400" r="14" fill="#0f766e"/>
+  <circle cx="160" cy="460" r="14" fill="#0f766e"/>
+  <text class="ns" x="100" y="510">pixels / tokens</text>
+  <text class="ns" x="100" y="528">/ features</text>
+
+  <!-- Hidden 1 -->
+  <rect class="hid" x="340" y="140" width="160" height="420" rx="8"/>
+  <text class="nl" x="365" y="175">HIDDEN 1</text>
+  <text class="ns" x="355" y="200">h1 = f(W1 x)</text>
+  <circle cx="420" cy="260" r="12" fill="#0284c7"/>
+  <circle cx="420" cy="310" r="12" fill="#0284c7"/>
+  <circle cx="420" cy="360" r="12" fill="#0284c7"/>
+  <circle cx="420" cy="410" r="12" fill="#0284c7"/>
+  <circle cx="420" cy="460" r="12" fill="#0284c7"/>
+  <circle cx="420" cy="510" r="12" fill="#0284c7"/>
+  <text class="ns" x="360" y="545">low-level features</text>
+
+  <!-- Hidden 2 -->
+  <rect class="hid" x="600" y="160" width="160" height="380" rx="8"/>
+  <text class="nl" x="625" y="195">HIDDEN N</text>
+  <text class="ns" x="615" y="220">hN = f(WN h)</text>
+  <circle cx="680" cy="280" r="12" fill="#0284c7"/>
+  <circle cx="680" cy="340" r="12" fill="#0284c7"/>
+  <circle cx="680" cy="400" r="12" fill="#0284c7"/>
+  <circle cx="680" cy="460" r="12" fill="#0284c7"/>
+  <text class="ns" x="620" y="510">high-level</text>
+  <text class="ns" x="620" y="528">abstractions</text>
+
+  <!-- Output -->
+  <rect class="out" x="860" y="200" width="200" height="300" rx="8"/>
+  <text class="nl" x="910" y="240">OUTPUT</text>
+  <text class="ns" x="885" y="268">yhat / logits / tokens</text>
+  <circle cx="960" cy="330" r="16" fill="#b45309"/>
+  <circle cx="960" cy="400" r="16" fill="#b45309"/>
+  <text class="ns" x="890" y="460">class · bbox · next</text>
+  <text class="ns" x="890" y="478">token · embedding</text>
+
+  <!-- edges (simplified) -->
+  <line class="edge" x1="240" y1="280" x2="340" y2="260"/>
+  <line class="edge" x1="240" y1="340" x2="340" y2="360"/>
+  <line class="edge" x1="240" y1="400" x2="340" y2="410"/>
+  <line class="edge" x1="240" y1="460" x2="340" y2="460"/>
+  <line class="edge" x1="500" y1="310" x2="600" y2="280"/>
+  <line class="edge" x1="500" y1="410" x2="600" y2="400"/>
+  <line class="edge" x1="760" y1="340" x2="860" y2="330"/>
+  <line class="edge" x1="760" y1="400" x2="860" y2="400"/>
+
+  <text class="note" x="40" y="600">Training: minimise loss L(yhat, y) via backpropagation + SGD/Adam. Inference: one forward pass (or autoregressive loop for generative models).</text>
+  <text class="note" x="40" y="628">Agent tip: treat each layer as a representation transform; depth increases capacity and compute (FLOPs, VRAM).</text>
+  <text class="note" x="40" y="668">Workstation  ·  workstation.co.uk</text>
+</svg>

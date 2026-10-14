@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="MySQL High Availability: ProxySQL, Group Replication, and Orchestrator">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#001624"/>
+      <stop offset="0.55" stop-color="#003547"/>
+      <stop offset="1" stop-color="#241200"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#f29111" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#f29111" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #ffb74d; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 70px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #ffb74d; font: 800 28px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 17px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #ffb74d; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #ffb74d; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arRepl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#42a5f5"/>
+    </marker>
+    <marker id="arWrite" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#f29111"/>
+    </marker>
+    <marker id="arRead" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">MYSQL  /  HIGH AVAILABILITY</text>
+  <text class="title" x="60" y="160">MySQL HA</text>
+  <text class="tagline" x="60" y="208">ProxySQL + Group Replication + Orchestrator</text>
+  <text class="sub" x="60" y="248">Read/write split at the proxy. Orchestrator drives promotion. GTIDs make replicas reattachable.</text>
+
+  <g>
+    <rect class="chip" x="60" y="290" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="317">01</text>
+    <text class="chipText" x="120" y="317">App - ProxySQL</text>
+
+    <rect class="chip" x="60" y="346" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="373">02</text>
+    <text class="chipText" x="120" y="373">Reads - replicas (round-robin)</text>
+
+    <rect class="chip" x="60" y="402" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="429">03</text>
+    <text class="chipText" x="120" y="429">Writes - source via GTID</text>
+
+    <rect class="chip" x="60" y="458" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="485">04</text>
+    <text class="chipText" x="120" y="485">Orchestrator promotes on fail</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="440" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">CONTROL PLANE</text>
+    <rect x="20" y="40" width="320" height="50" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+    <text class="nodeLabel" x="180" y="62" text-anchor="middle">Orchestrator (or operator)</text>
+    <text class="nodeText" x="180" y="78" text-anchor="middle">topology discovery  /  failure detection  /  promote candidate</text>
+
+    <rect x="360" y="40" width="340" height="50" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+    <text class="nodeLabel" x="530" y="62" text-anchor="middle">ProxySQL hostgroups</text>
+    <text class="nodeText" x="530" y="78" text-anchor="middle">writer HG  /  reader HG  /  query rules + audit  /  re-routes on failover</text>
+
+    <text class="laneLabel" x="20" y="118">CLIENT PLANE</text>
+    <rect x="20" y="130" width="200" height="44" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="120" y="152" text-anchor="middle">Application</text>
+    <text class="nodeText" x="120" y="166" text-anchor="middle">MySQL driver  /  retryable writes</text>
+
+    <text class="laneLabel" x="20" y="200">DATA PLANE  /  GROUP REPLICATION (single-primary)</text>
+    <g transform="translate(20,212)">
+      <rect x="0" y="0" width="220" height="100" rx="10" fill="#3a1f08" stroke="#f29111" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="24" text-anchor="middle">Source (Primary)</text>
+      <text class="nodeText" x="110" y="42" text-anchor="middle">accepts writes</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">binlog GTID enabled</text>
+      <text class="nodeText" x="110" y="70" text-anchor="middle">semi-sync ack from at least one replica</text>
+      <text class="nodeText" x="110" y="84" text-anchor="middle">read_only=0</text>
+
+      <rect x="240" y="0" width="220" height="100" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="24" text-anchor="middle">Replica #1 (sync)</text>
+      <text class="nodeText" x="350" y="42" text-anchor="middle">read-only</text>
+      <text class="nodeText" x="350" y="56" text-anchor="middle">applies relay log</text>
+      <text class="nodeText" x="350" y="70" text-anchor="middle">candidate for promotion</text>
+      <text class="nodeText" x="350" y="84" text-anchor="middle">read_only=1</text>
+
+      <rect x="480" y="0" width="220" height="100" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="24" text-anchor="middle">Replica #2 (async)</text>
+      <text class="nodeText" x="590" y="42" text-anchor="middle">read-only</text>
+      <text class="nodeText" x="590" y="56" text-anchor="middle">applies relay log</text>
+      <text class="nodeText" x="590" y="70" text-anchor="middle">backup target  /  reports</text>
+      <text class="nodeText" x="590" y="84" text-anchor="middle">read_only=1</text>
+
+      <line x1="220" y1="50" x2="240" y2="50" stroke="#42a5f5" stroke-width="2" marker-end="url(#arRepl)"/>
+      <line x1="460" y1="50" x2="480" y2="50" stroke="#42a5f5" stroke-width="2" marker-end="url(#arRepl)"/>
+    </g>
+
+    <line x1="180" y1="90" x2="180" y2="130" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <line x1="530" y1="90" x2="530" y2="130" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+
+    <line x1="220" y1="155" x2="360" y2="155" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="360" y1="180" x2="220" y2="180" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+
+    <line x1="530" y1="174" x2="160" y2="212" stroke="#f29111" stroke-width="2" marker-end="url(#arWrite)"/>
+    <line x1="530" y1="174" x2="370" y2="212" stroke="#4caf50" stroke-width="2" marker-end="url(#arRead)"/>
+    <line x1="530" y1="174" x2="610" y2="212" stroke="#4caf50" stroke-width="2" marker-end="url(#arRead)"/>
+
+    <text class="laneLabel" x="20" y="340">FAILOVER (Orchestrator)</text>
+    <g transform="translate(20,352)">
+      <rect x="0" y="0" width="700" height="40" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text class="nodeText" x="14" y="24">detect source down  -  pick most-up-to-date replica (GTID)  -  apply pending relay  -  set read_only=0  -  switch ProxySQL writer HG  -  drain old connections</text>
+    </g>
+
+    <g transform="translate(20,408)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#f29111"/>
+      <text class="nodeText" x="22" y="11">Source (writes)</text>
+      <rect x="140" y="0" width="14" height="14" rx="3" fill="#2e7d32"/>
+      <text class="nodeText" x="162" y="11">Replica (reads)</text>
+      <rect x="280" y="0" width="14" height="14" rx="3" fill="#6a3eff"/>
+      <text class="nodeText" x="302" y="11">Orchestrator + ProxySQL</text>
+      <line x1="460" y1="7" x2="490" y2="7" stroke="#42a5f5" stroke-width="2"/>
+      <text class="nodeText" x="496" y="11">Binlog / GTID stream</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">SRE  /  DBA  /  PLATFORM TEAMS</text>
+</svg>

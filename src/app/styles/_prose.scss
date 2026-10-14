@@ -1,0 +1,336 @@
+// Long-form typography for article / blog / insight HTML. The HTML comes from
+// JSON or the CMS, so it carries plain tags (and a few legacy class names:
+// .lead, .blog-figure, .cta, .note, .table, .text-muted, .blog-disclaimer),
+// never module classes — hence global styles scoped under .tm-prose.
+@use './mixins' as *;
+
+.tm-prose {
+  max-width: var(--tm-measure);
+  font-size: var(--tm-text-base);
+  line-height: var(--tm-leading-relaxed);
+  color: var(--tm-text);
+  overflow-wrap: break-word;
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+
+  // The content wrappers some posts ship with shouldn't add structure.
+  .blog-content,
+  .article-content,
+  article {
+    display: contents;
+  }
+
+  p,
+  ul,
+  ol,
+  dl,
+  blockquote,
+  figure,
+  table,
+  pre,
+  details,
+  iframe {
+    margin-block: 0 1.25em;
+  }
+
+  h2,
+  h3,
+  h4 {
+    scroll-margin-top: calc(var(--tm-header-h) + var(--tm-space-6));
+  }
+
+  h2 {
+    @include heading(var(--tm-text-2xl));
+    margin-block: 2em 0.6em;
+    padding-top: 0.2em;
+  }
+
+  h3 {
+    @include heading(var(--tm-text-xl));
+    margin-block: 1.7em 0.5em;
+  }
+
+  h4 {
+    font-size: var(--tm-text-lg);
+    font-weight: var(--tm-weight-semibold);
+    margin-block: 1.5em 0.4em;
+  }
+
+  // An h1 inside article HTML would compete with the page h1.
+  h1 {
+    @include heading(var(--tm-text-2xl));
+    margin-block: 2em 0.6em;
+  }
+
+  .lead,
+  > p:first-child:not(:only-child) {
+    font-size: var(--tm-text-md);
+    color: var(--tm-text-muted);
+    line-height: var(--tm-leading-normal);
+  }
+
+  .text-muted {
+    color: var(--tm-text-muted);
+  }
+
+  a {
+    color: var(--tm-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--tm-accent-line);
+    text-decoration-thickness: 1.5px;
+
+    &:hover {
+      color: var(--tm-accent-hover);
+      text-decoration-color: currentColor;
+    }
+  }
+
+  strong,
+  b {
+    font-weight: var(--tm-weight-semibold);
+    color: var(--tm-text);
+  }
+
+  ul,
+  ol {
+    padding-left: 1.4em;
+  }
+
+  li {
+    margin-block: 0.35em;
+    padding-left: 0.2em;
+
+    &::marker {
+      color: var(--tm-text-subtle);
+    }
+  }
+
+  ul > li::marker {
+    color: var(--tm-accent);
+  }
+
+  ol > li::marker {
+    font-family: var(--tm-font-mono);
+    font-size: 0.9em;
+  }
+
+  li > ul,
+  li > ol {
+    margin-block: 0.35em;
+  }
+
+  blockquote {
+    margin-inline: 0;
+    padding: 0.2em 0 0.2em 1.25em;
+    border-left: 3px solid var(--tm-accent);
+    color: var(--tm-text-muted);
+    font-size: var(--tm-text-md);
+    line-height: var(--tm-leading-normal);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    cite {
+      display: block;
+      margin-top: 0.6em;
+      font-family: var(--tm-font-mono);
+      font-size: var(--tm-text-xs);
+      font-style: normal;
+      color: var(--tm-text-subtle);
+    }
+  }
+
+  img,
+  svg,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  img {
+    display: block;
+    border-radius: var(--tm-radius);
+    border: 1px solid var(--tm-line);
+    background: var(--tm-surface);
+  }
+
+  figure,
+  .blog-figure {
+    margin-inline: 0;
+
+    img,
+    svg {
+      margin-inline: auto;
+    }
+  }
+
+  figcaption {
+    margin-top: var(--tm-space-3);
+    font-size: var(--tm-text-sm);
+    line-height: 1.5;
+    color: var(--tm-text-subtle);
+  }
+
+  // Inline SVG diagrams carry their own (light) colours: give them a light,
+  // framed stage in both themes so the drawing always reads.
+  svg:not([width='1em']):not([class*='icon']) {
+    display: block;
+  }
+
+  figure > svg,
+  > svg,
+  div > svg {
+    padding: var(--tm-space-4);
+    border-radius: var(--tm-radius);
+    border: 1px solid var(--tm-line);
+    background: var(--tm-brand-paper);
+  }
+
+  iframe {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: var(--tm-radius);
+    background: var(--tm-sunken);
+  }
+
+  // Tables scroll horizontally on their own instead of widening the page.
+  table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--tm-text-sm);
+    line-height: 1.5;
+    border: 1px solid var(--tm-line);
+    border-radius: var(--tm-radius);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  th,
+  td {
+    padding: 0.65em 0.9em;
+    border-bottom: 1px solid var(--tm-line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    font-weight: var(--tm-weight-semibold);
+    background: var(--tm-sunken);
+    color: var(--tm-text);
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: color-mix(in srgb, var(--tm-sunken) 45%, transparent);
+  }
+
+  hr {
+    margin-block: 2.5em;
+  }
+
+  // Inline code (block code lives in _code.scss).
+  :not(pre) > code {
+    padding: 0.12em 0.38em;
+    border-radius: var(--tm-radius-xs);
+    background: var(--tm-code-inline-bg);
+    color: var(--tm-code-inline-text);
+    font-size: 0.875em;
+    overflow-wrap: anywhere;
+  }
+
+  kbd {
+    padding: 0.1em 0.4em;
+    border: 1px solid var(--tm-line-strong);
+    border-bottom-width: 2px;
+    border-radius: var(--tm-radius-xs);
+    font-size: 0.85em;
+  }
+
+  details {
+    padding: var(--tm-space-3) var(--tm-space-4);
+    border: 1px solid var(--tm-line);
+    border-radius: var(--tm-radius);
+    background: var(--tm-surface);
+
+    summary {
+      cursor: pointer;
+      font-weight: var(--tm-weight-semibold);
+    }
+  }
+
+  // Callouts. `.note` / `.callout` are neutral-accent; `.cta` is the legacy
+  // dark promo box (its markup hard-codes white headings), so it stays dark.
+  .note,
+  .callout,
+  .blog-disclaimer,
+  aside {
+    margin-block: 0 1.25em;
+    padding: var(--tm-space-4) var(--tm-space-5);
+    border: 1px solid var(--tm-accent-line);
+    border-left: 3px solid var(--tm-accent);
+    border-radius: var(--tm-radius-sm);
+    background: var(--tm-accent-soft);
+    color: var(--tm-text);
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .callout--warn,
+  .warning {
+    border-color: var(--tm-warn);
+    background: var(--tm-warn-soft);
+  }
+
+  .blog-disclaimer {
+    font-size: var(--tm-text-sm);
+    color: var(--tm-text-muted);
+    border-color: var(--tm-line);
+    background: var(--tm-sunken);
+  }
+
+  .cta {
+    margin-block: 2em;
+    padding: var(--tm-space-6);
+    border-radius: var(--tm-radius);
+    background: var(--tm-night-bg);
+    color: var(--tm-night-muted);
+
+    h2,
+    h3,
+    h4,
+    strong {
+      color: var(--tm-night-text) !important;
+    }
+
+    a {
+      color: var(--tm-night-accent);
+      text-decoration-color: currentColor;
+
+      &:hover {
+        color: var(--tm-night-accent-hover);
+      }
+    }
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}

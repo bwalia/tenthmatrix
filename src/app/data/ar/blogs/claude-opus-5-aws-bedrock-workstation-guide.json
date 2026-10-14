@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-claude-opus-5-aws-001",
+  "internal_id": 957,
+  "slug": "claude-opus-5-aws-bedrock-workstation-guide",
+  "title": "Claude Opus 5 على AWS: دليل TenthMatrix للمطوّرين والأعمال",
+  "sub_title": "Opus 5 على Bedrock وClaude Platform — ما تغيّر ومتى تستخدمه وZDR وبداية سريعة مع Converse",
+  "excerpt": "نظرة TenthMatrix على Claude Opus 5 على Amazon Bedrock: برمجة وكيلية ووكلاء طويلة الأمد وسياق 1M وZDR افتراضيًا وكيف تتبنّاه الفرق.",
+  "meta_title": "Claude Opus 5 على AWS Bedrock — دليل TenthMatrix للمطوّرين والأعمال",
+  "meta_description": "Claude Opus 5 على Amazon Bedrock وClaude Platform on AWS: القدرات وZDR وسياق 1M ومتى تستخدمه وبداية Converse لفرق الإنتاج.",
+  "meta_keywords": "Claude Opus 5, Amazon Bedrock, Claude Platform on AWS, Anthropic, agentic coding, ZDR, long-running agents, TenthMatrix",
+  "cover_image": "/img/claude-opus-5-aws-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-opus-5-aws-cover.svg",
+      "id": 957,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Opus 5 on Amazon Bedrock AWS TenthMatrix guide"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Opus 5 متاح على Amazon Bedrock وClaude Platform on AWS. نظرة TenthMatrix — ماذا يعني للمطوّرين وفرق الأعمال ومتى تستخدمه وكيف تبدأ. تحليل مع الشيفرة في <a href=\"/ar/articles/claude-opus-5-aws-bedrock-workstation-guide\">المقال الطويل</a>.</em></p>\n\n<p><img src=\"/img/claude-opus-5-aws-cover.svg\" alt=\"Claude Opus 5 على Amazon Bedrock AWS — دليل TenthMatrix\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>في فقرة واحدة.</strong> Opus 5 أقوى نموذج Opus من Anthropic على AWS (أُطلق في 24 يوليو 2026): برمجة وكيلية أفضل ووكلاء طويلة الأمد وعمل وثائقي كثيف مع نافذة سياق <strong>1M رمز</strong>. على <strong>Amazon Bedrock</strong> تحصل على <strong>احتفاظ صفري بالبيانات (ZDR) افتراضيًا</strong> وGuardrails وIAM/فوترة AWS. استخدمه للهندسة الصعبة وأساطيل الوكلاء؛ أبقِ Sonnet/Haiku للحجم. نصيحة التوجيه الكاملة: <a href=\"/ar/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">مقارنة نماذج Claude</a>.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">مُكيَّف لقرّاء TenthMatrix من إعلان AWS Machine Learning Blog — <a href=\"https://aws.amazon.com/blogs/machine-learning/introducing-claude-opus-5-on-aws-anthropics-most-capable-opus-model/\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Claude Opus 5 on AWS</a>.</p>\n\n<h2>لماذا تهتم فرق الأعمال</h2>\n<ul>\n  <li><strong>وكلاء إنتاج تعمل أطول</strong> — مسارات متعددة الساعات / ليلية مع استرداد أفضل من الأخطاء.</li>\n  <li><strong>هندسة بمقياس قاعدة الشيفرة</strong> — تصفّح مستودعات كبيرة وتسليم تصحيحات أعلى جودة وحلقات إرشاد أقل.</li>\n  <li><strong>عمل وثائقي مؤسسي</strong> — استدلال أعمق على سياسات طويلة وعقود وحزم مالية.</li>\n  <li><strong>حوكمة على Bedrock</strong> — ZDR افتراضيًا وخيارات إقامة إقليمية بلا «ظل SaaS» للمواد الحساسة.</li>\n</ul>\n\n<h2>لماذا يهتم المطوّرون</h2>\n<ul>\n  <li>معرّفات النموذج على Bedrock: <code>global.anthropic.claude-opus-5</code> (ومتغيرات جغرافية <code>us.</code> / <code>eu.</code> / <code>au.</code>).</li>\n  <li>استدعِ عبر <strong>Invoke</strong> أو <strong>Converse</strong> أو Anthropic Messages على <strong>bedrock-mantle</strong>.</li>\n  <li>استدلال تكيّفي مفعّل افتراضيًا؛ تخزين مؤقت للمطالبات (5د / 1س)؛ إضافة/إزالة أدوات أثناء المحادثة.</li>\n  <li>اقتصاديات مستوى Opus مع ذكاء فئة Fable مُدّعى في مجالات كثيرة — احفظ Fable/Mythos للمسارات الحرجة.</li>\n</ul>\n\n<h2>بابان على AWS</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">المسار</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الأفضل عندما</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ZDR افتراضيًا وGuardrails وKnowledge Bases وAgentCore وأمان AWS الأصلي</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Platform on AWS</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">وحدة تحكم/واجهات Anthropic الأصلية مع مصادقة وفوترة AWS؛ ZDR عند الطلب</td></tr>\n</tbody>\n</table>\n\n<h2>بداية سريعة (Bedrock Converse)</h2>\n<pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.82rem;\">\nimport boto3\n\nclient = boto3.client(\"bedrock-runtime\", region_name=\"us-east-1\")\nresp = client.converse(\n    modelId=\"global.anthropic.claude-opus-5\",\n    messages=[{\"role\": \"user\", \"content\": [{\"text\": \"Refactor this service for multi-region failover.\"}]}],\n    inferenceConfig={\"maxTokens\": 4096},\n)\nprint(resp[\"output\"][\"message\"][\"content\"])\n</pre>\n\n<h2>توصية TenthMatrix</h2>\n<p>اربط Opus 5 على Bedrock بمكدس الوكلاء الحالي (Review Bots وطواقم متعددة الوكلاء وبوابات GitOps). استخدم Opus 5 لوكلاء المخطّط/المهندس الرئيسي؛ وجّه التذاكر الروتينية لنماذج أرخص. انظر  <a href=\"/ar/articles/claude-opus-5-aws-bedrock-workstation-guide\">المقال الطويل</a>. نُشر بواسطة <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-26T07:00:00Z",
+  "updated_at": "2026-07-26T07:00:00Z",
+  "published_date": "2026-07-26",
+  "status": true
+}

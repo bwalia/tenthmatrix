@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "การเปิดเผยจุดคอขวดของ LLM: ความสามารถในการสังเกต OTEL และการควบคุมต้นทุน",
+  "sub_title": "ข้อมูลสรุปเกี่ยวกับธุรกิจ: OpenTelemetry, Prometheus/Grafana, Langfuse — ข้อดี ข้อเสีย ต้นทุน และตัวชี้วัดการใช้งานที่ลดการใช้จ่ายของตัวแทน",
+  "excerpt": "TenthMatrix ในการเปิดเผยจุดคอขวดของตัวแทน LLM ที่มีการสังเกตได้: OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse — พร้อมข้อดี/ข้อเสียที่ชัดเจน การยกระดับต้นทุน และตัวชี้วัดการใช้งานที่ปกป้องส่วนต่างกำไร",
+  "meta_title": "การเปิดเผยจุดคอขวดของ LLM: OTEL ความสามารถในการสังเกตและต้นทุน | TenthMatrix",
+  "meta_description": "ค้นหาจุดคอขวดของตัวแทน LLM ด้วย OpenTelemetry, Prometheus/Grafana และ Langfuse ข้อดี ข้อเสีย ต้นทุน และตัวชี้วัดการใช้งานสำหรับ AI ที่พร้อมใช้งาน FinOps",
+  "meta_keywords": "คอขวด LLM, OpenTelemetry, OTEL, ความสามารถในการสังเกต, Langfuse, Prometheus, Grafana, ธานอส, FinOps, ตัวแทน AI, TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>สรุปธุรกิจ: เปิดเผย LLM และจุดคอขวดของตัวแทนที่สามารถสังเกตได้ — แพลตฟอร์ม OpenTelemetry, Prometheus/Grafana/Thanos และ LLM เช่น Langfuse — เพื่อให้คุณสามารถลดต้นทุน กระชับ SLO และจัดส่งตัวแทนพร้อมหลักฐาน เจาะลึก: บทความทางเทคนิคยาว<a href=\"/th/articles/llm-bottlenecks-observability-otel-cost-control\">(OTEL, FinOps, งบประมาณของตัวแทน)</a>ที่เกี่ยวข้อง:<a href=\"/th/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">เทอร์โบชาร์จ LLMs</a>·<a href=\"/th/enterprise-ai\">Enterprise AI Lab</a></em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สิ่งสำคัญที่สุด</strong>ตั๋ว \"AI ที่ช้า\" ส่วนใหญ่ไม่ใช่ความล้มเหลวของโมเดลอย่างลึกลับ เนื่องจากขาดการระบุแหล่งที่มา ตัวแทนเครื่องมือทำงานด้วย OpenTelemetry ให้คะแนนเอาต์พุต ติดแท็กทุกการโทรด้วยผู้เช่า / รุ่น / เส้นทาง / โทเค็น / ต้นทุน และบังคับใช้งบประมาณ โดยทั่วไปทีมที่ทำเช่นนี้จะพบว่ามีการสิ้นเปลือง 20–50% ในการลองใหม่ โมเดลขนาดใหญ่ และข้อความแจ้งที่ไม่แคชภายในรอบการวัดแรก</div><h2>เหตุใดคอขวดจึงถูกซ่อนโดยไม่มีการตรวจวัดทางไกล</h2>พรอมต์ลูกโซ่เอเจนต์<p>LLM เครื่องมือ การดึงข้อมูล RAG และลองอีกครั้ง เวลาแฝงและการใช้จ่ายทบต้นข้ามฮอป หากไม่มีสแปนและเมตริก คุณจะไม่สามารถบอกได้ว่าคอขวดคือโมเดล ที่เก็บเวกเตอร์ เครื่องมือที่ไม่สม่ำเสมอ หรือลูปการแก้ไขตัวเองที่ไม่มีขอบเขต ผู้มีส่วนได้ส่วนเสียทางธุรกิจซื้อโควต้า GPU หรือ API มากเกินไปในขณะที่คุณภาพของผลิตภัณฑ์ยังคงทรงตัว</p>จุดยืนของ<p>TenthMatrix สำหรับคุณสมบัติ AI: ปฏิบัติต่อไปป์ไลน์ของตัวแทนเช่นเดียวกับบริการการผลิตอื่นๆ —<strong>การสังเกตก่อน</strong>จากนั้นเพิ่มประสิทธิภาพการให้บริการ (ดู<a href=\"/th/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>) จากนั้นโปรโมตอย่างมีระเบียบวินัย (<a href=\"/th/ring-promoter\">Ring Promoter</a>)</p><h2>สแต็กความสามารถในการสังเกตที่จ่ายให้กับตัวเอง</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— หนึ่งเลเยอร์เครื่องมือสำหรับการติดตาม เมตริก และบันทึก (หากมีประโยชน์) ส่งออกไปยังนักสะสม พัดไปที่แบ็กเอนด์</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>— สัญญาณสีทอง: อัตราคำขอ, อัตราข้อผิดพลาด, เวลาแฝง, ทรูพุตโทเค็น, $/คำขอโดยประมาณ, การใช้งาน GPU ธานอส (หรือเทียบเท่า) เก็บตัวชี้วัดระยะยาวไว้สำหรับการรีวิว FinOps</li><li><strong>LLM แพลตฟอร์มความสามารถในการสังเกต</strong>(เช่น<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — เซสชัน/การติดตาม UI, เวอร์ชันพร้อมท์, มนุษย์ &amp; คะแนนอัตโนมัติ ชุดข้อมูลสำหรับการถดถอย</li></ul><h2>ข้อดีและข้อเสียของแนวทางนี้</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">ขนาด</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">ข้อดี</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">จุดด้อย / ข้อเสีย</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ควบคุมต้นทุน</strong></td>แอตทริบิวต์<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ใช้กับผู้เช่า คุณลักษณะ โมเดล และขั้นตอนตัวแทน ฆ่าความพยายามที่สิ้นเปลือง</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">เวลาทางวิศวกรรมต่อเครื่องมือ; ต้นทุนการจัดเก็บสำหรับการติดตามหากการเก็บรักษานั้นไร้เดียงสา</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>คุณภาพ</strong></td>คะแนน<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">+ ชุดข้อมูลจะตรวจจับการถดถอยทันทีก่อนที่ลูกค้าจะทำ</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การให้คะแนนอัตโนมัติอาจมีเสียงรบกวน มนุษย์ยังคงต้องการเส้นทางวิกฤติ</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ปฏิบัติการ</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ทักษะ OTEL/Prometheus แบบเดียวกับไมโครเซอร์วิสอื่นๆ ของคุณ</td>UI เฉพาะ<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM (Langfuse ฯลฯ) เพิ่มผลิตภัณฑ์อื่นเพื่อใช้งานหรือซื้อ</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ความสอดคล้อง</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Audit ว่าใครเรียกรุ่นไหนพร้อมแจ้งเวอร์ชันไหน</td>นโยบายการเก็บรักษา<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Prompt/PII ต้องได้รับการออกแบบล่วงหน้า</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ความเร็วเป็นค่า</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">แดชบอร์ดแรกในไม่กี่วัน หากคุณใช้งาน Grafana อยู่แล้ว</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การระบุแหล่งที่มาแบบต้นทุนเต็มสำหรับกราฟหลายตัวแทนใช้เวลานานกว่า</td></tr></tbody></table>ค่าใช้จ่าย<h2>: สิ่งที่คุณใช้จ่ายเทียบกับสิ่งที่คุณประหยัดได้</h2><p><strong>ค่าเครื่องมือวัด (แพลตฟอร์มตัวแทนขนาดกลางทั่วไป):</strong></p><ul><li>ใช้เวลา 1–2 สัปดาห์วิศวกรเพื่อปรับใช้ข้อตกลงการขยาย OTEL + การเดินสายของผู้ส่งออก</li>ตัวสะสม<li>+ การรักษาตัววัด: มักจะ &lt;5–10% ของ LLM API/GPU รายเดือนเมื่อปรับการสุ่มตัวอย่างแล้ว</li><li>ตัวเลือกการสังเกต SaaS LLM: ราคาต่อเหตุการณ์/การติดตาม - ตั้งงบประมาณเป็น % ของการใช้จ่ายของโมเดล ไม่ใช่ในภายหลัง</li></ul><p><strong>คันโยกประหยัด (หน่วยเมตริกการใช้งานที่ขยับเข็ม):</strong></p><ul>โทเค็น<li><strong>ต่องานที่สำเร็จ</strong>— ไม่ใช่โทเค็นต่อการเรียกแบบ Raw ลูปเครื่องมือ Cap และรอบการแก้ไขข้อบกพร่องด้วยตนเอง</li><li><strong>ต้นทุนต่องานที่สำเร็จ</strong>— กำหนดเส้นทางโมเดลราคาถูกสำหรับจำแนก/กำหนดเส้นทาง จองรุ่นชายแดนสำหรับขั้นตอนที่ยาก</li><li><strong>อัตราการเข้าถึงแคช</strong>- การแคชพร้อมท์/คำนำหน้าที่ปลอดภัย วัดความถูกต้อง ไม่ใช่แค่ความหน่วงเท่านั้น</li><li><strong>อัตราการลองซ้ำ &amp; อัตราจดหมายตาย</strong>— เครื่องมือที่ไม่สม่ำเสมอปลอมตัวว่าเป็นปัญหา “คุณภาพของโมเดล”</li><li><strong>p95 TTFT และความหน่วงจากต้นทางถึงปลายทาง</strong>— ปกป้อง UX ในขณะที่คุณลดค่าใช้จ่าย</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>กฎง่ายๆ</strong>หากคุณไม่สามารถตอบได้ว่า “ตัวแทนนี้มีค่าใช้จ่ายเท่าใดในสัปดาห์ที่แล้วตามลูกค้าและตามขั้นตอน” คุณยังไม่พร้อมที่จะปรับขนาดการใช้งาน - คุณพร้อมที่จะสร้างความประหลาดใจให้กับ Finance แล้ว</div>การให้คะแนน<h2>:</h2>แบบแมนนวลเทียบกับแบบอัตโนมัติ<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\">วิธี<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">เมื่อใดควรใช้</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">หมายเหตุธุรกิจ</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>การให้คะแนนด้วยตนเอง</strong></td>ชุดทอง<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">, คำตอบที่ได้รับการควบคุม, สำเนาที่ละเอียดอ่อนต่อแบรนด์</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ราคาแพงแต่มีระบบผู้พิพากษาอัตโนมัติ</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>การให้คะแนนอัตโนมัติ</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การถดถอยในปริมาณมาก, LLM-ตามที่ตัดสิน, การตรวจสอบรูบริก</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ราคาถูกในขนาด; ปรับเทียบกับมนุษย์ทุกเดือน</td></tr></tbody></table><h2>Playbook การโยกย้าย (เริ่มเล็ก ๆ )</h2><ol><li>Instrument<strong>เส้นทางตัวแทนการผลิต</strong>หนึ่งเส้นทางจากต้นทางถึงปลายทางด้วยแอตทริบิวต์ OTEL + โทเค็น/ต้นทุน</li><li>จัดส่งบอร์ด Grafana สำหรับอัตรา / ข้อผิดพลาด / เวลาแฝง / $/ความสำเร็จ</li><li>เพิ่ม Langfuse (หรือเทียบเท่า) สำหรับเวอร์ชันพร้อมท์และคะแนนบนเส้นทางนั้น</li><li>บังคับใช้ฮาร์ดแคป: โทเค็นสูงสุด, การเรียกใช้เครื่องมือสูงสุด, การลองใหม่สูงสุดต่อเซสชัน</li><li>ขยายไปยังเอเจนต์ถัดไปหลังจากพาธแรกแสดงต้นทุนที่วัดได้หรือชนะเวลาแฝงเท่านั้น</li></ol>นาฬิกา<h2>: เหตุใดความสามารถในการสังเกตจึงมีความสำคัญต่อระบบ AI</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">การพูดคุยตามบริบทเกี่ยวกับวัฒนธรรมการสังเกต — ไม่ใช่การสาธิตผลิตภัณฑ์ TenthMatrix จับคู่กับเอกสาร<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>และบทความทางเทคนิค<a href=\"/th/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix</a></p><h2>อ่าน</h2>ถัดไป<ol><li><a href=\"/th/articles/llm-bottlenecks-observability-otel-cost-control\">บทความแบบยาว</a>- สคีมา OTEL, ตัวสะสม, สูตรต้นทุน, ตัวพิมพ์ใหญ่ของตัวแทน, หมายเหตุ Langfuse/LMNR</li><li><a href=\"/th/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">เทอร์โบชาร์จ LLMs</a>— ปัญหาคอขวดฝั่งเสิร์ฟหลังจากที่คุณมองเห็นแล้ว</li><li><a href=\"/th/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">ตัวแทนท้องถิ่น</a>·<a href=\"/th/enterprise-ai\">Enterprise AI Lab</a>·<a href=\"/th/contact-us\">ติดต่อ TenthMatrix</a></li></ol><p>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>. ข้อมูลอ้างอิง:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

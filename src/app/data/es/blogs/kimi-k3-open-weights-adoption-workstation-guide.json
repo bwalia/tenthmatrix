@@ -1,0 +1,77 @@
+{
+  "uuid": "blog-kimi-k3-open-weights-001",
+  "internal_id": 958,
+  "slug": "kimi-k3-open-weights-adoption-workstation-guide",
+  "title": "Kimi K3 y pesos abiertos: agentes de frontera sin APIs cerradas",
+  "sub_title": "Moonshot Kimi K3, vLLM day-0, MCP pasa a ser sin estado, y cómo deben adoptar los modelos abiertos las empresas",
+  "excerpt": "Kimi K3 lleva los modelos open-weight al territorio de agentes de frontera. Qué cambia para desarrolladores, serving vLLM, MCP y consejos de producción TenthMatrix.",
+  "meta_title": "Guía Kimi K3 open weights — vLLM, MCP y agentes híbridos | TenthMatrix",
+  "meta_description": "Guía TenthMatrix sobre Moonshot Kimi K3 y adopción open-weight: benchmarks, serving vLLM day-0, MCP sin estado, radar de modelos y enrutado híbrido en producción.",
+  "meta_keywords": "Kimi K3, Moonshot, open weights, LLM open-weight, vLLM, MCP, Laguna, Solar Open 2, DeepSeek, Qwen, TenthMatrix",
+  "cover_image": "/img/kimi-k3-open-weights-cover.svg",
+  "images": [
+    {
+      "url": "/img/kimi-k3-open-weights-cover.svg",
+      "id": 958,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kimi K3 open-weight models TenthMatrix guide"
+    },
+    {
+      "url": "/img/open-weights-production-stack.svg",
+      "id": 959,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Open-weight production stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>El Kimi K3 de Moonshot puso los modelos open-weight en la misma conversación que las APIs cerradas de frontera — para coding agéntico, no solo demos de chat. Aquí la visión TenthMatrix para negocio y builders. Análisis, lista radar y checklist de producción en el <a href=\"/es/articles/kimi-k3-open-weights-adoption-workstation-guide\">artículo largo</a>.</em></p>\n\n<p><img src=\"/img/kimi-k3-open-weights-cover.svg\" alt=\"Los modelos open-weight Kimi K3 aceleran la IA empresarial\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Conclusión.</strong> Los pesos abiertos ya no son «casi tan buenos». Kimi K3 (2,8T MoE, contexto 1M, multimodal nativo) llegó con soporte <strong>vLLM</strong> / SGLang day-0 y puntuaciones que sitúan los modelos abiertos en benches agenticos junto a sistemas clase Claude/GPT. La decisión real no es «abierto o cerrado» — es <strong>qué modelo para qué trabajo</strong>, en hardware y ops que realmente puedas operar.\n</div>\n\n<h2>Lo que cambió Kimi K3</h2>\n<ul>\n  <li><strong>Escala:</strong> primer modelo abierto ampliamente discutido en la clase ~3T parámetros (Moonshot; pesos en Hugging Face como <code>moonshotai/Kimi-K3</code>).</li>\n  <li><strong>Aptitud agentica:</strong> benches independientes (p. ej. informes SWE-bench / LiveCodeBench estilo MindStudio circulando en julio 2026) sitúan K3 en la misma banda que los top propietarios en coding/agentes.</li>\n  <li><strong>Velocidad de serving:</strong> vLLM publicó recetas day-0 (kernels KDA, desagregación P/D, decodificación especulativa DSpark) — self-host es un proyecto de ingeniería, no un paper.</li>\n  <li><strong>Caveat de licencia:</strong> «open weights» ≠ MIT para todo uso SaaS comercial — lea la Kimi K3 License antes de productizar.</li>\n</ul>\n\n<p><img src=\"/img/open-weights-production-stack.svg\" alt=\"Stack de producción open-weight de pesos a agentes\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Señal de industria (misma quincena)</h2>\n<ul>\n  <li><strong>MCP 2026-07-28</strong> — el protocolo pasa en gran medida a <em>sin estado</em> (sin handshake de sesión / session IDs); escala horizontal más fácil para herramientas agenticas. Extensiones: MCP Apps, MCP Tasks.</li>\n  <li><strong>Open Secure AI Alliance</strong> (NVIDIA + 100+ firmas) + carta «Open Weights and American AI Leadership» — marco político y de seguridad de modelos abiertos como infraestructura defensiva.</li>\n  <li><strong>Adopción ≠ producción:</strong> encuestas open-source AI estilo Mozilla siguen mostrando alta <em>experimentación</em> open-model pero un hueco obstinado hacia producción — ops y evals, no el IQ bruto, son el cuello de botella.</li>\n</ul>\n\n<h2>Ver: servir modelos abiertos con vLLM</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/a9T9kWwpaNg\" title=\"Optimizar, desplegar y hacer benchmark de un LLM open-source con vLLM\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n\n<h2>Consejo TenthMatrix</h2>\n<ol>\n  <li><strong>PYMEs:</strong> preferir MoE abiertos más pequeños (Laguna S 2.1, Solar Open 2, clase Qwen/DeepSeek) en workstations AI / nodos GPU pequeños; usar APIs K3 gestionadas si necesita ese IQ sin rack.</li>\n  <li><strong>Empresas:</strong> self-host clase K3 solo con clúster GPU + presupuesto MLOps; si no, híbrido — abierto para RAG/agentes privados, cerrado para rutas peak-critical.</li>\n  <li><strong>Siempre:</strong> harness de eval, Review Bot, GitOps, herramientas MCP con HITL — ver nuestro <a href=\"/es/docs/blogs/wise-developer-project-workflow-multi-agent-teams\">flujo multi-agente</a>.</li>\n</ol>\n\n<p>Radar completo (Kimi, Laguna, Solar, DeepSeek, Qwen, Llama, Nemotron, GLM, KAT-Coder, Mage-Flow, Inflect y más), notas MCP y checklist de producción: <a href=\"/es/articles/kimi-k3-open-weights-adoption-workstation-guide\">artículo largo</a>. Publicado por <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "kimi",
+      "id": 1024
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-08-05T22:00:00Z",
+  "updated_at": "2026-08-05T22:00:00Z",
+  "published_date": "2026-08-05",
+  "status": true
+}

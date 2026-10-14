@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Open-weight production stack from weights to agents">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#10251f"/>
+    </linearGradient>
+    <style>
+      .t { fill: #ffffff; font: 800 24px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .h { fill: #67e8f9; font: 700 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .p { fill: rgba(255,255,255,0.8); font: 500 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: rgba(255,255,255,0.05); stroke: rgba(103,232,249,0.35); stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <text class="t" x="40" y="48">Open-weight path to production (Workstation view)</text>
+
+  <rect class="box" x="40" y="80" width="250" height="160" rx="14"/>
+  <text class="h" x="60" y="112">1. WEIGHTS</text>
+  <text class="p" x="60" y="142">Kimi K3, Laguna, Solar,</text>
+  <text class="p" x="60" y="162">DeepSeek, Qwen, Llama,</text>
+  <text class="p" x="60" y="182">Nemotron, GLM...</text>
+  <text class="p" x="60" y="212">Read the license first</text>
+
+  <rect class="box" x="330" y="80" width="250" height="160" rx="14"/>
+  <text class="h" x="350" y="112">2. SERVE</text>
+  <text class="p" x="350" y="142">vLLM / SGLang day-0</text>
+  <text class="p" x="350" y="162">TP/EP, P/D split,</text>
+  <text class="p" x="350" y="182">speculative decoding</text>
+  <text class="p" x="350" y="212">Managed API optional</text>
+
+  <rect class="box" x="620" y="80" width="250" height="160" rx="14"/>
+  <text class="h" x="640" y="112">3. GOVERN</text>
+  <text class="p" x="640" y="142">Guardrails, evals,</text>
+  <text class="p" x="640" y="162">RBAC, audit logs,</text>
+  <text class="p" x="640" y="182">prompt cache, FinOps</text>
+  <text class="p" x="640" y="212">HITL for write tools</text>
+
+  <rect class="box" x="910" y="80" width="250" height="160" rx="14"/>
+  <text class="h" x="930" y="112">4. AGENTS</text>
+  <text class="p" x="930" y="142">MCP tools (stateless),</text>
+  <text class="p" x="930" y="162">multi-agent crews,</text>
+  <text class="p" x="930" y="182">Review Bot + GitOps</text>
+  <text class="p" x="930" y="212">Ship to business</text>
+
+  <rect class="box" x="40" y="280" width="1120" height="300" rx="16"/>
+  <text class="h" x="70" y="320">HARDWARE REALITY CHECK</text>
+  <text class="p" x="70" y="360">Kimi K3 is frontier open-weight scale: ~2.8T MoE, 1M context, MXFP4 weights ~1.4TB.</text>
+  <text class="p" x="70" y="390">Moonshot-class serving wants datacenter GPUs (often 16+ accelerators; 64+ for preferred configs).</text>
+  <text class="p" x="70" y="420">SME path: smaller open MoEs (Laguna S, Solar Open 2, Qwen/DeepSeek distillations) on Workstation GPU boxes,</text>
+  <text class="p" x="70" y="450">or managed inference for K3-class models while you keep Spec, RAG, and agents on your stack.</text>
+  <text class="p" x="70" y="500">The gap is not model IQ - it is production ops. Close it with evals, serving recipes, and GitOps.</text>
+  <text class="p" x="70" y="540">Workstation: AI workstations + Multi Agentic Software + GPU clusters sized to the model you can actually run.</text>
+</svg>

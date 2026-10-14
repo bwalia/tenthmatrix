@@ -1,0 +1,404 @@
+{
+  "pageId": "grok",
+  "meta": {
+    "title": "Grok Bot — Persistent AI Teammates | TenthMatrix",
+    "description": "TenthMatrix guide to xAI Grok Bot: always-on cloud teammates with browser, terminal, connectors, skills, routines, and multi-bot coordination — plus Grok API models for builders.",
+    "keywords": "Grok Bot, xAI, Grok 4.6, persistent AI agents, skills, routines, computer use, TenthMatrix"
+  },
+  "header": {
+    "title": "Grok Bot",
+    "subtitle": "Persistent AI teammates on a shared cloud computer",
+    "lastUpdated": "September 2026"
+  },
+  "ui": {
+    "videoHeading": "Watch: Grok Bot overview",
+    "featuresHeading": "How Grok Bot works",
+    "useCasesHeading": "Real-world Grok Bot use cases",
+    "useCasesSubtitle": "Always-on teammates for sales, ops, research, and coordinated multi-bot work",
+    "keyBenefits": "Key Benefits:",
+    "newsHeading": "Latest Grok & xAI updates",
+    "faqHeading": "اکثر پوچھے جانے والے سوالات",
+    "mostPopular": "سب سے مقبول"
+  },
+  "hero": {
+    "badge": "xAI · Grok Bot · Grok API · Skills & Routines",
+    "title": "Grok Bot: AI Teammates That Keep Working",
+    "subtitle": "Named persistent bots on a shared cloud computer — browser, terminal, connectors, skills, and routines",
+    "description": "Grok Bot is xAI’s product for durable AI teammates. Each Bot has memory, files, and browser sessions that survive between turns. Bots sign into real apps, collaborate with each other, and interrupt you mainly for approvals. Pair that with Grok frontier models on the API for coding and agentic tool use. TenthMatrix helps you adopt Grok Bot safely beside Claude and OpenAI agents — with clear ownership, connectors, and promotion controls.",
+    "video": "https://www.youtube.com/embed/mlB8GDy0WX0",
+    "videoTitle": "Grok Bot: xAI's 24/7 AI Teammates",
+    "videoHeading": "Watch: Grok Bot overview",
+    "image": "/img/ai-agents-business-hero.jpg",
+    "overlayRgb": "29,78,216",
+    "overlayRgbDark": "30,58,138",
+    "stats": [
+      {
+        "number": "24/7",
+        "label": "Works while devices are off",
+        "icon": "fas fa-clock"
+      },
+      {
+        "number": "Cloud VM",
+        "label": "Browser, files & terminal",
+        "icon": "fas fa-desktop"
+      },
+      {
+        "number": "Multi-bot",
+        "label": "Shared context & handoffs",
+        "icon": "fas fa-users"
+      },
+      {
+        "number": "Routines",
+        "label": "Schedules & event triggers",
+        "icon": "fas fa-redo"
+      }
+    ]
+  },
+  "introduction": {
+    "title": "What is Grok Bot?",
+    "content": "Grok Bot is not a chat thread that resets. It is a roster of named AI teammates that share one account-scoped cloud computer. They use apps the way people do — browser and computer use when APIs are missing — keep durable state, and coordinate with other Bots. Skills capture how work should be done; routines decide when it runs. TenthMatrix positions Grok Bot for always-on operational lanes while Claude Code remains the deep coding agent on your repos.",
+    "keyPoints": [
+      "<strong>Persistent computer</strong>: Shared cloud VM with browser, filesystem, and terminal per account",
+      "<strong>Named teammates</strong>: Durable memory, sessions, and preferences across turns",
+      "<strong>Computer use</strong>: Operate apps and sites without clean APIs when connectors alone are not enough",
+      "<strong>Skills & routines</strong>: Reusable instructions plus schedules or event-driven runs",
+      "<strong>Multi-bot coordination</strong>: Parallel Bots that message, share context, and hand off ownership"
+    ]
+  },
+  "features": [
+    {
+      "title": "Persistent cloud computer",
+      "description": "Every Bot runs on the same user-scoped cloud machine. Files, browser sessions, and logins persist so handoffs do not restart from zero — treat credentials as shared across your Bots.",
+      "icon": "fas fa-server",
+      "image": "/img/ai-technology.jpg",
+      "capabilities": [
+        "Always-on Linux cloud VM",
+        "Browser + terminal + files",
+        "Shared account state",
+        "Parallel Bot screens",
+        "Background execution"
+      ]
+    },
+    {
+      "title": "Skills, plugins & connectors",
+      "description": "Skills encode steps, decision rules, and safety boundaries. Plugins and connectors attach CRM, inbox, Slack, GitHub, and other systems Bots need to finish real work.",
+      "icon": "fas fa-puzzle-piece",
+      "image": "/img/agent-workflows.jpg",
+      "capabilities": [
+        "Reusable skill packs",
+        "Connector / MCP access",
+        "Per-Bot skill enablement",
+        "Composer / shortcut discovery",
+        "Human approval for risky actions"
+      ]
+    },
+    {
+      "title": "Routines & automations",
+      "description": "Routines tell a Bot when to run — on a schedule or after supported events. Draft and reconcile first; require approval for send, purchase, delete, or production changes.",
+      "icon": "fas fa-calendar-check",
+      "image": "/img/14.jpg",
+      "capabilities": [
+        "Scheduled routines",
+        "Event-triggered runs",
+        "Test-run before enable",
+        "Pause while away",
+        "Idempotent retry guidance"
+      ]
+    },
+    {
+      "title": "Grok API & coding models",
+      "description": "Builders can call Grok frontier models (including Grok 4.6-class reasoning and coding) via the xAI API for custom agents, while Grok Bot covers persistent teammate workflows.",
+      "icon": "fas fa-code",
+      "image": "/img/ai-programming.jpg",
+      "capabilities": [
+        "Responses / chat APIs",
+        "Function calling & search tools",
+        "Long context agent loops",
+        "Grok Build coding agent",
+        "OpenAI-compatible migration paths"
+      ]
+    }
+  ],
+  "useCases": [
+    {
+      "industry": "Sales & GTM",
+      "title": "Outbound and CRM follow-through",
+      "description": "Bots draft outreach, update CRM fields, and queue reviews while humans approve sends — keeping pipeline work moving overnight.",
+      "image": "/img/15.jpg",
+      "benefits": [
+        "Always-on follow-ups",
+        "CRM hygiene",
+        "Approval before send"
+      ],
+      "metrics": {
+        "coverage": "24/7 queue progress",
+        "handoff": "Multi-bot threads",
+        "risk": "Human sign-off"
+      }
+    },
+    {
+      "industry": "Operations",
+      "title": "Recurring ops packs",
+      "description": "Routines assemble status packs, reconcile sheets, and ping owners only when exceptions need a decision.",
+      "image": "/img/16.jpg",
+      "benefits": [
+        "Scheduled packs",
+        "Exception-first interrupts",
+        "Skill reuse"
+      ],
+      "metrics": {
+        "cadence": "Daily / weekly routines",
+        "noise": "Fewer status pings",
+        "reuse": "Shared skills"
+      }
+    },
+    {
+      "industry": "Research",
+      "title": "Long-running research agents",
+      "description": "Bots keep browser sessions and files across days, gather sources, and hand synthesised briefs to a reviewer Bot or human.",
+      "image": "/img/11.jpg",
+      "benefits": [
+        "Durable research state",
+        "Parallel Bots",
+        "Cited briefs"
+      ],
+      "metrics": {
+        "persist": "Multi-day context",
+        "parallel": "Bot collaboration",
+        "review": "Human gate"
+      }
+    },
+    {
+      "industry": "Engineering adjacent",
+      "title": "Companion to Claude Code",
+      "description": "Use Grok Bot for office-admin and always-on lanes; keep Claude Code for deep repository work and PR review on your machines.",
+      "image": "/img/claude-code-cowork-chatgpt-cover.svg",
+      "benefits": [
+        "Right tool per lane",
+        "Less laptop dependency",
+        "Shared governance model"
+      ],
+      "metrics": {
+        "split": "Ops vs coding lanes",
+        "uptime": "Cloud persistence",
+        "control": "Approval policies"
+      }
+    }
+  ],
+  "technicalDetails": {
+    "title": "Grok Bot architecture",
+    "subtitle": "Persistent teammates, shared computer, skills, and API builders",
+    "components": [
+      {
+        "name": "Bot roster",
+        "description": "Named persistent agents with durable memory and preferences",
+        "features": [
+          "Messaging UI",
+          "میموری",
+          "Handoffs"
+        ]
+      },
+      {
+        "name": "Shared cloud computer",
+        "description": "Account-scoped VM with browser, filesystem, and terminal",
+        "features": [
+          "Computer use",
+          "Sessions",
+          "Parallel screens"
+        ]
+      },
+      {
+        "name": "Skills & plugins",
+        "description": "Reusable instructions and installed connectors for real apps",
+        "features": [
+          "Skills",
+          "Plugins",
+          "Connectors"
+        ]
+      },
+      {
+        "name": "Routines",
+        "description": "Schedule and event triggers with test runs and pause controls",
+        "features": [
+          "Cron-like",
+          "Events",
+          "History"
+        ]
+      },
+      {
+        "name": "Grok API models",
+        "description": "Frontier Grok models for reasoning, coding, and tool-calling agents",
+        "features": [
+          "Grok 4.6",
+          "ٹولز",
+          "Long context"
+        ]
+      },
+      {
+        "name": "TenthMatrix overlay",
+        "description": "Adopt beside Claude/OpenAI with WSL Proxy, Vault, and Ring Promoter",
+        "features": [
+          "Edge",
+          "Secrets",
+          "Rings"
+        ]
+      }
+    ]
+  },
+  "comparison": {
+    "title": "Grok Bot vs chat copilots",
+    "columns": [
+      "پہلو",
+      "Typical chat copilot",
+      "Grok Bot",
+      "بہتری"
+    ],
+    "items": [
+      {
+        "aspect": "Persistence",
+        "traditional": "Session resets",
+        "agentWorkflow": "Durable Bot state",
+        "improvement": "Context compounds"
+      },
+      {
+        "aspect": "Runtime",
+        "traditional": "Your laptop must be on",
+        "agentWorkflow": "Cloud computer 24/7",
+        "improvement": "Works while offline"
+      },
+      {
+        "aspect": "Apps",
+        "traditional": "API integrations only",
+        "agentWorkflow": "Connectors + computer use",
+        "improvement": "Real tool completion"
+      },
+      {
+        "aspect": "Teamwork",
+        "traditional": "Single assistant",
+        "agentWorkflow": "Multi-bot coordination",
+        "improvement": "Handoffs without you"
+      },
+      {
+        "aspect": "Coding depth",
+        "traditional": "Varies by product",
+        "agentWorkflow": "Companion to Claude Code",
+        "improvement": "Right lane per job"
+      }
+    ]
+  },
+  "news": [
+    {
+      "date": "2026",
+      "title": "Grok Bot launches as persistent teammates",
+      "summary": "xAI ships named Bots on a shared cloud computer with messaging, approvals, connectors, and routines.",
+      "source": "xAI docs"
+    },
+    {
+      "date": "2026",
+      "title": "Skills and routines",
+      "summary": "Reusable skills plus scheduled or event-driven routines turn successful tasks into repeatable processes.",
+      "source": "Grok Bot docs"
+    },
+    {
+      "date": "2026",
+      "title": "Grok frontier API models",
+      "summary": "Grok 4.6-class models add long-context reasoning, tools, and coding for custom agent builders.",
+      "source": "xAI API"
+    },
+    {
+      "date": "2026",
+      "title": "TenthMatrix multi-agent stack",
+      "summary": "Run Grok Bot beside Claude and OpenAI agents with shared security and promotion patterns.",
+      "source": "TenthMatrix"
+    }
+  ],
+  "pricing": {
+    "title": "Adopt Grok Bot with TenthMatrix",
+    "subtitle": "xAI / Cursor subscription pricing stays with the vendor — we help you operationalise safely",
+    "plans": [
+      {
+        "name": "Pilot Bot",
+        "price": "Scoped",
+        "period": "engagement",
+        "description": "One Bot, one routine, clear approval policy",
+        "features": [
+          "Bot role design",
+          "Connector review",
+          "Approval checklist",
+          "2-week pilot"
+        ],
+        "cta": "Book a pilot"
+      },
+      {
+        "name": "Team roster",
+        "price": "Programme",
+        "period": "per quarter",
+        "description": "Multi-bot operating model with skills and routines",
+        "features": [
+          "Skill library",
+          "Routine playbooks",
+          "Security workshop",
+          "Operator training"
+        ],
+        "cta": "ہم سے بات کریں",
+        "featured": true
+      },
+      {
+        "name": "انٹرپرائز",
+        "price": "Custom",
+        "period": "contact",
+        "description": "Multi-vendor agent estate with TenthMatrix controls",
+        "features": [
+          "Claude + OpenAI + Grok map",
+          "WSL Proxy edge",
+          "Vault / OAuth patterns",
+          "Dedicated team"
+        ],
+        "cta": "Contact sales"
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "How is Grok Bot different from Grok chat?",
+      "answer": "Grok chat is a conversational interface. Grok Bot is a persistent teammate product: named Bots on a shared cloud computer that keep memory, use apps, run routines, and collaborate with other Bots."
+    },
+    {
+      "question": "Do Bots share credentials?",
+      "answer": "Yes — the cloud computer is isolated to your account, not to each Bot. Treat logins and files as available to all of your Bots, and design approvals accordingly."
+    },
+    {
+      "question": "Should Grok Bot replace Claude Code?",
+      "answer": "Usually no. Claude Code remains the deep repository coding agent. Grok Bot shines for always-on operational and knowledge-work lanes that must continue when laptops are closed."
+    },
+    {
+      "question": "What are skills and routines?",
+      "answer": "A skill is a reusable set of instructions for how to do a task. A routine tells a Bot when to run — on a schedule or after a supported event — with test runs and pause controls."
+    },
+    {
+      "question": "How does TenthMatrix help with Grok Bot?",
+      "answer": "We help you design Bot roles, connector scopes, approval policies, and how Grok Bot sits beside Claude and OpenAI agents — including WSL Proxy, Vault leases, and Ring Promoter promotion where needed."
+    }
+  ],
+  "cta": {
+    "title": "Ready to pilot Grok Bot with clear controls?",
+    "description": "TenthMatrix helps you stand up persistent AI teammates without confusing them for coding agents — and without skipping approvals.",
+    "buttons": [
+      {
+        "text": "Contact TenthMatrix",
+        "link": "/contact-us",
+        "type": "primary"
+      },
+      {
+        "text": "OpenAI Agents page",
+        "link": "/openai-agents",
+        "type": "secondary"
+      },
+      {
+        "text": "Claude Agents page",
+        "link": "/claude-agents",
+        "type": "outline"
+      }
+    ]
+  }
+}

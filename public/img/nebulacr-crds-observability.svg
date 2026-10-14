@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="440" viewBox="0 0 920 440" role="img" aria-label="NebulaCR Kubernetes CRDs and observability hooks">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .tenant { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .project { fill: #0c2e36; stroke: #00acc1; stroke-width: 1.5; }
+      .access { fill: #3a1f08; stroke: #ea580c; stroke-width: 1.5; }
+      .token { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .pull { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.75); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+    </style>
+  </defs>
+
+  <rect width="920" height="440" fill="url(#bg)"/>
+  <rect width="920" height="440" fill="url(#grid)"/>
+
+  <text class="title" x="460" y="28" text-anchor="middle">Kubernetes CRDs (nebulacr.io/v1alpha1) + ops hooks</text>
+  <text class="subtitle" x="460" y="48" text-anchor="middle">Reconciled by nebula-controller  /  quotas, RBAC, token policies</text>
+
+  <g transform="translate(28,64)">
+    <rect width="200" height="100" rx="10" class="tenant"/>
+    <text class="boxLabel" x="100" y="28" text-anchor="middle">Tenant</text>
+    <text class="boxText" x="12" y="48">- org quotas, IP allow/deny</text>
+    <text class="boxText" x="12" y="64">- OIDC subject mapping</text>
+    <text class="boxText" x="12" y="80">- billing cohort</text>
+    <text class="boxText" x="12" y="94" fill="#ce93d8">scope: cluster</text>
+  </g>
+
+  <g transform="translate(248,64)">
+    <rect width="200" height="100" rx="10" class="project"/>
+    <text class="boxLabel" x="100" y="28" text-anchor="middle">Project</text>
+    <text class="boxText" x="12" y="48">- repo grouping, visibility</text>
+    <text class="boxText" x="12" y="64">- retention, scanning hooks</text>
+    <text class="boxText" x="12" y="80">- replication targets</text>
+    <text class="boxText" x="12" y="94" fill="#80deea">scope: namespace</text>
+  </g>
+
+  <g transform="translate(468,64)">
+    <rect width="200" height="100" rx="10" class="access"/>
+    <text class="boxLabel" x="100" y="28" text-anchor="middle">AccessPolicy</text>
+    <text class="boxText" x="12" y="48">- subjects, resources</text>
+    <text class="boxText" x="12" y="64">- actions, conditions</text>
+    <text class="boxText" x="12" y="80">- effective scope evaluation</text>
+    <text class="boxText" x="12" y="94" fill="#ffb74d">fine-grained RBAC</text>
+  </g>
+
+  <g transform="translate(688,64)">
+    <rect width="204" height="100" rx="10" class="token"/>
+    <text class="boxLabel" x="102" y="28" text-anchor="middle">TokenPolicy</text>
+    <text class="boxText" x="12" y="48">- TTL, rotation, revocation</text>
+    <text class="boxText" x="12" y="64">- robot accounts</text>
+    <text class="boxText" x="12" y="80">- audience scoping</text>
+    <text class="boxText" x="12" y="94" fill="#81c784">automation-safe</text>
+  </g>
+
+  <g transform="translate(28,184)">
+    <rect width="864" height="120" rx="10" class="lane"/>
+    <text class="boxLabel" x="20" y="26">Observability stack  /  Helm values + docs</text>
+    <text class="boxText" x="20" y="50">- Prometheus: ServiceMonitor enabled  /  scrape /metrics from registry and auth</text>
+    <text class="boxText" x="20" y="68">- OpenTelemetry: OTLP endpoint  /  tracing to collectors  /  Grafana / Jaeger</text>
+    <text class="boxText" x="20" y="86">- Structured JSON logs  /  request IDs propagated  /  registry event webhooks</text>
+    <text class="boxText" x="20" y="104">- Rate limits per IP and per tenant (governor)  /  pre-flight throttle for noisy clients</text>
+  </g>
+
+  <g transform="translate(28,318)">
+    <rect width="864" height="100" rx="10" class="pull"/>
+    <text class="boxLabel" x="20" y="26">Pull-through paths (examples)</text>
+    <text class="code" x="20" y="48">docker pull &lt;host&gt;:5000/library/nginx:latest</text>
+    <text class="code" x="20" y="66">docker pull &lt;host&gt;:5000/ghcr.io/org/repo:tag</text>
+    <text class="code" x="20" y="84">docker pull &lt;host&gt;:5000/quay.io/prometheus/prometheus:latest</text>
+    <text class="boxText" x="500" y="48">containerd registry.mirrors</text>
+    <text class="boxText" x="500" y="66">point docker.io at NebulaCR</text>
+    <text class="boxText" x="500" y="84">cut upstream latency + egress</text>
+  </g>
+</svg>

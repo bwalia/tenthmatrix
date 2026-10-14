@@ -1,0 +1,122 @@
+@use './shared' as *;
+
+.steps {
+  display: grid;
+  gap: var(--tm-space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: none;
+}
+
+.row {
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--tm-space-5);
+  }
+
+  .step {
+    border-top: 2px solid var(--tm-line-strong);
+    padding-top: var(--tm-space-5);
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      inset-inline-start: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--tm-accent);
+    }
+  }
+}
+
+.list {
+  gap: 0;
+
+  .step {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: var(--tm-space-4);
+    padding-bottom: var(--tm-space-8);
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      inset-inline-start: 23px;
+      top: 48px;
+      bottom: 0;
+      width: 1px;
+      background: var(--tm-line-strong);
+    }
+  }
+
+  .marker {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--tm-radius-sm);
+    border: 1px solid var(--tm-line);
+    background: var(--tm-surface);
+  }
+}
+
+.step {
+  min-width: 0;
+}
+
+.marker {
+  display: block;
+  margin-bottom: var(--tm-space-3);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-semibold);
+  color: var(--tm-accent);
+
+  .list & {
+    margin: 0;
+  }
+}
+
+.phase {
+  margin: 0 0 var(--tm-space-1);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  letter-spacing: var(--tm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--tm-text-subtle);
+}
+
+.title {
+  @include card-title;
+}
+
+.duration {
+  margin: var(--tm-space-1) 0 0;
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  color: var(--tm-secondary);
+}
+
+.text {
+  margin: var(--tm-space-2) 0 0;
+  color: var(--tm-text-muted);
+}
+
+.sub {
+  margin: var(--tm-space-3) 0 0;
+  padding-inline-start: var(--tm-space-5);
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+
+  li + li {
+    margin-top: var(--tm-space-1);
+  }
+
+  li::marker {
+    color: var(--tm-accent);
+  }
+}

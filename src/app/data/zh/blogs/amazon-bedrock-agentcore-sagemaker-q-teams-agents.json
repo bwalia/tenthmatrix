@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-aws-bedrock-teams-agents-001",
+  "internal_id": 954,
+  "slug": "amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "title": "Amazon Bedrock、AgentCore、SageMaker 与 Q：Microsoft Teams 中的智能体",
+  "sub_title": "FDE 手册：用哪个 AWS 服务、首个 Teams 智能体路径，以及 RAG、MLOps 与 LLM 应用的日历估算",
+  "excerpt": "落地 Amazon Bedrock、Bedrock AgentCore、SageMaker 与 Amazon Q，再在 Microsoft Teams 中启动首个业务智能体——含需求、工具与时间盒。",
+  "meta_title": "Amazon Bedrock、AgentCore、SageMaker 与 Q — Microsoft Teams 中的智能体",
+  "meta_description": "FDE 指南：Amazon Bedrock、Bedrock AgentCore、SageMaker 与 Amazon Q：架构、Microsoft Teams 中的首个智能体、工具，以及 RAG 与 MLOps 的时间估算。",
+  "meta_keywords": "Amazon Bedrock, Bedrock AgentCore, Amazon SageMaker, Amazon Q, Microsoft Teams 智能体, RAG, MLOps, FDE, Entra ID",
+  "cover_image": "/img/aws-bedrock-teams-agents-cover.svg",
+  "images": [
+    {
+      "url": "/img/aws-bedrock-teams-agents-cover.svg",
+      "id": 954,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Amazon Bedrock AgentCore SageMaker Amazon Q agents in Microsoft Teams"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Amazon Bedrock、Bedrock AgentCore、SageMaker 与 Amazon Q 如何协同——以及 FDE 如何把首个业务智能体交付进 Microsoft Teams。完整设置指南、工具清单与日历估算，请阅读 <a href=\"/zh/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">长文章</a>.</em></p>\n<p><img alt=\"Amazon Bedrock AgentCore SageMaker Amazon Q 在 Microsoft Teams 中的智能体\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/aws-bedrock-teams-agents-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #ff9900;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>一段话版。</strong> 使用 <strong>Amazon Bedrock</strong> 用于托管基础模型与 RAG 知识库。使用 <strong>Bedrock AgentCore</strong> 作为自定义智能体的运行时（记忆、工具、身份、可观测性）。使用 <strong>SageMaker</strong> 当你需要自定义训练、微调或 MLOps 流水线时。使用 <strong>Amazon Q</strong> （Business / Developer），当你想要产品化的员工或构建者助手、且工程投入更少时。把智能体放在人们已经工作的地方 — <strong>Microsoft Teams</strong> — 经 Bot Framework / Azure Bot 中继进入 AgentCore Runtime，并用 Entra ID 做认证。\n</div>\n<h2>AWS 技术栈中谁做什么</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#ffb84d;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">服务</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">最适合</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">不适合</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">无服务器 FM、Guardrails、Knowledge Bases（RAG）、Agents APIs</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">从零训练大模型</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Bedrock AgentCore</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">自定义智能体运行时、Gateway 工具（含 Teams Graph）、Identity、Memory</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">仅限低代码「chat with my docs」</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon SageMaker</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">训练 / 微调 / 托管自定义模型、Pipelines、Feature Store、MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">通往 Teams 聊天机器人 MVP 的最快路径</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Q</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">员工知识助手；AWS 上的开发者编码帮助</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">深度定制的多智能体产品</td></tr>\n</tbody>\n</table>\n<h2>推荐业务模式</h2>\n<ol>\n<li><strong>第 0–2 周：</strong> 在试点语料上搭建 Bedrock + Knowledge Base RAG；启用 Guardrails。</li>\n<li><strong>第 2–4 周：</strong> 在 AgentCore Runtime 上打包生产智能体；经 Gateway 连接工具（SharePoint、CRM、Teams Graph）。</li>\n<li><strong>第 3–5 周：</strong> 交付把消息中继到 AgentCore 的 Teams bot；用以下方式保持会话 <code>teams-{aadObjectId}-{conversationId}</code>.</li>\n<li><strong>并行 / 稍后：</strong> SageMaker 用于自定义分类器或微调；Amazon Q Business 用于组织级问答、少构建。</li>\n</ol>\n<h2>Teams 中的首个智能体（FDE 快照）</h2>\n<p>在面向生产的试点中可行的最短路径：</p>\n<ul>\n<li>Azure Bot + Teams 应用注册（Entra ID）</li>\n<li>AWS Lambda（或容器）作为 Bot 消息端点</li>\n<li><code>POST</code> 到 AgentCore Runtime <code>/invocations</code> 配合 JWT</li>\n<li>Bedrock Knowledge Base 做 RAG；Guardrails 做安全</li>\n<li>试点频道、人工反馈环、CloudWatch 追踪</li>\n</ul>\n<p>大约预期 <strong>3–6 周</strong> 用于范围明确的内部智能体（一个部门、一个知识源、以只读为主的工具），配合 FDE + 平台工程师 + 安全评审。完整 MLOps + 多智能体 + 写入业务系统动作则是 <strong>一季度+</strong>.</p>\n<h2>时间盒（示意）</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">工作流</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">日历（FDE 主导）</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Bedrock chat + Guardrails MVP</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">3–5 天</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Knowledge Base RAG (one corpus)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 周</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">AgentCore agent + 2–3 tools</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">2–3 周</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Teams bot + 管理员发布试点</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 周（可重叠）</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Amazon Q Business (managed assistant)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–3 周</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">SageMaker fine-tune + endpoint + MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">4–8+ 周</td></tr>\n</tbody>\n</table>\n<h2>阅读长文版本</h2>\n<p>该 <a href=\"/zh/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">长文章</a> 涵盖文字版架构图、Teams 首个智能体逐步设置、带 AgentCore Identity 的 Entra ID、Gateway 工具目标、FDE 培训课程、需求/工具清单，以及 LLM 应用、RAG 与 MLOps 的分阶段估算。发布方为 <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "agentcore",
+      "id": 1012
+    },
+    {
+      "name": "sagemaker",
+      "id": 1013
+    },
+    {
+      "name": "amazon-q",
+      "id": 1014
+    },
+    {
+      "name": "microsoft-teams",
+      "id": 1015
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "rag",
+      "id": 945
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-21T09:00:00Z",
+  "updated_at": "2026-07-21T09:00:00Z",
+  "published_date": "2026-07-21",
+  "status": true
+}

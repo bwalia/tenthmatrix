@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-wsl-proxy-001",
+  "internal_id": 963,
+  "slug": "workstation-wsl-proxy-api-gateway-cdn",
+  "title": "TenthMatrix WSL ਪ੍ਰੌਕਸੀ: API ਗੇਟਵੇ, CDN ਅਤੇ ਏਜੰਟ ਐਜ",
+  "sub_title": "TenthMatrix ਟੀਮ ਤੋਂ API ਗੇਟਵੇ ਅਤੇ CDN ਨੂੰ ਪੂਰਾ ਕਰੋ — ਲਾਈਵ ਨਿਯਮ, WAF, ਮਲਟੀ-ਪੀਓਪੀ, ਪਲੱਸ ਏਜੰਟ ਗੇਟਵੇ ਅਤੇ MCP ਗੇਟਵੇ ਚੱਲ ਰਿਹਾ ਹੈ",
+  "excerpt": "TenthMatrix WSL ਪ੍ਰੌਕਸੀ (WSLProxy) ਇੱਕ ਸੰਪੂਰਨ API ਗੇਟਵੇ ਅਤੇ CDN ਕਿਨਾਰਾ ਹੈ: ਲਾਈਵ ਰੂਟਿੰਗ, WAF, ਕੈਸ਼, ਮਲਟੀ-ਪੀਓਪੀ DNS, MCP — ਏਜੰਟ ਗੇਟਵੇ ਅਤੇ MCP ਗੇਟਵੇ ਦੇ ਨਾਲ ਪ੍ਰਗਤੀ ਵਿੱਚ ਹੈ।",
+  "meta_title": "TenthMatrix WSL ਪ੍ਰੌਕਸੀ — API ਗੇਟਵੇ ਅਤੇ CDN | TenthMatrix",
+  "meta_description": "TenthMatrix WSL ਪ੍ਰੌਕਸੀ: ਲਾਈਵ ਨਿਯਮਾਂ ਦੇ ਨਾਲ OpenResty API ਗੇਟਵੇ ਅਤੇ CDN, WAF, ਮਲਟੀ-POP DNS, MCP ਟੂਲਸ, ਅਤੇ ਏਜੰਟ ਗੇਟਵੇ / MCP ਗੇਟਵੇ ਏਕੀਕਰਣ ਪ੍ਰਗਤੀ ਵਿੱਚ ਹਨ।",
+  "meta_keywords": "TenthMatrix WSL ਪ੍ਰੌਕਸੀ, WSLProxy, API ਗੇਟਵੇ, CDN, OpenResty, WAF, MCP ਗੇਟਵੇ, ਏਜੰਟ ਗੇਟਵੇ, ਐਜ ਕੈਸ਼, ਰਿਵਰਸ ਪ੍ਰੌਕਸੀ, TenthMatrix",
+  "cover_image": "/img/wsl-proxy-cover.svg",
+  "images": [
+    {
+      "url": "/img/wsl-proxy-cover.svg",
+      "id": 963,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "TenthMatrix WSL Proxy API Gateway and CDN"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix WSL ਪ੍ਰੌਕਸੀ</strong>(WSLProxy) TenthMatrix ਦਾ ਖੁੱਲ੍ਹਾ API ਗੇਟਵੇ ਅਤੇ CDN ਐਜ ਕੰਟਰੋਲ ਪਲੇਨ ਹੈ — ਲਾਈਵ ਰੂਟਿੰਗ, WAF, ਕੈਸ਼, ਮਲਟੀ-ਪੀਓਪੀ DNS, ਅਤੇ ਏਜੰਟਾਂ ਲਈ MCP। ਉਤਪਾਦ ਪੰਨਾ:<a href=\"/pa/wsl-proxy\">/wsl-proxy</a>। ਡੂੰਘੀ ਗੋਤਾਖੋਰੀ:<a href=\"/pa/articles/workstation-wsl-proxy-api-gateway-cdn\">ਲੰਬਾ ਲੇਖ</a>।</em></p><p><img src=\"/img/wsl-proxy-cover.svg\" alt=\"TenthMatrix WSL Proxy — API Gateway and CDN\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Watch: TenthMatrix WSL Proxy intro</h2>\n<p><a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg\" alt=\"TenthMatrix WSL Proxy — product intro\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/7NJulclG5sQ\" title=\"TenthMatrix WSL Proxy intro\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Watch: <a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/7NJulclG5sQ</a> · Product: <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a></p><div style=\"background:#fff7ed;border-left:4px solid #c45c26;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>ਹੇਠਲੀ ਲਾਈਨ।</strong>ਇੱਕ ਸਥਿਰ nginx.conf ਦੇ ਰੂਪ ਵਿੱਚ ਕਿਨਾਰੇ ਦਾ ਇਲਾਜ ਕਰਨਾ ਬੰਦ ਕਰੋ। TenthMatrix WSL ਪ੍ਰੌਕਸੀ JSON/MCP ਸੰਰਚਨਾ - ਪ੍ਰੌਕਸੀ, ਰੀਡਾਇਰੈਕਟ, ਡਬਲਯੂਏਐਫ, ਕੈਸ਼, ਕੈਨਰੀ - ਤੋਂ ਹਰ ਬੇਨਤੀ ਦਾ ਮੁਲਾਂਕਣ ਕਰਦਾ ਹੈ ਅਤੇ ਸੁਣਨ/SSL ਬਲਾਕ ਬਦਲਣ 'ਤੇ ਹੀ nginx ਨੂੰ ਰੀਲੋਡ ਕਰਦਾ ਹੈ। ਸਾਈਟ:<a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>· ਰੈਪੋ:<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>.</div><h2>ਇਹ</h2>ਕੀ ਹੈ<p>WSLProxy ਇੱਕ ਡਾਇਨਾਮਿਕ API ਗੇਟਵੇ ਹੈ ਅਤੇ OpenResty 'ਤੇ ਰਿਵਰਸ ਪ੍ਰੌਕਸੀ ਹੈ। ਓਪਰੇਟਰ ਇੱਕ ਐਡਮਿਨ UI, REST API, MCP ਟੂਲਸ, ਜਾਂ<code>wslproxy-cli</code>ਤੋਂ ਵਰਚੁਅਲ ਹੋਸਟ, ਨਿਯਮਾਂ, WAF, ਕੈਸ਼, ਟ੍ਰੈਫਿਕ ਸਪਲਿਟਸ, ਅਤੇ ਕਿਨਾਰੇ POPs ਦਾ ਪ੍ਰਬੰਧਨ ਕਰਦੇ ਹਨ। ਇਹ ਮਲਟੀ-ਪੀਓਪੀ ਕਿਨਾਰਿਆਂ, GitOps-ਸ਼ੈਲੀ ਦੀ ਸੰਰਚਨਾ, ਅਤੇ AI ਏਜੰਟਾਂ ਲਈ ਬਣਾਇਆ ਗਿਆ ਹੈ - ਉਹੀ ਸਟੈਕ ਜੋ ਉਤਪਾਦਨ ਦੇ ਪੈਟਰਨਾਂ ਵਿੱਚ tenthmatrix.com ਟ੍ਰੈਫਿਕ ਨੂੰ ਫਰੰਟ ਕਰਦਾ ਹੈ।</p><h2>ਸੰਪੂਰਨ API ਗੇਟਵੇ + CDN</h2><ul><li><strong>ਰੂਟਿੰਗ:</strong>ਮਾਰਗ / IP / ਦੇਸ਼ / JWT / ਕੂਕੀ ਮੈਚ → ਪ੍ਰੌਕਸੀ, ਰੀਡਾਇਰੈਕਟ, HTML, ਕੈਪਟਚਾ।</li><li><strong>ਟ੍ਰੈਫਿਕ:</strong>ਵਜ਼ਨ ਵਾਲਾ, RR, ਕੈਨਰੀ, ਸਟਿੱਕੀ, ਘੱਟ ਤੋਂ ਘੱਟ-ਕੋਨ; ਬੈਕਐਂਡ ਨੂੰ ਉਤਸ਼ਾਹਿਤ ਅਤੇ ਰੋਲਬੈਕ ਕਰੋ।</li><li><strong>WAF:</strong>ਪਾਲਿਸੀ ਪੈਕ, ਅਨੌਮਲੀ ਸਕੋਰਿੰਗ, ਮਾਨੀਟਰ/ਬਲਾਕ, ਇਵੈਂਟ API।</li><li><strong>CDN ਕੈਸ਼:</strong>ਕਿਨਾਰਾ ਸਥਿਰ ਕੈਸ਼, ਵਿਕਲਪਿਕ Docker ਬਲੌਬ ਕੈਸ਼, ਵਾਰਨਿਸ਼ ਹੁੱਕ।</li><li><strong>POPs + DNS:</strong>ਕਿਨਾਰਿਆਂ ਦਾ ਐਲਾਨ; Cloudflare A- ਗਾਰਡਰੇਲ ਦੇ ਨਾਲ ਰਿਕਾਰਡ ਪ੍ਰੋਵਿਜ਼ਨਿੰਗ।</li><li><strong>ਕੰਟਰੋਲ ਪਲੇਨ:</strong>React ਐਡਮਿਨ, ਸਵੈਗਰ, MCP (ਕਲਾਡ/ਕਰਸਰ), GHCR 'ਤੇ CLI ਚਿੱਤਰ।</li></ul><h2>ਏਜੰਟ ਗੇਟਵੇ &amp; MCP ਗੇਟਵੇ (ਰੋਡਮੈਪ)</h2><p>TenthMatrix ਏਜੰਟ ਯੁੱਗ ਵਿੱਚ ਉਸੇ ਕਿਨਾਰੇ ਨੂੰ ਵਧਾ ਰਿਹਾ ਹੈ:</p><ul><li><strong>MCP ਗੇਟਵੇ (ਪ੍ਰਗਤੀ ਵਿੱਚ):</strong>ਬਾਹਰੀ MCP ਸਰਵਰਾਂ ਲਈ ਸਾਹਮਣੇ ਦਰਵਾਜ਼ੇ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰਦਾ ਹੈ — ਪ੍ਰਮਾਣਿਕਤਾ ਬ੍ਰਿਜਿੰਗ, ਟੂਲ ਦੀ ਇਜਾਜ਼ਤ/ਅਣਕਾਰ,<code>tools/call</code>ਦਾ ਆਡਿਟ , ਪ੍ਰਤੀ-ਟੂਲ ਦਰ ਸੀਮਾਵਾਂ।</li><li><strong>ਏਜੰਟ ਗੇਟਵੇ (ਪ੍ਰਗਤੀ ਵਿੱਚ): TenthMatrix WSL ਪ੍ਰੌਕਸੀ ਕਿਨਾਰੇ ਦੁਆਰਾ ਮਲਟੀ-ਏਜੰਟ ਟ੍ਰੈਫਿਕ ਲਈ</strong>ਨੀਤੀ ਅਤੇ ਨਿਰੀਖਣਯੋਗਤਾ।</li><li><strong>MCP ਪ੍ਰਬੰਧਨ (ਹੁਣ ਉਪਲਬਧ):</strong>MCP ਟੂਲਸ ਦੁਆਰਾ ਕਲਾਉਡ/ਕਰਸਰ ਤੋਂ WSLProxy ਦੀ ਆਪਣੀ ਐਡਮਿਨ ਸਤਹ ਨੂੰ ਚਲਾਓ।</li></ul><h2></h2>ਕਿੱਥੋਂ ਸ਼ੁਰੂ ਕਰਨਾ ਹੈ<ol><li><a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>ਅਤੇ<a href=\"https://wslproxy.org/swagger/\" target=\"_blank\" rel=\"noopener noreferrer\">ਸਵੈਗਰ API</a>ਖੋਲ੍ਹੋ।</li><li>ਕਲੋਨ<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>ਅਤੇ k3s ਲਈ ਕੰਪੋਜ਼ ਜਾਂ Helm ਚਲਾਓ।</li><li><a href=\"/pa/articles/workstation-wsl-proxy-api-gateway-cdn\">ਤਕਨੀਕੀ ਲੇਖ</a>ਜਾਂ<a href=\"/pa/wsl-proxy\">ਉਤਪਾਦ ਪੰਨਾ</a>ਪੜ੍ਹੋ।</li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>ਦੁਆਰਾ ਪ੍ਰਕਾਸ਼ਿਤ।</p><p style=\"margin-top:1.5rem;\"><div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> <a href=\"/pa/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a> · <a href=\"/pa/articles/wslproxy-waf-web-application-firewall\">Explainable edge WAF article</a> · <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">WAF tour video</a> · <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>\n</div>\n\n<p style=\"margin-top:1.5rem;\"><strong>Product site:</strong> <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">https://wslproxy.org</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-15T10:00:00Z",
+  "updated_at": "2026-08-15T10:00:00Z",
+  "published_date": "2026-08-15",
+  "status": true
+}

@@ -1,0 +1,24 @@
+@use './shared' as *;
+
+.figure {
+  margin: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: var(--tm-space-3);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-subtle);
+  }
+}
+
+.framed img {
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+}

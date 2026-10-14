@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" role="img" aria-label="NebulaDB versus Mem0, Zep, Memgraph and Pinecone Mem agent memory platforms: at-a-glance decision matrix">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0e27"/>
+      <stop offset="0.5" stop-color="#111940"/>
+      <stop offset="1" stop-color="#0a0e27"/>
+    </linearGradient>
+    <linearGradient id="ndbAccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="mpAccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#64748b"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #a5b4fc; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 36px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #c7d2fe; font: 800 16px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .laneLabel { fill: #a5b4fc; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect width="1200" height="640" fill="url(#grid)"/>
+  <rect width="1200" height="640" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#ndbAccent)"/>
+
+  <text class="kicker" x="40" y="50">AI INFRASTRUCTURE  /  OPEN SOURCE vs MANAGED  /  DECISION</text>
+  <text class="title" x="40" y="100">NebulaDB vs Agent Memory Platforms</text>
+  <text class="tagline" x="40" y="128">Open-source AI-native database vs proprietary SaaS memory services</text>
+  <text class="sub" x="40" y="150">Same problem space, different trade-offs. Pick on lock-in, cost band, governance and total ops surface.</text>
+
+  <g transform="translate(40,180)">
+    <rect width="540" height="380" rx="12" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="2"/>
+    <rect width="540" height="48" rx="12" fill="url(#ndbAccent)"/>
+    <rect y="36" width="540" height="12" fill="url(#ndbAccent)"/>
+    <text x="20" y="32" class="h" fill="#ffffff" font-size="20">NebulaDB</text>
+    <text x="500" y="32" text-anchor="end" class="c" fill="#e0e7ff">OPEN SOURCE  /  APACHE-2.0</text>
+
+    <g font-size="11" fill="#e0e7ff">
+      <circle cx="36" cy="76" r="5" fill="#22c55e"/><text x="50" y="80">AI-native hybrid db (vector + SQL + RAG)</text>
+      <circle cx="36" cy="100" r="5" fill="#22c55e"/><text x="50" y="104">Rust, open source, no vendor lock-in</text>
+      <circle cx="36" cy="124" r="5" fill="#22c55e"/><text x="50" y="128">REST + gRPC + Postgres wire protocol</text>
+      <circle cx="36" cy="148" r="5" fill="#22c55e"/><text x="50" y="152">HNSW (cosine / L2 / dot) SIMD optimised</text>
+      <circle cx="36" cy="172" r="5" fill="#22c55e"/><text x="50" y="176">SQL: JOIN + GROUP BY + semantic_match()</text>
+      <circle cx="36" cy="196" r="5" fill="#22c55e"/><text x="50" y="200">Streaming RAG over SSE</text>
+      <circle cx="36" cy="220" r="5" fill="#22c55e"/><text x="50" y="224">WAL durability + snapshot recovery</text>
+      <circle cx="36" cy="244" r="5" fill="#22c55e"/><text x="50" y="248">Multi-tier cache (LRU + Redis)</text>
+      <circle cx="36" cy="268" r="5" fill="#22c55e"/><text x="50" y="272">Helm + Operator + Docker</text>
+      <circle cx="36" cy="292" r="5" fill="#22c55e"/><text x="50" y="296">Prometheus + Grafana built-in</text>
+    </g>
+
+    <rect x="20" y="316" width="500" height="48" rx="8" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1"/>
+    <text x="30" y="336" class="h" fill="#bbf7d0" font-size="11">Cost band</text>
+    <text x="30" y="354" class="c" font-size="11">infra only (self-hosted) - no per-call usd</text>
+    <text x="290" y="336" class="h" fill="#bbf7d0" font-size="11">Ops surface</text>
+    <text x="290" y="354" class="c" font-size="11">k8s pods, object store, optional redis cache</text>
+  </g>
+
+  <g transform="translate(620,180)">
+    <rect width="540" height="380" rx="12" fill="rgba(100,116,139,0.10)" stroke="#475569" stroke-width="1.5"/>
+    <rect width="540" height="48" rx="12" fill="url(#mpAccent)"/>
+    <rect y="36" width="540" height="12" fill="url(#mpAccent)"/>
+    <text x="20" y="32" class="h" fill="#ffffff" font-size="20">Agent Memory Platforms</text>
+    <text x="500" y="32" text-anchor="end" class="c" fill="#e2e8f0">SAAS / PROPRIETARY</text>
+
+    <g font-size="11" fill="#cbd5e1">
+      <circle cx="36" cy="76" r="5" fill="#f59e0b"/><text x="50" y="80">Memory + context infra for AI agents</text>
+      <circle cx="36" cy="100" r="5" fill="#f59e0b"/><text x="50" y="104">Closed-source SaaS (Mem0, Zep, Cognee, Letta)</text>
+      <circle cx="36" cy="124" r="5" fill="#f59e0b"/><text x="50" y="128">REST API + Python / TS SDKs</text>
+      <circle cx="36" cy="148" r="5" fill="#f59e0b"/><text x="50" y="152">Proprietary vector substrate</text>
+      <circle cx="36" cy="172" r="5" fill="#f59e0b"/><text x="50" y="176">Graph traversal (multi-hop relationships)</text>
+      <circle cx="36" cy="196" r="5" fill="#f59e0b"/><text x="50" y="200">Context retrieval for external LLMs</text>
+      <circle cx="36" cy="220" r="5" fill="#f59e0b"/><text x="50" y="224">In-memory (managed) tier</text>
+      <circle cx="36" cy="244" r="5" fill="#f59e0b"/><text x="50" y="248">Temporal / immutable ledger model</text>
+      <circle cx="36" cy="268" r="5" fill="#f59e0b"/><text x="50" y="272">SaaS multi-tenant or enterprise self-host</text>
+      <circle cx="36" cy="292" r="5" fill="#ef4444"/><text x="50" y="296">usd 249 - usd 5000+ / month per tenant</text>
+    </g>
+
+    <rect x="20" y="316" width="500" height="48" rx="8" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1"/>
+    <text x="30" y="336" class="h" fill="#fecaca" font-size="11">Cost band</text>
+    <text x="30" y="354" class="c" font-size="11">subscription scales with agents + tokens stored</text>
+    <text x="290" y="336" class="h" fill="#fecaca" font-size="11">Ops surface</text>
+    <text x="290" y="354" class="c" font-size="11">API key, SDK; no infra to run yourself</text>
+  </g>
+
+  <line x1="600" y1="200" x2="600" y2="560" stroke="#334155" stroke-width="2" stroke-dasharray="8,6"/>
+  <text x="600" y="180" text-anchor="middle" class="h" font-size="14" fill="#94a3b8" letter-spacing="3">vs</text>
+
+  <g transform="translate(40,580)">
+    <rect width="1120" height="36" rx="8" fill="rgba(99,102,241,0.12)" stroke="#6366f1" stroke-width="1" stroke-dasharray="6,3"/>
+    <text x="560" y="22" text-anchor="middle" class="h" fill="#c7d2fe" font-size="12">Decision rule: pick NebulaDB for owned data + relational queries + zero per-call cost. Pick a memory SaaS only when zero-ops + first-class temporal agent memory matters more than control.</text>
+  </g>
+
+  <text class="brand" x="40" y="632">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1160" y="632" text-anchor="end">OPS  /  ARCHITECTS  /  AI ENGINEERING  /  FINOPS</text>
+</svg>

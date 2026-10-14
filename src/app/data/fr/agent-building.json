@@ -1,0 +1,69 @@
+{
+  "header": {
+    "title": "Construire des agents IA systématiques avec des LLM open source",
+    "description": "Plan pratique pour concevoir des agents fiables avec Llama, Mistral et exécution d’outils typés."
+  },
+  "sections": [
+    {
+      "title": "Architecture cœur",
+      "points": [
+        "Planificateur : décompose l’objectif en étapes actionnables",
+        "Exécutant : appelle des outils/API typés et valide les sorties",
+        "Mémoire : vecteur + KV pour court/long terme",
+        "Superviseur : évalue les résultats, relance, escalade"
+      ]
+    },
+    {
+      "title": "Pratiques d’ingénierie",
+      "points": [
+        "Outils schema-first avec validation stricte",
+        "Relances déterministes et boucles bornées",
+        "Versionnage des prompts et suivi des changements",
+        "Télémétrie : traces, métriques et logs structurés"
+      ]
+    },
+    {
+      "title": "Choix LLM open source",
+      "points": [
+        "Llama : bonnes performances générales et tooling",
+        "Mistral/Mixtral : inférence efficace, bon raisonnement",
+        "Qwen : atouts multilingues",
+        "Hébergement local : vLLM, TGI, Ollama"
+      ]
+    },
+    {
+      "title": "Évaluation & sécurité",
+      "points": [
+        "Taux de réussite et score de qualité",
+        "Analyse des erreurs d’outils et récupération",
+        "Politiques de sécurité et red-teaming",
+        "Budgets de coût et latence"
+      ]
+    },
+    {
+      "title": "Checklist de déploiement",
+      "points": [
+        "Identifiants sécurisés et outils en sandbox",
+        "Limites de débit par agent et tenant",
+        "Intégration observabilité (OpenTelemetry)",
+        "Stratégie de déploiement et canary"
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Besoin d’industrialiser des agents ?",
+    "description": "Nous aidons les équipes à livrer des systèmes d’agents fiables avec une évaluation et une sécurité solides.",
+    "buttons": [
+      {
+        "text": "Contacter les ventes",
+        "link": "/contact-us",
+        "type": "primary"
+      },
+      {
+        "text": "Lire les articles",
+        "link": "/articles",
+        "type": "outline-primary"
+      }
+    ]
+  }
+}

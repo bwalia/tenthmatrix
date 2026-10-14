@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-kubepilot-001",
+  "internal_id": 962,
+  "slug": "kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "title": "KubePilot：CoPilot、Pilot 和 AutoPilot 可加快 Kubernetes 事件的发生",
+  "sub_title": "TenthMatrix 团队的开源驾驶舱 — kubepilot.org 上的 AI 诊断、SRE 浏览和策略门控修复",
+  "excerpt": "KubePilot 帮助 SRE、DevOps 和平台团队从嘈杂的集群信号转向安全修复 - CoPilot、Pilot 和 AutoPilot。在 kubepilot.org 上开源。",
+  "meta_title": "KubePilot — 适用于 Kubernetes 的 AI CoPilot、Pilot 和 AutoPilot | TenthMatrix",
+  "meta_description": "TenthMatrix 的开源 Kubernetes 驾驶舱：CoPilot AI RCA、Pilot SRE 浏览器、AutoPilot 策略门控修复。 kubepilot.org · github.com/bwalia/kubepilot",
+  "meta_keywords": "KubePilot、Kubernetes、SRE、DevOps、平台工程、AIOps、AutoPilot、CoPilot、Ollama、MCP、开源、TenthMatrix、kubepilot.org",
+  "cover_image": "/img/kubepilot-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubepilot-cover.svg",
+      "id": 962,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "KubePilot CoPilot Pilot AutoPilot for Kubernetes"
+    },
+    {
+      "url": "/img/kubepilot-three-modes.svg",
+      "id": 963,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "KubePilot three-mode incident loop"
+    },
+    {
+      "url": "/img/kubepilot-dashboard-overview.svg",
+      "id": 964,
+      "is_cover": false,
+      "width": 1200,
+      "height": 675,
+      "alt": "KubePilot Pilot dashboard overview"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>KubePilot</strong>是 TenthMatrix 工程团队的开源 Kubernetes 驾驶舱 - 三种模式可将 SRE、DevOps 和平台团队从嘈杂的集群信号中消除到安全修复。产品主页：<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>。<a href=\"/zh/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">长文</a>中的深度安装、安全模型和功能图。</em></p><p><img src=\"/img/kubepilot-cover.svg\" alt=\"KubePilot — CoPilot, Pilot, AutoPilot for Kubernetes\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #326ce5;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。</strong>停止在事件中处理 kubectl 选项卡、Lens 窗口和聊天机器人。<strong>CoPilot</strong>以简单的英语进行诊断（通过 Ollama 进行本地 LLM），<strong>Pilot</strong>像 SRE 浏览器一样进行验证，<strong>AutoPilot</strong>仅在试运行、置信底线、冷却和终止开关后进行修复。开源 — 明星<a href=\"https://github.com/bwalia/kubepilot\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/kubepilot</a>。</div><h2>手表：使用 AI</h2>对 Kubernetes 进行故障排除<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/CsiJWpfncqA\" title=\"KubePilot — Troubleshooting Kubernetes using AI — Balinder Walia\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">YouTube 上的完整演讲：<a href=\"https://youtu.be/CsiJWpfncqA\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/CsiJWpfncqA</a>· 站点：<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a></p><h2>三种模式。一种更快的事件循环。</h2><p><img src=\"/img/kubepilot-three-modes.svg\" alt=\"KubePilot CoPilot Pilot AutoPilot incident loop\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>CoPilot (AI)：</strong>询问什么坏了；一键AI分析； RCA 有证据和信心； CrashLoop / OOM / ImagePull / 节点压力异常；复制您首选型号的提示。</li><li><strong>Pilot (SRE)：</strong>Lens 式只读浏览 — 工作负载、日志、YAML、拓扑（Ingress → Pod）、CPU/mem/磁盘仪表、LAN/WAN/隧道节点 IP、端口转发、多集群 kubeconfig 交换机。</li><li><strong>AutoPilot（修复器）：</strong>关闭/空运行/活动；命名空间阻止列表；行动允许名单；每小时上限；决策分类账； CR 代码升级；暂停终止开关。</li></ul><p><img src=\"/img/kubepilot-dashboard-overview.svg\" alt=\"KubePilot Pilot dashboard overview\" width=\"1200\" height=\"675\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;border:1px solid #e2e8f0;\" /></p><h2>为什么 TenthMatrix 构建了</h2><p>平台和 SRE 团队不会因为缺少仪表板而失败 — 他们在<em>上下文切换</em>的压力下失败。 KubePilot 将诊断 → 验证 → 修复整合到一个开源驾驶舱中，并使用本地 LLM 默认设置，因此集群遥测不需要离开您的网络。它配备了 Web UI、Go CLI/服务器、用于代理的 MCP 服务器以及本机 iOS 伴侣。</p><h2>只需几分钟</h2><pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">\ngit clone https://github.com/bwalia/kubepilot.git\ncd kubepilot\nmake dashboard-install &amp;&amp; make dashboard &amp;&amp; make build\nKUBEPILOT_KUBECONFIG=\"$HOME/.kube/config\" ./dist/kubepilot serve --dashboard-port=8383\n# Dashboard: http://localhost:8383  ·  MCP: :9090\n</pre><p>还有：Helm (<code>charts/kubepilot</code>/<code>helm repo add kubepilot https://bwalia.github.io/kubepilot</code>)、Docker (<code>ghcr.io/kubepilot/kubepilot</code>) 和 iOS 下的<code>ios/</code>。有关<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>的详细信息。</p><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>标签。</strong>#Kubernetes #SRE #DevOps #PlatformEngineering #AIOps #OpenSource #KubePilot</div><h2>阅读完整版本</h2><p>安装路径、AutoPilot 安全导轨、操作手册、MCP、iOS 和生产清单：<a href=\"/zh/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot 技术文章</a>。由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>构建。</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "aiops",
+      "id": 213
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    }
+  ],
+  "created_at": "2026-08-12T12:00:00Z",
+  "updated_at": "2026-08-12T12:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

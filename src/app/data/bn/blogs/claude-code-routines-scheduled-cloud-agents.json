@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: নির্ধারিত সময়ে চলা ক্লাউড এজেন্ট, সাব-রুটিন ও কো-রুটিন",
+  "sub_title": "ল্যাপটপ ও সার্ভার ছাড়াই Claude Code চালান শিডিউল অনুযায়ী, একটি API কল থেকে বা GitHub ইভেন্টে। পাঁচ মিনিটের গাইড।",
+  "excerpt": "Claude Code Routines সংরক্ষিত এজেন্ট-টাস্ক Anthropic-এর ক্লাউডে চালায়—শিডিউল অনুযায়ী, API-এর মাধ্যমে বা GitHub ইভেন্টে। কীভাবে কাজ করে, কীভাবে সেট আপ করবেন এবং কীভাবে শৃঙ্খলিত করবেন।",
+  "meta_title": "Claude Code Routines: শিডিউলড ক্লাউড এজেন্টের ব্যাখ্যা | TenthMatrix",
+  "meta_description": "Claude Code Routines-এর ব্যাখ্যা: শিডিউল, API ও GitHub ট্রিগার, সেটআপ, প্রম্পট ডিজাইন, সাবএজেন্টসহ সাব-রুটিন, কো-রুটিন পাইপলাইন, নিরাপত্তা ও প্ল্যান-সীমা।",
+  "meta_keywords": "Claude Code Routines, শিডিউলড AI এজেন্ট, Claude Code শিডিউল, /schedule, ক্লাউড এজেন্ট, GitHub ট্রিগার, API ট্রিগার, সাবএজেন্ট, সাব-রুটিন, কো-রুটিন, Anthropic, AI অটোমেশন, DevOps অটোমেশন",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code চালাতে এখন আর আপনাকে কিবোর্ডের সামনে বসে থাকতে হবে না। <strong>Routines</strong> (রুটিন) সংরক্ষিত এজেন্ট-টাস্কগুলো Anthropic-এর ক্লাউডে চালায়—নির্ধারিত সময়সূচিতে, একটি API কল থেকে, অথবা GitHub-এ কোনো ঘটনা ঘটলে। এখানে জানুন এগুলো কী, কীভাবে একটি সেট আপ করবেন, আর দুটি প্যাটার্ন যাদের আমরা বলি সাব-রুটিন (sub-routines) ও কো-রুটিন (co-routines)। পূর্ণাঙ্গ গাইডের জন্য পড়ুন <a href=\"/bn/articles/claude-code-routines-scheduled-cloud-agents\">বিস্তারিত নিবন্ধটি</a>।</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: নির্ধারিত সময়ে চলা ক্লাউড এজেন্ট, সাব-রুটিন ও কো-রুটিন\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>মূল কথা।</strong> একটি routine হলো এমন একটি Claude Code টাস্ক যা আপনি একবার কনফিগার করেন (প্রম্পট, রিপোজিটরি, ক্লাউড এনভায়রনমেন্ট, কানেক্টর) এবং যা স্বয়ংক্রিয়ভাবে ট্রিগার হয়। এটি ক্লাউডে একটি পূর্ণাঙ্গ স্বয়ংক্রিয় সেশন হিসেবে চলে, তাই আপনার ল্যাপটপ বন্ধই থাকতে পারে। Routines বর্তমানে রিসার্চ প্রিভিউতে রয়েছে (14 এপ্রিল 2026 থেকে) এবং Pro, Max, Team ও Enterprise প্ল্যানে পাওয়া যায়।\n</div>\n\n<h2>একটি routine চালু করার তিনটি উপায়</h2>\n<ul>\n  <li><strong>শিডিউল:</strong> প্রতি ঘণ্টায়, প্রতিদিন, কর্মদিবসে, সাপ্তাহিক, অথবা একবারের জন্য নির্দিষ্ট সময়ে—সময় দেওয়া হয় আপনার স্থানীয় টাইম জোনে। <code>/schedule update</code> দিয়ে কাস্টম cron ব্যবহার করা যায়, তবে ন্যূনতম ব্যবধান এক ঘণ্টা।</li>\n  <li><strong>API:</strong> প্রতিটি routine-এর জন্য আলাদা HTTPS এন্ডপয়েন্ট, নিজস্ব bearer টোকেনসহ। আপনার অ্যালার্টিং টুল বা ডিপ্লয়মেন্ট পাইপলাইন এতে POST করে, চাইলে সঙ্গে প্রাসঙ্গিক টেক্সটও পাঠায়। সেই টেক্সট অবিশ্বস্ত হিসেবে চিহ্নিত হয়ে পৌঁছায়, ফলে কোনো টোকেন ফাঁস হলেও তা দিয়ে routine-এর নির্দেশনা পুনর্লিখন করা যায় না।</li>\n  <li><strong>GitHub:</strong> পুল রিকোয়েস্ট বা রিলিজ ইভেন্ট, যা ব্রাঞ্চ, লেবেল, লেখক, ড্রাফট বা মার্জড অবস্থা অনুযায়ী ফিল্টার করা যায়।</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"একটি routine রানের গঠন: ট্রিগার, সংরক্ষিত routine, ক্লাউড সেশন ও ফলাফল\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>দুই মিনিটে একটি সেট আপ করুন</h2>\n<ol>\n  <li><code>claude.ai/code/routines</code> খুলে <strong>New routine</strong> বেছে নিন, অথবা Claude Code CLI-তে <code>/schedule</code> টাইপ করুন।</li>\n  <li>একটি স্বয়ংসম্পূর্ণ প্রম্পট লিখুন: পরিধি, অনুমোদিত কাজ, আউটপুট কোথায় যাবে, এবং করার মতো কিছু না থাকলে কী করতে হবে।</li>\n  <li>রিপোজিটরি ও একটি এনভায়রনমেন্ট বেছে নিন। টাস্কের প্রয়োজন নেই এমন কানেক্টরগুলো সরিয়ে দিন, কারণ ডিফল্টভাবে সবগুলোই যুক্ত থাকে।</li>\n  <li>একটি ট্রিগার যোগ করুন, পরীক্ষার জন্য <strong>Run now</strong> বেছে নিন, তারপর ট্রান্সক্রিপ্ট পড়ুন। সবুজ ব্যাজের অর্থ কেবল সেশনটি চলেছে, টাস্কটি সফল হয়েছে এমন নয়।</li>\n</ol>\n\n<h2>সাব-রুটিন: একটি রান, অনেক সহকারী</h2>\n<p>এটি একটি প্যাটার্নের জন্য আমাদের দেওয়া নাম, Anthropic-এর কোনো ফিচার নয়। routine-এর প্রম্পট সমন্বয়কের ভূমিকা নেয় এবং প্রতিটি ধাপ রিপোজিটরিতে কমিট করা একটি <strong>সাবএজেন্ট</strong> (<code>.claude/agents/</code>) বা একটি <strong>স্কিল</strong>-এর হাতে তুলে দেয়। প্রতিটি সহকারী নিজস্ব কনটেক্সট উইন্ডো এবং শুধু প্রয়োজনীয় টুলগুলো পায়, ফলে দীর্ঘ, তত্ত্বাবধানহীন রানগুলো থাকে কেন্দ্রীভূত, সাশ্রয়ী ও নিরাপদ।</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"সাব-রুটিন: একটি সমন্বয়কারী প্রম্পট সাবএজেন্ট ও স্কিলের কাছে কাজ অর্পণ করছে\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>কো-রুটিন: যে routines একে অপরের হাতে কাজ তুলে দেয়</h2>\n<p>Routines সরাসরি একে অপরকে কল করতে পারে না, তবে স্থায়ী আর্টিফ্যাক্টের মাধ্যমে সহযোগিতা করতে পারে। যেমন, একটি নৈশ routine একটি ড্রাফট PR খোলে, GitHub-ট্রিগারড একটি routine সেটি রিভিউ করে, একজন মানুষ সেটি মার্জ করেন, মার্জ-ট্রিগারড একটি routine ডকুমেন্টেশন হালনাগাদ করে, এবং আপনার ডিপ্লয়মেন্ট পাইপলাইন একটি যাচাইকারী routine কল করে। ফিল্টার ব্যবহার করুন যাতে কোনো routine নিজের আউটপুটে ট্রিগার না হয়, এবং শৃঙ্খলে একটি মানব মার্জ-গেট রাখুন।</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"কো-রুটিন: চারটি routine GitHub ইভেন্ট, লেবেল ও API কলের মাধ্যমে সহযোগিতা করছে\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>যে সীমাগুলো জানা দরকার</h2>\n<ul>\n  <li>লঞ্চের সময় দৈনিক রানের সীমা ছিল Pro-তে 5, Max-এ 15 এবং Team ও Enterprise-এ 25, যা সাধারণ সাবস্ক্রিপশন ব্যবহারের অতিরিক্ত। একবারের রানগুলো এতে গণ্য হয় না।</li>\n  <li>Routines কাজ করে <strong>আপনার</strong> পরিচয়ে। কমিট, PR ও Slack বার্তায় আপনার পরিচয় থাকে। অন্যভাবে বলা না হলে Claude শুধু <code>claude/</code> ব্রাঞ্চে পুশ করে, এবং সুরক্ষিত ব্রাঞ্চে কখনোই নয়।</li>\n  <li>মিনিট-স্তরের পোলিং বা লোকাল ফাইল দরকার? তার বদলে <code>/loop</code> বা Desktop-এর শিডিউলড টাস্ক ব্যবহার করুন।</li>\n</ul>\n\n<p><strong>এরপর পড়ুন:</strong> <a href=\"/bn/articles/claude-code-routines-scheduled-cloud-agents\">পূর্ণাঙ্গ গাইডে</a> রয়েছে API পেলোড নিরাপত্তা, প্রম্পট টেমপ্লেট, সাবএজেন্টের উদাহরণ, GitHub Actions, n8n ও Trigger.dev-এর সঙ্গে তুলনা এবং একটি গভর্ন্যান্স চেকলিস্ট। সূত্র: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">Anthropic-এর ঘোষণা</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code ডকস</a>।</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

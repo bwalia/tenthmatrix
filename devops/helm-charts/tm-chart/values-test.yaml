@@ -1,0 +1,21 @@
+# test — https://test.tenthmatrix.com (lead form → https://test-api.tenthmatrix.com)
+env: test
+
+appConfig:
+  SITE_URL: "https://test.tenthmatrix.com"
+  WEBSITE_NAMESPACE: "tenthmatrix"
+  WEBSITE_CATEGORY: ""
+  CMS_CONTENT_MODE: "overlay"
+  OPSAPI_URL: "http://workstation-opsapi/"
+  CMS_REVALIDATE_SECONDS: "3600"
+  ENGAGEMENT_STORE_DIR: "/tmp/engagement"
+  ROBOTS_DISALLOW_ALL: "true"
+
+ingress:
+  enabled: true
+  className: "traefik-edge"
+  hosts:
+    - host: test.tenthmatrix.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific

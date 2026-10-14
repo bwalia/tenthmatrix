@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "Rust ਅਸਿੰਕ ਬਲਾਕਿੰਗ, Rayon ਅਤੇ ਆਧੁਨਿਕ ਐਪਲੀਕੇਸ਼ਨਾਂ",
+  "sub_title": "async Rust ਵਿੱਚ \"ਬਲੌਕਿੰਗ\" ਦਾ ਕੀ ਅਰਥ ਹੈ, ਜਦੋਂ Rayon CPU-ਬਾਉਂਡ ਕੰਮ ਨੂੰ ਫਿੱਟ ਕਰਦਾ ਹੈ, ਅਤੇ Rust APIs, ਕਿਨਾਰੇ, ਏਜੰਟਾਂ, ਅਤੇ CI/CD ਪਲੇਟਫਾਰਮਾਂ ਲਈ ਕਿਉਂ ਮਜ਼ਬੂਤ ​​ਰਹਿੰਦਾ ਹੈ।",
+  "excerpt": "Async Rust ਬਲਾਕਿੰਗ 'ਤੇ TenthMatrix, CPU-ਬਾਉਂਡ ਕੰਮ ਲਈ Rayon, ਅਤੇ Rust ਆਧੁਨਿਕ API, ਕਿਨਾਰੇ, ਏਜੰਟ, ਅਤੇ CI/CD ਨੂੰ ਫਿੱਟ ਕਿਉਂ ਕਰਦਾ ਹੈ — Alice Ryhl ਦੇ Rayon ਮਾਰਗਦਰਸ਼ਨ ਤੋਂ ਪ੍ਰੇਰਿਤ।",
+  "meta_title": "Rust Async ਬਲਾਕਿੰਗ ਅਤੇ Rayon ਆਧੁਨਿਕ ਐਪਾਂ ਲਈ | TenthMatrix",
+  "meta_description": "ਅਸਿੰਕ Rust ਵਿੱਚ ਬਲਾਕਿੰਗ ਦਾ ਕੀ ਮਤਲਬ ਹੈ, ਜਦੋਂ Rayon CPU-ਬਾਉਂਡ ਕੰਮ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ, ਅਤੇ APIs, ਕਿਨਾਰੇ, ਏਜੰਟਾਂ, ਅਤੇ CI/CD ਪਲੇਟਫਾਰਮਾਂ ਲਈ Rust ਮਜ਼ਬੂਤ ​​ਕਿਉਂ ਹੈ।",
+  "meta_keywords": "Rust, async Rust, Tokio, Rayon, spawn_blocking, ਬਲਾਕਿੰਗ, CPU-ਬਾਉਂਡ, Polyglot Benchmarks, APIs, ਕਿਨਾਰੇ, ਏਜੰਟ, CI/CD, TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>ਇਸ ਬਾਰੇ ਕਿ Rust ਆਧੁਨਿਕ ਐਪਲੀਕੇਸ਼ਨਾਂ ਲਈ ਪਹਿਲੀ-ਸ਼੍ਰੇਣੀ ਦੀ ਚੋਣ ਕਿਉਂ ਰਹਿੰਦਾ ਹੈ — ਅਤੇ ਜਦੋਂ ਤੁਸੀਂ Tokio ਨੂੰ CPU-ਭਾਰੀ ਕੰਮ ਨਾਲ ਮਿਲਾਉਂਦੇ ਹੋ ਤਾਂ \"ਬਲਾਕ ਕਰਨ\" ਦਾ ਅਸਲ ਵਿੱਚ ਕੀ ਮਤਲਬ ਹੁੰਦਾ ਹੈ। Alice Ryhl ਦੇ<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">ਅਸਿੰਕ ਤੋਂ ਪ੍ਰੇਰਿਤ: ਬਲੌਕਿੰਗ ਕੀ ਹੈ?</a>(Rayon ਭਾਗ)। ਡੂੰਘੀ ਗੋਤਾਖੋਰੀ:<a href=\"/pa/articles/rust-async-blocking-rayon-modern-applications\">ਲੰਬਾ ਲੇਖ</a>।</em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>ਹੇਠਲੀ ਲਾਈਨ।</strong>async Rust ਵਿੱਚ, \"ਬਲੌਕ ਕਰਨ\" ਦਾ ਮਤਲਬ ਹੈ ਇੱਕ ਰਨਟਾਈਮ ਵਰਕਰ ਨੂੰ<code>.await</code>ਤੋਂ ਇੰਨਾ ਦੂਰ ਰੱਖਣਾ ਕਿ ਹੋਰ ਕੰਮ ਭੁੱਖੇ ਰਹਿਣ। Tokio ਦੇ ਪੂਲ ਤੋਂ ਮਹਿੰਗੇ CPU ਕੰਮ ਨੂੰ ਹਟਾਓ — ਅਕਸਰ<strong>Rayon</strong>ਅਤੇ ਇੱਕ oneshot ਚੈਨਲ ਦੇ ਨਾਲ — ਅਤੇ APIs, ਕਿਨਾਰੇ ਪ੍ਰੌਕਸੀਜ਼, ਏਜੰਟਾਂ, ਅਤੇ CI/CD ਕੰਟਰੋਲ ਪਲੇਨਾਂ ਲਈ ਅਸਿੰਕ ਮਾਰਗ ਨੂੰ ਜਵਾਬਦੇਹ ਰੱਖੋ।</div><h2>Rust ਆਧੁਨਿਕ ਐਪਲੀਕੇਸ਼ਨ ਸਲੋਟ</h2>ਕਿਉਂ ਜਿੱਤਦਾ ਰਹਿੰਦਾ ਹੈ<p>ਟੀਮਾਂ Rust ਨੂੰ ਚੁਣਦੀਆਂ ਹਨ ਜਦੋਂ ਉਹਨਾਂ ਨੂੰ GC ਵਿਰਾਮ ਟੈਕਸ ਦੇ ਬਿਨਾਂ ਮੈਮੋਰੀ ਸੁਰੱਖਿਆ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਲੋਡ ਦੇ ਅਧੀਨ ਅਨੁਮਾਨਿਤ ਲੇਟੈਂਸੀ, ਅਤੇ ਸਮਰੂਪਤਾ ਜੋ ਕਿ ਟਾਈਪ ਸਿਸਟਮ ਤੁਹਾਨੂੰ ਸਹੀ ਹੋਣ ਵਿੱਚ ਮਦਦ ਕਰਦਾ ਹੈ। ਇਹ ਸੁਮੇਲ ਹਰ ਥਾਂ 'ਤੇ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ ਜਿੱਥੇ TenthMatrix ਬਣਦੇ ਹਨ: ਉੱਚ-ਥਰੂਪੁੱਟ APIs, ਕਿਨਾਰੇ ਗੇਟਵੇ, ਏਜੰਟ ਰਨਟਾਈਮ, ਅਤੇ ਪ੍ਰੋਮੋਸ਼ਨ ਕੰਟਰੋਲ ਪਲੇਨ ਜੋ ਕਿ CPU ਦੇ ਕੰਮ ਦੀ ਇੱਕ ਸਪਾਈਕ ਆਉਣ 'ਤੇ ਫ੍ਰੀਜ਼ ਨਹੀਂ ਹੋ ਸਕਦੇ।</p><p>ਇਹ \"ਹਰ ਚੀਜ਼ ਲਈ Rust\" ਨਹੀਂ ਹੈ। ਸਾਡੀਆਂ<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>ਡੈਸ਼ਬੋਰਡ ਅਤੇ ਸਾਥੀ ਪੋਸਟਾਂ —<a href=\"/pa/docs/blogs/polyglot-benchmarks-right-tool-right-application\">ਬਲੌਗ</a>/<a href=\"/pa/articles/polyglot-benchmarks-right-tool-right-application\">ਲੇਖ</a>— Rust ਦੀ ਤੁਲਨਾ Go, Bun, JVM ਸਟੈਕ, ਅਤੇ ਉਸੇ HTTP ਵਰਕਲੋਡਾਂ 'ਤੇ ਸਕ੍ਰਿਪਟਿੰਗ ਕਿਨਾਰਿਆਂ ਨਾਲ ਕਰੋ। Rust ਅਕਸਰ CPU-ਬੱਧ ਅਤੇ ਸਮਕਾਲੀ-ਭਾਰੀ ਕਤਾਰਾਂ 'ਤੇ ਅਗਵਾਈ ਕਰਦਾ ਹੈ; ਹੋਰ ਰਨਟਾਈਮ ਵੇਗ ਜਾਂ ਕਿਨਾਰੇ ਦੇ ਰੂਪਾਂਤਰਾਂ 'ਤੇ ਜਿੱਤਦੇ ਹਨ। ਬਿੰਦੂ ਸਬੂਤ ਹੈ, ਫਿਰ ਏ.ਡੀ.ਆਰ.</p><h2>async Rust</h2>ਵਿੱਚ \"ਬਲੌਕ ਕਰਨ\" ਦਾ ਕੀ ਅਰਥ ਹੈ<p>ਅਸਿੰਕ ਰਨਟਾਈਮ (Tokio ਅਤੇ ਦੋਸਤ)<code>.await</code>ਪੁਆਇੰਟਾਂ 'ਤੇ ਕਾਰਜਾਂ ਨੂੰ ਸਵੈਪ ਕਰੋ। ਜੇਕਰ ਤੁਹਾਡਾ ਕੰਮ CPU ਦੇ ਮਿਲੀਸਕਿੰਟ ਬਰਨ ਕਰਦਾ ਹੈ ਜਾਂ ਬਿਨਾਂ ਉਡੀਕ ਕੀਤੇ<code>std::thread::sleep</code>ਨਾਲ ਸੌਂਦਾ ਹੈ, ਤਾਂ ਕਰਮਚਾਰੀ ਉਸ ਧਾਗੇ 'ਤੇ ਕਿਸੇ ਹੋਰ ਨੂੰ ਤਹਿ ਨਹੀਂ ਕਰ ਸਕਦਾ ਹੈ। ਸਥਾਨਕ ਤੌਰ 'ਤੇ ਤੁਸੀਂ ਸ਼ਾਇਦ ਨੋਟਿਸ ਨਾ ਕਰੋ (ਕੁਝ ਕੋਰ ਬੱਗ ਨੂੰ ਲੁਕਾਉਂਦੇ ਹਨ); ਉਤਪਾਦਨ ਵਿੱਚ ਤੁਹਾਡੇ ਕੋਲ ਕਾਮੇ ਖਤਮ ਹੋ ਜਾਂਦੇ ਹਨ ਅਤੇ ਲੇਟੈਂਸੀ ਦੀਆਂ ਪੂਛਾਂ ਫਟ ਜਾਂਦੀਆਂ ਹਨ।</p><p>ਈਕੋਸਿਸਟਮ ਤੋਂ ਅੰਗੂਠੇ ਦਾ ਨਿਯਮ: ਲੇਟੈਂਸੀ-ਸੰਵੇਦਨਸ਼ੀਲ ਸੇਵਾਵਾਂ ਦੀ ਉਡੀਕ ਦੇ ਵਿਚਕਾਰ ਦਸਾਂ ਤੋਂ ਸੈਂਕੜੇ ਮਾਈਕ੍ਰੋਸਕਿੰਟਾਂ ਦੇ ਅੰਦਰ ਰਹੋ — ਅਤੇ ਕਿਸੇ ਵੀ ਹੋਰ ਕੰਮ ਦੇ ਤੌਰ 'ਤੇ ਲੰਬੇ ਸਮੇਂ ਤੱਕ ਕੰਮ ਕਰੋ।</p><h2>ਜਦੋਂ Rayon ਮਦਦ ਕਰਦਾ ਹੈ (CPU-ਬਾਉਂਡ)</h2><ul><li><strong>spawn_blocking</strong>— Tokio ਦਾ ਬਲਾਕਿੰਗ ਪੂਲ: ਸਿੰਕ IO (ਫਾਈਲ ਸਿਸਟਮ, ਬਲਾਕਿੰਗ DB ਡਰਾਈਵਰਾਂ) ਲਈ ਵਧੀਆ; ਭਾਰੀ CPU ਲਈ ਸਬ-ਅਪਟੀਮਲ ਕਿਉਂਕਿ ਇਹ ਕੋਰ ਨੂੰ ਓਵਰਸਬਸਕ੍ਰਾਈਬ ਕਰ ਸਕਦਾ ਹੈ।</li><li><strong>Rayon</strong>— ਸਮਾਨਾਂਤਰ ਦੁਹਰਾਓ ਅਤੇ ਮਹਿੰਗੇ ਗਣਨਾਵਾਂ ਲਈ ਇੱਕ ਛੋਟਾ, CPU-ਆਕਾਰ ਦਾ ਥਰਿੱਡ ਪੂਲ।<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>ਨਾਲ ਬ੍ਰਿਜ ਤਾਂ ਜੋ ਅਸਿੰਕ ਟਾਸਕ ਰਨਟਾਈਮ ਥ੍ਰੈਡ ਨੂੰ ਬਲੌਕ ਕੀਤੇ ਬਿਨਾਂ ਨਤੀਜੇ ਦੀ ਉਡੀਕ ਕਰੇ।</li><li><strong>ਸਮਰਪਿਤ ਥ੍ਰੈੱਡ</strong>— ਹਮੇਸ਼ਾ ਲਈ ਲੂਪਸ (ਕੁਨੈਕਸ਼ਨ ਪ੍ਰਬੰਧਕ, ਲੰਬੇ ਸਮੇਂ ਤੋਂ ਕੰਮ ਕਰਨ ਵਾਲੇ ਕਰਮਚਾਰੀ) ਲਈ ਜਿਨ੍ਹਾਂ ਨੂੰ ਸਥਾਈ ਤੌਰ 'ਤੇ ਪੂਲ ਸਮਰੱਥਾ ਦੀ ਵਰਤੋਂ ਨਹੀਂ ਕਰਨੀ ਚਾਹੀਦੀ।</li></ul><p>ਉਹ Rayon + oneshot ਪੈਟਰਨ ਬਿਲਕੁਲ ਉਹੀ ਹੈ ਜੋ<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon ਸੈਕਸ਼ਨ</a>ਵਿੱਚ Alice Ryhl ਦੁਆਰਾ ਚੱਲਦਾ ਹੈ — TenthMatrix ਦਾ ਵਿਚਾਰ ਇਹ ਹੈ ਕਿ ਉਹ ਵਿਕਲਪ ਪੌਲੀਗਲੋਟ ਅਸਟੇਟ ਸ਼ਿਪਿੰਗ ਏਜੰਟਾਂ ਅਤੇ ਪਲੇਟਫਾਰਮਾਂ ਵਿੱਚ ਕਿਵੇਂ ਆਉਂਦੇ ਹਨ, ਟਿਊਟੋਰਿਅਲ ਦਾ ਮੁੜ ਪ੍ਰਿੰਟ ਨਹੀਂ।</p><h2>ਜਿੱਥੇ ਇਹ TenthMatrix ਉਤਪਾਦਾਂ</h2>ਵਿੱਚ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ<ul><li><strong>APIs ਅਤੇ ਕਿਨਾਰੇ</strong>— ਬੇਨਤੀ ਕਰਮਚਾਰੀਆਂ ਨੂੰ IO ਲਈ ਮੁਫ਼ਤ ਰੱਖੋ; ਫੈਨ CPU Rayon ਵਿੱਚ ਬਦਲ ਜਾਂਦਾ ਹੈ ਜਦੋਂ ਇੱਕ ਗਰਮ ਮਾਰਗ ਨੂੰ ਇਸਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ।</li><li><strong>ਏਜੰਟ</strong>— ਏਮਬੈਡਿੰਗ ਪ੍ਰੀਪ, ਈਵਲ ਬੈਚ, ਅਤੇ ਟੂਲ-ਸਾਈਡ ਕਰੰਚ ਨੂੰ ਆਰਕੈਸਟ੍ਰੇਸ਼ਨ ਲੂਪ ਨੂੰ ਰੋਕ ਨਹੀਂ ਦੇਣਾ ਚਾਹੀਦਾ।</li><li><strong>CI/CD ਪਲੇਟਫਾਰਮ</strong>— ਸਿਹਤ ਜਾਂਚ ਅਤੇ ਪ੍ਰੋਮੋਸ਼ਨ ਇੰਜਣ (ਵੇਖੋ<a href=\"/pa/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>) ਜਵਾਬਦੇਹ ਰਹਿੰਦੇ ਹਨ ਜਦੋਂ ਕਿ ਭਾਰੀ ਤਸਦੀਕ ਦਾ ਕੰਮ ਆਫ-ਪੂਲ ਚੱਲਦਾ ਹੈ।</li><li><strong>Kubernetes ops</strong>— ਘਟਨਾ ਸਹਿ-ਪਾਇਲਟ ਜਿਵੇਂ ਕਿ<a href=\"/pa/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>ਨੂੰ ਤਸੱਲੀਬਖਸ਼ ਕੰਟਰੋਲ ਲੂਪਸ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ ਭਾਵੇਂ ਵਿਸ਼ਲੇਸ਼ਣ CPU-ਭਾਰੀ ਹੋਵੇ।</li></ul><h2>ਅਗਲਾ</h2>ਪੜ੍ਹੋ<ol><li><a href=\"/pa/articles/rust-async-blocking-rayon-modern-applications\">ਲੰਮਾ ਲੇਖ</a>— ਚੀਟ ਸ਼ੀਟ, ਕੋਡ-ਆਕਾਰ ਦੇ ਪੈਟਰਨ, ਅਤੇ ਆਰਕੀਟੈਕਚਰ ਨੋਟਸ।</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— ਲਾਈਵ Rust ਬਨਾਮ ਸਾਥੀ ਸਬੂਤ।</li><li>Alice Ryhl —<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">ਅਸਿੰਕ: ਬਲਾਕਿੰਗ ਕੀ ਹੈ?</a></li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>ਦੁਆਰਾ ਪ੍ਰਕਾਸ਼ਿਤ।</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

@@ -1,0 +1,61 @@
+{
+  "uuid": "blog-claude-models-compare-001",
+  "internal_id": 952,
+  "slug": "claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "title": "Claude Models Compared: Haiku vs Sonnet vs Opus vs Fable 5 (Mythos 5)",
+  "sub_title": "A quick guide to choosing the right Claude model tier, plus a cheap-to-frontier router.",
+  "excerpt": "Choose the right Claude model tier: Haiku for fast routing, Sonnet for daily work, Opus for complex agentic coding, and Fable 5 for long-horizon autonomy. Includes a token-budget router blueprint.",
+  "meta_title": "Claude Models Compared: Haiku vs Sonnet vs Opus vs Fable 5",
+  "meta_description": "Compare Anthropic Claude Haiku, Sonnet, Opus, Fable 5, and gated Mythos 5. Includes specs, cost/token strategy, and a routing blueprint.",
+  "meta_keywords": "Claude models comparison, Claude Opus 4.8, Claude Fable 5, Claude Sonnet 5, Claude Haiku 4.5, Claude Mythos 5, token budgeting, agentic coding",
+  "cover_image": "/img/claude-models-comparison-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-models-comparison-cover.svg",
+      "id": 952,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude models comparison cover: Haiku, Sonnet, Opus, Fable 5, Mythos 5"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>A quick, practical guide to Claude model tiers. For the full deep-dive with routing blueprints, prompting patterns, and a token-budget playbook, read the <a href=\"/en/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">large article</a>.</em></p>\n\n<p><img src=\"/img/claude-models-comparison-cover.svg\" alt=\"Claude models comparison: Haiku, Sonnet, Opus, Fable 5, Mythos 5\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>The one-paragraph version.</strong> Claude model selection is mostly a trade between <em>latency</em>, <em>cost</em>, and <em>how long the task needs the model to stay in the flow</em>. Use <code>claude-haiku-4-5</code> for fast and cheap intent work, <code>claude-sonnet-5</code> for the best speed/quality balance, <code>claude-opus-4-8</code> for complex agentic coding and enterprise work, and reserve <code>claude-fable-5</code> (and gated <code>claude-mythos-5</code>) for the truly hard, long-horizon jobs that take hours or days.\n</div>\n\n<h2>Model lineup at a glance</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0a2740;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Model</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Best for</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Context window</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Max output</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Pricing (input / output)</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Thinking behavior</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Fable 5</strong> (<code>claude-fable-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Long-running agents and hardest unsolved problems</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$10 / $50 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Opus 4.8</strong> (<code>claude-opus-4-8</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Complex agentic coding and enterprise work</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$5 / $25 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Sonnet 5</strong> (<code>claude-sonnet-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Best speed/quality balance</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$3 / $15 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Haiku 4.5</strong> (<code>claude-haiku-4-5-20251001</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Fastest model for cheap, high-volume tasks</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">200K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">64K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$1 / $5 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Extended thinking available (adaptive off)</td>\n</tr>\n</tbody>\n</table>\n\n<p><strong>Claude Mythos 5</strong> (<code>claude-mythos-5</code>) is a gated model that shares the same specs and pricing as Fable 5, but does not include the safety classifiers used by Fable 5. Availability is limited to approved partners via Project Glasswing.</p>\n\n<h2>Pick the right model (quick rules)</h2>\n<ul>\n  <li><strong>Haiku 4.5</strong>: routing, classification, extraction, and any workflow where you want fast replies and you cannot afford high output-token budgets.</li>\n  <li><strong>Sonnet 5</strong>: daily coding and document work where you want strong quality without Opus/Fable pricing.</li>\n  <li><strong>Opus 4.8</strong>: complex agentic coding, enterprise analysis, and harder debugging where longer, more autonomous work is required.</li>\n  <li><strong>Fable 5</strong>: the hard, long-horizon problems that take hours or days, especially when the model must keep the goal, delegate sub-tasks, and stay coherent.</li>\n</ul>\n\n<h2>Effort and thinking: how it impacts cost</h2>\n<p>On the API, <code>effort</code> is the primary control for the trade-off between intelligence, latency, and cost on Fable 5 and Mythos 5. For Opus 4.8 and Sonnet 5, you can also set effort explicitly when you need a different cost/latency profile.</p>\n<p>Practical implication: defaulting every request to maximum effort is usually the fastest way to spend your budget on output tokens.</p>\n\n<h2>Token strategy that works across all tiers</h2>\n<p>Claude output tokens are the expensive part. A simple rule is: <strong>cap output length</strong>, <strong>prompt for TLDR-first</strong>, and use <strong>prompt caching</strong> so stable prefixes (system instructions and tool schemas) are reused.</p>\n\n<ul>\n  <li><strong>Use the cheapest model that can finish.</strong> A router (Haiku -> Sonnet/Opus -> Fable) often cuts cost dramatically while keeping quality high.</li>\n  <li><strong>Set output limits.</strong> In production, always set a max output / token cap. Unbounded answers are a budgeting accident.</li>\n  <li><strong>Use summaries strategically.</strong> Instead of sending full transcripts every turn, keep a compact “lessons” memory and only update it.</li>\n</ul>\n\n<h2>A simple router blueprint</h2>\n<ol>\n  <li>Classify intent and estimated complexity with <code>claude-haiku-4-5</code>.</li>\n  <li>Send “normal hard” work to <code>claude-sonnet-5</code> (or <code>claude-opus-4-8</code> when you expect heavier agentic coding).</li>\n  <li>Escalate to <code>claude-fable-5</code> only when the task is clearly long-horizon or has failed on lower tiers.</li>\n  <li>If Fable 5 refuses via safety classifiers, fall back to Opus 4.8 (the API supports refiring with fallbacks when configured).</li>\n</ol>\n\n<h2>Further reading (official)</h2>\n<ul>\n  <li><a href=\"https://platform.claude.com/docs/en/about-claude/models/overview\" target=\"_blank\" rel=\"noopener noreferrer\">Models overview</a></li>\n  <li><a href=\"https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Fable 5 and Mythos 5</a></li>\n  <li><a href=\"https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5\" target=\"_blank\" rel=\"noopener noreferrer\">Prompting Claude Fable 5</a></li>\n</ul>\n\n</div>\n\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-07-08T09:00:00Z",
+  "updated_at": "2026-07-08T09:00:00Z",
+  "published_date": "2026-07-08",
+  "status": true
+}

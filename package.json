@@ -1,0 +1,54 @@
+{
+  "name": "tenthmatrix",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev -p 3300",
+    "build": "next build",
+    "postbuild": "node scripts/copy-public-to-standalone.mjs",
+    "start": "next start -p 3300",
+    "lint": "eslint .",
+    "fetch:blogs": "node scripts/fetchBlogs.mjs",
+    "sitemap": "node scripts/generateSitemap.mjs",
+    "verify:blog": "node scripts/verify-blog-assets.mjs",
+    "verify:svg": "node scripts/verify-svg-xml.mjs",
+    "verify:opsapi": "node scripts/verify-opsapi-env.mjs",
+    "sync:theme": "node scripts/sync-theme.mjs",
+    "verify:theme": "node scripts/sync-theme.mjs --check",
+    "verify:headings": "node scripts/verify-headings.mjs",
+    "verify:i18n": "node scripts/verify-i18n.mjs",
+    "verify": "npm run verify:blog && npm run verify:svg && npm run verify:opsapi && npm run verify:theme && npm run verify:i18n",
+    "sync:articles-locales": "node scripts/sync-articles-locales.mjs",
+    "prebuild": "node scripts/fetchBlogs.mjs && node scripts/generateSitemap.mjs && npm run verify",
+    "i18n:harvest": "node scripts/i18n/harvest-dict.mjs",
+    "i18n:build": "node scripts/i18n/apply-dict.mjs",
+    "i18n:report": "node scripts/i18n/report.mjs",
+    "i18n:check": "node scripts/i18n/apply-dict.mjs --check",
+    "cms:import": "node scripts/import-blogs-to-cms.mjs"
+  },
+  "dependencies": {
+    "@fortedigital/nextjs-cache-handler": "^3.3.0",
+    "@redis/client": "^6.2.1",
+    "dotenv": "^16.5.0",
+    "framer-motion": "^12.42.2",
+    "fuse.js": "^7.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.468.0",
+    "next": "16.1.6",
+    "next-intl": "^4.8.3",
+    "prismjs": "^1.30.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sass": "^1.72.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "16.1.6",
+    "fast-xml-parser": "^5.7.1",
+    "playwright": "^1.56.1"
+  }
+}

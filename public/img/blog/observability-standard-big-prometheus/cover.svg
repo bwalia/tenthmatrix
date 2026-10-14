@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Centralised observability as a business standard">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220"/>
+      <stop offset="50%" stop-color="#12263a"/>
+      <stop offset="100%" stop-color="#0f3d3e"/>
+    </linearGradient>
+    <style>
+      .eyebrow { fill: #5eead4; font: 700 16px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; letter-spacing: 0.08em; }
+      .title { fill: #f8fafc; font: 800 40px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #cbd5e1; font: 500 18px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .chip { fill: #0f172a; stroke: #2dd4bf; stroke-width: 2; }
+      .chip-t { fill: #99f6e4; font: 700 13px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .foot { fill: #94a3b8; font: 500 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="980" cy="140" r="200" fill="#2dd4bf" fill-opacity="0.08"/>
+  <circle cx="1080" cy="500" r="180" fill="#38bdf8" fill-opacity="0.10"/>
+  <text class="eyebrow" x="64" y="110">WORKSTATION · OBSERVABILITY</text>
+  <text class="title" x="64" y="185">Observability is not optional.</text>
+  <text class="title" x="64" y="245">It is a business standard.</text>
+  <text class="sub" x="64" y="305">Centralise signals. Standardise tools. Query the estate as one.</text>
+  <rect class="chip" x="64" y="360" width="170" height="42" rx="8"/>
+  <text class="chip-t" x="84" y="386">Prometheus core</text>
+  <rect class="chip" x="250" y="360" width="150" height="42" rx="8"/>
+  <text class="chip-t" x="270" y="386">MoSCoW map</text>
+  <rect class="chip" x="416" y="360" width="200" height="42" rx="8"/>
+  <text class="chip-t" x="436" y="386">Big Prometheus stack</text>
+  <text class="foot" x="64" y="560">workstation.co.uk</text>
+</svg>

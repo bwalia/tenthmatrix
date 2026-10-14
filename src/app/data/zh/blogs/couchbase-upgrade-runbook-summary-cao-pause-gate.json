@@ -1,0 +1,49 @@
+{
+  "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+  "excerpt": "对 Couchbase Autonomous Operator (CAO) 下的 Couchbase 服务器滚动升级进行支持友好、SRE 就绪的概述，使用 spec.paused 一次控制一个节点的交换重新平衡，以便您可以稳定、验证运行状况并保持回滚选项打开。",
+  "sub_title": "使用 CAO 本机暂停门、运行状况检查和 XDCR 感知监控进行受控滚动升级",
+  "title": "Couchbase 使用 CAO 暂停门进行升级：支持友好的概述",
+  "meta_title": "Couchbase 服务器升级操作手册（CAO 节奏 + 暂停）| TenthMatrix",
+  "meta_description": "使用spec.paused在CAO下升级Couchbase服务器来调整交换重新平衡：预检检查、监控信号、XDCR策略、回滚触发器和升级后验证——为支持、SRE和数据库工程师编写。",
+  "meta_keywords": "Couchbase、Couchbase 自主操作员、CAO、Kubernetes、滚动升级、规格暂停、交换重新平衡、XDCR、SRE、运行手册、数据库升级",
+  "images": [
+    {
+      "url": "/img/couchbase-upgrade-cover.svg",
+      "id": 930,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Couchbase Server upgrade runbook cover"
+    }
+  ],
+  "content": "<div class='blog-content'><p>如果您支持 Couchbase 平台（或者当<em>没有</em>行为时您会收到传呼），升级可能感觉像是在“放手和希望”与“手动和冒险”之间进行选择。这篇文章抓住了一个务实的中间立场：<strong>控制滚动升级</strong>，用于在<strong>Couchbase 自治操作员 (CAO)</strong>下运行的 Couchbase 服务器，由 CAO 的本机<code>spec.paused</code>字段调整。</p><h2>这是谁的</h2><ul><li><strong>技术支持/事件响应者：</strong>在交换重新平衡期间“正常”是什么样子以及什么被视为危险信号。</li><li><strong>SRE / 平台工程师：</strong>可重复程序，具有预检检查、浸泡门和回滚触发器。</li><li><strong>数据库工程师：</strong>重新平衡期望、XDCR 行为和升级后验证。</li><li><strong>开发人员：</strong>您的平台在维护时段期间正在执行哪些操作（以及您应该发出警报的内容）。</li></ul><h2>典型 CAO 托管拓扑（概念性）</h2><p>下图是操作手册的思维导图：操作员所在的位置、<code>CouchbaseCluster</code>CR 控制的内容以及在升级过程中应关联哪些信号。</p><p><img src=\"/img/couchbase-upgrade-cluster-topology.svg\" alt=\"Typical Couchbase on AKS topology\" width=\"1200\" height=\"640\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>大创意：使用暂停门调整 CAO</h2><p>CAO 通过交换重新平衡执行滚动升级。该运行手册特意添加了一个安全门：暂停节点之间的协调、稳定、验证运行状况，然后恢复。这样，如果节点 N 在交换后出现异常行为，您可以在</em>节点 N+1 启动之前捕获它<em>。</p><p><img src=\"/img/couchbase-upgrade-paced-loop.svg\" alt=\"Paced upgrade loop\" width=\"1200\" height=\"520\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>为什么暂停门值得</h2><ul><li><strong>更少的惊喜：</strong>将症状隔离到单个节点更改。</li><li><strong>更清晰的信号：</strong>将延迟、错误率、重新平衡状态和 XDCR 滞后与一次交换相关联。</li><li><strong>更安全的推出：在您调查时握住<code>spec.paused=true</code>，</strong>可以快速停止“传送带”。</li></ul><h2>升级过程中“好”的样子</h2><ul><li><strong>Pod 映像：</strong>旧→新逐步；最好一次交换一个。</li><li><strong>集群阶段：</strong>在交换之间经常返回到<code>Available</code>；预计再平衡期间会出现短暂的过渡。</li><li><strong>XDCR（如果启用）：</strong><code>changes_left</code>在重新平衡期间上升，然后在稳定期间耗尽。</li><li><strong>重新启动：</strong>新 Pod 从<code>RESTARTS=0</code>开始。任何增加都是暂停和调查的信号。</li></ul><h2>预检检查可在以后为您节省</h2><p>在您进行任何操作之前，请确保集群为绿色（无主动重新平衡，无警告事件），备份是当前的<em>和可恢复的</em>，并且您已记录回滚映像标签。预先决定您的 XDCR 策略：在升级期间禁用以获得更安静的生产信号，继续在预生产中运行以练习实际行为，或使用第三个备用集群进行战略切换。</p><h2>回滚现实检查</h2><p>成熟运行手册大声说出的令人不安的事实：只有在至少一个节点仍保留在旧版本</strong>上时，<strong>回滚才有可能实现。一旦每个 Pod 都被交换并且集群完全重新平衡，“降级”就可以变成“从备份恢复”。这就是节奏很重要的原因：它可以让回滚窗口保持更长时间的打开状态。</p><h2>Next steps</h2><ul><li>Read the full operational guide:<a href=\"/zh/articles/couchbase-server-upgrade-cao-paced\">Couchbase Server rolling upgrade under CAO (paced + pause gate)</a></li><li>Related background:<a href=\"/zh/docs/blogs/couchbase-ha-production-multi-region\">Couchbase high availability in production (XDCR + Kubernetes operator)</a></li></ul></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "database",
+      "id": 930
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "observability",
+      "id": 934
+    }
+  ],
+  "created_at": "2026-04-22T12:30:00Z",
+  "updated_at": "2026-04-22T12:30:00Z",
+  "status": true,
+  "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "internal_id": 930,
+  "published_date": "2026-04-22"
+}

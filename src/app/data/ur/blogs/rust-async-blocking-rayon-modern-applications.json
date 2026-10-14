@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "Rust Async بلاکنگ، Rayon اور جدید ایپلی کیشنز",
+  "sub_title": "async Rust میں \"بلاکنگ\" کا کیا مطلب ہے، جب Rayon CPU سے منسلک کام کو فٹ کرتا ہے، اور Rust APIs، کنارے، ایجنٹس، اور CI/CD پلیٹ فارمز کے لیے کیوں مضبوط رہتا ہے؟",
+  "excerpt": "TenthMatrix async Rust بلاکنگ پر، Rayon CPU سے منسلک کام کے لیے، اور کیوں Rust جدید APIs، ایج، ایجنٹس، اور CI/CD پر فٹ بیٹھتا ہے — Alice Ryhl کی Rayon رہنمائی سے متاثر۔",
+  "meta_title": "Rust Async بلاکنگ اور Rayon جدید ایپس کے لیے | TenthMatrix",
+  "meta_description": "async Rust میں بلاک کرنے کا کیا مطلب ہے، جب Rayon CPU کے پابند کام میں مدد کرتا ہے، اور Rust APIs، کنارے، ایجنٹوں، اور CI/CD پلیٹ فارمز کے لیے کیوں مضبوط ہے۔",
+  "meta_keywords": "Rust، async Rust، Tokio، Rayon، spawn_blocking، بلاکنگ، CPU- پابند، Polyglot Benchmarks، APIs، کنارے، ایجنٹس، CI/CD، TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>اس بارے میں کہ Rust جدید ایپلیکیشنز کے لیے فرسٹ کلاس انتخاب کیوں رہتا ہے — اور جب آپ Tokio کو CPU- بھاری کام کے ساتھ ملاتے ہیں تو \"بلاک کرنے\" کا اصل مطلب کیا ہے۔ Alice Ryhl کے<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Async سے متاثر: مسدود کیا ہے؟</a>(Rayon سیکشن)۔ گہرا غوطہ:<a href=\"/ur/articles/rust-async-blocking-rayon-modern-applications\">طویل مضمون</a>۔</em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>نیچے لائن۔</strong>async Rust میں، \"بلاک کرنے\" کا مطلب ہے کہ رن ٹائم ورکر کو<code>.await</code>سے اتنا دور رکھنا کہ دوسرے کام بھوکے رہ جائیں۔ Tokio کے پول سے مہنگے CPU کام کو منتقل کریں — اکثر<strong>Rayon</strong>کے علاوہ ایک oneshot چینل کے ساتھ — اور APIs، ایج پراکسیز، ایجنٹس، اور CI/CD کنٹرول طیاروں کے لیے async پاتھ کو ریسپانسیو رکھیں۔</div><h2>کیوں Rust جدید ایپلیکیشن سلاٹس</h2>جیتتا رہتا ہے۔<p>ٹیمیں اس وقت Rust چنتی ہیں جب انہیں GC توقف ٹیکس کے بغیر میموری کی حفاظت کی ضرورت ہوتی ہے، بوجھ کے تحت متوقع تاخیر، اور ہم آہنگی کہ ٹائپ سسٹم آپ کو درست ہونے میں مدد کرتا ہے۔ یہ مجموعہ ہر جگہ ظاہر ہوتا ہے جہاں TenthMatrix بنتا ہے: ہائی تھرو پٹ APIs، ایج گیٹ ویز، ایجنٹ رن ٹائمز، اور پروموشن کنٹرول طیارے جو CPU کے کام کی بڑھتی ہوئی تعداد کے آنے پر جم نہیں سکتے۔</p><p>یہ \"ہر چیز کے لیے Rust\" نہیں ہے۔ ہماری<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>ڈیش بورڈ اور ساتھی پوسٹس —<a href=\"/ur/docs/blogs/polyglot-benchmarks-right-tool-right-application\">بلاگ</a>/<a href=\"/ur/articles/polyglot-benchmarks-right-tool-right-application\">مضمون</a>— Rust کا موازنہ Go, Bun, JVM سٹیکس، اور اسکرپٹنگ کناروں کے ساتھ اسی HTTP ورک بوجھ پر کریں۔ Rust اکثر CPU-باؤنڈ اور کنکرنسی سے بھاری قطاروں کی طرف جاتا ہے۔ دوسرے رن ٹائمز رفتار یا ایج ٹرانسفارمز پر جیت جاتے ہیں۔ نقطہ ثبوت ہے، پھر ADRs۔</p><h2>async Rust</h2>میں \"بلاکنگ\" کا کیا مطلب ہے۔<p>Async رن ٹائمز (Tokio اور دوست)<code>.await</code>پوائنٹس پر کاموں کو تبدیل کریں۔ اگر آپ کا ٹاسک CPU کے ملی سیکنڈ جلاتا ہے یا بغیر انتظار کیے<code>std::thread::sleep</code>کے ساتھ سوتا ہے، تو کارکن اس تھریڈ پر کسی اور کو شیڈول نہیں کر سکتا۔ مقامی طور پر آپ کو محسوس نہیں ہوگا (کچھ کور بگ کو چھپاتے ہیں)؛ پیداوار میں آپ کے پاس کارکن ختم ہو جاتے ہیں اور تاخیر کی دم پھٹ جاتی ہے۔</p><p>ایکو سسٹم سے انگوٹھے کا اصول: دیر سے حساس خدمات کے انتظار کے درمیان دسیوں سے سیکڑوں مائیکرو سیکنڈز کے اندر رہیں — اور کسی بھی چیز کو کسی اور کام کے طور پر سمجھیں۔</p><h2>جب Rayon مدد کرتا ہے (CPU- پابند)</h2><ul><li><strong>spawn_blocking</strong>— Tokio کا بلاک کرنے والا پول: مطابقت پذیری IO (فائل سسٹم، DB ڈرائیوروں کو مسدود کرنا) کے لیے بہترین؛ بھاری CPU کے لیے سب سے زیادہ بہتر کیونکہ یہ کور کو اوور سبسکرائب کر سکتا ہے۔</li><li><strong>Rayon</strong>— ایک چھوٹا، CPU سائز کا تھریڈ پول متوازی تکرار کرنے والوں اور مہنگے کمپیوٹیشنز کے لیے۔<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>کے ساتھ پل تاکہ async ٹاسک رن ٹائم تھریڈ کو بلاک کیے بغیر نتیجہ کا انتظار کرے۔</li><li><strong>وقف شدہ دھاگہ</strong>— ہمیشہ کے لیے لوپس (کنکشن مینیجر، طویل المدت کارکن) کے لیے جو پول کی صلاحیت کو مستقل طور پر استعمال نہیں کرنا چاہیے۔</li></ul><p>وہ Rayon + oneshot پیٹرن بالکل وہی ہے جو Alice Ryhl<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon سیکشن</a>میں گزرتا ہے — TenthMatrix کا طریقہ یہ ہے کہ وہ انتخاب پولی گلوٹ اسٹیٹس شپنگ ایجنٹس اور پلیٹ فارمز میں کیسے آتے ہیں، نہ کہ ٹیوٹوریل کی دوبارہ اشاعت۔</p><h2>جہاں یہ TenthMatrix مصنوعات</h2>میں ظاہر ہوتا ہے۔<ul><li><strong>APIs اور کنارے</strong>— درخواست کارکنوں کو IO کے لیے مفت رکھیں۔ فین CPU Rayon میں تبدیل ہو جاتا ہے جب کسی گرم راستے کو اس کی ضرورت ہوتی ہے۔</li><li><strong>ایجنٹس</strong>— ایمبیڈنگ پریپ، ایول بیچز، اور ٹول سائیڈ کرنچ کو آرکیسٹریشن لوپ کو نہیں روکنا چاہیے۔</li><li><strong>CI/CD پلیٹ فارمز</strong>— صحت کی جانچ اور پروموشن انجن (<a href=\"/ur/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>دیکھیں) جوابدہ رہتے ہیں جب کہ تصدیق کا بھاری کام آف پول سے چلتا ہے۔</li><li><strong>Kubernetes ops</strong>—<a href=\"/ur/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>جیسے واقعہ کے کوپائلٹس کو اس وقت بھی تیز کنٹرول لوپس کی ضرورت ہوتی ہے جب تجزیہ CPU بھاری ہو۔</li></ul><h2>اگلا</h2>پڑھیں<ol><li><a href=\"/ur/articles/rust-async-blocking-rayon-modern-applications\">طویل مضمون</a>— چیٹ شیٹ، کوڈ کے سائز کے پیٹرن، اور فن تعمیر کے نوٹس۔</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— لائیو Rust بمقابلہ ہم عمر ثبوت۔</li><li>Alice Ryhl -<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">Async: مسدود کیا ہے؟</a></li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>کے ذریعے شائع کیا گیا۔</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

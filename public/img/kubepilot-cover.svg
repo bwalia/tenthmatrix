@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="KubePilot - CoPilot Pilot AutoPilot for Kubernetes">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.55" stop-color="#102a43"/>
+      <stop offset="1" stop-color="#0f1f2e"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.2" cy="0.25" r="0.55">
+      <stop offset="0" stop-color="#326ce5" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#326ce5" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.85" cy="0.7" r="0.5">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #86efac; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 46px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.86); font: 500 17px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(134,239,172,0.45); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.5); font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <text class="kicker" x="60" y="78">OPEN SOURCE  /  KUBERNETES  /  SRE  /  AIOPS</text>
+  <text class="title" x="60" y="150">KubePilot</text>
+  <text class="title" x="60" y="210">from signal to safe fix</text>
+  <text class="sub" x="60" y="265">CoPilot diagnoses. Pilot verifies. AutoPilot remediates - with policy gates.</text>
+  <rect class="chip" x="60" y="320" width="120" height="36" rx="8"/>
+  <text class="chipText" x="82" y="343">CoPilot</text>
+  <rect class="chip" x="195" y="320" width="100" height="36" rx="8"/>
+  <text class="chipText" x="220" y="343">Pilot</text>
+  <rect class="chip" x="310" y="320" width="130" height="36" rx="8"/>
+  <text class="chipText" x="330" y="343">AutoPilot</text>
+  <rect class="chip" x="455" y="320" width="140" height="36" rx="8"/>
+  <text class="chipText" x="475" y="343">kubepilot.org</text>
+  <text class="brand" x="60" y="580">BUILT BY WORKSTATION  ·  WORKSTATION.CO.UK</text>
+</svg>

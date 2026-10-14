@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "Deep learning-systemen: technisch brief voor engineers & agents",
+  "sub_title": "Representatieleren, discriminatieve vs generatieve paden, metrics en buy/build-routing — AWS-concepten herschreven voor productieteams",
+  "excerpt": "Technisch Workstation-brief over deep learning: gradient-getrainde deep nets, discriminatieve vs generatieve modellen, taakmetrics, en Bedrock vs Kubernetes-serving.",
+  "meta_title": "Deep learning-systemen — Technisch brief (TenthMatrix)",
+  "meta_description": "Technisch deep learning-brief: neurale netten, backprop, discriminatieve vs generative AI, taakmetrics, en Bedrock vs self-host routing voor engineers en AI-agents.",
+  "meta_keywords": "deep learning, neurale netwerken, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Technische digest: deep learning als meerlaagse neurale optimalisatie, discriminatieve vs generatieve paden, en hoe werk te routeren naar classic ML, getrainde DL of foundation-model-API’s. Volledige vergelijkingen, figuren en agent-checklist in het <a href=\"/nl/articles/what-is-deep-learning-workstation-guide\">lange artikel</a>.</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"Technisch brief deep learning-systemen — trainen, optimaliseren, serveren\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Definitie.</strong> Deep learning is gradient-based training van diepe neurale netten zodat f_&#x3b8;(x) hiërarchische features leert uit hoogdimensionaal x. Het vormt de basis van moderne vision/ASR/NLP en is het substraat van generative AI (transformers / diffusion). Kostendrijvers: schoon datavolume, accelerator-tijd en inference OpEx — geen slideware.\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Agent-digest.</strong> DL ⊂ ML. Discriminatief = p(y|x). Generatief = sample x of x|c. Prefer GBM voor sterke tabulaire features; train DL voor perceptie; gebruik Bedrock/vLLM voor taalagents. GitOps-serving; gate money/auth/prod.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">Aangepast van AWS — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — voor <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>-engineeringteams.</p>\n\n<h2>Capability-splitsing</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"ML vs deep learning vs generative AI-stack\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — engineered features; trees/lineaire modellen; beste default voor dichte tabulaire SLA’s.</li>\n  <li><strong>Deep learning</strong> — end-to-end nets op images/text/audio; backprop + GPU’s; serve via Triton/KServe/SageMaker.</li>\n  <li><strong>Generative AI</strong> — sample nieuwe content; LLM’s/diffusion + RAG/tools; Bedrock API of open-weight inference.</li>\n</ul>\n\n<h2>Taakfamilies (metrics doen ertoe)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Familie</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Typisch doel / metric</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">detecteren/classificeren — mAP, IoU, p99 latency</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER, real-time factor</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">classificeren / genereren — F1, exact-match, groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ranken — NDCG, CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">taaksucces + safety + $/request</td></tr>\n</tbody>\n</table>\n\n<h2>Beperkingen</h2>\n<ul>\n  <li><strong>Data</strong> — labelruis en shift domineren; version datasets.</li>\n  <li><strong>Compute</strong> — training en LLM-decode zijn accelerator-gebonden.</li>\n  <li><strong>Ops</strong> — eval harness, drift, cost, GitOps-rollback vóór brede promote.</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"Beslisflow train vs buy vs hybrid\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Workstation-aanbeveling</h2>\n<p>Classificeer eerst discriminatief vs generatief. Prefer managed foundation models voor taalagents tenzij residency/cost open weights afdwingt. Houd classic ML voor tabulaire data. Details, layer diagram en checklist: <a href=\"/nl/articles/what-is-deep-learning-workstation-guide\">lange artikel</a>. Gepubliceerd door <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

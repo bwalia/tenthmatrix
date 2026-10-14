@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="FileMyTax Self Assessment workflow: six API lanes from bank PDF to HMRC MTD with decision matrix">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06121f"/>
+      <stop offset="0.55" stop-color="#0a2740"/>
+      <stop offset="1" stop-color="#1a0b3a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.1" r="0.6">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #fcd34d; font: 700 13px system-ui, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 34px system-ui, sans-serif; }
+      .tagline { fill: #fbbf24; font: 800 16px system-ui, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.85); font: 500 12px system-ui, sans-serif; }
+      .laneLabel { fill: #fcd34d; font: 700 10px system-ui, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 10px system-ui, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.78); font: 400 9px system-ui, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, sans-serif; letter-spacing: 1.5px; }
+      .matrixHead { fill: #fcd34d; font: 700 9px system-ui, sans-serif; letter-spacing: 1px; }
+      .matrixCell { fill: rgba(255,255,255,0.85); font: 500 9px system-ui, sans-serif; }
+      .matrixRow { fill: #ffffff; font: 700 9px system-ui, sans-serif; }
+      .safety { fill: #fbbf24; font: 700 10px system-ui, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect width="1200" height="720" fill="url(#grid)"/>
+  <rect width="1200" height="720" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="40">FILEMYTAX  /  6-API PIPELINE  /  SELF ASSESSMENT</text>
+  <text class="title" x="60" y="72">Bank PDF to HMRC MTD</text>
+  <text class="tagline" x="60" y="96">upload  -&gt;  extract  -&gt;  classify  -&gt;  reconcile  -&gt;  calculate  -&gt;  file</text>
+  <text class="sub" x="60" y="114">AI-assisted prep with deterministic tax engine and human approval before POST /api/file</text>
+
+  <g transform="translate(40,130)">
+    <rect width="1120" height="52" rx="10" fill="rgba(66,165,245,0.06)" stroke="#42a5f5" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">CLIENT PLANE  /  BROWSER + MOBILE LAN</text>
+    <text class="nodeLabel" x="200" y="34">Next.js UI</text>
+    <text class="nodeText" x="320" y="34">review classifications</text>
+    <text class="nodeText" x="520" y="34">approve tax return</text>
+    <text class="nodeText" x="720" y="34">HMRC OAuth in browser</text>
+    <text class="nodeText" x="920" y="34">LAN mode: ./start.sh --env=lan</text>
+  </g>
+
+  <g transform="translate(40,190)">
+    <rect width="1120" height="52" rx="10" fill="rgba(124,58,237,0.06)" stroke="#7c3aed" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">INGEST  /  NGINX + PDF UPLOAD</text>
+    <text class="nodeLabel" x="180" y="34">POST /api/upload</text>
+    <text class="nodeText" x="360" y="34">MinIO storage</text>
+    <text class="nodeText" x="540" y="34">/  -&gt;  Next.js</text>
+    <text class="nodeText" x="660" y="34">/fastapi/*  /opsapi/*</text>
+    <text class="nodeText" x="880" y="34">JWT from opsapi login</text>
+  </g>
+
+  <g transform="translate(40,250)">
+    <rect width="1120" height="68" rx="10" fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">AI PLANE  /  FASTAPI + LLM + PDFPLUMBER</text>
+    <text class="nodeLabel" x="120" y="38">POST /api/extract</text>
+    <text class="nodeText" x="120" y="50">pdfplumber + Claude Vision OCR</text>
+    <text class="nodeLabel" x="340" y="38">POST /api/classify</text>
+    <text class="nodeText" x="340" y="50">SA HMRC categories + confidence</text>
+    <text class="nodeLabel" x="560" y="38">POST /api/reconcile</text>
+    <text class="nodeText" x="560" y="50">balance validation + breakdown</text>
+    <text class="nodeLabel" x="800" y="38">anomaly flags</text>
+    <text class="nodeText" x="800" y="50">human review queue</text>
+  </g>
+
+  <g transform="translate(40,326)">
+    <rect width="1120" height="52" rx="10" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">TAX ENGINE  /  DETERMINISTIC 2025-26 SA</text>
+    <text class="nodeLabel" x="200" y="34">GET /api/calculate/{id}</text>
+    <text class="nodeText" x="420" y="34">income tax bands + PA taper</text>
+    <text class="nodeText" x="640" y="34">Class 4 NI</text>
+    <text class="nodeText" x="820" y="34">DECIMAL(18,2) precision</text>
+    <text class="nodeText" x="980" y="34">no LLM in maths</text>
+  </g>
+
+  <g transform="translate(40,386)">
+    <rect width="1120" height="52" rx="10" fill="rgba(239,108,0,0.06)" stroke="#ef6c00" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">HMRC PLANE  /  MTD SELF ASSESSMENT</text>
+    <text class="nodeLabel" x="160" y="34">OAuth initiate + callback</text>
+    <text class="nodeText" x="360" y="34">obligations fetch</text>
+    <text class="nodeText" x="540" y="34">fraud prevention headers</text>
+    <text class="nodeLabel" x="720" y="34">POST /api/file</text>
+    <text class="nodeText" x="900" y="34">sandbox then production</text>
+  </g>
+
+  <g transform="translate(40,446)">
+    <rect width="1120" height="52" rx="10" fill="rgba(38,198,218,0.06)" stroke="#26c6da" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">AUDIT PLANE  /  JWT + ENCRYPTED NINO + LOGS</text>
+    <text class="nodeText" x="180" y="34">opsapi JWT + refresh cookies</text>
+    <text class="nodeText" x="420" y="34">NINO encrypted at rest</text>
+    <text class="nodeText" x="640" y="34">processing + validation status</text>
+    <text class="nodeText" x="880" y="34">Gatus :8085 health checks</text>
+  </g>
+
+  <g transform="translate(40,510)">
+    <rect width="1120" height="36" rx="10" fill="rgba(220,38,38,0.12)" stroke="#f87171" stroke-width="1.2"/>
+    <text class="safety" x="560" y="24" text-anchor="middle">SAFETY: human approval required before POST /api/file  |  HMRC sandbox first  |  accountant sign-off</text>
+  </g>
+
+  <g transform="translate(40,556)">
+    <rect width="1120" height="108" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+    <text class="laneLabel" x="12" y="16">DECISION MATRIX  /  FILEMYTAX vs SPREADSHEET vs ACCOUNTANT-ONLY</text>
+    <text class="matrixHead" x="14" y="34">Dimension</text>
+    <text class="matrixHead" x="160" y="34">FileMyTax AI-assisted</text>
+    <text class="matrixHead" x="420" y="34">Manual spreadsheet</text>
+    <text class="matrixHead" x="680" y="34">Accountant-only</text>
+    <text class="matrixRow" x="14" y="52">Time</text>
+    <text class="matrixCell" x="160" y="52">Hours not days</text>
+    <text class="matrixCell" x="420" y="52">1-2 days per return</text>
+    <text class="matrixCell" x="680" y="52">Days + back-and-forth</text>
+    <text class="matrixRow" x="14" y="68">Accuracy</text>
+    <text class="matrixCell" x="160" y="68">Consistent rules + flags</text>
+    <text class="matrixCell" x="420" y="68">Formula errors common</text>
+    <text class="matrixCell" x="680" y="68">High if expert</text>
+    <text class="matrixRow" x="14" y="84">Audit trail</text>
+    <text class="matrixCell" x="160" y="84">DB + API logs + review</text>
+    <text class="matrixCell" x="420" y="84">Version chaos</text>
+    <text class="matrixCell" x="680" y="84">Professional records</text>
+    <text class="matrixRow" x="14" y="100">HMRC compliance</text>
+    <text class="matrixCell" x="160" y="100">MTD API + OAuth</text>
+    <text class="matrixCell" x="420" y="100">Manual entry risk</text>
+    <text class="matrixCell" x="680" y="100">Full compliance</text>
+    <text class="matrixRow" x="14" y="116">Human oversight</text>
+    <text class="matrixCell" x="160" y="116">Required before file</text>
+    <text class="matrixCell" x="420" y="116">Self only</text>
+    <text class="matrixCell" x="680" y="116">Accountant gate</text>
+  </g>
+
+  <text class="brand" x="60" y="700">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="700" text-anchor="end">LANDLORDS  /  SOLE TRADERS  /  FINANCE OPS</text>
+</svg>

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "涡轮增压LLMs",
+  "sub_title": "PagedAttention、vLLM、Self-Debugging、PowerInfer 和 EG-MLA — 如何在不浪费 GPU KV 缓存的情况下扩展 LLM 代理",
+  "excerpt": "TenthMatrix 增强 LLMs：用于 KV 缓存的 PagedAttention 分页、vLLM 服务、用于代理的 Self-Debugging、PowerInfer 令牌率和 EG-MLA 内存削减 — 以及生产权衡。",
+  "meta_title": "涡轮增压 LLMs：PagedAttention、vLLM、PowerInfer | TenthMatrix",
+  "meta_description": "扩展 LLM 服务与 PagedAttention 和 vLLM、用于代理的 Self-Debugging、PowerInfer 令牌生成和 EG-MLA KV 压缩 — 旋钮和权衡。",
+  "meta_keywords": "LLM、PagedAttention、vLLM、KV 缓存、PowerInfer、EG-MLA、Self-Debugging、GPU 服务、Kubernetes、TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>关于如何在生产中增强大型语言模型：PagedAttention、vLLM、Self-Debugging、PowerInfer 和 EG-MLA — 以及 GPU 上实际显示的权衡。深入探讨：<a href=\"/zh/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">长文</a>。入门：<a href=\"/zh/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs 解释 + Kubernetes</a>。</em></p><p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。当 KV 缓存碎片时，</strong>吞吐量会下降。像操作系统一样对缓存进行分页（vLLM 内的 PagedAttention），选择与盒子匹配的令牌引擎（胖消费者 GPU 上的 PowerInfer，服务集群上的 vLLM），在架构允许时缩小注意力 (EG-MLA)，并限制代理调试循环，以便质量不会带来无限制的延迟。</div><h2>手表：LLM 实际上是什么</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">上下文，而不是产品演示：<a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">大型语言模型</a>简介 (Andrej Karpathy)。与我们的<a href=\"/zh/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">简单英语 LLM + Kubernetes 指南</a>配对。</p><h2></h2>的扩展问题<p>LLMs 解锁了对话式 AI 和生成，然后立即成为服务问题。每个解码步骤都会将键和值附加到 KV 缓存中，该缓存随着序列长度和批量大小而增长。简单的引擎预先保留巨大的连续板。当其他请求等待时，大部分内存处于空闲状态。尽管 GPU 看起来“满”，但吞吐量却崩溃了。</p><h2>PagedAttention：注意</h2>的虚拟内存<p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>PagedAttention（Kwon 等人，SOSP 2023）将 KV 缓存视为操作系统分页：固定大小的块、每个请求一个块表、非连续的物理页<a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>。内核在关注时间收集块。您仍然必须调整<strong>块大小</strong>、<strong>最大模型长度</strong>和<strong>缓存层次结构</strong>（GPU HBM 与 CPU 卸载与前缀缓存）。太小的块会增加映射开销；太大的块会重新引入废物。</p><h2>vLLM：接近零浪费的</h2><p>vLLM是围绕PagedAttention构建的服务系统。它的目标是接近零 KV 浪费、连续配料和兼容 OpenAI 的 HTTP 表面。在生产中，请注意三件事：(1)<code>gpu_memory_utilization</code>与 OOM，(2) 首次令牌时间与解码令牌/秒，(3) 前缀/提示缓存是否会更改评估集的答案。缓存是吞吐量的胜利；它并非没有正确性和尾部延迟效应。</p><pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre><p>这才是真正的vLLM用法。 Hugging Face BERT<code>forward()</code>调用是<em>，而不是</em>PagedAttention — 不要将分类器 logits 与分页 KV 服务混淆。</p><h2>Self-Debugging：具有延迟预算的质量循环</h2><p>Self-Debugging（Chen 等人）教导模型根据少量轨迹修复自己的预测程序，匹配或击败发出 10 倍以上候选<a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">的基线 [arXiv:2304.05128]</a>。对于代理商来说，这就是黄金——直到反馈轮累积为止。限制调试消息的数量，记录每一轮，并在预算耗尽时向人类或较小的专业模型关闭失败。</p><h2>观看：服务和推理上下文</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">关于快速 LLM 服务的上下文讨论 — 不是官方的 TenthMatrix 演示。与 vLLM 纸和<a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a>配对。</p><h2>PowerInfer：单胖 GPU</h2>上的令牌<p>PowerInfer 分离热/冷神经元，因此消费者 GPU 和 CPU 可以快速生成令牌。报告数据：<strong>13.20 个令牌/秒平均</strong>，峰值<strong>29.08 个令牌/秒</strong>在一台 NVIDIA RTX 4090 上，<strong>11.69x</strong>与 llama.cpp 相比，同时保持精度<a href=\"https://github.com/SJTU-IPADS/PowerInfer\" target=\"_blank\" rel=\"noopener noreferrer\">[PowerInfer]</a>。 在舰队规模上，您仍然需要放置：哪些层保留在 GPU 上，如何跨节点分片，以及</em>提示的<em>位置配置文件是否与论文的模型匹配。</p><h2>EG-MLA：在不破坏工作台的情况下缩小 KV</h2><p>EG-MLA（嵌入门控多头潜在注意力）报告<strong>超过 91.6% KV 缓存减少</strong>与多头注意力相比，降级可忽略不计，与 MLA 相比额外节省（高达 59.9%），并且推理套件得分更高，缩放超过 1B 参数<a href=\"https://arxiv.org/abs/2509.16686\" target=\"_blank\" rel=\"noopener noreferrer\">[EG-MLA 论文]</a>。将其视为一种架构选择，而不是冻结的 vLLM 检查点上的插入标志 - 在庆祝内存图之前验证您的评估工具。</p><p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>将其放在一起</h2><p>结合 PagedAttention + vLLM 进行集群服务，PowerInfer（当盒子是工作站 GPU），Self-Debugging 内部编码代理具有硬轮限制，以及 EG-MLA（当您控制模型系列时）。分布式服务增加了复杂性：KV 并行性、预填充/解码分割以及不会影响页表的自动缩放。措施。然后写ADR。</p><h2>读取下一个</h2><ol><li><a href=\"/zh/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">长文</a>— 旋钮、故障模式、Kubernetes 注释。</li><li><a href=\"/zh/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs 解释 + 在 Kubernetes</a></li>上运行您自己的<li><a href=\"/zh/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / 本地代理</a>·<a href=\"/zh/enterprise-ai\">企业人工智能实验室</a></li></ol><p>由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布。</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

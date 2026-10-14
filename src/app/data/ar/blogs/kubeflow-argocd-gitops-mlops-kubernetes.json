@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-kubeflow-argocd-001",
+  "internal_id": 953,
+  "slug": "kubeflow-argocd-gitops-mlops-kubernetes",
+  "title": "Kubeflow + Argo CD: GitOps MLOps على Kubernetes",
+  "sub_title": "درّب بـ Kubeflow وسلّم بـ Argo CD — مسارات وModel Registry وKServe وتراجع عبر git revert",
+  "excerpt": "اربط Kubeflow وArgo CD لـ MLOps على Kubernetes: درّب وسجّل النماذج في Kubeflow، ورقِّ InferenceServices بـ GitOps، وتراجع بـ git revert.",
+  "meta_title": "Kubeflow + Argo CD: GitOps MLOps على Kubernetes",
+  "meta_description": "اجمع Kubeflow Pipelines وModel Registry وKServe مع Argo CD GitOps لتدريب-إلى-خدمة قابل للتدقيق على Kubernetes.",
+  "meta_keywords": "Kubeflow Argo CD, GitOps MLOps, KServe, Kubeflow Pipelines, تعلم الآلة على Kubernetes, سجل النماذج, InferenceService",
+  "cover_image": "/img/kubeflow-argocd-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubeflow-argocd-cover.svg",
+      "id": 953,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kubeflow and Argo CD GitOps MLOps on Kubernetes"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>دليل عملي لربط Kubeflow (تدريب / تقييم / تسجيل) مع Argo CD (تسليم / تراجع GitOps). للبنية الكاملة والـ manifests والأنماط المضادة، اقرأ <a href=\"/ar/articles/kubeflow-argocd-gitops-mlops-kubernetes\">مقال طويل</a>.</em></p>\n<p><img alt=\"Kubeflow وArgo CD GitOps MLOps على Kubernetes\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/kubeflow-argocd-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>النسخة في فقرة واحدة.</strong> يملك Kubeflow دورة حياة ML على Kubernetes — المسارات ومهام التدريب وmodel registry وKServe. يملك Argo CD التسليم: كل <code>InferenceService</code>، وتعريف المسار، ومكوّن المنصة يُوفَّق من Git. درّب وقيّم في Kubeflow؛ رقِّ بتحديث manifest في Git؛ تراجع بـ <code>git revert</code>. احتفظ بالنماذج في تخزين الكائنات — يخزّن Git عناوين URI والإعداد لا الأوزان.\n</div>\n<h2>لماذا الأداتان معًا؟</h2>\n<p><strong>Kubeflow</strong> يجيب: كيف نشغّل تدريبًا وتقييمًا قابلين للتكرار على وحدات GPU؟ <strong>Argo CD</strong> يجيب: كيف نُسلّم النموذج الناتج إلى الإنتاج دون عناقيد snowflake؟ استخدام Kubeflow وحده ينتهي غالبًا بـ <code>kubectl apply</code> للخدمة. استخدام Argo CD وحده يتركك بلا مسار ML من الدرجة الأولى ونظام تجارب. معًا يشكّلان حلقة MLOps مغلقة.</p>\n<h2>تقسيم العمل</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الاهتمام</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الأداة</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ما يعيش في Git</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">رسوم DAG للمسارات وTrainJobs والتجارب</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow Pipelines / Trainer</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">YAML المسار / مواصفات المكوّنات</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مخرجات النموذج والنَسَب</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Model Registry + object storage</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">URI + بيانات وصفية — لا ملف الأوزان</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">الخدمة وcanaries والتراجعات</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">KServe + Argo CD</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><code>InferenceService</code> overlays</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تثبيت المنصة والترقيات</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Argo CD Applications</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Helm/Kustomize لـ Kubeflow نفسه</td></tr>\n</tbody>\n</table>\n<h2>حلقة من طرف إلى طرف (ما يبدو جيدًا)</h2>\n<ol>\n<li>عالِم بيانات يدمج تغيير مسار → Argo CD يزامن CRDs المسار.</li>\n<li>يشغّل Kubeflow التدريب على عُقد GPU (اختياريًا في طابور عبر Kueue).</li>\n<li>تمر بوابات التقييم → يُسجَّل URI النموذج؛ يحدّث PR الإنتاج <code>InferenceService</code> <code>storageUri</code>.</li>\n<li>يكتشف Argo CD حالة OutOfSync وينشر (حركة canary أولًا).</li>\n<li>انحراف أو مقاييس سيئة → <code>git revert</code> يستعيد URI السابق؛ يوفّق Argo CD.</li>\n</ol>\n<h2>خمس ممارسات توفّر عليك الألم</h2>\n<ul>\n<li><strong>مستودعات أو مجلدات منفصلة:</strong> المنصة (تثبيت Kubeflow) مقابل التطبيقات (pipelines + InferenceServices).</li>\n<li><strong>لا تُودِع أبدًا ثنائيات النماذج</strong> — مرجع <code>s3://</code> / <code>gs://</code> / PVC URIs.</li>\n<li><strong>Sync waves:</strong> MySQL/MinIO (أو مكافئات مُدارة) قبل مكوّنات KFP.</li>\n<li><strong>حدود موارد في كل خطوة</strong> — مهام التدريب بلا حدود ستُجوّع العنقود.</li>\n<li><strong>الترقية = PR،</strong> ليست زرًا في دفتر ملاحظات. مسار التدقيق مجاني.</li>\n</ul>\n<h2>متى تكون هذه الحزمة مبالغًا فيها</h2>\n<p>جهاز Mac Studio واحد يشغّل Ollama لروبوت دردشة للشركات الصغيرة والمتوسطة لا يحتاج Kubeflow + Argo CD. لجأ إلى هذا النمط عندما يكون لديك نماذج متعددة أو تنافس على GPU أو متطلبات امتثال أو أكثر من بيئة واحدة (dev/staging/prod) يجب أن تبقى متطابقة.</p>\n<div style=\"background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>قراءات ذات صلة.</strong> نشرنا بالفعل نظرة عامة على GitOps تركّز على Argo CD وFlux: <a href=\"/ar/docs/blogs/kubernetes-continuous-delivery\">Kubernetes Continuous Delivery: مسارات GitOps مع ArgoCD وFlux</a>. هذا المنشور هو المرافق الخاص بـ ML — Kubeflow في الحلقة.\n</div>\n<h2>اقرأ النسخة الطويلة</h2>\n<p>الـ <a href=\"/ar/articles/kubeflow-argocd-gitops-mlops-kubernetes\">مقال طويل</a> يغطي خريطة Kubernetes MLOps لعام 2026 (KFP v2 وTrainer وKServe وKueue) وأنماط Application في Argo CD وبوابات الترقية وخدمة canary وGPU FinOps وقائمة تحقق للنشر. نُشر بواسطة <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubeflow",
+      "id": 980
+    },
+    {
+      "name": "argocd",
+      "id": 981
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "kserve",
+      "id": 983
+    }
+  ],
+  "created_at": "2026-07-20T09:00:00Z",
+  "updated_at": "2026-07-20T09:00:00Z",
+  "published_date": "2026-07-20",
+  "status": true
+}

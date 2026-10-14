@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320" role="img" aria-label="User to API to DB request flow with auth, gateway, decision matrix and SLOs for OPS architects">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: #9fb0ff; font: 500 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .user { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.2; }
+      .gw { fill: #1e293b; stroke: #38bdf8; stroke-width: 1.2; }
+      .api { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.2; }
+      .auth { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.2; }
+      .db { fill: #0c2b18; stroke: #22c55e; stroke-width: 1.2; }
+      .h { fill: #ffffff; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 7.5px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .v { fill: #94a3b8; font: 600 7.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .step { fill: #fbbf24; font: 800 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .flow { stroke: #4F8EF7; stroke-width: 1.5; fill: none; }
+      .slo { fill: #fca5a5; font: 700 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 600 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+    </style>
+    <marker id="ar2" markerWidth="6" markerHeight="6" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0,6 2.5,0 5" fill="#4F8EF7"/>
+    </marker>
+  </defs>
+
+  <rect width="600" height="320" rx="14" fill="url(#bg)"/>
+  <rect width="600" height="320" rx="14" fill="url(#grid)"/>
+
+  <text class="title" x="14" y="22">User to DB request flow</text>
+  <text class="sub" x="14" y="36">5 hops with concrete vendors + decision points for each stage</text>
+
+  <g transform="translate(14,52)">
+    <rect width="108" height="100" rx="8" class="user"/>
+    <text class="step" x="54" y="16" text-anchor="middle">STEP 1</text>
+    <text class="h" x="54" y="32" text-anchor="middle">User</text>
+    <text class="c" x="6" y="48">browser / mobile</text>
+    <text class="c" x="6" y="60">TLS 1.3 connection</text>
+    <text class="c" x="6" y="72">JWT in Authorization</text>
+    <text class="v" x="6" y="84">React / Flutter / iOS</text>
+    <text class="slo" x="6" y="96">SLO: p99 lt 250 ms</text>
+  </g>
+
+  <g transform="translate(128,52)">
+    <rect width="108" height="100" rx="8" class="gw"/>
+    <text class="step" x="54" y="16" text-anchor="middle">STEP 2</text>
+    <text class="h" x="54" y="32" text-anchor="middle">Gateway</text>
+    <text class="c" x="6" y="48">TLS terminate + WAF</text>
+    <text class="c" x="6" y="60">rate-limit + route</text>
+    <text class="c" x="6" y="72">JWT pre-flight</text>
+    <text class="v" x="6" y="84">Kong / Envoy / APIM</text>
+    <text class="slo" x="6" y="96">SLO: 4xx lt 2 percent</text>
+  </g>
+
+  <g transform="translate(242,52)">
+    <rect width="108" height="100" rx="8" class="api"/>
+    <text class="step" x="54" y="16" text-anchor="middle">STEP 3</text>
+    <text class="h" x="54" y="32" text-anchor="middle">API</text>
+    <text class="c" x="6" y="48">business logic</text>
+    <text class="c" x="6" y="60">input validate (zod)</text>
+    <text class="c" x="6" y="72">scope check + tenant</text>
+    <text class="v" x="6" y="84">Node / Go / Rust / Java</text>
+    <text class="slo" x="6" y="96">SLO: p99 lt 150 ms</text>
+  </g>
+
+  <g transform="translate(356,52)">
+    <rect width="108" height="100" rx="8" class="auth"/>
+    <text class="step" x="54" y="16" text-anchor="middle">STEP 4</text>
+    <text class="h" x="54" y="32" text-anchor="middle">Auth</text>
+    <text class="c" x="6" y="48">IdP introspect (cache)</text>
+    <text class="c" x="6" y="60">role + scope resolve</text>
+    <text class="c" x="6" y="72">JWKS rotation</text>
+    <text class="v" x="6" y="84">Keycloak / Auth0 / Entra</text>
+    <text class="slo" x="6" y="96">SLO: auth lt 80 ms</text>
+  </g>
+
+  <g transform="translate(470,52)">
+    <rect width="116" height="100" rx="8" class="db"/>
+    <text class="step" x="58" y="16" text-anchor="middle">STEP 5</text>
+    <text class="h" x="58" y="32" text-anchor="middle">DB</text>
+    <text class="c" x="6" y="48">parameterised query</text>
+    <text class="c" x="6" y="60">RLS + least-priv user</text>
+    <text class="c" x="6" y="72">connection pool</text>
+    <text class="v" x="6" y="84">Postgres / MySQL / Mongo</text>
+    <text class="slo" x="6" y="96">SLO: query lt 50 ms</text>
+  </g>
+
+  <line x1="122" y1="100" x2="128" y2="100" class="flow" marker-end="url(#ar2)"/>
+  <line x1="236" y1="100" x2="242" y2="100" class="flow" marker-end="url(#ar2)"/>
+  <line x1="350" y1="100" x2="356" y2="100" class="flow" marker-end="url(#ar2)"/>
+  <line x1="464" y1="100" x2="470" y2="100" class="flow" marker-end="url(#ar2)"/>
+
+  <g transform="translate(14,170)">
+    <rect width="572" height="116" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text class="h" x="10" y="14">Decision matrix  /  trade-offs per layer</text>
+
+    <text class="c" x="10" y="30">Gateway choice  /  Kong (OSS) - low cost, plugin rich  /  Envoy - perf champion  /  AWS APIM - native AWS but lock-in</text>
+    <text class="c" x="10" y="44">IdP choice  /  Keycloak - self-host free  /  Auth0 - managed per MAU  /  Entra - M365 native  /  Okta - enterprise</text>
+    <text class="c" x="10" y="58">DB choice  /  Postgres - JSONB + RLS  /  MySQL - HA via group repl  /  Mongo - flex schema, weaker txn</text>
+    <text class="c" x="10" y="72">Cache between API and DB  /  Redis (HA) - p99 lt 5 ms  /  Memcached - simpler, no persistence</text>
+
+    <text class="h" x="10" y="92">Config knobs</text>
+    <text class="c" x="10" y="104">JWT TTL = 10 min  /  refresh = 24 h  /  pool max = 50  /  rate-limit = 100 / IP / s  /  WAF strict mode = on</text>
+
+    <text class="h" x="320" y="92">Breach actions</text>
+    <text class="c" x="320" y="104">SLO breach  -  page on-call  /  open incident  /  rotate JWK  /  block IP at WAF  /  warm cache</text>
+  </g>
+
+  <text class="brand" x="14" y="306">WORKSTATION.CO.UK  -  request flow for OPS + architects</text>
+</svg>

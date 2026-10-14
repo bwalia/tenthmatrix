@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines : agents cloud planifiés, sous-routines et co-routines",
+  "sub_title": "Exécutez Claude Code selon une planification, via un appel API ou sur des événements GitHub, sans ordinateur portable ni serveur. Le guide en cinq minutes.",
+  "excerpt": "Les Routines de Claude Code exécutent des tâches d'agent enregistrées sur le cloud d'Anthropic selon une planification, via API ou sur des événements GitHub. Fonctionnement, configuration et enchaînement.",
+  "meta_title": "Claude Code Routines : agents cloud planifiés expliqués | TenthMatrix",
+  "meta_description": "Claude Code Routines : déclencheurs planifiés, API et GitHub, configuration, prompts, sous-routines avec sous-agents, co-routines, sécurité et limites des offres.",
+  "meta_keywords": "Claude Code Routines, agents IA planifiés, planification Claude Code, /schedule, agents cloud, déclencheur GitHub, déclencheur API, sous-agents, sous-routines, co-routines, Anthropic, automatisation IA, automatisation DevOps",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code n'a plus besoin de vous devant le clavier. Les <strong>Routines</strong> exécutent des tâches d'agent enregistrées sur le cloud d'Anthropic selon une planification, à partir d'un appel API ou lorsqu'un événement se produit sur GitHub. Voici ce qu'elles sont, comment en configurer une, et deux patterns que nous appelons sous-routines (sub-routines) et co-routines. Pour le guide complet, lisez l'<a href=\"/fr/articles/claude-code-routines-scheduled-cloud-agents\">article détaillé</a>.</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines : agents cloud planifiés, sous-routines et co-routines\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>L'essentiel.</strong> Une routine est une tâche Claude Code que vous configurez une seule fois (prompt, dépôts, environnement cloud, connecteurs) et qui se déclenche automatiquement. Elle s'exécute comme une session autonome complète dans le cloud : votre ordinateur portable peut rester fermé. Les routines sont en préversion de recherche (depuis le 14 avril 2026) sur les offres Pro, Max, Team et Enterprise.\n</div>\n\n<h2>Trois façons de lancer une routine</h2>\n<ul>\n  <li><strong>Planification :</strong> toutes les heures, tous les jours, en semaine, chaque semaine ou à une date ponctuelle, saisie dans votre fuseau horaire local. Un cron personnalisé est disponible via <code>/schedule update</code>, avec un intervalle minimum d'une heure.</li>\n  <li><strong>API :</strong> un endpoint HTTPS propre à chaque routine, avec son propre jeton bearer. Votre outil d'alerte ou votre pipeline de déploiement y envoie un POST, éventuellement accompagné d'un texte de contexte. Ce texte arrive marqué comme non fiable : un jeton divulgué ne permet donc pas de réécrire les instructions de la routine.</li>\n  <li><strong>GitHub :</strong> événements de pull request ou de release, filtrés par branche, label, auteur, statut brouillon ou fusionné.</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"Anatomie d'une exécution de routine : déclencheurs, routine enregistrée, session cloud et résultats\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>En configurer une en deux minutes</h2>\n<ol>\n  <li>Ouvrez <code>claude.ai/code/routines</code> et choisissez <strong>New routine</strong>, ou tapez <code>/schedule</code> dans la CLI de Claude Code.</li>\n  <li>Rédigez un prompt autonome : périmètre, actions autorisées, destination du résultat et conduite à tenir lorsqu'il n'y a rien à faire.</li>\n  <li>Choisissez les dépôts et un environnement. Retirez les connecteurs dont la tâche n'a pas besoin, car ils sont tous inclus par défaut.</li>\n  <li>Ajoutez un déclencheur, choisissez <strong>Run now</strong> pour tester, puis lisez la transcription. Un badge vert signifie seulement que la session s'est exécutée, pas que la tâche a réussi.</li>\n</ol>\n\n<h2>Sous-routines : une exécution, plusieurs assistants</h2>\n<p>C'est le nom que nous donnons à un pattern, pas une fonctionnalité d'Anthropic. Le prompt de la routine orchestre et confie chaque étape à un <strong>sous-agent</strong> (<code>.claude/agents/</code>) ou à une <strong>skill</strong> versionnée dans le dépôt. Chaque assistant dispose de sa propre fenêtre de contexte et uniquement des outils dont il a besoin, ce qui rend les longues exécutions sans surveillance plus ciblées, moins coûteuses et plus sûres.</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"Sous-routines : un prompt orchestrateur qui délègue à des sous-agents et à des skills\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Co-routines : des routines qui se passent le relais</h2>\n<p>Les routines ne peuvent pas s'appeler directement, mais elles peuvent coopérer au moyen d'artefacts durables. Par exemple, une routine nocturne ouvre une PR en brouillon, une routine déclenchée par GitHub la relit, un humain la fusionne, une routine déclenchée par la fusion met à jour la documentation, et votre pipeline de déploiement appelle une routine de vérification. Utilisez des filtres pour qu'aucune routine ne se déclenche sur sa propre production, et conservez une validation humaine de la fusion dans la chaîne.</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"Co-routines : quatre routines qui coopèrent via des événements GitHub, des labels et des appels API\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Les limites à connaître</h2>\n<ul>\n  <li>Au lancement, les plafonds quotidiens d'exécutions étaient de 5 sur Pro, 15 sur Max et 25 sur Team et Enterprise, en plus de l'utilisation normale de l'abonnement. Les exécutions ponctuelles ne sont pas comptabilisées.</li>\n  <li>Les routines agissent en <strong>votre nom</strong>. Les commits, les PR et les messages Slack portent votre identité. Claude ne pousse que vers des branches <code>claude/</code>, sauf instruction contraire, et jamais vers des branches protégées.</li>\n  <li>Besoin d'une interrogation à la minute ou de fichiers locaux ? Utilisez plutôt <code>/loop</code> ou les tâches planifiées de Desktop.</li>\n</ul>\n\n<p><strong>À lire ensuite :</strong> le <a href=\"/fr/articles/claude-code-routines-scheduled-cloud-agents\">guide complet</a> couvre la sécurité du payload API, des modèles de prompts, des exemples de sous-agents, des comparaisons avec GitHub Actions, n8n et Trigger.dev, ainsi qu'une checklist de gouvernance. Sources : <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">annonce d'Anthropic</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">documentation de Claude Code</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

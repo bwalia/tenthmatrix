@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="WSLVault envelope encryption key hierarchy">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 28px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #b45309; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .root { fill: #fff7ed; stroke: #c2410c; stroke-width: 2.5; }
+      .kek { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+      .dek { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .cipher { fill: #f1f5f9; stroke: #475569; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Envelope encryption and key hierarchy</text>
+  <text class="sub" x="48" y="78">DEK wraps the secret; tenant KEK wraps the DEK; root KEK stays with crypto custody</text>
+
+  <rect class="root" x="420" y="120" width="360" height="100" rx="10"/>
+  <text class="lbl" x="450" y="165">Root KEK</text>
+  <text class="sm" x="450" y="195">KMS / HSM / Shamir quorum</text>
+
+  <path class="arrow" d="M600 230 V270"/>
+
+  <rect class="kek" x="180" y="280" width="300" height="100" rx="10"/>
+  <text class="lbl" x="210" y="325">Tenant A KEK</text>
+  <text class="sm" x="210" y="355">Isolated crypto boundary</text>
+
+  <rect class="kek" x="720" y="280" width="300" height="100" rx="10"/>
+  <text class="lbl" x="750" y="325">Tenant B KEK</text>
+  <text class="sm" x="750" y="355">Cannot unwrap Tenant A</text>
+
+  <path class="arrow" d="M330 390 V430"/>
+  <path class="arrow" d="M870 390 V430"/>
+
+  <rect class="dek" x="180" y="440" width="300" height="90" rx="10"/>
+  <text class="lbl" x="210" y="480">DEK (data key)</text>
+  <text class="sm" x="210" y="508">AES-256-GCM per secret</text>
+
+  <rect class="dek" x="720" y="440" width="300" height="90" rx="10"/>
+  <text class="lbl" x="750" y="480">DEK (data key)</text>
+  <text class="sm" x="750" y="508">Separate tenant material</text>
+
+  <path class="arrow" d="M330 540 V580"/>
+  <path class="arrow" d="M870 540 V580"/>
+
+  <rect class="cipher" x="120" y="590" width="420" height="90" rx="10"/>
+  <text class="lbl" x="150" y="630">Ciphertext on disk / DB</text>
+  <text class="sm" x="150" y="658">Steal disk = ciphertext only</text>
+
+  <rect class="cipher" x="660" y="590" width="420" height="90" rx="10"/>
+  <text class="lbl" x="690" y="630">Ciphertext on disk / DB</text>
+  <text class="ok" x="690" y="658">Not the secrets</text>
+</svg>

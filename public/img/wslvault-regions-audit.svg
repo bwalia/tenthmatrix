@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="WSLVault multi-region and audit">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 26px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #b45309; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .reg { fill: #fff7ed; stroke: #c2410c; stroke-width: 2; }
+      .audit { fill: #f8fafc; stroke: #475569; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Regions, HA, and tamper-evident audit</text>
+  <text class="sub" x="48" y="78">Active/active stacks share key material; audit joins a signed hash chain</text>
+
+  <rect class="reg" x="80" y="140" width="420" height="220" rx="12"/>
+  <text class="lbl" x="110" y="185">Region A (active)</text>
+  <text class="sm" x="110" y="220">Own PostgreSQL and services</text>
+  <text class="sm" x="110" y="250">Sealed at rest</text>
+  <text class="sm" x="110" y="280">Public endpoint for local clients</text>
+  <text class="ok" x="110" y="320">Writes secrets as ciphertext</text>
+
+  <path class="arrow" d="M520 250 H680"/>
+  <text class="sm" x="545" y="235">encrypted replication</text>
+
+  <rect class="reg" x="700" y="140" width="420" height="220" rx="12"/>
+  <text class="lbl" x="730" y="185">Region B (active)</text>
+  <text class="sm" x="730" y="220">Byte-identical key material</text>
+  <text class="sm" x="730" y="250">Reads secrets written anywhere</text>
+  <text class="sm" x="730" y="280">Fails over as a PoP-side change</text>
+  <text class="ok" x="730" y="320">Same secret, peer decrypt</text>
+
+  <rect class="audit" x="80" y="420" width="1040" height="240" rx="12"/>
+  <text class="lbl" x="110" y="470">Hash-chained audit</text>
+  <text class="sm" x="110" y="510">Every operation joins a per-tenant hash chain signed with a dedicated key.</text>
+  <text class="sm" x="110" y="540">A record cannot be altered or removed without breaking the chain.</text>
+  <text class="sm" x="110" y="570">Operators prove what happened without storing plaintext secrets in the trail.</text>
+  <text class="ok" x="110" y="620">Visibility for compliance. Ciphertext for storage.</text>
+</svg>

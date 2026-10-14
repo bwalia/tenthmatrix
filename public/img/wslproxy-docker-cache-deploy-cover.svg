@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="WSLProxy Docker image cache and faster deploys">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1c2c"/>
+      <stop offset="0.55" stop-color="#1a3347"/>
+      <stop offset="1" stop-color="#0f2433"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.18" cy="0.22" r="0.55">
+      <stop offset="0" stop-color="#c45c26" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#c45c26" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.88" cy="0.78" r="0.5">
+      <stop offset="0" stop-color="#1a7a6d" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#1a7a6d" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+
+  <text fill="#f0a070" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="3" x="60" y="72">DOCKER  /  BUILDX  /  GHA CACHE  /  ANSIBLE</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="42" font-weight="800" x="60" y="140">Faster WSLProxy Deploys</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" font-weight="700" x="60" y="186">Prebuilt images, Build cache, day-2 code path</text>
+  <text fill="rgba(255,255,255,0.86)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" x="60" y="232">Compile OpenResty once in CI. Pull and extract on POPs. Prefer DEPLOY_MODE=code.</text>
+
+  <!-- LHS box -->
+  <rect x="60" y="280" width="500" height="220" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(26,122,109,0.55)" stroke-width="1.5"/>
+  <text fill="#5eead4" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="2" x="84" y="318">LHS  IMAGE FACTORY</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" x="84" y="358">Buildx + GHA layer cache</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="84" y="390">bwalia/wslproxy-openresty</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="84" y="420">Multi-stage tree, not the toolchain</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="84" y="450">Extract via docker cp + rsync</text>
+
+  <!-- RHS box -->
+  <rect x="640" y="280" width="500" height="220" rx="14" fill="rgba(255,255,255,0.06)" stroke="rgba(196,92,38,0.55)" stroke-width="1.5"/>
+  <text fill="#f0a070" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="2" x="664" y="318">RHS  FULL DEPLOY</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="600" x="664" y="358">int ��→ smoke ��→ test ��→ prod</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="664" y="390">DEPLOY_MODE: code | build | full</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="664" y="420">npm + Next.js .next/cache</text>
+  <text fill="rgba(255,255,255,0.75)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="14" x="664" y="450">Ansible tags from mode</text>
+
+  <text fill="rgba(255,255,255,0.5)" font-family="ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2" x="60" y="580">WORKSTATION  ·  WSLPROXY.ORG  ·  RINGPROMOTER.COM</text>
+</svg>

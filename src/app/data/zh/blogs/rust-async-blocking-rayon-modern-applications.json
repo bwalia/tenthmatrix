@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "Rust 异步阻塞、Rayon 和现代应用",
+  "sub_title": "当 Rayon 适合 CPU 绑定工作时，“阻塞”在异步 Rust 中意味着什么，以及为什么 Rust 对于 API、边缘、代理和 CI/CD 平台保持强劲",
+  "excerpt": "异步 Rust 阻塞上的 TenthMatrix、用于 CPU 绑定工作的 Rayon，以及为什么 Rust 适合现代 API、边缘、代理和 CI/CD — 灵感来自 Alice Ryhl 的 Rayon 指南。",
+  "meta_title": "适用于现代应用程序的 Rust 异步阻止和 Rayon | TenthMatrix",
+  "meta_description": "当 Rayon 帮助 CPU 绑定工作时，阻塞在异步 Rust 中意味着什么，以及为什么 Rust 对于 API、边缘、代理和 CI/CD 平台来说非常强大。",
+  "meta_keywords": "Rust、异步 Rust、Tokio、Rayon、spawn_blocking、阻塞、CPU 绑定、Polyglot Benchmarks、APIs、边缘、代理、CI/CD、TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>解释了为什么 Rust 仍然是现代应用的一流选择 - 以及当您将 Tokio 与 CPU 繁重工作混合使用时“阻塞”的真正含义。受到 Alice Ryhl 的<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">异步的启发：什么是阻塞？</a>（Rayon 部分）。深入探讨：<a href=\"/zh/articles/rust-async-blocking-rayon-modern-applications\">长文</a>。</em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。</strong>在异步 Rust 中，“阻塞”意味着运行时工作线程远离<code>.await</code>足够长的时间，以致其他任务陷入困境。将昂贵的 CPU 工作移出 Tokio 池（通常使用<strong>Rayon</strong>加上 oneshot 通道），并保持异步路径对 API、边缘代理、代理和 CI/CD 控制平面的响应。</div><h2>为什么 Rust 不断赢得现代应用插槽</h2><p>团队在需要内存安全且无需 GC 暂停税、可预测的负载延迟以及类型系统可帮助您实现正确的并发性时，会选择 Rust。这种组合出现在 TenthMatrix 构建的任何地方：高吞吐量 API、边缘网关、代理运行时以及在 CPU 工作高峰到来时无法冻结的升级控制平面。</p><p>它并不是“万能的 Rust”。我们的<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>仪表板和配套文章 -<a href=\"/zh/docs/blogs/polyglot-benchmarks-right-tool-right-application\">博客</a>/<a href=\"/zh/articles/polyglot-benchmarks-right-tool-right-application\">文章</a>- 将 Rust 与相同 HTTP 工作负载上的 Go、Bun、JVM 堆栈和脚本边缘进行比较。 Rust 通常领先于 CPU 绑定和并发性较高的行；其他运行时在速度或边缘变换上获胜。重点是证据，然后是 ADR。</p><h2>异步中“阻塞”的含义 Rust</h2><p>异步运行时（Tokio和朋友）在<code>.await</code>点交换任务。如果您的任务消耗了 CPU 的毫秒数或在没有等待的情况下使用<code>std::thread::sleep</code>进行睡眠，则工作线程无法在该线程上安排其他任何人。在本地，您可能不会注意到（一些核心隐藏了该错误）；在生产中，你会耗尽工作人员，并且延迟尾部会爆炸。</p><p>生态系统的经验法则：对延迟敏感的服务的等待间隔保持在数十到数百微秒之内，并将任何更长的时间视为属于其他地方的工作。</p><h2>当 Rayon 提供帮助时（CPU 绑定）</h2><ul><li><strong>spawn_blocking</strong>— Tokio 的阻塞池：非常适合同步 IO（文件系统、阻塞 DB 驱动程序）；对于重型 CPU 来说不是最佳选择，因为它可能会超额订阅内核。</li><li><strong>Rayon</strong>— 一个小型 CPU 大小的线程池，用于并行迭代器和昂贵的计算。与<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>桥接，以便异步任务等待结果，而不会阻塞运行时线程。</li><li><strong>专用线程</strong>— 用于不得永久消耗池容量的永远循环（连接管理器、长期工作线程）。</li></ul><p>Rayon + oneshot 模式正是 Alice Ryhl 在<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon 部分</a>中介绍的模式 - TenthMatrix 的做法是这些选择如何登陆多语言地产运输代理和平台，而不是教程的重印。</p><h2>TenthMatrix 产品中的情况</h2><ul><li><strong>APIs 和边缘</strong>— 让请求工作人员可以自由进行 IO；当热路径需要时，风扇 CPU 会转换为 Rayon。</li><li><strong>代理</strong>— 嵌入准备、评估批次和工具端处理不应阻碍编排循环。</li><li><strong>CI/CD 平台</strong>— 运行状况检查和升级引擎（请参阅<a href=\"/zh/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>）保持响应，同时在池外运行更繁重的验证工作。</li><li><strong>Kubernetes 操作</strong>— 像<a href=\"/zh/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>这样的事件副驾驶即使在 CPU 分析繁重时也需要快速的控制循环。</li></ul><h2>阅读下一个</h2><ol><li><a href=\"/zh/articles/rust-async-blocking-rayon-modern-applications\">长文</a>— 备忘单、代码形状模式和架构注释。</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— 实时 Rust 与同行的对比证据。</li><li>Alice Ryhl —<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">异步：什么是阻塞？</a></li></ol><p>由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布。</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

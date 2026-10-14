@@ -1,0 +1,45 @@
+# TenthMatrix website — production image (one image for int/test/acc/prod).
+# Per-env behaviour comes from the request host (src/utils/opsapiEnv.mjs) and
+# runtime env injected by Helm (appConfig + the Vault-backed ExternalSecret).
+# No .env is copied in (.dockerignore) and none is committed.
+FROM node:24-alpine AS builder
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY . .
+
+# prebuild (fetchBlogs → sitemap → verify) runs inside `npm run build`.
+# Build-time CMS fetch is optional: pass --build-arg OPSAPI_URL=... to bake the
+# latest posts into the committed-JSON fallback layer; ISR keeps them fresh.
+ARG OPSAPI_URL=""
+ARG WEBSITE_NAMESPACE="tenthmatrix"
+ENV OPSAPI_URL=${OPSAPI_URL} \
+    WEBSITE_NAMESPACE=${WEBSITE_NAMESPACE} \
+    NEXT_PUBLIC_LEADS_NAMESPACE=tenthmatrix \
+    NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+# Stage 2: minimal runtime
+FROM node:24-alpine AS runner
+ENV NODE_ENV=production \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0 \
+    NEXT_TELEMETRY_DISABLED=1 \
+    ENGAGEMENT_STORE_DIR=/tmp/engagement
+WORKDIR /app
+
+RUN apk add --no-cache curl \
+ && addgroup --system --gid 1001 nodejs \
+ && adduser --system --uid 1001 nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+USER nextjs
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:3000/en >/dev/null || exit 1
+CMD ["node", "server.js"]

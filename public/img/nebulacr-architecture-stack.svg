@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="780" viewBox="0 0 1200 780" role="img" aria-label="NebulaCR architecture: registry, auth, storage, Kubernetes control plane, observability">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 24px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAccent { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .boxRegistry { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .boxAuth { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .boxStore { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .boxK8s { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .boxObs { fill: #0c2e36; stroke: #00acc1; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: #bbc6ff; font: 400 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .link { stroke: rgba(255,255,255,0.45); stroke-width: 2; fill: none; }
+      .auth { stroke: #ab47bc; stroke-width: 2; fill: none; stroke-dasharray: 4 4; }
+      .data { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .ctrl { stroke: #ff9560; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .obs { stroke: #26c6da; stroke-width: 2; fill: none; stroke-dasharray: 1 3; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arAuth" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ab47bc"/>
+    </marker>
+    <marker id="arData" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arObs" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#26c6da"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="780" fill="url(#bg)"/>
+  <rect width="1200" height="780" fill="url(#grid)"/>
+
+  <text class="title" x="600" y="40" text-anchor="middle">NebulaCR  /  logical architecture</text>
+  <text class="subtitle" x="600" y="62" text-anchor="middle">Rust workspace: nebula-registry :5000, nebula-auth :5001, object_store, Kubernetes CRDs, metrics</text>
+
+  <g>
+    <rect x="40" y="90" width="1120" height="70" rx="10" class="lane"/>
+    <text class="laneTitle" x="62" y="112">CLIENT PLANE  /  INGRESS</text>
+    <text class="boxLabel" x="600" y="128" text-anchor="middle">Ingress / load balancer</text>
+    <text class="boxText" x="600" y="146" text-anchor="middle">TLS + rate limits  /  /v2 to registry  /  /auth to auth service  /  oci.example.com  /  HSTS</text>
+  </g>
+
+  <g transform="translate(40,180)">
+    <rect width="540" height="220" rx="12" class="boxRegistry"/>
+    <text class="laneTitle" x="22" y="22" fill="#90caf9">REGISTRY  /  DATA PLANE  /  :5000</text>
+    <text class="boxLabel" x="270" y="50" text-anchor="middle">nebula-registry</text>
+    <text class="boxText" x="22" y="80">OCI Distribution API v2</text>
+    <text class="boxText" x="22" y="100">JWT verification + tenant path isolation</text>
+    <text class="boxText" x="22" y="120">Pull-through cache: Docker Hub, GHCR, Quay</text>
+    <text class="boxText" x="22" y="140">Chunked + monolithic blob uploads</text>
+    <text class="boxText" x="22" y="160">Manifest list / index for multi-arch</text>
+    <text class="boxText" x="22" y="180">Content trust via cosign verify (optional)</text>
+    <rect x="22" y="194" width="496" height="20" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text class="code" x="270" y="208" text-anchor="middle">/v2/{tenant}/{project}/{repo}/manifests/{ref}</text>
+  </g>
+
+  <g transform="translate(620,180)">
+    <rect width="540" height="220" rx="12" class="boxAuth"/>
+    <text class="laneTitle" x="22" y="22" fill="#ce93d8">AUTHN / AUTHZ  /  CONTROL PLANE  /  :5001</text>
+    <text class="boxLabel" x="270" y="50" text-anchor="middle">nebula-auth</text>
+    <text class="boxText" x="22" y="80">OIDC providers: Azure AD, Okta, Google (PKCE)</text>
+    <text class="boxText" x="22" y="100">CI OIDC: GitHub Actions, GitLab, Kubernetes SA</text>
+    <text class="boxText" x="22" y="120">RS256 / EdDSA JWTs  /  SCIM 2.0 provisioning</text>
+    <text class="boxText" x="22" y="140">Docker-compatible /auth/token  /  bearer flow</text>
+    <text class="boxText" x="22" y="160">JWKS cache  /  RBAC by tenant + scope  /  robots</text>
+    <text class="boxText" x="22" y="180">Token revocation + replay protection</text>
+    <rect x="22" y="194" width="496" height="20" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text class="code" x="270" y="208" text-anchor="middle">scope=repository:{tenant}/{project}/{repo}:pull,push</text>
+  </g>
+
+  <line x1="580" y1="290" x2="620" y2="290" class="auth" marker-end="url(#arAuth)"/>
+  <line x1="620" y1="310" x2="580" y2="310" class="auth" marker-end="url(#arAuth)"/>
+  <text class="tag" x="600" y="284" text-anchor="middle" fill="#ce93d8">token exchange</text>
+
+  <g transform="translate(40,420)">
+    <rect width="1120" height="120" rx="12" class="boxStore"/>
+    <text class="laneTitle" x="22" y="22" fill="#a5d6a7">OBJECT STORAGE  /  DATA PLANE  /  STATELESS REGISTRY PODS</text>
+    <text class="boxLabel" x="560" y="50" text-anchor="middle">object_store backend</text>
+    <text class="boxText" x="40" y="74">Filesystem  /  S3  /  GCS  /  Azure Blob  /  MinIO  -  hierarchical paths for blobs + manifests</text>
+    <text class="boxText" x="40" y="92">Stateless registry pods. Durability follows the chosen storage policy (versioning, lifecycle, cross-region).</text>
+    <text class="code" x="40" y="108">s3://nebulacr-{env}/{tenant}/{project}/{repo}/blobs/sha256/{first2}/{full}</text>
+  </g>
+
+  <line x1="280" y1="400" x2="280" y2="420" class="data" marker-end="url(#arData)"/>
+  <line x1="900" y1="400" x2="900" y2="420" class="data" marker-end="url(#arData)"/>
+
+  <g transform="translate(40,560)">
+    <rect width="540" height="200" rx="12" class="boxK8s"/>
+    <text class="laneTitle" x="22" y="22" fill="#ffb74d">KUBERNETES CONTROL PLANE</text>
+    <text class="boxLabel" x="270" y="50" text-anchor="middle">nebula-controller</text>
+    <text class="boxText" x="22" y="80">Reconciles Tenant, Project, AccessPolicy, TokenPolicy CRDs</text>
+    <text class="boxText" x="22" y="100">Helm: HPA, Ingress TLS, NetworkPolicy, ServiceMonitor</text>
+    <text class="boxText" x="22" y="120">Reflects identity provider state back into registry policy</text>
+    <text class="boxText" x="22" y="140">Validating webhook: rejects ambiguous repo aliases</text>
+    <rect x="22" y="156" width="496" height="22" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text class="code" x="270" y="172" text-anchor="middle">kubectl apply -f tenant.yaml -f project.yaml -f access-policy.yaml</text>
+  </g>
+
+  <g transform="translate(620,560)">
+    <rect width="540" height="200" rx="12" class="boxObs"/>
+    <text class="laneTitle" x="22" y="22" fill="#80deea">OBSERVABILITY PLANE</text>
+    <text class="boxLabel" x="270" y="50" text-anchor="middle">Metrics + traces + audit</text>
+    <text class="boxText" x="22" y="80">Prometheus metrics: pulls/pushes/sec, blob bytes, auth verdicts</text>
+    <text class="boxText" x="22" y="100">JSON structured logs  /  OpenTelemetry traces  /  Loki + Jaeger</text>
+    <text class="boxText" x="22" y="120">Dashboard: image browser, replication health, audit filters</text>
+    <text class="boxText" x="22" y="140">SLO targets: pull p95, push success rate, auth failure rate</text>
+    <rect x="22" y="156" width="496" height="22" rx="4" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)"/>
+    <text class="code" x="270" y="172" text-anchor="middle">/metrics  -  ServiceMonitor  -  Grafana dashboards bundled</text>
+  </g>
+
+  <line x1="280" y1="540" x2="280" y2="560" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="900" y1="540" x2="900" y2="560" class="obs" marker-end="url(#arObs)"/>
+</svg>

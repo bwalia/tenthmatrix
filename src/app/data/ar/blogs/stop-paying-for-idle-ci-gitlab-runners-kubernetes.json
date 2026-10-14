@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "توقف عن دفع تكاليف CI غير النشطة: GitLab Runners على Kubernetes",
+  "sub_title": "قم بتوسيع CI لتلبية ذروة يوم الاثنين، ثم قلل السعة ليلاً وأيام العطل — الدليل الخماسي الدقائق مع مقاطع فيديو توضيحية لكلا الأمرين.",
+  "excerpt": "معظم الفرق تدفع مقابل CI وكأن كل ليلة لا تزال صباح الاثنين. GitLab Runners على Kubernetes يغيّران ذلك: حاويات مهام مؤقتة، تتوسع تحت الحمل، وتتقلّص عندما يكون الهدوء.",
+  "meta_title": "توقف عن دفع تكاليف CI غير النشطة: GitLab Runners على Kubernetes | TenthMatrix",
+  "meta_description": "GitLab Runners على Kubernetes: حاويات الوظائف المؤقتة، مسارات تثبيت Helm والمُشغّل، التوسيع التلقائي، وكيفية التوقف عن دفع تكاليف الليالي والأيام العطلات غير النشطة.",
+  "meta_keywords": "GitLab Runner، Kubernetes executor، GitLab Operator، Helm، k3s، توسيع نطاق CI التلقائي، FinOps، تكلفة CI الخاملة، DinD، مشغلات hyperscale، TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>معظم الفرق تدفع مقابل التكامل المستمر وكأن كل ليلة وكل عطلة نهاية أسبوع لا تزال صباح الاثنين.<strong></strong><a href=\"/ar/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\"></a></em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>باختصار.</strong>خصّص للذروة، وألغِ الخصخصة في القاع. حاويات المهام المؤقتة تستعيد CPU والذاكرة والتخزين عند انخفاض الطلب — خاصة في الليالي وأيام العطلة — حتى لا تحدد مزرعة الاثنين فاتورة السبت.</div><h2>شاهد الفيديوهات</h2><p><strong>1.</strong></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2.</strong></p><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>·<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\"></a></p><h2>عادة مكلفة</h2><ul><li><strong>نهارًا:</strong>تزداد طلبات طلبات الدمج والاختبارات.</li><li><strong>ليلاً:</strong>ينخفض النشاط؛ إلا أن الخوادم الثابتة لا تزال تستهلك CPU والذاكرة.</li><li><strong>عطلة نهاية الأسبوع:</strong>غالبًا شبه خامل — ومع ذلك قد لا يزال يتم الفوترة للأقراص والعقد.</li></ul><p>لا تدفع مقابل Builds تم إنجازها. تدفع مقابل السعة الموجودة سواء استخدمها أحد أم لا.</p><h2>صورة أبسط</h2><p>ينفّذ<strong>Runner</strong>مهام خط الأنابيب.<strong>Kubernetes</strong>يمكنه إنشاء هؤلاء العمال على شكل حاويات قصيرة العمر وحذفها عند انتهاء المهمة. وعند النطاق الضخم تنطبق نفس الفكرة على العقد: المزيد عندما تكون الطابور عميقة؛ أقل — مثاليًا ما يقرب من لا شيء — خلال الليل وأيام العطل.</p><h2>من أين تأتي الوفورات الهائلة</h2><ol><li><strong>زد السعة</strong>عندما يعمل الناس (أو الروبوتات) — حاويات مهام متوازية حتى حدود التوازي وعقد المجموعة.</li><li><strong>قلل السعة بشدة</strong>عندما تختفي الطلبية — تختفي الحاويات؛ مع التلقائي في ضبط عقد المجموعة، تغادر العقد الفارغة المجموعة.</li><li><strong>توقف إهدار CPU والذاكرة والتخزين</strong>على أساطيل runners تعمل دائمًا خلال ساعات الهدوء.</li><li><strong>ادفع مقابل النتائج، لا الأثاث</strong>— احتفظ بـ GitLab ومدير runners رفيع؛ دع المزرعة تتبخر عند الخمول.</li></ol><blockquote><p>تظهر الوفورات الهائلة عندما لا يحدد ذروة يوم الاثنين فاتورة يوم الثلاثاء عند الساعة 3 صباحًا — وعندما تبدو صمت يوم السبت أخيرًا هادئًا في الفاتورة.</p></blockquote><h2>الوثائق الرسمية</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">ثبت GitLab Runner باستخدام مخطط Helm</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">أعد تكوين مخطط Runner Helm</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes منفذ</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">ضبط GitLab Runner تلقائيًا</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">تثبيت GitLab Operator</a></li></ul><p><strong>اقرأ التالي:</strong><a href=\"/ar/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">مقالة تقنية حول hyperscale</a>تتناول مسارات Operator مقابل Helm، والتزامن، وDinD، والرصد، وقائمة مراجعة FinOps. نموذج بناء الدورة:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>في مستودع موقع TenthMatrix (يحل محل رابط devops.git المتقاعد).</p><p>نُشرت بواسطة<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "معايير متعدد اللغات: اختيار الأداة المناسبة للوظيفة المناسبة",
+  "sub_title": "كيف تساعدك مقاييس الأداء متعددة اللغات في اختيار المجموعة المناسبة لكل تطبيق - وليس لغة واحدة تحكمها جميعًا",
+  "excerpt": "إيقاف انحياز المكدس الافتراضي. تقوم Polyglot Benchmarks بمقارنة njs وLua وPython وGo وRust وBun وJava وKotlin على نفس أعباء العمل - أداة قابلة للتكرار + لوحة معلومات حية لاتخاذ قرارات الهندسة المعمارية.",
+  "meta_title": "مقاييس متعدد اللغات: الأداة المناسبة للوظيفة",
+  "meta_description": "قارن njs وLua وPython وGo وRust وBun وJava وKotlin في نفس اختبارات HTTP. حزام قابل للتكرار + لوحة معلومات حية لاتخاذ قرارات المكدس.",
+  "meta_keywords": "معايير متعددة اللغات، مقارنة اللغة، قرارات البنية، أمثلة سير العمل، معيار الأداء، Rust vs Go، Java vs Kotlin، FastAPI، Bun.js، Javalin، Ktor، Lua، OpenResty، njs، NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>رفيق قصير وسهل القراءة. للاطلاع على التعمق الكامل في البنية - تخطيط الحزام، ومصفوفة القرار، والأنماط المضادة، وكيفية تفرع المعايير - اقرأ مقالة<a href=\"/ar/articles/polyglot-benchmarks-right-tool-right-application\">الطويلة</a>.</em></p><h2>اختارت مؤسستك مكدسًا واحدًا في عام 2019. لكن أعباء العمل الخاصة بك لم تفعل ذلك.</h2><p>لا تزال معظم الفرق تعمل على توحيد لغة واحدة لكل خدمة جديدة: كل شيء في Node، وكل شيء في Python، وكل شيء في Java، أو رهان بطولي على Rust من أجل الحقول الخضراء فقط. هذه العادة مفهومة - يصبح التوظيف وقوالب CI ومراجعة الأمان أسهل عندما تكون الحزمة موحدة. المشكلة هي أن أعباء العمل ليست موحدة. تعمل بوابة API، ووظيفة ETL الليلية، وتحويل حافة NGINX، وملكية الخدمات الصغيرة لـ JVM، والواجهة الخلفية للدردشة ذات الاتصالات طويلة الأمد على التركيز على أجزاء مختلفة من وقت التشغيل. إن اختيار فائز واحد من مناظرة في المدخل أو اختيار معيار صغير واحد هو كيف ينتهي بك الأمر إلى استخدام الأداة الخاطئة التي تحمل العبء الخطأ.</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>مقاييس متعدد اللغات</strong></a>هو الترياق: أداة قابلة للتكرار ولوحة معلومات حية تقارن<strong>ثمانية أوقات تشغيل</strong>على أعباء عمل<em>نفسها</em>HTTP، بحيث يمكن للمهندسين المعماريين مطابقة الأدلة مع السياقات المحدودة بدلاً من تحيز المكدس الافتراضي.</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>ما يقيسه</h2><p>لوحة المعلومات العامة تقارن<strong>NGINX njs</strong>,<strong>OpenResty Lua</strong>,<strong>Python (FastAPI)</strong>,<strong>Go (net/http)</strong>,<strong>Rust (Actix)</strong>و<strong>Bun</strong>و<strong>Java (Javalin / Jetty)</strong>و<strong>Kotlin (Ktor / Netty)</strong>عبر سبعة اختبارات تركيبية تعكس API الحقيقي وأنماط الحواف: الخط الأساسي للنص العادي، وتسلسل JSON، وفيبوناتشي المرتبطة بـ CPU، والسلسلة المعالجة، فحص الطلب، الطلب الفرعي الداخلي + التحويل، ومنطق التوجيه. يُبلغ كل اختبار عن الطلبات في الثانية، والمتوسط ​​ووقت الاستجابة (بما في ذلك P99)، والوقت حتى البايت الأول من التجعيد، وأعداد الأخطاء - يتم بثها مباشرة عند اكتمال<code>bench.sh</code>.</p><p>Java وKotlin موجودان جنبًا إلى جنب مع أوقات التشغيل المترجمة والبرمجة النصية حتى تتمكن متاجر JVM من رؤية كيف تتداول Javalin وKtor ضد Go وRust وBun وFastAPI على مسارات متطابقة - وليس ضد سرد متموج يدويًا \"المؤسسة مقابل الحقل الأخضر\". يعيش الحزام في أمثلة / معايير سير عمل<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\"></a>: خدمات الإنشاء Docker، وملف تعريف<code>wrk</code>مشترك (10 ثوانٍ، 4 خيوط، 100 اتصال)، ونتائج JSON التي تستهلكها لوحة المعلومات. يمكنك تفرعها للمرشحين والمسارات الساخنة الخاصة بك.</p><h2>لماذا يعتبر هذا إطار عمل للقرار، وليس لوحة صدارة</h2>لا تتوج معايير<p>Polyglot Benchmarks لغة واحدة إلى الأبد. يتغير الفائزون حسب صف الاختبار - وهو بالضبط ما تريده عند تصميم الخدمات الصغيرة. يقوم قسم الحكم في لوحة المعلومات بتعيين النتائج لحالات الاستخدام (توجيه الحافة في Lua/njs، والتزامن الأساسي في Rust/Go، وخدمات JVM في Java/Kotlin، والسرعة في Python). هذه هي الأطروحة:<strong>متعدد اللغات حسب التصميم</strong>، مع بيانات لوحات مراجعة الهندسة المعمارية بدلاً من الرأي.</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">النهج المكون من أربع خطوات في إطار واحد: تحديد عبء العمل، وتشغيل مجموعة الأدوات، والمقارنة على لوحة القيادة المباشرة، ثم اتخاذ القرار باستخدام ADR.</figcaption></figure><h2>ست فوائد للمنصة والقيادة الهندسية</h2><ul><li><strong>الأدلة فوق الرأي</strong>— إرفاق المخططات والتكوينات بـ ADRs؛ تسوية مناقشات المكدس من خلال جولات محسوبة.</li><li><strong>الفائزون في أحمال العمل</strong>- المسارات الحساسة لزمن الوصول مقابل تحويلات الدفعة مقابل الحافة مقابل عقارات JVM تحصل على قادة مختلفين.</li><li><strong>إجمالي تكلفة الملكية</strong>— RPS الخام ليس كافيًا؛ وزن وقت البناء وحجم الصورة وملاءمة مهارات الفريق وعبء العمليات.</li><li><strong>سير العمل القابل للتكرار</strong>- نفس الريبو، نفس ملف الإنشاء، نفس البرنامج النصي للعمل؛ يمكن إعادة تشغيله في CI.</li><li><strong>خدمات مشروعة متعددة اللغات</strong>- لغات مختلفة لكل حدود الخدمة دون خجل أو مفاجأة.</li><li><strong>تقليل المخاطر</strong>— النموذج الأولي في المركز الثاني قبل التفويض على مستوى المؤسسة.</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>بداية سريعة</h2><ol><li>افتح لوحة القيادة المباشرة<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"></a>أثناء التشغيل (أو ابدأ تشغيلًا محليًا).</li><li>Clone<code>workflow-examples</code>و<code>cd benchmarks</code>و<code>docker compose up</code>— ثماني خدمات لغات بالإضافة إلى لوحة القيادة ومجرى المقعد.</li><li>اقرأ<code>results.json</code>على حجم لوحة المعلومات وقم بتعيين الفائزين إلى<em>في صفوف حمل العمل</em>.</li><li>اكتب ADR - يتضمن المدة والخيوط والاتصالات وفئة الأجهزة.</li></ol><h2>اقرأ النسخة الطويلة</h2><p>تغطي مقالة<a href=\"/ar/articles/polyglot-benchmarks-right-tool-right-application\">الطويلة</a>تخطيط الريبو الكامل، وجدول المعايير، ومخطط مصفوفة القرار، وأنماط الحالة لكل مجموعة اختبار (بما في ذلك Java وKotlin)، والأنماط المضادة، والقيود، ومقتطفات جاهزة لتحسين محركات البحث للمشاركة مع ARB الخاص بك. تم النشر بواسطة<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>; موقع قياس الأداء مستضاف على<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>.</p><p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter: puertas de control de calidad antes de la producción",
+  "sub_title": "No realice promoción automática para producir: donde el control de calidad y las puertas humanas se encuentran en int → test → acc → prod, además de la promoción automática frente a los saltos cerrados",
+  "excerpt": "Puertas de control de calidad Ring Promoter: promoción automática de los primeros anillos, mantenimiento de una puerta humana antes de la activación y tratamiento de las comprobaciones de estado y versión como puertas de calidad de primera clase.",
+  "meta_title": "Ring Promoter: puertas de control de calidad antes de la producción | TenthMatrix",
+  "meta_description": "No realice promociones automáticas para estimular. Puertas de control de calidad Ring Promoter: promoción automática de los primeros anillos, puerta humana antes de la producción, verificación de estado y versión, reversión.",
+  "meta_keywords": "Ring Promoter, puertas de control de calidad, puertas de calidad, promoción automática, puerta de producción, CI/CD, GitOps, Kubernetes, promoción controlada por estado, TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>Watch: puertas de control de calidad antes de la producción</h2><p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Vídeo:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>· Producto:<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p><p class=\"lead\"><em><strong>Ring Promoter</strong>mueve disparadores a través de anillos ordenados<code>int → test → acc → prod</code>. La pregunta empresarial no es \"¿podemos realizar promociones automáticas?\" — es<strong>donde pertenecen el control de calidad y las puertas humanas</strong>, especialmente antes de la producción. Producto:<a href=\"/es/ring-promoter\">/promotor de anillo</a>. Análisis profundo: artículo técnico largo de<a href=\"/es/articles/ring-promoter-qa-gates-before-production\"></a>. Descripción general del complemento:<a href=\"/es/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter moderno CI/CD</a>.</em></p><p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Conclusión.</strong>Promoción automática de los primeros anillos cuando se superan las comprobaciones de estado y versión. Mantenga una puerta de control de calidad/humano<strong>en el salto hacia el producto</strong>. No realice promociones automáticas directamente a producción: cada lanzamiento aún debería generar clientes.</div><h2>Qué significan las puertas de control de calidad en Ring Promoter</h2><p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>Una “puerta” es cualquier cosa que pueda detener un salto de promoción:</p><ul><li><strong>Puertas de estado</strong>: la fuente debe estar en buen estado antes de la promoción; El objetivo debe permanecer en buen estado después de la implementación (o reversión automática).</li><li><strong>Puertas de versión</strong>: opcional: el punto final debe informar la versión exacta que se acaba de implementar (crítico para sidecars y agentes de IA).</li><li><strong>Puertas humanas/QA</strong>: no hay promoción automática en ese anillo; un propietario o control de calidad aprueba el siguiente salto (típico de<code>acc → prod</code>).</li></ul><h2>Promoción automática frente a saltos cerrados</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\">Modo<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Ventajas</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Contras / cuándo evitar</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Promoción automática (llamadas tempranas)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Respuesta más rápida; CI permanece verde sin esperar un clic; La misma operación bloqueada continúa en adelante.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Amplifica las malas construcciones si la salud es débil. Nunca habilite ciegamente el prod.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Puerta humana/QA (especialmente antes de la producción)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Aprobación comercial, ventanas de cambio, cumplimiento, último vistazo a la aceptación.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Agrega latencia; Necesita un dueño claro para que las liberaciones no se detengan.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Salud + versión puertas (siempre)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Detiene la “versión verde pero incorrecta”; se empareja con reversión automática.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Requiere puntos finales de estado honestos que expongan la versión.</td></tr></tbody></table><h2>Cuándo cerrar</h2><ul><li><strong>Ingrese al producto</strong>para aplicaciones orientadas al cliente, cambios regulados o plataformas compartidas de las que dependen muchos equipos.</li><li><strong>Promoción automática de int→test→acc</strong>cuando las evaluaciones, el humo y el estado de la versión verificada son sólidos.</li><li><strong>Ajuste las puertas</strong>para pilas de IA (modelos, agentes, puertas de enlace) donde un binario obsoleto aún puede responder<code>200 OK</code>.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">Política<strong>que recomendamos.</strong>Promoción automática en<code>int</code>/<code>test</code>cuando esté en buen estado; mantenga<code>acc</code>controlado por humanos antes que<code>prod</code>. Verificación de estado y versión en cada salto. Los controles fallidos se revierten: no hay una “promoción parcial” silenciosa.</div><h2>Adónde ir a continuación</h2><ol><li>Mire el vídeo de arriba:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>.</li><li>Lea el artículo técnico<a href=\"/es/articles/ring-promoter-qa-gates-before-production\"></a>(configuración, API, reversión, implicaciones del equipo de IA).</li><li>Abra<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>o la página del producto TenthMatrix<a href=\"/es/ring-promoter\"></a>.</li><li>Estrella<a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a>.</li></ol><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">Hashtags<strong>.</strong>#RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation</div><p>Publicado por<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p><p style=\"margin-top:1.5rem;\"><strong>Sitio del producto:</strong><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

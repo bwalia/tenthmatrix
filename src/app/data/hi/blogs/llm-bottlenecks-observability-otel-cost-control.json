@@ -1,0 +1,82 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "LLM बाधाओं का खुलासा: ऑब्ज़र्वेबिलिटी, OTEL और लागत नियंत्रण",
+  "sub_title": "बिज़नेस ब्रीफ: OpenTelemetry, Prometheus/Grafana, Langfuse — फायदे, नुकसान, लागत और एजेंट खर्च घटाने वाले उपयोग मेट्रिक्स",
+  "excerpt": "TenthMatrix: ऑब्ज़र्वेबिलिटी से LLM एजेंट बाधाओं का खुलासा — OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse — स्पष्ट फायदे/नुकसान, लागत लीवर और मार्जिन सुरक्षित रखने वाले उपयोग मेट्रिक्स।",
+  "meta_title": "LLM बाधाएँ: OTEL, ऑब्ज़र्वेबिलिटी और लागत | TenthMatrix",
+  "meta_description": "OpenTelemetry, Prometheus/Grafana और Langfuse से LLM एजेंट बाधाएँ खोजें। FinOps-तैयार AI के लिए फायदे, नुकसान, लागत और उपयोग मेट्रिक्स।",
+  "meta_keywords": "LLM bottlenecks, OpenTelemetry, OTEL, observability, Langfuse, Prometheus, Grafana, Thanos, FinOps, AI agents, TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>व्यापार संक्षिप्त: LLM और एजेंट बाधाओं को अवलोकनीयता के साथ उजागर करें — OpenTelemetry, Prometheus/Grafana/Thanos, और LLM प्लेटफ़ॉर्म जैसे कि Langfuse — ताकि आप लागत में कटौती कर सकें, SLOs को कस सकते हैं, और सबूतों के साथ एजेंट भेज सकते हैं। डीप डाइव:<a href=\"/hi/articles/llm-bottlenecks-observability-otel-cost-control\">लंबा तकनीकी लेख (OTEL, FinOps, एजेंट बजट)</a>। संबंधित:<a href=\"/hi/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">टर्बोचार्जिंग LLMs</a>·<a href=\"/hi/enterprise-ai\">Enterprise AI Lab</a>.</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>बॉटम लाइन।</strong>अधिकांश \"स्लो AI\" टिकट रहस्यमय मॉडल विफलता नहीं हैं — उनमें एट्रिब्यूशन की कमी है। इंस्ट्रूमेंट एजेंट OpenTelemetry के साथ चलता है, स्कोर आउटपुट करता है, हर कॉल को किरायेदार / मॉडल/मार्ग/टोकन / लागत के साथ टैग करता है, और बजट लागू करता है। ऐसा करने वाली टीमों को आमतौर पर पहले माप चक्र के भीतर रीट्रीज़, ओवरसाइज़्ड मॉडल और अनकैश किए गए प्रॉम्प्ट में 20 -50% कचरा मिलता है।</div><h2>टेलीमेट्री के बिना अड़चनें क्यों छिपती हैं</h2><p>LLM एजेंट चेन प्रॉम्प्ट, टूल, RAG रिट्रीवल और फिर से कोशिश करते हैं। लेटेंसी और हॉप्स पर कंपाउंड खर्च करें। बिना स्पैन और मैट्रिक्स के आप यह नहीं बता सकते कि अड़चन मॉडल है या नहीं, वेक्टर स्टोर, फ़्लैकी टूल या अनबाउंड सेल्फ - डिबग लूप। इसके बाद व्यावसायिक हितधारक GPUs या API कोटा खरीदते हैं, जबकि उत्पाद की गुणवत्ता स्थिर रहती है।</p>एआई एस्टेट के लिए<p>TenthMatrix का रुख: किसी भी अन्य उत्पादन सेवा की तरह एजेंट पाइपलाइनों का इलाज करें —<strong>पहले</strong>, फिर सेवारत को अनुकूलित करें (<a href=\"/hi/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention/vLLM</a>देखें), फिर अनुशासन के साथ प्रचार करें (<a href=\"/hi/ring-promoter\">Ring Promoter</a>)।</p><h2>वह ऑब्ज़र्वेबिलिटी स्टैक जो अपने लिए भुगतान करता है</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— ट्रेस, मेट्रिक्स और (जहाँ उपयोगी हो) लॉग के लिए एक इंस्ट्रूमेंटेशन लेयर। कलेक्टर को एक्सपोर्ट करें; फ़ैन आउट से बैकएंड तक।</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>- सुनहरे सिग्नल: अनुरोध दर, त्रुटि दर, विलंबता, टोकन थ्रूपुट, अनुमानित $/अनुरोध, GPU उपयोग। Thanos (या समतुल्य) FinOps समीक्षाओं के लिए दीर्घकालिक मीट्रिक रखता है।</li><li><strong>LLM ऑब्जर्वेबिलिटी प्लेटफॉर्म</strong>(जैसे<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — सत्र/ट्रेस UI, शीघ्र संस्करण, मानव और स्वचालित स्कोर, प्रतिगमन के लिए डेटासेट।</li></ul><h2>इस दृष्टिकोण के पेशेवर और विपक्ष</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">आयाम</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">पेशेवर</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">विपक्ष / ट्रेड - ऑफ</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>लागत नियंत्रण</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">एट्रीब्यूट किरायेदार, फ़ीचर, मॉडल और एजेंट स्टेप पर खर्च करता है; फिजूलखर्ची को खत्म करता है।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">इंस्ट्रूमेंट के लिए इंजीनियरिंग समय; यदि अवधारण भोला है तो ट्रेस के लिए भंडारण लागत।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>क्वालिटी</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">स्कोर + डेटासेट ग्राहकों के ऐसा करने से पहले शीघ्र प्रतिगमन पकड़ते हैं।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">स्वचालित स्कोरिंग शोर हो सकती है; महत्वपूर्ण रास्तों के लिए अभी भी मनुष्यों की आवश्यकता है।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ऑप्स</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">वही OTEL/Prometheus कौशल आपकी अन्य माइक्रोसर्विसेज के रूप में सेट है।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM - विशिष्ट UI (Langfuse आदि) चलाने या खरीदने के लिए एक और उत्पाद जोड़ें।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>अनुपालन</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ऑडिट किसने किस मॉडल को किस प्रॉम्प्ट संस्करण के साथ कॉल किया।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">प्रॉम्प्ट/PII प्रतिधारण नीतियों को सामने से डिज़ाइन किया जाना चाहिए।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>की गति से</strong></td>का  मूल्य \n यदि आप पहले से ही Grafana चलाते हैं तो<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">दिनों में पहला डैशबोर्ड।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">मल्टी - एजेंट ग्राफ़ में पूर्ण लागत एट्रिब्यूशन में ज़्यादा समय लगता है।</td></tr></tbody></table><h2>लागत: आप क्या खर्च करते हैं बनाम आप</h2>की बचत करते हैं<p><strong>इंस्ट्रूमेंटेशन कॉस्ट (सामान्य मिड - साइज़ एजेंट प्लैटफ़ॉर्म):</strong></p><ul><li>1 -2 इंजीनियर - सप्ताह OTEL स्पैन कन्वेंशन + एक्सपोर्टर वायरिंग को अपनाने के लिए।</li><li>कलेक्टर + मेट्रिक्स रिटेंशन: सैंपलिंग ट्यून होने के बाद अक्सर मासिक LLM API/GPU खर्च का &lt;5 -10%।</li><li>वैकल्पिक सास LLM अवलोकन: प्रति घटना/ट्रेस की कीमत — इसे मॉडल खर्च के % के रूप में बजट करें, न कि बाद की सोच के रूप में।</li></ul><p><strong>बचत लीवर (उपयोग मीट्रिक जो सुई को स्थानांतरित करते हैं):</strong></p><ul><li><strong>टोकन प्रति सफल कार्य</strong>— प्रति रॉ कॉल टोकन नहीं। कैप टूल लूप और सेल्फ - डिबग राउंड।</li><li><strong>प्रति सफल कार्य की लागत</strong>— वर्गीकृत/मार्ग के लिए मार्ग सस्ते मॉडल; कठिन चरणों के लिए फ्रंटियर मॉडल आरक्षित करें।</li><li><strong>कैश हिट रेट</strong>- जहां सुरक्षित हो वहां प्रॉम्प्ट/प्रीफिक्स कैशिंग; शुद्धता को मापें, न केवल विलंबता को।</li><li><strong>रेट और डेड - लेटर रेट को फिर से आज़माएँ</strong>— फ़्लैकी टूल \"मॉडल क्वालिटी\" के मुद्दों के रूप में मास्करेड करते हैं।</li><li><strong>p95 TTFT और एंड - टू - एंड लेटेंसी</strong>— खर्च में कटौती करते समय UX की रक्षा करें।</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>अंगूठे का नियम।</strong>यदि आप जवाब नहीं दे सकते हैं \"ग्राहक द्वारा और चरणबद्ध तरीके से पिछले सप्ताह इस एजेंट की लागत क्या थी ?\" तो आप उपयोग को बढ़ाने के लिए तैयार नहीं हैं — आप वित्त को आश्चर्यचकित करने के लिए तैयार हैं।</div><h2>स्कोरिंग: मैनुअल बनाम ऑटोमैटिक</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">विधि</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th>का उपयोग कब करें<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">व्यावसायिक नोट</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>मैनुअल स्कोरिंग</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">गोल्ड सेट, विनियमित उत्तर, ब्रांड - संवेदनशील कॉपी।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">महंगा लेकिन ग्राउंड ऑटोमेटेड जज।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>स्वचालित स्कोरिंग</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">हाई - वॉल्यूम रिग्रेशन, LLM - as - judge, rubric checks।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">पैमाने पर सस्ता; मनुष्यों के खिलाफ मासिक कैलिब्रेट करें।</td></tr></tbody></table><h2>माइग्रेशन प्लेबुक (छोटा शुरू करें)</h2><ol><li>इंस्ट्रूमेंट<strong>ONE</strong>प्रोडक्शन एजेंट पथ OTEL + टोकन/लागत विशेषताओं के साथ एंड - टू - एंड।</li><li>दर / त्रुटियों/विलंबता/$/सफलता के लिए Grafana बोर्ड शिप करें।</li>उस पथ पर शीघ्र संस्करणों और स्कोर के लिए<li>Langfuse (या समतुल्य) जोड़ें।</li><li>हार्ड कैप लागू करें: अधिकतम टोकन, अधिकतम टूल कॉल, प्रति सत्र अधिकतम पुनः प्रयास।</li><li>पहले पथ पर मापी गई लागत या विलंबता जीत दिखाने के बाद ही अगले एजेंट तक विस्तार करें।</li></ol><h2>वॉच: AI सिस्टम के लिए प्रेक्षणीयता क्यों मायने रखती है</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">ऑब्ज़र्वेबिलिटी कल्चर पर कॉन्टेक्स्ट टॉक — TenthMatrix प्रोडक्ट डेमो नहीं।<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry  डॉक्स</a>और<a href=\"/hi/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix तकनीकी लेख</a>के साथ पेयर करें ।</p><h2>अगला पढ़ें</h2><ol><li><a href=\"/hi/articles/llm-bottlenecks-observability-otel-cost-control\">लंबा लेख</a>— OTEL स्पैन स्कीमा, कलेक्टर, लागत सूत्र, एजेंट कैप, Langfuse/LMNR नोट्स।</li><li><a href=\"/hi/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">टर्बोचार्जिंग LLMs</a>— उन्हें देखने के बाद सेवारत - साइड बाधाएं।</li><li><a href=\"/hi/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">स्थानीय एजेंट</a>·<a href=\"/hi/enterprise-ai\">Enterprise AI Lab</a>·<a href=\"/hi/contact-us\">संपर्क TenthMatrix</a></li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>द्वारा प्रकाशित । संदर्भ:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr - AI/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true,
+  "language_code": "hi"
+}

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "เทอร์โบชาร์จเจอร์ LLMs",
+  "sub_title": "PagedAttention, vLLM, Self-Debugging, PowerInfer และ EG-MLA — วิธีปรับขนาดเอเจนต์ LLM โดยไม่เปลืองแคช GPU KV",
+  "excerpt": "TenthMatrix บนเทอร์โบชาร์จ LLMs: การเพจ PagedAttention สำหรับแคช KV, การให้บริการ vLLM, Self-Debugging สำหรับตัวแทน, อัตราโทเค็น PowerInfer และการตัดหน่วยความจำ EG-MLA — พร้อมข้อเสียด้านการผลิต",
+  "meta_title": "เทอร์โบชาร์จ LLMs: PagedAttention, vLLM, PowerInfer | TenthMatrix",
+  "meta_description": "ปรับขนาด LLM ที่ให้บริการด้วย PagedAttention และ vLLM, Self-Debugging สำหรับตัวแทน, การสร้างโทเค็น PowerInfer และการบีบอัด EG-MLA KV — ปุ่มหมุนและการแลกเปลี่ยน",
+  "meta_keywords": "LLM, PagedAttention, vLLM, แคช KV, PowerInfer, EG-MLA, Self-Debugging, การให้บริการ GPU, Kubernetes, TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>เกี่ยวกับวิธีการเทอร์โบชาร์จโมเดลภาษาขนาดใหญ่ในการผลิต: PagedAttention, vLLM, Self-Debugging, PowerInfer และ EG-MLA — พร้อมข้อดีข้อเสียที่จะแสดงบน GPU จริงๆ เจาะลึก: บทความยาว<a href=\"/th/articles/turbocharging-llms-pagedattention-vllm-powerinfer\"></a>ไพรเมอร์:<a href=\"/th/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs อธิบาย + Kubernetes</a></em></p><p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สิ่งสำคัญที่สุด ปริมาณงาน</strong>ตายเมื่อแฟรกเมนต์แคช KV เพจแคชเหมือนกับ OS (PagedAttention ภายใน vLLM) เลือกกลไกโทเค็นที่ตรงกับกล่อง (PowerInfer บน GPU สำหรับผู้ใช้ไขมันสูง, vLLM บนคลัสเตอร์ที่ให้บริการ) ลดความสนใจเมื่อสถาปัตยกรรมอนุญาต (EG-MLA) และ cap agent debug loops เพื่อให้คุณภาพไม่ซื้อเวลาแฝงที่ไม่จำกัด</div><h2>Watch: LLM แท้จริงแล้วคือ</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>บริบท<p style=\"font-size:0.9rem;color:#64748b;\">ไม่ใช่การสาธิตผลิตภัณฑ์:<a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">ข้อมูลเบื้องต้นเกี่ยวกับรุ่นภาษาขนาดใหญ่</a>(Andrej Karpathy) จับคู่กับคู่มือ<a href=\"/th/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">ภาษาอังกฤษธรรมดา LLM + Kubernetes</a>ของเรา</p><h2>ปัญหาการปรับขนาด</h2><p>LLMs ปลดล็อก AI การสนทนาและการสร้าง จากนั้นจึงกลายเป็นปัญหาการให้บริการทันที แต่ละขั้นตอนการถอดรหัสจะผนวกคีย์และค่าเข้ากับแคช KV ที่ขยายตามความยาวของลำดับและขนาดแบตช์ เครื่องยนต์ไร้เดียงสาจะจองแผ่นคอนกรีตที่ต่อเนื่องกันขนาดใหญ่ไว้ล่วงหน้า หน่วยความจำส่วนใหญ่นั้นไม่ได้ใช้งานในขณะที่คำขออื่นรออยู่ ปริมาณงานลดลงแม้ว่า GPU จะดู \"เต็ม\"</p><h2>PagedAttention: หน่วยความจำเสมือนเพื่อความสนใจ</h2><p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>PagedAttention (Kwon และคณะ, SOSP 2023) ปฏิบัติต่อแคช KV เช่น การเพจ OS: บล็อกขนาดคงที่, ตารางบล็อกต่อคำขอ, หน้าทางกายภาพที่ไม่ต่อเนื่องกัน<a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>เคอร์เนลรวบรวมบล็อกในเวลาที่สนใจ คุณยังคงต้องปรับแต่งขนาดบล็อก<strong></strong>,<strong>ความยาวโมเดลสูงสุด</strong>และลำดับชั้นแคช<strong></strong>(GPU HBM กับ CPU ออฟโหลดเทียบกับแคชคำนำหน้า) บล็อกที่เล็กเกินไปจะเพิ่มค่าใช้จ่ายในการทำแผนที่ บล็อกขนาดใหญ่เกินไปจะทำให้เกิดขยะอีกครั้ง</p><h2>vLLM: ของเสียเกือบเป็นศูนย์ที่ให้บริการ</h2><p>vLLM คือระบบการให้บริการที่สร้างขึ้นโดยใช้ PagedAttention โดยกำหนดเป้าหมายของเสีย KV ที่เกือบเป็นศูนย์ การแบ่งกลุ่มอย่างต่อเนื่อง และพื้นผิว HTTP ที่เข้ากันได้กับ OpenAI ในการผลิต ให้ดูสามสิ่ง: (1)<code>gpu_memory_utilization</code>กับ OOM, (2) โทเค็นเวลาถึงโทเค็นแรกเทียบกับโทเค็นการถอดรหัส/วินาที (3) ว่าการแคชคำนำหน้า / พรอมต์จะเปลี่ยนคำตอบสำหรับชุดการประเมินของคุณหรือไม่ การแคชคือการชนะปริมาณงาน มันไม่ได้ปราศจากความถูกต้องและผลกระทบจากความล่าช้าหาง</p><pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre><p>นั่นคือการใช้งาน vLLM จริง ๆ การเรียก Hugging Face BERT<code>forward()</code>คือ<em>ไม่ใช่</em>PagedAttention — อย่าสับสนกับบันทึกของตัวแยกประเภทกับการแสดงเพจ KV</p><h2>Self-Debugging: ลูปคุณภาพพร้อมงบประมาณแฝง</h2><p>Self-Debugging (Chen และคณะ) สอนแบบจำลองเพื่อแก้ไขโปรแกรมที่คาดการณ์ไว้ของตัวเองจากการติดตามแบบไม่กี่ช็อต การจับคู่หรือการเอาชนะเส้นพื้นฐานที่ปล่อยผู้สมัครมากกว่า 10 เท่า<a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2304.05128]</a>สำหรับตัวแทน นั่นคือทองคำ — จนกว่าผลตอบรับจะรวมกัน จำกัดจำนวนข้อความแก้ไขข้อบกพร่อง บันทึกในแต่ละรอบ และปิดความล้มเหลวให้กับบุคคลหรือโมเดลผู้เชี่ยวชาญที่มีขนาดเล็กลงเมื่องบประมาณหมด</p><h2>Watch: การแสดงและการอนุมานบริบท</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">พูดคุยตามบริบทเกี่ยวกับการให้บริการ LLM ที่รวดเร็ว — ไม่ใช่การสาธิต TenthMatrix อย่างเป็นทางการ จับคู่กับกระดาษ vLLM และ<a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a></p><h2>PowerInfer: โทเค็นบน GPU</h2>ไขมันตัวเดียว<p>PowerInfer แยกเซลล์ประสาทร้อน/เย็น ดังนั้นผู้บริโภค GPU บวก CPU จึงสามารถสร้างโทเค็นได้อย่างรวดเร็ว ตัวเลขที่รายงาน:<strong>13.20 โทเค็น/วินาทีโดยเฉลี่ย</strong>, จุดสูงสุด<strong>29.08 โทเค็น/วินาที</strong>บน NVIDIA RTX 4090 หนึ่งตัว สูงสุด<strong>11.69x</strong>เทียบกับ llama.cpp ในขณะที่ยังคงความแม่นยำ<a href=\"https://github.com/SJTU-IPADS/PowerInfer\" target=\"_blank\" rel=\"noopener noreferrer\">[PowerInfer]</a>ในระดับกลุ่มยานพาหนะ คุณยังคงต้องการตำแหน่ง: เลเยอร์ใดที่อยู่บน GPU วิธีที่คุณแบ่งส่วนข้ามโหนด และโปรไฟล์ตำแหน่งท้องถิ่นของ<em>ข้อความแจ้ง</em>ของคุณตรงกับรุ่นของกระดาษหรือไม่</p><h2>EG-MLA: ลดขนาด KV โดยไม่ทำลายม้านั่ง</h2><p>EG-MLA (ความสนใจแฝงแบบหลายหัวที่มีการฝังรั้วรอบขอบชิด) รายงาน<strong>มากกว่า 91.6% การลดแคช KV</strong>เทียบกับความสนใจแบบหลายหัวที่มีการลดลงเล็กน้อย การประหยัดเพิ่มเติมเทียบกับ MLA (สูงถึง 59.9%) และคะแนนที่ดีกว่าในชุดการให้เหตุผล โดยปรับขนาดพารามิเตอร์ 1B ที่ผ่านมา<a href=\"https://arxiv.org/abs/2509.16686\" target=\"_blank\" rel=\"noopener noreferrer\">[กระดาษ EG-MLA]</a>ถือว่าเป็นทางเลือกทางสถาปัตยกรรม ไม่ใช่ธงแบบดรอปอินบนจุดตรวจสอบ vLLM ที่ค้าง — ตรวจสอบสายรัดประเมินผลของคุณก่อนที่คุณจะเฉลิมฉลองกราฟหน่วยความจำ</p><p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>เอามาต่อกัน</h2><p>รวม PagedAttention + vLLM สำหรับการให้บริการคลัสเตอร์, PowerInfer เมื่อกล่องนั้นเป็นเวิร์กสเตชัน GPU, Self-Debugging ภายในเอเจนต์การเข้ารหัสที่มีขีดจำกัดแบบฮาร์ดรอบ และ EG-MLA เมื่อคุณควบคุมตระกูลโมเดล การให้บริการแบบกระจายจะเพิ่มความซับซ้อน: ความขนานของ KV, การแยกการเติมล่วงหน้า/การถอดรหัส และการปรับขนาดอัตโนมัติที่ไม่กระทบกับตารางหน้า วัด. จากนั้นเขียน ADR</p><h2>อ่าน</h2>ถัดไป<ol><li><a href=\"/th/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">บทความแบบยาว</a>— ปุ่มหมุน, โหมดความล้มเหลว, บันทึกย่อ Kubernetes</li><li><a href=\"/th/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs อธิบาย + รันของคุณเองบน Kubernetes</a></li><li><a href=\"/th/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / ตัวแทนท้องถิ่น</a>·<a href=\"/th/enterprise-ai\">Enterprise AI Lab</a></li></ol><p>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

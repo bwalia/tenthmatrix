@@ -1,0 +1,77 @@
+{
+  "uuid": "blog-kimi-k3-open-weights-001",
+  "internal_id": 958,
+  "slug": "kimi-k3-open-weights-adoption-workstation-guide",
+  "title": "Kimi K3 और ओपन वेट्स: लॉक-इन API के बिना फ्रंटियर एजेंट",
+  "sub_title": "Moonshot Kimi K3, day-0 vLLM, MCP स्टेटलेस, और व्यवसायों को ओपन मॉडल कैसे अपनाना चाहिए",
+  "excerpt": "Kimi K3 ओपन-वेट मॉडल को फ्रंटियर एजेंट क्षेत्र में धकेलता है। डेवलपर्स, vLLM serving, MCP और TenthMatrix प्रोडक्शन सलाह।",
+  "meta_title": "Kimi K3 ओपन वेट्स गाइड — vLLM, MCP और हाइब्रिड एजेंट | TenthMatrix",
+  "meta_description": "Moonshot Kimi K3 और ओपन-वेट अपनापन: बेंचमार्क, vLLM day-0, MCP स्टेटलेस, मॉडल रडार और प्रोडक्शन हाइब्रिड रूटिंग।",
+  "meta_keywords": "Kimi K3, Moonshot, open weights, open-weight LLM, vLLM, MCP, Laguna, Solar Open 2, DeepSeek, Qwen, TenthMatrix",
+  "cover_image": "/img/kimi-k3-open-weights-cover.svg",
+  "images": [
+    {
+      "url": "/img/kimi-k3-open-weights-cover.svg",
+      "id": 958,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kimi K3 open-weight models TenthMatrix guide"
+    },
+    {
+      "url": "/img/open-weights-production-stack.svg",
+      "id": 959,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Open-weight production stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Moonshot का Kimi K3 ओपन-वेट मॉडल को फ्रंटियर क्लोज्ड API जैसी ही बातचीत में ले आया — एजेंटिक कोडिंग के लिए, सिर्फ चैट डेमो नहीं। व्यवसाय और बिल्डर्स के लिए TenthMatrix नज़र। गहराई, रडार सूची और प्रोडक्शन चेकलिस्ट <a href=\"/hi/articles/kimi-k3-open-weights-adoption-workstation-guide\">लंबा आलेख</a>.</em></p>\n\n<p><img src=\"/img/kimi-k3-open-weights-cover.svg\" alt=\"Kimi K3 ओपन-वेट मॉडल एंटरप्राइज़ AI तेज़ करते हैं\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>निचोड़।</strong> ओपन वेट्स अब «लगभग उतने अच्छे» नहीं रहे। Kimi K3 (2.8T MoE, 1M कॉन्टेक्स्ट, नेटिव मल्टीमोडल) day-0 <strong>vLLM</strong> / SGLang सपोर्ट और स्कोर के साथ आया जो ओपन मॉडल को Claude/GPT-क्लास के पास एजेंट बेंच पर रखते हैं। असली फैसला «ओपन या क्लोज्ड» नहीं — <strong>किस जॉब के लिए कौन सा मॉडल</strong>, उस हार्डवेयर और ops पर जिसे आप सच में चला सकें।\n</div>\n\n<h2>Kimi K3 ने क्या बदला</h2>\n<ul>\n  <li><strong>स्केल:</strong> ~3T-पैरामीटर क्लास में पहला व्यापक रूप से चर्चित ओपन मॉडल (Moonshot; Hugging Face पर <code>moonshotai/Kimi-K3</code>)।</li>\n  <li><strong>एजेंट फिटनेस:</strong> स्वतंत्र बेंच (जैसे जुलाई 2026 में MindStudio-स्टाइल SWE-bench / LiveCodeBench रिपोर्ट) K3 को कोडिंग/एजेंट टास्क पर टॉप प्रॉप्राइटरी के पास रखती हैं।</li>\n  <li><strong>सर्विंग स्पीड:</strong> vLLM ने day-0 रेसिपी दीं (KDA kernels, P/D disaggregation, DSpark speculative decoding) — सेल्फ-होस्ट इंजीनियरिंग प्रोजेक्ट है, रिसर्च पेपर नहीं।</li>\n  <li><strong>लाइसेंस चेतावनी:</strong> «open weights» ≠ हर कमर्शियल SaaS के लिए MIT — प्रोडक्टाइज़ करने से पहले Kimi K3 License पढ़ें।</li>\n</ul>\n\n<p><img src=\"/img/open-weights-production-stack.svg\" alt=\"वेट्स से एजेंट तक ओपन-वेट प्रोडक्शन स्टैक\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>इंडस्ट्री सिग्नल (उसी पखवाड़े)</h2>\n<ul>\n  <li><strong>MCP 2026-07-28</strong> — प्रोटोकॉल काफी हद तक <em>स्टेटलेस</em> हो जाता है (कोई session handshake / session IDs नहीं); एजेंट टूल्स के लिए हॉरिज़ॉन्टल स्केल आसान। एक्सटेंशन: MCP Apps, MCP Tasks।</li>\n  <li><strong>Open Secure AI Alliance</strong> (NVIDIA + 100+ फर्म) + «Open Weights and American AI Leadership» पत्र — ओपन मॉडल को डिफेंसिव इंफ्रा के रूप में पॉलिसी/सिक्योरिटी फ्रेमिंग।</li>\n  <li><strong>अपनापन ≠ प्रोडक्शन:</strong> Mozilla-स्टाइल ओपन-सोर्स AI सर्वे अभी भी ऊँची ओपन-मॉडल <em>प्रयोग</em> दिखाते हैं पर प्रोडक्शन तक अड़ियल गैप — बॉटलनेक ops और evals हैं, कच्चा IQ नहीं।</li>\n</ul>\n\n<h2>देखें: vLLM से ओपन मॉडल सर्व करें</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/a9T9kWwpaNg\" title=\"vLLM के साथ ओपन-सोर्स LLM ऑप्टिमाइज़, डिप्लॉय और बेंचमार्क करें\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n\n<h2>TenthMatrix सलाह</h2>\n<ol>\n  <li><strong>SME:</strong> छोटे ओपन MoE (Laguna S 2.1, Solar Open 2, Qwen/DeepSeek-क्लास) AI वर्कस्टेशन / छोटे GPU नोड पर पसंद करें; रैक के बिना उस IQ के लिए मैनेज्ड K3 API।</li>\n  <li><strong>एंटरप्राइज़:</strong> K3-क्लास सेल्फ-होस्ट केवल GPU क्लस्टर + MLOps बजट के साथ; वरना हाइब्रिड — प्राइवेट RAG/एजेंट के लिए ओपन, peak-critical के लिए क्लोज्ड।</li>\n  <li><strong>हमेशा:</strong> eval harness, Review Bot, GitOps, HITL वाले MCP टूल — देखें हमारा <a href=\"/hi/docs/blogs/wise-developer-project-workflow-multi-agent-teams\">मल्टी-एजेंट वर्कफ़्लो</a>.</li>\n</ol>\n\n<p>पूर्ण रडार (Kimi, Laguna, Solar, DeepSeek, Qwen, Llama, Nemotron, GLM, KAT-Coder, Mage-Flow, Inflect आदि), MCP नोट्स और प्रोडक्शन चेकलिस्ट: <a href=\"/hi/articles/kimi-k3-open-weights-adoption-workstation-guide\">लंबा आलेख</a>. प्रकाशित <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "kimi",
+      "id": 1024
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-08-05T22:00:00Z",
+  "updated_at": "2026-08-05T22:00:00Z",
+  "published_date": "2026-08-05",
+  "status": true
+}

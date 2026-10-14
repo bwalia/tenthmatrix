@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-claude-opus-5-aws-001",
+  "internal_id": 957,
+  "slug": "claude-opus-5-aws-bedrock-workstation-guide",
+  "title": "AWS پر Claude Opus 5: بلڈرز اور کاروبار کے لیے TenthMatrix گائیڈ",
+  "sub_title": "Bedrock اور Claude Platform پر Opus 5 — کیا بدلا، کب استعمال کریں، ZDR، اور تیز Converse اسٹارٹ",
+  "excerpt": "Amazon Bedrock پر Claude Opus 5 پر TenthMatrix نظر: ایجنٹک کوڈنگ، طویل چلنے والے ایجنٹس، 1M کانٹیکسٹ، ڈیفالٹ ZDR، اور ٹیمیں کیسے اپنائیں۔",
+  "meta_title": "AWS Bedrock پر Claude Opus 5 — TenthMatrix بلڈر اور کاروبار گائیڈ",
+  "meta_description": "Amazon Bedrock اور Claude Platform on AWS پر Claude Opus 5: صلاحیتیں، ZDR، 1M کانٹیکسٹ، کب استعمال کریں، اور پروڈکشن ٹیموں کے لیے Converse کوئیک اسٹارٹ۔",
+  "meta_keywords": "Claude Opus 5, Amazon Bedrock, Claude Platform on AWS, Anthropic, agentic coding, ZDR, long-running agents, TenthMatrix",
+  "cover_image": "/img/claude-opus-5-aws-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-opus-5-aws-cover.svg",
+      "id": 957,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Opus 5 on Amazon Bedrock AWS TenthMatrix guide"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Opus 5 Amazon Bedrock اور Claude Platform on AWS پر لائیو ہے۔ TenthMatrix نظر — ڈویلپرز اور کاروباری ٹیموں کے لیے مطلب، کب استعمال کریں، کیسے شروع کریں۔ کوڈ کے ساتھ گہرائی <a href=\"/ur/articles/claude-opus-5-aws-bedrock-workstation-guide\">تفصیلی مضمون</a>.</em></p>\n\n<p><img src=\"/img/claude-opus-5-aws-cover.svg\" alt=\"Amazon Bedrock AWS پر Claude Opus 5 — TenthMatrix گائیڈ\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>ایک پیراگراف میں۔</strong> Opus 5 AWS پر Anthropic کا سب سے مضبوط Opus-ٹائر ماڈل ہے (24 جولائی 2026 لانچ): بہتر ایجنٹک کوڈنگ، طویل چلنے والے ایجنٹس، اور دستاویز-بھاری نالج ورک، <strong>1M-ٹوکن کانٹیکسٹ</strong> ونڈو کے ساتھ۔ <strong>Amazon Bedrock</strong> پر آپ کو <strong>ڈیفالٹ zero data retention (ZDR)</strong>، Guardrails اور AWS IAM/بلنگ ملتی ہے۔ مشکل انجینئرنگ اور ایجنٹ فلیٹس کے لیے استعمال کریں؛ والیوم کے لیے Sonnet/Haiku رکھیں۔ مکمل روٹر مشورہ: <a href=\"/ur/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">Claude ماڈل موازنہ</a>.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">TenthMatrix قارئین کے لیے AWS Machine Learning Blog اعلان سے موافقت شدہ — <a href=\"https://aws.amazon.com/blogs/machine-learning/introducing-claude-opus-5-on-aws-anthropics-most-capable-opus-model/\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Claude Opus 5 on AWS</a>.</p>\n\n<h2>کاروباری ٹیمیں کیوں خیال کریں</h2>\n<ul>\n  <li><strong>طویل چلنے والے پروڈکشن ایجنٹس</strong> — ملٹی آور / اوور نائٹ ورک فلو، بہتر ایرر ریکوری۔</li>\n  <li><strong>کوڈ بیس اسکیل انجینئرنگ</strong> — بڑے ریپوز نیویگیٹ کریں، بہتر پیچ شپ کریں، کم hand-holding لوپس۔</li>\n  <li><strong>انٹرپرائز دستاویز کام</strong> — لمبی پالیسیز، معاہدوں اور مالیاتی پیکس پر گہری استدلال۔</li>\n  <li><strong>Bedrock پر گورننس</strong> — ڈیفالٹ ZDR، علاقائی residency اختیارات، حساس کارپورا کے لیے «shadow SaaS» نہیں۔</li>\n</ul>\n\n<h2>ڈویلپرز کیوں خیال کریں</h2>\n<ul>\n  <li>Bedrock پر ماڈل IDs: <code>global.anthropic.claude-opus-5</code> (اور geo ویرینٹس <code>us.</code> / <code>eu.</code> / <code>au.</code>)۔</li>\n  <li><strong>Invoke</strong>، <strong>Converse</strong>، یا <strong>bedrock-mantle</strong> پر Anthropic Messages سے کال کریں۔</li>\n  <li>اڈاپٹو استدلال ڈیفالٹ آن؛ پرامپٹ کیشنگ (5m / 1h)؛ بات چیت کے درمیان ٹولز شامل/ہٹائیں۔</li>\n  <li>کئی ڈومینز میں Fable-کلاس ذہانت کے دعوے والی Opus-ٹائر اکنامکس — peak-critical راستوں کے لیے Fable/Mythos محفوظ رکھیں۔</li>\n</ul>\n\n<h2>AWS پر دو دروازے</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">راستہ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">بہترین جب</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ڈیفالٹ ZDR، Guardrails، Knowledge Bases، AgentCore، AWS-نیٹو سیکیورٹی</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Platform on AWS</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">AWS auth + بلنگ کے ساتھ Anthropic-نیٹو کنسول/APIs؛ درخواست پر ZDR</td></tr>\n</tbody>\n</table>\n\n<h2>کوئیک اسٹارٹ (Bedrock Converse)</h2>\n<pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.82rem;\">\nimport boto3\n\nclient = boto3.client(\"bedrock-runtime\", region_name=\"us-east-1\")\nresp = client.converse(\n    modelId=\"global.anthropic.claude-opus-5\",\n    messages=[{\"role\": \"user\", \"content\": [{\"text\": \"Refactor this service for multi-region failover.\"}]}],\n    inferenceConfig={\"maxTokens\": 4096},\n)\nprint(resp[\"output\"][\"message\"][\"content\"])\n</pre>\n\n<h2>TenthMatrix تجویز</h2>\n<p>Bedrock پر Opus 5 کو اپنی موجودہ ایجنٹ اسٹیک (Review Bots، ملٹی ایجنٹ کریوز، GitOps گیٹس) سے جوڑیں۔ پلانر/لیڈ انجینئر ایجنٹس کے لیے Opus 5؛ روٹین ٹکٹس سستے ماڈلز پر۔ دیکھیں  <a href=\"/ur/articles/claude-opus-5-aws-bedrock-workstation-guide\">تفصیلی مضمون</a>. شائع کردہ <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-26T07:00:00Z",
+  "updated_at": "2026-07-26T07:00:00Z",
+  "published_date": "2026-07-26",
+  "status": true
+}

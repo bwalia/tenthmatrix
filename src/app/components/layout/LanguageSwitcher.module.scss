@@ -1,0 +1,59 @@
+@use '../../styles/mixins' as *;
+
+.wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-3);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-2);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  letter-spacing: var(--tm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--tm-text-subtle);
+}
+
+.select {
+  min-height: var(--tm-tap-target);
+  padding: 0 2.25rem 0 0.85rem;
+  border: 1px solid var(--tm-line-strong);
+  border-radius: var(--tm-radius-sm);
+  background-color: var(--tm-surface);
+  color: var(--tm-text);
+  font-size: var(--tm-text-sm);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) 50%,
+    calc(100% - 11px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.night {
+  .label {
+    color: var(--tm-night-muted);
+  }
+
+  .select {
+    border-color: var(--tm-night-subtle);
+    background-color: var(--tm-night-raised);
+    color: var(--tm-night-text);
+    color-scheme: dark;
+
+    &:focus-visible {
+      box-shadow:
+        0 0 0 2px var(--tm-night-bg),
+        0 0 0 4px var(--tm-night-accent);
+    }
+  }
+}

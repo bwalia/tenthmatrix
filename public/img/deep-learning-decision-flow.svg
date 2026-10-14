@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Deep learning train and serve decision flow">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .tag { fill: #0f766e; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .node { fill: #f1f5f9; stroke: #475569; stroke-width: 1.5; }
+      .dec { fill: #ecfeff; stroke: #0e7490; stroke-width: 2; }
+      .ok { fill: #ccfbf1; stroke: #0f766e; stroke-width: 2; }
+      .warn { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .t { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#a); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="680"/>
+  <text class="tag" x="40" y="36">FIGURE C  -  DEPLOYMENT DECISION FLOW (AGENTS)</text>
+  <text class="title" x="40" y="68">Train / buy / hybrid - pick a path before writing YAML</text>
+  <text class="cap" x="40" y="94">Executable checklist: answer diamond questions top-down; leave with one serving target.</text>
+
+  <rect class="node" x="420" y="120" width="360" height="70" rx="8"/>
+  <text class="t" x="450" y="150">Start: define task + SLA</text>
+  <text class="s" x="450" y="172">latency, accuracy, risk, modality</text>
+
+  <path class="ln" d="M600 190 V220"/>
+
+  <rect class="dec" x="400" y="220" width="400" height="70" rx="8"/>
+  <text class="t" x="430" y="250">Is output novel content (text/code/image)?</text>
+  <text class="s" x="430" y="272">Yes -> generative  |  No -> discriminative</text>
+
+  <path class="ln" d="M400 255 H220"/>
+  <path class="ln" d="M800 255 H980"/>
+  <path class="ln" d="M220 255 V300"/>
+  <path class="ln" d="M980 255 V300"/>
+
+  <rect class="warn" x="60" y="300" width="320" height="100" rx="8"/>
+  <text class="t" x="80" y="335">Discriminative DL / ML</text>
+  <text class="s" x="80" y="360">Train or fine-tune classifier/detector</text>
+  <text class="s" x="80" y="382">Serve: Triton / KServe / SageMaker</text>
+
+  <rect class="ok" x="820" y="300" width="320" height="100" rx="8"/>
+  <text class="t" x="840" y="335">Generative path</text>
+  <text class="s" x="840" y="360">Foundation model + tools/RAG</text>
+  <text class="s" x="840" y="382">Or open weights on GPU cluster</text>
+
+  <path class="ln" d="M980 400 V430"/>
+  <rect class="dec" x="820" y="430" width="320" height="90" rx="8"/>
+  <text class="t" x="840" y="465">Residency / unit-cost force</text>
+  <text class="t" x="840" y="485">self-host?</text>
+  <text class="s" x="840" y="505">Yes -> vLLM/Ollama  No -> Bedrock</text>
+
+  <path class="ln" d="M220 400 V460"/>
+  <rect class="node" x="60" y="460" width="320" height="80" rx="8"/>
+  <text class="t" x="80" y="495">Always: dataset versioning,</text>
+  <text class="s" x="80" y="520">eval set, drift alerts, GitOps</text>
+
+  <rect class="node" x="420" y="460" width="360" height="80" rx="8"/>
+  <text class="t" x="440" y="495">Human gates</text>
+  <text class="s" x="440" y="520">money · auth · production deploy</text>
+
+  <text class="foot" x="40" y="590">Agent contract: do not start with GPUs. Start with task type (discriminative vs generative), then data readiness, then buy vs build, then GitOps the chosen serving target.</text>
+  <text class="foot" x="40" y="620">Related Workstation guides: LLMs on Kubernetes, Bedrock AgentCore, Kubeflow + Argo CD.</text>
+  <text class="foot" x="40" y="655">workstation.co.uk</text>
+</svg>

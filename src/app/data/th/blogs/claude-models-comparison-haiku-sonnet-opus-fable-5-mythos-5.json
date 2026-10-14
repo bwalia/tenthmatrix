@@ -1,0 +1,61 @@
+{
+  "uuid": "blog-claude-models-compare-001",
+  "internal_id": 952,
+  "slug": "claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "title": "เปรียบเทียบโมเดล Claude: Haiku vs Sonnet vs Opus vs Fable 5 (Mythos 5)",
+  "sub_title": "คู่มือสั้นเลือกชั้นโมเดล Claude ที่ถูก พร้อมเราเตอร์ cheap-to-frontier",
+  "excerpt": "เลือกชั้นโมเดล Claude ที่เหมาะสม: Haiku สำหรับ routing เร็ว Sonnet สำหรับงานประจำวัน Opus สำหรับ agentic coding ที่ซับซ้อน และ Fable 5 สำหรับ autonomy ระยะยาว รวมพิมพ์เขียว token-budget router",
+  "meta_title": "เปรียบเทียบโมเดล Claude: Haiku vs Sonnet vs Opus vs Fable 5",
+  "meta_description": "เปรียบเทียบ Anthropic Claude Haiku, Sonnet, Opus, Fable 5 และ Mythos 5 แบบ gated รวมสเปก กลยุทธ์ cost/token และพิมพ์เขียว routing",
+  "meta_keywords": "การเปรียบเทียบโมเดล Claude, Claude Opus 4.8, Claude Fable 5, Claude Sonnet 5, Claude Haiku 4.5, Claude Mythos 5, token budgeting, agentic coding",
+  "cover_image": "/img/claude-models-comparison-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-models-comparison-cover.svg",
+      "id": 952,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude models comparison cover: Haiku, Sonnet, Opus, Fable 5, Mythos 5"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>คู่มือสั้น ใช้งานได้จริงเรื่องชั้นโมเดล Claude สำหรับการเจาะลึกเต็มพร้อมพิมพ์เขียว routing แพทเทิร์น prompting และ playbook token-budget อ่าน <a href=\"/th/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">บทความใหญ่</a>.</em></p>\n<p><img alt=\"การเปรียบเทียบโมเดล Claude: Haiku, Sonnet, Opus, Fable 5, Mythos 5\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-models-comparison-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>เวอร์ชันหนึ่งย่อหน้า</strong> การเลือกโมเดล Claude ส่วนใหญ่เป็นการแลกระหว่าง <em>ความหน่วง</em>, <em>ต้นทุน</em>, และ <em>งานต้องการให้โมเดลอยู่ในโฟลวนานแค่ไหน</em>. ใช้ <code>claude-haiku-4-5</code> สำหรับงานเจตนาที่เร็วและถูก, <code>claude-sonnet-5</code> เพื่อความสมดุลความเร็ว/คุณภาพที่ดีที่สุด, <code>claude-opus-4-8</code> สำหรับ agentic coding ที่ซับซ้อนและงานองค์กร และสงวน <code>claude-fable-5</code> (และ gated <code>claude-mythos-5</code>) สำหรับงานที่ยากจริง ๆ ระยะยาว ที่ใช้ชั่วโมงหรือวัน\n</div>\n<h2>ไลน์อัปโมเดลในพริบตา</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0a2740;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">โมเดล</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">เหมาะสำหรับ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">หน้าต่างบริบท</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">เอาต์พุตสูงสุด</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ราคา (input / output)</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">พฤติกรรม thinking</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Fable 5</strong> (<code>claude-fable-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">เอเจนต์รันยาวและปัญหาที่ยากที่สุดยังไม่แก้</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$10 / $50 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Opus 4.8</strong> (<code>claude-opus-4-8</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Agentic coding ที่ซับซ้อนและงานองค์กร</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$5 / $25 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Sonnet 5</strong> (<code>claude-sonnet-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">สมดุลความเร็ว/คุณภาพดีที่สุด</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$3 / $15 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Haiku 4.5</strong> (<code>claude-haiku-4-5-20251001</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">โมเดลเร็วที่สุดสำหรับงานถูก ปริมาณสูง</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">200K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">64K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$1 / $5 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Extended thinking available (adaptive off)</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Claude Mythos 5</strong> (<code>claude-mythos-5</code>) คือโมเดลแบบ gated ที่ใช้สเปกและราคาเดียวกับ Fable 5 แต่ไม่มี safety classifiers ที่ Fable 5 ใช้ ความพร้อมจำกัดเฉพาะพาร์ทเนอร์ที่อนุมัติผ่าน Project Glasswing</p>\n<h2>เลือกโมเดลที่ถูก (กฎเร็ว)</h2>\n<ul>\n<li><strong>Haiku 4.5</strong>: routing, classification, extraction และเวิร์กโฟลว์ใดก็ตามที่ต้องการคำตอบเร็วและแบกรับงบ output-token สูงไม่ได้</li>\n<li><strong>Sonnet 5</strong>: การเขียนโค้ดประจำวันและงานเอกสารที่ต้องการคุณภาพสูงโดยไม่ใช้ราคา Opus/Fable</li>\n<li><strong>Opus 4.8</strong>: agentic coding ที่ซับซ้อน การวิเคราะห์องค์กร และการดีบักที่ยากขึ้นซึ่งต้องการงานยาวและอิสระกว่า</li>\n<li><strong>Fable 5</strong>: ปัญหาที่ยาก ระยะยาว ที่ใช้ชั่วโมงหรือวัน โดยเฉพาะเมื่อโมเดลต้องรักษาเป้าหมาย มอบหมายงานย่อย และคงความสอดคล้อง</li>\n</ul>\n<h2>Effort และ thinking: ผลต่อต้นทุนอย่างไร</h2>\n<p>บน API, <code>effort</code> คือตัวควบคุมหลักของ trade-off ระหว่างความฉลาด ความหน่วง และต้นทุนบน Fable 5 และ Mythos 5 สำหรับ Opus 4.8 และ Sonnet 5 คุณตั้ง effort อย่างชัดเจนได้เมื่อต้องการโปรไฟล์ cost/latency อื่น</p>\n<p>นัยปฏิบัติ: ค่าเริ่มต้นทุกคำขอเป็น effort สูงสุด มักเป็นวิธีเร็วที่สุดในการเผางบด้วย output tokens</p>\n<h2>กลยุทธ์โทเคนที่ใช้ได้ทุกชั้น</h2>\n<p>Claude output tokens คือส่วนที่แพง กฎง่าย ๆ คือ: <strong>จำกัดความยาวเอาต์พุต</strong>, <strong>พรอมต์แบบ TLDR-first</strong>, และใช้ <strong>prompt caching</strong> เพื่อให้ prefix ที่เสถียร (system instructions และ tool schemas) ถูกใช้ซ้ำ</p>\n<ul>\n<li><strong>ใช้โมเดลถูกที่สุดที่ทำจบได้</strong> เราเตอร์ (Haiku -&gt; Sonnet/Opus -&gt; Fable) มักลดต้นทุนอย่างมากโดยยังรักษาคุณภาพสูง</li>\n<li><strong>ตั้งขีดจำกัดเอาต์พุต</strong> ในโปรดักชัน ให้ตั้ง max output / token cap เสมอ คำตอบไร้ขอบเขตคืออุบัติเหตุด้านงบ</li>\n<li><strong>ใช้สรุปอย่างมีกลยุทธ์</strong> แทนที่จะส่งทรานสคริปต์เต็มทุกเทิร์น ให้เก็บหน่วยความจำ “lessons” แบบกะทัดรัดแล้วอัปเดตเฉพาะส่วนนั้น</li>\n</ul>\n<h2>พิมพ์เขียวเราเตอร์ง่าย ๆ</h2>\n<ol>\n<li>จำแนกเจตนาและความซับซ้อนโดยประมาณด้วย <code>claude-haiku-4-5</code>.</li>\n<li>ส่งงาน “ยากปกติ” ไปยัง <code>claude-sonnet-5</code> (หรือ <code>claude-opus-4-8</code> เมื่อคาดว่าจะมี agentic coding ที่หนักขึ้น)</li>\n<li>เลื่อนระดับไป <code>claude-fable-5</code> เฉพาะเมื่องานชัดเจนว่าระยะยาวหรือล้มเหลวบนชั้นล่าง</li>\n<li>ถ้า Fable 5 ปฏิเสธผ่าน safety classifiers ให้ถอยไป Opus 4.8 (API รองรับการยิงใหม่พร้อม fallbacks เมื่อตั้งค่าไว้)</li>\n</ol>\n<h2>อ่านเพิ่ม (อย่างเป็นทางการ)</h2>\n<ul>\n<li><a href=\"https://platform.claude.com/docs/th/about-claude/models/overview\" rel=\"noopener noreferrer\" target=\"_blank\">ภาพรวมโมเดล</a></li>\n<li><a href=\"https://platform.claude.com/docs/th/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">แนะนำ Fable 5 และ Mythos 5</a></li>\n<li><a href=\"https://platform.claude.com/docs/th/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">Prompting Claude Fable 5</a></li>\n</ul>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-07-08T09:00:00Z",
+  "updated_at": "2026-07-08T09:00:00Z",
+  "published_date": "2026-07-08",
+  "status": true
+}

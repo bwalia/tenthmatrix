@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "Systèmes de deep learning : brief technique pour ingénieurs et agents",
+  "sub_title": "Apprentissage de représentations, voies discriminatives vs génératives, métriques et arbitrage acheter/construire — concepts AWS réécrits pour les équipes de production",
+  "excerpt": "Brief technique TenthMatrix sur le deep learning : réseaux profonds entraînés par gradient, modèles discriminatifs vs génératifs, métriques de tâche, et Bedrock vs serving Kubernetes.",
+  "meta_title": "Systèmes de deep learning — Brief technique (TenthMatrix)",
+  "meta_description": "Brief technique deep learning : réseaux de neurones, backprop, IA discriminative vs générative, métriques de tâche, et routage Bedrock vs self-host pour ingénieurs et agents IA.",
+  "meta_keywords": "deep learning, réseaux de neurones, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Digest technique : le deep learning comme optimisation neuronale multi-couches, voies discriminatives vs génératives, et comment router le travail vers le ML classique, le DL entraîné ou les API de modèles de fondation. Équations complètes, figures et checklist agent dans le <a href=\"/fr/articles/what-is-deep-learning-workstation-guide\">long article</a>.</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"Brief technique systèmes deep learning — entraîner, optimiser, servir\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Définition.</strong> Le deep learning est l’entraînement par gradient de réseaux de neurones profonds afin que f_&#x3b8;(x) apprenne des caractéristiques hiérarchiques à partir d’un x haute dimension. Il sous-tend la vision/ASR/NLP modernes et est le substrat de l’IA générative (transformers / diffusion). Facteurs de coût : volume de données propres, temps d’accélérateur et OpEx d’inférence — pas les slides.\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Digest agent.</strong> DL ⊂ ML. Discriminatif = p(y|x). Génératif = échantillonner x ou x|c. Préférer GBM pour de fortes features tabulaires ; entraîner le DL pour la perception ; utiliser Bedrock/vLLM pour les agents langage. Serving GitOps ; gater argent/auth/prod.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">Adapté d’AWS — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — pour les équipes d’ingénierie <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n<h2>Répartition des capacités</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"Pile ML vs deep learning vs generative AI\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — features conçues ; arbres/modèles linéaires ; meilleur défaut pour les SLA tabulaires denses.</li>\n  <li><strong>Deep learning</strong> — réseaux de bout en bout sur images/texte/audio ; backprop + GPUs ; serving via Triton/KServe/SageMaker.</li>\n  <li><strong>Generative AI</strong> — échantillonner du nouveau contenu ; LLMs/diffusion + RAG/outils ; API Bedrock ou inférence open-weight.</li>\n</ul>\n\n<h2>Familles de tâches (les métriques comptent)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Famille</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Objectif / métrique typique</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">détecter/classifier — mAP, IoU, latence p99</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER, facteur temps réel</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">classer / générer — F1, exact-match, groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ranger — NDCG, CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">succès de tâche + sécurité + $/requête</td></tr>\n</tbody>\n</table>\n\n<h2>Contraintes</h2>\n<ul>\n  <li><strong>Data</strong> — bruit de labels et drift dominent ; versionner les datasets.</li>\n  <li><strong>Compute</strong> — l’entraînement et le décodage LLM sont liés aux accélérateurs.</li>\n  <li><strong>Ops</strong> — harnais d’éval, drift, coût, rollback GitOps avant large promote.</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"Flux de décision entraîner vs acheter vs hybride\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Recommandation TenthMatrix</h2>\n<p>Classer d’abord discriminatif vs génératif. Préférer les modèles de fondation managés pour les agents langage sauf si résidence/coût imposent des poids ouverts. Garder le ML classique pour le tabulaire. Détails, diagramme de couches et checklist : <a href=\"/fr/articles/what-is-deep-learning-workstation-guide\">long article</a>. Publié par <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

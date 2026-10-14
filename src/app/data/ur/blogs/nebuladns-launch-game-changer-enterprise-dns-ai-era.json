@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS ایک محفوظ-زنگ کا مستند DNS سرور ہے جس میں API-پہلا کنٹرول طیارہ، Prometheus میٹرکس، پروپیگیشن گیٹس، اور Kubernetes-مقامی آپریشنز ہیں—جب AI سروسز اور ایجنٹس DNS پر پہلے سے زیادہ انحصار کرتے ہیں تو مرئیت کے لیے بنایا گیا ہے۔",
+  "sub_title": "API-پہلا DNS، مشاہدہ، اور AI دور کو ایک نئے مستند اسٹیک کی ضرورت کیوں ہے",
+  "title": "NebulaDNS: کیوں مستند DNS AI دور میں گیم چینجر ہے۔",
+  "meta_title": "NebulaDNS | مستند DNS Rust AI Enterprise | TenthMatrix",
+  "meta_description": "NebulaDNS کا تعارف: مورچا مستند DNS، API کنٹرول طیارہ، پروپیگیشن کی تصدیق، k3s اور Route 53 پیٹرن، اور کیوں انٹرپرائز DNS کو AI دور میں قابل مشاہدہ ہونا چاہیے۔",
+  "meta_keywords": "NebulaDNS، مستند DNS، Rust DNS، Kubernetes DNS، Route 53، CoreDNS، AI انفراسٹرکچر، Prometheus DNS میٹرکس، TSIG، AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>ایگزیکٹو خلاصہ</h2><p><strong><a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">NebulaDNS</a></strong> ایک جدید ہے، <strong>API- پہلا مستند DNS سرور</strong> میں لکھا ہوا <strong>محفوظ مورچا</strong> (<code>#![forbid(unsafe_code)]</code>)۔ یہ دہائیوں پرانے ڈیمنز اور مبہم سی کوڈ بیسز کے ذریعہ چھوڑے گئے آپریشنل خلا کو نشانہ بناتا ہے: <strong>کوئی میٹرکس نہیں</strong>, <strong>کوئی پروپیگنڈہ سچائی نہیں</strong>، اور <strong>مشین سے پڑھنے کے قابل کنٹرول جہاز نہیں ہے۔</strong>. میں <strong>اے آئی کا دور</strong>، DNS \"صرف بنیادی ڈھانچہ\" نہیں ہے - یہ کیسے ہے۔ <strong>ایجنٹس</strong>, <strong>قیاس کے اختتامی نکات</strong>, <strong>GPU نوڈس</strong>، اور <strong>ملٹی کلسٹر خدمات</strong> پالیسی کے تحت ایک دوسرے کو تلاش کریں۔ NebulaDNS سلوک کرتا ہے۔ <strong>ریلیز کے طور پر ہر زون کی تبدیلی</strong>: تصدیق شدہ ثانوی، واضح میٹرکس، اور ہر آپریٹر ایکشن کے لیے ایک API — پر عوامی بیانیہ کے ساتھ منسلک <a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">پروجیکٹ سائٹ</a> اور <a href=\"https://github.com/bwalia/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">GitHub ذخیرہ</a>.</p><h2>جب AI پروڈکشن میں ہو تو DNS کیوں زیادہ اہمیت رکھتا ہے۔</h2><ul><li><strong>ایجنٹوں کے لیے سروس کی دریافت:</strong> ٹول اینڈ پوائنٹس، بازیافت کی خدمات، اور پالیسی گیٹ ویز کے لیے مستحکم نام فیمرل کلسٹرز میں سخت کوڈ والے IPs کو مات دیتے ہیں۔</li><li><strong>دھماکے کا رداس:</strong> ایک خاموش AXFR یا ثانوی بڑھے ہوئے واقعہ (جیسے سائٹ پر بیان کردہ حقیقی دنیا کی انٹراپ ناکامیاں) LLM ڈیش بورڈز کے نوٹس سے بہت پہلے فالتو پن کو توڑ سکتا ہے۔</li><li><strong>تعمیل اور ثبوت:</strong> ڈھانچے والے لاگز اور میٹرکس کے ساتھ آڈٹ کے لیے دوستانہ DNS SOC2 طرز کے ثبوت کی حمایت کرتا ہے کہ کس نے کون سا زون تبدیل کیا اور آیا اس کا پرچار کیا گیا۔</li></ul><h2>NebulaDNS کو کیا مختلف بناتا ہے۔</h2><p>لینڈنگ پیج NebulaDNS کو برٹل اسٹیکس کے ساتھ تبدیل کرنے کے طور پر پوزیشن میں رکھتا ہے۔ <strong>ایک چھوٹی سی بائنری</strong> کہ جہاز <strong>میٹرکس</strong>, a <strong>کنٹرول ہوائی جہاز</strong>، اور a کا راستہ <strong>Kubernetes آپریٹر</strong>- تو ناکامیاں سامنے آتی ہیں۔ <strong>سیکنڈ</strong>، کسٹمر ٹکٹ کے ذریعے نہیں۔ جھلکیاں شامل ہیں۔ <strong>تصدیق شدہ تبلیغ</strong>, <strong>پیر سافٹ ویئر فنگر پرنٹنگ</strong>, <strong>جوہری ورژن کی ترتیب</strong>, <strong>ڈیٹرمنسٹک ایس او اے سیریلز</strong>، اور <strong>Prometheus <code>/metrics</code></strong> کمپائل ٹائم کارڈینیلیٹی بجٹ کے ساتھ۔</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"NebulaDNS کنٹرول ہوائی جہاز، زون اسٹور، اور DNS ڈیٹا ہوائی جہاز\" decoding=\"async\" height=\"640\" loading=\"lazy\" src=\"/img/nebuladns-architecture-stack.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1000\"/></figure><h2>انٹیگریشن سنیپ شاٹ: روٹ 53 اور k3s</h2><p>انٹرپرائزز اکثر جوڑتے ہیں۔ <strong>AWS روٹ 53</strong> کے ساتھ عوامی زون <strong>آن کلسٹر یا سرشار مستند</strong> درجے NebulaDNS کے طور پر فٹ بیٹھتا ہے۔ <strong>سچائی کا مستند ذریعہ</strong> ان زونز کے لیے جن کے آپ اینڈ ٹو اینڈ تک مالک ہیں۔ <strong>Helm</strong>, <strong>سروس مانیٹر</strong>، اور <strong>آپریٹر/CRD</strong> سائٹ پر بیان کردہ روڈ میپ پر کہانی کی لکیریں۔ ذیل کا خاکہ a <strong>وفد + کلسٹر</strong> پیٹرن (فروش کے لیے مخصوص وائرنگ نہیں—آپ کے نیٹ سیگمنٹیشن کے مطابق ڈھال لیں)۔</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"Route 53 وفد کو NebulaDNS اور k3s CoreDNS انضمام\" decoding=\"async\" height=\"520\" loading=\"lazy\" src=\"/img/nebuladns-k3s-route53-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1100\"/></figure><h2>اگلا پڑھیں</h2><p>کے لیے <strong>مکمل فیچر کیٹلاگ</strong>, میٹرکس کی مثالیں، اور گہرے k3s/Route 53 نوٹس، ساتھی پوسٹ دیکھیں <a href=\"/ur/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide\">NebulaDNS مکمل فیچر گائیڈ</a> TenthMatrix پر۔</p><h2>TenthMatrix کس طرح مدد کر سکتا ہے۔</h2><p>TenthMatrix ڈیزائن <strong>پلیٹ فارم انجینئرنگ</strong> اور <strong>SRE کے لیے تیار DNS</strong> پیٹرن—GitOps، مشاہداتی، اور محفوظ کٹ اوور—کلاؤڈ اور ایج کے لیے۔ رابطہ کریں۔ <strong>info@tenthmatrix.com</strong> فن تعمیر کے جائزوں یا ڈیلیوری سپورٹ کے لیے۔</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

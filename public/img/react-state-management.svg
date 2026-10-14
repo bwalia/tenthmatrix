@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="React state management decision matrix: Redux Toolkit, Zustand, Jotai, Recoil, MobX, TanStack Query, Context with sizing and SLOs">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a28"/>
+      <stop offset="0.5" stop-color="#0e2540"/>
+      <stop offset="1" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#61DAFB"/>
+      <stop offset="1" stop-color="#a78bfa"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#61DAFB" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#61DAFB" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #93c5fd; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 44px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #61DAFB; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.22); stroke-width: 1.2; }
+      .chipText { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #61DAFB; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #93c5fd; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+
+  <text class="kicker" x="40" y="50">REACT  /  STATE  /  CLIENT + SERVER  /  ARCHITECTURE</text>
+  <text class="title" x="40" y="110">React State</text>
+  <text class="tagline" x="40" y="138">Pick the right tool for client, server and form state</text>
+  <text class="sub" x="40" y="158">Most apps need 2-3: client store + server cache + form library. Avoid mixing patterns within a feature.</text>
+
+  <g transform="translate(40,180)">
+    <rect class="chip" x="0" y="0" rx="14" ry="14" width="220" height="32"/>
+    <text class="num" x="14" y="20">01</text>
+    <text class="chipText" x="40" y="20">Local first (useState / Reducer)</text>
+
+    <rect class="chip" x="0" y="40" rx="14" ry="14" width="220" height="32"/>
+    <text class="num" x="14" y="60">02</text>
+    <text class="chipText" x="40" y="60">Server state - TanStack Query</text>
+
+    <rect class="chip" x="0" y="80" rx="14" ry="14" width="220" height="32"/>
+    <text class="num" x="14" y="100">03</text>
+    <text class="chipText" x="40" y="100">Client store - Zustand / Redux</text>
+
+    <rect class="chip" x="0" y="120" rx="14" ry="14" width="220" height="32"/>
+    <text class="num" x="14" y="140">04</text>
+    <text class="chipText" x="40" y="140">Form state - RHF / Formik</text>
+  </g>
+
+  <g transform="translate(40,360)">
+    <text class="laneLabel" x="0" y="0">SIZING / WHEN TO ADOPT</text>
+    <rect x="0" y="8" width="280" height="180" rx="8" fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+    <text class="h" x="10" y="28">Component-local: under 5 fields</text>
+    <text class="c" x="10" y="44">useState / useReducer in component</text>
+    <text class="h" x="10" y="62">Feature-scoped: 1 - 3 pages</text>
+    <text class="c" x="10" y="78">Zustand store or Jotai atoms</text>
+    <text class="h" x="10" y="96">App-wide: cross-cutting flows</text>
+    <text class="c" x="10" y="112">Redux Toolkit / Zustand + slices</text>
+    <text class="h" x="10" y="130">Server cache</text>
+    <text class="c" x="10" y="146">TanStack Query, RTK Query, SWR</text>
+    <text class="h" x="10" y="164">Real-time + offline</text>
+    <text class="c" x="10" y="178">Replicache / TinyBase / Yjs</text>
+  </g>
+
+  <g transform="translate(280,180)">
+    <text class="laneLabel" x="0" y="0">DECISION MATRIX  /  STATE LIBRARIES</text>
+    <rect x="0" y="8" width="880" height="200" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <text class="h" x="14" y="28">Library</text>
+    <text class="h" x="160" y="28">Bundle (gzip)</text>
+    <text class="h" x="260" y="28">Boilerplate</text>
+    <text class="h" x="360" y="28">DevTools</text>
+    <text class="h" x="450" y="28">SSR / RSC</text>
+    <text class="h" x="540" y="28">Async / cache</text>
+    <text class="h" x="650" y="28">Concurrent ok</text>
+    <text class="h" x="760" y="28">Best fit</text>
+    <line x1="14" y1="36" x2="870" y2="36" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <text class="c" x="14" y="58">Redux Toolkit</text>
+    <text class="warn" x="160" y="58">~13 KB</text>
+    <text class="warn" x="260" y="58">slices + thunks</text>
+    <text class="ok" x="360" y="58">time travel</text>
+    <text class="ok" x="450" y="58">supported</text>
+    <text class="ok" x="540" y="58">RTK Query</text>
+    <text class="ok" x="650" y="58">stable</text>
+    <text class="c" x="760" y="58">large app, audit log</text>
+
+    <text class="c" x="14" y="84">Zustand</text>
+    <text class="ok" x="160" y="84">~1 KB</text>
+    <text class="ok" x="260" y="84">tiny</text>
+    <text class="ok" x="360" y="84">redux ext compat</text>
+    <text class="ok" x="450" y="84">supported</text>
+    <text class="warn" x="540" y="84">manual or query</text>
+    <text class="ok" x="650" y="84">stable</text>
+    <text class="c" x="760" y="84">default for new apps</text>
+
+    <text class="c" x="14" y="110">Jotai</text>
+    <text class="ok" x="160" y="110">~3 KB</text>
+    <text class="ok" x="260" y="110">atoms = vars</text>
+    <text class="ok" x="360" y="110">jotai-devtools</text>
+    <text class="ok" x="450" y="110">supported</text>
+    <text class="warn" x="540" y="110">atomWithQuery</text>
+    <text class="ok" x="650" y="110">stable</text>
+    <text class="c" x="760" y="110">fine-grained reactivity</text>
+
+    <text class="c" x="14" y="136">Recoil</text>
+    <text class="warn" x="160" y="136">~14 KB</text>
+    <text class="warn" x="260" y="136">atoms + selectors</text>
+    <text class="warn" x="360" y="136">basic</text>
+    <text class="warn" x="450" y="136">limited</text>
+    <text class="warn" x="540" y="136">selectors</text>
+    <text class="warn" x="650" y="136">maintenance mode</text>
+    <text class="c" x="760" y="136">legacy or Meta stack</text>
+
+    <text class="c" x="14" y="162">MobX</text>
+    <text class="warn" x="160" y="162">~16 KB</text>
+    <text class="warn" x="260" y="162">classes / observers</text>
+    <text class="ok" x="360" y="162">mobx-devtools</text>
+    <text class="warn" x="450" y="162">requires care</text>
+    <text class="ok" x="540" y="162">computed</text>
+    <text class="warn" x="650" y="162">careful with strict</text>
+    <text class="c" x="760" y="162">OOP teams, complex graphs</text>
+
+    <text class="c" x="14" y="188">TanStack Query</text>
+    <text class="ok" x="160" y="188">~12 KB</text>
+    <text class="ok" x="260" y="188">use hook</text>
+    <text class="ok" x="360" y="188">excellent</text>
+    <text class="ok" x="450" y="188">SSR + RSC</text>
+    <text class="ok" x="540" y="188">first-class cache</text>
+    <text class="ok" x="650" y="188">stable</text>
+    <text class="c" x="760" y="188">all server state - default</text>
+  </g>
+
+  <g transform="translate(280,400)">
+    <text class="laneLabel" x="0" y="0">CONFIG KNOBS</text>
+    <rect x="0" y="8" width="430" height="180" rx="8" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+    <text class="h" x="10" y="28">query.staleTime = 60_000</text>
+    <text class="c" x="10" y="42">match domain rate-of-change; cuts refetches</text>
+    <text class="h" x="10" y="60">query.gcTime = 5_minutes</text>
+    <text class="c" x="10" y="74">keeps cache warm on quick nav-back</text>
+    <text class="h" x="10" y="92">store.persist = whitelist</text>
+    <text class="c" x="10" y="106">persist auth + prefs only; never tokens raw</text>
+    <text class="h" x="10" y="124">selectors.shallow = on</text>
+    <text class="c" x="10" y="138">avoid full re-render storms</text>
+    <text class="h" x="10" y="156">devtools.enable = process.env.DEV</text>
+    <text class="c" x="10" y="170">strip in production builds</text>
+
+    <text class="laneLabel" x="450" y="0">SLO / PERFORMANCE BREACH</text>
+    <rect x="450" y="8" width="430" height="180" rx="8" fill="rgba(220,38,38,0.08)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
+    <text class="h" x="460" y="28">INP p75 gt 200 ms  ->  audit selectors</text>
+    <text class="c" x="460" y="42">profile re-renders; memo + split store</text>
+    <text class="h" x="460" y="60">bundle gt 200 KB gzip  ->  trim libs</text>
+    <text class="c" x="460" y="74">drop unused providers; lazy-load slices</text>
+    <text class="h" x="460" y="92">query cache miss gt 30 percent  ->  tune</text>
+    <text class="c" x="460" y="106">raise staleTime; prefetch on hover</text>
+    <text class="h" x="460" y="124">memory leak (heap grow)  ->  unmount</text>
+    <text class="c" x="460" y="138">verify subscriptions + abort signals</text>
+    <text class="h" x="460" y="156">hydration mismatch  ->  isolate store</text>
+    <text class="c" x="460" y="170">use createServerStore + provider per req</text>
+  </g>
+
+  <text class="brand" x="40" y="610">WORKSTATION.CO.UK  /  React architecture cheat sheet</text>
+  <text class="audience" x="1160" y="610" text-anchor="end">FRONTEND  /  ARCHITECTS  /  STAFF ENGINEERS</text>
+</svg>

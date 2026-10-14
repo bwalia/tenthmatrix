@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-wsl-proxy-001",
+  "internal_id": 963,
+  "slug": "workstation-wsl-proxy-api-gateway-cdn",
+  "title": "TenthMatrix WSL-proxy: API Gateway, CDN en Agent Edge",
+  "sub_title": "Voltooi de API-gateway en CDN van het Workstation-team – live regels, WAF, multi-POP, plus Agents Gateway en MCP Gateway onderweg",
+  "excerpt": "TenthMatrix WSL Proxy (WSLProxy) is een complete API-gateway en CDN-edge: live routing, WAF, cache, multi-POP DNS, MCP - met Agents Gateway en MCP Gateway in uitvoering.",
+  "meta_title": "TenthMatrix WSL-proxy — API Gateway & CDN | TenthMatrix",
+  "meta_description": "TenthMatrix WSL Proxy: OpenResty API gateway en CDN met live regels, WAF, multi-POP DNS, MCP tools en Agents Gateway / MCP Gateway-integraties in uitvoering.",
+  "meta_keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, OpenResty, WAF, MCP gateway, Agents Gateway, edge cache, reverse proxy, TenthMatrix",
+  "cover_image": "/img/wsl-proxy-cover.svg",
+  "images": [
+    {
+      "url": "/img/wsl-proxy-cover.svg",
+      "id": 963,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "TenthMatrix WSL Proxy API Gateway and CDN"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix WSL Proxy</strong>(WSLProxy) is TenthMatrix's open API-gateway en CDN edge control-vlak - live routing, WAF, cache, multi-POP DNS en MCP voor agenten. Productpagina:<a href=\"/nl/wsl-proxy\">/wsl-proxy</a>. Diepe duik:<a href=\"/nl/articles/workstation-wsl-proxy-api-gateway-cdn\">lang artikel</a>.</em></p><p><img src=\"/img/wsl-proxy-cover.svg\" alt=\"TenthMatrix WSL Proxy — API Gateway and CDN\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Watch: TenthMatrix WSL Proxy intro</h2>\n<p><a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg\" alt=\"TenthMatrix WSL Proxy — product intro\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/7NJulclG5sQ\" title=\"TenthMatrix WSL Proxy intro\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Watch: <a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/7NJulclG5sQ</a> · Product: <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a></p><div style=\"background:#fff7ed;border-left:4px solid #c45c26;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Kortom.</strong>Stop met het behandelen van de rand als een statische nginx.conf. TenthMatrix WSL Proxy evalueert de regels bij elk verzoek van JSON/MCP-configuraties (proxy, redirect, WAF, cache, canary) en laadt nginx alleen opnieuw als luister-/SSL-blokken veranderen. Site:<a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>· repository:<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>.</div><h2>Wat het is</h2><p>WSLProxy is een dynamische API-gateway en reverse proxy op OpenResty. Operators beheren virtuele hosts, regels, WAF, cache, verkeerssplitsingen en edge-POP's vanuit een beheerdersinterface, REST API-, MCP-tools of<code>wslproxy-cli</code>. Het is gebouwd voor multi-POP-randen, configuraties in GitOps-stijl en AI-agents – dezelfde stapel die het verkeer op tenthmatrix.com in productiepatronen voorstaat.</p><h2>Complete API-gateway + CDN</h2><ul><li><strong>Routing:</strong>pad / IP / land / JWT / cookie match → proxy, redirect, HTML, CAPTCHA.</li><li><strong>Verkeer:</strong>gewogen, RR, kanarie, sticky, minst-conn; backends promoten en terugdraaien.</li><li><strong>WAF:</strong>-beleidspakketten, anomaliescores, monitor/blok, gebeurtenissen API.</li><li><strong>CDN-cache:</strong>edge statische cache, optionele Docker blob-cache, vernishaken.</li><li><strong>POP's + DNS:</strong>declareert randen; Cloudflare A-recordvoorziening met vangrails.</li><li><strong>Besturingsvlak:</strong>React Admin, Swagger, MCP (Claude/Cursor), CLI-afbeelding op GHCR.</li></ul><h2>Agenten Gateway &amp; MCP Gateway (routekaart)</h2><p>TenthMatrix breidt dezelfde voorsprong uit naar het agententijdperk:</p><ul><li><strong>MCP Gateway (in uitvoering):</strong>bestuurde voordeur voor externe MCP-servers - auth bridging, tool toestaan/weigeren, audit van<code>tools/call</code>, snelheidslimieten per tool.</li><li><strong>Agents Gateway (in uitvoering):</strong>-beleid en observatie voor multi-agentverkeer via de TenthMatrix WSL Proxy edge.</li><li><strong>MCP-beheer (nu beschikbaar):</strong>stuurt WSLProxy's eigen beheerdersoppervlak aan van Claude/Cursor via MCP-tools.</li></ul><h2>Waar te beginnen</h2><ol><li>Open<a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>en de<a href=\"https://wslproxy.org/swagger/\" target=\"_blank\" rel=\"noopener noreferrer\">Swagger API</a>.</li><li>Kloon<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>en voer Compose of Helm uit voor k3s.</li><li>Lees het<a href=\"/nl/articles/workstation-wsl-proxy-api-gateway-cdn\">technische artikel</a>of de<a href=\"/nl/wsl-proxy\">productpagina</a>.</li></ol><p>Gepubliceerd door<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p><p style=\"margin-top:1.5rem;\"><div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> <a href=\"/nl/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a> · <a href=\"/nl/articles/wslproxy-waf-web-application-firewall\">Explainable edge WAF article</a> · <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">WAF tour video</a> · <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>\n</div>\n\n<p style=\"margin-top:1.5rem;\"><strong>Product site:</strong> <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">https://wslproxy.org</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-15T10:00:00Z",
+  "updated_at": "2026-08-15T10:00:00Z",
+  "published_date": "2026-08-15",
+  "status": true
+}

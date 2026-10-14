@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Deep learning technical guide - Workstation">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <style>
+      .title { fill: #0f172a; font: 800 42px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #334155; font: 500 18px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .kicker { fill: #0f766e; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .boxA { fill: #ccfbf1; stroke: #0f766e; stroke-width: 2; }
+      .boxB { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2; }
+      .boxC { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #475569; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+      .brand { fill: #64748b; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="8" height="630" fill="#0f766e"/>
+  <text class="kicker" x="48" y="52">TECHNICAL BRIEF  |  WORKSTATION.CO.UK</text>
+  <text class="title" x="48" y="108">Deep Learning Systems</text>
+  <text class="sub" x="48" y="145">Representation learning, neural stacks, training vs inference, deployment paths</text>
+
+  <!-- pipeline boxes -->
+  <rect class="boxA" x="48" y="200" width="200" height="88" rx="6"/>
+  <text class="lbl" x="68" y="238">1. Data + labels</text>
+  <text class="sm" x="68" y="262">tensors, batches, splits</text>
+
+  <path class="arrow" d="M258 244 H300"/>
+
+  <rect class="boxA" x="310" y="200" width="200" height="88" rx="6"/>
+  <text class="lbl" x="330" y="238">2. Model (DNN)</text>
+  <text class="sm" x="330" y="262">layers, weights, loss</text>
+
+  <path class="arrow" d="M520 244 H562"/>
+
+  <rect class="boxB" x="572" y="200" width="200" height="88" rx="6"/>
+  <text class="lbl" x="592" y="238">3. Optimise</text>
+  <text class="sm" x="592" y="262">backprop + optimiser</text>
+
+  <path class="arrow" d="M782 244 H824"/>
+
+  <rect class="boxC" x="834" y="200" width="300" height="88" rx="6"/>
+  <text class="lbl" x="854" y="238">4. Serve / generate</text>
+  <text class="sm" x="854" y="262">classify  |  detect  |  sample tokens</text>
+
+  <!-- bottom legend row -->
+  <rect class="box" x="48" y="340" width="350" height="160" rx="6"/>
+  <text class="lbl" x="68" y="375">Discriminative DL</text>
+  <text class="sm" x="68" y="405">p(y|x) - classify, detect, rank</text>
+  <text class="sm" x="68" y="430">CNNs, encoders, ranking heads</text>
+  <text class="sm" x="68" y="455">Output: labels / scores / boxes</text>
+
+  <rect class="box" x="425" y="340" width="350" height="160" rx="6"/>
+  <text class="lbl" x="445" y="375">Generative DL</text>
+  <text class="sm" x="445" y="405">p(x) or p(x|c) - sample new data</text>
+  <text class="sm" x="445" y="430">transformers, diffusion, VAEs</text>
+  <text class="sm" x="445" y="455">Output: text / code / images</text>
+
+  <rect class="box" x="802" y="340" width="332" height="160" rx="6"/>
+  <text class="lbl" x="822" y="375">Ops surface</text>
+  <text class="sm" x="822" y="405">GPUs, batching, KV-cache</text>
+  <text class="sm" x="822" y="430">Bedrock API or K8s + vLLM</text>
+  <text class="sm" x="822" y="455">GitOps, evals, human gates</text>
+
+  <text class="brand" x="48" y="560">FOR HUMANS AND AI AGENTS  -  STRUCTURED REFERENCE</text>
+  <text class="brand" x="48" y="590">ML subset: deep nets  ·  gen AI builds on deep generative models</text>
+</svg>

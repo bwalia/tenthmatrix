@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "Turbolader LLMs",
+  "sub_title": "PagedAttention, vLLM, Self-Debugging, PowerInfer en EG-MLA – hoe u LLM-agents kunt schalen zonder GPU KV-cache te verspillen",
+  "excerpt": "TenthMatrix op turbo-opladende LLMs: PagedAttention-paging voor KV-cache, vLLM-serving, Self-Debugging voor agenten, PowerInfer-tokensnelheden en EG-MLA-geheugenbesparingen - met productie-afwegingen.",
+  "meta_title": "Turbocompressor LLMs: PagedAttention, vLLM, PowerInfer | TenthMatrix",
+  "meta_description": "Schaal LLM-services met PagedAttention en vLLM, Self-Debugging voor agenten, PowerInfer-tokengeneratie en EG-MLA KV-compressie: knoppen en afwegingen.",
+  "meta_keywords": "LLM, PagedAttention, vLLM, KV-cache, PowerInfer, EG-MLA, Self-Debugging, GPU-bediening, Kubernetes, TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>over hoe u grote taalmodellen in productie een boost kunt geven: PagedAttention, vLLM, Self-Debugging, PowerInfer en EG-MLA - met de afwegingen die daadwerkelijk opduiken op GPU's. Diepe duik:<a href=\"/nl/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">lang artikel</a>. Primer:<a href=\"/nl/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs uitgelegd + Kubernetes</a>.</em></p><p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Kortom.</strong>Doorvoer sterft wanneer KV-cache fragmenteert. Pagina de cache als een besturingssysteem (PagedAttention binnen vLLM), kies een token-engine die overeenkomt met de box (PowerInfer op een dikke consument GPU, vLLM op een serveercluster), verklein de aandacht wanneer de architectuur dit toelaat (EG-MLA) en beperk de foutopsporingslussen van agenten, zodat kwaliteit geen onbeperkte latentie koopt.</div><h2>Kijk: wat een LLM eigenlijk is, is</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Context, geen productdemo:<a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">Inleiding tot grote taalmodellen</a>(Andrej Karpathy). Combineer met onze<a href=\"/nl/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">eenvoudig-Engelse LLM + Kubernetes-gids</a>.</p><h2>Het schaalprobleem</h2><p>LLMs ontgrendelde conversatie-AI en -generatie en werd toen onmiddellijk een serveerprobleem. Elke decoderingsstap voegt sleutels en waarden toe aan een KV-cache die groeit met de reekslengte en batchgrootte. Naïeve motoren reserveren enorme aaneengesloten platen vooraf. Het grootste deel van dat geheugen blijft inactief terwijl andere verzoeken wachten. De doorvoer stort in, ook al ziet de GPU er “vol” uit.</p><h2>PagedAttention: virtueel geheugen voor aandacht</h2><p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>PagedAttention (Kwon et al., SOSP 2023) behandelt KV-cache zoals OS-paging: blokken met een vaste grootte, een bloktabel per verzoek, niet-aaneengesloten fysieke pagina's<a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>. De kernel verzamelt blokken op het moment van aandacht. U moet nog steeds de<strong>-blokgrootte</strong>,<strong>maximale modellengte</strong>en de<strong>-cachehiërarchie</strong>(GPU HBM versus CPU offload versus prefix-cache) afstemmen. Te kleine blokken voegen mapping-overhead toe; te grote blokken herintroduceren afval.</p><h2>vLLM: bijna geen afval voor de</h2><p>vLLM is het serveersysteem gebouwd rond PagedAttention. Het richt zich op vrijwel nul KV-afval, continue batching en een OpenAI-compatibel HTTP-oppervlak. Let tijdens de productie op drie dingen: (1)<code>gpu_memory_utilization</code>versus OOM, (2) tijd tot eerste token versus decodeer tokens/s, (3) of prefix/prompt-caching de antwoorden voor uw evaluatieset verandert. Caching is een doorvoerwinst; het is niet vrij van correctheids- en staartlatentie-effecten.</p><pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre><p>Dat is echt vLLM-gebruik. Een Hugging Face BERT<code>forward()</code>-oproep is<em>en niet</em>PagedAttention - verwar classifier-logits niet met paged KV-serving.</p><h2>Self-Debugging: kwaliteitslussen met een latentiebudget</h2><p>Self-Debugging (Chen et al.) leert een model zijn eigen voorspelde programma's te herstellen op basis van een paar sporen, waarbij basislijnen worden gematcht of verbeterd die 10x meer kandidaten uitzenden<a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2304.05128]</a>. Voor agenten is dat goud, totdat de feedbackrondes zich opstapelen. Beperk het aantal foutopsporingsberichten, registreer elke ronde en sluit niet af voor een menselijk of een kleiner specialistisch model als het budget op is.</p><h2>Bekijk: context voor weergave en gevolgtrekking</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Contextueel gesprek over snelle LLM-bediening - geen officiële Workstation-demo. Combineer met het vLLM-papier en<a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a>.</p><h2>PowerInfer: tokens op een enkele dikke GPU</h2><p>PowerInfer splitst warme/koude neuronen zodat een consument GPU plus CPU snel tokens kan genereren. Gerapporteerde cijfers:<strong>13,20 tokens/s gemiddeld</strong>, piek<strong>29,08 tokens/s</strong>op één NVIDIA RTX 4090, tot<strong>11,69x</strong>versus llama.cpp met behoud van nauwkeurigheid<a href=\"https://github.com/SJTU-IPADS/PowerInfer\" target=\"_blank\" rel=\"noopener noreferrer\">[PowerInfer]</a>. Op vlootschaal heb je nog steeds plaatsing nodig: welke lagen blijven op GPU, hoe verdeel je over knooppunten en of het locatieprofiel van<em>dat je</em>vraagt ​​overeenkomt met de modellen van het papier.</p><h2>EG-MLA: verklein de KV zonder de bank</h2>kapot te maken<p>EG-MLA (embedding-gated latente aandacht met meerdere hoofden) rapporteert<strong>meer dan 91,6% KV-cachereductie</strong>versus aandacht met meerdere hoofden met verwaarloosbare degradatie, extra besparingen versus MLA (tot 59,9%) en betere scores op redeneersuites, geschaald voorbij 1B-parameters<a href=\"https://arxiv.org/abs/2509.16686\" target=\"_blank\" rel=\"noopener noreferrer\">[EG-MLA-papier]</a>. Beschouw het als een architectuurkeuze, niet als een drop-in-vlag op een bevroren vLLM-controlepunt - valideer uw evaluatieharnas voordat u de geheugengrafiek viert.</p><p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>In elkaar zetten</h2><p>Combineer PagedAttention + vLLM voor clusterbediening, PowerInfer als de box een GPU-werkstation is, Self-Debugging in codeeragenten met een harde ronde limiet, en EG-MLA als u de modelfamilie beheert. Gedistribueerde weergave voegt complexiteit toe: KV-parallellisme, prefill/decode-split en automatisch schalen dat de paginatabellen niet vernietigt. Meeteenheid. Schrijf vervolgens het ADR.</p><h2>Lees volgende</h2><ol><li><a href=\"/nl/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">Lang artikel</a>— knoppen, foutmodi, Kubernetes-opmerkingen.</li><li><a href=\"/nl/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs uitgelegd + voer uw eigen uit op Kubernetes</a></li><li><a href=\"/nl/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / lokale agenten</a>·<a href=\"/nl/enterprise-ai\">Enterprise AI Lab</a></li></ol><p>Gepubliceerd door<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

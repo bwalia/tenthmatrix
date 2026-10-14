@@ -1,0 +1,21 @@
+# acc — https://acc.tenthmatrix.com (lead form → https://acc-api.tenthmatrix.com)
+env: acc
+
+appConfig:
+  SITE_URL: "https://acc.tenthmatrix.com"
+  WEBSITE_NAMESPACE: "tenthmatrix"
+  WEBSITE_CATEGORY: ""
+  CMS_CONTENT_MODE: "overlay"
+  OPSAPI_URL: "http://workstation-opsapi/"
+  CMS_REVALIDATE_SECONDS: "3600"
+  ENGAGEMENT_STORE_DIR: "/tmp/engagement"
+  ROBOTS_DISALLOW_ALL: "true"
+
+ingress:
+  enabled: true
+  className: "traefik-edge"
+  hosts:
+    - host: acc.tenthmatrix.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific

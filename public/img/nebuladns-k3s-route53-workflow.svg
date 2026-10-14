@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-label="NebulaDNS pattern: AWS Route 53 delegation and k3s cluster integration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 20px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .aws { fill: #3a1f08; stroke: #ea580c; stroke-width: 1.5; }
+      .nebula { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .clients { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .k3s { fill: #0c2e36; stroke: #00acc1; stroke-width: 1.5; }
+      .pod { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.78); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ctrl { stroke: #ff9560; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .data { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .verify { stroke: #26c6da; stroke-width: 2; fill: none; stroke-dasharray: 1 3; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arData" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arVerify" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#26c6da"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="520" fill="url(#bg)"/>
+  <rect width="1100" height="520" fill="url(#grid)"/>
+
+  <text class="title" x="550" y="36" text-anchor="middle">NebulaDNS  /  Enterprise pattern</text>
+  <text class="subtitle" x="550" y="58" text-anchor="middle">Public Route 53 delegation + on-cluster authoritative + propagation-gated releases</text>
+
+  <g transform="translate(40,80)">
+    <rect width="240" height="120" rx="12" class="aws"/>
+    <text class="boxLabel" x="120" y="32" text-anchor="middle">AWS Route 53</text>
+    <text class="boxText" x="120" y="56" text-anchor="middle">Public hosted zone</text>
+    <text class="boxText" x="120" y="74" text-anchor="middle">NS delegation</text>
+    <text class="boxText" x="120" y="92" text-anchor="middle">health checks</text>
+    <text class="boxText" x="120" y="110" text-anchor="middle">latency-based routing</text>
+  </g>
+
+  <g transform="translate(360,70)">
+    <rect width="380" height="140" rx="12" class="nebula"/>
+    <text class="boxLabel" x="190" y="32" text-anchor="middle">NebulaDNS (authoritative)</text>
+    <text class="boxText" x="190" y="56" text-anchor="middle">API  /  TSIG  /  AXFR to secondaries  /  /metrics</text>
+    <text class="boxText" x="190" y="76" text-anchor="middle">Zones for api  /  agents  /  inference CNAMEs</text>
+    <text class="boxText" x="190" y="96" text-anchor="middle">Propagation verifier confirms secondaries</text>
+    <text class="boxText" x="190" y="116" text-anchor="middle">before deploy is marked done</text>
+    <text class="boxText" x="190" y="132" text-anchor="middle">UDP / TCP / DoT / DoH / DoQ ready</text>
+  </g>
+
+  <g transform="translate(820,80)">
+    <rect width="240" height="120" rx="12" class="clients"/>
+    <text class="boxLabel" x="120" y="32" text-anchor="middle">Internet / clients</text>
+    <text class="boxText" x="120" y="56" text-anchor="middle">dig  /  DoH  /  agents</text>
+    <text class="boxText" x="120" y="74" text-anchor="middle">L7 LB  /  CDN edges</text>
+    <text class="boxText" x="120" y="92" text-anchor="middle">resolvers (1.1.1.1, 8.8.8.8)</text>
+    <text class="boxText" x="120" y="110" text-anchor="middle">no caching of stale records</text>
+  </g>
+
+  <line x1="280" y1="140" x2="360" y2="140" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="740" y1="140" x2="820" y2="140" class="data" marker-end="url(#arData)"/>
+
+  <g transform="translate(200,232)">
+    <rect width="700" height="240" rx="14" class="k3s"/>
+    <text class="laneTitle" x="20" y="22" fill="#80deea">k3s CLUSTER (Rancher)  /  IN-PATH AUTHORITATIVE</text>
+    <text class="boxText" x="20" y="40">Helm  /  Operator  /  GitOps reconciled. Zone changes behave like releases.</text>
+
+    <g transform="translate(40,56)">
+      <rect width="200" height="160" rx="10" class="pod"/>
+      <text class="boxLabel" x="100" y="26" text-anchor="middle">CoreDNS</text>
+      <text class="boxText" x="100" y="46" text-anchor="middle">cluster.local  /  svc</text>
+      <text class="boxText" x="100" y="64" text-anchor="middle">forward stub</text>
+      <text class="boxText" x="100" y="82" text-anchor="middle">to NebulaDNS svc IP</text>
+      <text class="boxText" x="100" y="104" text-anchor="middle">Pod DNS policy: ClusterFirst</text>
+      <text class="boxText" x="100" y="126" text-anchor="middle">caches 30s</text>
+      <text class="boxText" x="100" y="148" text-anchor="middle">metrics scraped</text>
+    </g>
+
+    <g transform="translate(260,56)">
+      <rect width="200" height="160" rx="10" class="nebula"/>
+      <text class="boxLabel" x="100" y="26" text-anchor="middle">NebulaDNS pod</text>
+      <text class="boxText" x="100" y="46" text-anchor="middle">StatefulSet  /  PDB</text>
+      <text class="boxText" x="100" y="64" text-anchor="middle">3 replicas anti-affinity</text>
+      <text class="boxText" x="100" y="82" text-anchor="middle">ServiceMonitor enabled</text>
+      <text class="boxText" x="100" y="104" text-anchor="middle">persistent zone store</text>
+      <text class="boxText" x="100" y="126" text-anchor="middle">arc-swap snapshots</text>
+      <text class="boxText" x="100" y="148" text-anchor="middle">role: master / secondary</text>
+    </g>
+
+    <g transform="translate(480,56)">
+      <rect width="180" height="160" rx="10" class="pod"/>
+      <text class="boxLabel" x="90" y="26" text-anchor="middle">ExternalDNS</text>
+      <text class="boxText" x="90" y="46" text-anchor="middle">optional  /  sync</text>
+      <text class="boxText" x="90" y="64" text-anchor="middle">Ingress + LB</text>
+      <text class="boxText" x="90" y="82" text-anchor="middle">to Route 53</text>
+      <text class="boxText" x="90" y="104" text-anchor="middle">closes the loop with</text>
+      <text class="boxText" x="90" y="126" text-anchor="middle">cluster Ingresses</text>
+      <text class="boxText" x="90" y="148" text-anchor="middle">TXT registry per record</text>
+    </g>
+  </g>
+
+  <path d="M 550 210 L 550 232" class="ctrl" marker-end="url(#arCtrl)"/>
+  <text class="tag" x="560" y="226">Helm / Operator / GitOps</text>
+
+  <path d="M 880 372 C 980 372 980 200 880 130" class="verify" marker-end="url(#arVerify)"/>
+  <text class="tag" x="990" y="252" fill="#26c6da">propagation verify</text>
+
+  <text class="footnote" x="550" y="500" text-anchor="middle">AI workloads: stable names for inference endpoints, GPU nodes, agent callbacks. Observable and gated like any other zone change.</text>
+</svg>

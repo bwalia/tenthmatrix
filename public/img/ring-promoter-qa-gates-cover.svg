@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Ring Promoter QA Gates Before Production">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050505"/>
+      <stop offset="0.55" stop-color="#0a0f0a"/>
+      <stop offset="1" stop-color="#0f1a12"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.35" r="0.55">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="amber" cx="0.45" cy="0.7" r="0.4">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#amber)"/>
+
+  <text fill="#86efac" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4" x="56" y="72">RING PROMOTER  ·  CI/CD</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="64" font-weight="800" x="56" y="160">QA Gates Before</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="64" font-weight="800" x="56" y="232">Production</text>
+  <rect x="56" y="258" width="320" height="3" fill="#22c55e" opacity="0.9"/>
+  <text fill="#a3a3a3" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" x="56" y="310">Don't auto-promote to prod — gate with health,</text>
+  <text fill="#a3a3a3" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" x="56" y="342">version checks, and a human hop at acceptance.</text>
+
+  <!-- Mini pipeline -->
+  <g font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif">
+    <rect x="56" y="420" width="110" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text fill="#86efac" font-size="18" font-weight="700" x="90" y="462">int</text>
+
+    <rect x="186" y="440" width="70" height="30" rx="6" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+    <text fill="#bfdbfe" font-size="11" font-weight="700" x="198" y="460">AUTO</text>
+
+    <rect x="276" y="420" width="110" height="70" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text fill="#86efac" font-size="18" font-weight="700" x="308" y="462">test</text>
+
+    <rect x="406" y="440" width="70" height="30" rx="6" fill="#1e3a8a" stroke="#60a5fa" stroke-width="1.5"/>
+    <text fill="#bfdbfe" font-size="11" font-weight="700" x="418" y="460">AUTO</text>
+
+    <rect x="496" y="420" width="110" height="70" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2"/>
+    <text fill="#fde68a" font-size="18" font-weight="700" x="530" y="462">acc</text>
+
+    <rect x="626" y="430" width="90" height="50" rx="8" fill="#7c2d12" stroke="#fb923c" stroke-width="2"/>
+    <text fill="#fed7aa" font-size="12" font-weight="700" x="640" y="460">HUMAN</text>
+
+    <rect x="736" y="420" width="120" height="70" rx="10" fill="#166534" stroke="#4ade80" stroke-width="2.5"/>
+    <text fill="#bbf7d0" font-size="18" font-weight="700" x="768" y="462">prod</text>
+  </g>
+
+  <text fill="#737373" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14" x="56" y="560">ringpromoter.com · workstation.co.uk</text>
+</svg>

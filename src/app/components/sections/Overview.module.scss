@@ -1,0 +1,56 @@
+@use './shared' as *;
+
+.band {
+  padding-block: var(--tm-space-section);
+  border-top: 1px solid var(--tm-line);
+  background: var(--tm-bg);
+}
+
+.sunken {
+  background: var(--tm-sunken);
+}
+
+.inner {
+  @include container;
+  display: grid;
+  gap: var(--tm-space-6) var(--tm-space-16);
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+}
+
+.title {
+  @include heading;
+}
+
+.body {
+  min-width: 0;
+}
+
+.p {
+  margin: 0 0 var(--tm-space-4);
+  font-size: var(--tm-text-md);
+  line-height: var(--tm-leading-normal);
+  color: var(--tm-text-muted);
+
+  &:first-child {
+    color: var(--tm-text);
+  }
+}
+
+.points,
+.links {
+  margin-top: var(--tm-space-6);
+}
+
+.media {
+  @media (min-width: $bp-md) {
+    grid-column: 1 / -1;
+  }
+  margin-top: var(--tm-space-6);
+}

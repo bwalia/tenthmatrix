@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Claude Fable 5 - Mythos-class AI for long-horizon agentic work">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0f0a"/>
+      <stop offset="0.45" stop-color="#2d1810"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.25" r="0.65">
+      <stop offset="0" stop-color="#d97706" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.2" cy="0.8" r="0.55">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #fbbf24; font: 700 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 58px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: -0.5px; }
+      .tagline { fill: #fbbf24; font: 700 22px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 16px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(251,191,36,0.35); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .stat { fill: #fbbf24; font: 800 28px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .statLabel { fill: rgba(255,255,255,0.65); font: 600 11px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .brand { fill: rgba(255,255,255,0.45); font: 700 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glow2)"/>
+
+  <text class="kicker" x="60" y="72">ANTHROPIC  /  MYTHOS CLASS  /  JUNE 2026</text>
+  <text class="title" x="60" y="158">Claude Fable 5</text>
+  <text class="tagline" x="60" y="202">Long-horizon agents - 1M context - frontier coding</text>
+  <text class="sub" x="60" y="242">When to use it, how to save tokens, and what the community is saying</text>
+
+  <rect class="chip" x="60" y="280" width="130" height="36" rx="8"/>
+  <text class="chipText" x="78" y="303">claude-fable-5</text>
+  <rect class="chip" x="205" y="280" width="110" height="36" rx="8"/>
+  <text class="chipText" x="223" y="303">1M tokens</text>
+  <rect class="chip" x="330" y="280" width="140" height="36" rx="8"/>
+  <text class="chipText" x="348" y="303">128K output</text>
+  <rect class="chip" x="485" y="280" width="155" height="36" rx="8"/>
+  <text class="chipText" x="503" y="303">agentic coding</text>
+
+  <text class="stat" x="60" y="400">$10</text>
+  <text class="statLabel" x="60" y="422">INPUT / MTok</text>
+  <text class="stat" x="220" y="400">$50</text>
+  <text class="statLabel" x="220" y="422">OUTPUT / MTok</text>
+  <text class="stat" x="400" y="400">5th</text>
+  <text class="statLabel" x="400" y="422">GEN INTELLIGENCE</text>
+
+  <rect x="60" y="460" width="1080" height="2" fill="rgba(251,191,36,0.25)"/>
+  <text class="sub" x="60" y="510">Use for days-long tasks Opus cannot sustain - Sonnet/Haiku for routine work</text>
+  <text class="brand" x="60" y="580">WORKSTATION.CO.UK</text>
+</svg>

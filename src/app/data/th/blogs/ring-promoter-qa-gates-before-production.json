@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter — ประตู QA ก่อนการผลิต",
+  "sub_title": "อย่าเลื่อนระดับอัตโนมัติเป็น prod: โดยที่ QA และ human gate นั่งอยู่ใน int → test → acc → prod รวมถึงเลื่อนระดับอัตโนมัติเทียบกับ gated hops",
+  "excerpt": "เกต Ring Promoter QA: เลื่อนระดับสัญญาณเรียกก่อนอัตโนมัติ รักษาเกตของมนุษย์ก่อนใช้งาน และรักษาสุขภาพและการตรวจสอบเวอร์ชันเสมือนเป็นเกตคุณภาพชั้นหนึ่ง",
+  "meta_title": "Ring Promoter — ประตู QA ก่อนการผลิต | TenthMatrix",
+  "meta_description": "อย่าโปรโมตอัตโนมัติเป็นผลิตภัณฑ์ เกต Ring Promoter QA: โปรโมตวงแหวนก่อนเวลาโดยอัตโนมัติ เกตของมนุษย์ก่อนการผลิต การตรวจสอบความสมบูรณ์และเวอร์ชัน การย้อนกลับ",
+  "meta_keywords": "Ring Promoter, ประตู QA, ประตูคุณภาพ, การเลื่อนตำแหน่งอัตโนมัติ, ประตูการผลิต, CI/CD, GitOps, Kubernetes, การเลื่อนระดับสุขภาพ, TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\">นาฬิกา<h2>: ประตู QA ก่อนการผลิต</h2><p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>วิดีโอ<p style=\"font-size:0.9rem;color:#64748b;\">:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>· ผลิตภัณฑ์:<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p><p class=\"lead\"><em><strong>Ring Promoter</strong>ย้ายการเผยแพร่ผ่านวงแหวนที่ได้รับคำสั่ง<code>int → test → acc → prod</code>คำถามทางธุรกิจไม่ใช่ \"เราจะโปรโมตอัตโนมัติได้ไหม\" — มันคือ<strong>โดยที่ QA และประตูมนุษย์อยู่ใน</strong>โดยเฉพาะก่อนการผลิต สินค้า:<a href=\"/th/ring-promoter\">/แหวน-โปรโมเตอร์</a>. เจาะลึก: บทความทางเทคนิคยาว<a href=\"/th/articles/ring-promoter-qa-gates-before-production\"></a>ภาพรวมคู่หู:<a href=\"/th/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter สมัยใหม่ CI/CD</a></em></p><p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สิ่งสำคัญที่สุด</strong>โปรโมตเสียงเรียกเข้าอัตโนมัติเมื่อสุขภาพและเวอร์ชันผ่านการตรวจสอบ ให้<strong>human / QA gate ก้าวเข้าสู่ prod</strong>อย่าโปรโมตโดยตรงเป็นเวอร์ชันที่ใช้งานจริงโดยอัตโนมัติ เพราะทุกๆ รุ่นควรยังคงได้รับลูกค้าอยู่</div><h2>ประตู QA หมายถึงอะไรใน Ring Promoter</h2><p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>“ประตู” คือทุกสิ่งที่สามารถหยุดการโปรโมตได้:</p>เอ็กซ์แท็ก49เอ็กซ์<li><strong>Health gates</strong>— แหล่งที่มาต้องแข็งแรงก่อนโปรโมต เป้าหมายจะต้องมีสุขภาพที่ดีหลังจากการปรับใช้ (หรือย้อนกลับอัตโนมัติ)</li><li><strong>Version gates</strong>— ทางเลือก: ตำแหน่งข้อมูลจะต้องรายงานเวอร์ชันที่แน่นอนที่เพิ่งปรับใช้ (สำคัญสำหรับ AI sidecars และเอเจนต์)</li><li><strong>ประตู Human / QA</strong>— ไม่มีการเลื่อนระดับอัตโนมัติบนวงแหวนนั้น เจ้าของหรือ QA อนุมัติฮอปถัดไป (โดยทั่วไปสำหรับ<code>acc → prod</code>)</li></ul><h2>เลื่อนระดับอัตโนมัติเทียบกับกระโดดรั้วรอบขอบชิด</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">โหมด</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">ข้อดี</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">จุดด้อย / เมื่อใดควรหลีกเลี่ยง</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>โปรโมตอัตโนมัติ (วงแหวนแรก)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ตอบรับเร็วขึ้น; CI ยังคงเป็นสีเขียวโดยไม่ต้องรอการคลิก การดำเนินการล็อคแบบเดียวกันจะดำเนินต่อไป</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ขยายบิลด์ที่ไม่ดีหากสุขภาพอ่อนแอ อย่าเปิดใช้งานผลิตภัณฑ์แบบสุ่มสี่สุ่มห้า</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>ประตูมนุษย์ / QA (โดยเฉพาะก่อนการผลิต)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การลงนามทางธุรกิจ, การเปลี่ยนแปลงหน้าต่าง, การปฏิบัติตามข้อกำหนด, การดูการยอมรับครั้งสุดท้าย</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">เพิ่มเวลาแฝง; ต้องการเจ้าของที่ชัดเจนเพื่อที่การเผยแพร่จะไม่หยุดชะงัก</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Health + เกตเวอร์ชัน (เสมอ)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">หยุด “สีเขียวแต่ผิดเวอร์ชัน”; จับคู่กับการย้อนกลับอัตโนมัติ</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ต้องมีจุดสิ้นสุดด้านสุขภาพที่ซื่อสัตย์ซึ่งเปิดเผยเวอร์ชัน</td></tr></tbody></table><h2>เมื่อไรจะเข้าเกท</h2><ul><li><strong>เข้าสู่ผลิตภัณฑ์</strong>สำหรับแอปที่ต้องพบปะกับลูกค้า การเปลี่ยนแปลงที่ได้รับการควบคุม หรือแพลตฟอร์มที่ใช้ร่วมกันซึ่งหลายทีมต้องพึ่งพา</li><li><strong>เลื่อนระดับอัตโนมัติ int → ทดสอบ → ตามมาตรฐาน</strong>เมื่อการประเมิน ควัน และสุขภาพที่ตรวจสอบเวอร์ชันมีความแข็งแกร่ง</li><li><strong>ขันประตู</strong>ให้แน่นหนาสำหรับสแต็ก AI (โมเดล เอเจนต์ เกตเวย์) โดยที่ไบนารีเก่ายังคงสามารถตอบ<code>200 OK</code>ได้</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">นโยบาย<strong>ที่เราแนะนำ</strong>โปรโมตอัตโนมัติบน<code>int</code>/<code>test</code>เมื่อมีสุขภาพดี ให้<code>acc</code>มีรั้วรอบขอบชิดมนุษย์ก่อน<code>prod</code>ความสมบูรณ์และการตรวจสอบเวอร์ชันในทุก ๆ ฮอป การตรวจสอบที่ล้มเหลวจะย้อนกลับ — ไม่มี \"การเลื่อนระดับบางส่วน\" แบบเงียบๆ</div><h2>ไปไหนดี</h2>ถัดไป<ol><li>ดูวิดีโอด้านบน —<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a></li><li>อ่านบทความทางเทคนิค<a href=\"/th/articles/ring-promoter-qa-gates-before-production\"></a>(config, API, การย้อนกลับ, ผลกระทบของทีม AI)</li><li>เปิด<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>หรือหน้าผลิตภัณฑ์ TenthMatrix<a href=\"/th/ring-promoter\"></a></li><li>ดาว<a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a></li></ol><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>แฮชแท็ก</strong>#RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation</div><p>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p><p style=\"margin-top:1.5rem;\"><strong>เว็บไซต์สินค้า:</strong><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

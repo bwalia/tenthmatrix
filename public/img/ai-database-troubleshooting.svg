@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="AI-powered database troubleshooting: anomaly detection, RCA, and remediation loop">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0a3a"/>
+      <stop offset="0.55" stop-color="#2a0f5c"/>
+      <stop offset="1" stop-color="#0a1a2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #d1c4e9; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 56px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #b39ddb; font: 800 26px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 17px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #b39ddb; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #d1c4e9; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ab47bc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">AI  /  DATABASE TROUBLESHOOTING + AUTOMATION</text>
+  <text class="title" x="60" y="156">AI for DBA</text>
+  <text class="tagline" x="60" y="200">Anomaly detection - RCA - guarded auto-remediation</text>
+  <text class="sub" x="60" y="240">Stream metrics + slow queries into an AI loop. Human approves changes outside the safe set.</text>
+
+  <g>
+    <rect class="chip" x="60" y="282" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="308">01</text>
+    <text class="chipText" x="120" y="308">Collect metrics + traces</text>
+
+    <rect class="chip" x="60" y="336" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="362">02</text>
+    <text class="chipText" x="120" y="362">Detect anomalies (model)</text>
+
+    <rect class="chip" x="60" y="390" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="416">03</text>
+    <text class="chipText" x="120" y="416">RCA + evidence trail</text>
+
+    <rect class="chip" x="60" y="444" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="470">04</text>
+    <text class="chipText" x="120" y="470">Auto-fix (safe set)  +  alert</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="450" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">SIGNAL PLANE  /  CONTINUOUS COLLECTION</text>
+    <g transform="translate(20,40)">
+      <rect width="220" height="60" rx="10" fill="#0c2e36" stroke="#0891b2" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">DB exporters</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">pg / mysql / mongo / redis</text>
+      <text class="nodeText" x="110" y="50" text-anchor="middle">queries  /  locks  /  replica lag</text>
+
+      <rect x="240" y="0" width="220" height="60" rx="10" fill="#0c2e36" stroke="#0891b2" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="22" text-anchor="middle">Slow query log</text>
+      <text class="nodeText" x="350" y="38" text-anchor="middle">structured + parsed</text>
+      <text class="nodeText" x="350" y="50" text-anchor="middle">plan hashes captured</text>
+
+      <rect x="480" y="0" width="220" height="60" rx="10" fill="#0c2e36" stroke="#0891b2" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="22" text-anchor="middle">App traces</text>
+      <text class="nodeText" x="590" y="38" text-anchor="middle">OpenTelemetry spans</text>
+      <text class="nodeText" x="590" y="50" text-anchor="middle">tied to SQL fingerprint</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="128">AI PLANE  /  DETECT + EXPLAIN</text>
+    <g transform="translate(20,140)">
+      <rect width="340" height="100" rx="10" fill="#1a1240" stroke="#7c3aed" stroke-width="1.5"/>
+      <text class="nodeLabel" x="170" y="22" text-anchor="middle">Anomaly detector</text>
+      <text class="nodeText" x="170" y="40" text-anchor="middle">seasonal baseline + isolation forest</text>
+      <text class="nodeText" x="170" y="56" text-anchor="middle">latency / IO / cache hit / lock waits</text>
+      <text class="nodeText" x="170" y="74" text-anchor="middle">scoring ms - severity 1-5</text>
+      <text class="nodeText" x="170" y="90" text-anchor="middle">emits Anomaly events</text>
+
+      <rect x="360" y="0" width="340" height="100" rx="10" fill="#2a0a1f" stroke="#db2777" stroke-width="1.5"/>
+      <text class="nodeLabel" x="170" y="22" text-anchor="middle">RCA + recommender (LLM)</text>
+      <text class="nodeText" x="170" y="40" text-anchor="middle">retrieves runbook snippets + history</text>
+      <text class="nodeText" x="170" y="56" text-anchor="middle">explains causal chain in plain English</text>
+      <text class="nodeText" x="170" y="74" text-anchor="middle">cites query plans, locks, replica lag</text>
+      <text class="nodeText" x="170" y="90" text-anchor="middle">proposes remediation + risk score</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="268">REMEDIATION PLANE  /  GUARDED CONTROL</text>
+    <g transform="translate(20,280)">
+      <rect width="220" height="80" rx="10" fill="#0c2b18" stroke="#16a34a" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Safe set (auto)</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">VACUUM ANALYZE</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">reset connection pool</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">read-replica promotion (dry run)</text>
+
+      <rect x="240" y="0" width="220" height="80" rx="10" fill="#3a1f08" stroke="#f59e0b" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Approval set</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">add index / drop index</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">resize instance</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">change shard config</text>
+
+      <rect x="480" y="0" width="220" height="80" rx="10" fill="#2a0a1f" stroke="#dc2626" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Manual only</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">DDL on production</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">cross-region failover</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">data deletion / truncate</text>
+    </g>
+
+    <path d="M 590 100 Q 720 220 590 268" stroke="#ab47bc" stroke-width="2" fill="none" stroke-dasharray="6 4" marker-end="url(#ar)"/>
+    <text class="nodeText" x="700" y="180" fill="#ce93d8">recommend</text>
+
+    <text class="laneLabel" x="20" y="386">EVIDENCE + AUDIT</text>
+    <g transform="translate(20,398)">
+      <rect width="680" height="36" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text class="nodeText" x="14" y="22">every recommendation links to source spans + query plans  /  approver and timestamp recorded  /  post-fix re-check</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">DBA  /  SRE  /  AIOPS</text>
+</svg>

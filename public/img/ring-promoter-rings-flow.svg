@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Ring Promoter deployment rings int test acc prod with health gates">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #16a34a; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ring { fill: #ecfdf5; stroke: #22c55e; stroke-width: 2; }
+      .ring-prod { fill: #dcfce7; stroke: #15803d; stroke-width: 2.5; }
+      .gate { fill: #fef3c7; stroke: #b45309; stroke-width: 1.5; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#m); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="640"/>
+  <text class="tag" x="40" y="36">FIGURE - RING PROMOTER PIPELINE</text>
+  <text class="title" x="40" y="68">int ��→ test ��→ acc ��→ prod — every hop health-gated</text>
+  <text class="cap" x="40" y="94">Shared rings, many apps. Never skip a ring. Auto-rollback on failed health checks.</text>
+
+  <rect class="ring" x="60" y="180" width="200" height="120" rx="10"/>
+  <text class="h" x="120" y="230">int</text>
+  <text class="s" x="80" y="258">Integration</text>
+  <text class="s" x="80" y="280">First landing for builds</text>
+
+  <rect class="gate" x="280" y="210" width="90" height="60" rx="8"/>
+  <text class="s" x="295" y="245">health ✓</text>
+
+  <rect class="ring" x="390" y="180" width="200" height="120" rx="10"/>
+  <text class="h" x="450" y="230">test</text>
+  <text class="s" x="410" y="258">Automated QA</text>
+  <text class="s" x="410" y="280">Eval suites, smoke</text>
+
+  <rect class="gate" x="610" y="210" width="90" height="60" rx="8"/>
+  <text class="s" x="625" y="245">health ✓</text>
+
+  <rect class="ring" x="720" y="180" width="200" height="120" rx="10"/>
+  <text class="h" x="780" y="230">acc</text>
+  <text class="s" x="740" y="258">Acceptance</text>
+  <text class="s" x="740" y="280">Staging gate</text>
+
+  <rect class="gate" x="940" y="210" width="90" height="60" rx="8"/>
+  <text class="s" x="955" y="245">health ✓</text>
+
+  <rect class="ring-prod" x="1050" y="180" width="110" height="120" rx="10"/>
+  <text class="h" x="1075" y="230">prod</text>
+  <text class="s" x="1065" y="258">Customers</text>
+
+  <path class="ln" d="M260 240 H280"/>
+  <path class="ln" d="M370 240 H390"/>
+  <path class="ln" d="M590 240 H610"/>
+  <path class="ln" d="M700 240 H720"/>
+  <path class="ln" d="M920 240 H940"/>
+  <path class="ln" d="M1030 240 H1050"/>
+
+  <rect x="60" y="360" width="1100" height="180" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text class="h" x="80" y="400">Promotion rules (non-negotiable)</text>
+  <text class="s" x="80" y="430">• One ring at a time — promote always targets the next ring in the pipeline</text>
+  <text class="s" x="80" y="455">• Source must be healthy before promotion proceeds (live health check)</text>
+  <text class="s" x="80" y="480">• Version-verified health: endpoint must report the exact version just deployed</text>
+  <text class="s" x="80" y="505">• Unhealthy target ��→ automatic rollback to previous version + full audit history</text>
+  <text class="s" x="80" y="530">• Auto-promote (optional): healthy landing continues onward — human gate stays on prod</text>
+
+  <text class="foot" x="40" y="610">ringpromoter.com  ·  github.com/bwalia/ring-promoter  ·  workstation.co.uk</text>
+</svg>

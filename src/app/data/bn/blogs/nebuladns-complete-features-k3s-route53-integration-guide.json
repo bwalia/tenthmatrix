@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "NebulaDNS বৈশিষ্ট্যগুলির সম্পূর্ণ সফর: API-প্রথম নিয়ন্ত্রণ প্লেন, Prometheus মেট্রিক্স, প্রচার গেটস, পিয়ার ফিঙ্গারপ্রিন্টিং, DNSSEC রোডম্যাপ, Helm/k3s অপারেটর গল্প, এবং কিভাবে AWS Route 53 এবং CoreDNS এর সাথে একীভূত করা যায়।",
+  "sub_title": "প্রতিটি \"ব্যাটারি অন্তর্ভুক্ত\" বৈশিষ্ট্য, ইন্টিগ্রেশন, এবং এন্টারপ্রাইজ DNS ভঙ্গি",
+  "title": "NebulaDNS সম্পূর্ণ বৈশিষ্ট্য নির্দেশিকা: k3s, Route53, পর্যবেক্ষণযোগ্যতা এবং এন্টারপ্রাইজ DNS",
+  "meta_title": "NebulaDNS বৈশিষ্ট্য | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "NebulaDNS সম্পূর্ণ বৈশিষ্ট্যের রেফারেন্স: মরিচা ডেটা প্লেন, কন্ট্রোল প্লেন API, প্রচার যাচাইকারী, TSIG, মেট্রিক্স ক্যাটালগ, Kubernetes Helm অপারেটর, Route 53 এবং k3s ইন্টিগ্রেশন প্যাটার্ন।",
+  "meta_keywords": "NebulaDNS বৈশিষ্ট্য, প্রামাণিক DNS, Prometheus মেট্রিক্স DNS, Kubernetes DNS অপারেটর, Route53 প্রতিনিধি, CoreDNS, TSIG AXFR, DNSSEC রোডম্যাপ, Rust DNS সার্ভার",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>সূত্র</h2><p>এই নির্দেশিকা জনসাধারণের সংশ্লেষণ করে <a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">NebulaDNS সাইট</a> এবং সংগ্রহস্থল <a href=\"https://github.com/bwalia/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">github.com/bwalia/nebuladns</a>. মাইলস্টোন এবং GA আইটেমগুলি বিকশিত হয়—আপনার সংস্করণের জন্য রিলিজ নোট যাচাই করুন।</p><h2>এক নজরে স্থাপত্য</h2><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"NebulaDNS আর্কিটেকচার স্ট্যাক\" decoding=\"async\" height=\"640\" loading=\"lazy\" src=\"/img/nebuladns-architecture-stack.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1000\"/></figure><p>স্ট্যাক আলাদা হয় <strong>নিয়ন্ত্রণ সমতল</strong> (REST/gRPC, authn/z), <strong>জোন ব্যবস্থাপনা</strong> (বৈধতা, DNSSEC স্বাক্ষর, পারমাণবিক প্রতিশ্রুতি), <strong>প্রচার যাচাই</strong> (সেকেন্ডারি রিপোর্ট SOA), <strong>বিষয়বস্তু-ঠিকানা জোন দোকান</strong>, এবং <strong>DNS ডেটা প্লেন</strong> (UDP/TCP/DoT/DoH/DoQ, স্থানান্তর, DNSSEC অনলাইন স্বাক্ষরকারী)।</p><h2>বৈশিষ্ট্য ক্যাটালগ (\"ব্যাটারি অন্তর্ভুক্ত\")</h2><p>প্রকল্প বাজার <strong>বারো শিরোনাম ক্ষমতা</strong>ল্যান্ডিং পৃষ্ঠা থেকে এখানে সংক্ষিপ্ত করা হয়েছে।</p><ul><li><strong>API-প্রথম:</strong> জোন, রেকর্ড, টিএসআইজি ঘূর্ণন, রোলব্যাক—সিএলআই/ইউআই পাতলা ক্লায়েন্টদের জন্য REST/gRPC।</li><li><strong>ডিফল্টরূপে পর্যবেক্ষণযোগ্য:</strong> Prometheus <code>/metrics</code>, enum-টাইপ করা লেবেল, JSON লগ, OTLP ট্রেস।</li><li><strong>যাচাইকৃত প্রচার:</strong> ডিপ্লোয় তখনই সম্পূর্ণ হয় যখন ঘোষিত মাধ্যমিকরা নতুন SOA সিরিয়াল স্বীকার করে।</li><li><strong>পিয়ার সফ্টওয়্যার ফিঙ্গারপ্রিন্টিং:</strong> রেকর্ডস <code>version.bind</code> CHAOS-শৈলী সংকেত তাই নীরব BIND আপগ্রেডগুলি অদৃশ্যভাবে অপ্রয়োজনীয়তা ক্ষয় করতে পারে না।</li><li><strong>নিরাপদ মরিচা:</strong> না <code>unsafe</code>; কোডেক, পার্সার, DNSSEC স্বাক্ষরকারীতে ক্রমাগত ফাজিং।</li><li><strong>জিরো-জিসি টেইল লেটেন্সি:</strong> নির্ধারক বরাদ্দ; মাধ্যমে লক-মুক্ত জোন স্ন্যাপশট <code>arc-swap</code>.</li><li><strong>পারমাণবিক সংস্করণ কনফিগারেশন:</strong> বিষয়বস্তু সম্বোধন অঞ্চল; আংশিক রিড ছাড়া রোল ফরওয়ার্ড/রোলব্যাক করুন।</li><li><strong>নির্ধারক SOA সিরিয়াল:</strong> ওয়েজড রিকভারি এড়াতে একঘেয়ে সিরিয়াল কৌশল।</li><li><strong>Kubernetes-নেটিভ:</strong> Helm চার্ট, অপারেটর, CRDs (<code>Zone</code>, <code>Record</code>, <code>Secondary</code>, <code>TsigKey</code>, <code>DeployGate</code>); GitOps-বান্ধব; রোডম্যাপে CoreDNS ক্লাস্টার-DNS প্রতিস্থাপনের পথ।</li><li><strong>স্ট্যান্ডার্ড-সঙ্গত তারের:</strong> কঠোর RFC কভারেজ; স্পষ্ট ত্রুটির ধরন (যেমন <code>QdCountMismatch</code>).</li><li><strong>অপ্রয়োজনীয়তা আপনি দেখতে পারেন:</strong> অঞ্চল জুড়ে দৃশ্যমানতা স্থানান্তরের জন্য ড্যাশবোর্ড অভিপ্রায়।</li><li><strong>কঠিন ডিফল্ট:</strong> systemd হার্ডেনিং, seccomp, নন-রুট কন্টেনার, ছোট ডিস্ট্রোলেস ইমেজ।</li></ul><h2>তুলনা অবস্থান (উচ্চ স্তর)</h2><p>সাইটটি একটি প্রতিযোগিতামূলক ম্যাট্রিক্স প্রকাশ করে (TinyDNS, BIND 9, Knot, NSD, PowerDNS, CoreDNS, NebulaDNS)। ডিফারেনসিয়েটরদের অন্তর্ভুক্ত করা হয়েছে <strong>সম্পূর্ণ REST API</strong>, <strong>সবসময়-চালু Prometheus</strong>, <strong>অন্তর্নির্মিত প্রচারের গেট</strong>, <strong>Kubernetes অপারেটর + CRDs</strong>, <strong>পিয়ার ফিঙ্গারপ্রিন্টিং</strong>, এবং <strong>মেমরি-নিরাপদ বাস্তবায়ন</strong>. সংস্করণ-নির্দিষ্ট দাবির জন্য আপস্ট্রিম ম্যাট্রিক্স ব্যবহার করুন।</p><h2>মেট্রিক্স ক্যাটালগ (নমুনা)</h2><p>সাইটের উদাহরণগুলির মধ্যে রয়েছে ক্যোয়ারী কাউন্টার, লেটেন্সি হিস্টোগ্রাম, FORMERR ট্র্যাকিং, AXFR প্রচেষ্টা, প্রতি-পিয়ার লাস্ট-সাকসেস টাইমস্ট্যাম্প, প্রোপাগেশন ল্যাগ এবং বিল্ড ইনফো। আপনি একটি চলমান বিল্ড স্ক্র্যাপ না হওয়া পর্যন্ত নামগুলিকে উদাহরণ হিসাবে বিবেচনা করুন৷</p><pre style=\"background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px\">nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s, CoreDNS, এবং AWS রুট 53</h2><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"Route53 এবং k3s ইন্টিগ্রেশন ওয়ার্কফ্লো\" decoding=\"async\" height=\"520\" loading=\"lazy\" src=\"/img/nebuladns-k3s-route53-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1100\"/></figure><ul><li><strong>রুট 53:</strong> AWS-এ পাবলিক ডেলিগেশন এবং স্বাস্থ্য পরীক্ষা রাখুন; NebulaDNS সেকেন্ডারিতে NS রেকর্ড করুন বা আপনার নিরাপত্তা মডেলের সাথে মেলে এমন স্প্লিট-হরাইজন প্যাটার্ন চালান।</li><li><strong>k3s / RKE2:</strong> PDB + ServiceMonitor দিয়ে Helm এর মাধ্যমে NebulaDNS স্থাপন করুন; CoreDNS সারিবদ্ধ করুন <strong>ফরোয়ার্ড/স্টাব</strong> NebulaDNS অঞ্চলের জন্য আপনি কর্তৃত্বমূলকভাবে এস্টেটের ভিতরে পরিবেশন করেন।</li><li><strong>বাহ্যিকDNS:</strong> ইনগ্রেস/এলবি অবজেক্ট থেকে পাবলিক রেকর্ডে ঐচ্ছিক সেতু—প্রচার গেটের সাথে সমন্বয় করুন যাতে অটোমেশন তাড়াতাড়ি \"হয়ে গেছে\" চিহ্নিত করতে না পারে।</li></ul><h2>রোডম্যাপ নোট</h2><p>পাবলিক রোডম্যাপ GA (ওয়্যার/জোন সম্পূর্ণতা, স্থানান্তর, DNSSEC, প্রচার যাচাইকারী, HA/মাল্টি-রিজিয়ন, অপারেটর) এর মাধ্যমে মাইলফলক তালিকাভুক্ত করে। চেক করুন <code>PROJECT_PROMPT.md</code> এবং তারিখের জন্য রেপোতে রিলিজ।</p><h2>সম্পর্কিত লঞ্চ নিবন্ধ</h2><p>\"কেন এখন / এআই যুগ\" আখ্যানের জন্য, পড়ুন <a href=\"/bn/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era\">NebulaDNS: AI যুগে গেম চেঞ্জার</a>.</p><h2>কিভাবে TenthMatrix সাহায্য করতে পারে</h2><p>আমরা এন্টারপ্রাইজ শিপ সাহায্য <strong>পর্যবেক্ষণযোগ্য DNS</strong> এবং <strong>GitOps</strong> প্রামাণিক স্ট্যাকের চারপাশে নিদর্শন - যোগাযোগ <strong>info@tenthmatrix.com</strong>.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

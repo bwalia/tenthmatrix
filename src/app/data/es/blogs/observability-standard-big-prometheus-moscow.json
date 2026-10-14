@@ -1,0 +1,70 @@
+{
+  "uuid": "blog-observability-standard-001",
+  "internal_id": 1037,
+  "slug": "observability-standard-big-prometheus-moscow",
+  "title": "Observability Is Not Optional: Make It a Business Standard",
+  "sub_title": "For managers and owners: centralise telemetry, standardise platforms, and treat monitoring as a release requirement — not a team preference",
+  "excerpt": "Why fragmented monitoring creates blind spots, duplicate spend, and slow incidents — and how to make centralised observability a non-negotiable company standard.",
+  "meta_title": "Observability as a Business Standard | TenthMatrix",
+  "meta_description": "Manager guide: make centralised observability mandatory — OpenTelemetry, Prometheus, shared alerts/SLOs — not optional per-team tooling.",
+  "meta_keywords": "observability standard, Prometheus, OpenTelemetry, Thanos, Grafana Mimir, VictoriaMetrics, MoSCoW, centralised monitoring, SRE, FinOps, TenthMatrix",
+  "cover_image": "/img/blog/observability-standard-big-prometheus/cover.svg",
+  "images": [
+    {
+      "url": "/img/blog/observability-standard-big-prometheus/cover.svg",
+      "id": 1037,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Observability as a business standard"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>For managers and business owners: <strong>observability is not a tool preference</strong> — it is how the company knows whether products, payments, and AI agents are healthy. Make it a <strong>centralised standard</strong>, not an optional side project. Technical companion: <a href=\"/en/articles/observability-standard-big-prometheus-moscow\">Big Prometheus, pros/cons, and MoSCoW of the tool landscape</a>. Related: <a href=\"/en/docs/blogs/llm-bottlenecks-observability-otel-cost-control\">LLM bottlenecks &amp; cost control</a>.</em></p>\n\n<p><img src=\"/img/blog/observability-standard-big-prometheus/cover.svg\" alt=\"Observability as a business standard\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #0d9488;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Board sentence.</strong> If every team picks its own monitoring, you do not have observability — you have folklore, duplicate invoices, and slow incidents. Centralise the contract (what every service must emit), standardise the platforms, and treat “no dashboards / no alerts” as a release blocker — the same way you treat no backups.\n</div>\n\n<h2>Why this is a business decision, not an SRE hobby</h2>\n<p>When a checkout fails at 2am, leadership does not ask which open-source database won a benchmark. They ask: <em>how long until we know, how long until we fix, and how do we stop this recurring?</em> Those answers only exist if metrics, logs, traces, and alerts live in a shared system with clear ownership.</p>\n<p>Optional observability creates predictable failure modes:</p>\n<ul>\n  <li><strong>Blind spots</strong> — a critical service “didn’t have time” to add metrics.</li>\n  <li><strong>Tool sprawl</strong> — three APMs, two log products, no single truth for SLOs.</li>\n  <li><strong>Cost surprises</strong> — high-cardinality labels and unsampled traces blow budgets.</li>\n  <li><strong>Audit gaps</strong> — regulators and enterprise customers ask for evidence; screenshots from Slack do not count.</li>\n</ul>\n\n<p><img src=\"/img/blog/observability-standard-big-prometheus/silos-vs-central.svg\" alt=\"Siloed monitoring versus centralised observability standard\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>What “centralised and standard” means in practice</h2>\n<p>Centralised does not mean one vendor forever. It means:</p>\n<ol>\n  <li><strong>One telemetry contract</strong> — every production service emits metrics, logs, and traces in approved formats (typically OpenTelemetry + Prometheus).</li>\n  <li><strong>One place to ask estate questions</strong> — “which clusters are on fire?” and “what was error rate seven weeks ago?” without hopping ten UIs.</li>\n  <li><strong>One on-call and alert taxonomy</strong> — severity, ownership, and escalation are shared language.</li>\n  <li><strong>One FinOps leash</strong> — retention, sampling, and cardinality budgets are policy, not heroics.</li>\n</ol>\n<p>Inspired by the open-source “Big Prometheus” conversation (Thanos, Cortex/Mimir, M3, VictoriaMetrics), the engineering choice is how you scale that standard across many Kubernetes clusters — not whether you need a standard at all.</p>\n\n<h2>MoSCoW in one slide for leadership</h2>\n<p><img src=\"/img/blog/observability-standard-big-prometheus/moscow-map.svg\" alt=\"MoSCoW map of observability capabilities\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Must</strong> — OpenTelemetry contract, PromQL metrics, shared dashboards, alerting/on-call, central logs, tracing, retention/access policy, SLOs for critical journeys.</li>\n  <li><strong>Should</strong> — global long-term metrics store, cardinality budgets, synthetics, error tracking, profiling, telemetry cost metering.</li>\n  <li><strong>Could</strong> — full SaaS APM, hyperscale commercial stacks, eBPF auto-instrumentation, RUM/session replay.</li>\n  <li><strong>Won’t (as the standard)</strong> — per-team unique APMs with no export, metrics-as-screenshots, unlimited cardinality, optional monitoring for production, three competing SLO sources.</li>\n</ul>\n\n<h2>What managers should fund and enforce</h2>\n<ul>\n  <li><strong>Platform ownership</strong> — a small team owns the standard; product teams consume it.</li>\n  <li><strong>Definition of Done</strong> — no production release without golden signals and runbooks linked to alerts.</li>\n  <li><strong>Budget as policy</strong> — pay for retention and query performance deliberately; do not “save money” by going blind.</li>\n  <li><strong>Quarterly reviews</strong> — tool sprawl, MTTA/MTTR trends, and top cardinality offenders.</li>\n</ul>\n\n<h2>TenthMatrix’s stance</h2>\n<p>TenthMatrix runs GPU storefronts, AI agents, edge proxies, and promotion rings. Those surfaces only stay trustworthy if observability is mandatory across INT → TEST → ACC → PROD — the same discipline we apply to secrets and releases. For the engineering deep dive — Big Prometheus options, honest pros/cons, and a full MoSCoW of the tool landscape — read the <a href=\"/en/articles/observability-standard-big-prometheus-moscow\">technical article</a>.</p>\n\n<p class=\"cta\">Want a single observability standard across your clusters and AI workloads? <a href=\"/en/contact-us\">Talk to TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-10-08T00:00:00Z",
+  "updated_at": "2026-10-08T00:00:00Z",
+  "published_date": "2026-10-08",
+  "status": true,
+  "language_code": "es"
+}

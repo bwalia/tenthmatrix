@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "หยุดจ่ายเงินสำหรับ CI ที่ไม่ได้ใช้งาน: GitLab Runners บน Kubernetes",
+  "sub_title": "ขยาย CI ไปรองรับยอดการใช้งานในวันจันทร์ จากนั้นลดความจุลงในช่วงกลางคืนและวันหยุดสุดสัปดาห์ — คู่มือห้านาทีพร้อมวิดีโอสาธิตทั้งสองแบบ XTAG0X XPR0X",
+  "excerpt": "ทีมส่วนใหญ่จ่ายค่า CI เหมือนทุกคืนยังเป็นเช้าวันจันทร์ GitLab Runners บน Kubernetes พลิกเรื่องนี้: pod งานชั่วคราว ขยายเมื่อโหลดหนัก ลดขนาดเมื่อเงียบงัน",
+  "meta_title": "หยุดจ่ายค่า CI ที่ idle: GitLab Runners บน Kubernetes | TenthMatrix",
+  "meta_description": "GitLab Runners บน Kubernetes: พอดงานชั่วคราว, เส้นทางติดตั้ง Helm และ Operator, การปรับขนาดอัตโนมัติ และวิธีหยุดการจ่ายเงินในคืนและวันหยุดสุดสัปดาห์ที่ไม่มีการใช้งาน",
+  "meta_keywords": "GitLab Runner, Kubernetes executor, GitLab Operator, Helm, k3s, autoscaling CI, FinOps, idle CI cost, DinD, hyperscale runners, TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>ทีมงานส่วนใหญ่จ่ายค่า Continuous Integration เหมือนกับว่าทุกคืนและวันหยุดสุดสัปดาห์ยังคงเป็นเช้าวันจันทร์<strong>GitLab Runners บน Kubernetes</strong>พลิกโมเดลดังกล่าว: ขยายความสามารถเมื่อ pipelines เข้ามา แล้วลดทอนลงเมื่อสำนักงานเงียบสงบ อ่าน<a href=\"/th/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">การเจาะลึกทางเทคนิค</a>สำหรับ Helm ค่าการตั้งค่า executor และโมเดลต้นทุน</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สรุปสั้นๆ</strong>จัดเตรียมทรัพยากรสำหรับช่วงสูงสุด และลดทอนทรัพยากรสำหรับช่วงต่ำ Job pods แบบชั่วคราวจะคืน CPU, RAM และพื้นที่จัดเก็บเมื่อความต้องการลดลง — โดยเฉพาะในคืนและวันหยุดสุดสัปดาห์ — เพื่อให้ฟาร์มในวันจันทร์ไม่ได้กำหนดบิลของวันเสาร์</div><h2>ดูวิดีโอ</h2><p><strong>1. Runners &amp; pipelines</strong>— autoscaling GitLab Runner workloads บน Kubernetes</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server บน HA Kubernetes</strong>— ติดตั้งด้วย Operator ในไม่กี่นาที</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· เอกสาร:<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>นิสัยที่มีค่าใช้จ่ายสูง</h2><ul><li><strong>ช่วงกลางวัน:</strong>merge requests และ tests ทำให้ความต้องการพุ่งสูงขึ้น</li><li><strong>คืน:</strong>กิจกรรมลดลง; VMs แบบคงที่ยังคงเผา CPU และ RAM</li><li><strong>สุดสัปดาห์:</strong>มักจะใกล้ idle — แต่ดิสก์และโหนดอาจยังคงถูกเรียกเก็บเงิน</li></ul><p>คุณไม่ได้จ่ายสำหรับการสร้างงานที่ทำเสร็จแล้ว คุณจ่ายสำหรับความสามารถที่มีอยู่ ไม่ว่าใครจะใช้งานหรือไม่ก็ตาม</p><h2>ภาพที่เรียบง่ายกว่า</h2><p>GitLab's<strong>Runner</strong>ดำเนินการงานใน pipeline.<strong>Kubernetes</strong>สามารถสร้างผู้ปฏิบัติงานเหล่านั้นเป็น pods ที่มีอายุสั้นและลบพวกมันเมื่องานเสร็จสิ้น ที่ระดับ hyperscale แนวคิดเดียวกันนี้ใช้กับ nodes: มากขึ้นเมื่อคิวลึก; น้อยลง — โดยนัยคือเกือบไม่มีเลย — ตอนกลางคืนและวันหยุดสุดสัปดาห์</p><h2>สถานที่ที่การประหยัดต้นทุนมหาศาลเกิดขึ้น</h2><ol><li><strong>ขยายขนาดขึ้น</strong>เมื่อผู้คน (หรือบอท) ทำงาน — pods งานแบบขนานจนถึงขีดจำกัด concurrency และ cluster ของคุณ</li><li><strong>ขยายขนาดลงอย่างหนัก</strong>เมื่อความต้องการหายไป — pods หายไป; ด้วย cluster autoscaling, nodes ที่เป็นว่างจะออกจาก pool</li><li><strong>หยุดการสูญเสีย CPU, RAM และพื้นที่จัดเก็บ</strong>บน fleet ของ runner ที่ทำงานตลอด 24 ชั่วโมงในช่วงเวลาเงียบสงบ</li><li><strong>จ่ายตามผลลัพธ์ ไม่ใช่เฟอร์นิเจอร์</strong>— รักษา GitLab และผู้จัดการ runner แบบบางไว้; ให้ฟาร์มระเหยหายไปเมื่อว่าง</li></ol><blockquote><p>การประหยัดมหาศาลปรากฏขึ้นเมื่อยอดสูงสุดของวันจันทร์不再กำหนดบิลของวันอังคารตอน 3 โมงเช้า — และเมื่อความเงียบของวันเสาร์ในที่สุดก็ดูเงียบบนใบแจ้งหนี้</p></blockquote><h2>เอกสารทางการ</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">ติดตั้ง GitLab Runner ด้วย Helm chart</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">กำหนดค่า Runner Helm chart</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes executor</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Runner แบบ autoscaling</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">การติดตั้ง GitLab Operator</a></li></ul><p><strong>อ่านถัดไป:</strong>บทความทางเทคนิค<a href=\"/th/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">hyperscale</a>ครอบคลุมหัวข้อ Operator vs Helm tracks, concurrency, DinD, observability และ FinOps checklist คำแนะนำในการสร้างคอร์ส:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>ใน repo ของเว็บไซต์ TenthMatrix (แทนที่ลิงก์ devops.git ที่เลิกใช้งานแล้ว)</p><p>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

@@ -1,0 +1,61 @@
+{
+  "pagTitle": "เริ่มกันเลย",
+  "pagDescription": "นี่คือคำอธิบายของหน้านี้",
+  "sections": {
+    "firstSection": {
+      "title": "โคลน",
+      "id": "clone-step",
+      "content": {
+        "heading": "ตัวอย่างโค้ดเริ่มต้น:",
+        "text": "git clone https://github.com/bwalia/webimpetus-src.git"
+      }
+    },
+    "secondSection": {
+      "title": "การติดตั้ง",
+      "id": "install-step",
+      "content": {
+        "first": {
+          "id": "first-1",
+          "heading": "ขั้นแรก",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "code": {
+            "language": "bash",
+            "title": "ตัวอย่างโค้ดเริ่มต้น:",
+            "codes": [
+              "sudo bash ./deploy-to-docker.sh",
+              "sudo bash ./deploy-to-kubernates.sh"
+            ]
+          }
+        },
+        "second": {
+          "id": "second-1",
+          "heading": "ขั้นที่สอง",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "diff": {
+            "left": {
+              "language": "bash",
+              "title": "ตัวอย่างโค้ดเริ่มต้น:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            },
+            "right": {
+              "language": "bash",
+              "title": "ตัวอย่างโค้ดเริ่มต้น:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            }
+          }
+        },
+        "third": {
+          "id": "third-1",
+          "heading": "ขั้นที่สาม",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes."
+        }
+      }
+    }
+  }
+}

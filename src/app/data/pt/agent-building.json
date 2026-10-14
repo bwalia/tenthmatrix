@@ -1,0 +1,69 @@
+{
+  "header": {
+    "title": "Systematic AI Agent Building with Open-Source LLMs",
+    "description": "A hands-on blueprint to design reliable agents using Llama, Mistral, and structured tool execution."
+  },
+  "sections": [
+    {
+      "title": "Core Architecture",
+      "points": [
+        "Planner: decomposes objective into actionable steps",
+        "Executor: runs typed tools/APIs and validates outputs",
+        "Memory: vector + key/value stores for short/long-term",
+        "Supervisor: evaluates outcomes, retries, escalates"
+      ]
+    },
+    {
+      "title": "Engineering Practices",
+      "points": [
+        "Schema-first tools with strict validation",
+        "Deterministic retries and bounded loops",
+        "Prompt versioning and change tracking",
+        "Telemetry: traces, metrics, and structured logs"
+      ]
+    },
+    {
+      "title": "Open-Source LLM Choices",
+      "points": [
+        "Llama: strong general performance and tooling",
+        "Mistral/Mixtral: efficient inference, good reasoning",
+        "Qwen: multilingual strengths",
+        "Local hosting: vLLM, TGI, Ollama"
+      ]
+    },
+    {
+      "title": "Evaluation & Safety",
+      "points": [
+        "Task success rate and quality scoring",
+        "Tool error analysis and recovery",
+        "Safety policies and red-teaming",
+        "Cost and latency budgets"
+      ]
+    },
+    {
+      "title": "Deployment Checklist",
+      "points": [
+        "Secure credentials and sandboxed tools",
+        "Rate limits per agent and tenant",
+        "Observability integration (OpenTelemetry)",
+        "Rollout strategy and canary testing"
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Need help productionizing agents?",
+    "description": "We help teams ship reliable agent systems with strong evaluation and safety.",
+    "buttons": [
+      {
+        "text": "Contact Sales",
+        "link": "/contact-us",
+        "type": "primary"
+      },
+      {
+        "text": "Ler artigos",
+        "link": "/articles",
+        "type": "outline-primary"
+      }
+    ]
+  }
+}

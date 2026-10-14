@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="NebulaCB mission control for Couchbase upgrades, migrations, XDCR validation with decision matrix and SLO checklist">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1220"/>
+      <stop offset="0.55" stop-color="#132337"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f59e0b"/>
+      <stop offset="0.5" stop-color="#ea580c"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #fcd34d; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 44px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #fb923c; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.22); stroke-width: 1.2; }
+      .chipText { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #fb923c; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #fcd34d; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+
+  <text class="kicker" x="40" y="50">COUCHBASE / XDCR / KUBERNETES / MISSION CONTROL</text>
+  <text class="title" x="40" y="110">NebulaCB</text>
+  <text class="tagline" x="40" y="138">Upgrade fearlessly - validate everything - lose nothing</text>
+  <text class="sub" x="40" y="158">Go binary + React dashboard. Drives CAO, XDCR load tests, integrity audits and AI RCA on Couchbase clusters.</text>
+
+  <g transform="translate(40,180)">
+    <rect class="chip" x="0" y="0" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="20">01</text>
+    <text class="chipText" x="40" y="20">Plan + cluster topology</text>
+
+    <rect class="chip" x="0" y="40" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="60">02</text>
+    <text class="chipText" x="40" y="60">Storm load - validate</text>
+
+    <rect class="chip" x="0" y="80" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="100">03</text>
+    <text class="chipText" x="40" y="100">Rolling upgrade + gate</text>
+
+    <rect class="chip" x="0" y="120" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="140">04</text>
+    <text class="chipText" x="40" y="140">Audit + RCA + rollback</text>
+  </g>
+
+  <g transform="translate(40,360)">
+    <text class="laneLabel" x="0" y="0">SIZING / CAPACITY (RULE OF THUMB)</text>
+    <rect x="0" y="8" width="280" height="158" rx="8" fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+    <text class="h" x="10" y="28">Nodes: 3 KV + 2 Index + 2 Query min</text>
+    <text class="c" x="10" y="44">scale KV first when RU/WU saturate</text>
+    <text class="h" x="10" y="62">Replicas: 2 (HA) / 3 (DR)</text>
+    <text class="c" x="10" y="78">3 only with rebalance budget headroom</text>
+    <text class="h" x="10" y="96">RAM: 50 percent of dataset working set</text>
+    <text class="c" x="10" y="112">measure with cbstats / vbucket residency</text>
+    <text class="h" x="10" y="130">Disk: NVMe, 3x dataset, IOPS gt 30k</text>
+    <text class="c" x="10" y="146">XDCR adds 20-40 percent net egress</text>
+    <text class="c" x="10" y="160">CPU: 16 vCPU / KV / saturate at 70 percent</text>
+  </g>
+
+  <g transform="translate(440,180)">
+    <text class="laneLabel" x="0" y="0">DECISION MATRIX  /  UPGRADE STRATEGY</text>
+    <rect x="0" y="8" width="720" height="190" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <text class="h" x="14" y="28">Strategy</text>
+    <text class="h" x="180" y="28">RTO</text>
+    <text class="h" x="240" y="28">RPO</text>
+    <text class="h" x="300" y="28">Blast radius</text>
+    <text class="h" x="410" y="28">Cost</text>
+    <text class="h" x="470" y="28">Complexity</text>
+    <text class="h" x="560" y="28">Best fit</text>
+    <line x1="14" y1="36" x2="710" y2="36" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <text class="c" x="14" y="56">Rolling (in-place)</text>
+    <text class="ok" x="180" y="56">0 (live)</text>
+    <text class="ok" x="240" y="56">0</text>
+    <text class="warn" x="300" y="56">1 node at a time</text>
+    <text class="ok" x="410" y="56">low</text>
+    <text class="warn" x="470" y="56">medium</text>
+    <text class="c" x="560" y="56">minor / patch versions</text>
+
+    <text class="c" x="14" y="78">Swap-rebalance</text>
+    <text class="ok" x="180" y="78">0 (live)</text>
+    <text class="ok" x="240" y="78">0</text>
+    <text class="ok" x="300" y="78">controlled vbucket move</text>
+    <text class="warn" x="410" y="78">2x nodes for window</text>
+    <text class="warn" x="470" y="78">medium</text>
+    <text class="c" x="560" y="78">major version, same OS</text>
+
+    <text class="c" x="14" y="100">XDCR cutover (blue/green)</text>
+    <text class="warn" x="180" y="100">2 - 10 min</text>
+    <text class="ok" x="240" y="100">seconds</text>
+    <text class="ok" x="300" y="100">isolated target cluster</text>
+    <text class="bad" x="410" y="100">2x cluster</text>
+    <text class="bad" x="470" y="100">high</text>
+    <text class="c" x="560" y="100">major version + OS change</text>
+
+    <text class="c" x="14" y="122">CAO operator (k8s)</text>
+    <text class="ok" x="180" y="122">0 (live)</text>
+    <text class="ok" x="240" y="122">0</text>
+    <text class="ok" x="300" y="122">pod by pod, PDB</text>
+    <text class="ok" x="410" y="122">low</text>
+    <text class="warn" x="470" y="122">medium</text>
+    <text class="c" x="560" y="122">cloud-native deployments</text>
+
+    <text class="c" x="14" y="144">Backup + restore</text>
+    <text class="bad" x="180" y="144">hours</text>
+    <text class="bad" x="240" y="144">minutes</text>
+    <text class="warn" x="300" y="144">full cluster offline</text>
+    <text class="ok" x="410" y="144">cheapest</text>
+    <text class="ok" x="470" y="144">simple</text>
+    <text class="c" x="560" y="144">last resort / cold DR</text>
+
+    <text class="c" x="14" y="166">Offline restart</text>
+    <text class="bad" x="180" y="166">minutes</text>
+    <text class="ok" x="240" y="166">0</text>
+    <text class="bad" x="300" y="166">whole cluster down</text>
+    <text class="ok" x="410" y="166">low</text>
+    <text class="ok" x="470" y="166">simple</text>
+    <text class="c" x="560" y="166">dev / non-prod only</text>
+
+    <text class="laneLabel" x="0" y="220">CONFIG KNOBS  /  RUNBOOK GATES</text>
+    <rect x="0" y="228" width="350" height="172" rx="8" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+    <text class="h" x="10" y="246">--paced-pause-ms</text>
+    <text class="c" x="10" y="260">default 60000  -  raise to widen recovery window</text>
+    <text class="h" x="10" y="278">--health-threshold</text>
+    <text class="c" x="10" y="292">node ratio gt 0.95 healthy before next pop</text>
+    <text class="h" x="10" y="310">--xdcr-replication-lag-ms</text>
+    <text class="c" x="10" y="324">abort if lag gt 5000 ms for 2 minutes</text>
+    <text class="h" x="10" y="342">--storm-rps</text>
+    <text class="c" x="10" y="356">load test target; track p99 latency before / after</text>
+    <text class="h" x="10" y="374">--integrity-sample-size</text>
+    <text class="c" x="10" y="388">10000 keys per bucket via SDK consistency check</text>
+
+    <text class="laneLabel" x="370" y="220">SLO / RUNBOOK BREACH ACTION</text>
+    <rect x="370" y="228" width="350" height="172" rx="8" fill="rgba(220,38,38,0.08)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
+    <text class="h" x="380" y="246">p99 latency gt 50 ms  ->  halt batch</text>
+    <text class="c" x="380" y="260">page on-call, open incident, freeze rebalance</text>
+    <text class="h" x="380" y="278">replica residency lt 100 percent  ->  wait</text>
+    <text class="c" x="380" y="292">do not advance until rebalance clears</text>
+    <text class="h" x="380" y="310">XDCR backlog gt 10k docs  ->  pause</text>
+    <text class="c" x="380" y="324">drain target before next node pop</text>
+    <text class="h" x="380" y="342">error rate gt 0.1 percent  ->  rollback</text>
+    <text class="c" x="380" y="356">trigger restore from automatic snapshot</text>
+    <text class="h" x="380" y="374">disk write queue gt 50k  ->  scale up</text>
+    <text class="c" x="380" y="388">add KV node or tune ep_max_threads</text>
+  </g>
+
+  <text class="brand" x="40" y="610">WORKSTATION.CO.UK  /  github.com/balinderwalia/nebulacb</text>
+  <text class="audience" x="1160" y="610" text-anchor="end">OPS  /  ARCHITECTS  /  DBA  /  SRE</text>
+</svg>

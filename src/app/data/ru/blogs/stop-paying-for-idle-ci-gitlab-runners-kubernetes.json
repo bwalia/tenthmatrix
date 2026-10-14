@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "Перестаньте платить за простаивающие CI: GitLab Runners на Kubernetes",
+  "sub_title": "Масштабируйте CI для пиков понедельника, затем снижайте мощность ночью и в выходные — пятиминутное руководство с пошаговыми видео.",
+  "excerpt": "Большинство команд платят за CI так, будто каждый вечер всё ещё понедельник утром. GitLab Runners на Kubernetes меняют это: эфемерные поды задач, масштабирование вверх под нагрузкой и масштабирование вниз в периоды затишья.",
+  "meta_title": "Перестаньте платить за простаивающие CI: GitLab Runners на Kubernetes | TenthMatrix",
+  "meta_description": "GitLab Runners на Kubernetes: эфемерные поды для задач, пути установки Helm и Operator, автоматическое масштабирование и как перестать платить за бездействующие ночи и выходные.",
+  "meta_keywords": "GitLab Runner, Kubernetes-исполнитель, GitLab Operator, Helm, k3s, автоматическое масштабирование CI, FinOps, стоимость простаивающего CI, DinD, гипермасштабные runners, TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>Большинство команд оплачивают непрерывную интеграцию так, будто каждый вечер и каждый выходной — всё ещё понедельник утром.<strong>GitLab Runners на Kubernetes</strong>меняют эту модель: масштабируют ресурсы при поступлении пайплайнов, а затем отключают их, когда в офисе наступает тишина. Прочитайте<a href=\"/ru/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">технический обзор</a>для Helm параметров стоимости, настроек исполнителей и модели ценообразования.</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Итог.</strong>Запланируйте ресурсы на пиковую нагрузку, а снимите их в период спада. Временные контейнеры задач освобождают CPU, оперативную память и хранилище при снижении спроса — особенно в ночное время и в выходные — чтобы ферма понедельника не оплачивала счёт субботы.</div><h2>Смотрите видео</h2><p><strong>1. Runners &amp; pipelines</strong>— автоматическое масштабирование рабочих нагрузок GitLab Runner на Kubernetes.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server на HA Kubernetes</strong>— развёртывание с помощью Operator за несколько минут.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· Документация:<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>Дорогая привычка</h2><ul><li><strong>Днём:</strong>запросы на слияние и тесты резко увеличивают нагрузку.</li><li><strong>Ночью:</strong>активность падает, но фиксированные виртуальные машины продолжают потреблять CPU и оперативную память.</li><li><strong>В выходные:</strong>часто почти без нагрузки — однако диски и узлы всё ещё могут быть оплачены.</li></ul><p>Вы не платите за выполненные сборки. Вы платите за ресурсы, которые существуют, независимо от того, пользуются ими кто-то или нет.</p><h2>Более простая картина</h2><p>Runner<strong>GitLab</strong>выполняет задачи конвейера.<strong>Kubernetes</strong>может создавать этих рабочих в виде кратковременных подов и удалять их после завершения задачи. При гипермасштабировании та же идея применяется к узлам: больше, когда очередь глубокая; меньше — в идеале почти никаких — ночью и в выходные.</p><h2>Откуда приходят огромные экономии</h2><ol><li><strong>Масштабируйте вверх</strong>в рабочее время (когда работают люди или боты) — параллельные поды задач до пределов параллелизма и кластера.</li><li><strong>Жёстко масштабируйте вниз</strong>когда спрос исчезает — поды уходят; с автоматическим масштабированием кластера пустые узлы покидают пул.</li><li><strong>Перестаньте тратить CPU, RAM и хранилище</strong>на постоянно работающие флоты runners в тихие часы.</li><li><strong>Платите за результаты, а не за мебель</strong>— оставляйте GitLab и тонкий менеджер runners; пусть ферма испаряется в простое.</li></ol><blockquote><p>Огромные экономии проявляются, когда пик понедельника больше не диктует счёт за вторник в 3 часа ночи — и когда тишина субботы наконец выглядит тихой на инвойсе.</p></blockquote><h2>Официальная документация</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Установите GitLab Runner с помощью диаграммы Helm</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">Настройте диаграмму Helm Runner</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes-исполнитель</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">Автомасштабирование GitLab Runner</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">Установка GitLab Operator</a></li></ul><p><strong>Следующее:</strong>статья<a href=\"/ru/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">о гипермасштабных технологиях</a>посвящена трекам Operator vs Helm, конкурентности, DinD, наблюдаемости и чек-листу FinOps. Промпт для создания курса:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>в репозитории сайта TenthMatrix (заменяет устаревшую ссылку devops.git).</p><p>Опубликовано в<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

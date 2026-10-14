@@ -1,0 +1,102 @@
+# Defaults for tm-chart. Each values-<env>.yaml overrides env, hosts and config.
+# Deployed by .github/workflows/deploy-k3s.yaml:
+#   helm upgrade -i tm-<env> devops/helm-charts/tm-chart -f values-<env>.yaml
+
+replicaCount: 1
+
+# Environment name (int/test/acc/prod): selects the Vault path
+# tenthmatrix/<env>/config and the Secret name tm-secret-<env>.
+env: int
+
+# Service / Deployment name. The wslproxy edge → k3s ingress routes by Host to
+# this Service, so keep it stable.
+fullnameOverride: tm-frontend
+nameOverride: ""
+
+image:
+  repository: bwalia/tm-frontend
+  pullPolicy: Always
+  tag: "latest"
+
+imagePullSecrets: []
+
+# Vault (vault.workstation.co.uk) via External Secrets Operator, through the
+# same ClusterSecretStore Workstation uses. See devops/VAULT-SECRETS.md.
+# There is no kubeseal path in this chart: secrets are Vault-only.
+externalSecret:
+  enabled: true
+  storeName: wslvault-backend
+  storeKind: ClusterSecretStore
+  pathPrefix: tenthmatrix
+  refreshInterval: "1m"
+
+# Non-secret runtime config (plain env). OPSAPI_URL is the IN-CLUSTER OpsAPI
+# service shared with Workstation (same namespace, port 80) — not the public
+# api.tenthmatrix.com host. WEBSITE_NAMESPACE turns on the CMS overlay.
+appConfig:
+  SITE_URL: "https://www.tenthmatrix.com"
+  WEBSITE_NAMESPACE: "tenthmatrix"
+  WEBSITE_CATEGORY: ""
+  CMS_CONTENT_MODE: "overlay"
+  OPSAPI_URL: "http://workstation-opsapi/"
+  CMS_REVALIDATE_SECONDS: "3600"
+  ENGAGEMENT_STORE_DIR: "/tmp/engagement"
+  ROBOTS_DISALLOW_ALL: "true"
+
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
+service:
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  # MUST be a class whose controller is traefik.io/ingress-controller: the edge
+  # (lon1.pop0.uk → 193.237.176.232:8888) forwards to k3s1 Traefik, which claims
+  # `traefik` / `traefik-edge` (see the long note in wsw-chart values).
+  className: "traefik-edge"
+  annotations: {}
+  hosts: []
+  tls: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 768Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+# The image is amd64-only; keep it off the arm64 Raspberry Pi worker.
+nodeSelector:
+  kubernetes.io/arch: amd64
+
+tolerations: []
+affinity: {}

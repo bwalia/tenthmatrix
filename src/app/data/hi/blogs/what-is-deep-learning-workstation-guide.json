@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "डीप लर्निंग सिस्टम: इंजीनियर्स और एजेंट्स के लिए तकनीकी ब्रीफ",
+  "sub_title": "रिप्रेजेंटेशन लर्निंग, डिस्क्रिमिनेटिव बनाम जेनेरेटिव पथ, मेट्रिक्स और buy/build रूटिंग — प्रोडक्शन टीमों के लिए पुनर्लेखित AWS अवधारणाएँ",
+  "excerpt": "डीप लर्निंग पर TenthMatrix तकनीकी ब्रीफ: ग्रेडिएंट-ट्रेंड डीप नेट्स, डिस्क्रिमिनेटिव बनाम जेनेरेटिव मॉडल, टास्क मेट्रिक्स, और Bedrock बनाम Kubernetes serving।",
+  "meta_title": "डीप लर्निंग सिस्टम — तकनीकी ब्रीफ (TenthMatrix)",
+  "meta_description": "तकनीकी डीप लर्निंग ब्रीफ: न्यूरल नेट्स, backprop, डिस्क्रिमिनेटिव बनाम जेनेरेटिव AI, टास्क मेट्रिक्स, और इंजीनियर्स व AI एजेंट्स के लिए Bedrock बनाम self-host रूटिंग।",
+  "meta_keywords": "deep learning, neural networks, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>तकनीकी डाइजेस्ट: डीप लर्निंग को मल्टी-लेयर न्यूरल ऑप्टिमाइज़ेशन, डिस्क्रिमिनेटिव बनाम जेनेरेटिव पथ, और classic ML, ट्रेंड DL या foundation-model APIs तक काम रूट करने के रूप में समझें। पूर्ण समीकरण, आंकड़े और एजेंट चेकलिस्ट <a href=\"/hi/articles/what-is-deep-learning-workstation-guide\">लंबे आलेख</a> में।</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"डीप लर्निंग सिस्टम तकनीकी ब्रीफ — ट्रेन, ऑप्टिमाइज़, सर्व\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>परिभाषा।</strong> डीप लर्निंग गहरे न्यूरल नेट्स का ग्रेडिएंट-आधारित प्रशिक्षण है ताकि f_&#x3b8;(x) उच्च-आयामी x से पदानुक्रमित फीचर्स सीखे। यह आधुनिक vision/ASR/NLP का आधार है और generative AI (transformers / diffusion) का सब्सट्रेट है। लागत चालक: स्वच्छ डेटा वॉल्यूम, एक्सेलेरेटर समय, और inference OpEx — स्लाइडवेयर नहीं।\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>एजेंट डाइजेस्ट।</strong> DL ⊂ ML। Discriminative = p(y|x)। Generative = sample x या x|c। मजबूत tabular फीचर्स के लिए GBM चुनें; perception के लिए DL ट्रेन करें; भाषा एजेंट्स के लिए Bedrock/vLLM। GitOps serving; money/auth/prod गेट करें।\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">AWS से अनुकूलित — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a> इंजीनियरिंग टीमों के लिए।</p>\n\n<h2>क्षमता विभाजन</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"ML बनाम डीप लर्निंग बनाम generative AI स्टैक\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — engineered features; trees/linear मॉडल; घने tabular SLAs के लिए सर्वश्रेष्ठ डिफ़ॉल्ट।</li>\n  <li><strong>Deep learning</strong> — images/text/audio पर end-to-end नेट्स; backprop + GPUs; Triton/KServe/SageMaker से serve।</li>\n  <li><strong>Generative AI</strong> — नई सामग्री sample करें; LLMs/diffusion + RAG/tools; Bedrock API या open-weight inference।</li>\n</ul>\n\n<h2>टास्क परिवार (मेट्रिक्स मायने रखते हैं)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">परिवार</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">सामान्य उद्देश्य / मेट्रिक</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">detect/classify — mAP, IoU, p99 latency</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER, real-time factor</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">classify / generate — F1, exact-match, groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">rank — NDCG, CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">task success + safety + $/request</td></tr>\n</tbody>\n</table>\n\n<h2>बाधाएँ</h2>\n<ul>\n  <li><strong>Data</strong> — लेबल शोर और shift हावी; datasets वर्शन करें।</li>\n  <li><strong>Compute</strong> — training और LLM decode एक्सेलेरेटर-बाउंड हैं।</li>\n  <li><strong>Ops</strong> — eval harness, drift, cost, व्यापक promote से पहले GitOps rollback।</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"Train बनाम buy बनाम hybrid निर्णय प्रवाह\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>TenthMatrix अनुशंसा</h2>\n<p>पहले discriminative बनाम generative वर्गीकृत करें। residency/cost खुले weights न थोपें तो भाषा एजेंट्स के लिए managed foundation models चुनें। tabular के लिए classic ML रखें। विवरण, लेयर डायग्राम और चेकलिस्ट: <a href=\"/hi/articles/what-is-deep-learning-workstation-guide\">लंबे आलेख</a>। प्रकाशित <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a> द्वारा।</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

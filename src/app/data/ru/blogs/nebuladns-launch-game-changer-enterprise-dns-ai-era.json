@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS — это авторитетный сервер DNS, безопасный для Rust, с метриками Prometheus, шлюзами распространения и собственными операциями Kubernetes, созданный для обеспечения прозрачности, когда службы и агенты ИИ зависят от DNS больше, чем когда-либо.",
+  "sub_title": "API — первый DNS, наблюдаемость и почему эпохе искусственного интеллекта нужен новый авторитетный стек",
+  "title": "NebulaDNS: почему авторитетный DNS меняет правила игры в эпоху искусственного интеллекта",
+  "meta_title": "NebulaDNS | Авторитетный DNS Rust AI Enterprise | TenthMatrix",
+  "meta_description": "Введение в NebulaDNS: авторитетный DNS в Rust, плоскость управления API, проверка распространения, шаблоны k3s и Route 53, а также почему корпоративный DNS должен быть доступным для наблюдения в эпоху искусственного интеллекта.",
+  "meta_keywords": "NebulaDNS, авторитетный DNS, Rust DNS, Kubernetes DNS, Route 53, CoreDNS, инфраструктура искусственного интеллекта, Prometheus DNS метрики, TSIG, AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Краткое описание</h2><p><strong><a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a></strong>— это современный<strong>API — первый авторитетный сервер DNS</strong>, написанный на безопасном<strong>Rust</strong>(<code>#![forbid(unsafe_code)]</code>). Он нацелен на операционные пробелы, оставленные демонами десятилетней давности и непрозрачными базами кода C:<strong>без метрик</strong>,<strong>без истинного распространения</strong>и<strong>без машиночитаемой плоскости управления</strong>. В эпоху искусственного интеллекта<strong></strong>, DNS — это не «просто инфраструктура» — это то, как агенты<strong></strong>, конечные точки вывода<strong></strong>, узлы<strong>GPU</strong>и многокластерные службы<strong></strong>находят друг друга в соответствии с политикой. NebulaDNS рассматривает каждое изменение зоны<strong>как выпуск</strong>: проверенные вторичные данные, явные метрики и API для каждого действия оператора — в соответствии с общедоступным описанием на сайте проекта<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'></a>и репозитории<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>GitHub</a>.</p><h2>Почему DNS имеет большее значение при разработке искусственного интеллекта</h2><ul><li><strong>Обнаружение служб для агентов:</strong>Стабильные имена для конечных точек инструментов, служб поиска и шлюзов политик превосходят жестко запрограммированные IP-адреса в эфемерных кластерах.</li><li><strong>Радиус взрыва:</strong>Незаметный инцидент AXFR или вторичный дрейф (например, реальные сбои взаимодействия, описанные на сайте) могут привести к нарушению избыточности задолго до того, как это заметит панель мониторинга LLM.</li><li><strong>Соответствие требованиям и доказательства:</strong>Удобный для аудита DNS со структурированными журналами и метриками поддерживает доказательства в стиле SOC2 о том, кто какую зону изменил и распространилось ли это.</li></ul><h2>Что отличает NebulaDNS</h2><p>На целевой странице NebulaDNS позиционируется как замена хрупких стеков на<strong>, один небольшой двоичный файл</strong>, который содержит метрики<strong></strong>, плоскость управления<strong></strong>и путь к<strong>Оператор Kubernetes</strong>— поэтому сбои проявляются через<strong>секунд</strong>, а не через заявки клиентов. Основные моменты включают<strong>проверенное распространение</strong>,<strong>снятие отпечатков пальцев однорангового программного обеспечения</strong>,<strong>атомарная конфигурация версий</strong>,<strong>детерминированные последовательные SOA</strong>и<strong>Prometheus<code>/metrics</code></strong>с бюджетом мощности во время компиляции.</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS control plane, zone store, and DNS data plane' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Моментальный снимок интеграции: Маршрут 53 и k3s</h2><p>Предприятия часто соединяют<strong>AWS Маршрут 53 Общедоступные зоны</strong>с<strong>в кластере или выделенным авторитетным</strong>ярусы. NebulaDNS подходит в качестве авторитетного источника достоверной информации<strong></strong>для сквозных зон, которыми вы владеете, с<strong>Helm</strong>,<strong>ServiceMonitor</strong>и<strong>оператор/CRD</strong>сюжетными линиями в дорожной карте, описанной на сайте. На диаграмме ниже показан шаблон делегирования<strong>+ кластер</strong>(не зависит от поставщика — адаптируйтесь к вашей сетевой сегментации).</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route 53 delegation to NebulaDNS and k3s CoreDNS integration' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Читать дальше</h2><p>Полный каталог функций<strong></strong>, примеры показателей и более подробные примечания по k3s/Route&nbsp;53 см. в сопутствующем посте<a href='/ru/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide'>Полное руководство по функциям NebulaDNS</a>на TenthMatrix.</p><h2>Как TenthMatrix может помочь</h2><p>TenthMatrix разрабатывает платформу<strong></strong>и<strong>Готовые к SRE модели DNS</strong>— GitOps, возможность наблюдения и безопасное переключение — для облака и периферии. Свяжитесь с<strong>по адресу info@tenthmatrix.com</strong>для получения обзоров архитектуры или поддержки доставки.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

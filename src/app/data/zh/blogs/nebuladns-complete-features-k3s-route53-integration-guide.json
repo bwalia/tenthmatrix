@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "完整了解 NebulaDNS 功能：API 优先控制平面、Prometheus 指标、传播门、对等指纹识别、DNSSEC 路线图、Helm/k3s 操作员故事以及如何与 AWS、Route 53 和 CoreDNS 集成。",
+  "sub_title": "每个“含电池”功能、集成和企业 DNS 状态",
+  "title": "NebulaDNS 完整功能指南：k3s、Route53、可观测性和企业级 DNS",
+  "meta_title": "NebulaDNS 特点 | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "NebulaDNS 完整功能参考：Rust 数据平面、控制平面 API、传播验证器、TSIG、指标目录、Kubernetes Helm 运算符、Route 53 和 k3s 集成模式。",
+  "meta_keywords": "NebulaDNS 功能、权威 DNS、Prometheus 指标 DNS、Kubernetes DNS 运算符、Route53 委派、CoreDNS、TSIG AXFR、DNSSEC 路线图、Rust DNS 服务器",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>源</h2><p>本指南综合了公共<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS 站点</a>和存储库<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>。里程碑和 GA 项目不断发展 - 验证您版本的发行说明。</p><h2>架构概览</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>该堆栈将<strong>控制平面</strong>（REST/gRPC、authn/z）、<strong>区域管理</strong>（验证、DNSSEC 签名、原子提交）、<strong>传播验证</strong>（辅助报告 SOA）分开，<strong>内容寻址区域存储</strong>和<strong>DNS 数据平面</strong>（UDP/TCP/DoT/DoH/DoQ、传输、DNSSEC 在线签名器）。</p><h2>功能目录（“含电池”）</h2><p>该项目推销<strong>的 12 项主要功能</strong>— 在登陆页面上进行了总结。</p><ul><li><strong>API-first：</strong>REST/gRPC，用于区域、记录、TSIG 轮换​​、回滚 — 作为瘦客户端的 CLI/UI。</li><li><strong>默认情况下可观察：</strong>Prometheus<code>/metrics</code>、枚举类型标签、JSON 日志、OTLP 跟踪。</li><li><strong>验证传播：仅当声明的辅助节点确认新的 SOA 序列时，</strong>部署才会完成。</li><li><strong>对等软件指纹识别：</strong>记录<code>version.bind</code>CHAOS 式信号，因此静默 BIND 升级不会无形中削弱冗余。</li><li><strong>安全防锈：</strong>无<code>unsafe</code>；对编解码器、解析器、DNSSEC 签名器进行连续模糊测试。</li><li><strong>零 GC 尾延迟：</strong>确定性分配；通过<code>arc-swap</code>进行无锁区域快照。</li><li><strong>原子版本配置：</strong>内容寻址区域；前滚/回滚，无需部分读取。</li><li><strong>确定性 SOA 串行：</strong>单调串行策略，以避免楔形恢复。</li><li><strong>Kubernetes-原生：</strong>Helm 图表、操作器、CRDs（<code>Zone</code>、<code>Record</code>、<code>Secondary</code>、<code>TsigKey</code>、<code>DeployGate</code>）； GitOps 友好；路线图上的 CoreDNS 集群-DNS 替换路径。</li><li><strong>符合标准的线缆：</strong>严格的 RFC 覆盖范围；明确的错误类型（例如<code>QdCountMismatch</code>）。您可以看到</li><li><strong>冗余：</strong>仪表板意图用于跨区域传输可见性。</li><li><strong>强化默认值：</strong>systemd 强化、seccomp、非根容器、小型 distroless 映像。</li></ul><h2>对比定位（高水平）</h2><p>该网站发布了竞争矩阵（TinyDNS、BIND 9、Knot、NSD、PowerDNS、CoreDNS、NebulaDNS）。推出的差异化产品包括<strong>全 REST API</strong>、<strong>始终在线 Prometheus</strong>、<strong>内置传播门</strong>、<strong>Kubernetes 运算符 + CRDs</strong>、<strong>对等指纹识别</strong>和<strong>内存安全实现</strong>。使用上游矩阵来获取特定于版本的声明。</p><h2>指标目录（示例）</h2><p>站点中的示例包括查询计数器、延迟直方图、FORMERR 跟踪、AXFR 尝试、每个对等点的最后成功时间戳、传播延迟和构建信息。将名称视为说明性的，直到您抓取正在运行的构建。</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s、CoreDNS 和 AWS 路由 53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>路由 53：</strong>在 AWS 中保留公共委托和健康检查；将 NS 记录指向 NebulaDNS 辅助节点或运行与您的安全模型匹配的水平分割模式。</li><li><strong>k3s / RKE2：</strong>通过带有 PDB + ServiceMonitor 的 Helm 部署 NebulaDNS；将 CoreDNS<strong>前向/存根</strong>与 NebulaDNS 对齐，以用于您在地产内负责服务的区域。</li><li><strong>外部DNS：</strong>从 Ingress/LB 对象到公共记录的可选桥接器 — 与传播门协调，以便自动化无法过早标记“完成”。</li></ul><h2>路线图说明</h2><p>公共路线图列出了 GA 期间的里程碑（线路/区域完整性、传输、DNSSEC、传播验证器、HA/多区域、运营商）。检查<code>PROJECT_PROMPT.md</code>并在存储库中发布以了解日期。</p><h2>相关发布文章</h2><p>对于“为什么是现在/AI 时代”的叙述，请阅读<a href='/zh/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS：AI 时代的游戏规则改变者</a>。</p><h2>TenthMatrix 如何帮助</h2><p>我们帮助企业围绕权威堆栈交付<strong>可观察的 DNS</strong>和<strong>GitOps</strong>模式 — 请联系<strong>info@tenthmatrix.com</strong>。</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

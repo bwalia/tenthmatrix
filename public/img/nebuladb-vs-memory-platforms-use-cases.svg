@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 580" width="1200" height="580" role="img" aria-label="Use case mapping: where NebulaDB excels and where agent memory platforms may fit, with decision rule">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0e27"/>
+      <stop offset="1" stop-color="#111940"/>
+    </linearGradient>
+    <linearGradient id="ndbH" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="mpH" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#64748b"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 22px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: #94a3b8; font: 500 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .colHead { fill: #ffffff; font: 700 16px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ucTitle { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ucBody { fill: rgba(255,255,255,0.78); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ucMeta { fill: #a5b4fc; font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .ucMetaM { fill: #cbd5e1; font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .ucNum { fill: #6366f1; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ucNumM { fill: #64748b; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="580" fill="url(#bg)" rx="8"/>
+  <rect width="1200" height="580" fill="url(#grid)"/>
+
+  <text class="title" x="600" y="40" text-anchor="middle">Use case mapping</text>
+  <text class="sub" x="600" y="60" text-anchor="middle">Where each solution excels  -  with concrete sizing and cost cues for OPS / Architects</text>
+
+  <rect x="40" y="80" width="520" height="44" rx="10" fill="url(#ndbH)"/>
+  <text x="300" y="108" text-anchor="middle" class="colHead">NebulaDB excels</text>
+
+  <rect x="640" y="80" width="520" height="44" rx="10" fill="url(#mpH)"/>
+  <text x="900" y="108" text-anchor="middle" class="colHead">Agent memory platforms may fit</text>
+
+  <g>
+    <rect x="40" y="135" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="166" r="16" fill="#1e1b4b"/>
+    <text x="72" y="171" text-anchor="middle" class="ucNum">1</text>
+    <text x="100" y="158" class="ucTitle">RAG pipelines + semantic search</text>
+    <text x="100" y="176" class="ucBody">chunk - embed - HNSW - SQL filter - stream answer; usd 0 / call infra</text>
+    <text x="100" y="192" class="ucMeta">SLO: p95 lt 200 ms  -  scale: 100M docs / pod</text>
+
+    <rect x="40" y="205" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="236" r="16" fill="#1e1b4b"/>
+    <text x="72" y="241" text-anchor="middle" class="ucNum">2</text>
+    <text x="100" y="228" class="ucTitle">SQL analytics over vector data</text>
+    <text x="100" y="246" class="ucBody">semantic_match() + GROUP BY + JOIN; analytics meet embeddings</text>
+    <text x="100" y="262" class="ucMeta">SLO: agg lt 1 s on 10M rows  -  config: cache TTL = 60s</text>
+
+    <rect x="40" y="275" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="306" r="16" fill="#1e1b4b"/>
+    <text x="72" y="311" text-anchor="middle" class="ucNum">3</text>
+    <text x="100" y="298" class="ucTitle">Multi-protocol API services</text>
+    <text x="100" y="316" class="ucBody">REST + gRPC + Postgres wire from a single binary; serve diverse clients</text>
+    <text x="100" y="332" class="ucMeta">SLO: p99 lt 80 ms  -  scale: 50k RPS / pod</text>
+
+    <rect x="40" y="345" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="376" r="16" fill="#1e1b4b"/>
+    <text x="72" y="381" text-anchor="middle" class="ucNum">4</text>
+    <text x="100" y="368" class="ucTitle">Self-hosted AI infrastructure</text>
+    <text x="100" y="386" class="ucBody">full control + zero per-call cost + no vendor lock-in; Docker / Helm / Operator</text>
+    <text x="100" y="402" class="ucMeta">SLO: avail 99.95 percent  -  config: 3 replicas + WAL backup</text>
+
+    <rect x="40" y="415" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="446" r="16" fill="#1e1b4b"/>
+    <text x="72" y="451" text-anchor="middle" class="ucNum">5</text>
+    <text x="100" y="438" class="ucTitle">Enterprise knowledge base</text>
+    <text x="100" y="456" class="ucBody">document corpus with hybrid search + metadata filters + multi-tier cache</text>
+    <text x="100" y="472" class="ucMeta">SLO: index lag lt 30 s  -  scale: 10 - 100 GB datasets</text>
+
+    <rect x="40" y="485" width="520" height="62" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5"/>
+    <circle cx="72" cy="516" r="16" fill="#1e1b4b"/>
+    <text x="72" y="521" text-anchor="middle" class="ucNum">6</text>
+    <text x="100" y="508" class="ucTitle">Production AI applications</text>
+    <text x="100" y="526" class="ucBody">124 tests + nightly CI + Prometheus / Grafana + leader / follower replication</text>
+    <text x="100" y="542" class="ucMeta">SLO: error budget 0.05 percent  -  on-call: standard runbook</text>
+  </g>
+
+  <g>
+    <rect x="640" y="135" width="520" height="62" rx="8" fill="rgba(100,116,139,0.08)" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="672" cy="166" r="16" fill="#1e293b"/>
+    <text x="672" y="171" text-anchor="middle" class="ucNumM">1</text>
+    <text x="700" y="158" class="ucTitle">Stateful agent memory</text>
+    <text x="700" y="176" class="ucBody">persistent cross-session memory for chatbot-style agents</text>
+    <text x="700" y="192" class="ucMetaM">trade-off: per-tenant pricing scales with sessions</text>
+
+    <rect x="640" y="205" width="520" height="62" rx="8" fill="rgba(100,116,139,0.08)" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="672" cy="236" r="16" fill="#1e293b"/>
+    <text x="672" y="241" text-anchor="middle" class="ucNumM">2</text>
+    <text x="700" y="228" class="ucTitle">Temporal reasoning over user prefs</text>
+    <text x="700" y="246" class="ucBody">what did the user prefer last month vs now? immutable ledger</text>
+    <text x="700" y="262" class="ucMetaM">trade-off: vendor-managed ledger model + lock-in</text>
+
+    <rect x="640" y="275" width="520" height="62" rx="8" fill="rgba(100,116,139,0.08)" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="672" cy="306" r="16" fill="#1e293b"/>
+    <text x="672" y="311" text-anchor="middle" class="ucNumM">3</text>
+    <text x="700" y="298" class="ucTitle">Multi-agent shared context</text>
+    <text x="700" y="316" class="ucBody">agent fleet coordination with shared context layer</text>
+    <text x="700" y="332" class="ucMetaM">trade-off: cross-agent indexing baked-in vs DIY</text>
+
+    <rect x="640" y="345" width="520" height="62" rx="8" fill="rgba(100,116,139,0.08)" stroke="#94a3b8" stroke-width="1"/>
+    <circle cx="672" cy="376" r="16" fill="#1e293b"/>
+    <text x="672" y="381" text-anchor="middle" class="ucNumM">4</text>
+    <text x="700" y="368" class="ucTitle">Zero-ops preference</text>
+    <text x="700" y="386" class="ucBody">teams preferring fully managed infrastructure to self-hosting</text>
+    <text x="700" y="402" class="ucMetaM">trade-off: data residency + cost scaling at growth</text>
+
+    <rect x="640" y="430" width="520" height="60" rx="8" fill="rgba(99,102,241,0.10)" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6,3"/>
+    <text x="900" y="454" text-anchor="middle" class="ucTitle" fill="#c7d2fe">Decision rule</text>
+    <text x="900" y="472" text-anchor="middle" class="ucBody">Most managed memory use cases can be built on NebulaDB</text>
+    <text x="900" y="486" text-anchor="middle" class="ucBody">with full control and near-zero per-call cost.</text>
+
+    <rect x="640" y="498" width="520" height="50" rx="8" fill="rgba(34,197,94,0.10)" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="900" y="520" text-anchor="middle" class="ucTitle" fill="#bbf7d0">Hybrid pattern</text>
+    <text x="900" y="538" text-anchor="middle" class="ucBody">NebulaDB for owned data + SaaS memory only for shared multi-tenant context</text>
+  </g>
+
+  <text class="brand" x="40" y="565">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1160" y="565" text-anchor="end">OPS  /  ARCHITECTS  /  AI ENGINEERING</text>
+</svg>

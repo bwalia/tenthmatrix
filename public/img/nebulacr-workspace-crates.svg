@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" role="img" aria-label="NebulaCR Rust workspace crates and repo layout">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 19px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .reg { fill: #3a1f08; stroke: #ea580c; stroke-width: 1.5; }
+      .auth { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .common { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.25); stroke-width: 1.5; }
+      .ctrl { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .mirror { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .res { fill: #2a0a1f; stroke: #dc2626; stroke-width: 1.5; }
+      .repl { fill: #0c2e36; stroke: #0891b2; stroke-width: 1.5; }
+      .deploy { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.18); stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.78); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .link { stroke: rgba(255,255,255,0.30); stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="520" fill="url(#bg)"/>
+  <rect width="1000" height="520" fill="url(#grid)"/>
+
+  <text class="title" x="500" y="34" text-anchor="middle">NebulaCR  /  Rust workspace (Cargo.toml members)</text>
+  <text class="subtitle" x="500" y="54" text-anchor="middle">cargo build --workspace --release  /  axum + kube + object_store + tokio</text>
+
+  <text class="laneTitle" x="40" y="78">SERVICE CRATES (bins)</text>
+  <g transform="translate(40,84)">
+    <rect width="200" height="72" rx="10" class="reg"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-registry</text>
+    <text class="boxText" x="100" y="46" text-anchor="middle">OCI Distribution API :5000</text>
+    <text class="boxText" x="100" y="60" text-anchor="middle">blobs, manifests, pull-through</text>
+  </g>
+  <g transform="translate(260,84)">
+    <rect width="200" height="72" rx="10" class="auth"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-auth</text>
+    <text class="boxText" x="100" y="46" text-anchor="middle">OIDC, JWT, token :5001</text>
+    <text class="boxText" x="100" y="60" text-anchor="middle">RBAC policy resolution</text>
+  </g>
+  <g transform="translate(480,84)">
+    <rect width="200" height="72" rx="10" class="common"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-common</text>
+    <text class="boxText" x="100" y="46" text-anchor="middle">shared models, config, storage</text>
+    <text class="boxText" x="100" y="60" text-anchor="middle">library crate (no binary)</text>
+  </g>
+  <g transform="translate(700,84)">
+    <rect width="260" height="72" rx="10" class="ctrl"/>
+    <text class="boxLabel" x="130" y="26" text-anchor="middle">nebula-controller</text>
+    <text class="boxText" x="130" y="46" text-anchor="middle">Kubernetes CRD reconciliation</text>
+    <text class="boxText" x="130" y="60" text-anchor="middle">Tenant, Project, AccessPolicy</text>
+  </g>
+
+  <text class="laneTitle" x="40" y="184">PLATFORM CRATES (libs)</text>
+  <g transform="translate(120,190)">
+    <rect width="200" height="64" rx="10" class="mirror"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-mirror</text>
+    <text class="boxText" x="100" y="44" text-anchor="middle">pull-through cache engine</text>
+    <text class="boxText" x="100" y="58" text-anchor="middle">upstream registry adapters</text>
+  </g>
+  <g transform="translate(340,190)">
+    <rect width="200" height="64" rx="10" class="res"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-resilience</text>
+    <text class="boxText" x="100" y="44" text-anchor="middle">retry, circuit breaker, failover</text>
+    <text class="boxText" x="100" y="58" text-anchor="middle">jittered backoff, deadline</text>
+  </g>
+  <g transform="translate(560,190)">
+    <rect width="200" height="64" rx="10" class="repl"/>
+    <text class="boxLabel" x="100" y="26" text-anchor="middle">nebula-replication</text>
+    <text class="boxText" x="100" y="44" text-anchor="middle">multi-region replication</text>
+    <text class="boxText" x="100" y="58" text-anchor="middle">event log + reconciler</text>
+  </g>
+
+  <line x1="580" y1="156" x2="220" y2="190" class="link"/>
+  <line x1="580" y1="156" x2="440" y2="190" class="link"/>
+  <line x1="580" y1="156" x2="660" y2="190" class="link"/>
+  <line x1="140" y1="156" x2="580" y2="120" class="link"/>
+  <line x1="360" y1="156" x2="580" y2="120" class="link"/>
+
+  <text class="subtitle" x="500" y="282" text-anchor="middle">All depend on nebula-common  /  shared with axum, kube, object_store, tokio</text>
+
+  <g transform="translate(80,310)">
+    <rect width="840" height="180" rx="12" class="deploy"/>
+    <text class="boxLabel" x="420" y="28" text-anchor="middle">Repo layout (upstream README)</text>
+    <text class="boxText" x="20" y="56">deploy/helm/nebulacr - production Helm chart  /  config/ - example TOML</text>
+    <text class="boxText" x="20" y="76">docs/ - architecture, auth, multi-tenancy, observability, threat model</text>
+    <text class="boxText" x="20" y="96">examples/ - GitHub Actions, GitLab, Jenkins, Tekton, Argo CD, Kubernetes</text>
+    <text class="boxText" x="20" y="116">docker-compose.yml - local stack  /  Dockerfile + Dockerfile.scratch - images</text>
+    <text class="boxText" x="20" y="136">scripts/ - migrations, db setup  /  tests/ - integration + soak</text>
+    <text class="code" x="420" y="162" text-anchor="middle">github.com/bwalia/nebulacr</text>
+  </g>
+</svg>

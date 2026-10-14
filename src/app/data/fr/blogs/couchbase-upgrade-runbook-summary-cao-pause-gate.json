@@ -1,0 +1,49 @@
+{
+  "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+  "excerpt": "Un aperçu convivial et prêt pour SRE des mises à niveau progressives du serveur Couchbase sous l'opérateur autonome Couchbase (CAO), utilisant spec.paused pour rééquilibrer le swap de porte un nœud à la fois, afin que vous puissiez stabiliser, valider l'état et garder les options de restauration ouvertes.",
+  "sub_title": "Mise à niveau continue contrôlée à l'aide des portes de pause natives CAO, des contrôles de santé et de la surveillance compatible XDCR",
+  "title": "Mises à niveau Couchbase avec les portes de pause CAO : un aperçu convivial",
+  "meta_title": "Runbook de mise à niveau du serveur Couchbase (CAO rythmé + pause) | TenthMatrix",
+  "meta_description": "Mettez à niveau le serveur Couchbase sous CAO à l'aide de spec.paused pour rythmer le rééquilibrage des swaps : vérifications en amont, signaux de surveillance, stratégie XDCR, déclencheurs de restauration et validation post-mise à niveau – écrits pour le support, SRE et les ingénieurs de bases de données.",
+  "meta_keywords": "Couchbase, Couchbase Autonomous Operator, CAO, Kubernetes, mise à niveau continue, spec.paused, rééquilibrage du swap, XDCR, SRE, runbook, mise à niveau de la base de données",
+  "images": [
+    {
+      "url": "/img/couchbase-upgrade-cover.svg",
+      "id": 930,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Couchbase Server upgrade runbook cover"
+    }
+  ],
+  "content": "<div class='blog-content'><p>Si vous prenez en charge une plate-forme Couchbase (ou si vous êtes la personne qui est alertée lorsque<em>ne se comporte pas</em>), les mises à niveau peuvent ressembler à un choix entre « ne pas intervenir et espérer » et « manuelles et risquées ». Cet article capture un terrain d'entente pragmatique : une mise à niveau continue contrôlée par<strong></strong>pour le serveur Couchbase fonctionnant sous l'opérateur autonome<strong>Couchbase (CAO)</strong>, rythmée par le champ<code>spec.paused</code>natif de CAO.</p><h2>À qui s'adresse-t-il</h2><ul><li><strong>Support technique / intervenants en cas d'incident :</strong>à quoi ressemble la « normalité » pendant le rééquilibrage du swap et ce qu'il faut traiter comme un signal d'alarme.</li><li><strong>SRE / ingénieurs de plate-forme : procédure répétable</strong>avec contrôles en amont, portes de trempage et déclencheurs de retour en arrière.</li><li><strong>Ingénieurs de base de données :</strong>rééquilibre les attentes, le comportement XDCR et la validation post-mise à niveau.</li><li><strong>Développeurs :</strong>ce que fait votre plate-forme pendant la fenêtre de maintenance (et ce sur quoi vous devez alerter).</li></ul><h2>Topologie typique gérée par CAO (conceptuel)</h2><p>Le diagramme ci-dessous est une carte mentale du runbook : où est assis l'opérateur, ce que contrôle le<code>CouchbaseCluster</code>CR et quels signaux vous devez corréler pendant la mise à niveau.</p><p><img src=\"/img/couchbase-upgrade-cluster-topology.svg\" alt=\"Typical Couchbase on AKS topology\" width=\"1200\" height=\"640\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>La grande idée : rythmer CAO avec une porte de pause</h2><p>CAO effectue une mise à niveau continue via un rééquilibrage de swap. Le runbook ajoute une barrière de sécurité délibérée : suspendez la réconciliation entre les nœuds, stabilisez, vérifiez l'état, puis reprenez. De cette façon, si le nœud N se comporte mal après son échange, vous l'attrapez<em>avant le démarrage du nœud</em>N+1.</p><p><img src=\"/img/couchbase-upgrade-paced-loop.svg\" alt=\"Paced upgrade loop\" width=\"1200\" height=\"520\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>Pourquoi la porte pause en vaut la peine</h2><ul><li><strong>Moins de surprises :</strong>isole les symptômes d'un seul changement de nœud.</li><li><strong>Signaux plus propres :</strong>corrèle la latence, le taux d'erreur, l'état de rééquilibrage et le décalage XDCR avec un seul échange.</li><li><strong>Déploiements plus sûrs :</strong>arrête rapidement le « tapis roulant » en maintenant<code>spec.paused=true</code>pendant que vous enquêtez.</li></ul><h2>À quoi ressemble le « bon » lors de la mise à niveau</h2><ul><li><strong>Images du pod :</strong>ancien → nouveau progressivement ; idéalement, un échange à la fois.</li><li><strong>Phase de cluster :</strong>revient souvent à<code>Available</code>entre les swaps ; de brèves transitions pendant le rééquilibrage sont attendues.</li><li><strong>XDCR (si activé) :</strong><code>changes_left</code>monte pendant le rééquilibrage, puis se vide pendant la stabilisation.</li><li><strong>Redémarre : les nouveaux pods</strong>démarrent à<code>RESTARTS=0</code>. Toute augmentation est un signal pour faire une pause et enquêter.</li></ul><h2>Des vérifications en amont qui vous sauvent plus tard</h2><p>Avant de toucher quoi que ce soit, assurez-vous que le cluster est vert (pas de rééquilibrage actif, aucun événement d'avertissement), que les sauvegardes sont actuelles<em>et restaurables</em>et que vous avez enregistré la balise d'image de restauration. Décidez dès le départ de votre stratégie XDCR : désactivez-la pendant la mise à niveau pour obtenir un signal plus silencieux en production, continuez à fonctionner en pré-prod pour exercer un comportement réel ou utilisez un troisième cluster de secours pour les basculements stratégiques.</p><h2>Vérification de la réalité de la restauration</h2><p>La vérité inconfortable que les runbooks matures disent à haute voix : la restauration de<strong>n'est proprement possible que tant qu'au moins un nœud reste sur l'ancienne version</strong>. Une fois que chaque pod a été échangé et que le cluster a été entièrement rééquilibré, la « rétrogradation » peut devenir une « restauration à partir d'une sauvegarde ». C’est pourquoi le rythme est important : il maintient la fenêtre de restauration ouverte plus longtemps.</p><h2>Étapes suivantes</h2><ul><li>Lire le guide opérationnel complet :<a href=\"/fr/articles/couchbase-server-upgrade-cao-paced\">Mise à niveau continue du serveur Couchbase sous CAO (rythme + porte de pause)</a></li><li>Contexte connexe :<a href=\"/fr/docs/blogs/couchbase-ha-production-multi-region\">Couchbase haute disponibilité en production (opérateur XDCR + Kubernetes)</a></li></ul></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "database",
+      "id": 930
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "observability",
+      "id": 934
+    }
+  ],
+  "created_at": "2026-04-22T12:30:00Z",
+  "updated_at": "2026-04-22T12:30:00Z",
+  "status": true,
+  "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "internal_id": 930,
+  "published_date": "2026-04-22"
+}

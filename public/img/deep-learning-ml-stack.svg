@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="ML vs deep learning vs generative AI stack">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .tag { fill: #0f766e; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .c1 { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
+      .c2 { fill: #ecfeff; stroke: #0e7490; stroke-width: 2; }
+      .c3 { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .h { fill: #0f172a; font: 700 16px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .b { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .arrow { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#arr); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="720"/>
+  <text class="tag" x="40" y="36">FIGURE B  -  CAPABILITY STACK</text>
+  <text class="title" x="40" y="68">Machine learning contains deep learning contains generative models</text>
+  <text class="cap" x="40" y="94">Nested sets: each layer adds capability and infrastructure cost. Pick the shallowest layer that meets the SLA.</text>
+
+  <!-- three nested-looking columns -->
+  <rect class="c1" x="40" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="60" y="170">1. Classic ML</text>
+  <text class="b" x="60" y="205">Goal: map features -> labels/scores</text>
+  <text class="b" x="60" y="235">- Linear / tree / SVM / GBM</text>
+  <text class="b" x="60" y="260">- Manual feature engineering</text>
+  <text class="b" x="60" y="285">- Supervised labels required</text>
+  <text class="b" x="60" y="310">- Strong on tabular data</text>
+  <text class="b" x="60" y="350">Weak on raw images/text/audio</text>
+  <text class="b" x="60" y="375">without handcrafted features</text>
+  <text class="b" x="60" y="420">Deploy: CPU sklearn / Spark</text>
+  <text class="b" x="60" y="445">Eval: AUC, F1, calibration</text>
+  <text class="b" x="60" y="490">Agent decision: use if x is</text>
+  <text class="b" x="60" y="515">structured + labelled cheaply</text>
+
+  <rect class="c2" x="420" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="440" y="170">2. Deep learning</text>
+  <text class="b" x="440" y="205">Goal: learn representations end-to-end</text>
+  <text class="b" x="440" y="235">- DNN / CNN / RNN / Transformer</text>
+  <text class="b" x="440" y="260">- Backprop + GPU/TPU training</text>
+  <text class="b" x="440" y="285">- Discriminative: p(y|x)</text>
+  <text class="b" x="440" y="310">- Vision, ASR, embeddings, rankers</text>
+  <text class="b" x="440" y="350">Needs: clean data volume,</text>
+  <text class="b" x="440" y="375">accelerator capacity, MLOps</text>
+  <text class="b" x="440" y="420">Deploy: TorchServe / Triton / KServe</text>
+  <text class="b" x="440" y="445">Eval: task metrics + drift monitors</text>
+  <text class="b" x="440" y="490">Agent decision: use if modality is</text>
+  <text class="b" x="440" y="515">unstructured and labels exist</text>
+
+  <rect class="c3" x="800" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="820" y="170">3. Generative AI</text>
+  <text class="b" x="820" y="205">Goal: sample new x (or x|c)</text>
+  <text class="b" x="820" y="235">- Autoregressive LLMs, diffusion</text>
+  <text class="b" x="820" y="260">- Pretrain -> align -> serve</text>
+  <text class="b" x="820" y="285">- Tools/agents/RAG on top</text>
+  <text class="b" x="820" y="310">- Code, docs, multimodal IO</text>
+  <text class="b" x="820" y="350">Cost driver: inference tokens,</text>
+  <text class="b" x="820" y="375">context length, tool loops</text>
+  <text class="b" x="820" y="420">Deploy: Bedrock / vLLM / Ollama</text>
+  <text class="b" x="820" y="445">Eval: task + safety + groundedness</text>
+  <text class="b" x="820" y="490">Agent decision: use when output</text>
+  <text class="b" x="820" y="515">must be novel structured content</text>
+
+  <path class="arrow" d="M400 340 H420"/>
+  <path class="arrow" d="M780 340 H800"/>
+
+  <text class="foot" x="40" y="590">Inclusion: generative systems are deep generative models (usually transformers) + serving + policy. Classic ML remains optimal for many tabular SLAs.</text>
+  <text class="foot" x="40" y="620">Workstation routing: tabular GBM -> DL for perception -> foundation model / open weights for language agents. Prefer managed API unless residency/cost forces self-host.</text>
+  <text class="foot" x="40" y="680">workstation.co.uk</text>
+</svg>

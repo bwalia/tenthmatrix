@@ -1,0 +1,16 @@
+# Keep the build context lean and secret-free. Real env never enters the image:
+# runtime secrets come from Vault via the ExternalSecret (devops/VAULT-SECRETS.md).
+node_modules
+.next
+out
+.git
+.github
+.serena
+.env
+.env.*
+!.env.example
+devops
+migration
+brand
+*.md
+!README.md

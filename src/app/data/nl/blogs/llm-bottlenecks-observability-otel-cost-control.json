@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "LLM-knelpunten blootleggen: waarneembaarheid, OTEL en kostenbeheersing",
+  "sub_title": "Zakelijk overzicht: OpenTelemetry, Prometheus/Grafana, Langfuse – voor- en nadelen, kosten en gebruiksstatistieken die de uitgaven van agenten verlagen",
+  "excerpt": "TenthMatrix over het blootleggen van knelpunten bij LLM-agenten met waarneembaarheid: OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse – met duidelijke voor- en nadelen, kostenvoordelen en gebruiksstatistieken die marges beschermen.",
+  "meta_title": "LLM-knelpunten blootleggen: OTEL, waarneembaarheid en kosten | TenthMatrix",
+  "meta_description": "Vind knelpunten bij LLM-agenten met OpenTelemetry, Prometheus/Grafana en Langfuse. Voor- en nadelen, kosten en gebruiksstatistieken voor AI die geschikt is voor FinOps.",
+  "meta_keywords": "LLM-knelpunten, OpenTelemetry, OTEL, waarneembaarheid, Langfuse, Prometheus, Grafana, Thanos, FinOps, AI-agenten, TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>zakelijke briefing: ontdek knelpunten in LLM en agenten met waarneembaarheid - OpenTelemetry, Prometheus/Grafana/Thanos en LLM-platforms zoals Langfuse - zodat u kosten kunt besparen, SLO's kunt aanscherpen en agenten met bewijs kunt verzenden. Diepe duik:<a href=\"/nl/articles/llm-bottlenecks-observability-otel-cost-control\">lang technisch artikel (OTEL, FinOps, agentbudgetten)</a>. Gerelateerd:<a href=\"/nl/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">turbocompressor LLMs</a>·<a href=\"/nl/enterprise-ai\">Enterprise AI Lab</a>.</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Kortom.</strong>De meeste ‘trage AI’-tickets zijn geen mysterieuze modelfouten; ze missen attributie. Instrumentagent werkt met OpenTelemetry, scoort uitvoer, tagt elke oproep met tenant/model/route/tokens/kosten en handhaaft budgetten. Teams die dit doen, ondervinden doorgaans 20-50% verspilling aan nieuwe pogingen, te grote modellen en niet-gecachte aanwijzingen binnen de eerste meetcyclus.</div><h2>Waarom knelpunten verborgen blijven zonder telemetrie</h2><p>LLM-agents koppelen aanwijzingen, tools, RAG-ophalen en nieuwe pogingen. Latentie en uitgaven zijn samengesteld over hops heen. Zonder spanwijdten en metrieken kun je niet zeggen of het knelpunt het model, de vectoropslag, een gebrekkig hulpmiddel of een onbegrensde zelfdebuglus is. Zakelijke belanghebbenden overkopen vervolgens de GPU- of API-quota, terwijl de productkwaliteit gelijk blijft.</p><p>Het standpunt van TenthMatrix ten aanzien van AI-complexen: behandel pijpleidingen van agenten zoals elke andere productieservice – eerst de waarneembaarheid van<strong></strong>, daarna de service optimaliseren (zie<a href=\"/nl/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>) en vervolgens met discipline promoten (<a href=\"/nl/ring-promoter\">Ring Promoter</a>).</p><h2>De observatiestapel die zichzelf terugbetaalt</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— één instrumentatielaag voor traces, statistieken en (waar nuttig) logboeken. Exporteren naar een verzamelaar; waaier uit naar backends.</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>— gouden signalen: verzoeksnelheid, foutenpercentage, latentie, tokendoorvoer, geschatte $/verzoek, GPU-gebruik. Thanos (of gelijkwaardig) houdt langetermijnstatistieken bij voor FinOps-beoordelingen.</li><li><strong>LLM observatieplatforms</strong>(bijv.<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — sessie/trace-UI, promptversies, menselijke &amp; geautomatiseerde scores, datasets voor regressie.</li></ul><h2>Voor- en nadelen van deze aanpak</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Afmeting</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Voordelen</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Nadelen / afwegingen</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Kostenbeheersing</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Ken uitgaven toe aan tenant, functie, model en agentstap; dood verspillende nieuwe pogingen.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Engineering tijd tot instrument; opslagkosten voor sporen als retentie naïef is.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Kwaliteit</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Scores + datasets vangen snelle regressies op voordat klanten dat doen.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Geautomatiseerde scores kunnen luidruchtig zijn; mensen nog steeds nodig voor kritieke paden.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Ops</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Dezelfde OTEL/Prometheus-vaardigheden als uw andere microservices.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM-specifieke gebruikersinterfaces (Langfuse enz.) voegen een ander product toe om uit te voeren of te kopen.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Naleving</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Controleer wie welk model heeft aangeroepen met welke promptversie.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Prompt/PII-retentiebeleid moet vooraf worden ontworpen.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Snelheid naar waarde</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Eerste dashboards in dagen als u Grafana al gebruikt.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Volledige kostentoeschrijving voor grafieken met meerdere agenten duurt langer.</td></tr></tbody></table><h2>Kosten: wat u uitgeeft versus wat u bespaart</h2><p><strong>Instrumentatiekosten (typisch platform voor middelgrote agenten):</strong></p><ul><li>1–2 ingenieursweken om OTEL-overspanningsconventies + exporteurbedrading over te nemen.</li><li>Collector + behoud van statistieken: vaak &lt;5–10% van de maandelijkse LLM API/GPU-uitgaven zodra de sampling is afgestemd.</li><li>Optionele SaaS LLM-observatie: geprijsd per gebeurtenis/trace – budgeteer dit als een percentage van de modeluitgaven, niet als een bijzaak.</li></ul><p><strong>Besparingshendels (gebruiksstatistieken die de naald bewegen):</strong></p><ul><li><strong>Tokens per succesvolle taak</strong>— geen tokens per onbewerkte oproep. Cap-toollussen en zelfdebugrondes.</li><li><strong>Kosten per succesvolle taak</strong>— route goedkope modellen voor classificeren/routeren; reserveer grensmodellen voor harde stappen.</li><li><strong>Cachehitpercentage</strong>— caching van prompts/voorvoegsels waar veilig; meet de correctheid, niet alleen de latentie.</li><li><strong>Aantal nieuwe pogingen &amp; dode letter-percentage</strong>- schilferige gereedschappen vermommen zich als problemen met de \"modelkwaliteit\".</li><li><strong>p95 TTFT en end-to-end latentie</strong>— bescherm UX terwijl u bespaart op de uitgaven.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Vuistregel.</strong>Als u niet kunt antwoorden “wat heeft deze agent vorige week per klant en per stap gekost?” u bent nog niet klaar om het gebruik te schalen – u bent klaar om Finance te verrassen.</div><h2>Score: handmatig versus automatisch</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Methode</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Wanneer moet u</th>gebruiken?<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Zakelijk briefje</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Handmatig scoren</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Gold-sets, gereguleerde antwoorden, merkgevoelige kopie.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Duur, maar gegronde geautomatiseerde rechters.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Automatisch scoren</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Regressie met groot volume, LLM-als-rechter, rubriekcontroles.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Goedkoop op schaal; kalibreer maandelijks tegen mensen.</td></tr></tbody></table><h2>Migratie-playbook (begin klein)</h2><ol><li>Instrument<strong>één</strong>-productieagentpad end-to-end met OTEL + token/kostenattributen.</li><li>Verzend een Grafana-bord voor snelheid / fouten / latentie / $/succes.</li><li>Voeg Langfuse (of gelijkwaardig) toe voor promptversies en scores op dat pad.</li><li>Hard caps afdwingen: max. tokens, max. tooloproepen, max. nieuwe pogingen per sessie.</li><li>Breid pas uit naar de volgende agent nadat het eerste pad een gemeten kosten- of latentiewinst laat zien.</li></ol><h2>Bekijk: waarom observatie belangrijk is voor AI-systemen</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Contextbespreking over waarneembaarheidscultuur - geen Workstation-productdemo. Koppel met<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry-documentatie</a>en het<a href=\"/nl/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix technisch artikel</a>.</p><h2>Lees volgende</h2><ol><li><a href=\"/nl/articles/llm-bottlenecks-observability-otel-cost-control\">Lang artikel</a>— OTEL-spanschema, verzamelaars, kostenformules, agentcaps, Langfuse/LMNR-aantekeningen.</li><li><a href=\"/nl/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocompressor LLMs</a>- knelpunten aan de bedieningszijde nadat u ze kunt zien.</li><li><a href=\"/nl/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Lokale agenten</a>·<a href=\"/nl/enterprise-ai\">Enterprise AI Lab</a>·<a href=\"/nl/contact-us\">Neem contact op met TenthMatrix</a></li></ol><p>Gepubliceerd door<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>. Referenties:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

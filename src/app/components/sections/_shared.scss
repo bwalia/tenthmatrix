@@ -1,0 +1,92 @@
+// Shared mixins for section modules. Tokens only (--tm-*), no raw colours.
+
+@mixin container($max: var(--tm-container)) {
+  width: 100%;
+  max-width: calc(#{$max} + 2 * var(--tm-gutter));
+  margin-inline: auto;
+  padding-inline: var(--tm-gutter);
+}
+
+@mixin eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-2);
+  margin: 0 0 var(--tm-space-3);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  font-weight: var(--tm-weight-medium);
+  letter-spacing: var(--tm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--tm-text-subtle);
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+    border-radius: 1px;
+    background: var(--tm-accent);
+  }
+}
+
+@mixin card {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-sm);
+
+  :global([data-theme='dark']) & {
+    box-shadow: none;
+  }
+}
+
+@mixin heading($size: var(--tm-text-2xl)) {
+  margin: 0;
+  font-family: var(--tm-font-display);
+  font-weight: var(--tm-weight-semibold);
+  font-size: $size;
+  line-height: var(--tm-leading-snug);
+  letter-spacing: var(--tm-tracking-heading);
+  color: var(--tm-text);
+  text-wrap: balance;
+}
+
+@mixin card-title {
+  margin: 0;
+  font-family: var(--tm-font-body);
+  font-weight: var(--tm-weight-semibold);
+  font-size: var(--tm-text-lg);
+  line-height: var(--tm-leading-snug);
+  color: var(--tm-text);
+}
+
+@mixin icon-tile($size: 40px) {
+  display: inline-grid;
+  place-items: center;
+  width: $size;
+  height: $size;
+  flex: none;
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-accent-soft);
+  color: var(--tm-accent);
+}
+
+@mixin focus {
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--tm-focus-ring);
+  }
+}
+
+@mixin step-in {
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform var(--tm-duration-fast) var(--tm-ease-out),
+      border-color var(--tm-duration-fast) var(--tm-ease-standard),
+      box-shadow var(--tm-duration-fast) var(--tm-ease-standard);
+  }
+}
+
+$bp-sm: 600px;
+$bp-md: 900px;
+$bp-lg: 1200px;

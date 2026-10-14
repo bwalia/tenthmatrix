@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-aws-bedrock-teams-agents-001",
+  "internal_id": 954,
+  "slug": "amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "title": "Amazon Bedrock وAgentCore وSageMaker وQ: وكلاء في Microsoft Teams",
+  "sub_title": "دليل FDE: أي خدمة AWS تستخدم، ومسار أول وكيل Teams، وتقديرات التقويم لـ RAG وMLOps وتطبيقات LLM",
+  "excerpt": "نفّذ Amazon Bedrock وBedrock AgentCore وSageMaker وAmazon Q، ثم أطلق أول وكيل أعمال في Microsoft Teams — مع المتطلبات والأدوات وصناديق الوقت.",
+  "meta_title": "Amazon Bedrock وAgentCore وSageMaker وQ — وكلاء في Microsoft Teams",
+  "meta_description": "دليل FDE لـ Amazon Bedrock وBedrock AgentCore وSageMaker وAmazon Q: البنية، وأول وكيل في Microsoft Teams، والأدوات، وتقديرات الوقت لـ RAG وMLOps.",
+  "meta_keywords": "Amazon Bedrock, Bedrock AgentCore, Amazon SageMaker, Amazon Q, وكلاء Microsoft Teams, RAG, MLOps, FDE, Entra ID",
+  "cover_image": "/img/aws-bedrock-teams-agents-cover.svg",
+  "images": [
+    {
+      "url": "/img/aws-bedrock-teams-agents-cover.svg",
+      "id": 954,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Amazon Bedrock AgentCore SageMaker Amazon Q agents in Microsoft Teams"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>كيف تتلاءم Amazon Bedrock وBedrock AgentCore وSageMaker وAmazon Q — وكيف يُسلّم FDE أول وكيل أعمال إلى Microsoft Teams. للدليل الكامل وقائمة الأدوات وتقديرات التقويم، اقرأ <a href=\"/ar/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">مقال طويل</a>.</em></p>\n<p><img alt=\"وكلاء Amazon Bedrock AgentCore SageMaker Amazon Q في Microsoft Teams\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/aws-bedrock-teams-agents-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #ff9900;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>النسخة في فقرة واحدة.</strong> استخدم <strong>Amazon Bedrock</strong> لنماذج الأساس المُدارة وقواعد معرفة RAG. استخدم <strong>Bedrock AgentCore</strong> كوقت تشغيل للوكلاء المخصصين (الذاكرة والأدوات والهوية وقابلية المراقبة). استخدم <strong>SageMaker</strong> عندما تحتاج تدريبًا مخصصًا أو ضبطًا دقيقًا أو مسارات MLOps. استخدم <strong>Amazon Q</strong> (Business / Developer) عندما تريد مساعد موظف أو بنّاء مُنتَجًا بهندسة أقل. ضع الوكلاء حيث يعمل الناس أصلًا — <strong>Microsoft Teams</strong> — عبر ترحيل Bot Framework / Azure Bot إلى AgentCore Runtime، مع Entra ID للمصادقة.\n</div>\n<h2>من يفعل ماذا في حزمة AWS</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#ffb84d;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الخدمة</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الأفضل لـ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ليس لـ</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">نماذج أساس بدون خادم، وGuardrails، وKnowledge Bases (RAG)، وAgents APIs</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تدريب نماذج كبيرة من الصفر</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Bedrock AgentCore</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">وقت تشغيل وكيل مخصص، وأدوات Gateway (بما في ذلك Teams Graph)، وIdentity، وMemory</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">low-code «chat with my docs» فقط</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon SageMaker</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تدريب / ضبط دقيق / استضافة نماذج مخصصة، Pipelines، Feature Store، MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">أسرع مسار إلى MVP لروبوت دردشة Teams</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Q</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مساعد معرفة للموظفين؛ مساعدة ترميز للمطوّرين على AWS</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">منتجات متعددة الوكلاء مخصصة بعمق</td></tr>\n</tbody>\n</table>\n<h2>نمط الأعمال الموصى به</h2>\n<ol>\n<li><strong>الأسبوع 0–2:</strong> أعد Bedrock + Knowledge Base RAG على مجموعة تجريبية؛ فعّل Guardrails.</li>\n<li><strong>الأسبوع 2–4:</strong> احزم وكيل إنتاج على AgentCore Runtime؛ وصّل الأدوات عبر Gateway (SharePoint وCRM وTeams Graph).</li>\n<li><strong>الأسبوع 3–5:</strong> سلّم بوت Teams يرحّل الرسائل إلى AgentCore؛ احتفظ بالجلسات مع <code>teams-{aadObjectId}-{conversationId}</code>.</li>\n<li><strong>بالتوازي / لاحقًا:</strong> SageMaker للمصنّفات المخصصة أو الضبط الدقيق؛ Amazon Q Business لأسئلة وأجوبة على مستوى المؤسسة ببناء أقل.</li>\n</ol>\n<h2>أول وكيل في Teams (لقطة FDE)</h2>\n<p>المسار الأدنى الذي يعمل في تجارب موجّهة للإنتاج:</p>\n<ul>\n<li>Azure Bot + تسجيل تطبيق Teams (Entra ID)</li>\n<li>AWS Lambda (أو حاوية) كنقطة نهاية رسائل Bot</li>\n<li><code>POST</code> إلى AgentCore Runtime <code>/invocations</code> مع JWT</li>\n<li>Bedrock Knowledge Base لـ RAG؛ Guardrails للسلامة</li>\n<li>قناة تجريبية، حلقة تغذية راجعة بشرية، تتبّع CloudWatch</li>\n</ul>\n<p>توقّع تقريبًا <strong>3–6 أسابيع</strong> لوكيل داخلي محدود النطاق (قسم واحد، مصدر معرفة واحد، أدوات للقراءة غالبًا) مع FDE + مهندس منصة + مراجعة أمن. MLOps كامل + متعدد الوكلاء + إجراءات كتابة في أنظمة الأعمال هو <strong>ربع سنة+</strong>.</p>\n<h2>صناديق وقت (إرشادية)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">مسار العمل</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">التقويم (بقيادة FDE)</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Bedrock chat + Guardrails MVP</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">3–5 أيام</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Knowledge Base RAG (one corpus)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 أسبوع</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">AgentCore agent + 2–3 tools</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">2–3 أسابيع</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">بوت Teams + نشر تجريبي إداري</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 أسبوع (تداخل)</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Amazon Q Business (managed assistant)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–3 أسابيع</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">SageMaker fine-tune + endpoint + MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">4–8+ أسابيع</td></tr>\n</tbody>\n</table>\n<h2>اقرأ النسخة الطويلة</h2>\n<p>الـ <a href=\"/ar/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">مقال طويل</a> يغطي مخططات البنية نثرًا، وإعداد أول وكيل في Teams خطوة بخطوة، وEntra ID مع AgentCore Identity، وأهداف أدوات Gateway، ومنهج تدريب FDE، وقوائم متطلبات/أدوات، وتقديرات مرحلية لتطبيقات LLM وRAG وMLOps. نُشر بواسطة <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "agentcore",
+      "id": 1012
+    },
+    {
+      "name": "sagemaker",
+      "id": 1013
+    },
+    {
+      "name": "amazon-q",
+      "id": 1014
+    },
+    {
+      "name": "microsoft-teams",
+      "id": 1015
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "rag",
+      "id": 945
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-21T09:00:00Z",
+  "updated_at": "2026-07-21T09:00:00Z",
+  "published_date": "2026-07-21",
+  "status": true
+}

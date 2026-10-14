@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "Benchmarks poliglotas: escolhendo a ferramenta certa para o trabalho certo",
+  "sub_title": "Como os benchmarks poliglotas ajudam você a escolher a pilha certa para cada aplicativo – e não uma linguagem para governar todos eles",
+  "excerpt": "Pare o viés da pilha padrão. O Polyglot Benchmarks compara njs, Lua, Python, Go, Rust, Bun, Java e Kotlin nas mesmas cargas de trabalho — equipamento reproduzível + painel ao vivo para decisões de arquitetura.",
+  "meta_title": "Benchmarks poliglotas: ferramenta certa para o trabalho",
+  "meta_description": "Compare njs, Lua, Python, Go, Rust, Bun, Java, Kotlin nos mesmos testes HTTP. Arnês reproduzível + painel ao vivo para decisões de pilha.",
+  "meta_keywords": "benchmarks poliglotas, comparação de linguagens, decisões de arquitetura, exemplos de fluxo de trabalho, benchmark de desempenho, Rust vs Go, Java vs Kotlin, FastAPI, Bun.js, Javalin, Ktor, Lua, OpenResty, njs, NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>Um companheiro curto e de fácil leitura. Para um mergulho profundo na arquitetura – aproveitar o layout, a matriz de decisão, os antipadrões e como bifurcar os benchmarks – leia<a href=\"/pt/articles/polyglot-benchmarks-right-tool-right-application\">o longo artigo</a>.</em></p><h2>Sua organização escolheu uma pilha em 2019. Suas cargas de trabalho não.</h2><p>A maioria das equipes ainda padroniza uma única linguagem para cada novo serviço: tudo em Node, tudo em Python, tudo em Java ou uma aposta heróica em Rust apenas para greenfield. Esse hábito é compreensível: contratação, modelos de CI e revisão de segurança ficam mais fáceis quando a pilha é uniforme. O problema é que as cargas de trabalho não são uniformes. Um gateway API, um trabalho ETL noturno, uma transformação de borda NGINX, uma propriedade de microsserviço JVM e um backend de chat com conexões de longa duração sobrecarregam diferentes partes do tempo de execução. Escolher um vencedor em um debate de corredor ou um único micro-referência é como você acaba com a ferramenta errada carregando a carga errada.</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Polyglot Benchmarks</strong></a>é o antídoto: um chicote reproduzível e um painel ao vivo que compara<strong>oito tempos de execução</strong>nas mesmas cargas de trabalho<em></em>HTTP, para que os arquitetos possam combinar evidências com contextos limitados em vez de viés de pilha padrão.</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>O que mede</h2><p>O painel público compara<strong>NGINX njs</strong>,<strong>OpenResty Lua</strong>,<strong>Python (FastAPI)</strong>,<strong>Go (net/http)</strong>,<strong>Rust (Actix)</strong>,<strong>Bun</strong>,<strong>Java (Javalin / Jetty)</strong>e<strong>Kotlin (Ktor / Netty)</strong>em sete testes sintéticos que espelham API real e padrões de borda: linha de base de texto simples, serialização JSON, fibonacci vinculado a CPU, manipulação de string, inspeção de solicitação, subsolicitação interna + transformação e lógica de roteamento. Cada teste relata solicitações por segundo, latência média e final (incluindo P99), tempo até o primeiro byte do curl e contagens de erros – transmitidos ao vivo conforme o<code>bench.sh</code>é concluído.</p><p>Java e Kotlin acompanham os tempos de execução compilados e de script para que as lojas JVM possam ver como Javalin e Ktor negociam contra Go, Rust, Bun e FastAPI em rotas idênticas – e não contra uma narrativa ondulada de “empresa versus greenfield”. O chicote reside em exemplos/benchmarks de fluxo de trabalho<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\"></a>: serviços Docker Compose, um perfil<code>wrk</code>compartilhado (10 segundos, 4 threads, 100 conexões) e resultados JSON consumidos pelo painel. Você pode bifurcá-lo para seus próprios candidatos e caminhos importantes.</p><h2>Por que esta é uma estrutura de decisão, não uma tabela de classificação</h2>Os benchmarks poliglotas<p>não coroam um idioma para sempre. Os vencedores mudam por linha de teste — exatamente o que você deseja ao projetar microsserviços. A seção de veredicto do painel mapeia os resultados para casos de uso (roteamento de borda em Lua/njs, simultaneidade central em Rust/Go, serviços JVM em Java/Kotlin, velocidade em Python). Essa é a tese:<strong>poliglota por design</strong>, com dados para placas de revisão de arquitetura em vez de opinião.</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">A abordagem de quatro etapas em um único quadro: definir a carga de trabalho, executar o chicote, comparar no painel ao vivo e depois decidir com um ADR.</figcaption></figure><h2>Seis benefícios para líderes de plataforma e engenharia</h2><ul><li><strong>Evidência sobre opinião</strong>— anexar gráficos e configurar ADRs; resolva debates de pilha com execuções medidas.</li><li><strong>Vencedores específicos para cargas de trabalho</strong>— caminhos sensíveis à latência versus transformações em lote versus transformações de borda versus propriedades JVM obtêm líderes diferentes.</li><li><strong>Custo total de propriedade</strong>— RPS bruto não é suficiente; avalie o tempo de construção, o tamanho da imagem, a adequação das habilidades da equipe e a carga de operações.</li><li><strong>Fluxos de trabalho reproduzíveis</strong>— mesmo repositório, mesmo arquivo Compose, mesmo script de trabalho; reexecutável em CI.</li><li><strong>Microsserviços poliglotas legítimos</strong>— diferentes idiomas por limite de serviço, sem vergonha ou surpresa.</li><li><strong>Redução de riscos</strong>— protótipo em segundo lugar antes de um mandato para toda a organização.</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>Início rápido</h2><ol><li>Abra o painel ao vivo do<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"></a>enquanto uma execução está em andamento (ou inicie uma localmente).</li><li>Clone<code>workflow-examples</code>,<code>cd benchmarks</code>,<code>docker compose up</code>— oito serviços de idiomas, além de painel e corredor de bancada.</li><li>Leia<code>results.json</code>no volume do painel e mapeie os vencedores para<em>suas linhas de carga de trabalho</em>.</li><li>Escreva o ADR — inclua duração, threads, conexões e classe de hardware.</li></ol><h2>Leia a versão longa</h2><p>O artigo longo do<a href=\"/pt/articles/polyglot-benchmarks-right-tool-right-application\"></a>cobre o layout completo do repositório, uma tabela de critérios, o diagrama de matriz de decisão, padrões de caso por família de teste (incluindo Java e Kotlin), antipadrões, limitações e snippets prontos para SEO para compartilhar com seu ARB. Publicado por<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>; site de benchmark hospedado em<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.ficctionally.org</a>.</p><p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

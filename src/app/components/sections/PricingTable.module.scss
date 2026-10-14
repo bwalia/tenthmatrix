@@ -1,0 +1,116 @@
+@use './shared' as *;
+
+.plans {
+  display: grid;
+  gap: var(--tm-grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.two {
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+}
+
+.plan {
+  @include card;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tm-space-3);
+  padding: var(--tm-space-8) var(--tm-space-6) var(--tm-space-6);
+  min-width: 0;
+}
+
+.featured {
+  border: 2px solid var(--tm-accent);
+  box-shadow: var(--tm-shadow);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  inset-inline-start: var(--tm-space-6);
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 2px var(--tm-space-3);
+  border-radius: var(--tm-radius-pill);
+  background: var(--tm-accent);
+  color: var(--tm-accent-contrast);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  font-weight: var(--tm-weight-semibold);
+}
+
+.name {
+  @include card-title;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--tm-space-1) var(--tm-space-2);
+  margin: 0;
+}
+
+.amount {
+  font-family: var(--tm-font-display);
+  font-weight: var(--tm-weight-display);
+  font-size: var(--tm-text-3xl);
+  line-height: 1.05;
+  letter-spacing: var(--tm-tracking-display);
+  color: var(--tm-text);
+}
+
+.period {
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  color: var(--tm-text-subtle);
+}
+
+.desc {
+  margin: 0;
+  color: var(--tm-text-muted);
+}
+
+.features {
+  display: grid;
+  gap: var(--tm-space-2);
+  margin: var(--tm-space-2) 0 0;
+  padding: var(--tm-space-4) 0 0;
+  border-top: 1px solid var(--tm-line);
+  list-style: none;
+  font-size: var(--tm-text-sm);
+
+  li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: var(--tm-space-2);
+    align-items: start;
+  }
+
+  svg {
+    margin-top: 3px;
+    color: var(--tm-accent);
+  }
+}
+
+.cta {
+  margin-top: auto;
+  padding-top: var(--tm-space-4);
+
+  a {
+    width: 100%;
+  }
+}

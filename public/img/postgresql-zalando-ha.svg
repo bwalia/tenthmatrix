@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="PostgreSQL HA with Zalando postgres-operator and Spilo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1828"/>
+      <stop offset="0.55" stop-color="#14253c"/>
+      <stop offset="1" stop-color="#2a0a16"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#ff6e42" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#ff6e42" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #ff8a65; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 56px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #ff8a65; font: 800 24px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 17px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #ff8a65; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #ff8a65; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arRepl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#42a5f5"/>
+    </marker>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arBkp" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">POSTGRESQL  /  ZALANDO POSTGRES-OPERATOR</text>
+  <text class="title" x="60" y="152">PostgreSQL HA</text>
+  <text class="tagline" x="60" y="194">Spilo + postgres-operator + Patroni</text>
+  <text class="sub" x="60" y="234">postgresql.acid.zalan.do CR is the contract. Spilo image bundles PG + Patroni + WAL-E/WAL-G.</text>
+
+  <g>
+    <rect class="chip" x="60" y="276" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="302">01</text>
+    <text class="chipText" x="120" y="302">App - master/replica Svc</text>
+
+    <rect class="chip" x="60" y="330" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="356">02</text>
+    <text class="chipText" x="120" y="356">Operator reconciles CR</text>
+
+    <rect class="chip" x="60" y="384" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="410">03</text>
+    <text class="chipText" x="120" y="410">Spilo runs Patroni</text>
+
+    <rect class="chip" x="60" y="438" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="464">04</text>
+    <text class="chipText" x="120" y="464">WAL-G to object store</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="450" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">CONTROL PLANE  /  KUBERNETES + OPERATOR</text>
+    <g transform="translate(20,40)">
+      <rect x="0" y="0" width="220" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">postgres-operator</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">watches postgresql CR</text>
+      <text class="nodeText" x="110" y="50" text-anchor="middle">manages STS + Service + RBAC</text>
+
+      <rect x="240" y="0" width="220" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="22" text-anchor="middle">postgresql CR</text>
+      <text class="code" x="350" y="38" text-anchor="middle">spec.numberOfInstances</text>
+      <text class="code" x="350" y="50" text-anchor="middle">spec.postgresql.version</text>
+
+      <rect x="480" y="0" width="220" height="60" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="22" text-anchor="middle">Services (master / repl)</text>
+      <text class="nodeText" x="590" y="38" text-anchor="middle">label selector: role=master</text>
+      <text class="nodeText" x="590" y="50" text-anchor="middle">Patroni updates pod labels</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="128">CLIENT PLANE</text>
+    <rect x="20" y="140" width="200" height="44" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="120" y="162" text-anchor="middle">Application</text>
+    <text class="nodeText" x="120" y="176" text-anchor="middle">connect via Service name</text>
+
+    <rect x="240" y="140" width="220" height="44" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="350" y="162" text-anchor="middle">Connection pooler (opt)</text>
+    <text class="nodeText" x="350" y="176" text-anchor="middle">PgBouncer sidecar  /  pooled writes</text>
+
+    <text class="laneLabel" x="20" y="210">DATA PLANE  /  SPILO STATEFULSET</text>
+    <g transform="translate(20,222)">
+      <rect x="0" y="0" width="220" height="110" rx="10" fill="#0e2540" stroke="#336791" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="24" text-anchor="middle">Spilo pod (master)</text>
+      <text class="nodeText" x="110" y="42" text-anchor="middle">PG + Patroni in single image</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">role label: master</text>
+      <text class="nodeText" x="110" y="70" text-anchor="middle">writes via streaming repl</text>
+      <text class="nodeText" x="110" y="84" text-anchor="middle">archives WAL to S3</text>
+      <text class="nodeText" x="110" y="98" text-anchor="middle">PVC managed by STS</text>
+
+      <rect x="240" y="0" width="220" height="110" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="24" text-anchor="middle">Spilo pod (replica)</text>
+      <text class="nodeText" x="350" y="42" text-anchor="middle">hot standby  /  role: replica</text>
+      <text class="nodeText" x="350" y="56" text-anchor="middle">Patroni heartbeats DCS</text>
+      <text class="nodeText" x="350" y="70" text-anchor="middle">async or sync per CR</text>
+      <text class="nodeText" x="350" y="84" text-anchor="middle">candidate on failover</text>
+      <text class="nodeText" x="350" y="98" text-anchor="middle">PVC managed by STS</text>
+
+      <rect x="480" y="0" width="220" height="110" rx="10" fill="#3a1f08" stroke="#ff6e42" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="24" text-anchor="middle">Backups - object store</text>
+      <text class="nodeText" x="590" y="42" text-anchor="middle">WAL-E / WAL-G push</text>
+      <text class="nodeText" x="590" y="56" text-anchor="middle">basebackup + WAL segments</text>
+      <text class="nodeText" x="590" y="70" text-anchor="middle">S3 / GCS / Azure</text>
+      <text class="nodeText" x="590" y="84" text-anchor="middle">PITR via WAL-G</text>
+      <text class="nodeText" x="590" y="98" text-anchor="middle">retention managed</text>
+
+      <line x1="220" y1="55" x2="240" y2="55" stroke="#42a5f5" stroke-width="2" marker-end="url(#arRepl)"/>
+    </g>
+
+    <line x1="350" y1="100" x2="350" y2="140" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arCtrl)"/>
+    <line x1="590" y1="60" x2="590" y2="222" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arCtrl)"/>
+    <line x1="120" y1="184" x2="120" y2="222" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="350" y1="184" x2="350" y2="222" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="110" y1="332" x2="480" y2="332" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arBkp)"/>
+
+    <text class="laneLabel" x="20" y="362">FAILOVER WORKFLOW</text>
+    <g transform="translate(20,374)">
+      <rect x="0" y="0" width="700" height="40" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text class="nodeText" x="14" y="24">Patroni leader fails  -  DCS lease expires  -  replica races, wins leader key  -  pg_promote  -  pod relabels to role=master  -  Service selector follows  -  WAL-G re-anchors</text>
+    </g>
+
+    <g transform="translate(20,424)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#336791"/>
+      <text class="nodeText" x="22" y="11">Master (writes)</text>
+      <rect x="140" y="0" width="14" height="14" rx="3" fill="#2e7d32"/>
+      <text class="nodeText" x="162" y="11">Replica (reads)</text>
+      <rect x="280" y="0" width="14" height="14" rx="3" fill="#6a3eff"/>
+      <text class="nodeText" x="302" y="11">postgres-operator + CR</text>
+      <line x1="450" y1="7" x2="480" y2="7" stroke="#42a5f5" stroke-width="2"/>
+      <text class="nodeText" x="486" y="11">WAL stream</text>
+      <line x1="555" y1="7" x2="585" y2="7" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4"/>
+      <text class="nodeText" x="591" y="11">WAL-G upload</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">SRE  /  DBA  /  PLATFORM TEAMS</text>
+</svg>

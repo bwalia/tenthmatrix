@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "पॉलीग्लॉट बेंचमार्क: सही कार्य के लिए सही उपकरण चुनना",
+  "sub_title": "पॉलीग्लॉट बेंचमार्क आपको प्रत्येक एप्लिकेशन के लिए सही स्टैक चुनने में कैसे मदद करते हैं - उन सभी पर शासन करने के लिए एक भाषा नहीं",
+  "excerpt": "डिफ़ॉल्ट-स्टैक पूर्वाग्रह बंद करें. पॉलीग्लॉट बेंचमार्क एनजेएस, लुआ, एक्सपीआर0एक्स, गो, रस्ट, बन, जावा और एक्सपीआर1एक्स की तुलना समान वर्कलोड पर करता है - आर्किटेक्चर निर्णयों के लिए प्रतिलिपि प्रस्तुत करने योग्य हार्नेस + लाइव डैशबोर्ड।",
+  "meta_title": "पॉलीग्लॉट बेंचमार्क: कार्य के लिए सही उपकरण",
+  "meta_description": "समान HTTP परीक्षणों पर njs, Lua, Python, Go, Rust, bun, Java, Kotlin की तुलना करें। स्टैक निर्णयों के लिए प्रतिलिपि प्रस्तुत करने योग्य हार्नेस + लाइव डैशबोर्ड।",
+  "meta_keywords": "पॉलीग्लॉट बेंचमार्क, भाषा तुलना, आर्किटेक्चर निर्णय, वर्कफ़्लो उदाहरण, प्रदर्शन बेंचमार्क, रस्ट बनाम गो, जावा बनाम एक्सपीआर1एक्स, फास्टएक्सपीआर3एक्स, बन.जेएस, एक्सपीआर0एक्स, एक्सपीआर2एक्स, लुआ, ओपनरेस्टी, एनजेएस, एनजीआईएनएक्स",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>एक छोटा, स्किम-पठनीय साथी। पूर्ण आर्किटेक्चर डीप-डाइव के लिए - हार्नेस लेआउट, निर्णय मैट्रिक्स, एंटी-पैटर्न और बेंचमार्क को कैसे फोर्क करें -<a href=\"/hi/articles/polyglot-benchmarks-right-tool-right-application\">लंबा लेख</a>पढ़ें।</em></p><h2>आपके संगठन ने 2019 में एक स्टैक चुना। आपके कार्यभार ने नहीं उठाया।</h2><p>अधिकांश टीमें अभी भी प्रत्येक नई सेवा के लिए एक ही भाषा पर मानकीकरण करती हैं: नोड में सब कुछ, Python में सब कुछ, जावा में सब कुछ, या केवल ग्रीनफ़ील्ड के लिए रस्ट पर एक वीरतापूर्ण दांव। वह आदत समझ में आती है - जब स्टैक एक समान हो तो नियुक्ति, सीआई टेम्प्लेट और सुरक्षा समीक्षा सभी आसान हो जाते हैं। समस्या यह है कि कार्यभार एक समान नहीं है। एक API गेटवे, एक रात्रिकालीन ETL जॉब, एक NGINX एज ट्रांसफॉर्म, एक JVM माइक्रोसर्विस एस्टेट, और लंबे समय तक चलने वाले कनेक्शन के साथ एक चैट बैकएंड रनटाइम के विभिन्न हिस्सों पर जोर देता है। हॉलवे डिबेट या एकल माइक्रो-बेंचमार्क से एक विजेता को चुनना यह है कि आप गलत भार उठाने वाले गलत टूल के साथ कैसे समाप्त होते हैं।</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>पॉलीग्लॉट बेंचमार्क</strong></a>मारक है: एक प्रतिलिपि प्रस्तुत करने योग्य हार्नेस और लाइव डैशबोर्ड जो<em>समान</em>HTTP वर्कलोड पर<strong>आठ</strong>रनटाइम की तुलना करता है, ताकि आर्किटेक्ट डिफ़ॉल्ट-स्टैक पूर्वाग्रह के बजाय बंधे हुए संदर्भों से साक्ष्य का मिलान कर सकें।</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>यह क्या मापता है</h2><p>सार्वजनिक डैशबोर्ड<strong>NGINX njs</strong>,<strong>OpenResty Lua</strong>,<strong></strong>,<strong>बन</strong>,<strong>जावा (Javalin / Jetty)</strong>, और<strong>Kotlin (Ktor / हेरफेर, अनुरोध निरीक्षण, आंतरिक उपअनुरोध + परिवर्तन, और रूटिंग तर्क। प्रत्येक परीक्षण रिपोर्ट प्रति सेकंड, औसत और टेल विलंबता (P99 सहित), कर्ल से पहली बाइट का समय और त्रुटि गणना का अनुरोध करती है -<code>bench.sh</code>पूर्ण होने पर लाइव स्ट्रीम किया जाता है।</p><p>जावा और Kotlin संकलित और स्क्रिप्टिंग रनटाइम के साथ बैठते हैं ताकि JVM दुकानें देख सकें कि Javalin और Ktor समान मार्गों पर गो, रस्ट, बन और फास्टएक्सपीआर 11X के खिलाफ कैसे व्यापार करते हैं - हाथ से चलने वाले \"उद्यम बनाम ग्रीनफील्ड\" कथा के खिलाफ नहीं। हार्नेस<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\">वर्कफ़्लो-उदाहरण/बेंचमार्क</a>में रहता है: Docker कंपोज़ सेवाएँ, एक साझा<code>wrk</code>प्रोफ़ाइल (10 सेकंड, 4 थ्रेड, 100 कनेक्शन), और डैशबोर्ड द्वारा उपभोग किए गए JSON परिणाम। आप इसे अपने स्वयं के उम्मीदवारों और हॉट पाथ के लिए उपयोग कर सकते हैं।</p><h2>यह एक निर्णय ढाँचा क्यों है, लीडरबोर्ड नहीं</h2><p>पॉलीग्लॉट बेंचमार्क सभी समय के लिए एक भाषा का ताज नहीं रखता। प्रति परीक्षण पंक्ति में विजेता बदलते हैं - ठीक वही जो आप माइक्रोसर्विसेज डिज़ाइन करते समय चाहते हैं। डैशबोर्ड का निर्णय अनुभाग उपयोग के मामलों (लुआ/एनजेएस में एज रूटिंग, रस्ट/गो में कोर कंकरेंसी, जावा/एक्सपीआर4एक्स में जेवीएम सेवाएं, एक्सपीआर3एक्स में वेलोसिटी) के परिणामों को मैप करता है। वह थीसिस है: डिज़ाइन द्वारा<strong>पॉलीग्लॉट</strong>, राय के बजाय आर्किटेक्चर समीक्षा बोर्डों के लिए डेटा के साथ।</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">एक फ्रेम में चार-चरणीय दृष्टिकोण: कार्यभार को परिभाषित करें, हार्नेस चलाएं, लाइव डैशबोर्ड पर तुलना करें, फिर एडीआर के साथ निर्णय लें।</figcaption></figure><h2>प्लेटफ़ॉर्म और इंजीनियरिंग के लिए छह लाभ</h2>की अगुवाई करते हैं<ul><li><strong>राय पर साक्ष्य</strong>- ADRs में चार्ट और कॉन्फिगरेशन संलग्न करें; मापे गए रनों के साथ स्टैक बहस का निपटारा करें।</li><li><strong>वर्कलोड-विशिष्ट विजेता</strong>- विलंबता-संवेदनशील पथ बनाम बैच बनाम एज ट्रांसफॉर्म बनाम जेवीएम एस्टेट को अलग-अलग लीडर मिलते हैं।</li><li><strong>स्वामित्व की कुल लागत</strong>- कच्चा आरपीएस पर्याप्त नहीं है; निर्माण समय, छवि आकार, टीम कौशल फिट और ऑप्स बोझ को तौलें।</li><li><strong>प्रतिलिपि प्रस्तुत करने योग्य वर्कफ़्लो</strong>- वही रेपो, वही कंपोज़ फ़ाइल, वही वर्क स्क्रिप्ट; सीआई में पुनः चलाने योग्य।</li><li><strong>वैध पॉलीग्लॉट माइक्रोसर्विसेज</strong>- बिना शर्म या आश्चर्य के प्रति सेवा सीमा के अनुसार अलग-अलग भाषाएँ।</li><li><strong>जोखिम में कमी</strong>- संगठन-व्यापी अधिदेश से पहले रनर-अप में प्रोटोटाइप।</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>त्वरित प्रारंभ</h2><ol><li>जब रन चल रहा हो तो<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">लाइव डैशबोर्ड</a>खोलें (या स्थानीय रूप से शुरू करें)।</li><li>क्लोन<code>workflow-examples</code>,<code>cd benchmarks</code>,<code>docker compose up</code>- आठ भाषा सेवाएं और डैशबोर्ड और बेंच रनर।</li><li>डैशबोर्ड वॉल्यूम पर<code>results.json</code>पढ़ें और विजेताओं को अपनी</em>वर्कलोड पंक्तियों को<em>पर मैप करें।</li><li>ADR लिखें - अवधि, थ्रेड, कनेक्शन और हार्डवेयर वर्ग शामिल करें।</li></ol><h2>लंबा संस्करण</h2>पढ़ें<p><a href=\"/hi/articles/polyglot-benchmarks-right-tool-right-application\">लंबे लेख</a>में आपके ARB के साथ साझा करने के लिए पूर्ण रेपो लेआउट, एक मानदंड तालिका, निर्णय-मैट्रिक्स आरेख, प्रति परीक्षण परिवार केस पैटर्न (जावा और Kotlin सहित), एंटी-पैटर्न, सीमाएं और एसईओ-तैयार स्निपेट शामिल हैं।<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>द्वारा प्रकाशित; बेंचमार्क साइट<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot-benchmarks.fictionally.org</a>पर होस्ट की गई।</p><p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

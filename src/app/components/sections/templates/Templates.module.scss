@@ -1,0 +1,213 @@
+@use '../shared' as *;
+
+// Page-level helpers shared by the templates.
+
+.heroText {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-base);
+  line-height: var(--tm-leading-normal);
+}
+
+.heroMedia {
+  margin: 0;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--tm-line);
+    border-radius: var(--tm-radius);
+    background: var(--tm-surface);
+  }
+}
+
+.split {
+  display: grid;
+  gap: var(--tm-space-8);
+  align-items: start;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--tm-space-12);
+  }
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.splitEven {
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.stack {
+  display: grid;
+  gap: var(--tm-space-10);
+
+  > * {
+    min-width: 0;
+  }
+}
+
+.spacer {
+  margin-top: var(--tm-space-10);
+}
+
+.panel {
+  @include card;
+  padding: var(--tm-space-6);
+}
+
+.panelTitle {
+  @include card-title;
+  margin-bottom: var(--tm-space-4);
+}
+
+.price {
+  @include card;
+  padding: var(--tm-space-8);
+  border-top: 3px solid var(--tm-accent);
+}
+
+.priceLabel {
+  @include eyebrow;
+}
+
+.priceValue {
+  margin: 0;
+  font-family: var(--tm-font-display);
+  font-weight: var(--tm-weight-display);
+  font-size: var(--tm-text-3xl);
+  line-height: 1.05;
+  letter-spacing: var(--tm-tracking-display);
+}
+
+.priceText {
+  margin: var(--tm-space-3) 0 var(--tm-space-6);
+  color: var(--tm-text-muted);
+}
+
+.muted {
+  color: var(--tm-text-muted);
+}
+
+.note {
+  margin: var(--tm-space-6) 0 0;
+  font-size: var(--tm-text-sm);
+  color: var(--tm-text-subtle);
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    padding: var(--tm-space-1) var(--tm-space-3);
+    border: 1px solid var(--tm-line);
+    border-radius: var(--tm-radius-pill);
+    background: var(--tm-surface);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-muted);
+  }
+}
+
+.codeList {
+  display: grid;
+  gap: var(--tm-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: stage;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-3);
+    padding: var(--tm-space-3) var(--tm-space-4);
+    border-radius: var(--tm-radius-sm);
+    background: var(--tm-code-bg);
+    color: var(--tm-code-text);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-sm);
+    overflow-wrap: anywhere;
+
+    &::before {
+      counter-increment: stage;
+      content: counter(stage, decimal-leading-zero);
+      color: var(--tm-code-keyword);
+      font-size: var(--tm-text-xs);
+    }
+  }
+}
+
+.hardware {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tm-space-4) var(--tm-space-8);
+  padding: var(--tm-space-6) var(--tm-space-8);
+  border: 1px dashed var(--tm-line-strong);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+
+  h2,
+  h3 {
+    @include card-title;
+  }
+
+  p {
+    margin: var(--tm-space-2) 0 0;
+    max-width: 60ch;
+    color: var(--tm-text-muted);
+  }
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-line);
+  overflow: hidden;
+
+  @media (min-width: $bp-md) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  > div {
+    padding: var(--tm-space-5);
+    background: var(--tm-surface);
+    min-width: 0;
+  }
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: var(--tm-space-2);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    color: var(--tm-text-subtle);
+
+    svg {
+      color: var(--tm-accent);
+    }
+  }
+
+  dd {
+    margin: var(--tm-space-1) 0 0;
+    font-weight: var(--tm-weight-semibold);
+    overflow-wrap: anywhere;
+  }
+}

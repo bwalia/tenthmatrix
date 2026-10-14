@@ -1,0 +1,79 @@
+{
+  "uuid": "blog-nebuladb-vs-memory-platforms-001",
+  "excerpt": "Полное сравнение NebulaDB — open-source AI-native гибридной базы на Rust — с категорией платформ agent memory. Узнайте, почему мультипротокольная архитектура NebulaDB, SQL-native векторные функции и streaming RAG pipeline делают её лучшим выбором для большинства AI-нагрузок.",
+  "sub_title": "Почему open-source AI-native база бьёт проприетарные SaaS memory-сервисы для RAG, семантического поиска и AI-инфраструктуры",
+  "title": "NebulaDB vs Agent Memory Platforms: почему побеждает open-source",
+  "meta_title": "NebulaDB vs Agent Memory Platforms | Сравнение open-source AI Database",
+  "meta_description": "Сравните open-source AI-native базу NebulaDB с платформами agent memory. Узнайте преимущества self-hosted векторного поиска, streaming RAG, SQL-аналитики и мультипротокольного доступа при нулевой стоимости.",
+  "meta_keywords": "NebulaDB, ИИ-база данных, векторная БД, RAG-конвейер, семантический поиск, HNSW, платформы памяти агентов, память агента, open source БД, БД на Rust",
+  "images": [
+    {
+      "document_id": 931,
+      "is_cover": true,
+      "url": "/img/nebuladb-vs-memory-platforms-cover.svg",
+      "uuid": "img-nebuladb-vs-memory-platforms-cover-001",
+      "id": 931,
+      "alt": "NebulaDB vs Agent Memory Platforms comparison cover",
+      "width": 1200,
+      "height": 640
+    }
+  ],
+  "content": "<article class=\"blog-content\">\n<p>Ландшафт AI-инфраструктуры быстро меняется. Команды, строящие RAG pipelines, семантический поиск и intelligent applications, стоят перед фундаментальным выбором: взять <strong>general-purpose AI-native база</strong> которым вы управляете, или платите за <strong>платформа agent memory</strong> которая берёт инфраструктуру на себя?</p>\n<p>Этот пост сравнивает <strong>NebulaDB</strong> — наша open-source, Rust-powered AI-native гибридная база — против новой категории платформ agent memory (SaaS-сервисы с persistent memory, context retrieval и temporal state для AI-агентов). Полный разбор доступен как <a href=\"/ru/articles/nebuladb-vs-managed-agent-memory-platforms\">comprehensive статья</a>; здесь — ключевые моменты.</p>\n<h2>Что такое NebulaDB?</h2>\n<p>NebulaDB — это <strong>AI-native гибридная база</strong> которая объединяет document storage, векторный поиск (HNSW), SQL с AI-расширениями и streaming RAG — всё в одном бинарнике на Rust. Под лицензией Apache-2.0 поставляется как self-hosted решение с Docker, Helm charts и полноценным Kubernetes Operator.</p>\n<p><img alt=\"Обзор архитектуры NebulaDB: 14 Rust crates, три сетевых протокола и полный embedding pipeline\" decoding=\"async\" height=\"700\" loading=\"lazy\" src=\"/img/nebuladb-architecture-overview.svg\" style=\"max-width:100%;height:auto;border-radius:8px\" width=\"1200\"/></p>\n<h3>Ключевые возможности кратко</h3>\n<ul>\n<li><strong>Три протокола из одного бинарника:</strong> REST+SSE (Axum), gRPC (Tonic), Postgres wire protocol</li>\n<li><strong>HNSW vector index:</strong> Косинусные, L2 и dot-product расстояния с SIMD-оптимизацией</li>\n<li><strong>SQL с AI-расширениями:</strong> <code>semantic_match()</code> и <code>vector_distance()</code> как first-class SQL-функции плюс GROUP BY, JOIN и агрегаты</li>\n<li><strong>Streaming RAG:</strong> Server-Sent Events с context chunks перед answer tokens — генерация в реальном времени</li>\n<li><strong>Полный pipeline:</strong> Ingest → Chunk → Embed → Index → Search → Generate в одной системе</li>\n<li><strong>Многоуровневый кэш:</strong> In-process LRU (10,000 записей) + опциональный Redis с failure-transparent fallback</li>\n<li><strong>WAL durability:</strong> WAL с проверкой CRC32, snapshot recovery и сжатием zstd</li>\n<li><strong>Kubernetes-native:</strong> CRD для NebulaCluster, NebulaBucket и NebulaRebalance через выделенный operator</li>\n<li><strong>Production-ready:</strong> 124 теста, nightly CI, multi-arch Docker images, observability Prometheus + Grafana</li>\n</ul>\n<h2>Что такое Agent Memory Platforms?</h2>\n<p>Платформы agent memory — более новая категория проприетарных SaaS-сервисов, созданных, чтобы дать <strong>инфраструктуру persistent memory и context</strong> для AI-агентов. Обычно они дают temporal knowledge graphs, неизменяемые state ledgers и общие слои контекста для multi-agent систем. Доступ чаще через REST API и языковые SDK, цены от $249/месяц до $5,000+ для enterprise.</p>\n<h2>Сравнение: почему побеждает NebulaDB</h2>\n<p>Вот как NebulaDB соотносится с платформами agent memory по самым важным измерениям:</p>\n<table style=\"width:100%;border-collapse:collapse;margin:1.5rem 0\">\n<thead><tr style=\"background:#6366f1;color:#fff\"><th style=\"padding:10px 14px;text-align:left\">Измерение</th><th style=\"padding:10px 14px;text-align:left\">NebulaDB</th><th style=\"padding:10px 14px;text-align:left\">Managed Platforms</th></tr></thead>\n<tbody>\n<tr style=\"background:#f8fafc\"><td style=\"padding:8px 14px;font-weight:600\">License</td><td style=\"padding:8px 14px;color:#166534\">Apache-2.0 (free)</td><td style=\"padding:8px 14px\">Proprietary ($249-$5k+/мес)</td></tr>\n<tr><td style=\"padding:8px 14px;font-weight:600\">Написано на</td><td style=\"padding:8px 14px\">Rust (open-source)</td><td style=\"padding:8px 14px\">Unknown (closed-source)</td></tr>\n<tr style=\"background:#f8fafc\"><td style=\"padding:8px 14px;font-weight:600\">Query Interfaces</td><td style=\"padding:8px 14px;color:#4338ca;font-weight:600\">REST, gRPC, Postgres, SQL</td><td style=\"padding:8px 14px\">REST API, SDKs</td></tr>\n<tr><td style=\"padding:8px 14px;font-weight:600\">Vector Index</td><td style=\"padding:8px 14px;color:#4338ca;font-weight:600\">HNSW (SIMD-optimized)</td><td style=\"padding:8px 14px\">Proprietary</td></tr>\n<tr style=\"background:#f8fafc\"><td style=\"padding:8px 14px;font-weight:600\">LLM Integration</td><td style=\"padding:8px 14px;color:#4338ca;font-weight:600\">Встроенный streaming RAG</td><td style=\"padding:8px 14px\">Только context retrieval</td></tr>\n<tr><td style=\"padding:8px 14px;font-weight:600\">Observability</td><td style=\"padding:8px 14px;color:#4338ca;font-weight:600\">Prometheus + Grafana</td><td style=\"padding:8px 14px\">Не задокументировано</td></tr>\n<tr style=\"background:#f8fafc\"><td style=\"padding:8px 14px;font-weight:600\">Deployment</td><td style=\"padding:8px 14px\">Docker, Helm, K8s Operator</td><td style=\"padding:8px 14px\">SaaS или enterprise self-host</td></tr>\n</tbody>\n</table>\n<h2>Decision Framework</h2>\n<p><img alt=\"Блок-схема выбора между NebulaDB и платформами agent memory\" decoding=\"async\" height=\"700\" loading=\"lazy\" src=\"/img/nebuladb-decision-flowchart.svg\" style=\"max-width:100%;height:auto;border-radius:8px\" width=\"1100\"/></p>\n<h3>Выбирайте NebulaDB, если вы:</h3>\n<ul>\n<li>Хотите полный контроль над инфраструктурой без vendor lock-in</li>\n<li>Строите RAG pipelines со streaming LLM-ответами</li>\n<li>Нужен мультипротокольный доступ (REST + gRPC + Postgres из одного бинарника)</li>\n<li>Нужна SQL-аналитика по векторному корпусу (GROUP BY, JOIN с семантическими фильтрами)</li>\n<li>Важна стоимость — NebulaDB бесплатна и open-source</li>\n<li>Нужна production-grade observability (Prometheus, Grafana, tracing)</li>\n<li>Нужен полный pipeline: ingest → chunk → embed → index → search → generate</li>\n</ul>\n<h3>Managed-платформы могут подойти, если вы:</h3>\n<ul>\n<li>Строите stateful AI-агентов, которым нужна persistent память между сессиями</li>\n<li>Нужно temporal reasoning («что предпочитал пользователь в прошлом месяце vs сейчас?»)</li>\n<li>Есть multi-agent системы, требующие общих слоёв контекста</li>\n<li>Предпочитаете нулевую ops-нагрузку и готовы платить $249+/месяц</li>\n</ul>\n<h2>Заключение</h2>\n<p>Для большинства AI-нагрузок — RAG pipelines, семантический поиск, document retrieval, SQL-аналитика по embeddings — <strong>NebulaDB даёт enterprise-grade возможности при нулевой стоимости</strong> с полным контролем инфраструктуры. Основа на Rust даёт производительность и безопасность, а трёхпротокольная архитектура (REST, gRPC, Postgres wire) позволяет бесшовно встроить существующие инструменты и workflows.</p>\n<p>Платформы agent memory закрывают более узкую нишу: команды, строящие stateful-разговорных агентов, которым нужно временное рассуждение и которые готовы к vendor lock-in и регулярным затратам. Даже для этих кейсов WAL-based event replay и расширяемая архитектура NebulaDB дают жизнеспособную self-hosted альтернативу.</p>\n<p>Читайте <a href=\"/ru/articles/nebuladb-vs-managed-agent-memory-platforms\">полная comprehensive comparison статья</a> для architectural deep-dives, примеров API и детального разбора по 15+ измерениям.</p>\n</article>",
+  "user_id": 1,
+  "tags": [
+    {
+      "tag_id": 100,
+      "document_id": 931,
+      "uuid": "tag-nebuladb-comparison-db-001",
+      "name": "database",
+      "updated_at": "2026-05-04 10:00:00",
+      "created_at": "2026-05-04 10:00:00",
+      "id": 200
+    },
+    {
+      "tag_id": 101,
+      "document_id": 931,
+      "uuid": "tag-nebuladb-comparison-ai-001",
+      "name": "ai",
+      "updated_at": "2026-05-04 10:00:00",
+      "created_at": "2026-05-04 10:00:00",
+      "id": 201
+    },
+    {
+      "tag_id": 102,
+      "document_id": 931,
+      "uuid": "tag-nebuladb-comparison-backend-001",
+      "name": "backend",
+      "updated_at": "2026-05-04 10:00:00",
+      "created_at": "2026-05-04 10:00:00",
+      "id": 202
+    },
+    {
+      "tag_id": 103,
+      "document_id": 931,
+      "uuid": "tag-nebuladb-comparison-devops-001",
+      "name": "devops",
+      "updated_at": "2026-05-04 10:00:00",
+      "created_at": "2026-05-04 10:00:00",
+      "id": 203
+    }
+  ],
+  "created_at": "2026-05-04 10:00:00",
+  "id": "blog-nebuladb-vs-memory-platforms-001",
+  "updated_at": "2026-05-04 10:00:00",
+  "user": {
+    "active": true,
+    "uuid": "cb9c1a5b-6910-4fb2-b457-a9c72a392d90",
+    "created_at": "2025-05-19 15:25:06",
+    "email": "administrative@admin.com",
+    "username": "administrative",
+    "first_name": "Super",
+    "last_name": "User",
+    "id": 1,
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "slug": "nebuladb-vs-managed-agent-memory-platforms",
+  "internal_id": 931,
+  "status": true,
+  "published_date": "2026-05-04"
+}

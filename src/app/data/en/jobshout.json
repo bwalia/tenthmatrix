@@ -1,0 +1,209 @@
+{
+  "meta": {
+    "title": "Jobshout AI Agent Framework — Specialist Agents with Approval Gates | TenthMatrix",
+    "description": "Jobshout is an open-source agent orchestration platform: specialist agents that finish real work in Gmail, GitHub and live sites, stream every step, and stop for your approval before anything is sent, spent or deleted.",
+    "keywords": "Jobshout, AI agent framework, agent orchestration, supervised agents, Mail Agent, SEO Analyst, PR Reviewer, MCP, OpenClaw, self-hosted AI agents, jobshout.co.uk"
+  },
+  "header": {
+    "title": "Jobshout AI Agent Framework",
+    "subtitle": "Specialist agents that do the job — and stop for your approval.",
+    "description": "Open-source agent orchestration from TenthMatrix. Describe a job in plain English; the agent plans it, signs into your real tools, streams every step, and pauses before anything is sent, spent or deleted. Self-host it, or run it as a managed service."
+  },
+  "intro": {
+    "title": "Agents that finish work, not chats that describe it",
+    "body": "Most AI tools give you text back. Jobshout gives you a completed job: a reply drafted in your mailbox, a pull request reviewed, a security report with reproduction steps, an SEO score with fix prompts, a researched brief with citations you can open. The agent does the work; you decide what ships.",
+    "links": [
+      {
+        "label": "jobshout.co.uk",
+        "href": "https://jobshout.co.uk/"
+      },
+      {
+        "label": "SEO Analyst blog",
+        "href": "/docs/blogs/jobshout-seo-analyst-ai-agent"
+      },
+      {
+        "label": "Technical brief",
+        "href": "/articles/jobshout-seo-analyst-ai-agent"
+      }
+    ]
+  },
+  "videos": [
+    {
+      "title": "SEO Analyst AI Agent — analyse any website & fix SEO issues",
+      "caption": "Watch on YouTube",
+      "embedUrl": "https://www.youtube.com/embed/ACmTPIoH7Mc",
+      "watchUrl": "https://youtu.be/ACmTPIoH7Mc",
+      "thumbnail": "/img/jobshout-seo-analyst-youtube-thumbnail.svg",
+      "thumbnailAlt": "Jobshout SEO Analyst YouTube thumbnail"
+    }
+  ],
+  "screenshot": {
+    "title": "Jobshout SEO Analyst AI Agent in Task Manager",
+    "caption": "Live analyse of tenthmatrix.com — SEO score 44 with title, meta and H1 fix prompts.",
+    "src": "/img/jobshout-seo-analyst-ai-agent.png",
+    "alt": "Jobshout SEO Analyst AI Agent — Task Manager analysing tenthmatrix.com (SEO score 44)",
+    "width": 1600,
+    "height": 900
+  },
+  "pillars": {
+    "title": "What Jobshout is",
+    "items": [
+      {
+        "title": "A place to delegate",
+        "text": "Brief an agent the way you would a colleague — one sentence is usually enough.",
+        "icon": "fas fa-comments"
+      },
+      {
+        "title": "A team of specialists",
+        "text": "Built-in agents each with their own tools, prompt and rules — Mail, Career, Research, Articles, Security, PR review, Images, SEO Analyst and more.",
+        "icon": "fas fa-users"
+      },
+      {
+        "title": "Real tool use",
+        "text": "Agents sign into Gmail, GitHub, job boards and live sites, then click through them like a person would.",
+        "icon": "fas fa-mouse-pointer"
+      },
+      {
+        "title": "Supervised by design",
+        "text": "Mark which tools need a human decision. Those calls pause the run until you approve or reject.",
+        "icon": "fas fa-user-check"
+      }
+    ]
+  },
+  "steps": {
+    "title": "One job, start to finish, in five moves",
+    "items": [
+      {
+        "n": "01",
+        "title": "Describe the job",
+        "text": "Type it in chat, or fill the short form the agent publishes. \"Chase the two overdue invoices.\" \"Review pull request 184.\" \"Analyse this site for SEO.\""
+      },
+      {
+        "n": "02",
+        "title": "The agent plans",
+        "text": "It picks the tools it needs and asks for anything missing — a target URL, a repository, the sender to watch. It will not invent details it was not given."
+      },
+      {
+        "n": "03",
+        "title": "It runs for real",
+        "text": "Signed into your tools, one step at a time: search, open, read, cross-check, draft. Each step streams into the run as it happens."
+      },
+      {
+        "n": "04",
+        "title": "It stops at the gate",
+        "text": "Reach a gated tool and the run pauses mid-loop. State is saved; it resumes from that exact step when you approve — or takes your reason when you reject."
+      },
+      {
+        "n": "05",
+        "title": "The result lands",
+        "text": "A draft, report, brief or image arrives on your task board with artifacts and full step history. You review it, then send it yourself."
+      }
+    ]
+  },
+  "agents": {
+    "title": "Give each agent a job",
+    "intro": "Specialists ship with Jobshout. Each owns a lane, brings its own tools, and answers in the same chat behind the same approval gate. Agents are modular — a new specialist registers its prompt, tools and launch form without touching the platform.",
+    "items": [
+      {
+        "title": "Mail Agent",
+        "text": "Watch the senders you care about, research the thread, and leave a reply draft. Nothing is sent until you approve."
+      },
+      {
+        "title": "Career Agent",
+        "text": "Evaluate a job posting against your profile and return a clear fit assessment."
+      },
+      {
+        "title": "Research Agent",
+        "text": "Return cited findings you can open — SLAs, competitor notes, source-checked briefs."
+      },
+      {
+        "title": "Article Writer",
+        "text": "File a draft article on the board with structure and artifacts attached."
+      },
+      {
+        "title": "Security Tester",
+        "text": "Scan an authorised target and hand back a report with reproduction steps."
+      },
+      {
+        "title": "PR Reviewer",
+        "text": "Review a GitHub pull request and leave structured feedback for your team."
+      },
+      {
+        "title": "Image Generator",
+        "text": "Make one picture and store it on the board — no unattended posting."
+      },
+      {
+        "title": "SEO Analyst",
+        "text": "Crawl a URL for title, meta, headings, robots and sitemap health. Improve proposes fixes; Publish applies via WordPress, OpsAPI or a git PR — with approval."
+      }
+    ]
+  },
+  "features": {
+    "title": "Everything around the agents",
+    "items": [
+      {
+        "title": "Tasks, projects and sprints",
+        "text": "Every run becomes a task you can see, sort and reassign, with its output and artifacts attached. Group them into projects and plan them into sprints."
+      },
+      {
+        "title": "Multi-agent workflows",
+        "text": "Chain specialists into a dependency graph. Steps with no prerequisites run at the same time; dependent steps wait for their inputs."
+      },
+      {
+        "title": "Jobs that repeat",
+        "text": "Put a job on a cron schedule — the Monday chase, the morning research brief, the weekly article. Results land on the board as usual."
+      },
+      {
+        "title": "Skills, plugins and MCP",
+        "text": "Teach an agent your own tools. Jobshout speaks the Model Context Protocol, so any MCP server you run becomes discoverable tools."
+      },
+      {
+        "title": "Bring your own model",
+        "text": "OpenAI, Anthropic Claude, or a model running locally through Ollama — no API key leaving the building when you self-host."
+      },
+      {
+        "title": "Cost and traces",
+        "text": "Per-run tokens, latency and USD cost. Export OpenTelemetry traces to Langfuse when you want to go deeper."
+      }
+    ]
+  },
+  "deploy": {
+    "title": "Run it on your own infrastructure",
+    "body": "A Go API, a Next.js interface, PostgreSQL and MinIO for object storage. Start the whole stack with docker compose up, or deploy the Kubernetes manifests. Your data and your prompts stay where you put them.",
+    "ctaLabel": "Visit jobshout.co.uk",
+    "ctaHref": "https://jobshout.co.uk/"
+  },
+  "related": {
+    "title": "Read more",
+    "items": [
+      {
+        "title": "Blog: SEO Analyst AI Agent",
+        "href": "/docs/blogs/jobshout-seo-analyst-ai-agent"
+      },
+      {
+        "title": "Technical brief: SEO Analyst",
+        "href": "/articles/jobshout-seo-analyst-ai-agent"
+      },
+      {
+        "title": "Multi-agent teams",
+        "href": "/docs/blogs/wise-developer-project-workflow-multi-agent-teams"
+      },
+      {
+        "title": "WSL Vault",
+        "href": "/wsl-vault"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Meet your first agent",
+    "description": "An AI teammate you can trust to get work done. Describe the job — a sentence is enough. Explore Jobshout on the product site, or talk to TenthMatrix about deploying the framework for your team.",
+    "primary": {
+      "label": "Open jobshout.co.uk",
+      "href": "https://jobshout.co.uk/"
+    },
+    "secondary": {
+      "label": "Contact TenthMatrix",
+      "href": "/contact-us"
+    }
+  }
+}

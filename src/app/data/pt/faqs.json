@@ -1,0 +1,147 @@
+{
+  "header": {
+    "title": "Perguntas frequentes",
+    "subtitle": "Find answers to common questions about AI Agents, Claude Code, OpenClaw Robotics, Enterprise AI, and AI Security."
+  },
+  "categories": [
+    {
+      "name": "AI Agents & Automation",
+      "faqs": [
+        {
+          "question": "What are AI agents and how do they differ from traditional chatbots?",
+          "answer": "AI agents are autonomous software systems that can perceive their environment, make decisions, and take actions to achieve specific goals — without constant human intervention. Unlike traditional chatbots that follow scripted responses, AI agents use large language models (LLMs) to reason, plan multi-step tasks, use tools (APIs, databases, file systems), and adapt to new situations. They can browse the web, write and execute code, manage files, and orchestrate complex workflows. Modern AI agent frameworks like LangChain, CrewAI, and the OpenAI Agents SDK enable businesses to deploy agents for customer support, document processing, data analysis, and operations automation."
+        },
+        {
+          "question": "What is multi-agent AI and how do autonomous agent teams work?",
+          "answer": "Multi-agent AI systems use multiple specialised AI agents that collaborate to solve complex problems — much like a human team. Each agent has a defined role (e.g. researcher, writer, reviewer, coder) and they communicate, delegate tasks, and build on each other's outputs. Frameworks like CrewAI, AutoGen, and LangGraph orchestrate these agent teams. For example, a content production pipeline might have a research agent gathering information, a writing agent drafting content, and an editor agent reviewing quality. Multi-agent architectures are especially effective for tasks that require diverse expertise, parallel processing, or iterative refinement — such as software development, financial analysis, and supply chain optimisation."
+        },
+        {
+          "question": "How can AI agents automate business processes?",
+          "answer": "AI agents can automate a wide range of business processes including: customer service (handling enquiries, processing refunds, scheduling appointments), document processing (extracting data from invoices, contracts, and forms), sales operations (lead qualification, CRM updates, proposal generation), HR workflows (CV screening, onboarding checklists, policy Q&A), financial operations (expense categorisation, compliance checks, report generation), and IT operations (incident triage, log analysis, infrastructure monitoring). The key advantage over traditional RPA is that AI agents can handle unstructured data, make contextual decisions, and adapt to variations without rigid rule programming."
+        },
+        {
+          "question": "What is Retrieval-Augmented Generation (RAG) and why is it important for enterprise AI?",
+          "answer": "RAG is an AI architecture pattern that combines the generative capabilities of large language models with a retrieval system that fetches relevant information from your organisation's own data sources — such as documents, databases, wikis, and knowledge bases. Instead of relying solely on the LLM's training data (which may be outdated or generic), RAG grounds the AI's responses in your actual business data. This dramatically reduces hallucinations, ensures accuracy, and keeps responses current. RAG is the foundation for enterprise AI assistants, internal knowledge bots, customer support systems, and compliance tools where factual accuracy is critical."
+        }
+      ]
+    },
+    {
+      "name": "Claude Code & AI Development Tools",
+      "faqs": [
+        {
+          "question": "What is Claude Code and how does it help developers?",
+          "answer": "Claude Code is Anthropic's official agentic coding tool that operates directly in your terminal. It can understand your entire codebase, edit files, run commands, search code, manage git workflows, and execute multi-step software engineering tasks autonomously. Unlike simple code completion tools, Claude Code acts as a full AI pair programmer — it can plan implementations, write and refactor code across multiple files, run tests, fix failing builds, create pull requests, and debug complex issues. It supports hooks, MCP servers, and IDE integrations (VS Code, JetBrains) for seamless workflow integration."
+        },
+        {
+          "question": "What is Claude Code Dispatch and how does it work?",
+          "answer": "Claude Code Dispatch (also known as Claude Code in headless mode) allows you to run Claude Code programmatically as a subprocess — without an interactive terminal. You send a task prompt via the SDK or CLI with the --print flag, and Claude Code executes it autonomously: reading files, making edits, running tests, and returning structured results. This enables powerful automation workflows such as: automated PR review bots, CI/CD pipeline integration for code fixes, batch code migrations across repositories, automated documentation generation, and scheduled codebase maintenance. The Claude Agent SDK makes it easy to build custom tools and orchestration layers on top of Claude Code Dispatch."
+        },
+        {
+          "question": "What is Claude Code Remote and how do I use it for remote development?",
+          "answer": "Claude Code Remote allows you to run Claude Code on remote machines, cloud instances, or containers while controlling it from your local terminal or IDE. This is essential for working with large codebases that require powerful hardware, accessing production-like environments for debugging, or developing on cloud GPU instances for AI/ML workloads. You can connect via SSH tunnelling, use it within Docker containers, or deploy it on cloud VMs. Combined with VS Code Remote or JetBrains Gateway, it provides a seamless remote AI-assisted development experience with full codebase access and tool execution on the remote host."
+        },
+        {
+          "question": "How does the Claude Agent SDK work for building custom AI agents?",
+          "answer": "The Claude Agent SDK enables developers to build custom AI agents powered by Claude. It provides a programmatic interface to Claude's capabilities including tool use, multi-turn conversations, file operations, and code execution. You can define custom tools that Claude can call, create agent loops with human-in-the-loop checkpoints, implement guardrails and safety controls, and orchestrate multi-agent workflows. The SDK supports both Python and TypeScript, integrates with MCP (Model Context Protocol) servers for extensibility, and can be deployed as microservices, serverless functions, or embedded in existing applications."
+        },
+        {
+          "question": "What is MCP (Model Context Protocol) and why does it matter?",
+          "answer": "MCP (Model Context Protocol) is an open standard created by Anthropic that provides a universal way for AI models to connect to external data sources, tools, and services. Think of it as a USB-C port for AI — a single standardised interface that lets any AI model access any compatible tool. MCP servers expose resources (data), tools (actions), and prompts (templates) that AI clients like Claude Code can discover and use. This means you can connect Claude to your Slack workspace, GitHub repos, databases, internal APIs, or any custom system through a single protocol. MCP eliminates the need for custom integrations per tool and enables portable, composable AI workflows."
+        }
+      ]
+    },
+    {
+      "name": "OpenClaw & AI Robotics",
+      "faqs": [
+        {
+          "question": "What is OpenClaw and how does it relate to AI robotics?",
+          "answer": "OpenClaw is an open-source AI robotics platform designed for building intelligent robotic systems that combine computer vision, natural language understanding, and physical manipulation. It provides a framework for creating robots that can understand verbal instructions, perceive their environment through cameras and sensors, plan actions, and execute physical tasks using robotic arms and grippers. OpenClaw integrates with modern AI models (including vision-language models) to enable robots that can sort objects, assemble components, perform quality inspection, and handle warehouse logistics. It runs on both NVIDIA Jetson edge devices and Apple Silicon Macs for development."
+        },
+        {
+          "question": "Can I run OpenClaw on Apple Silicon Mac Mini or Mac Studio?",
+          "answer": "Yes — Apple Silicon Macs are excellent development and inference platforms for OpenClaw. The Mac Mini M4 Pro (with 24GB unified memory) and Mac Studio M4 Ultra (with up to 192GB unified memory) provide fast on-device AI inference through Apple's MLX framework and Metal GPU acceleration. You can train smaller models, run real-time computer vision pipelines, and test robotic control algorithms locally before deploying to edge hardware. The unified memory architecture is particularly beneficial for vision-language models that need to process both images and text simultaneously. For production deployment, models trained on Mac are typically exported to NVIDIA Jetson or other edge devices."
+        },
+        {
+          "question": "What hardware do I need for an OpenClaw robotics project?",
+          "answer": "A typical OpenClaw setup requires: a compute platform (NVIDIA Jetson Orin Nano/AGX for edge deployment, or Mac Mini M4 Pro/Mac Studio for development), a robotic arm (compatible with ROS2 — popular options include Franka Emika, Universal Robots UR3e/UR5e, or affordable options like xArm), cameras (Intel RealSense D435 depth camera or stereo camera setup for 3D perception), and optionally a gripper system. For AI model training, you'll want either a workstation with NVIDIA RTX 4090/5090 or cloud GPU access. The software stack includes ROS2, PyTorch, OpenCV, and the OpenClaw framework itself."
+        }
+      ]
+    },
+    {
+      "name": "AI Hardware",
+      "faqs": [
+        {
+          "question": "Where can I get GPU workstations, NVIDIA DGX or Apple Silicon systems for AI?",
+          "answer": "AI hardware is covered by our sister company Workstation. See <a href=\"https://www.workstation.co.uk/ai-workstations\">AI workstations</a> and <a href=\"https://www.workstation.co.uk/gpu-clusters\">GPU clusters</a> for NVIDIA DGX, RTX and Apple Silicon systems. TenthMatrix focuses on the agents, tools and software that run on them."
+        }
+      ]
+    },
+    {
+      "name": "Enterprise AI & AI for Business",
+      "faqs": [
+        {
+          "question": "How should enterprises approach AI adoption in 2026?",
+          "answer": "Start with high-impact, low-risk use cases: internal knowledge assistants (RAG-powered Q&A over company documents), automated document processing (invoices, contracts, forms), customer support augmentation (AI draft responses for human review), and code assistance for engineering teams. Key principles: begin with a proof of concept on a contained use case, measure ROI before scaling, ensure data privacy (consider on-premise or private cloud deployments), establish AI governance policies, train staff on effective AI collaboration, and build in human oversight for critical decisions. Avoid trying to build a custom LLM — instead, use foundation models (Claude, GPT-4, Llama) with RAG and fine-tuning to add your domain knowledge."
+        },
+        {
+          "question": "What is on-premise AI and when should we choose it over cloud AI?",
+          "answer": "On-premise AI means running AI models and infrastructure within your own data centre or office rather than using cloud API services. Choose on-premise when: you handle sensitive data subject to regulations (GDPR, HIPAA, financial compliance) that prohibit sending data to external APIs; you need predictable costs at scale (cloud API costs grow linearly with usage); you require low-latency inference (sub-10ms response times); you want full control over model versions, updates, and availability; or you operate in air-gapped environments. On-premise options range from a single NVIDIA RTX workstation running Ollama for small teams, to GPU servers with vLLM or TGI for department-scale deployment, to full DGX clusters for enterprise-wide AI platforms."
+        },
+        {
+          "question": "What is the cost of setting up enterprise AI infrastructure?",
+          "answer": "Costs vary dramatically by scale. Entry-level (small team, 5-20 users): Mac Studio M4 Ultra (~£4,000) or workstation with RTX 4090 (~£2,500) running Ollama — total £3,000-£6,000. Mid-range (department, 50-200 users): GPU server with 2-4x A100 or L40S, networking, storage — total £50,000-£150,000. Enterprise (500+ users, training capability): Multi-node GPU cluster with H100s, InfiniBand, parallel storage — total £500,000-£2M+. DGX systems: DGX H100 starts around £300,000. Cloud alternative: AWS/GCP GPU instances cost £2-£30/hour per GPU, which is cost-effective for burst workloads but expensive for 24/7 operation. Many organisations use a hybrid approach: on-premise for steady inference workloads and cloud for training bursts."
+        },
+        {
+          "question": "How can AI help financial services and banking?",
+          "answer": "AI transforms financial services across multiple areas: fraud detection (real-time transaction monitoring using ML anomaly detection), risk assessment (credit scoring models, portfolio risk analysis), regulatory compliance (automated KYC/AML checks, regulatory reporting, document analysis), customer service (AI assistants for account enquiries, personalised financial advice), trading (algorithmic trading strategies, market sentiment analysis from news and social media), document processing (automated mortgage application processing, insurance claims analysis), and anti-money laundering (pattern detection across transaction networks). Key considerations: financial regulators require model explainability (no black-box decisions), data sovereignty compliance, audit trails for all AI decisions, and robust testing for bias in lending and insurance models."
+        },
+        {
+          "question": "How is AI transforming healthcare and life sciences?",
+          "answer": "AI is advancing healthcare in critical areas: medical imaging (AI-assisted radiology for detecting tumours, fractures, and retinal diseases with accuracy matching or exceeding specialists), drug discovery (using AI to predict molecular structures, identify drug candidates, and accelerate clinical trial design — reducing timelines from years to months), clinical documentation (ambient AI scribes that listen to patient consultations and generate structured medical notes), patient triage (AI systems that assess symptom severity and route patients appropriately), genomics (analysing genetic data for personalised treatment plans and disease risk prediction), and operational efficiency (predictive scheduling, supply chain optimisation, bed management). Key requirement: all healthcare AI must comply with HIPAA/NHS data standards, require clinical validation, and maintain human clinician oversight for diagnostic decisions."
+        }
+      ]
+    },
+    {
+      "name": "AI Security & Safety",
+      "faqs": [
+        {
+          "question": "What are the main security risks of deploying AI in production?",
+          "answer": "Key AI security risks include: prompt injection (malicious inputs that manipulate AI behaviour to bypass safety controls or leak system prompts), data poisoning (corrupted training data that introduces biases or backdoors), model theft (extracting proprietary models through repeated API queries), data leakage (AI inadvertently exposing sensitive training data or PII in responses), supply chain attacks (compromised model weights, poisoned dependencies in ML pipelines), adversarial attacks (inputs designed to fool image classifiers or NLP models), and hallucination risks (AI generating confident but incorrect information that leads to harmful decisions). Mitigation requires a layered approach: input validation, output filtering, access controls, monitoring, red-teaming, and human oversight."
+        },
+        {
+          "question": "How do I secure AI models and prevent prompt injection attacks?",
+          "answer": "Defence-in-depth strategy: 1) Input sanitisation — validate and filter user inputs before they reach the model, strip known injection patterns. 2) System prompt protection — never include secrets or sensitive instructions in system prompts; assume they can be extracted. 3) Output filtering — scan AI responses for PII, sensitive data, or unexpected content before returning to users. 4) Least privilege — AI agents should have minimal permissions; use sandboxed execution environments for code generation. 5) Rate limiting — prevent abuse and model extraction through API rate limits. 6) Monitoring — log all AI interactions, flag anomalous patterns, and set up alerts for unusual behaviour. 7) Red-teaming — regularly test your AI systems with adversarial prompts. 8) Guardrails — use tools like NVIDIA NeMo Guardrails or Anthropic's constitutional AI approach to constrain model behaviour."
+        },
+        {
+          "question": "What is AI governance and why do enterprises need it?",
+          "answer": "AI governance is the framework of policies, processes, and controls that ensure AI systems are developed and deployed responsibly, ethically, and in compliance with regulations. Enterprises need AI governance to: comply with emerging regulations (EU AI Act, UK AI Safety Institute guidelines, sector-specific rules for finance and healthcare), manage reputational risk (biased or harmful AI outputs), ensure accountability (clear ownership of AI decisions), maintain data privacy (GDPR compliance when training on personal data), provide transparency (explainable AI for regulated decisions like credit scoring), and manage model lifecycle (version control, drift monitoring, retirement processes). A practical AI governance framework includes: an AI ethics board, model risk assessment procedures, bias testing protocols, incident response plans, and regular audits."
+        },
+        {
+          "question": "How do I ensure data privacy when using AI models?",
+          "answer": "Data privacy strategies for AI: 1) On-premise deployment — run models locally (using Ollama, vLLM, or TGI) so data never leaves your infrastructure. 2) Private cloud — use dedicated cloud instances (AWS Private Link, Azure Private Endpoints) with data residency guarantees. 3) Data anonymisation — remove PII from training data and RAG documents using Named Entity Recognition (NER) before indexing. 4) Differential privacy — add mathematical noise during model training to prevent individual data point extraction. 5) Federated learning — train models across distributed datasets without centralising sensitive data. 6) Access controls — implement role-based access to AI systems with audit logging. 7) API data handling — when using cloud AI APIs (Claude, GPT-4), review data retention policies and opt out of training data usage. 8) Encryption — encrypt data at rest and in transit, including model weights and vector database embeddings."
+        },
+        {
+          "question": "What is the EU AI Act and how does it affect my business?",
+          "answer": "The EU AI Act is the world's first comprehensive AI regulation, classifying AI systems by risk level: Unacceptable risk (banned) — social scoring, real-time biometric surveillance in public spaces, manipulative AI. High risk (strict requirements) — AI used in hiring, credit scoring, healthcare diagnostics, law enforcement, critical infrastructure — requires conformity assessments, human oversight, transparency, bias testing, and documentation. Limited risk (transparency obligations) — chatbots and AI-generated content must disclose they are AI. Minimal risk (no specific rules) — spam filters, AI in video games. If your business deploys AI in the EU or serves EU citizens, you must: classify your AI systems by risk level, implement required safeguards for high-risk systems, maintain technical documentation and audit logs, appoint an AI compliance officer, and report serious incidents. Non-compliance penalties can reach 7% of global turnover."
+        }
+      ]
+    },
+    {
+      "name": "DevOps, SRE & Infrastructure",
+      "faqs": [
+        {
+          "question": "What is DevOps and why is it important?",
+          "answer": "DevOps is a cultural and technical movement that combines software development (Dev) and IT operations (Ops) to shorten the development lifecycle and deliver high-quality software continuously. It emphasises collaboration, automation, continuous integration/continuous deployment (CI/CD), and monitoring. DevOps practices help organisations deploy features faster, maintain system reliability, and respond quickly to customer needs. Key practices include Infrastructure as Code (Terraform, Ansible), CI/CD pipelines (GitHub Actions, GitLab CI), container orchestration (Kubernetes), and observability (Prometheus, Grafana)."
+        },
+        {
+          "question": "What is Kubernetes and how does it help with AI workloads?",
+          "answer": "Kubernetes is a container orchestration platform that automates deployment, scaling, and management of containerised applications. For AI workloads specifically, Kubernetes provides: GPU scheduling (NVIDIA GPU Operator assigns GPUs to AI pods), auto-scaling (scale inference pods based on request load), multi-tenancy (isolate different teams' AI workloads), model serving (deploy with KServe, Triton Inference Server, or vLLM), pipeline orchestration (Kubeflow for ML pipelines), and high availability (self-healing, rolling updates for zero-downtime model deployments). K3s is a lightweight Kubernetes distribution ideal for edge AI deployments and smaller clusters."
+        },
+        {
+          "question": "What is GitOps and how does it work?",
+          "answer": "GitOps uses Git repositories as the single source of truth for declarative infrastructure and applications. The entire system state is versioned in Git, and automated processes ensure the live environment matches what's defined in the repository. Changes are made through pull requests, providing audit trails and easy rollbacks. Tools like ArgoCD, Flux, and Jenkins X enable GitOps workflows. Benefits include improved reliability, faster deployments, better security, and complete audit history. GitOps is particularly valuable for managing AI infrastructure where reproducibility and version control of model deployments, configurations, and data pipelines are critical."
+        }
+      ]
+    }
+  ]
+}

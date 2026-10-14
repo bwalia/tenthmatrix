@@ -1,0 +1,331 @@
+{
+  "slug": "ai-model-selection",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "How to choose the right AI model",
+  "subtitle": "An evergreen TenthMatrix manual for selecting models by workload — intelligence, latency, cost, tools, calibration and risk — without fake “best model” rankings.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "25 min",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": null,
+  "hero_image": "/img/insights/model-selection-flow.svg",
+  "hero_alt": "How to choose the right AI model",
+  "meta": {
+    "title": "How to choose the right AI model | TenthMatrix Insights",
+    "description": "An evergreen TenthMatrix manual for selecting models by workload — intelligence, latency, cost, tools, calibration and risk — without fake “best model” ran",
+    "keywords": "Jev, System One, AI agents, model routing, LLM, RAG, TenthMatrix",
+    "og_image": "/img/insights/model-selection-flow.svg"
+  },
+  "takeaways": [
+    "Select by workload and constraints, not by launch blogs.",
+    "Use the matrix as a starting hypothesis.",
+    "Measure on your data; keep historical eval versions."
+  ],
+  "toc": [
+    {
+      "id": "why",
+      "label": "Why this matters"
+    },
+    {
+      "id": "framework",
+      "label": "Decision framework"
+    },
+    {
+      "id": "matrix",
+      "label": "Selection matrix"
+    },
+    {
+      "id": "dims",
+      "label": "Evaluation dimensions"
+    },
+    {
+      "id": "prod",
+      "label": "Production recommendations"
+    },
+    {
+      "id": "conclusion",
+      "label": "Conclusion"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "Why this matters",
+      "id": "why"
+    },
+    {
+      "type": "p",
+      "text": "Model selection fails when teams chase leaderboards. Workloads differ. This manual teaches a decision framework. It is not a permanent ranking of brands."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/model-selection-flow.svg",
+      "caption": "Start from workload, not from hype.",
+      "alt": "Start from workload, not from hype."
+    },
+    {
+      "type": "h2",
+      "text": "Decision framework",
+      "id": "framework"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Does the step need to generate novel text/code/images?",
+        "If no: consider decision models / classifiers / rankers.",
+        "If yes: does it need deep multi-step reasoning?",
+        "If yes: reasoning model. If no: fast/small LLM may suffice.",
+        "Add constraints: latency SLO, privacy, tool use, modality, offline/on-prem.",
+        "Measure on your golden set before committing."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Selection matrix",
+      "id": "matrix"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Workload",
+        "Candidate model type",
+        "Key metric"
+      ],
+      "rows": [
+        [
+          "Classification",
+          "Decision model / classifier",
+          "Accuracy + latency"
+        ],
+        [
+          "Routing",
+          "Decision model",
+          "Correct routing + escalation quality"
+        ],
+        [
+          "Tool safety",
+          "Decision model",
+          "False negatives"
+        ],
+        [
+          "Simple extraction",
+          "Small/fast LLM or decision model",
+          "Accuracy/cost"
+        ],
+        [
+          "Coding",
+          "Coding / agentic model",
+          "Task success"
+        ],
+        [
+          "Deep reasoning",
+          "Reasoning model",
+          "Correctness"
+        ],
+        [
+          "Creative writing",
+          "Generative LLM",
+          "Quality rubrics"
+        ],
+        [
+          "RAG generation",
+          "LLM",
+          "Answer quality"
+        ],
+        [
+          "RAG evaluation",
+          "Judge / decision model",
+          "Calibration"
+        ],
+        [
+          "Real-time voice",
+          "Fast multimodal",
+          "End-to-end latency"
+        ],
+        [
+          "Long-running agent",
+          "Agentic frontier model + harness",
+          "Task completion"
+        ],
+        [
+          "High-volume automation",
+          "Fast decision model",
+          "Cost × accuracy"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Evaluation dimensions",
+      "id": "dims"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Intelligence & reasoning depth",
+        "Latency & tail latency",
+        "Cost & cost per success",
+        "Context window needs",
+        "Structured output reliability",
+        "Tool use / MCP fitness",
+        "Coding ability",
+        "Multimodal needs",
+        "Reliability & uptime",
+        "Calibration",
+        "Privacy / data residency",
+        "Deployment model",
+        "Rate limits",
+        "Observability hooks",
+        "Safety tooling",
+        "Task-specific accuracy"
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Production recommendations",
+      "id": "prod"
+    },
+    {
+      "type": "p",
+      "text": "Keep a written model policy. Version it. Revisit when providers change defaults. Prefer explicit model ids over moving aliases in production paths that encode thresholds."
+    },
+    {
+      "type": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "type": "p",
+      "text": "The right model is the cheapest model that meets a measured quality bar under your latency and risk constraints — sometimes that is Jev-like, sometimes it is a frontier reasoner, often it is both in one system."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 1: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 2: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 3: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 4: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 5: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 6: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 7: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 8: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 9: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 10: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 11: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    },
+    {
+      "type": "p",
+      "text": "Worked example 12: define the user journey, list each decision or generation step, assign a candidate model type from the matrix, write the metric, and only then pick a vendor. Skipping the matrix step is how organisations accidentally spend premium reasoning tokens on boolean gates. Document the owner of each step so model policy changes have a human inbox. Re-run a fixed eval harness monthly; store results beside the policy document. If a step is both generative and decisive, split it. If a step is high volume, invest in calibration. If a step is irreversible, invest in false-negative analysis and human escalation UX — not only in model IQ."
+    }
+  ],
+  "related": [
+    {
+      "href": "/insights/jev/benchmarks",
+      "label": "Benchmark Lab",
+      "note": "Interactive charts"
+    },
+    {
+      "href": "/insights/ai-model-selection",
+      "label": "Model selection manual",
+      "note": ""
+    },
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": ""
+    },
+    {
+      "href": "/ai-automation",
+      "label": "AI Automation",
+      "note": ""
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobs",
+      "note": ""
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Primary vendor source (15 Sep 2026)."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Harness integration (17 Sep 2026)."
+    },
+    {
+      "title": "TypeSafe documentation index",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Concepts, primitives, API, cookbooks."
+    },
+    {
+      "title": "LangChain — Can Jev Be a Better Agent Evaluator?",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "20 Sep 2026 LangSmith experiment."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM when to use each",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Published triage cost/latency/accuracy."
+    },
+    {
+      "title": "AyAutomate — Independent Jev benchmark",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 decisions; challenges headline multipliers vs small models."
+    },
+    {
+      "title": "JevBench RESULTS v1.2",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public community harness."
+    },
+    {
+      "title": "OpenAI — Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "note": "Landscape: agent platform primitives."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Which model should I evaluate for my workload?",
+      "a": "Map each step through the matrix, then shortlist one decision-model candidate and one generative candidate where relevant. Run both on a labelled sample before standardising."
+    }
+  ]
+}

@@ -1,0 +1,110 @@
+@use '../../styles/mixins' as *;
+
+.band {
+  padding-block: var(--tm-space-section);
+}
+
+.wrap {
+  @include container;
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  gap: var(--tm-space-10);
+  align-items: center;
+  overflow: hidden;
+  padding: clamp(1.75rem, 1rem + 3.2vw, 4rem);
+  border-radius: var(--tm-radius-lg);
+
+  @include up($bp-lg) {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+.copy {
+  display: grid;
+  gap: var(--tm-space-5);
+  justify-items: start;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--tm-text-3xl);
+  font-weight: var(--tm-weight-display);
+  line-height: var(--tm-leading-tight);
+  letter-spacing: var(--tm-tracking-display);
+  max-width: 18ch;
+}
+
+.body {
+  font-size: var(--tm-text-md);
+  max-width: 52ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-3);
+  margin-top: var(--tm-space-2);
+}
+
+.art {
+  display: none;
+  max-width: 340px;
+  justify-self: end;
+  width: 100%;
+
+  @include up($bp-lg) {
+    display: block;
+  }
+}
+
+// Dark in both themes.
+.night .panel {
+  background: var(--tm-night-bg);
+  color: var(--tm-night-text);
+  border: 1px solid var(--tm-night-line);
+
+  .title {
+    color: var(--tm-night-text);
+  }
+
+  .body {
+    color: var(--tm-night-muted);
+  }
+
+  .eyebrow {
+    color: var(--tm-night-subtle);
+  }
+
+  .eyebrow::before {
+    background: var(--tm-night-accent);
+  }
+
+  .secondary {
+    border-color: var(--tm-night-subtle);
+    color: var(--tm-night-text);
+
+    &:hover {
+      border-color: var(--tm-night-text);
+      background: var(--tm-night-raised);
+      color: var(--tm-night-text);
+    }
+  }
+
+  :global(.tm-lattice) {
+    --tm-line: var(--tm-night-line);
+    --tm-text: var(--tm-night-text);
+    --tm-accent: var(--tm-night-accent);
+  }
+}
+
+.accent .panel {
+  background: var(--tm-accent-soft);
+  border: 1px solid var(--tm-accent-line);
+
+  .body {
+    color: var(--tm-text-muted);
+  }
+}

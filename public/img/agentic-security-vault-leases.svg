@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-label="Vault lease lifecycle for AI agents">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #047857; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .step { fill: #ffffff; stroke: #047857; stroke-width: 2; }
+      .warn { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .t { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#a); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="680"/>
+  <text class="tag" x="40" y="36">FIGURE B - VAULT SECRET LIFECYCLE</text>
+  <text class="title" x="40" y="68">Short-lived leases, renew/rotate, revoke on session end</text>
+  <text class="cap" x="40" y="94">Dynamic secrets force check-in; static long-lived API keys are an anti-pattern for agents.</text>
+
+  <rect class="step" x="40" y="140" width="250" height="110" rx="8"/>
+  <text class="t" x="60" y="180">1. Authenticate</text>
+  <text class="s" x="60" y="205">JWT / AppRole / OAuth</text>
+  <text class="s" x="60" y="225">map agent -&gt; Vault policy</text>
+
+  <path class="ln" d="M290 195 H330"/>
+
+  <rect class="step" x="330" y="140" width="250" height="110" rx="8"/>
+  <text class="t" x="350" y="180">2. Issue secret</text>
+  <text class="s" x="350" y="205">dynamic DB/cloud/API</text>
+  <text class="s" x="350" y="225">returns lease_id + TTL</text>
+
+  <path class="ln" d="M580 195 H620"/>
+
+  <rect class="step" x="620" y="140" width="250" height="110" rx="8"/>
+  <text class="t" x="640" y="180">3. Use within TTL</text>
+  <text class="s" x="640" y="205">agent tool call only</text>
+  <text class="s" x="640" y="225">scope = least privilege</text>
+
+  <path class="ln" d="M870 195 H910"/>
+
+  <rect class="warn" x="910" y="140" width="250" height="110" rx="8"/>
+  <text class="t" x="930" y="180">4. Renew or rotate</text>
+  <text class="s" x="930" y="205">renew lease if allowed</text>
+  <text class="s" x="930" y="225">else fetch replacement</text>
+
+  <rect class="step" x="40" y="320" width="360" height="140" rx="8"/>
+  <text class="t" x="60" y="360">Auto-rotate (static roles)</text>
+  <text class="s" x="60" y="390">Vault rotates password/key on period</text>
+  <text class="s" x="60" y="415">Vault Agent re-renders at ~90% TTL</text>
+  <text class="s" x="60" y="440">(lease_renewal_threshold)</text>
+
+  <rect class="step" x="430" y="320" width="360" height="140" rx="8"/>
+  <text class="t" x="450" y="360">Dynamic (ephemeral)</text>
+  <text class="s" x="450" y="390">Unique creds per request/session</text>
+  <text class="s" x="450" y="415">Expire automatically at lease end</text>
+  <text class="s" x="450" y="440">Best for agent tool bursts</text>
+
+  <rect class="warn" x="820" y="320" width="340" height="140" rx="8"/>
+  <text class="t" x="840" y="360">Revoke</text>
+  <text class="s" x="840" y="390">On agent stop / incident</text>
+  <text class="s" x="840" y="415">vault lease revoke lease_id</text>
+  <text class="s" x="840" y="440">Invalidate immediately</text>
+
+  <text class="foot" x="40" y="520">Recommended TTLs for agent tools: 5-15 min for high-risk (prod DB write); 30-60 min for read-only; never days-long static keys in MCP env files.</text>
+  <text class="foot" x="40" y="550">Vault Enterprise: Agent Registry + OAuth resource server for enrolled agent identities and on-behalf-of constraints.</text>
+  <text class="foot" x="40" y="580">Validated pattern: user OBO token -&gt; agent tool -&gt; Vault JWT auth -&gt; scoped dynamic secret (audit trails to human).</text>
+  <text class="foot" x="40" y="640">workstation.co.uk</text>
+</svg>

@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-muse-glimmer-001",
+  "internal_id": 961,
+  "slug": "muse-glimmer-ollama-local-agents-workstation-guide",
+  "title": "Muse Glimmer บน Ollama: Local Agent แบบเปิดตลอดเวลาบน GPU หนึ่งตัว",
+  "sub_title": "โมเดลเอเจนต์ 30B Apache 2.0 ของ Meta — การใช้เครื่องมือ การมองเห็น การกู้คืนความล้มเหลว — และความหมายสำหรับ AI ส่วนตัวบนเวิร์กสเตชัน",
+  "excerpt": "Meta Muse Glimmer นำตัวแทนท้องถิ่นที่ทำงานตลอดเวลามาสู่ GPU เดียวผ่าน Ollama: บริบท 30B, Apache 2.0, 128K, วิสัยทัศน์ และเครื่องมือ - คู่มือธุรกิจ TenthMatrix",
+  "meta_title": "Muse Glimmer บน Ollama — Local Agents Guide | TenthMatrix",
+  "meta_description": "คู่มือ TenthMatrix สำหรับ Meta Muse Glimmer บน Ollama: ตัวแทนท้องถิ่น 30B Apache 2.0, วิสัยทัศน์, เครื่องมือ, การกู้คืนความล้มเหลว, MLX บน Apple Silicon และคำแนะนำในการผลิตแบบไฮบริด",
+  "meta_keywords": "Muse Glimmer, Ollama, Meta, ตัวแทนท้องถิ่น, น้ำหนักเปิด, Apache 2.0, MLX, Apple Silicon, MCP, OpenClaw, TenthMatrix",
+  "cover_image": "/img/muse-glimmer-cover.svg",
+  "images": [
+    {
+      "url": "/img/muse-glimmer-cover.svg",
+      "id": 961,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Meta Muse Glimmer local agents on Ollama"
+    },
+    {
+      "url": "/img/muse-glimmer-local-agent-stack.svg",
+      "id": 962,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Muse Glimmer local agent stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>Muse Glimmer</strong>ของ Meta เป็นโมเดลแบบเปิดขนาด 30B ที่ปรับแต่งมาสำหรับตัวแทนในพื้นที่ที่ทำงานตลอดเวลา — การใช้เครื่องมือ, งานที่ยาวนาน, การกู้คืนความล้มเหลว, การมองเห็น — และวางจำหน่ายบน<a href=\"https://ollama.com/library/muse-glimmer\" target=\"_blank\" rel=\"noopener noreferrer\">Ollama</a>ภายใต้ Apache 2.0 สำหรับ GPU หรือ Apple Silicon เดียว นี่คือประเด็นสำคัญทางธุรกิจของ TenthMatrix ข้อมูลจำเพาะ เกณฑ์มาตรฐาน วิธีการ และรายการตรวจสอบการผลิตในบทความยาว<a href=\"/th/articles/muse-glimmer-ollama-local-agents-workstation-guide\"></a></em></p><p><img src=\"/img/muse-glimmer-cover.svg\" alt=\"Meta Muse Glimmer local agents on Ollama\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สิ่งสำคัญที่สุด</strong>Cloud frontier API ยังคงได้รับชัยชนะจากการขัดเกลาสูงสุดและ SLA ที่มีการจัดการ Muse Glimmer เปลี่ยนค่าเริ่มต้น<em>สำหรับเอเจนต์ส่วนตัวที่เปิดตลอดเวลา</em>: โมเดล 30B กลั่นพร้อมตัวเข้ารหัสการรับรู้ที่เหมาะกับฮาร์ดแวร์ผู้บริโภค / เวิร์กสเตชัน (น้ำหนักประมาณ 18GB, บริบท 128K), Apache 2.0 ที่ได้รับอนุญาต และต่อเข้ากับ Claude Code, OpenCode, Hermes Agent และ OpenClaw ผ่าน<code>ollama launch</code>ความเป็นส่วนตัว ช่องว่างอากาศ และต้นทุนต่อหน่วยที่คาดการณ์ได้กลายเป็นคุณลักษณะของผลิตภัณฑ์ ไม่ใช่โครงการวิจัย</div><h2>สิ่งที่จัดส่ง (ในแง่ธุรกิจ)</h2><ul><li><strong>ตัวแทนท้องถิ่นที่ทำงานตลอดเวลา:</strong>ได้รับการออกแบบมาเพื่อให้ทำงานต่อไปผ่านงานหลายขั้นตอนโดยไม่ต้องสะดุดทุกโทเค็นไปยังไฮเปอร์สเกลเลอร์</li><li><strong>Toolวินัย: ฟังก์ชันที่แม่นยำของสคีมา</strong>ที่เรียกใช้ในเวิร์กโฟลว์ที่ยาวนาน — ความแตกต่างระหว่างแชทบอทสาธิตและตัวแทนที่ยื่นตั๋ว แก้ไขโค้ด หรือสอบถามเครื่องมือ MCP</li><li><strong>การกู้คืนความล้มเหลว:</strong>เมื่อเครื่องมือมีข้อผิดพลาดหรือส่งคืนเรื่องไร้สาระ โมเดลจะวินิจฉัยและลองใหม่อีกครั้งแทนที่จะหยุดการทำงาน</li><li><strong>Multimodal: ภาพหน้าจอ แผนภูมิ และเอกสาร</strong>จะอยู่เคียงข้างข้อความ ซึ่งมีประโยชน์สำหรับคอนโซลปฏิบัติการ ใบแจ้งหนี้ และ UI อัตโนมัติ</li><li><strong>ความพยายามที่ควบคุมได้:</strong>เรียกเหตุผลความแข็งแกร่งขึ้นสำหรับตั๋วยาก ลดลงสำหรับเส้นทางที่มีความอ่อนไหวต่อความหน่วง</li><li><strong>ใบอนุญาต:</strong>Apache 2.0 — เรื่องราวเชิงพาณิชย์ที่สะอาดตากว่าการ์ด “open Weight” หลายตัวที่มีการแกะสลัก SaaS</li></ul><p><img src=\"/img/muse-glimmer-local-agent-stack.svg\" alt=\"Muse Glimmer local agent stack from scaffold to Ollama\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>ทำไมบอร์ดและ SMEs จึงควรใส่ใจ</h2><ol><li><strong>ถิ่นที่อยู่ของข้อมูล: PII ของลูกค้า</strong>, ซอร์สโค้ด และเอกสารทางการเงินสามารถอยู่บนเวิร์กสเตชันหรือ VPC ส่วนตัวได้</li><li><strong>เศรษฐศาสตร์ต่อหน่วย: ต้นทุนการอนุมานของ</strong>จะกลายเป็นค่าตัดจำหน่ายฮาร์ดแวร์ + ไฟฟ้า ไม่ใช่ใบแจ้งหนี้ต่อโทเค็นที่พุ่งสูงขึ้นด้วยลูปของตัวแทน</li><li><strong>ความต่อเนื่อง:</strong>ออฟไลน์หรือไซต์เครือข่ายที่เสื่อมโทรม (โรงงาน คลินิก ทีมงานภาคสนาม) ช่วยให้ตัวแทนทำงานต่อไป</li><li><strong>ความชัดเจนในการจัดซื้อ: การกระจาย</strong>Apache 2.0 + Ollama ช่วยลดแรงเสียดทานทางกฎหมายและการปฏิบัติงาน เมื่อเทียบกับการทิ้งน้ำหนักแบบทึบ</li></ol><h2>โดยที่<em>ไม่ใช่</em>แทนที่คลาวด์</h2><p>เก็บ API แบบปิด (หรือ MoE แบบเปิดที่ใหญ่กว่าบนคลัสเตอร์) สำหรับเส้นทางที่มีความสำคัญสูงสุด การสร้างที่คำนึงถึงแบรนด์ และปริมาณงานที่ต้องการ SLA ที่สนับสนุนผู้จำหน่าย Muse Glimmer คือ<strong>local / private lane</strong>ที่แข็งแกร่งในเราเตอร์แบบไฮบริด — ไม่ใช่คำสั่งให้แยก Bedrock หรือ Anthropic ออกในชั่วข้ามคืน จับคู่กับ evals, HITL และส่วนควบคุมใน<a href=\"/th/docs/blogs/agentic-ai-security-mcp-oauth-vault\">agentic security Brief</a>ของเรา</p>คำแนะนำ<h2>TenthMatrix</h2><ul><li><strong>SMEs / ร้านค้า Mac:</strong>เริ่มต้นด้วย<code>ollama run muse-glimmer:30b-mlx</code>บน Apple Silicon (หรือแท็กมาตรฐาน 18GB บนเวิร์กสเตชัน GPU ระดับกลาง/สูงเครื่องเดียว)</li>ทีม<li><strong>Dev: โครงลวด</strong>พร้อม<code>ollama launch claude --model muse-glimmer</code>(หรือ OpenCode / Hermes / OpenClaw) และวัดงานทองคำของคุณ - ไม่ใช่กระดานผู้นำของ Meta เพียงอย่างเดียว</li><li><strong>Enterprises: พ็อดตัวแทนที่มีช่องว่างทางอากาศนำร่อง</strong>พร้อม Review Bot + GitOps; เก็บระบบคลาวด์เฟลโอเวอร์ไว้สำหรับโอเวอร์โฟลว์</li></ul><p>การเขียนทางเทคนิคใหม่ทั้งหมด — สถาปัตยกรรม, แท็ก Ollama, เมทริกซ์เกณฑ์มาตรฐานเทียบกับ Gemma4-31B / Qwen3.6-27B, วิธีการประเมิน Meta และรายการตรวจสอบการผลิต: บทความยาว<a href=\"/th/articles/muse-glimmer-ollama-local-agents-workstation-guide\"></a>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ollama",
+      "id": 944
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "local-ai",
+      "id": 946
+    },
+    {
+      "name": "apple-silicon",
+      "id": 942
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    }
+  ],
+  "created_at": "2026-08-12T10:00:00Z",
+  "updated_at": "2026-08-12T10:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

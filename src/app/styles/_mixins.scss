@@ -1,0 +1,105 @@
+// Shared SCSS helpers. Import with a relative path, e.g.
+// `@use '../../styles/mixins' as *;` from src/app/components/<dir>/. Values only — every
+// colour comes from --tm-* tokens (src/app/styles/tm-theme.css).
+
+$bp-sm: 600px;
+$bp-md: 820px;
+$bp-lg: 1080px;
+$bp-xl: 1280px;
+
+@mixin up($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin down($bp) {
+  @media (max-width: ($bp - 0.02px)) {
+    @content;
+  }
+}
+
+@mixin motion {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
+@mixin focus-ring {
+  outline: none;
+  box-shadow: var(--tm-focus-ring);
+}
+
+@mixin focus-visible {
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+@mixin container($width: var(--tm-container)) {
+  width: 100%;
+  max-width: calc(#{$width} + 2 * var(--tm-gutter));
+  margin-inline: auto;
+  padding-inline: var(--tm-gutter);
+}
+
+@mixin eyebrow {
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+  font-weight: var(--tm-weight-medium);
+  letter-spacing: var(--tm-tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--tm-text-subtle);
+  line-height: 1.4;
+}
+
+@mixin display($size: var(--tm-text-3xl)) {
+  font-family: var(--tm-font-display);
+  font-size: $size;
+  font-weight: var(--tm-weight-display);
+  line-height: var(--tm-leading-tight);
+  letter-spacing: var(--tm-tracking-display);
+  font-variation-settings: 'opsz' 72;
+}
+
+@mixin heading($size: var(--tm-text-2xl)) {
+  font-family: var(--tm-font-display);
+  font-size: $size;
+  font-weight: var(--tm-weight-semibold);
+  line-height: var(--tm-leading-snug);
+  letter-spacing: var(--tm-tracking-heading);
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Accent square, the "tenth cell", used as a marker before eyebrows/labels.
+@mixin cell-marker($size: 6px) {
+  content: '';
+  display: inline-block;
+  flex: none;
+  width: $size;
+  height: $size;
+  border-radius: 1px;
+  background: var(--tm-accent);
+}
+
+@mixin card-surface {
+  background: var(--tm-surface);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  box-shadow: var(--tm-shadow-sm);
+
+  :root[data-theme='dark'] & {
+    box-shadow: none;
+  }
+}

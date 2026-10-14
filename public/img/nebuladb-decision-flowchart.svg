@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700" role="img" aria-label="NebulaDB vs managed agent memory platforms: decision flowchart">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 22px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .q { fill: #3a1f08; stroke: #f59e0b; stroke-width: 1.5; }
+      .ans { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .alt { fill: #2a1505; stroke: #ee7600; stroke-width: 1.5; }
+      .qLabel { fill: #fde68a; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ansLabel { fill: #ffffff; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ansText { fill: rgba(255,255,255,0.78); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .yes { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .no { stroke: #9fb0ff; stroke-width: 2; fill: none; stroke-dasharray: 5 4; }
+      .yesLabel { fill: #66bb6a; font: 800 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .noLabel { fill: #9fb0ff; font: 800 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .summary { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .summaryText { fill: #c4b5fd; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="arYes" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arNo" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#9fb0ff"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="700" fill="url(#bg)"/>
+  <rect width="1100" height="700" fill="url(#grid)"/>
+
+  <text class="title" x="550" y="36" text-anchor="middle">Which database should you choose?</text>
+  <text class="subtitle" x="550" y="58" text-anchor="middle">Decision framework: NebulaDB vs managed agent memory platforms</text>
+
+  <g>
+    <rect x="380" y="80" width="340" height="50" rx="25" class="q"/>
+    <text class="qLabel" x="550" y="111" text-anchor="middle">Q1. RAG pipelines or semantic search?</text>
+  </g>
+
+  <rect x="60" y="172" width="280" height="56" rx="10" class="ans"/>
+  <text class="ansLabel" x="200" y="196" text-anchor="middle">NebulaDB</text>
+  <text class="ansText" x="200" y="216" text-anchor="middle">Built-in ingest-to-generate pipeline (Step 1-6)</text>
+  <path d="M 470 130 L 200 172" class="yes" marker-end="url(#arYes)"/>
+  <text class="yesLabel" x="270" y="148">YES</text>
+
+  <rect x="730" y="172" width="340" height="56" rx="25" class="q"/>
+  <text class="qLabel" x="900" y="202" text-anchor="middle">Q2. SQL analytics over vector data?</text>
+  <path d="M 660 130 L 900 172" class="no" marker-end="url(#arNo)"/>
+  <text class="noLabel" x="810" y="150">NO</text>
+
+  <rect x="140" y="272" width="280" height="56" rx="10" class="ans"/>
+  <text class="ansLabel" x="280" y="296" text-anchor="middle">NebulaDB</text>
+  <text class="ansText" x="280" y="316" text-anchor="middle">semantic_match() + GROUP BY + JOIN</text>
+  <path d="M 790 228 L 280 272" class="yes" marker-end="url(#arYes)"/>
+  <text class="yesLabel" x="540" y="252">YES</text>
+
+  <rect x="730" y="278" width="340" height="56" rx="25" class="q"/>
+  <text class="qLabel" x="900" y="300" text-anchor="middle">Q3. Full infrastructure control</text>
+  <text class="qLabel" x="900" y="318" text-anchor="middle">and zero licensing cost?</text>
+  <path d="M 1000 228 L 1000 278" class="no" marker-end="url(#arNo)"/>
+  <text class="noLabel" x="1014" y="256">NO</text>
+
+  <rect x="140" y="368" width="280" height="56" rx="10" class="ans"/>
+  <text class="ansLabel" x="280" y="392" text-anchor="middle">NebulaDB</text>
+  <text class="ansText" x="280" y="412" text-anchor="middle">Apache-2.0  /  self-hosted  /  no vendor lock-in</text>
+  <path d="M 790 334 L 280 368" class="yes" marker-end="url(#arYes)"/>
+  <text class="yesLabel" x="540" y="356">YES</text>
+
+  <rect x="730" y="378" width="340" height="56" rx="25" class="q"/>
+  <text class="qLabel" x="900" y="400" text-anchor="middle">Q4. Multi-protocol access?</text>
+  <text class="qLabel" x="900" y="418" text-anchor="middle">(REST + gRPC + Postgres)</text>
+  <path d="M 1000 334 L 1000 378" class="no" marker-end="url(#arNo)"/>
+  <text class="noLabel" x="1014" y="358">NO</text>
+
+  <rect x="140" y="466" width="280" height="56" rx="10" class="ans"/>
+  <text class="ansLabel" x="280" y="490" text-anchor="middle">NebulaDB</text>
+  <text class="ansText" x="280" y="510" text-anchor="middle">REST + gRPC + Postgres from one binary</text>
+  <path d="M 790 434 L 280 466" class="yes" marker-end="url(#arYes)"/>
+  <text class="yesLabel" x="540" y="454">YES</text>
+
+  <rect x="730" y="478" width="340" height="56" rx="25" class="q"/>
+  <text class="qLabel" x="900" y="500" text-anchor="middle">Q5. OK with $249+/month</text>
+  <text class="qLabel" x="900" y="518" text-anchor="middle">and SaaS vendor lock-in?</text>
+  <path d="M 1000 434 L 1000 478" class="no" marker-end="url(#arNo)"/>
+  <text class="noLabel" x="1014" y="458">NO</text>
+
+  <rect x="140" y="566" width="280" height="56" rx="10" class="ans"/>
+  <text class="ansLabel" x="280" y="590" text-anchor="middle">NebulaDB</text>
+  <text class="ansText" x="280" y="610" text-anchor="middle">Build your own memory layer on NebulaDB</text>
+  <path d="M 790 534 L 280 566" class="no" marker-end="url(#arNo)"/>
+  <text class="noLabel" x="540" y="554">NO</text>
+
+  <rect x="800" y="566" width="280" height="56" rx="10" class="alt"/>
+  <text class="ansLabel" x="940" y="590" text-anchor="middle" fill="#ffd380">Managed memory platform</text>
+  <text class="ansText" x="940" y="610" text-anchor="middle">Specialized agent memory SaaS (Mem0, Zep, etc.)</text>
+  <path d="M 1000 534 L 940 566" class="yes" marker-end="url(#arYes)"/>
+  <text class="yesLabel" x="1014" y="552">YES</text>
+
+  <rect x="60" y="640" width="980" height="42" rx="10" class="summary"/>
+  <text class="summaryText" x="550" y="666" text-anchor="middle">For most AI workloads, NebulaDB provides the full foundation: zero licensing cost, full control, enterprise-grade capabilities.</text>
+</svg>

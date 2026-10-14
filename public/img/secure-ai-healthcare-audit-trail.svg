@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Healthcare AI agent audit trail without copying PHI">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 28px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #047857; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .no { fill: #9f1239; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .step { fill: #ffffff; stroke: #0ea5e9; stroke-width: 2; }
+      .bad { fill: #fff1f2; stroke: #e11d48; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">3. Track what the agent did, not just what it said</text>
+  <text class="sub" x="48" y="78">Compliance-grade action chain — without spreading extra PHI copies</text>
+
+  <rect class="step" x="40" y="130" width="160" height="110" rx="8"/>
+  <text class="lbl" x="55" y="175">1. Agent ID</text>
+  <text class="sm" x="55" y="205">Which bot acted</text>
+
+  <path class="arrow" d="M210 185 H250"/>
+
+  <rect class="step" x="260" y="130" width="160" height="110" rx="8"/>
+  <text class="lbl" x="275" y="175">2. Workflow</text>
+  <text class="sm" x="275" y="205">Which flow started</text>
+
+  <path class="arrow" d="M430 185 H470"/>
+
+  <rect class="step" x="480" y="130" width="160" height="110" rx="8"/>
+  <text class="lbl" x="495" y="175">3. Tools</text>
+  <text class="sm" x="495" y="205">Systems attempted</text>
+
+  <path class="arrow" d="M650 185 H690"/>
+
+  <rect class="step" x="700" y="130" width="160" height="110" rx="8"/>
+  <text class="lbl" x="715" y="175">4. Permission</text>
+  <text class="sm" x="715" y="205">Allow / deny / escalate</text>
+
+  <path class="arrow" d="M870 185 H910"/>
+
+  <rect class="step" x="920" y="130" width="240" height="110" rx="8"/>
+  <text class="lbl" x="935" y="175">5. Boundary + result</text>
+  <text class="sm" x="935" y="205">What crossed · outcome</text>
+
+  <rect class="step" x="48" y="300" width="540" height="340" rx="12"/>
+  <text class="lbl" x="72" y="345">Good audit visibility</text>
+  <text class="sm" x="72" y="380">" Tool name and purpose</text>
+  <text class="sm" x="72" y="410">" Policy decision and actor</text>
+  <text class="sm" x="72" y="440">" Token / status references</text>
+  <text class="sm" x="72" y="470">" Timestamps and correlation IDs</text>
+  <text class="sm" x="72" y="500">" Success / failure codes</text>
+  <text class="ok" x="72" y="545">Prove what happened</text>
+  <text class="ok" x="72" y="575">without replaying raw PHI</text>
+
+  <rect class="bad" x="620" y="300" width="532" height="340" rx="12"/>
+  <text class="lbl" x="644" y="345">Avoid these copies</text>
+  <text class="sm" x="644" y="380">" Full transcripts with card digits</text>
+  <text class="sm" x="644" y="410">" Dumping charts into analytics</text>
+  <text class="sm" x="644" y="440">" Admin screenshots of EHR pages</text>
+  <text class="sm" x="644" y="470">" Unbounded model memory dumps</text>
+  <text class="sm" x="644" y="500">" Shadow logs outside retention policy</text>
+  <text class="no" x="644" y="545">Visibility ` copying everything</text>
+  <text class="no" x="644" y="575">Extra PHI copies increase risk</text>
+</svg>

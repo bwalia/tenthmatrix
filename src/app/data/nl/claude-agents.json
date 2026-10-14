@@ -1,0 +1,406 @@
+{
+  "pageId": "claude",
+  "meta": {
+    "title": "Claude Agents, Subagents & Workflows | TenthMatrix",
+    "description": "TenthMatrix guide to Claude Code, Claude Cowork, Agent SDK subagents, dynamic workflows, MCP, and governed adoption for engineering and business teams.",
+    "keywords": "Claude Agents, Claude Code, Claude Cowork, Agent SDK, subagents, dynamic workflows, MCP, Anthropic, TenthMatrix"
+  },
+  "header": {
+    "title": "Claude Agents & Workflows",
+    "subtitle": "Code agents, Cowork, subagents, and dynamic workflows for business teams",
+    "lastUpdated": "September 2026"
+  },
+  "ui": {
+    "videoHeading": "Watch: Building more effective AI agents",
+    "featuresHeading": "Claude agent surfaces",
+    "useCasesHeading": "Where Claude agents fit",
+    "useCasesSubtitle": "Map Claude Code, Cowork, subagents, and workflows to real team jobs",
+    "keyBenefits": "Key Benefits:",
+    "newsHeading": "Latest Claude agent updates",
+    "faqHeading": "Veelgestelde vragen",
+    "mostPopular": "Meest gekozen"
+  },
+  "hero": {
+    "badge": "Anthropic · Claude Code · Claude Cowork · Agent SDK",
+    "title": "Claude Agents, Subagents & Dynamic Workflows",
+    "subtitle": "Repo-scale coding agents, business Cowork, and scripted multi-agent orchestration — with governance TenthMatrix teams can run",
+    "description": "Claude is no longer just a chat model. Claude Code runs long-horizon coding agents in the terminal and IDE. Claude Cowork handles decks, docs, and scheduled knowledge work. The Agent SDK adds named subagents and dynamic workflows that fan out dozens of specialised workers. TenthMatrix helps you pick the right surface per team and put approval gates, MCP OAuth, and Ring Promoter promotion in front of production.",
+    "video": "https://www.youtube.com/embed/uhJJgc-0iTQ",
+    "videoTitle": "Building more effective AI agents — Anthropic",
+    "videoHeading": "Watch: Building more effective AI agents",
+    "image": "/img/claude-code-cowork-chatgpt-cover.svg",
+    "overlayRgb": "217,119,6",
+    "overlayRgbDark": "180,83,9",
+    "stats": [
+      {
+        "number": "Subagents",
+        "label": "Isolated workers with tool scopes",
+        "icon": "fas fa-sitemap"
+      },
+      {
+        "number": "Workflows",
+        "label": "Scripted fan-out & verification",
+        "icon": "fas fa-project-diagram"
+      },
+      {
+        "number": "MCP",
+        "label": "Tools, data & connectors",
+        "icon": "fas fa-plug"
+      },
+      {
+        "number": "Cowork",
+        "label": "Business artefacts & routines",
+        "icon": "fas fa-briefcase"
+      }
+    ]
+  },
+  "introduction": {
+    "title": "What are Claude agents at TenthMatrix?",
+    "content": "Claude agents are Anthropic’s productised ways to plan, use tools, and finish multi-step work — not one-shot chat replies. Engineering teams live in Claude Code. Ops and knowledge teams use Claude Cowork. Builders embed the Claude Agent SDK with subagents and dynamic workflows. TenthMatrix maps each surface to owners, risk classes, and promotion paths so demos become durable operating models.",
+    "keyPoints": [
+      "<strong>Claude Code</strong>: Terminal and IDE coding agents for repo-scale edits, tests, PRs, and long-running tasks",
+      "<strong>Claude Cowork</strong>: Desk-to-phone business workflows for decks, docs, spreadsheets, and scheduled work",
+      "<strong>Subagents</strong>: Named workers with isolated context and restricted tools for focused subtasks",
+      "<strong>Dynamic workflows</strong>: Claude-written orchestration scripts that fan out, verify, and synthesise at scale",
+      "<strong>Governance</strong>: MCP OAuth, Vault leases, human approval gates, and Ring Promoter health-gated deploys"
+    ]
+  },
+  "features": [
+    {
+      "title": "Claude Code",
+      "description": "Anthropic’s agentic coding product for engineering and platform teams. It understands repositories, edits across files, runs tests, and can work headlessly for CI bots and Dispatch-style automation.",
+      "icon": "fas fa-terminal",
+      "image": "/img/ai-software-engineering.jpg",
+      "capabilities": [
+        "Repo-aware multi-file coding agents",
+        "Hooks, MCP servers, and IDE integrations",
+        "Headless / Dispatch automation",
+        "Remote and container workflows",
+        "Pairs with Claude models on Platform and Bedrock"
+      ]
+    },
+    {
+      "title": "Claude Cowork",
+      "description": "Cowork is Claude for knowledge work: connect data, schedule recurring tasks, and deliver artefacts for human review — without hand-authoring agent files for every job.",
+      "icon": "fas fa-briefcase",
+      "image": "/img/agent-workflows.jpg",
+      "capabilities": [
+        "Scheduled recurring business tasks",
+        "Decks, documents, and spreadsheets",
+        "Automatic parallel workstreams",
+        "Plugins that bundle skills and connectors",
+        "Cross-device task check-in"
+      ]
+    },
+    {
+      "title": "Subagents & Agent SDK",
+      "description": "Define specialised subagents in code or `.claude/agents/` markdown. Isolate context, restrict tools, and let the main agent delegate — or call them by name.",
+      "icon": "fas fa-users-cog",
+      "image": "/img/ai-neural-network.jpg",
+      "capabilities": [
+        "Programmatic AgentDefinition / agents map",
+        "Filesystem-based agent definitions",
+        "Parallel analysis with tool allowlists",
+        "Python and TypeScript Agent SDK",
+        "MCP for databases, browsers, and internal APIs"
+      ]
+    },
+    {
+      "title": "Dynamic workflows",
+      "description": "When a few subagents are not enough, Claude writes a JavaScript orchestration script. The Workflow runtime fans out, stores intermediate results in variables, and returns a verified synthesis — ideal for audits, migrations, and cross-checked research.",
+      "icon": "fas fa-stream",
+      "image": "/img/jobshout-spec-based-ai-workflow.svg",
+      "capabilities": [
+        "Scripted parallel() and pipeline() orchestration",
+        "Bundled /deep-research workflow",
+        "Ultracode effort for automatic workflow planning",
+        "Resumable background runs",
+        "Adversarial verification passes"
+      ]
+    }
+  ],
+  "useCases": [
+    {
+      "industry": "Engineering",
+      "title": "Repo-scale coding & PR loops",
+      "description": "Claude Code plans changes, edits files, runs tests, and opens PRs. Subagents review security and quality in parallel before humans merge.",
+      "image": "/img/12.jpg",
+      "benefits": [
+        "Faster feature delivery",
+        "Consistent review depth",
+        "CI-friendly Dispatch bots"
+      ],
+      "metrics": {
+        "speed": "5x faster multi-file changes",
+        "quality": "Fewer missed review angles",
+        "ops": "Headless PR bots"
+      }
+    },
+    {
+      "industry": "Platform & SRE",
+      "title": "Codebase audits with workflows",
+      "description": "Dynamic workflows fan out across packages for dependency, config, and security sweeps — then verify claims before the report lands.",
+      "image": "/img/agentic-security-cover.svg",
+      "benefits": [
+        "Repeatable audit scripts",
+        "Cross-checked findings",
+        "Scoped tool permissions"
+      ],
+      "metrics": {
+        "scale": "Dozens of agents per run",
+        "trust": "Verifier passes",
+        "risk": "Allowlisted tools only"
+      }
+    },
+    {
+      "industry": "Ops & PMO",
+      "title": "Cowork for decks and status packs",
+      "description": "Claude Cowork connects sources, builds status decks and spreadsheets, and schedules recurring updates for human review.",
+      "image": "/img/13.jpg",
+      "benefits": [
+        "Scheduled artefacts",
+        "Less copy-paste reporting",
+        "Human approval before send"
+      ],
+      "metrics": {
+        "time": "Hours saved per week",
+        "cadence": "Recurring routines",
+        "review": "Human gate retained"
+      }
+    },
+    {
+      "industry": "Enterprise builders",
+      "title": "Custom agents on the SDK",
+      "description": "Embed the Claude Agent SDK behind MCP, Vault leases, and TenthMatrix gateways so internal tools stay authenticated and auditable.",
+      "image": "/img/enterprise-agentic-frameworks-cover.svg",
+      "benefits": [
+        "MCP connectors",
+        "OAuth and Vault leases",
+        "Ring Promoter promotion"
+      ],
+      "metrics": {
+        "security": "Least-privilege tools",
+        "memory": "Session + durable stores",
+        "promote": "Health-gated rings"
+      }
+    }
+  ],
+  "technicalDetails": {
+    "title": "Claude agent architecture",
+    "subtitle": "Surfaces, orchestration, tools, and controls TenthMatrix recommends",
+    "components": [
+      {
+        "name": "Claude Code runtime",
+        "description": "Interactive and headless agent loop with repo tools, hooks, and remote execution options",
+        "features": [
+          "CLI / IDE",
+          "Dispatch",
+          "Hooks",
+          "Remote"
+        ]
+      },
+      {
+        "name": "Agent SDK",
+        "description": "Programmatic query loop with Agent tool, allowedTools, and custom tool registration",
+        "features": [
+          "Python",
+          "TypeScript",
+          "Agent tool",
+          "MCP"
+        ]
+      },
+      {
+        "name": "Subagents",
+        "description": "Isolated workers with descriptions Claude uses to auto-delegate focused work",
+        "features": [
+          "Tool scopes",
+          "Parallel runs",
+          "Named agents"
+        ]
+      },
+      {
+        "name": "Dynamic workflows",
+        "description": "Background JavaScript orchestration for large fan-out and verification patterns",
+        "features": [
+          "Workflow tool",
+          "/deep-research",
+          "Ultracode"
+        ]
+      },
+      {
+        "name": "Claude Cowork",
+        "description": "Knowledge-work surface with connectors, plugins, and automatic parallelisation",
+        "features": [
+          "Schedules",
+          "Artefacts",
+          "Plugins"
+        ]
+      },
+      {
+        "name": "TenthMatrix controls",
+        "description": "MCP OAuth, Vault leases, WSL Proxy edge, and Ring Promoter promotion for production",
+        "features": [
+          "Approvals",
+          "Audit",
+          "Rings"
+        ]
+      }
+    ]
+  },
+  "comparison": {
+    "title": "Claude agents vs traditional chat AI",
+    "columns": [
+      "Aspect",
+      "Traditional chat",
+      "Claude agents",
+      "Verbetering"
+    ],
+    "items": [
+      {
+        "aspect": "Work style",
+        "traditional": "Single-turn answers",
+        "agentWorkflow": "Multi-step tool-using agents",
+        "improvement": "End-to-end delivery"
+      },
+      {
+        "aspect": "Coding",
+        "traditional": "Snippet suggestions",
+        "agentWorkflow": "Repo-scale Claude Code agents",
+        "improvement": "Shipable changes"
+      },
+      {
+        "aspect": "Scale",
+        "traditional": "One context window",
+        "agentWorkflow": "Subagents + workflows",
+        "improvement": "Fan-out with verification"
+      },
+      {
+        "aspect": "Business work",
+        "traditional": "Draft in chat",
+        "agentWorkflow": "Cowork artefacts & routines",
+        "improvement": "Scheduled outcomes"
+      },
+      {
+        "aspect": "Enterprise",
+        "traditional": "Copy-paste integrations",
+        "agentWorkflow": "MCP + governed promotion",
+        "improvement": "Auditable production"
+      }
+    ]
+  },
+  "news": [
+    {
+      "date": "2026",
+      "title": "Dynamic workflows in Claude Code",
+      "summary": "Claude writes orchestration scripts that fan out subagents for audits, migrations, and cross-checked research.",
+      "source": "Claude Code docs"
+    },
+    {
+      "date": "2026",
+      "title": "Claude Cowork for business teams",
+      "summary": "Desk-to-phone workflows for decks, docs, and scheduled knowledge work without hand-written agent files.",
+      "source": "Anthropic product"
+    },
+    {
+      "date": "2026",
+      "title": "Agent SDK subagents",
+      "summary": "Define specialised workers with tool scopes and descriptions Claude uses to delegate automatically.",
+      "source": "Agent SDK docs"
+    },
+    {
+      "date": "2026",
+      "title": "TenthMatrix teams guide",
+      "summary": "Map Claude Code, Cowork, and ChatGPT agents to engineering, ops, GTM, and finance with shared controls.",
+      "source": "TenthMatrix articles"
+    }
+  ],
+  "pricing": {
+    "title": "Adopt Claude agents with TenthMatrix",
+    "subtitle": "We help you choose surfaces, wire MCP securely, and promote safely — Anthropic pricing stays with Anthropic",
+    "plans": [
+      {
+        "name": "Pilot",
+        "price": "Scoped",
+        "period": "engagement",
+        "description": "One team, one Claude surface, clear success metrics",
+        "features": [
+          "Claude Code or Cowork pilot",
+          "MCP connector review",
+          "Approval-gate checklist",
+          "2-week working session"
+        ],
+        "cta": "Book a pilot"
+      },
+      {
+        "name": "Team rollout",
+        "price": "Programme",
+        "period": "per quarter",
+        "description": "Multi-team playbooks with SDK patterns and Ring Promoter",
+        "features": [
+          "Subagent / workflow blueprints",
+          "Vault + OAuth patterns",
+          "Ring Promoter promotion",
+          "Operator training"
+        ],
+        "cta": "Praat met ons",
+        "featured": true
+      },
+      {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "contact",
+        "description": "Bedrock / Platform routing, private networking, and SLAs",
+        "features": [
+          "Private AI options",
+          "WSL Proxy edge",
+          "Compliance packaging",
+          "Dedicated account team"
+        ],
+        "cta": "Contact sales"
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "How is Claude Code different from Claude chat?",
+      "answer": "Claude chat answers questions. Claude Code is an agentic coding product that reads your repo, edits files, runs commands, and completes multi-step engineering work in the terminal or IDE — including headless Dispatch for automation."
+    },
+    {
+      "question": "What are Claude subagents?",
+      "answer": "Subagents are separate agent instances the main agent can spawn for focused work. You define them in the Agent SDK or as markdown files under .claude/agents/, give them clear descriptions and tool allowlists, and Claude delegates when the description matches."
+    },
+    {
+      "question": "When should I use dynamic workflows instead of subagents?",
+      "answer": "Use a few subagents for adaptive delegation inside a conversation. Use dynamic workflows when you need dozens of workers, repeatable orchestration in a script, and verification passes that should not overflow the main context window."
+    },
+    {
+      "question": "What is Claude Cowork for?",
+      "answer": "Cowork targets business and knowledge work — decks, docs, spreadsheets, scheduled tasks — with connectors and automatic parallelisation. It is the non-terminal sibling of the same agent architecture as Claude Code."
+    },
+    {
+      "question": "How does TenthMatrix help with Claude agents?",
+      "answer": "We map the right Claude surface to each team, secure MCP tools with OAuth and Vault leases, put WSL Proxy in front of agent traffic, and promote changes through Ring Promoter rings so agent demos survive production."
+    }
+  ],
+  "cta": {
+    "title": "Ready to run Claude agents with governance?",
+    "description": "TenthMatrix helps engineering and business teams adopt Claude Code, Cowork, subagents, and workflows without skipping approval gates.",
+    "buttons": [
+      {
+        "text": "Contact TenthMatrix",
+        "link": "/contact-us",
+        "type": "primary"
+      },
+      {
+        "text": "Read teams guide",
+        "link": "/articles/claude-code-cowork-chatgpt-business-teams",
+        "type": "secondary"
+      },
+      {
+        "text": "View products",
+        "link": "/products",
+        "type": "outline"
+      }
+    ]
+  }
+}

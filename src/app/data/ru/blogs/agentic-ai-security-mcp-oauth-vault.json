@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-agentic-security-001",
+  "internal_id": 960,
+  "slug": "agentic-ai-security-mcp-oauth-vault",
+  "title": "Безопасность агентного ИИ: MCP OAuth, VPN и аренды HashiCorp Vault",
+  "sub_title": "OAuth 2.1 для MCP, частные сетевые пути и краткоживущие секреты Vault — базовые настройки для Claude, OpenAI и Cursor",
+  "excerpt": "Защитите корпоративных ИИ-агентов с MCP OAuth 2.1, VPN-изолированными инструментами и арендами HashiCorp Vault с авторотацией и истечением — плюс рекомендации для Claude, OpenAI и Cursor.",
+  "meta_title": "Безопасность агентного ИИ — MCP OAuth, VPN, аренды Vault",
+  "meta_description": "Как защитить корпоративных ИИ-агентов: MCP OAuth 2.1, VPN/частный MCP, динамические секреты и аренды HashiCorp Vault, плюс настройки Claude, OpenAI и Cursor.",
+  "meta_keywords": "безопасность агентного ИИ, MCP OAuth, Model Context Protocol, HashiCorp Vault, динамические секреты, аренда, VPN, Claude, OpenAI, Cursor, корпоративные агенты",
+  "cover_image": "/img/agentic-security-cover.svg",
+  "images": [
+    {
+      "url": "/img/agentic-security-cover.svg",
+      "id": 960,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Agentic AI security MCP OAuth VPN Vault"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Корпоративным агентам нужны три контроля, которых нет у статических API-ключей: <strong>MCP-доступ, привязанный к OAuth</strong>, <strong>частные сетевые пути (VPN/mesh)</strong> и <strong>краткоживущие аренды Vault</strong> для секретов инструментов. Этот дайджест описывает отраслевые базовые практики для Claude, OpenAI и Cursor. Полная эталонная архитектура в <a href=\"/ru/articles/agentic-ai-security-mcp-oauth-vault\">полная статья</a>.</em></p>\n\n<p><img src=\"/img/agentic-security-cover.svg\" alt=\"Безопасность агентного ИИ: MCP OAuth, VPN, аренды Vault\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff1f2;border-left:4px solid #9f1239;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Определение.</strong> Агентная безопасность — это идентичность + авторизация + жизненный цикл секретов для инструментов, которые может вызывать LLM. Удалённые MCP-серверы выступают как OAuth 2.1 <em>resource servers</em> (Protected Resource Metadata / RFC 9728). Backend-учётные данные (БД, облако, SaaS) должны приходить из HashiCorp Vault как арендуемые, ротируемые секреты — никогда из конфигов MCP или контекста чата.\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> For explainable edge protection on the same live-config proxy that will front agent and MCP traffic, see the <a href=\"/ru/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a>, the <a href=\"/ru/articles/wslproxy-waf-web-application-firewall\">WAF technical article</a>, the <a href=\"/ru/wsl-proxy\">WSL Proxy product page</a>, or <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a> · tour: <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/r10XSonA5JE</a>.\n</div>\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Дайджест для агента.</strong> (1) AuthN/AuthZ через OAuth 2.1 + PKCE + привязку audience. (2) Предпочитать Enterprise-Managed Authorization (EMA / ID-JAG) для org-wide MCP. (3) Размещать MCP + Vault на VPN/private link. (4) Выдавать динамические секреты Vault с TTL; renew/rotate; revoke при остановке. (5) Отделять ключи LLM-провайдера от секретов инструментов.\n</div>\n\n<h2>Эталонный путь</h2>\n<p><img src=\"/img/agentic-security-architecture.svg\" alt=\"Архитектура IdP → MCP → Vault → инструменты\" width=\"1200\" height=\"760\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Базовые настройки вендоров (Claude / OpenAI / Cursor)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#fda4af;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Продукт</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Рекомендуемая настройка</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Удалённый MCP через OAuth; discovery 401 + WWW-Authenticate; никогда токены в URL; Vault для секретов инструментов</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>OpenAI</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Изолировать API-ключ модели; OBO/user-attributed токены инструментов; VPC-агенты; динамические creds Vault на каждый вызов</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Cursor</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Только env-конфиг MCP; Vault Agent для STDIO; корп. VPN к частному MCP; allowlist серверов команды</td></tr>\n</tbody>\n</table>\n\n<h2>Аренды Vault (краткоживущие секреты)</h2>\n<p><img src=\"/img/agentic-security-vault-leases.svg\" alt=\"Жизненный цикл аренды Vault: renew, rotate, revoke\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Динамические секреты</strong> — уникальные creds + <code>lease_id</code> + TTL; истекают или отзываются по окончании сессии агента.</li>\n  <li><strong>Авторотация</strong> — статические роли ротируются периодически; Vault Agent обновляет около TTL (по умолчанию ~90%).</li>\n  <li><strong>Enterprise</strong> — Agent Registry + OAuth resource server для зарегистрированных идентичностей агентов (Vault Enterprise).</li>\n</ul>\n\n<h2>Рекомендация TenthMatrix</h2>\n<p>Считайте MCP OAuth <em>входной дверью</em>, VPN — <em>сетевой дверью</em>, а Vault — <em>дверью секретов</em>. Полные чеклисты, RFC и антипаттерны: <a href=\"/ru/articles/agentic-ai-security-mcp-oauth-vault\">полная статья</a>. Опубликовано <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "llm",
+      "id": 975
+    }
+  ],
+  "created_at": "2026-08-08T10:00:00Z",
+  "updated_at": "2026-08-08T10:00:00Z",
+  "published_date": "2026-08-08",
+  "status": true
+}

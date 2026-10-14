@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-filemytax-sa-001",
+  "internal_id": 944,
+  "slug": "can-ai-file-self-assessment-hmrc-filemytax",
+  "title": "ਕੀ ਇੱਕ AI ਸਿਸਟਮ ਪ੍ਰਕਿਰਿਆ ਅਤੇ Self Assessment ਟੈਕਸ ਨੂੰ HMRC 'ਤੇ ਆਟੋਮੈਟਿਕਲੀ ਫਾਈਲ ਕਰ ਸਕਦਾ ਹੈ?",
+  "sub_title": "FileMyTax ਦਾ ਪ੍ਰਦਰਸ਼ਨ ਕਰਨਾ — ਬੈਂਕ PDF ਤੋਂ HMRC MTD ਫਾਈਲਿੰਗ ਤੱਕ ਇੱਕ AI-ਸੰਚਾਲਿਤ ਪਾਈਪਲਾਈਨ, CognoAI ਲਈ TenthMatrix ਦੁਆਰਾ ਬਣਾਈ ਗਈ",
+  "excerpt": "ਕੀ AI UK Self Assessment ਤੋਂ HMRC ਫਾਈਲ ਕਰ ਸਕਦਾ ਹੈ? FileMyTax ਇੱਕ ਮਨੁੱਖੀ ਗੇਟ ਨਾਲ ਬੈਂਕ PDF → ਐਬਸਟਰੈਕਟ → ਵਰਗੀਕ੍ਰਿਤ → ਗਣਨਾ → MTD ਦਿਖਾਉਂਦਾ ਹੈ। CognoAI ਲਈ TenthMatrix ਦੁਆਰਾ ਬਣਾਇਆ ਗਿਆ। ਟੈਕਸ ਸਲਾਹ ਨਹੀਂ।",
+  "meta_title": "ਕੀ AI Self Assessment ਤੋਂ HMRC ਫਾਈਲ ਕਰ ਸਕਦਾ ਹੈ? | FileMyTax",
+  "meta_description": "FileMyTax ਡੈਮੋ: AI ਬੈਂਕ PDF ਕੱਢਦਾ ਹੈ, SA ਟ੍ਰਾਂਜੈਕਸ਼ਨਾਂ ਦਾ ਵਰਗੀਕਰਨ ਕਰਦਾ ਹੈ, 2025-26 ਟੈਕਸ ਦੀ ਗਣਨਾ ਕਰਦਾ ਹੈ, HMRC MTD ਦੁਆਰਾ ਫਾਈਲਾਂ — ਮਨੁੱਖੀ ਸਮੀਖਿਆ ਦੇ ਨਾਲ। CognoAI ਲਈ TenthMatrix ਦੁਆਰਾ ਬਣਾਇਆ ਗਿਆ।",
+  "meta_keywords": "AI ਸਵੈ ਮੁਲਾਂਕਣ, FileMyTax, HMRC MTD, ਆਟੋਮੈਟਿਕ ਟੈਕਸ ਫਾਈਲਿੰਗ, ਬੈਂਕ ਸਟੇਟਮੈਂਟ AI, CognoAI, TenthMatrix, Making Tax Digital, ਮਕਾਨ ਮਾਲਿਕ ਟੈਕਸ",
+  "cover_image": "/img/filemytax-sa-cover.svg",
+  "images": [
+    {
+      "url": "/img/filemytax-sa-cover.svg",
+      "id": 944,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "FileMyTax AI to HMRC Self Assessment - cover diagram"
+    },
+    {
+      "url": "/img/filemytax-sa-workflow.svg",
+      "id": 945,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "FileMyTax six-lane workflow from bank PDF to HMRC MTD"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>ਇੱਕ ਛੋਟਾ, ਸਕਿਮ-ਪੜ੍ਹਨਯੋਗ ਸਾਥੀ। ਆਰਕੀਟੈਕਚਰ, HMRC OAuth, curl ਉਦਾਹਰਨਾਂ, ਅਤੇ ਸੀਮਾਵਾਂ ਦੇ ਨਾਲ ਪੂਰੀ ਡੂੰਘੀ ਗੋਤਾਖੋਰੀ ਲਈ, ਪੜ੍ਹੋ <a href=\"/pa/articles/can-ai-file-self-assessment-hmrc-filemytax\">ਲੰਬਾ ਲੇਖ</a>. <strong>ਟੈਕਸ ਸਲਾਹ ਨਹੀਂ।</strong></em></p>\n<h2>ਕੀ AI ਤੁਹਾਡੇ Self Assessment ਤੋਂ HMRC ਨੂੰ ਫਾਈਲ ਕਰ ਸਕਦਾ ਹੈ?</h2>\n<p>ਹਰ ਜਨਵਰੀ ਵਿੱਚ ਇਹੀ ਸਵਾਲ ਪ੍ਰਗਟ ਹੁੰਦਾ ਹੈ: ਕੀ ਕੋਈ AI ਮੇਰੇ ਬੈਂਕ ਸਟੇਟਮੈਂਟਾਂ ਨੂੰ ਪੜ੍ਹ ਸਕਦਾ ਹੈ ਅਤੇ ਮੇਰੀ UK ਟੈਕਸ ਰਿਟਰਨ ਜਮ੍ਹਾਂ ਕਰ ਸਕਦਾ ਹੈ? ਸਾਡੇ ਦੁਆਰਾ ਬਣਾਏ ਗਏ ਸਿਸਟਮ ਤੋਂ ਵਿਹਾਰਕ ਜਵਾਬ <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">ਕੋਗਨੋਏਆਈ</a> — ਇੱਥੇ ਪ੍ਰਕਾਸ਼ਿਤ ਕੀਤਾ ਗਿਆ ਹੈ <strong>FileMyTax</strong> - ਹੈ <strong>ਹਾਂ ਤਿਆਰੀ ਲਈ, ਨਾ ਕਿ ਗੈਰ ਹਾਜ਼ਰੀ ਭਰਨ ਲਈ</strong>. AI PDFs ਤੋਂ ਟ੍ਰਾਂਜੈਕਸ਼ਨਾਂ ਨੂੰ ਐਕਸਟਰੈਕਟ ਕਰ ਸਕਦਾ ਹੈ, ਉਹਨਾਂ ਨੂੰ HMRC Self Assessment ਸ਼੍ਰੇਣੀਆਂ ਵਿੱਚ ਸ਼੍ਰੇਣੀਬੱਧ ਕਰ ਸਕਦਾ ਹੈ, ਬਕਾਏ ਨੂੰ ਮਿਲਾ ਸਕਦਾ ਹੈ, ਅਤੇ 2025-26 ਟੈਕਸ ਨਿਰਧਾਰਿਤ ਰੂਪ ਵਿੱਚ ਗਣਨਾ ਕਰ ਸਕਦਾ ਹੈ; ਇੱਕ ਮਨੁੱਖ ਅਜੇ ਵੀ ਸਮੀਖਿਆ ਕਰਦਾ ਹੈ, ਇੱਕ ਅਕਾਊਂਟੈਂਟ ਅਜੇ ਵੀ ਸਾਈਨ ਆਫ ਕਰਦਾ ਹੈ, ਅਤੇ ਟੈਕਸਦਾਤਾ ਅਜੇ ਵੀ HMRC OAuth ਨੂੰ ਪੂਰਾ ਕਰਦਾ ਹੈ ਇਸ ਤੋਂ ਪਹਿਲਾਂ ਕਿ ਕੁਝ ਵੀ ਉਤਪਾਦਨ MTD ਤੱਕ ਪਹੁੰਚ ਜਾਵੇ।</p>\n<p>TenthMatrix ਨੇ ਅੰਡਰਲਾਈੰਗ ਪਲੇਟਫਾਰਮ ਵਿਕਸਿਤ ਕੀਤਾ; CognoAI ਬੌਧਿਕ ਸੰਪੱਤੀ ਦਾ ਮਾਲਕ ਹੈ। ਇਹ ਪੋਸਟ ਦੱਸਦੀ ਹੈ ਕਿ ਛੇ API ਕਾਲਾਂ ਵਿੱਚ ਕਿਹੋ ਜਿਹਾ ਦਿਖਾਈ ਦਿੰਦਾ ਹੈ — ਕਿਤੇ ਹੋਰ ਮਾਲਕੀ ਵਾਲੇ ਉਤਪਾਦ ਨਾਮਾਂ ਦੀ ਵਰਤੋਂ ਕੀਤੇ ਬਿਨਾਂ।</p>\n<p><img alt=\"FileMyTax AI ਤੋਂ HMRC Self Assessment ਕਵਰ\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/filemytax-sa-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>ਡੈਮੋ ਦੇਖੋ</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/dDx5n0975vw\" title=\"FileMyTax ਡੈਮੋ - AI Self Assessment ਤੋਂ HMRC\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">HMRC MTD ਸੈਂਡਬੌਕਸ ਲਈ ਵਰਗੀਕਰਣ ਅਤੇ ਗਣਨਾ ਦੁਆਰਾ ਬੈਂਕ PDF — UI ਵਿੱਚ ਸਮੀਖਿਆ ਗੇਟਾਂ ਦੇ ਨਾਲ।</p>\n<h2>ਛੇ-ਪੜਾਅ ਵਾਲੀ ਪਾਈਪਲਾਈਨ</h2>\n<p><img alt=\"FileMyTax ਵਰਕਫਲੋ: ਕਲਾਇੰਟ, ਇੰਜੈਸਟ, AI, ਟੈਕਸ ਇੰਜਣ, HMRC, ਆਡਿਟ\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/filemytax-sa-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>ਅੱਪਲੋਡ ਕਰੋ</strong> — <code>POST /fastapi/api/upload</code> nginx ਰਾਹੀਂ MinIO ਨੂੰ PDF ਭੇਜਦਾ ਹੈ।</li>\n<li><strong>ਐਬਸਟਰੈਕਟ</strong> - ਨੇਟਿਵ ਟੇਬਲ ਲਈ pdfplumber; ਸਕੈਨ ਲਈ ਕਲਾਉਡ ਵਿਜ਼ਨ.</li>\n<li><strong>ਵਰਗੀਕਰਨ ਕਰੋ</strong> — LLM ਭਰੋਸੇ ਦੇ ਸਕੋਰਾਂ ਦੇ ਨਾਲ SA ਖਰਚਿਆਂ ਦੀਆਂ ਸ਼੍ਰੇਣੀਆਂ ਲਈ ਲਾਈਨਾਂ ਦਾ ਨਕਸ਼ਾ ਬਣਾਉਂਦਾ ਹੈ।</li>\n<li><strong>ਮਿਲਾਪ ਕਰੋ</strong> - ਸੰਤੁਲਨ ਦੀ ਜਾਂਚ ਅਤੇ ਆਮਦਨ/ਖਰਚ ਰੋਲ-ਅੱਪ।</li>\n<li><strong>ਗਣਨਾ ਕਰੋ</strong> — ਨਿਰਣਾਇਕ 2025-26 ਆਮਦਨ ਕਰ + ਕਲਾਸ 4 NI (ਗਣਿਤ ਵਿੱਚ ਕੋਈ LLM ਨਹੀਂ)।</li>\n<li><strong>ਫਾਈਲ</strong> — <code>POST /fastapi/api/file</code> OAuth ਅਤੇ ਮਨੁੱਖੀ ਮਨਜ਼ੂਰੀ ਤੋਂ ਬਾਅਦ HMRC MTD ਤੱਕ।</li>\n</ol>\n<p>JWT ਪ੍ਰਮਾਣਿਕਤਾ opsapi ਤੋਂ ਆਉਂਦੀ ਹੈ; NINO ਆਰਾਮ 'ਤੇ ਏਨਕ੍ਰਿਪਟ ਕੀਤਾ ਗਿਆ ਹੈ; ਪੋਰਟ 8085 'ਤੇ ਗੈਟਸ ਹਰ ਸੇਵਾ ਨੂੰ ਦੇਖਦਾ ਹੈ।</p>\n<h2>ਜਿਸਨੇ ਇਸਨੂੰ ਬਣਾਇਆ ਹੈ</h2>\n<p><a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">ਕੋਗਨੋਏਆਈ</a> ਸਿਸਟਮ IP ਅਤੇ ਉਤਪਾਦ ਦਿਸ਼ਾ ਦਾ ਮਾਲਕ ਹੈ। <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> ਡੌਕਰਾਈਜ਼ਡ ਪਲੇਟਫਾਰਮ ਬਣਾਇਆ — nginx ਮਾਰਗ ਰੂਟਿੰਗ, FastAPI AI ਸੇਵਾਵਾਂ, opsapi auth, PostgreSQL, MinIO, Gatus ਨਿਗਰਾਨੀ, ਅਤੇ Next.js ਸਮੀਖਿਆ UI। ਨਾਮ ਹੇਠ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਦੇ ਹਾਂ <strong>FileMyTax</strong> ਡੈਮੋ ਦਾ ਵਰਣਨ ਕਰਨ ਲਈ; ਅਸੀਂ ਇਸ ਲਿਖਤ ਵਿੱਚ ਹੋਰ CognoAI ਉਤਪਾਦ ਦੇ ਨਾਮ ਨਹੀਂ ਵਰਤਦੇ ਹਾਂ।</p>\n<h2>AI ਮਦਦ ਕਿਉਂ ਕਰਦਾ ਹੈ — ਅਤੇ ਇਹ ਕਿੱਥੇ ਰੁਕਦਾ ਹੈ</h2>\n<p>AI ਸੈਂਕੜੇ ਬੈਂਕ ਲਾਈਨਾਂ ਵਿੱਚ ਗਤੀ ਅਤੇ ਇਕਸਾਰਤਾ 'ਤੇ ਜਿੱਤਦਾ ਹੈ, ਅਸੰਗਤਤਾ ਫਲੈਗ ਕਰਨਾ, ਅਤੇ HMRC ਸ਼੍ਰੇਣੀਆਂ ਵਿੱਚ ਗੜਬੜ ਵਾਲੇ ਵਰਣਨ ਨੂੰ ਮੈਪ ਕਰਦਾ ਹੈ। ਇਹ ਨਿਰਣੇ ਦੀ ਥਾਂ ਨਹੀਂ ਲੈਂਦਾ: ਟ੍ਰਾਂਸਫਰ ਬਨਾਮ ਕਿਰਾਇਆ, ਪੂੰਜੀ ਬਨਾਮ ਮਾਲੀਆ, ਅਤੇ ਨਿੱਜੀ ਬਨਾਮ ਕਾਰੋਬਾਰ ਨੂੰ ਅਜੇ ਵੀ ਅੱਖਾਂ ਦੀ ਲੋੜ ਹੈ। ਟੈਕਸ ਇੰਜਣ ਦਸ਼ਮਲਵ ਖੇਤਰਾਂ ਦੇ ਨਾਲ ਸ਼ੁੱਧ ਪਾਈਥਨ ਹੈ — ਉਹੀ ਵਿਭਾਜਨ ਜਿਸ 'ਤੇ ਅਸੀਂ ਨਿਯੰਤ੍ਰਿਤ ਵਿੱਤ ਲਈ ਜ਼ੋਰ ਦਿੰਦੇ ਹਾਂ: <strong>ਭਾਸ਼ਾ ਲਈ LLM, ਕਾਨੂੰਨ ਲਈ ਕੋਡ</strong>.</p>\n<p>ਟੈਸਟਿੰਗ ਵਿੱਚ ਅਸੀਂ ਵਰਤਿਆ <strong>ਕਾਲਪਨਿਕ HSBC-ਸ਼ੈਲੀ ਮਕਾਨ ਮਾਲਿਕ ਸਟੇਟਮੈਂਟ ਫਿਕਸਚਰ</strong> (ਸਿਰਫ਼ ਸਿੰਥੈਟਿਕ ਡੇਟਾ) ਤਣਾਅ ਕੱਢਣ ਲਈ ਉੱਚ ਟਰਨਓਵਰ ਦ੍ਰਿਸ਼ਾਂ ਦੇ ਨਾਲ — ਉਹ ਪਾਠ ਵੀ ਸ਼ਾਮਲ ਹਨ ਜਿੱਥੇ ਪੀਡੀਐਫਪਲੰਬਰ ਨੇ ਗਲਤ ਕਾਲਮ ਚੁਣਿਆ ਹੈ (ਸੰਤੁਲਨ ਬਨਾਮ ਪੇਡ-ਇਨ)। ਉਹ ਅਸਫਲਤਾਵਾਂ ਇਸ ਲਈ ਹਨ ਕਿ ਮੇਲ-ਮਿਲਾਪ ਅਤੇ ਸਮੀਖਿਆ ਮੌਜੂਦ ਹੈ।</p>\n<h2>ਇੱਕ ਨਜ਼ਰ 'ਤੇ ਆਰਕੀਟੈਕਚਰ</h2>\n<p>ਲੋਕਲਹੋਸਟ 'ਤੇ ਇੱਕ nginx ਸਭ ਕੁਝ ਫਰੰਟ ਕਰਦਾ ਹੈ: ਮਨੁੱਖਾਂ ਲਈ Next.js, AI ਅਤੇ ਫਾਈਲਿੰਗ ਲਈ FastAPI, ਲੌਗਿਨ ਲਈ opsapi ਅਤੇ ਐਨਕ੍ਰਿਪਟਡ NINO। PostgreSQL ਸਟੇਟਮੈਂਟਾਂ ਅਤੇ ਵਰਗੀਕ੍ਰਿਤ ਟ੍ਰਾਂਜੈਕਸ਼ਨਾਂ ਨੂੰ ਸਟੋਰ ਕਰਦਾ ਹੈ; MinIO ਕੋਲ PDF ਹਨ। ਟੈਕਸ ਕੈਲਕੁਲੇਟਰ ਪਾਈਥਨ ਵਿੱਚ UK 2025/26 ਬੈਂਡ ਲਾਗੂ ਕਰਦਾ ਹੈ — ਨਿੱਜੀ ਭੱਤਾ ਟੇਪਰ, ਇਨਕਮ ਟੈਕਸ, ਕਲਾਸ 4 NI — DECIMAL(18,2) ਪੈਸੇ ਵਾਲੇ ਖੇਤਰਾਂ ਦੇ ਨਾਲ। ਇਹ ਵੰਡ ਜਾਣਬੁੱਝ ਕੇ ਹੈ: ਰੈਗੂਲੇਟਰਾਂ ਅਤੇ ਲੇਖਾਕਾਰਾਂ ਨੂੰ ਪ੍ਰਜਨਨਯੋਗ ਗਣਿਤ ਦੀ ਲੋੜ ਹੁੰਦੀ ਹੈ, ਸੰਭਾਵੀ ਟੋਕਨਾਂ ਦੀ ਨਹੀਂ।</p>\n<h2>ਵਿੱਤ ਟੀਮਾਂ ਲਈ ਲਾਭ</h2>\n<ul>\n<li><strong>ਗਤੀ</strong> - ਸੈਂਕੜੇ ਲਾਈਨਾਂ ਮਿੰਟਾਂ ਵਿੱਚ ਸ਼੍ਰੇਣੀਬੱਧ ਕੀਤੀਆਂ ਗਈਆਂ, ਐਕਸਲ ਵਿੱਚ ਦਿਨਾਂ ਵਿੱਚ ਨਹੀਂ।</li>\n<li><strong>ਇਕਸਾਰਤਾ</strong> — ਹਰ ਕਤਾਰ 'ਤੇ ਉਹੀ HMRC ਸ਼੍ਰੇਣੀ ਨਿਯਮ।</li>\n<li><strong>ਵਿਸੰਗਤੀਆਂ</strong> - ਮੇਲ-ਮਿਲਾਪ ਸਤ੍ਹਾ ਸੰਤੁਲਨ ਅਤੇ ਮੈਪਿੰਗ ਦੀਆਂ ਗਲਤੀਆਂ ਨੂੰ ਜਲਦੀ ਦਰਸਾਉਂਦਾ ਹੈ।</li>\n<li><strong>ਆਡਿਟ ਟ੍ਰੇਲ</strong> — ਪ੍ਰੋਸੈਸਿੰਗ ਸਥਿਤੀ, ਵਿਸ਼ਵਾਸ, ਕਾਰਨਾਂ ਦੇ ਨਾਲ ਓਵਰਰਾਈਡ।</li>\n<li><strong>ਗੋਪਨੀਯਤਾ</strong> - SaaS ਕਿਰਾਏਦਾਰ ਦੁਆਰਾ ਸਟੇਟਮੈਂਟਾਂ ਪਾਸ ਕੀਤੇ ਬਿਨਾਂ ਸਥਾਨਕ ਸਟੈਕ ਵਿਕਲਪ।</li>\n<li><strong>ਲੇਖਾਕਾਰ ਦਾ ਸਮਾਂ</strong> — ਸਮੀਖਿਅਕ ਇੱਕ ਡਰਾਫਟ ਰਿਟਰਨ ਦੇਖਦੇ ਹਨ, ਕੱਚੇ PDF ਨਹੀਂ।</li>\n</ul>\n<h2>ਇੱਕ ਪੈਰੇ ਵਿੱਚ HMRC MTD</h2>\n<p>opsapi ਰਾਹੀਂ NINO ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ, OAuth ਸ਼ੁਰੂ ਕਰੋ, ਕਾਰੋਬਾਰ ਅਤੇ ਜ਼ਿੰਮੇਵਾਰੀਆਂ ਪ੍ਰਾਪਤ ਕਰੋ, ਫਿਰ ਸੈਂਡਬੌਕਸ ਵਿੱਚ ਫਾਈਲ ਕਰੋ ਜਦੋਂ ਤੱਕ ਤੁਹਾਡਾ ਅਕਾਊਂਟੈਂਟ ਖੁਸ਼ ਨਹੀਂ ਹੁੰਦਾ। ਫਰਾਡ ਰੋਕਥਾਮ ਹੈਡਰ ਅਤੇ ਟੋਕਨ ਰਿਫਰੈਸ਼ ਸਰਵਰ-ਸਾਈਡ ਨਾਲ ਹੈਂਡਲ ਕੀਤੇ ਜਾਂਦੇ ਹਨ। ਫਲਿੱਪ <code>HMRC_ENVIRONMENT=production</code> ਸਿਰਫ਼ ਉਦੋਂ ਜਦੋਂ ਤੁਹਾਡਾ ਮਤਲਬ ਹੈ।</p>\n<h2>ਬੇਦਾਅਵਾ</h2>\n<ul>\n<li><strong>ਟੈਕਸ ਸਲਾਹ ਨਹੀਂ।</strong> ਲਾਈਵ ਸਬਮਿਸ਼ਨ ਤੋਂ ਪਹਿਲਾਂ ਸਮੀਖਿਆ ਕਰਨ ਲਈ ਯੂਕੇ ਦੇ ਅਕਾਊਂਟੈਂਟ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰੋ।</li>\n<li><strong>FileMyTax</strong> ਇਸ ਲੇਖ ਵਿੱਚ ਪ੍ਰਦਰਸ਼ਨ ਦਾ ਨਾਮ ਹੈ; ਹੋਰ CognoAI ਉਤਪਾਦ ਦੇ ਨਾਮ ਵੱਖਰੇ ਹਨ - ਉਹਨਾਂ ਨੂੰ ਇਕੱਠੇ ਨਾ ਕਰੋ।</li>\n<li><strong>ਕਾਲਪਨਿਕ ਬੈਂਕ ਡੇਟਾ</strong> ਜਿੱਥੇ ਟੈਸਟ ਫਿਕਸਚਰ ਦਾ ਜ਼ਿਕਰ ਕੀਤਾ ਗਿਆ ਹੈ।</li>\n<li><strong>ਕੋਈ ਗੈਰ-ਹਾਜ਼ਰ ਫਾਈਲਿੰਗ</strong> - ਮਨੁੱਖੀ ਗੇਟ ਅੱਗੇ <code>POST /api/file</code>.</li>\n</ul>\n<h2>ਜੋ ਤੁਸੀਂ ਵੀਡੀਓ ਵਿੱਚ ਦੇਖੋਗੇ</h2>\n<p>YouTube ਵਾਕਥਰੂ Next.js UI ਦਿਖਾਉਂਦਾ ਹੈ: ਇੱਕ ਸਟੇਟਮੈਂਟ ਅੱਪਲੋਡ ਕਰੋ, ਐਕਸਟਰੈਕਸ਼ਨ ਅਤੇ ਵਰਗੀਕਰਨ ਦੀ ਪ੍ਰਗਤੀ ਦੇਖੋ, ਭਰੋਸੇ ਦੇ ਸਕੋਰ ਦੀ ਜਾਂਚ ਕਰੋ, ਟੈਕਸ ਸਾਲ 2025-26 ਲਈ ਗਣਨਾ ਚਲਾਓ, ਸੈਂਡਬੌਕਸ ਵਿੱਚ HMRC ਨੂੰ ਕਨੈਕਟ ਕਰੋ, ਅਤੇ ਇੱਕ ਮਨੁੱਖੀ ਪੁਸ਼ਟੀ ਹੋਣ ਤੱਕ ਫਾਈਲ ਸਟੈਪ 'ਤੇ ਰੋਕੋ। ਉਹ ਵਿਰਾਮ ਉਤਪਾਦ ਦਾ ਫੈਸਲਾ ਹੈ - ਇੱਕ ਗੁੰਮ ਵਿਸ਼ੇਸ਼ਤਾ ਨਹੀਂ। ਪੂਰੀ ਤਰ੍ਹਾਂ ਅਣਸੁਲਝੀ ਅਧੀਨਗੀ ਤੇਜ਼ ਅਤੇ ਕਾਨੂੰਨੀ ਤੌਰ 'ਤੇ ਨਾਜ਼ੁਕ ਹੋਵੇਗੀ।</p>\n<p>ਮਲਟੀਪਲ ਰੈਂਟਲ ਖਾਤਿਆਂ ਵਾਲੇ ਮਕਾਨ ਮਾਲਕ ਅਤੇ ਮਿਸ਼ਰਤ ਨਿੱਜੀ ਅਤੇ ਕਾਰੋਬਾਰੀ ਲਾਈਨਾਂ ਵਾਲੇ ਇਕੱਲੇ ਵਪਾਰੀ ਪ੍ਰਾਇਮਰੀ ਦਰਸ਼ਕ ਹਨ। ਉਹਨਾਂ ਦਾ ਸਮਰਥਨ ਕਰਨ ਵਾਲੀਆਂ ਫਾਈਨਾਂਸ ਓਪਸ ਟੀਮਾਂ ਨੂੰ ਉਹੀ ਪਾਈਪਲਾਈਨ ਮਿਲਦੀ ਹੈ: ਘੱਟ CSV ਨਿਰਯਾਤ, 31 ਜਨਵਰੀ ਤੋਂ ਪਹਿਲਾਂ ਘੱਟ ਰਾਤਾਂ, ਉਹਨਾਂ ਨੂੰ ਲੱਭਣ ਦੀ ਬਜਾਏ ਨੰਬਰਾਂ ਦੀ ਵਿਆਖਿਆ ਕਰਨ ਵਿੱਚ ਵਧੇਰੇ ਸਮਾਂ।</p>\n<h2>ਇਸ ਨੂੰ ਸੁਰੱਖਿਅਤ ਢੰਗ ਨਾਲ ਅਜ਼ਮਾਓ</h2>\n<p>ਸਟੈਕ ਨੂੰ ਕਲੋਨ ਕਰੋ, ਚਲਾਓ <code>./start.sh</code>, ਲੰਬੇ ਲੇਖ ਤੋਂ ਕਰਲ ਉਦਾਹਰਨਾਂ ਨੂੰ ਪੇਸਟ ਕਰੋ, ਅਤੇ HMRC ਸੈਂਡਬੌਕਸ ਵਿੱਚ ਉਦੋਂ ਤੱਕ ਰਹੋ ਜਦੋਂ ਤੱਕ ਤੁਹਾਡਾ ਅਕਾਊਂਟੈਂਟ ਪੂਰੀ ਵਾਪਸੀ ਨਹੀਂ ਕਰ ਲੈਂਦਾ। ਸੈੱਟ ਕਰੋ <code>HMRC_ENVIRONMENT=sandbox</code>, ਲੋੜ ਪੈਣ 'ਤੇ ਇੱਕ ਟੈਸਟ ਉਪਭੋਗਤਾ ਬਣਾਓ, ਅਤੇ ਇਲਾਜ ਕਰੋ <code>POST /api/file</code> ਇੱਕ ਉਤਪਾਦਨ ਮਿਜ਼ਾਈਲ ਵਾਂਗ - ਕਿਉਂਕਿ ਲਾਈਵ ਮੋਡ ਵਿੱਚ, ਇਹ ਹੈ.</p>\n<p>ਜੇ nginx ਪੋਰਟ 80 ਰੁੱਝਿਆ ਹੋਇਆ ਹੈ, ਤਾਂ ਵਰਤੋਂ ਕਰੋ <code>NGINX_HOST_PORT=8080</code>. ਜੇਕਰ JWT ਅਚਾਨਕ ਅਸਫਲ ਹੋ ਜਾਂਦਾ ਹੈ, ਤਾਂ opsapi ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ ਅਤੇ FastAPI ਇੱਕੋ ਰਾਜ਼ ਨੂੰ ਸਾਂਝਾ ਕਰੋ। ਜੇਕਰ ਮੇਲ-ਮਿਲਾਪ ਚੀਕਦਾ ਹੈ, ਤਾਂ ਵਰਗੀਕਰਣਾਂ ਨੂੰ ਓਵਰਰਾਈਡ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ PDF ਕਾਲਮ ਮੈਪਿੰਗ ਨੂੰ ਠੀਕ ਕਰੋ — ਇਹ ਆਰਡਰ ਘੰਟਿਆਂ ਦੀ ਬਚਤ ਕਰਦਾ ਹੈ।</p>\n<h2>OAuth ਵਿਕਲਪਿਕ ਨਹੀਂ ਹੈ</h2>\n<p>HMRC ਸਿਰਫ ਇੱਕ ਰਾਸ਼ਟਰੀ ਬੀਮਾ ਨੰਬਰ ਦੇ ਨਾਲ ਇੱਕ ਬੈਕਗ੍ਰਾਉਂਡ ਕ੍ਰੋਨ ਨੌਕਰੀ ਤੋਂ ਫਾਈਲਿੰਗ ਨੂੰ ਸਵੀਕਾਰ ਨਹੀਂ ਕਰੇਗਾ। ਟੈਕਸਦਾਤਾ ਨੂੰ ਸਰਕਾਰੀ ਗੇਟਵੇ ਰਾਹੀਂ ਤੁਹਾਡੀ ਅਰਜ਼ੀ ਨੂੰ ਅਧਿਕਾਰਤ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ, ਜੋ ਬੈਕਐਂਡ ਸਟੋਰਾਂ ਨੂੰ ਟੋਕਨ ਦਿੰਦਾ ਹੈ ਅਤੇ ਰਿਫ੍ਰੈਸ਼ ਕਰਦਾ ਹੈ। FileMyTax ਸਤਹਾਂ ਜੋ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਵਹਿੰਦੀਆਂ ਹਨ: ਇੱਕ ਐਨਕ੍ਰਿਪਟਡ NINO ਨੂੰ ਸੁਰੱਖਿਅਤ ਕਰੋ, HMRC ਪ੍ਰਮਾਣੀਕਰਨ URL ਖੋਲ੍ਹੋ, ਕਾਲਬੈਕ ਰਾਹੀਂ ਵਾਪਸ ਜਾਓ, ਕਾਰੋਬਾਰਾਂ ਅਤੇ ਜ਼ਿੰਮੇਵਾਰੀਆਂ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰੋ, ਫਿਰ ਫਾਈਲ ਕਰੋ। ਧੋਖਾਧੜੀ ਦੀ ਰੋਕਥਾਮ ਦੇ ਸਿਰਲੇਖ ਹਰ API ਕਾਲ 'ਤੇ ਸਵਾਰ ਹੁੰਦੇ ਹਨ — ਡਿਵਾਈਸ ID, ਉਪਭੋਗਤਾ ਏਜੰਟ, ਅਤੇ ਬਾਕੀ Gov-* ਗਾਹਕ ਤੋਂ ਪਲੇਟਫਾਰਮ ਨੂੰ ਅੱਗੇ ਸੈੱਟ ਕਰਦੇ ਹਨ।</p>\n<p>ਇਸ ਲਈ ਮਾਰਕੀਟਿੰਗ ਸਲਾਈਡਾਂ ਵਿੱਚ \"ਆਟੋਮੈਟਿਕ\" ਅਸਲ ਵਿੱਚ ਮਤਲਬ ਹੈ <em>ਅੰਤ ਵਿੱਚ ਇੱਕ ਜਾਣਬੁੱਝ ਕੇ ਮਨੁੱਖੀ ਅਤੇ OAuth ਗੇਟ ਦੇ ਨਾਲ ਆਟੋਮੈਟਿਕ ਤਿਆਰੀ</em>. ਇੰਜਨੀਅਰਿੰਗ ਅਜੇ ਵੀ ਕੀਮਤੀ ਹੈ: ਛੇ ਕਰਲ ਸਟੈਪਸ ਦੁਹਰਾਉਣ ਯੋਗ, ਸੈਂਡਬੌਕਸ ਵਿੱਚ ਟੈਸਟ ਕਰਨ ਯੋਗ, ਅਤੇ ਗੈਟਸ ਵਿੱਚ ਦੇਖਣਯੋਗ ਹਨ।</p>\n<h2>ਲੰਬਾ ਸੰਸਕਰਣ ਪੜ੍ਹੋ</h2>\n<p>ਦ <a href=\"/pa/articles/can-ai-file-self-assessment-hmrc-filemytax\">ਲੰਮਾ ਲੇਖ</a> ਵਿਸ਼ੇਸ਼ਤਾ, ਆਰਕੀਟੈਕਚਰ SVG, ਪੂਰੀ ਕਰਲ ਉਦਾਹਰਨਾਂ, ਲਾਭ ਸਾਰਣੀ, OAuth ਕਦਮ, ਸੀਮਾਵਾਂ, ਗੈਟਸ ਨਿਗਰਾਨੀ, 2025-26 ਟੈਕਸ ਪੈਰਾਮੀਟਰ, ਅਤੇ ਰੋਡਮੈਪ ਨੂੰ ਕਵਰ ਕਰਦਾ ਹੈ। ਦੇਖੋ <a href=\"https://youtu.be/dDx5n0975vw\" rel=\"noopener noreferrer\" target=\"_blank\">YouTube ਡੈਮੋ</a> ਅਤੇ ਫੇਰੀ <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">cognoai.uk</a> ਉਤਪਾਦ ਸੰਦਰਭ ਲਈ; <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> ਇੰਜੀਨੀਅਰਿੰਗ ਲਈ.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "filemytax",
+      "id": 960
+    },
+    {
+      "name": "self-assessment",
+      "id": 961
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "tax-return",
+      "id": 962
+    },
+    {
+      "name": "cognoai",
+      "id": 963
+    }
+  ],
+  "created_at": "2026-05-20T09:00:00Z",
+  "updated_at": "2026-05-20T09:00:00Z",
+  "published_date": "2026-05-20",
+  "status": true
+}

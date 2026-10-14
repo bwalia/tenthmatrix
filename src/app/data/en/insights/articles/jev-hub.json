@@ -1,0 +1,195 @@
+{
+  "slug": "jev",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "Jev & the next generation of AI automation",
+  "subtitle": "An independent TenthMatrix series on System One models, agent harnesses, routing, safety and inference economics — with citations, not cheerleading.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "12 min overview",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": null,
+  "hero_image": "/img/insights/insights-cover.svg",
+  "hero_alt": "Jev & the next generation of AI automation",
+  "meta": {
+    "title": "Jev & the next generation of AI automation | TenthMatrix Insights",
+    "description": "An independent TenthMatrix series on System One models, agent harnesses, routing, safety and inference economics — with citations, not cheerleading.",
+    "keywords": "Jev, System One, AI agents, model routing, AI harness, LLM, TenthMatrix Insights",
+    "og_image": "/img/insights/insights-cover.svg"
+  },
+  "takeaways": [
+    "Jev is TypeSafe’s System One model for typed, probabilistic decisions — not text generation.",
+    "Vendor speed/cost claims are extraordinary; independent benchmarks are more nuanced and must be labelled clearly.",
+    "Modern agents often need both fast decision layers and generative/reasoning models.",
+    "TenthMatrix’s contribution is methodology transparency, original diagrams and a living selection manual."
+  ],
+  "toc": [
+    {
+      "id": "why",
+      "label": "Why this series exists"
+    },
+    {
+      "id": "map",
+      "label": "Series map"
+    },
+    {
+      "id": "start",
+      "label": "Start here"
+    },
+    {
+      "id": "known",
+      "label": "What we know / what we don’t"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "Why this series exists",
+      "id": "why"
+    },
+    {
+      "type": "p",
+      "text": "In September 2026, TypeSafe AI publicly introduced System One models and Jev, framing a gap between chat-superhuman LLMs and dependable software automation. LangChain followed with harness patterns that place fast decisions inside the agent loop. Those posts matter — and they are still vendor or partner narratives."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix Insights exists to help engineers answer a harder question: when does a specialised decision model belong in your architecture, how should you measure it, and what does the wider model landscape look like once you stop treating “bigger LLM” as the only lever?"
+    },
+    {
+      "type": "callout",
+      "label": "Editorial position",
+      "text": "We do not claim Jev is “the best model”, and we do not claim it replaces LLMs. We investigate composable AI systems where generation, reasoning, routing, classification, evaluation and safety may be separate specialised components."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/specialised-ai-system.svg",
+      "caption": "TenthMatrix original: generate · reason · decide · route · evaluate.",
+      "alt": "TenthMatrix original: generate · reason · decide · route · evaluate."
+    },
+    {
+      "type": "h2",
+      "text": "Series map",
+      "id": "map"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "What Is Jev? — accessible explanation of Choice, Score and Noul.",
+        "System One vs LLMs — complementary roles.",
+        "Why harnesses need fast decisions — latency as an architecture primitive.",
+        "Building a Jev agent harness — TenthMatrix reference design.",
+        "Benchmark lab — methodology, citations, interactive charts.",
+        "Model routing — measure, don’t assume.",
+        "Guardrails & tool safety — allow / deny / escalate.",
+        "Model selection manual — evergreen workload framework.",
+        "How AI models are evolving — specialisation timeline.",
+        "Future of AI automation — Jevons-style economics with caveats."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Start here",
+      "id": "start"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Short path: What Is Jev? then System One vs LLMs.",
+        "Engineering path: Building a harness → Benchmark lab → Model selection.",
+        "Long path: Jev and the new AI stack (long-form)."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What we know / what we don’t",
+      "id": "known"
+    },
+    {
+      "type": "p",
+      "text": "We know the public API shape TypeSafe documents (state + typed questions → structured answers), LangChain’s middleware patterns, and several third-party published numbers with explicit methodologies. We do not treat TypeSafe’s homepage “193.6× faster / 444.6× cheaper” workflow figures as independently reproduced TenthMatrix measurements. Where we show interactive charts, every row is tagged vendor_reported, independent, or workstation_methodology."
+    }
+  ],
+  "related": [
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": "TenthMatrix agent offerings"
+    },
+    {
+      "href": "/ai-automation",
+      "label": "AI Automation",
+      "note": "Automation pathways"
+    },
+    {
+      "href": "/applied-ai",
+      "label": "Applied AI",
+      "note": "Applied use cases"
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobshout",
+      "note": "Jobs in the ecosystem"
+    },
+    {
+      "href": "/openai-agents",
+      "label": "OpenAI Agents",
+      "note": "Agent product surface"
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev (15 Sep 2026)",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Vendor announcement and published workflow evals."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev (17 Sep 2026)",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Integration patterns for routing and Auto Mode."
+    },
+    {
+      "title": "TypeSafe docs (llms.txt index)",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Official concepts, primitives, API, cookbooks."
+    },
+    {
+      "title": "LangChain — Can Jev Be a Better Agent Evaluator? (20 Sep 2026)",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "Independent-style LangSmith experiment on judge variance."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM: When to Use Each",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Published triage latency/cost/accuracy tables."
+    },
+    {
+      "title": "AyAutomate — Jev vs GPT and Claude Independent Benchmark (19 Sep 2026)",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 labeled decisions via OpenRouter; challenges headline 193×/444× claims against small-model baselines."
+    },
+    {
+      "title": "JevBench RESULTS (fstandhartinger/jevbench)",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public harness results; methodology-heavy."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is this a TypeSafe advertisement?",
+      "a": "No. We cite TypeSafe and LangChain as primary sources, then separate vendor claims from independent papers and from TenthMatrix methodology demos."
+    },
+    {
+      "q": "Can I reproduce the lab?",
+      "a": "Yes — see /insights/jev/benchmarks and the public reproducibility pack under /insights/benchmarks/v1/."
+    },
+    {
+      "q": "Does Jev replace my coding model?",
+      "a": "No. TypeSafe’s own framing and LangChain’s guidance treat Jev as a decision/classification layer. Coding and long-form generation still need generative models."
+    }
+  ]
+}

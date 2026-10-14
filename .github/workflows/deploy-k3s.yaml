@@ -1,0 +1,144 @@
+name: "Deploy TenthMatrix to K3S Environment"
+
+# Reusable rollout, adapted from Workstation's deploy-k3s.yaml. Differences:
+#   - secrets are Vault-only (ExternalSecret in tm-chart) → no kubeseal step and
+#     no per-env DOT_*_ENV secret input
+#   - Deployment/Service are named tm-frontend (fullnameOverride)
+#   - the job runs in a GitHub environment named after the target, so `prod`
+#     can require reviewers in the repo settings
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: "Environment name (int, test, acc, prod)"
+      namespace:
+        required: true
+        type: string
+      release_name:
+        required: true
+        type: string
+      values_file:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      smoke_test_port:
+        required: true
+        type: string
+      runner_labels:
+        required: true
+        type: string
+        description: 'Runner labels JSON array e.g. ["self-hosted","Linux","test"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S:
+        required: true
+      DOCKER_REGISTRY:
+        required: true
+      SLACK_WEBHOOK:
+        required: false
+
+jobs:
+  deploy:
+    name: "${{ inputs.environment }} K3S Deployment"
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    environment: ${{ inputs.environment }}
+    env:
+      CHART: ./devops/helm-charts/tm-chart
+      DEPLOY: tm-frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Kubeconfig
+        id: kubeconfig
+        run: |
+          KUBECONFIG_PATH=$(mktemp)
+          echo "${{ secrets.KUBE_CONFIG_DATA_K3S }}" | base64 -d > "$KUBECONFIG_PATH"
+          echo "path=$KUBECONFIG_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Clear stuck pods / failed release
+        run: |
+          set -euo pipefail
+          export KUBECONFIG="${{ steps.kubeconfig.outputs.path }}"
+          NS="${{ inputs.namespace }}"
+          REL="${{ inputs.release_name }}"
+          kubectl get pods -n "$NS" -l app.kubernetes.io/instance="$REL" -o wide 2>/dev/null || true
+          # Terminating pods block RollingUpdate + helm --wait (lesson from wsw).
+          for p in $(kubectl get pods -n "$NS" -l app.kubernetes.io/instance="$REL" --no-headers 2>/dev/null | awk '/Terminating/{print $1}'); do
+            kubectl delete pod "$p" -n "$NS" --grace-period=0 --force 2>/dev/null || true
+            kubectl patch pod "$p" -n "$NS" -p '{"metadata":{"finalizers":null}}' --type=merge 2>/dev/null || true
+          done
+          HELM_STATUS=$(helm status "$REL" -n "$NS" -o json 2>/dev/null | grep -o '"status":"[^"]*"' || true)
+          echo "Helm release status: ${HELM_STATUS:-<none>}"
+          if echo "$HELM_STATUS" | grep -qiE "pending|failed"; then
+            echo "Rolling back stuck Helm release..."
+            helm rollback "$REL" 0 -n "$NS" --wait=false 2>/dev/null || true
+          fi
+
+      - name: Helm deploy to ${{ inputs.namespace }}
+        run: |
+          set -euo pipefail
+          export KUBECONFIG="${{ steps.kubeconfig.outputs.path }}"
+          NS="${{ inputs.namespace }}"
+          REL="${{ inputs.release_name }}"
+          if ! helm upgrade -i "$REL" "$CHART" \
+            -f "$CHART/${{ inputs.values_file }}" \
+            --set-string image.repository="${{ secrets.DOCKER_REGISTRY }}/tm-frontend" \
+            --set-string image.tag="${{ inputs.image_tag }}" \
+            --namespace "$NS" \
+            --create-namespace \
+            --wait \
+            --timeout 20m0s; then
+            echo "=== HELM UPGRADE FAILED - Diagnostics ==="
+            kubectl get pods -n "$NS" -l app.kubernetes.io/instance="$REL" -o wide || true
+            kubectl get events -n "$NS" --sort-by='.lastTimestamp' | tail -30 || true
+            kubectl describe deploy/"$DEPLOY" -n "$NS" || true
+            exit 1
+          fi
+
+      - name: Wait for rollout
+        run: |
+          export KUBECONFIG="${{ steps.kubeconfig.outputs.path }}"
+          if ! kubectl rollout status deployment/"$DEPLOY" -n ${{ inputs.namespace }} --timeout=600s; then
+            kubectl get pods -n ${{ inputs.namespace }} -l app.kubernetes.io/instance=${{ inputs.release_name }} -o wide
+            kubectl get events -n ${{ inputs.namespace }} --sort-by='.lastTimestamp' | tail -20
+            kubectl logs -n ${{ inputs.namespace }} -l app.kubernetes.io/instance=${{ inputs.release_name }} --tail=50 || true
+            exit 1
+          fi
+
+      - name: Smoke test ${{ inputs.environment }}
+        run: |
+          export KUBECONFIG="${{ steps.kubeconfig.outputs.path }}"
+          kubectl port-forward svc/"$DEPLOY" ${{ inputs.smoke_test_port }}:3000 -n ${{ inputs.namespace }} &
+          PF_PID=$!
+          sleep 5
+          PASSED=false
+          for i in $(seq 1 10); do
+            CODE=$(curl -sL -o /tmp/tm-smoke.html -w "%{http_code}" --max-time 10 http://localhost:${{ inputs.smoke_test_port }}/en || echo "000")
+            SIZE=$(wc -c < /tmp/tm-smoke.html 2>/dev/null || echo 0)
+            echo "Attempt $i/10: HTTP $CODE, ${SIZE} bytes"
+            if [ "$CODE" -ge 200 ] && [ "$CODE" -lt 400 ] && [ "$SIZE" -gt 100 ]; then PASSED=true; break; fi
+            sleep 10
+          done
+          kill $PF_PID 2>/dev/null || true
+          [ "$PASSED" = "true" ] || { echo "Smoke test FAILED"; exit 1; }
+
+      - name: Cleanup kubeconfig
+        if: always()
+        run: rm -f "${{ steps.kubeconfig.outputs.path }}"
+
+      - name: Slack notification
+        if: always()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          JOB_STATUS: ${{ job.status }}
+          SLACK_MESSAGE: "TenthMatrix ${{ inputs.environment }} deployment ${{ job.status }} | Image: ${{ inputs.image_tag }} | By: ${{ github.actor }}"
+          SLACK_TITLE: "TenthMatrix ${{ inputs.environment }} K3S - ${{ job.status }}"
+          SLACK_USERNAME: TenthMatrix Pipeline
+        run: python3 scripts/ci/github-slack-notify.py

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "Turbocharging LLMs",
+  "sub_title": "PagedAttention, vLLM, Self-Debugging, PowerInfer, and EG-MLA — how to scale LLM agents without wasting GPU KV cache",
+  "excerpt": "TenthMatrix on turbocharging LLMs: PagedAttention paging for KV cache, vLLM serving, Self-Debugging for agents, PowerInfer token rates, and EG-MLA memory cuts — with production trade-offs.",
+  "meta_title": "Turbocharging LLMs: PagedAttention, vLLM, PowerInfer | TenthMatrix",
+  "meta_description": "Scale LLM serving with PagedAttention and vLLM, Self-Debugging for agents, PowerInfer token generation, and EG-MLA KV compression — knobs and trade-offs.",
+  "meta_keywords": "LLM, PagedAttention, vLLM, KV cache, PowerInfer, EG-MLA, Self-Debugging, GPU serving, Kubernetes, TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>TenthMatrix</strong> on how to turbocharge large language models in production: PagedAttention, vLLM, Self-Debugging, PowerInfer, and EG-MLA — with the trade-offs that actually show up on GPUs. Deep dive: <a href=\"/en/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">long article</a>. Primer: <a href=\"/en/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs explained + Kubernetes</a>.</em></p>\n\n<p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Throughput dies when KV cache fragments. Page the cache like an OS (PagedAttention inside vLLM), pick a token engine that matches the box (PowerInfer on a fat consumer GPU, vLLM on a serving cluster), shrink attention when the architecture allows (EG-MLA), and cap agent debug loops so quality does not buy unbounded latency.\n</div>\n\n<h2>Watch: what an LLM actually is</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Context, not a product demo: <a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">Intro to Large Language Models</a> (Andrej Karpathy). Pair with our <a href=\"/en/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">plain-English LLM + Kubernetes guide</a>.</p>\n\n<h2>The scaling problem</h2>\n<p>LLMs unlocked conversational AI and generation, then immediately became a serving problem. Each decode step appends keys and values to a KV cache that grows with sequence length and batch size. Naive engines pre-reserve huge contiguous slabs. Most of that memory sits idle while other requests wait. Throughput collapses even though the GPU looks “full.”</p>\n\n<h2>PagedAttention: virtual memory for attention</h2>\n<p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<p>PagedAttention (Kwon et al., SOSP 2023) treats KV cache like OS paging: fixed-size blocks, a block table per request, non-contiguous physical pages <a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>. The kernel gathers blocks at attention time. You still must tune <strong>block size</strong>, <strong>max model length</strong>, and the <strong>cache hierarchy</strong> (GPU HBM vs CPU offload vs prefix cache). Too-small blocks add mapping overhead; too-large blocks reintroduce waste.</p>\n\n<h2>vLLM: near-zero waste serving</h2>\n<p>vLLM is the serving system built around PagedAttention. It targets near-zero KV waste, continuous batching, and an OpenAI-compatible HTTP surface. In production, watch three things: (1) <code>gpu_memory_utilization</code> vs OOM, (2) time-to-first-token vs decode tokens/s, (3) whether prefix / prompt caching changes answers for your eval set. Caching is a throughput win; it is not free of correctness and tail-latency effects.</p>\n<pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre>\n<p>That is real vLLM usage. A Hugging Face BERT <code>forward()</code> call is <em>not</em> PagedAttention — do not confuse classifier logits with paged KV serving.</p>\n\n<h2>Self-Debugging: quality loops with a latency budget</h2>\n<p>Self-Debugging (Chen et al.) teaches a model to fix its own predicted programs from few-shot traces, matching or beating baselines that emit 10x more candidates <a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2304.05128]</a>. For agents, that is gold — until feedback rounds stack. Cap the number of debug messages, log each round, and fail closed to a human or a smaller specialist model when the budget is gone.</p>\n\n<h2>Watch: serving and inference context</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Contextual talk on fast LLM serving — not an official TenthMatrix demo. Pair with the vLLM paper and <a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a>.</p>\n\n<h2>PowerInfer: tokens on a single fat GPU</h2>\n<p>PowerInfer splits hot/cold neurons so a consumer GPU plus CPU can generate tokens quickly. Reported figures: <strong>13.20 tokens/s average</strong>, peak <strong>29.08 tokens/s</strong> on one NVIDIA RTX 4090, up to <strong>11.69x</strong> vs llama.cpp while keeping accuracy <a href=\"https://github.com/SJTU-IPADS/PowerInfer\" target=\"_blank\" rel=\"noopener noreferrer\">[PowerInfer]</a>. At fleet scale you still need placement: which layers stay on GPU, how you shard across nodes, and whether the locality profile of <em>your</em> prompts matches the paper’s models.</p>\n\n<h2>EG-MLA: shrink the KV without wrecking the bench</h2>\n<p>EG-MLA (embedding-gated multi-head latent attention) reports <strong>over 91.6% KV cache reduction</strong> vs multi-head attention with negligible degradation, extra savings vs MLA (up to 59.9%), and better scores on reasoning suites, scaled past 1B parameters <a href=\"https://arxiv.org/abs/2509.16686\" target=\"_blank\" rel=\"noopener noreferrer\">[EG-MLA paper]</a>. Treat it as an architecture choice, not a drop-in flag on a frozen vLLM checkpoint — validate your eval harness before you celebrate the memory graph.</p>\n\n<p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Putting it together</h2>\n<p>Combine PagedAttention + vLLM for cluster serving, PowerInfer when the box is a workstation GPU, Self-Debugging inside coding agents with a hard round limit, and EG-MLA when you control the model family. Distributed serving adds complexity: KV parallelism, prefill/decode split, and autoscaling that does not thrash the page tables. Measure. Then write the ADR.</p>\n\n<h2>Read next</h2>\n<ol>\n  <li><a href=\"/en/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">Long article</a> — knobs, failure modes, Kubernetes notes.</li>\n  <li><a href=\"/en/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs explained + run your own on Kubernetes</a></li>\n  <li><a href=\"/en/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / local agents</a> · <a href=\"/en/enterprise-ai\">Enterprise AI Lab</a></li>\n</ol>\n\n<p>Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

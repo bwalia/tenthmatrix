@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS 是一款安全、Rust 权威的 DNS 服务器，具有 API 优先的控制平面、Prometheus 指标、传播门和 Kubernetes 原生操作，专为在 AI 服务和代理比以往更加依赖 DNS 时实现可见性而构建。",
+  "sub_title": "API-第一DNS、可观测性以及为什么AI时代需要新的权威堆栈",
+  "title": "NebulaDNS：为什么权威的DNS是人工智能时代的游戏规则改变者",
+  "meta_title": "NebulaDNS |权威DNS Rust AI企业| TenthMatrix",
+  "meta_description": "NebulaDNS简介：Rust权威DNS、API控制平面、传播验证、k3s和Route 53模式，以及为什么企业DNS在AI时代必须是可观察的。",
+  "meta_keywords": "NebulaDNS、权威 DNS、Rust DNS、Kubernetes DNS、Route 53、CoreDNS、AI 基础设施、Prometheus DNS 指标、TSIG、AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>执行摘要</h2><p><strong><a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a></strong>是一款现代<strong>API 权威 DNS 服务器</strong>，采用<strong>安全 Rust</strong>(<code>#![forbid(unsafe_code)]</code>) 编写。它的目标是几十年前的守护进程和不透明的 C 代码库留下的操作差距：<strong>没有度量</strong>，<strong>没有传播真相</strong>，<strong>没有机器可读的控制平面</strong>。在<strong>AI 时代，</strong>、DNS 不仅仅是“基础设施”——它是<strong>代理</strong>、<strong>推理端点</strong>、<strong>GPU 节点</strong>和<strong>多集群服务</strong>在策略下如何找到彼此的方式。 NebulaDNS 将<strong>的每个区域更改视为发布</strong>：经过验证的辅助节点、明确的指标以及针对每个操作员操作的 API — 与<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>项目网站</a>和<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>GitHub 存储库</a>上的公开叙述保持一致。</p><h2>为什么 DNS 在 AI 投入生产时更重要</h2><ul><li><strong>代理服务发现：</strong>工具端点、检索服务和策略网关的稳定名称胜过跨临时集群的硬编码 IP。</li><li><strong>爆炸半径：</strong>无声的 AXFR 或二次漂移事件（如网站上描述的现实世界互操作故障）可能会在 LLM 仪表板注意到之前就破坏冗余。</li><li><strong>合规性和证据：</strong>审计友好型 DNS 具有结构化日志和指标，支持 SOC2 式证据，了解谁更改了哪个区域以及是否传播。</li></ul><h2>NebulaDNS 有何不同</h2><p>着陆页将 NebulaDNS 定位为用<strong>替代易碎堆栈，一个小型二进制</strong>，提供<strong>指标</strong>、<strong>控制平面</strong>以及通往<strong>Kubernetes 操作员</strong>的路径 - 因此故障出现在<strong>秒</strong>，不通过客票。亮点包括<strong>验证传播</strong>、<strong>对等软件指纹识别</strong>、<strong>原子版本配置</strong>、<strong>确定性 SOA 串行</strong>和具有编译时基数预算的<strong>Prometheus<code>/metrics</code></strong>。</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS control plane, zone store, and DNS data plane' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>集成快照：Route 53 和 k3s</h2><p>企业通常将<strong>AWS Route 53</strong>公共区域与集群上的<strong>或专用的权威</strong>层配对。 NebulaDNS 适合作为您拥有的端到端区域的<strong>权威事实来源</strong>，以及网站上描述的路线图上的<strong>Helm</strong>、<strong>ServiceMonitor</strong>和<strong>操作员/CRD</strong>故事情节。下图描绘了<strong>委派 + 集群</strong>模式（不是特定于供应商的接线 - 适应您的网络分段）。</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route 53 delegation to NebulaDNS and k3s CoreDNS integration' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>阅读下一篇</h2><p>有关<strong>完整功能目录</strong>、指标示例和更深入的 k3s/Route&nbsp;53 注释，请参阅配套文章<a href='/zh/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide'>NebulaDNS 完整功能指南 TenthMatrix 上的</a>。</p><h2>TenthMatrix 如何帮助</h2><p>TenthMatrix 设计<strong>平台工程</strong>和<strong>SRE 就绪 DNS</strong>模式 — GitOps、可观测性和安全切换 — 适用于云和边缘。请联系<strong>info@tenthmatrix.com</strong>获取架构审查或交付支持。</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

@@ -1,0 +1,62 @@
+{
+  "uuid": "blog-wslvault-zero-trust-001",
+  "internal_id": 1036,
+  "slug": "wslvault-zero-trust-tenant-isolation",
+  "title": "WSL Vault for Compliance: One Tenant Never Opens Another’s Secrets",
+  "sub_title": "Business language for regulators: per-tenant custody, no shared root blast radius, ceremony oaths, and dual-tenant control when a wide audience needs a secret",
+  "excerpt": "How WSL Vault keeps app, team, and environment tenants cryptographically isolated — so a stolen root-style token cannot empty the estate — and why dual-tenant control beats secrets sprawl.",
+  "meta_title": "WSL Vault Zero-Trust Tenant Isolation for Compliance | TenthMatrix",
+  "meta_description": "Compliance-focused guide to WSL Vault: per-tenant secrets isolation, why a single root token is a breach risk, ceremony oaths, dual-tenant control, and zero sprawl.",
+  "meta_keywords": "WSL Vault, WSLVault, zero trust secrets, tenant isolation, dual control, HashiCorp Vault root token, compliance, MFA, multi-region HA, secrets sprawl, wslvault.org",
+  "cover_image": "/img/blog/wslvault-zero-trust-tenant-isolation/cover.svg",
+  "images": [
+    {
+      "url": "/img/blog/wslvault-zero-trust-tenant-isolation/cover.svg",
+      "id": 1036,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "WSL Vault zero-trust tenant isolation for compliance"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>For compliance officers, risk committees, and regulators: <strong>WSL Vault</strong> makes sure one app, tenant, team, or environment can never open another’s tokens and secret keys. Unlike a classic HashiCorp Vault posture where a single root token in the wrong hands can expose everything, WSL Vault keeps custody personal — and requires both sides when a wide audience must obtain a shared secret. Deep dive: <a href=\"/en/articles/wslvault-zero-trust-tenant-isolation\">technical article</a> · Product: <a href=\"/en/wsl-vault\">/wsl-vault</a> · <a href=\"https://www.wslvault.org/#features\" target=\"_blank\" rel=\"noopener noreferrer\">wslvault.org features</a>.</em></p>\n\n<p><img src=\"/img/blog/wslvault-zero-trust-tenant-isolation/cover.svg\" alt=\"WSL Vault — zero-trust tenant isolation for compliance\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #059669;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Board-level sentence.</strong> Zero-trust secrets means nobody — not a platform admin, not a neighbouring team, not a stolen “master” credential — can casually walk the whole estate. Each tenant’s secrets stay sealed under that tenant’s keys. When something truly shared must be opened, <em>both</em> tenant tokens are required. That is how you avoid secrets sprawl without pretending a shared root token is fine.\n</div>\n\n<h2>The compliance problem with a single root token</h2>\n<p>Many organisations still run a vault where one highly privileged root token (or a small set of break-glass credentials) can unseal and read across every team, application, and environment. If that token leaks — phishing, a laptop, a CI log, a well-meaning paste into chat — the blast radius is the entire secrets estate. Regulators do not ask whether you <em>intended</em> isolation. They ask what an attacker with that one credential can actually do.</p>\n<p>HashiCorp Vault is powerful and familiar. The risk pattern we call out is organisational and architectural: when root-level power is concentrated, a single compromise becomes a serious data-breach event. Policies and namespaces help — until someone still holds a key that sits above them.</p>\n\n<p><img src=\"/img/blog/wslvault-zero-trust-tenant-isolation/blast-radius.svg\" alt=\"Blast radius of a shared root token versus WSL Vault per-tenant custody\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>What WSL Vault changes for tenants and teams</h2>\n<p>Inspired by the product model on <a href=\"https://www.wslvault.org/#features\" target=\"_blank\" rel=\"noopener noreferrer\">wslvault.org</a>, WSL Vault seals secrets with envelope encryption and a <strong>per-tenant key hierarchy</strong>. A data key belongs to exactly one tenant. Finance cannot decrypt Payments. INT cannot casually open PROD. A cross-tenant request returns “not found” — cryptographic refusal, not a soft filter.</p>\n<ul>\n  <li><strong>One app / one team / one environment</strong> — each can be its own tenant with its own sealed world.</li>\n  <li><strong>No shared root walking stick</strong> — day-to-day access is a signed, per-tenant token, not a universal master key in every operator’s pocket.</li>\n  <li><strong>Zero plaintext at rest</strong> — a stolen disk or database dump yields ciphertext the database itself cannot open.</li>\n  <li><strong>Audit you can show</strong> — operations join a tamper-evident, hash-chained trail per tenant.</li>\n</ul>\n\n<h2>The ceremony: personal oath, dual control for shared secrets</h2>\n<p>When a WSL Vault ceremony concludes, each team and tenant custodian takes a practical oath: <strong>keep your own token secret</strong>. Do not share it in Slack. Do not commit it. Do not reuse it across tenants “for convenience.” That personal custody is the human half of zero trust.</p>\n<p>When a <em>wide audience</em> or joint process must obtain a secret that spans tenants — a shared release gate, a joint audit export, a deliberate break-glass — policy can require <strong>both tenant tokens</strong>. Neither side alone is enough. That dual-tenant control turns “who approved this?” into something regulators recognise: two custodians, two authentications, one recorded purpose.</p>\n\n<p><img src=\"/img/blog/wslvault-zero-trust-tenant-isolation/dual-tenant-ceremony.svg\" alt=\"WSL Vault ceremony and dual-tenant control workflow\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Zero trust that also ends secrets sprawl</h2>\n<p>Sprawl happens when people copy passwords into tickets, chat, and repos because the “proper” vault is too hard or too shared. WSL Vault is designed so the easy path is the safe path: short-lived leases, MFA for humans, workload identity for apps, and engines (KV, transit, PKI) behind one API. Teams stop scattering copies because the vault answers in seconds — and revoke actually stops access.</p>\n\n<h2>Watch and tour</h2>\n<p>Start with the silent console tour on the product site, then the longer presentation:</p>\n<ul>\n  <li><a href=\"https://www.wslvault.org/#tour\" target=\"_blank\" rel=\"noopener noreferrer\">Silent console tour (~2 min)</a> — tenants, KV, transit, MFA, regions, audit</li>\n  <li><a href=\"https://www.wslvault.org/#features\" target=\"_blank\" rel=\"noopener noreferrer\">Features tour</a> — versioned KV, envelope encryption, transit, PKI, leases, two-factor identity</li>\n  <li><a href=\"https://www.wslvault.org/#architecture\" target=\"_blank\" rel=\"noopener noreferrer\">Architecture tour</a> — active/active multi-region mesh</li>\n  <li><a href=\"https://www.wslvault.org/#security\" target=\"_blank\" rel=\"noopener noreferrer\">Security tour</a> — audit chain, Shamir custody, tenant isolation, zero plaintext at rest</li>\n  <li><a href=\"https://youtu.be/O6q3_H0k2M8\" target=\"_blank\" rel=\"noopener noreferrer\">Full presentation on YouTube (~20 min)</a> — <em>Steal the server. Not the secrets.</em></li>\n</ul>\n\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0;\">\n<iframe src=\"https://www.youtube.com/embed/O6q3_H0k2M8\" title=\"WSLVault presentation — steal the server, not the secrets\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n\n<h2>Related reading</h2>\n<ul>\n  <li><a href=\"/en/articles/wslvault-zero-trust-tenant-isolation\">Technical deep dive — workflows, HA, MFA, diagrams</a></li>\n  <li><a href=\"/en/docs/blogs/wslvault-steal-the-server-not-the-secrets\">Intro blog: Steal the server. Not the secrets.</a></li>\n  <li><a href=\"/en/docs/blogs/wslvault-ai-agents-cryptographic-refusal\">AI agents and cryptographic refusal</a></li>\n  <li><a href=\"/en/wsl-vault\">TenthMatrix WSL Vault product page</a></li>\n</ul>\n\n<p class=\"cta\">Need a secrets story your auditors can understand in one slide? <a href=\"/en/contact-us\">Talk to TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-10-07T22:00:00Z",
+  "updated_at": "2026-10-07T22:00:00Z",
+  "published_date": "2026-10-07",
+  "status": true,
+  "language_code": "bn"
+}

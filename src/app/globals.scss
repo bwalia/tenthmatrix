@@ -1,0 +1,289 @@
+// Global base for TenthMatrix. Tokens come from ./styles/tm-theme.css (imported
+// first in the root layout). Component styles live in co-located SCSS modules;
+// only document-level rules, shared utilities and styles for CMS/article HTML
+// (which can't carry module class names) live here.
+@use './styles/mixins' as *;
+@use './styles/prose';
+@use './styles/code';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--tm-header-h) + var(--tm-space-4));
+  -webkit-tap-highlight-color: transparent;
+  hanging-punctuation: first;
+
+  @include motion {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--tm-bg);
+  color: var(--tm-text);
+  font-family: var(--tm-font-body);
+  font-size: var(--tm-text-base);
+  line-height: var(--tm-leading-normal);
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+
+  &.tm-scroll-locked {
+    overflow: hidden;
+  }
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  color: var(--tm-text);
+  text-wrap: balance;
+}
+
+h1 {
+  @include display(var(--tm-text-3xl));
+}
+
+h2 {
+  @include heading(var(--tm-text-2xl));
+}
+
+h3 {
+  @include heading(var(--tm-text-xl));
+}
+
+h4 {
+  font-size: var(--tm-text-lg);
+  font-weight: var(--tm-weight-semibold);
+  line-height: var(--tm-leading-snug);
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--tm-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &:hover {
+    color: var(--tm-accent-hover);
+  }
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--tm-font-mono);
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--tm-line);
+  margin: var(--tm-space-8) 0;
+}
+
+// Focus: one ring everywhere, never removed.
+:focus-visible {
+  @include focus-ring;
+  border-radius: var(--tm-radius-xs);
+}
+
+:where(a, button, [role='button'], input, select, textarea, summary):focus:not(:focus-visible) {
+  outline: none;
+}
+
+// ------------------------------------------------------------- layout utils
+.tm-main {
+  flex: 1 0 auto;
+  display: block;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.tm-container {
+  @include container;
+}
+
+.tm-container--narrow {
+  @include container(var(--tm-container-narrow));
+}
+
+.tm-container--wide {
+  @include container(var(--tm-container-wide));
+}
+
+.tm-skip-link {
+  position: fixed;
+  top: var(--tm-space-2);
+  left: var(--tm-space-2);
+  z-index: var(--tm-z-modal);
+  padding: var(--tm-space-3) var(--tm-space-4);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-accent);
+  color: var(--tm-accent-contrast);
+  font-weight: var(--tm-weight-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+
+  &:focus,
+  &:focus-visible {
+    transform: none;
+    color: var(--tm-accent-contrast);
+  }
+}
+
+.tm-visually-hidden {
+  @include visually-hidden;
+}
+
+.tm-eyebrow {
+  @include eyebrow;
+}
+
+.tm-lede {
+  font-size: var(--tm-text-md);
+  color: var(--tm-text-muted);
+  line-height: var(--tm-leading-normal);
+}
+
+.tm-tap {
+  min-width: var(--tm-tap-target);
+  min-height: var(--tm-tap-target);
+}
+
+// Page head shared by listing pages (blog, articles, insights, docs, search).
+.tm-page-head {
+  padding-block: clamp(2.5rem, 1.6rem + 3.6vw, 5rem) clamp(1.5rem, 1rem + 2vw, 3rem);
+  border-bottom: 1px solid var(--tm-line);
+  background: var(--tm-gradient-wash);
+
+  &__inner {
+    @include container;
+    display: grid;
+    gap: var(--tm-space-4);
+  }
+
+  h1 {
+    max-width: 22ch;
+  }
+
+  .tm-lede {
+    max-width: 62ch;
+  }
+}
+
+.tm-page-body {
+  @include container;
+  padding-block: clamp(2rem, 1.4rem + 2.4vw, 4rem) var(--tm-space-section);
+}
+
+.tm-grid {
+  display: grid;
+  gap: var(--tm-grid-gap);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.tm-empty {
+  padding: var(--tm-space-12) var(--tm-space-6);
+  border: 1px dashed var(--tm-line-strong);
+  border-radius: var(--tm-radius);
+  color: var(--tm-text-muted);
+  text-align: center;
+}
+
+// Shared form controls (contact, comments, search).
+.tm-input {
+  width: 100%;
+  min-height: var(--tm-tap-target);
+  padding: var(--tm-space-3) var(--tm-space-4);
+  border: 1px solid var(--tm-line-strong);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-surface);
+  color: var(--tm-text);
+  font-size: 1rem; // >= 16px: no iOS zoom on focus
+  line-height: 1.4;
+  transition:
+    border-color var(--tm-duration-fast) var(--tm-ease-standard),
+    box-shadow var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &::placeholder {
+    color: var(--tm-text-subtle);
+    opacity: 1;
+  }
+
+  &:hover {
+    border-color: var(--tm-text-muted);
+  }
+
+  &:focus-visible {
+    border-color: var(--tm-accent);
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--tm-danger);
+  }
+}
+
+textarea.tm-input {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.tm-label {
+  display: block;
+  margin-bottom: var(--tm-space-2);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-semibold);
+  color: var(--tm-text);
+}

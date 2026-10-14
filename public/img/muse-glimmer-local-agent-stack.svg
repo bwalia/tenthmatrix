@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Muse Glimmer local agent stack from Ollama to tools">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <style>
+      .label { fill: #94a3b8; font: 600 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .boxTitle { fill: #f8fafc; font: 700 16px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .boxSub { fill: #cbd5e1; font: 500 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #1e293b; stroke: #334155; stroke-width: 1.5; }
+      .accent { fill: #164e63; stroke: #22d3ee; stroke-width: 1.5; }
+      .arrow { stroke: #67e8f9; stroke-width: 2; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#67e8f9"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)" rx="0"/>
+  <text class="label" x="48" y="40">LOCAL AGENT RUNTIME - MUSE GLIMMER ON OLLAMA</text>
+
+  <rect class="accent" x="48" y="70" width="260" height="100" rx="12"/>
+  <text class="boxTitle" x="68" y="110">IDE / Agent scaffold</text>
+  <text class="boxSub" x="68" y="138">Claude Code / OpenCode / Hermes / OpenClaw</text>
+
+  <path class="arrow" d="M320 120 H400"/>
+
+  <rect class="accent" x="410" y="70" width="280" height="100" rx="12"/>
+  <text class="boxTitle" x="430" y="110">Ollama runtime</text>
+  <text class="boxSub" x="430" y="138">chat API / launch / MLX (Apple Silicon)</text>
+
+  <path class="arrow" d="M700 120 H780"/>
+
+  <rect class="accent" x="790" y="70" width="360" height="100" rx="12"/>
+  <text class="boxTitle" x="810" y="110">muse-glimmer:30b / :30b-mlx</text>
+  <text class="boxSub" x="810" y="138">30B / ~18-21GB / 128K / text + image</text>
+
+  <path class="arrow" d="M970 180 V230"/>
+
+  <rect class="box" x="48" y="240" width="350" height="140" rx="12"/>
+  <text class="boxTitle" x="68" y="280">Perception encoder</text>
+  <text class="boxSub" x="68" y="308">Interleaved screenshots, charts, docs</text>
+  <text class="boxSub" x="68" y="332">GUI grounding / document parse</text>
+  <text class="boxSub" x="68" y="356">Controllable reasoning effort</text>
+
+  <rect class="box" x="425" y="240" width="350" height="140" rx="12"/>
+  <text class="boxTitle" x="445" y="280">Tool loop</text>
+  <text class="boxSub" x="445" y="308">Schema-accurate function calls</text>
+  <text class="boxSub" x="445" y="332">MCP / shell / browser / files</text>
+  <text class="boxSub" x="445" y="356">Diagnose failures then retry</text>
+
+  <rect class="box" x="802" y="240" width="348" height="140" rx="12"/>
+  <text class="boxTitle" x="822" y="280">Long-horizon plan</text>
+  <text class="boxSub" x="822" y="308">Multi-step coding and research</text>
+  <text class="boxSub" x="822" y="332">128K working memory</text>
+  <text class="boxSub" x="822" y="356">End-to-end task completion</text>
+
+  <path class="arrow" d="M600 390 V440"/>
+
+  <rect class="box" x="200" y="450" width="800" height="130" rx="12"/>
+  <text class="boxTitle" x="230" y="495">Workstation control plane</text>
+  <text class="boxSub" x="230" y="525">Evals / Review Bot / GitOps / HITL / MCP OAuth / Vault leases / offline air-gap option</text>
+  <text class="boxSub" x="230" y="550">Single GPU workstation or Apple Silicon MLX node - no cloud required for inference</text>
+</svg>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-label="NebulaDNS architecture: control plane, zone store, DNS data plane">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 22px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .box { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAccent { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .boxOk { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .boxWarn { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: #bbc6ff; font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .ctrl { stroke: #ff9560; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .data { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .verify { stroke: #26c6da; stroke-width: 2; fill: none; stroke-dasharray: 1 3; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arData" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arVerify" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#26c6da"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="640" fill="url(#bg)"/>
+  <rect width="1000" height="640" fill="url(#grid)"/>
+
+  <text class="title" x="500" y="36" text-anchor="middle">NebulaDNS  /  logical architecture</text>
+  <text class="subtitle" x="500" y="58" text-anchor="middle">Authoritative DNS in safe Rust. API-first control plane, propagation-verified releases.</text>
+
+  <g>
+    <rect x="40" y="80" width="920" height="64" rx="10" class="lane"/>
+    <text class="laneTitle" x="60" y="100">CLIENT  /  ADMIN PLANE</text>
+    <g transform="translate(280,108)">
+      <rect width="200" height="28" rx="8" class="box"/>
+      <text class="boxText" x="100" y="18" text-anchor="middle">React web UI</text>
+    </g>
+    <g transform="translate(500,108)">
+      <rect width="220" height="28" rx="8" class="box"/>
+      <text class="boxText" x="110" y="18" text-anchor="middle">OpenAPI clients (v1.0 roadmap)</text>
+    </g>
+    <g transform="translate(740,108)">
+      <rect width="200" height="28" rx="8" class="box"/>
+      <text class="boxText" x="100" y="18" text-anchor="middle">kubectl + CRDs (roadmap)</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="164" width="920" height="100" rx="12" class="boxAccent"/>
+    <text class="laneTitle" x="60" y="184" fill="#c4b5fd">CONTROL PLANE  /  axum REST + tonic gRPC</text>
+    <g transform="translate(60,196)">
+      <rect width="220" height="56" rx="8" class="box"/>
+      <text class="boxLabel" x="110" y="22" text-anchor="middle">REST API (axum)</text>
+      <text class="boxText" x="110" y="38" text-anchor="middle">mTLS  /  OIDC  /  RBAC</text>
+      <text class="code" x="110" y="50" text-anchor="middle">utoipa OpenAPI</text>
+    </g>
+    <g transform="translate(300,196)">
+      <rect width="220" height="56" rx="8" class="box"/>
+      <text class="boxLabel" x="110" y="22" text-anchor="middle">gRPC (tonic)</text>
+      <text class="boxText" x="110" y="38" text-anchor="middle">internal services  /  audit</text>
+      <text class="code" x="110" y="50" text-anchor="middle">idempotent writes</text>
+    </g>
+    <g transform="translate(540,196)">
+      <rect width="200" height="56" rx="8" class="box"/>
+      <text class="boxLabel" x="100" y="22" text-anchor="middle">AuthN / AuthZ</text>
+      <text class="boxText" x="100" y="38" text-anchor="middle">OIDC + RBAC</text>
+      <text class="boxText" x="100" y="50" text-anchor="middle">tenant scoping</text>
+    </g>
+    <g transform="translate(760,196)">
+      <rect width="180" height="56" rx="8" class="box"/>
+      <text class="boxLabel" x="90" y="22" text-anchor="middle">Audit log</text>
+      <text class="boxText" x="90" y="38" text-anchor="middle">append-only  /  signed</text>
+      <text class="boxText" x="90" y="50" text-anchor="middle">tail to SIEM</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="284" width="920" height="100" rx="12" class="lane"/>
+    <text class="laneTitle" x="60" y="304">ORCHESTRATION  /  CHANGES BEHAVE LIKE RELEASES</text>
+    <g transform="translate(60,316)">
+      <rect width="380" height="56" rx="10" class="boxOk"/>
+      <text class="boxLabel" x="190" y="22" text-anchor="middle">Zone manager</text>
+      <text class="boxText" x="190" y="38" text-anchor="middle">validate  /  DNSSEC sign  /  atomic commit</text>
+      <text class="boxText" x="190" y="50" text-anchor="middle">staged  -  approved  -  promoted</text>
+    </g>
+    <g transform="translate(460,316)">
+      <rect width="240" height="56" rx="10" class="boxWarn"/>
+      <text class="boxLabel" x="120" y="22" text-anchor="middle">Propagation verifier</text>
+      <text class="boxText" x="120" y="38" text-anchor="middle">polls peers + secondaries</text>
+      <text class="boxText" x="120" y="50" text-anchor="middle">SOA serial gate  /  TTL aware</text>
+    </g>
+    <g transform="translate(720,316)">
+      <rect width="220" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="110" y="22" text-anchor="middle">Peer fingerprints</text>
+      <text class="boxText" x="110" y="38" text-anchor="middle">JWKS  /  TSIG keys</text>
+      <text class="boxText" x="110" y="50" text-anchor="middle">drift detection</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="404" width="920" height="76" rx="12" class="lane"/>
+    <text class="laneTitle" x="60" y="424">ZONE STORE  /  CONTENT-ADDRESSED</text>
+    <g transform="translate(120,432)">
+      <rect width="760" height="40" rx="10" class="box"/>
+      <text class="boxText" x="380" y="20" text-anchor="middle">sled / redb  /  arc-swap snapshots  /  readers never block  /  signed revisions  /  rollback to any revision</text>
+      <text class="code" x="380" y="34" text-anchor="middle">snapshot_id = sha256(zonefile)</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="500" width="920" height="100" rx="12" class="boxOk"/>
+    <text class="laneTitle" x="60" y="520" fill="#a5d6a7">DNS DATA PLANE  /  tokio runtime</text>
+    <g transform="translate(60,530)">
+      <rect width="160" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="22" text-anchor="middle">UDP / TCP :53</text>
+      <text class="boxText" x="80" y="38" text-anchor="middle">classic resolvers</text>
+      <text class="boxText" x="80" y="50" text-anchor="middle">EDNS0  /  cookies</text>
+    </g>
+    <g transform="translate(240,530)">
+      <rect width="160" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="22" text-anchor="middle">DoT :853</text>
+      <text class="boxText" x="80" y="38" text-anchor="middle">TLS 1.3  /  ALPN</text>
+      <text class="boxText" x="80" y="50" text-anchor="middle">per-tenant certs</text>
+    </g>
+    <g transform="translate(420,530)">
+      <rect width="160" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="22" text-anchor="middle">DoH :443</text>
+      <text class="boxText" x="80" y="38" text-anchor="middle">HTTP/2 + HTTP/3</text>
+      <text class="boxText" x="80" y="50" text-anchor="middle">RFC 8484</text>
+    </g>
+    <g transform="translate(600,530)">
+      <rect width="160" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="22" text-anchor="middle">DoQ :853 quic</text>
+      <text class="boxText" x="80" y="38" text-anchor="middle">QUIC streams</text>
+      <text class="boxText" x="80" y="50" text-anchor="middle">low-RTT mobile</text>
+    </g>
+    <g transform="translate(780,530)">
+      <rect width="160" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="22" text-anchor="middle">AXFR / IXFR</text>
+      <text class="boxText" x="80" y="38" text-anchor="middle">TSIG + NOTIFY</text>
+      <text class="boxText" x="80" y="50" text-anchor="middle">peer + secondary fanout</text>
+    </g>
+  </g>
+
+  <line x1="500" y1="144" x2="500" y2="164" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="500" y1="264" x2="500" y2="284" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="250" y1="372" x2="250" y2="404" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="580" y1="372" x2="580" y2="404" class="verify" marker-end="url(#arVerify)"/>
+  <line x1="500" y1="480" x2="500" y2="500" class="data" marker-end="url(#arData)"/>
+
+  <text class="footnote" x="40" y="624">Observability: OpenTelemetry traces, Prometheus metrics, Loki logs, Tempo for cross-plane correlation. Hot-path UDP/TCP is alloc-free in steady state.</text>
+</svg>

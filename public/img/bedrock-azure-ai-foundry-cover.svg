@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="AWS Bedrock versus Azure AI Foundry versus Google Vertex AI versus self-hosted LLMs: decision matrix, cost bands, governance, sizing">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1829"/>
+      <stop offset="0.5" stop-color="#1a2744"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="aws" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff9900"/>
+      <stop offset="1" stop-color="#ec7211"/>
+    </linearGradient>
+    <linearGradient id="azure" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0078d4"/>
+      <stop offset="1" stop-color="#50e6ff"/>
+    </linearGradient>
+    <linearGradient id="vertex" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#34a853"/>
+      <stop offset="1" stop-color="#4285f4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#0078d4" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#0078d4" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #93c5fd; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 36px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #fdba74; font: 800 16px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.22); stroke-width: 1.2; }
+      .chipText { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #fdba74; font: 800 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #93c5fd; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="400" height="4" fill="url(#aws)"/>
+  <rect x="400" y="0" width="400" height="4" fill="url(#azure)"/>
+  <rect x="800" y="0" width="400" height="4" fill="url(#vertex)"/>
+
+  <text class="kicker" x="40" y="40">MANAGED MODELS  /  FINOPS  /  GOVERNANCE  /  DATA RESIDENCY</text>
+  <text class="title" x="40" y="86">Bedrock vs AI Foundry vs Vertex</text>
+  <text class="tagline" x="40" y="112">Host models in the cloud and keep spend predictable</text>
+  <text class="sub" x="40" y="132">Routing, caching, quotas, batch, observability, governance. Decision support for OPS and Architecture teams.</text>
+
+  <g transform="translate(40,150)">
+    <rect class="chip" x="0" y="0" rx="12" ry="12" width="180" height="28"/>
+    <text class="num" x="12" y="18">01</text>
+    <text class="chipText" x="36" y="18">Route smartly + cache</text>
+
+    <rect class="chip" x="0" y="34" rx="12" ry="12" width="180" height="28"/>
+    <text class="num" x="12" y="52">02</text>
+    <text class="chipText" x="36" y="52">Budget per workload</text>
+
+    <rect class="chip" x="0" y="68" rx="12" ry="12" width="180" height="28"/>
+    <text class="num" x="12" y="86">03</text>
+    <text class="chipText" x="36" y="86">Batch + schedule off-peak</text>
+
+    <rect class="chip" x="0" y="102" rx="12" ry="12" width="180" height="28"/>
+    <text class="num" x="12" y="120">04</text>
+    <text class="chipText" x="36" y="120">Audit + safety filters</text>
+  </g>
+
+  <g transform="translate(40,310)">
+    <text class="laneLabel" x="0" y="0">SIZING / FINOPS HEURISTICS</text>
+    <rect x="0" y="8" width="240" height="220" rx="8" fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+    <text class="h" x="10" y="28">tokens / month: estimate now</text>
+    <text class="c" x="10" y="42">log every request; per-tenant projection</text>
+    <text class="h" x="10" y="60">cache target: 30 - 50 percent hit</text>
+    <text class="c" x="10" y="74">semantic + exact match; redis backed</text>
+    <text class="h" x="10" y="92">batch window: ge 30 percent of jobs</text>
+    <text class="c" x="10" y="106">non-interactive  -  scheduled lane</text>
+    <text class="h" x="10" y="124">router defaults:</text>
+    <text class="c" x="10" y="138">small model -> long context only on miss</text>
+    <text class="h" x="10" y="156">guardrails: PII + jailbreak filter</text>
+    <text class="c" x="10" y="170">block at edge, do not pay for refusal</text>
+    <text class="h" x="10" y="188">SLA pick: provisioned vs on-demand</text>
+    <text class="c" x="10" y="202">provisioned when steady-state ge 60 percent</text>
+    <text class="c" x="10" y="218">switch to on-demand for spiky workloads</text>
+  </g>
+
+  <g transform="translate(300,150)">
+    <text class="laneLabel" x="0" y="0">DECISION MATRIX  /  MANAGED LLM PLATFORMS</text>
+    <rect x="0" y="8" width="860" height="220" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <text class="h" x="14" y="28">Criterion</text>
+    <text class="h" x="190" y="28" fill="#fdba74">AWS Bedrock</text>
+    <text class="h" x="380" y="28" fill="#7dd3fc">Azure AI Foundry</text>
+    <text class="h" x="580" y="28" fill="#86efac">Google Vertex AI</text>
+    <text class="h" x="770" y="28">Self-hosted</text>
+    <line x1="14" y1="36" x2="850" y2="36" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <text class="c" x="14" y="56">Model catalog</text>
+    <text class="c" x="190" y="56">Anthropic, Llama, Mistral, Titan</text>
+    <text class="c" x="380" y="56">OpenAI, Llama, Phi, Mistral</text>
+    <text class="c" x="580" y="56">Gemini, Llama, Anthropic, MaaS</text>
+    <text class="c" x="770" y="56">any open-weights</text>
+
+    <text class="c" x="14" y="78">Open weights</text>
+    <text class="warn" x="190" y="78">Llama / Mistral only</text>
+    <text class="warn" x="380" y="78">Llama / Mistral / Phi</text>
+    <text class="warn" x="580" y="78">Llama / Mistral / Gemma</text>
+    <text class="ok" x="770" y="78">full control</text>
+
+    <text class="c" x="14" y="100">Fine-tune</text>
+    <text class="ok" x="190" y="100">Custom Model / RAG KB</text>
+    <text class="ok" x="380" y="100">LoRA / RAFT / DPO</text>
+    <text class="ok" x="580" y="100">supervised + RLHF</text>
+    <text class="ok" x="770" y="100">unlimited (axolotl)</text>
+
+    <text class="c" x="14" y="122">Pricing model</text>
+    <text class="warn" x="190" y="122">per 1k tok + provisioned</text>
+    <text class="warn" x="380" y="122">PTU + per token</text>
+    <text class="warn" x="580" y="122">char + provisioned</text>
+    <text class="warn" x="770" y="122">GPU hours fixed</text>
+
+    <text class="c" x="14" y="144">Cost band (med use)</text>
+    <text class="c" x="190" y="144">usd 2 - 30 / M in tok</text>
+    <text class="c" x="380" y="144">usd 2 - 30 / M in tok</text>
+    <text class="c" x="580" y="144">usd 2 - 25 / M in tok</text>
+    <text class="ok" x="770" y="144">usd 1 - 4 / GPU-hr</text>
+
+    <text class="c" x="14" y="166">Data residency</text>
+    <text class="ok" x="190" y="166">most regions</text>
+    <text class="ok" x="380" y="166">most regions + EU AI</text>
+    <text class="ok" x="580" y="166">global + EU</text>
+    <text class="ok" x="770" y="166">your DC</text>
+
+    <text class="c" x="14" y="188">Governance / safety</text>
+    <text class="ok" x="190" y="188">Guardrails for Bedrock</text>
+    <text class="ok" x="380" y="188">Content safety + Defender</text>
+    <text class="ok" x="580" y="188">Safety filters + Watermark</text>
+    <text class="warn" x="770" y="188">DIY (NeMo / Llama Guard)</text>
+
+    <text class="c" x="14" y="210">Lock-in</text>
+    <text class="bad" x="190" y="210">high (aws SDK)</text>
+    <text class="bad" x="380" y="210">high (azure SDK)</text>
+    <text class="bad" x="580" y="210">high (gcp SDK)</text>
+    <text class="ok" x="770" y="210">none</text>
+  </g>
+
+  <g transform="translate(300,400)">
+    <text class="laneLabel" x="0" y="0">CONFIG KNOBS  /  FINOPS GUARDRAILS</text>
+    <rect x="0" y="8" width="430" height="180" rx="8" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+    <text class="h" x="10" y="28">router.fallback_model = small</text>
+    <text class="c" x="10" y="42">try cheap first; escalate on confidence drop</text>
+    <text class="h" x="10" y="60">prompt_cache.ttl = 24h  /  semantic_threshold = 0.92</text>
+    <text class="c" x="10" y="74">cache idempotent prompts, skip personalized</text>
+    <text class="h" x="10" y="92">budget.daily_usd_per_tenant = 50</text>
+    <text class="c" x="10" y="106">hard-stop with 80 percent / 100 percent alerts</text>
+    <text class="h" x="10" y="124">batch.target_share = 0.3</text>
+    <text class="c" x="10" y="138">aim for ge 30 percent jobs in batch lane</text>
+    <text class="h" x="10" y="156">safety.refusal_action = log + alert</text>
+    <text class="c" x="10" y="170">do not retry refusals; log for review</text>
+
+    <text class="laneLabel" x="450" y="0">SLO / BREACH ACTION</text>
+    <rect x="450" y="8" width="410" height="180" rx="8" fill="rgba(220,38,38,0.08)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
+    <text class="h" x="460" y="28">cost gt 110 percent budget  ->  throttle</text>
+    <text class="c" x="460" y="42">shed lower tier; notify product owner</text>
+    <text class="h" x="460" y="60">p99 latency gt 8 s  ->  route small / batch</text>
+    <text class="c" x="460" y="74">degrade gracefully; preserve UX</text>
+    <text class="h" x="460" y="92">4xx rate gt 2 percent  ->  rotate keys / inspect</text>
+    <text class="c" x="460" y="106">refresh credentials; verify request shape</text>
+    <text class="h" x="460" y="124">refusal rate gt 5 percent  ->  prompt review</text>
+    <text class="c" x="460" y="138">jailbreak attempt or policy mismatch</text>
+    <text class="h" x="460" y="156">quota gt 90 percent used  ->  switch region</text>
+    <text class="c" x="460" y="170">spillover lane; renegotiate provisioned</text>
+  </g>
+
+  <text class="brand" x="40" y="610">WORKSTATION.CO.UK  /  multi-cloud GenAI architecture</text>
+  <text class="audience" x="1160" y="610" text-anchor="end">OPS  /  ARCHITECTS  /  FINOPS  /  MLOPS</text>
+</svg>

@@ -1,0 +1,653 @@
+{
+  "header": {
+    "title": "ผลิตภัณฑ์",
+    "description": "Software and productised lab offerings you can run: AI GPU workstations, agentic frameworks, Claude Code / Cowork and ChatGPT for teams — plus WSL Proxy, Ring Promoter, AI Labs, CRM, and marketing tools."
+  },
+  "agenticFrameworks": {
+    "title": "Top AI agentic frameworks & orchestration",
+    "subtitle": "LangChain / LangGraph, Apache Airflow, and enterprise workflow patterns we operationalise in AI Labs",
+    "description": "Agent frameworks alone do not make production systems. We combine graph-based agents with durable orchestration, approval gates, and observability so enterprise workflows survive real traffic.",
+    "articleHref": "/articles/enterprise-agentic-frameworks-langchain-airflow",
+    "articleLabel": "Read the enterprise agentic frameworks guide",
+    "items": [
+      {
+        "title": "LangChain & LangGraph",
+        "icon": "fas fa-project-diagram",
+        "description": "Composable LLM apps and stateful agent graphs — tool calling, human-in-the-loop interrupts, and durable checkpointing for long-horizon enterprise agents.",
+        "useCases": [
+          "RAG copilots",
+          "Multi-agent ops cells",
+          "Tool-using support agents"
+        ]
+      },
+      {
+        "title": "LangSmith & evaluation",
+        "icon": "fas fa-clipboard-check",
+        "description": "Tracing, datasets, and eval loops so agent regressions are caught before promotion through int → test → acc → prod rings.",
+        "useCases": [
+          "Prompt/version evals",
+          "Trace-driven debugging",
+          "Cost & latency budgets"
+        ]
+      },
+      {
+        "title": "Apache Airflow 3",
+        "icon": "fas fa-stream",
+        "description": "Durable DAGs for data prep, model refresh, RAG ingest, and scheduled agent jobs — Apache Airflow 3.x remains the enterprise backbone for batch and hybrid agent workflows.",
+        "useCases": [
+          "Knowledge ingest",
+          "Model refresh cadences",
+          "Compliance batch jobs"
+        ]
+      },
+      {
+        "title": "Enterprise workflow patterns",
+        "icon": "fas fa-sitemap",
+        "description": "MCP connectors, approval gates, Ring Promoter health-gated deploys, and OpenTelemetry cost control — the operational layer that makes agent demos survivable in production.",
+        "useCases": [
+          "Human approval gates",
+          "MCP tool governance",
+          "Ring-based promotion"
+        ]
+      }
+    ]
+  },
+  "codingAgents": {
+    "title": "Claude Code, Claude Cowork & ChatGPT for business teams",
+    "subtitle": "Latest coding agents and team copilots — mapped to engineering, ops, finance, and GTM workflows",
+    "description": "Anthropic’s Claude Code and Claude Cowork, plus OpenAI ChatGPT / Agents SDK models, are how business teams actually ship with AI today. We help you pick the right surface per team and run them with governance.",
+    "articleHref": "/articles/claude-code-cowork-chatgpt-business-teams",
+    "articleLabel": "Read the Claude Code / Cowork & ChatGPT teams guide",
+    "items": [
+      {
+        "title": "Claude Code",
+        "team": "Engineering & platform",
+        "icon": "fas fa-terminal",
+        "description": "Anthropic’s agentic coding product for repository-scale work: multi-file edits, tests, and long-running coding agents in the terminal or IDE — suited to platform, SRE, and product engineering squads.",
+        "capabilities": [
+          "Repo-aware coding agents",
+          "Tests and refactors at scale",
+          "Pairs with Claude models on Platform / Bedrock"
+        ]
+      },
+      {
+        "title": "Claude Cowork",
+        "team": "Ops, PMO & knowledge work",
+        "icon": "fas fa-briefcase",
+        "description": "Anthropic’s Claude Cowork product for desk-to-phone task workflows: connect data, schedule recurring work, and deliver decks, documents, or spreadsheets for human review — positioned for business teams beyond pure coding.",
+        "capabilities": [
+          "Scheduled recurring tasks",
+          "Decks, docs, spreadsheets",
+          "Cross-device task check-in"
+        ]
+      },
+      {
+        "title": "ChatGPT & OpenAI Agents",
+        "team": "GTM, support & builders",
+        "icon": "fas fa-comments",
+        "description": "ChatGPT Team / Enterprise surfaces plus OpenAI Agents SDK / Agents API for custom tool-using agents. Current model lineup includes GPT-5.6-class and GPT-6-class APIs for reasoning, realtime, and multimodal team workflows.",
+        "capabilities": [
+          "ChatGPT Team / Enterprise",
+          "Agents SDK & API",
+          "GPT-5.6 / GPT-6 class models"
+        ]
+      },
+      {
+        "title": "Team playbooks by function",
+        "team": "Cross-functional",
+        "icon": "fas fa-users",
+        "description": "We map agents to finance, legal, support, marketing, and DevOps with MCP OAuth, Vault leases, and approval gates — so copilots help without becoming shadow IT.",
+        "capabilities": [
+          "Role-based agent scopes",
+          "MCP OAuth & Vault patterns",
+          "Audit-friendly workflows"
+        ]
+      }
+    ]
+  },
+  "featured": {
+    "title": "แพลตฟอร์ม AI Vibe Coding",
+    "subtitle": "สร้างแอปเร็วขึ้น 10 เท่าด้วยการพัฒนาที่ขับเคลื่อนด้วย AI",
+    "prehead": "Featured Service",
+    "description": "เปลี่ยนเวิร์กโฟลว์การพัฒนาของคุณด้วย AI Vibe Coding — แนวทางปฏิวัติที่ให้คุณสร้างแอปพลิเคชันที่สมบูรณ์โดยใช้ภาษาธรรมชาติ ขับเคลื่อนด้วย Cursor IDE, GPT-4, Claude และ Gemini แพลตฟอร์มของเราช่วยให้ทั้งนักพัฒนาและผู้ที่ไม่ใช่นักพัฒนาสร้างแอปพลิเคชัน iOS, Android และเว็บที่พร้อมใช้งานจริงผ่าน AI เชิงสนทนา",
+    "image": "ai-software-engineering.jpg",
+    "video": "https://www.youtube.com/embed/8AWEPx5cHWQ",
+    "deployment": {
+      "title": "Development Approach Options",
+      "options": [
+        {
+          "name": "AI Vibe Coding",
+          "icon": "fas fa-magic",
+          "description": "สร้างแอปพลิเคชันที่สมบูรณ์โดยใช้พร้อมท์ภาษาธรรมชาติ อธิบายแอปของคุณเป็นภาษาไทยง่ายๆ และดู AI สร้างโค้ดที่พร้อมใช้งานจริงทันที",
+          "benefits": [
+            "No coding experience required",
+            "10x faster development",
+            "Natural language to code",
+            "Multi-language support",
+            "Real-time debugging"
+          ],
+          "ideal": "Startups, Indie developers, Non-technical founders"
+        },
+        {
+          "name": "การพัฒนาด้วยความช่วยเหลือจาก AI",
+          "icon": "fas fa-code",
+          "description": "เพิ่มทักษะการพัฒนาที่มีอยู่ของคุณด้วย AI pair programming รับ autocomplete อัจฉริยะ, code review และคำแนะนำ refactoring แบบเรียลไทม์",
+          "benefits": [
+            "Autocomplete อัจฉริยะ",
+            "AI code review",
+            "Refactoring อัตโนมัติ",
+            "Bug detection",
+            "การบังคับใช้ best practices"
+          ],
+          "ideal": "Professional developers, Development teams, Agencies"
+        },
+        {
+          "name": "การพัฒนาแอป AI แบบกำหนดเอง",
+          "icon": "fas fa-mobile-alt",
+          "description": "บริการพัฒนาแอป AI iOS และ Android แบบครบวงจร ผู้เชี่ยวชาญของเราสร้างแอปพลิเคชันมือถือแบบกำหนดเองพร้อมความสามารถ AI ที่ปรับแต่งตามความต้องการทางธุรกิจของคุณ",
+          "benefits": [
+            "แอป iOS และ Android เนทีฟ",
+            "การผสานรวม AI แบบกำหนดเอง",
+            "การส่ง App Store",
+            "Ongoing maintenance",
+            "Performance optimization"
+          ],
+          "ideal": "Enterprises, Healthcare, Finance, E-commerce"
+        }
+      ]
+    },
+    "aiAgents": {
+      "title": "เครื่องมือพัฒนา AI ที่เราใช้",
+      "description": "เราใช้ประโยชน์จากเครื่องมือ AI coding ที่ล้ำสมัยที่สุดเพื่อส่งมอบผลลัพธ์ที่ยอดเยี่ยม:",
+      "agents": [
+        {
+          "name": "Cursor IDE",
+          "icon": "fas fa-edit",
+          "capabilities": [
+            "การสร้างโค้ดที่ขับเคลื่อนด้วย AI",
+            "Natural language to code conversion",
+            "Autocomplete อัจฉริยะ",
+            "การแก้ไขหลายไฟล์ด้วย AI",
+            "ความเข้าใจ codebase และแชท"
+          ]
+        },
+        {
+          "name": "การผสานรวม GPT-4 และ Claude",
+          "icon": "fas fa-brain",
+          "capabilities": [
+            "Advanced code reasoning",
+            "Complex problem solving",
+            "Code review และการเพิ่มประสิทธิภาพ",
+            "Documentation generation",
+            "Bug fixing and debugging"
+          ]
+        },
+        {
+          "name": "การพัฒนา iOS (Swift/SwiftUI)",
+          "icon": "fab fa-apple",
+          "capabilities": [
+            "อินเทอร์เฟซ SwiftUI เนทีฟ",
+            "การผสานรวม Core ML",
+            "Vision framework สำหรับ image AI",
+            "การผสานรวม Siri และ Shortcuts",
+            "การเพิ่มประสิทธิภาพ App Store"
+          ]
+        },
+        {
+          "name": "การพัฒนา Android (Kotlin)",
+          "icon": "fab fa-android",
+          "capabilities": [
+            "Jetpack Compose UI",
+            "การผสานรวม TensorFlow Lite",
+            "ML Kit สำหรับ on-device AI",
+            "การผสานรวม Google Assistant",
+            "การเพิ่มประสิทธิภาพ Play Store"
+          ]
+        }
+      ]
+    },
+    "competitive": {
+      "title": "Why Choose AI Vibe Coding?",
+      "subtitle": "The Future of Software Development is Here",
+      "challenges": [
+        {
+          "problem": "Traditional Development Takes Months",
+          "solution": "AI Vibe Coding Delivers in Days",
+          "impact": "10x faster time-to-market, rapid prototyping, instant iterations"
+        },
+        {
+          "problem": "Hiring Developers is Expensive",
+          "solution": "Build Apps Without Coding Experience",
+          "impact": "80% cost reduction, no recruitment hassle, immediate start"
+        },
+        {
+          "problem": "Technical Debt Slows Progress",
+          "solution": "AI Generates Clean, Maintainable Code",
+          "impact": "Best practices by default, consistent code quality, easy maintenance"
+        },
+        {
+          "problem": "Mobile AI Integration is Complex",
+          "solution": "Pre-built AI Components & Templates",
+          "impact": "ChatGPT, Vision AI, Voice AI ready to integrate"
+        }
+      ]
+    },
+    "stats": [
+      {
+        "number": "10x",
+        "label": "Faster Development",
+        "icon": "fas fa-rocket"
+      },
+      {
+        "number": "500+",
+        "label": "แอปที่สร้างด้วย AI",
+        "icon": "fas fa-mobile-alt"
+      },
+      {
+        "number": "80%",
+        "label": "Cost Reduction",
+        "icon": "fas fa-dollar-sign"
+      },
+      {
+        "number": "99%",
+        "label": "Client Satisfaction",
+        "icon": "fas fa-star"
+      }
+    ],
+    "cta": {
+      "primary": "Start Building Today",
+      "secondary": "Book a Demo",
+      "tertiary": "ดูบทเรียน AI Coding",
+      "link": "/contact-us"
+    }
+  },
+  "sections": {
+    "hardware": {
+      "title": "ฮาร์ดแวร์",
+      "description": "เวิร์กสเตชัน AI และแพ็กเกจพร้อมใช้งาน — ประกอบ ติดตั้ง และกำหนดค่าให้เรียบร้อย เพื่อให้คุณรัน AI ส่วนตัวบนเครื่องที่คุณเป็นเจ้าของ",
+      "icon": "fas fa-server"
+    },
+    "software": {
+      "title": "ซอฟต์แวร์",
+      "description": "แพลตฟอร์ม แอปพลิเคชัน และบริการพัฒนา AI ที่ทำงานบนฮาร์ดแวร์ของคุณเอง เซิร์ฟเวอร์ของคุณ หรือบนคลาวด์",
+      "icon": "fas fa-code"
+    }
+  },
+  "content": [
+    {
+      "title": "Ring Promoter — Modern CI/CD for AI Deployments",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "ai-programming-code.jpg",
+      "link": "https://www.ringpromoter.com/",
+      "description": "The modern CI/CD control plane you cannot miss for AI-powered deployments: int → test → acc → prod rings, health-gated promotion, version-verified checks, and auto-rollback. Visit ringpromoter.com.",
+      "benefits": [
+        "Shared deployment rings",
+        "Health-gated promote",
+        "Version-verified health",
+        "Auto-rollback on failure",
+        "kubectl, GitHub Actions, k8sjob"
+      ],
+      "quality": "Production-grade history, locks, and audit trail per (app, ring)",
+      "support": "Product site ringpromoter.com · GitHub open source · TenthMatrix support",
+      "cta": "Open ringpromoter.com",
+      "external": "https://www.ringpromoter.com/"
+    },
+    {
+      "title": "AI SME Packages Catalog",
+      "category": "hardware",
+      "icon": "graph.svg",
+      "image": "ai-technology.jpg",
+      "link": "https://www.workstation.co.uk/ai-sme-packages",
+      "description": "Hardware + software combination packages for SMEs and enterprises. Generative AI workstations, Agentic AI platforms, and OpenClaw for Business — installed, configured, and tailored to your industry and workflows.",
+      "benefits": [
+        "Matched hardware + software",
+        "Installed and configured",
+        "Business-tailored GenAI",
+        "Agentic automation ready",
+        "OpenClaw สำหรับธุรกิจและองค์กร"
+      ],
+      "quality": "UK assembly options, documented runbooks, staff onboarding workshop",
+      "support": "UK & Brussels support, optional managed updates",
+      "cta": "Browse AI Packages"
+    },
+    {
+      "title": "AI Vibe Coding กับ Cursor",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "ai-software-engineering.jpg",
+      "link": "/contact-us",
+      "description": "เชี่ยวชาญศิลปะของ AI Vibe Coding กับ Cursor IDE สร้างแอปพลิเคชันที่สมบูรณ์โดยอธิบายสิ่งที่คุณต้องการเป็นภาษาไทยง่ายๆ การฝึกอบรมและการสนับสนุนของเราช่วยให้คุณใช้ประโยชน์จาก GPT-4, Claude และ Gemini เพื่อสร้างโค้ดที่พร้อมใช้งานจริงเร็วขึ้น 10 เท่า",
+      "benefits": [
+        "Natural language to code",
+        "การแก้ไขหลายไฟล์ด้วย AI",
+        "Intelligent debugging",
+        "Code review แบบเรียลไทม์",
+        "Best practices ในตัว"
+      ],
+      "quality": "Expert instructors, hands-on projects, lifetime access to updates",
+      "support": "การให้คำปรึกษาแบบ 1-ต่อ-1, การเข้าถึงชุมชน, office hours รายสัปดาห์",
+      "cta": "เริ่ม Vibe Coding"
+    },
+    {
+      "title": "การพัฒนาแอป iOS AI",
+      "category": "software",
+      "icon": "network.svg",
+      "image": "12.jpg",
+      "link": "/contact-us",
+      "description": "สร้างแอปพลิเคชัน iOS อัจฉริยะพร้อมความสามารถ AI ในตัว ตั้งแต่แชทบอทที่ขับเคลื่อนด้วย ChatGPT ไปจนถึงแอป computer vision เราช่วยคุณสร้างแอปพลิเคชัน Swift/SwiftUI เนทีฟที่ใช้ประโยชน์จากเทคโนโลยี AI ล่าสุด",
+      "benefits": [
+        "การพัฒนา SwiftUI เนทีฟ",
+        "การผสานรวม ChatGPT",
+        "Core ML และ Vision AI",
+        "การผสานรวม Siri shortcuts",
+        "การส่ง App Store"
+      ],
+      "quality": "แนวทางการออกแบบของ Apple, ประสิทธิภาพที่ปรับให้เหมาะสม, สอดคล้องกับการเข้าถึง",
+      "support": "ผู้เชี่ยวชาญ iOS, การเพิ่มประสิทธิภาพ App Store, การบำรุงรักษาต่อเนื่อง",
+      "cta": "สร้างแอป iOS"
+    },
+    {
+      "title": "การพัฒนาแอป Android AI",
+      "category": "software",
+      "icon": "profit.svg",
+      "image": "13.jpg",
+      "link": "/contact-us",
+      "description": "สร้างแอปพลิเคชัน Android ที่ทรงพลังพร้อมฟีเจอร์ AI ในตัว เราเชี่ยวชาญการพัฒนา Kotlin/Jetpack Compose พร้อม TensorFlow Lite, ML Kit และการผสานรวม cloud AI",
+      "benefits": [
+        "Jetpack Compose UI",
+        "TensorFlow Lite on-device AI",
+        "การผสานรวม ML Kit",
+        "Google Assistant actions",
+        "การเพิ่มประสิทธิภาพ Play Store"
+      ],
+      "quality": "Material Design 3, ปรับให้เหมาะกับแบตเตอรี่, รองรับ AI ออฟไลน์",
+      "support": "ผู้เชี่ยวชาญ Android, การเพิ่มประสิทธิภาพ Play Store, อัปเดตต่อเนื่อง",
+      "cta": "สร้างแอป Android"
+    },
+    {
+      "title": "แอป AI ข้ามแพลตฟอร์ม (Flutter/React Native)",
+      "category": "software",
+      "icon": "tactics.svg",
+      "image": "14.jpg",
+      "link": "/contact-us",
+      "description": "เปิดตัวบน iOS และ Android พร้อมกันด้วยแอปพลิเคชัน AI ข้ามแพลตฟอร์ม ด้วย Flutter หรือ React Native เราสร้างแอปที่สวยงามและมีประสิทธิภาพพร้อมความสามารถ AI ในตัว",
+      "benefits": [
+        "codebase เดียว สองแพลตฟอร์ม",
+        "Native performance",
+        "การผสานรวม AI SDK",
+        "การพัฒนาแบบ hot reload",
+        "Cost-effective solution"
+      ],
+      "quality": "look และ feel เนทีฟ, ประสิทธิภาพที่ปรับให้เหมาะสม, business logic ที่ใช้ร่วมกัน",
+      "support": "Cross-platform experts, unified maintenance, rapid iterations",
+      "cta": "Build Cross-Platform App"
+    },
+    {
+      "title": "การผสานรวม ChatGPT และ LLM",
+      "category": "software",
+      "icon": "target.svg",
+      "image": "15.jpg",
+      "link": "/contact-us",
+      "description": "เพิ่ม AI เชิงสนทนาให้กับแอปมือถือของคุณด้วย ChatGPT, Claude และการผสานรวม LLM แบบกำหนดเอง เราใช้งานแชทบอทอัจฉริยะ, AI assistants และ natural language interfaces",
+      "benefits": [
+        "การผสานรวม OpenAI GPT-4",
+        "รองรับ Claude และ Gemini",
+        "โมเดล fine-tuned แบบกำหนดเอง",
+        "Streaming responses",
+        "Context-aware conversations"
+      ],
+      "quality": "Low latency, cost optimized, privacy compliant",
+      "support": "ผู้เชี่ยวชาญ LLM, prompt engineering, การเพิ่มประสิทธิภาพ token",
+      "cta": "เพิ่ม AI Chat"
+    },
+    {
+      "title": "แอป Computer Vision",
+      "category": "software",
+      "icon": "rocket.svg",
+      "image": "16.jpg",
+      "link": "/contact-us",
+      "description": "สร้างแอปที่มองเห็นและเข้าใจโลก ตั้งแต่การตรวจจับวัตถุและการจำแนกรูปภาพไปจนถึง OCR และการจดจำใบหน้า เราสร้างแอปมือถือพร้อมความสามารถ computer vision ที่ทรงพลัง",
+      "benefits": [
+        "Real-time object detection",
+        "Image classification",
+        "OCR และการสแกนเอกสาร",
+        "Face detection & recognition",
+        "การผสานรวม AR"
+      ],
+      "quality": "On-device processing, privacy-first, high accuracy",
+      "support": "ผู้เชี่ยวชาญ Vision AI, การเพิ่มประสิทธิภาพโมเดล, การฝึกแบบกำหนดเอง",
+      "cta": "สร้างแอป Vision"
+    },
+    {
+      "title": "Voice AI & Speech Apps",
+      "category": "software",
+      "icon": "cloud.png",
+      "image": "17.jpg",
+      "link": "/contact-us",
+      "description": "Create voice-enabled applications with speech recognition, text-to-speech, and voice command interfaces. Build apps that listen, understand, and respond naturally using Whisper, ElevenLabs, and native speech APIs.",
+      "benefits": [
+        "Speech-to-text (Whisper)",
+        "Text-to-speech (ElevenLabs)",
+        "Voice commands",
+        "Multi-language support",
+        "Real-time transcription"
+      ],
+      "quality": "High accuracy, low latency, natural voice synthesis",
+      "support": "Voice AI specialists, custom voice models, optimization",
+      "cta": "สร้างแอป Voice"
+    },
+    {
+      "title": "AI-Powered Backend & APIs",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "18.jpg",
+      "link": "/contact-us",
+      "description": "Power your AI apps with scalable backend infrastructure. We build serverless APIs, vector databases, and AI processing pipelines that handle millions of requests while keeping costs low and performance high.",
+      "benefits": [
+        "Serverless architecture",
+        "Vector database (Pinecone)",
+        "API rate limiting",
+        "Cost optimization",
+        "Auto-scaling"
+      ],
+      "quality": "99.99% uptime, global CDN, enterprise security",
+      "support": "Backend experts, monitoring, 24/7 support",
+      "cta": "Build AI Backend"
+    },
+    {
+      "title": "RAG & Knowledge Base Apps",
+      "category": "software",
+      "icon": "network.svg",
+      "image": "19.jpg",
+      "link": "/contact-us",
+      "description": "Build intelligent apps that can search and reason over your documents, databases, and knowledge bases. We implement Retrieval-Augmented Generation (RAG) systems that provide accurate, contextual AI responses.",
+      "benefits": [
+        "Document Q&A",
+        "Semantic search",
+        "Knowledge base chat",
+        "Citation & sources",
+        "Custom embeddings"
+      ],
+      "quality": "High accuracy, hallucination reduction, source attribution",
+      "support": "RAG specialists, embedding optimization, knowledge curation",
+      "cta": "สร้างแอป RAG"
+    },
+    {
+      "title": "AI App Prototyping & MVP",
+      "category": "software",
+      "icon": "tactics.svg",
+      "image": "20.jpg",
+      "link": "/contact-us",
+      "description": "Launch your AI app idea in weeks, not months. Our rapid prototyping service uses AI Vibe Coding to build functional MVPs that validate your concept and attract investors—all at a fraction of traditional development cost.",
+      "benefits": [
+        "2-4 week delivery",
+        "Functional prototype",
+        "User testing ready",
+        "Investor-ready demos",
+        "Iteration support"
+      ],
+      "quality": "Production-ready code, scalable architecture, clean design",
+      "support": "Product strategy, user feedback integration, pivot support",
+      "cta": "สร้าง MVP"
+    },
+    {
+      "title": "AI Coding Training & Workshops",
+      "category": "software",
+      "icon": "profit.svg",
+      "image": "ai-technology.jpg",
+      "link": "/contact-us",
+      "description": "Upskill your team with AI-powered development techniques. Our workshops cover Cursor IDE, prompt engineering, AI pair programming, and building AI-integrated mobile apps. Transform your developers into 10x engineers.",
+      "benefits": [
+        "Hands-on training",
+        "Cursor IDE mastery",
+        "Prompt engineering",
+        "AI best practices",
+        "Certification included"
+      ],
+      "quality": "Expert instructors, real projects, ongoing support",
+      "support": "Corporate training, custom curriculum, team coaching",
+      "cta": "Book Training"
+    },
+    {
+      "title": "AI App Consulting & Strategy",
+      "category": "software",
+      "icon": "target.svg",
+      "image": "22.jpg",
+      "link": "/contact-us",
+      "description": "Get expert guidance on your AI app strategy. We help you identify opportunities, choose the right AI technologies, plan your roadmap, and avoid common pitfalls. Turn your AI vision into a successful product.",
+      "benefits": [
+        "Technology assessment",
+        "AI roadmap planning",
+        "Vendor selection",
+        "Cost estimation",
+        "Risk mitigation"
+      ],
+      "quality": "Industry experts, proven frameworks, actionable insights",
+      "support": "Strategic advisors, ongoing guidance, executive briefings",
+      "cta": "Book Consultation"
+    }
+  ],
+  "customerService": {
+    "title": "การสนับสนุนระดับโลกสำหรับนักพัฒนา AI",
+    "description": "ความมุ่งมั่นของเราต่อความสำเร็จของคุณรวมถึงการสนับสนุนที่ครอบคลุมตลอดการเดินทางการพัฒนา AI ของคุณ",
+    "features": [
+      {
+        "title": "24/7 Developer Support",
+        "description": "การสนับสนุนตลอดเวลาจากผู้เชี่ยวชาญการพัฒนา AI",
+        "icon": "support.svg"
+      },
+      {
+        "title": "Code Review และคำแนะนำ",
+        "description": "การตรวจสอบโดยผู้เชี่ยวชาญของโค้ดที่สร้างด้วย AI และ best practices",
+        "icon": "manager.svg"
+      },
+      {
+        "title": "การฝึกอบรมและ Workshops",
+        "description": "การฝึกอบรม AI coding ที่ครอบคลุมสำหรับบุคคลและทีม",
+        "icon": "training.svg"
+      },
+      {
+        "title": "การสนับสนุน App Store",
+        "description": "คำแนะนำในการส่ง iOS App Store และ Google Play",
+        "icon": "response.svg"
+      }
+    ]
+  },
+  "qualityAssurance": {
+    "title": "มาตรฐานการพัฒนา AI คุณภาพ",
+    "description": "ทุกแอป AI ที่เราสร้างตรงตามมาตรฐานคุณภาพสูงสุดสำหรับประสิทธิภาพ ความปลอดภัย และประสบการณ์ผู้ใช้",
+    "certifications": [
+      "สอดคล้องกับแนวทาง Apple App Store",
+      "สอดคล้องกับนโยบาย Google Play Store",
+      "สอดคล้องกับ GDPR และความเป็นส่วนตัว",
+      "มาตรฐานการเข้าถึง WCAG",
+      "Best Practices ด้านความปลอดภัย"
+    ],
+    "metrics": [
+      "99.9% App Uptime",
+      "คะแนน App Store 4.8+",
+      "เวลาตอบสนอง AI ต่ำกว่าวินาที",
+      "Zero Security Vulnerabilities",
+      "Continuous Performance Monitoring"
+    ]
+  },
+  "softwareProducts": {
+    "title": "Product catalog",
+    "subtitle": "Control planes, AI Labs, and applications your operators run every day",
+    "items": [
+      {
+        "title": "AI GPU hardware",
+        "description": "NVIDIA DGX Spark/Station, Mac Studio M5, and enterprise GPU boxes for AI Labs.",
+        "href": "https://www.workstation.co.uk/ai-workstations",
+        "icon": "fas fa-microchip"
+      },
+      {
+        "title": "Agentic frameworks",
+        "description": "LangChain/LangGraph, Airflow 3, and enterprise orchestration patterns.",
+        "href": "/products#agentic-frameworks",
+        "icon": "fas fa-project-diagram"
+      },
+      {
+        "title": "Claude & ChatGPT agents",
+        "description": "Claude Code, Claude Cowork, and ChatGPT for engineering and business teams.",
+        "href": "/products#coding-agents",
+        "icon": "fas fa-terminal"
+      },
+      {
+        "title": "WSL Proxy",
+        "description": "Live-config API gateway, CDN edge, and explainable WAF for AI and agent traffic.",
+        "href": "/wsl-proxy",
+        "icon": "fas fa-shield-alt"
+      },
+      {
+        "title": "Ring Promoter",
+        "description": "Health-gated promotion through int → test → acc → prod for AI-powered releases.",
+        "href": "/ring-promoter",
+        "icon": "fas fa-rocket"
+      },
+      {
+        "title": "AI Labs",
+        "description": "Productised lab shapes — workstations, clusters, private and edge AI — with TenthMatrix software in the middle.",
+        "href": "https://www.workstation.co.uk/ai-labs",
+        "icon": "fas fa-flask"
+      },
+      {
+        "title": "OpenAI Agents",
+        "description": "Agent software and orchestration patterns for business workflows and tool use.",
+        "href": "/openai-agents",
+        "icon": "fas fa-robot"
+      },
+      {
+        "title": "Claude Agents",
+        "description": "Claude Code, Cowork, subagents, and dynamic workflows for engineering and business teams.",
+        "href": "/claude-agents",
+        "icon": "fas fa-terminal"
+      },
+      {
+        "title": "Grok Bot",
+        "description": "xAI persistent AI teammates with cloud computer, skills, routines, and multi-bot coordination.",
+        "href": "/grok-bot",
+        "icon": "fas fa-robot"
+      },
+      {
+        "title": "TenthMatrix CRM (WSL CRM)",
+        "description": "TenthMatrix CRM — short name WSL CRM — with native AI agent integrations.",
+        "href": "/crm",
+        "icon": "fas fa-address-book"
+      },
+      {
+        "title": "การตลาด",
+        "description": "Marketing automation and campaign tooling aligned to TenthMatrix CRM.",
+        "href": "/marketing",
+        "icon": "fas fa-bullhorn"
+      }
+    ]
+  },
+  "partnerNote": {
+    "title": "Hardware with Boston Limited",
+    "description": "For AI Labs that need enterprise accelerated systems, we partner with Boston Limited — a trusted relationship spanning more than two decades.",
+    "href": "https://www.workstation.co.uk/partners/boston",
+    "label": "Partnership details"
+  }
+}

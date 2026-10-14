@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter — контроль качества перед производством",
+  "sub_title": "Не выполнять автоматическое повышение до prod: где контроль качества и человеческие ворота находятся в int → test → acc → prod, плюс автоматическое продвижение по сравнению с закрытыми переходами.",
+  "excerpt": "Контроль качества Ring Promoter: автоматически продвигайте ранние звонки, проверяйте людей перед выпуском и рассматривайте проверки работоспособности и версий как первоклассные контрольные точки качества.",
+  "meta_title": "Ring Promoter — контроль качества перед производством | TenthMatrix",
+  "meta_description": "Не продвигайте автоматически в продукт. Контроль качества Ring Promoter: автоматическое продвижение на ранних этапах, контроль вручную перед производством, проверка работоспособности и версии, откат.",
+  "meta_keywords": "Ring Promoter, контроль качества, контроль качества, автоматическое продвижение, производственный контроль, CI/CD, GitOps, Kubernetes, безопасное продвижение, TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>Watch: контроль качества перед производством</h2><p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>Видео<p style=\"font-size:0.9rem;color:#64748b;\">:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>· Продукт:<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p><p class=\"lead\"><em><strong>Ring Promoter</strong>перемещает расцепители через упорядоченные кольца<code>int → test → acc → prod</code>. Бизнес-вопрос не в том, «можем ли мы проводить автоматическое продвижение?» — это<strong>, где контроль качества и человеческие ворота принадлежат</strong>, особенно перед производством. Продукт:<a href=\"/ru/ring-promoter\">/кольцо-промотор</a>. Глубокое погружение: длинная техническая статья<a href=\"/ru/articles/ring-promoter-qa-gates-before-production\"></a>. Обзор сопутствующего устройства:<a href=\"/ru/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter современный CI/CD</a>.</em></p><p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Итог.</strong>Автоматически продвигать ранние звонки после прохождения проверок работоспособности и версии. Держите<strong>человеком/контролем качества на пути к продукту</strong>. Не продвигайте продукт сразу в производство — каждый релиз все равно должен привлекать клиентов.</div><h2>Что означают элементы контроля качества в Ring Promoter</h2><p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>«Ворота» — это все, что может остановить продвижение по службе:</p><ul><li><strong>Ворота здоровья</strong>— перед продвижением источник должен быть исправен; цель должна оставаться исправной после развертывания (или автоматического отката).</li><li><strong>Шлюзы версии</strong>— необязательно: конечная точка должна сообщить точную только что развернутую версию (критично для сайдкаров и агентов ИИ).</li><li><strong>Ворота для людей/QA</strong>— на этом кольце нет автоматического продвижения; владелец или специалист по контролю качества утверждает следующий переход (типично для<code>acc → prod</code>).</li></ul><h2>Автоматическое продвижение и закрытые переходы</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\">Режим<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th>Плюсы<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Минусы<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">/ когда следует избегать</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Автоматическое продвижение (ранние звонки)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Более быстрая обратная связь; CI остается зеленым, не дожидаясь щелчка; та же самая заблокированная операция продолжается дальше.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Усиливает плохие сборки, если здоровье слабое. Никогда не включайте продукт вслепую.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Контроль качества / контроль качества (особенно перед выпуском)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Подписание сделки, окна изменений, соответствие требованиям, последний взгляд на приемку.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Добавляет задержку; нуждается в четком владельце, чтобы выпуски не останавливались.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Health + версии (всегда)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Останавливает сообщение «зеленый, но неправильная версия»; пары с автооткатом.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Требуются честные конечные точки работоспособности, предоставляющие версию.</td></tr></tbody></table><h2>Когда использовать ворота</h2><ul><li><strong>Переход в продукт</strong>для приложений для клиентов, регулируемых изменений или общих платформ, от которых зависят многие команды.</li><li><strong>Автоматическое повышение уровня int→test→acc</strong>, когда оценки, дым и работоспособность, проверенная версией, сильны.</li><li><strong>Усиление шлюзов</strong>для стеков искусственного интеллекта (моделей, агентов, шлюзов), где устаревший двоичный файл все еще может отвечать на<code>200 OK</code>.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">Мы рекомендуем политику<strong>.</strong>Автоматическое продвижение на<code>int</code>/<code>test</code>, когда он исправен; оставьте<code>acc</code>закрытым для человека до<code>prod</code>. Проверка работоспособности и версии на каждом переходе. Неудачные проверки откатываются — никакого молчаливого «частичного продвижения».</div><h2>Куда двигаться дальше</h2><ol><li>Посмотрите видео выше —<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>.</li><li>Прочтите техническую статью<a href=\"/ru/articles/ring-promoter-qa-gates-before-production\"></a>(конфигурация, API, откат, последствия для команды искусственного интеллекта).</li><li>Откройте<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>или страницу продукта TenthMatrix<a href=\"/ru/ring-promoter\"></a>.</li><li>Star<a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a>.</li></ol><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Хэштеги.</strong>#RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation</div><p>Опубликовано<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p><p style=\"margin-top:1.5rem;\"><strong>Сайт продукта:</strong><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

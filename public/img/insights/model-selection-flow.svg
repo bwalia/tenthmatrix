@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="model-selection-flow.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">SELECTION FLOW</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="34">How to choose the right model type</text>
+  <rect x="460" y="150" width="280" height="70" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="476" y="178" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Start: workload</text>
+  <rect x="460" y="260" width="280" height="70" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="476" y="288" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Needs generation?</text>
+  <rect x="120" y="390" width="260" height="90" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="136" y="418" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">No �→ decision model</text>
+<text x="136" y="442" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">classify / route / gate</text>
+  <rect x="700" y="390" width="360" height="90" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="716" y="418" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Yes �→ need deep reasoning?</text>
+  <rect x="620" y="520" width="220" height="80" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="636" y="548" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Yes �→ reasoning LLM</text>
+  <rect x="900" y="520" width="220" height="80" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="916" y="548" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">No �→ fast LLM</text>
+  <path d="M600,220 L600,260" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M500,330 L250,390" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M700,330 L860,390" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M820,480 L730,520" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M920,480 L1000,520" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+
+</svg>

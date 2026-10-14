@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "Uncovering LLM Bottlenecks: Observability, OTEL & Cost Control",
+  "sub_title": "Business brief: OpenTelemetry, Prometheus/Grafana, Langfuse — pros, cons, costs, and usage metrics that cut agent spend",
+  "excerpt": "TenthMatrix on uncovering LLM agent bottlenecks with observability: OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse — with clear pros/cons, cost levers, and usage metrics that protect margins.",
+  "meta_title": "Uncovering LLM Bottlenecks: OTEL, Observability & Cost | TenthMatrix",
+  "meta_description": "Find LLM agent bottlenecks with OpenTelemetry, Prometheus/Grafana, and Langfuse. Pros, cons, costs, and usage metrics for FinOps-ready AI.",
+  "meta_keywords": "LLM bottlenecks, OpenTelemetry, OTEL, observability, Langfuse, Prometheus, Grafana, Thanos, FinOps, AI agents, TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>TenthMatrix</strong> business brief: uncover LLM and agent bottlenecks with observability — OpenTelemetry, Prometheus/Grafana/Thanos, and LLM platforms such as Langfuse — so you can cut cost, tighten SLOs, and ship agents with evidence. Deep dive: <a href=\"/en/articles/llm-bottlenecks-observability-otel-cost-control\">long technical article (OTEL, FinOps, agent budgets)</a>. Related: <a href=\"/en/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocharging LLMs</a> · <a href=\"/en/enterprise-ai\">Enterprise AI Lab</a>.</em></p>\n\n<p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Most “slow AI” tickets are not mysterious model failures — they are missing attribution. Instrument agent runs with OpenTelemetry, score outputs, tag every call with tenant / model / route / tokens / cost, and enforce budgets. Teams that do this typically find 20–50% waste in retries, oversized models, and uncached prompts within the first measurement cycle.\n</div>\n\n<h2>Why bottlenecks hide without telemetry</h2>\n<p>LLM agents chain prompts, tools, RAG retrieval, and retries. Latency and spend compound across hops. Without spans and metrics you cannot tell whether the bottleneck is the model, the vector store, a flaky tool, or an unbounded self-debug loop. Business stakeholders then over-buy GPUs or API quotas while product quality stays flat.</p>\n<p>TenthMatrix’s stance for AI estates: treat agent pipelines like any other production service — <strong>observability first</strong>, then optimise serving (see <a href=\"/en/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>), then promote with discipline (<a href=\"/en/ring-promoter\">Ring Promoter</a>).</p>\n\n<h2>The observability stack that pays for itself</h2>\n<p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>OpenTelemetry (OTEL)</strong> — one instrumentation layer for traces, metrics, and (where useful) logs. Export to a collector; fan out to backends.</li>\n  <li><strong>Prometheus + Grafana (+ Thanos)</strong> — golden signals: request rate, error rate, latency, token throughput, estimated $/request, GPU utilisation. Thanos (or equivalent) keeps long-term metrics for FinOps reviews.</li>\n  <li><strong>LLM observability platforms</strong> (e.g. <a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>, <a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — session/trace UI, prompt versions, human &amp; automated scores, datasets for regression.</li>\n</ul>\n\n<h2>Pros and cons of this approach</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1c2c;color:#7dd3fc;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Dimension</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Pros</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Cons / trade-offs</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Cost control</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Attribute spend to tenant, feature, model, and agent step; kill wasteful retries.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Engineering time to instrument; storage cost for traces if retention is naive.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Quality</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Scores + datasets catch prompt regressions before customers do.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Automated scoring can be noisy; humans still needed for critical paths.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Ops</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Same OTEL/Prometheus skill set as your other microservices.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM-specific UIs (Langfuse etc.) add another product to run or buy.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Compliance</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Audit who called which model with which prompt version.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Prompt/PII retention policies must be designed up front.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speed to value</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">First dashboards in days if you already run Grafana.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Full cost attribution across multi-agent graphs takes longer.</td>\n</tr>\n</tbody>\n</table>\n\n<h2>Costs: what you spend vs what you save</h2>\n<p><strong>Instrumentation cost (typical mid-size agent platform):</strong></p>\n<ul>\n  <li>1–2 engineer-weeks to adopt OTEL span conventions + exporter wiring.</li>\n  <li>Collector + metrics retention: often &lt;5–10% of monthly LLM API/GPU spend once sampling is tuned.</li>\n  <li>Optional SaaS LLM observability: priced per event/trace — budget it as a % of model spend, not as an afterthought.</li>\n</ul>\n<p><strong>Savings levers (usage metrics that move the needle):</strong></p>\n<ul>\n  <li><strong>Tokens per successful task</strong> — not tokens per raw call. Cap tool loops and self-debug rounds.</li>\n  <li><strong>Cost per successful task</strong> — route cheap models for classify/route; reserve frontier models for hard steps.</li>\n  <li><strong>Cache hit rate</strong> — prompt/prefix caching where safe; measure correctness, not only latency.</li>\n  <li><strong>Retry rate &amp; dead-letter rate</strong> — flaky tools masquerade as “model quality” issues.</li>\n  <li><strong>p95 TTFT and end-to-end latency</strong> — protect UX while you cut spend.</li>\n</ul>\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Rule of thumb.</strong> If you cannot answer “what did this agent cost last week by customer and by step?” you are not ready to scale usage — you are ready to surprise Finance.\n</div>\n\n<h2>Scoring: manual vs automatic</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1c2c;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Method</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">When to use</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Business note</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Manual scoring</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Gold sets, regulated answers, brand-sensitive copy.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Expensive but grounds automated judges.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Automatic scoring</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">High-volume regression, LLM-as-judge, rubric checks.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Cheap at scale; calibrate against humans monthly.</td>\n</tr>\n</tbody>\n</table>\n\n<h2>Migration playbook (start small)</h2>\n<ol>\n  <li>Instrument <strong>one</strong> production agent path end-to-end with OTEL + token/cost attributes.</li>\n  <li>Ship a Grafana board for rate / errors / latency / $/success.</li>\n  <li>Add Langfuse (or equivalent) for prompt versions and scores on that path.</li>\n  <li>Enforce hard caps: max tokens, max tool calls, max retries per session.</li>\n  <li>Expand to the next agent only after the first path shows a measured cost or latency win.</li>\n</ol>\n\n<h2>Watch: why observability matters for AI systems</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Context talk on observability culture — not a TenthMatrix product demo. Pair with <a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry docs</a> and the <a href=\"/en/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix technical article</a>.</p>\n\n<h2>Read next</h2>\n<ol>\n  <li><a href=\"/en/articles/llm-bottlenecks-observability-otel-cost-control\">Long article</a> — OTEL span schema, collectors, cost formulas, agent caps, Langfuse/LMNR notes.</li>\n  <li><a href=\"/en/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocharging LLMs</a> — serving-side bottlenecks after you can see them.</li>\n  <li><a href=\"/en/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Local agents</a> · <a href=\"/en/enterprise-ai\">Enterprise AI Lab</a> · <a href=\"/en/contact-us\">Contact TenthMatrix</a></li>\n</ol>\n\n<p>Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>. References: <a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a> · <a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a> · <a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

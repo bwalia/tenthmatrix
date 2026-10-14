@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-kubepilot-001",
+  "internal_id": 962,
+  "slug": "kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "title": "KubePilot: CoPilot, Pilot y AutoPilot para incidentes Kubernetes más rápidos",
+  "sub_title": "Cabina de código abierto del equipo TenthMatrix: diagnóstico de IA, navegación SRE y correcciones basadas en políticas en kubepilot.org",
+  "excerpt": "KubePilot ayuda a SRE, DevOps y a los equipos de plataforma a pasar de señales de clúster ruidosas a una solución segura: CoPilot, Pilot y AutoPilot. Código abierto en kubepilot.org.",
+  "meta_title": "KubePilot: copiloto, piloto y piloto automático de IA para Kubernetes | TenthMatrix",
+  "meta_description": "Cabina Kubernetes de código abierto de TenthMatrix: CoPilot AI RCA, navegador Pilot SRE, correcciones controladas por políticas de AutoPilot. kubepilot.org · github.com/bwalia/kubepilot",
+  "meta_keywords": "KubePilot, Kubernetes, SRE, DevOps, Ingeniería de plataforma, AIOps, AutoPilot, CoPilot, Ollama, MCP, código abierto, TenthMatrix, kubepilot.org",
+  "cover_image": "/img/kubepilot-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubepilot-cover.svg",
+      "id": 962,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "KubePilot CoPilot Pilot AutoPilot for Kubernetes"
+    },
+    {
+      "url": "/img/kubepilot-three-modes.svg",
+      "id": 963,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "KubePilot three-mode incident loop"
+    },
+    {
+      "url": "/img/kubepilot-dashboard-overview.svg",
+      "id": 964,
+      "is_cover": false,
+      "width": 1200,
+      "height": 675,
+      "alt": "KubePilot Pilot dashboard overview"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>KubePilot</strong>es la cabina Kubernetes de código abierto del equipo de ingeniería de TenthMatrix: tres modos que llevan a SRE, DevOps y los equipos de plataforma de señales de clúster ruidosas a una solución segura. Inicio del producto:<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>. Instalación profunda, modelo de seguridad y mapa de funciones en el artículo extenso de<a href=\"/es/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\"></a>.</em></p><p><img src=\"/img/kubepilot-cover.svg\" alt=\"KubePilot — CoPilot, Pilot, AutoPilot for Kubernetes\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #326ce5;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Conclusión.</strong>Deje de hacer malabares con las pestañas de kubectl, las ventanas de Lens y los chatbots en mitad del incidente.<strong>CoPilot</strong>diagnostica en inglés sencillo (LLM local a través de Ollama),<strong>Pilot</strong>verifica como un navegador SRE y<strong>AutoPilot</strong>corrige solo después de un funcionamiento en seco, pisos de confianza, tiempos de reutilización y un interruptor de apagado. Código abierto: estrella<a href=\"https://github.com/bwalia/kubepilot\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/kubepilot</a>.</div>Reloj<h2>: Solución de problemas de Kubernetes con AI</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/CsiJWpfncqA\" title=\"KubePilot — Troubleshooting Kubernetes using AI — Balinder Walia\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Charla completa en YouTube:<a href=\"https://youtu.be/CsiJWpfncqA\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/CsiJWpfncqA</a>· sitio:<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a></p><h2>Tres modos. Un bucle de incidentes más rápido.</h2><p><img src=\"/img/kubepilot-three-modes.svg\" alt=\"KubePilot CoPilot Pilot AutoPilot incident loop\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>CoPilot (AI):</strong>pregunta qué está roto; Análisis AI con un solo clic; RCA con evidencia y confianza; CrashLoop / OOM / ImagePull / anomalías de presión de nodo; Copie el mensaje para su modelo preferido.</li><li><strong>Pilot (SRE): exploración de solo lectura estilo lente</strong>: cargas de trabajo, registros, YAML, topología (Ingress → Pod), indicadores CPU/mem/disco, IP de nodo LAN/WAN/túnel, reenvío de puertos, conmutador kubeconfig de múltiples clústeres.</li><li><strong>AutoPilot (reparador):</strong>apagado/funcionamiento en seco/activo; listas de bloqueo de espacios de nombres; listas de acciones permitidas; límites horarios; libro de decisiones; escalada de código CR; pausar el interruptor de apagado.</li></ul><p><img src=\"/img/kubepilot-dashboard-overview.svg\" alt=\"KubePilot Pilot dashboard overview\" width=\"1200\" height=\"675\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;border:1px solid #e2e8f0;\" /></p><h2>Por qué TenthMatrix lo construyó</h2>Los equipos<p>Platform y SRE no fallan por falta de paneles: fallan por el cambio de contexto<em>a</em>bajo presión. KubePilot colapsa el diagnóstico → la verificación → la corrección en una cabina de código abierto, con los valores predeterminados de LLM local, por lo que la telemetría del clúster no necesita salir de su red. Incluye una interfaz de usuario web, un servidor/CLI Go, un servidor MCP para agentes y un complemento iOS nativo.</p><h2>Arriba en minutos</h2><pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">\ngit clone https://github.com/bwalia/kubepilot.git\ncd kubepilot\nmake dashboard-install &amp;&amp; make dashboard &amp;&amp; make build\nKUBEPILOT_KUBECONFIG=\"$HOME/.kube/config\" ./dist/kubepilot serve --dashboard-port=8383\n# Dashboard: http://localhost:8383  ·  MCP: :9090\n</pre><p>También: Helm (<code>charts/kubepilot</code>/<code>helm repo add kubepilot https://bwalia.github.io/kubepilot</code>), Docker (<code>ghcr.io/kubepilot/kubepilot</code>) e iOS bajo<code>ios/</code>. Detalles sobre<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>.</p><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">Hashtags<strong>.</strong>#Kubernetes #SRE #DevOps #Ingeniería de plataformas #AIOps #OpenSource #KubePilot</div><h2>Leer la versión larga</h2><p>Rutas de instalación, barandillas de seguridad de AutoPilot, runbooks, MCP, iOS y una lista de verificación de producción:<a href=\"/es/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">Artículo técnico de KubePilot</a>. Construido por<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "aiops",
+      "id": 213
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    }
+  ],
+  "created_at": "2026-08-12T12:00:00Z",
+  "updated_at": "2026-08-12T12:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

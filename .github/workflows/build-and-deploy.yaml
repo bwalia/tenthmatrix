@@ -1,0 +1,334 @@
+name: "Build and Deploy TenthMatrix Website"
+
+# Adapted from Workstation's build-and-deploy.yaml:
+#   - no S3 static export (prod runs on k3s like every other env)
+#   - no shop jobs
+#   - image tm-frontend, chart devops/helm-charts/tm-chart, releases tm-<env>
+# Flow: compute-version → build (npm verify + docker) → dns → wslproxy →
+#       deploy-int (auto on push) → test / acc / prod (manual dispatch).
+# Nothing here runs until the repo is pushed and the secrets below exist.
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      TARGET_ENV:
+        type: choice
+        description: "Target environment"
+        default: "test"
+        required: true
+        options: [int, test, acc, prod]
+      DEPLOYMENT_TYPE:
+        type: choice
+        description: "Build only, deploy only, or both"
+        default: "build-and-deploy"
+        required: true
+        options: [build, deploy, build-and-deploy]
+      IMAGE_TAG:
+        type: string
+        description: "Image tag to deploy (leave empty to build new)"
+        required: false
+
+env:
+  IMAGE_NAME: tm-frontend
+  IMAGE_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tm-build-and-deploy-main
+  cancel-in-progress: false
+
+jobs:
+  # ── Compute next release version (claims nothing; auto-tag pushes it) ──
+  compute-version:
+    name: "🔢 Compute Release Version"
+    runs-on: [self-hosted, Linux, int]
+    outputs:
+      next_version: ${{ steps.calc.outputs.next_version }}
+      should_tag: ${{ steps.calc.outputs.should_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Calculate next version
+        id: calc
+        run: |
+          set -euo pipefail
+          LATEST_TAG=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -1)
+          if [ "${{ github.event_name }}" = "push" ]; then
+            if [ -z "$LATEST_TAG" ]; then
+              NEXT_VERSION="v0.1.0"
+            else
+              IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST_TAG#v}"
+              NEXT_VERSION="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+            fi
+            if git tag -l "$NEXT_VERSION" | grep -q "^$NEXT_VERSION$"; then
+              echo "::warning::Tag $NEXT_VERSION already exists — no tag will be created."
+              SHOULD_TAG=false
+            else
+              SHOULD_TAG=true
+            fi
+          else
+            NEXT_VERSION="${LATEST_TAG:-v0.0.0}"
+            SHOULD_TAG=false
+          fi
+          echo "next_version=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "should_tag=$SHOULD_TAG" >> "$GITHUB_OUTPUT"
+
+  # ── Build ──────────────────────────────────────────────────────────────
+  build:
+    name: "🏗️ Verify, Build & Push Docker Image"
+    runs-on: [self-hosted, Linux, int]
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.event.inputs.DEPLOYMENT_TYPE != 'deploy')
+    outputs:
+      image_tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate image tag
+        id: tag
+        run: echo "tag=$(echo ${{ github.sha }} | cut -c1-7)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # Same gates as prebuild (blog assets, SVG XML, OpsAPI host map, theme
+      # copy, i18n) so a bad commit fails before the slow docker build.
+      - name: Verify
+        run: npm run verify
+
+      - name: Build and push Docker image
+        run: |
+          set -euo pipefail
+          IMAGE_TAG="${{ steps.tag.outputs.tag }}"
+          IMAGE="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
+          echo "${{ secrets.DOCKER_PASSWD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker build -f Dockerfile.prod -t "${IMAGE}:${IMAGE_TAG}" . --no-cache
+          docker tag "${IMAGE}:${IMAGE_TAG}" "${IMAGE}:latest"
+          docker push "${IMAGE}:${IMAGE_TAG}"
+          docker push "${IMAGE}:latest"
+
+  # ── Cloudflare DNS: CNAME every env host → the wslproxy edge ──────────
+  # Grey cloud (proxied=false): the edge terminates TLS. Hostnames are read
+  # from the Helm values so DNS cannot drift from the Ingress. Gated on the
+  # DNS_WSLPROXY_ENABLED repo variable.
+  dns:
+    name: "🌐 Cloudflare DNS (tenthmatrix.com)"
+    runs-on: [self-hosted, Linux, int]
+    needs: [compute-version]
+    if: >-
+      vars.DNS_WSLPROXY_ENABLED == 'true' &&
+      (github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.DEPLOYMENT_TYPE != 'build'))
+    env:
+      DNS_TARGET: lon1.pop0.uk
+      DNS_PROXIED: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ensure CNAMEs for all env hosts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.TM_CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ZONE_ID: ${{ secrets.TM_CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_ZONE: tenthmatrix.com
+        run: |
+          set -euo pipefail
+          chmod +x deploy/scripts/cloudflare-dns.sh
+          for ENV in int test acc prod; do
+            VALUES="devops/helm-charts/tm-chart/values-${ENV}.yaml"
+            HOSTS=$(grep -E '^[[:space:]]*-[[:space:]]*host:' "$VALUES" | sed 's/.*host:[[:space:]]*//')
+            for HOST in $HOSTS; do
+              echo "Ensuring ${HOST} -> ${DNS_TARGET} (proxied=${DNS_PROXIED})"
+              ./deploy/scripts/cloudflare-dns.sh --name "$HOST" --content "$DNS_TARGET" --proxied "$DNS_PROXIED"
+            done
+          done
+
+  # ── Register the vhosts with the wslproxy control plane ────────────────
+  wslproxy:
+    name: "🧭 Register wslproxy domains"
+    needs: [dns]
+    if: >-
+      vars.DNS_WSLPROXY_ENABLED == 'true' &&
+      (github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.DEPLOYMENT_TYPE != 'build'))
+    uses: ./.github/workflows/wslproxy-register-domains.yml
+    with:
+      TARGET_ENV: prod
+      ACTIVATE_CONFIG: true
+      runner_labels: '["self-hosted","macOS","ARM64"]'
+    secrets: inherit
+
+  # ── Resolve image tag (deploy-only dispatch reuses one) ───────────────
+  resolve-tag:
+    name: "🏷️ Resolve Image Tag"
+    runs-on: [self-hosted, Linux, int]
+    needs: [build]
+    if: >-
+      always() &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped')
+    outputs:
+      image_tag: ${{ steps.resolve.outputs.tag }}
+    steps:
+      - name: Resolve tag
+        id: resolve
+        run: |
+          if [ "${{ needs.build.result }}" = "success" ] && [ -n "${{ needs.build.outputs.image_tag }}" ]; then
+            echo "tag=${{ needs.build.outputs.image_tag }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ github.event.inputs.IMAGE_TAG }}" ]; then
+            echo "tag=${{ github.event.inputs.IMAGE_TAG }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=latest" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── Stage 1: INT (auto on push) ───────────────────────────────────────
+  deploy-int:
+    name: "🧪 INT → K3S"
+    needs: [resolve-tag, wslproxy]
+    if: >-
+      always() &&
+      needs.resolve-tag.result == 'success' &&
+      (needs.wslproxy.result == 'success' || needs.wslproxy.result == 'skipped') &&
+      (github.event_name == 'push' ||
+       (github.event_name == 'workflow_dispatch' &&
+        github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+        github.event.inputs.TARGET_ENV == 'int'))
+    uses: ./.github/workflows/deploy-k3s.yaml
+    with:
+      environment: int
+      namespace: int
+      release_name: tm-int
+      values_file: values-int.yaml
+      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
+      smoke_test_port: "8180"
+      runner_labels: '["self-hosted","Linux","int"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ── Stage 2: TEST (manual) ────────────────────────────────────────────
+  deploy-test:
+    name: "🔍 TEST → K3S"
+    needs: [resolve-tag]
+    if: >-
+      always() &&
+      needs.resolve-tag.result == 'success' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+      github.event.inputs.TARGET_ENV == 'test'
+    uses: ./.github/workflows/deploy-k3s.yaml
+    with:
+      environment: test
+      namespace: test
+      release_name: tm-test
+      values_file: values-test.yaml
+      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
+      smoke_test_port: "8181"
+      runner_labels: '["self-hosted","Linux","test"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ── Stage 3: ACC (manual, client sign-off gate) ───────────────────────
+  deploy-acc:
+    name: "✅ ACC → K3S"
+    needs: [resolve-tag]
+    if: >-
+      always() &&
+      needs.resolve-tag.result == 'success' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+      github.event.inputs.TARGET_ENV == 'acc'
+    uses: ./.github/workflows/deploy-k3s.yaml
+    with:
+      environment: acc
+      namespace: acc
+      release_name: tm-acc
+      values_file: values-acc.yaml
+      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
+      smoke_test_port: "8182"
+      runner_labels: '["self-hosted","Linux","int"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ── Stage 4: PROD (manual; protect the `prod` GitHub environment) ─────
+  deploy-prod:
+    name: "🚀 PROD → K3S"
+    needs: [resolve-tag]
+    if: >-
+      always() &&
+      needs.resolve-tag.result == 'success' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+      github.event.inputs.TARGET_ENV == 'prod'
+    uses: ./.github/workflows/deploy-k3s.yaml
+    with:
+      environment: prod
+      namespace: prod
+      release_name: tm-prod
+      values_file: values-prod.yaml
+      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
+      smoke_test_port: "8183"
+      runner_labels: '["self-hosted","Linux","int"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
+  # ── Cut the release tag LAST (only after the image is pushed) ─────────
+  auto-tag:
+    name: "🏷️ Cut Release Tag"
+    needs: [compute-version, build]
+    if: needs.compute-version.outputs.should_tag == 'true'
+    runs-on: [self-hosted, Linux, int]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create and push tag
+        id: create_tag
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          NEXT_VERSION="${{ needs.compute-version.outputs.next_version }}"
+          if git ls-remote --exit-code --tags origin "refs/tags/$NEXT_VERSION" >/dev/null 2>&1; then
+            echo "tag_created=false" >> "$GITHUB_OUTPUT"
+          else
+            git tag -a "$NEXT_VERSION" -m "Release $NEXT_VERSION"
+            git push origin "$NEXT_VERSION"
+            echo "tag_created=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Create GitHub Release
+        if: steps.create_tag.outputs.tag_created == 'true'
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.compute-version.outputs.next_version }}
+          name: Release ${{ needs.compute-version.outputs.next_version }}
+          generate_release_notes: true

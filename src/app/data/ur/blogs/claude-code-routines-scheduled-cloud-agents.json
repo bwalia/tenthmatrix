@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: شیڈول شدہ کلاؤڈ ایجنٹس، ذیلی روٹینز اور باہمی روٹینز",
+  "sub_title": "Claude Code کو شیڈول کے مطابق، API کال سے یا GitHub ایونٹس پر چلائیں، بغیر لیپ ٹاپ اور بغیر سرور کے۔ پانچ منٹ کی رہنمائی۔",
+  "excerpt": "Claude Code Routines محفوظ شدہ ایجنٹ ٹاسکس کو Anthropic کے کلاؤڈ پر شیڈول کے مطابق، API کے ذریعے یا GitHub ایونٹس پر چلاتی ہیں۔ یہ کیسے کام کرتی ہیں، انہیں کیسے سیٹ اپ کریں اور کیسے باہم جوڑیں۔",
+  "meta_title": "Claude Code Routines کی وضاحت: شیڈول شدہ کلاؤڈ ایجنٹس | TenthMatrix",
+  "meta_description": "Claude Code Routines کی وضاحت: شیڈول، API اور GitHub ٹرگرز، سیٹ اپ، پرامپٹ ڈیزائن، ذیلی ایجنٹس کے ساتھ ذیلی روٹینز، باہمی روٹین پائپ لائنز، سیکیورٹی اور پلان کی حدود۔",
+  "meta_keywords": "Claude Code Routines, شیڈول شدہ AI ایجنٹس, Claude Code شیڈول, /schedule, کلاؤڈ ایجنٹس, GitHub ٹرگر, API ٹرگر, ذیلی ایجنٹس, ذیلی روٹینز, باہمی روٹینز, Anthropic, AI آٹومیشن, DevOps آٹومیشن",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>اب Claude Code کو آپ کے کی بورڈ پر بیٹھے رہنے کی ضرورت نہیں۔ <strong>Routines</strong> (روٹینز) محفوظ کیے گئے ایجنٹ ٹاسکس کو Anthropic کے کلاؤڈ پر شیڈول کے مطابق، کسی API کال کے ذریعے یا GitHub پر کوئی واقعہ پیش آنے پر چلاتی ہیں۔ یہاں ہم بتاتے ہیں کہ یہ کیا ہیں، انہیں کیسے سیٹ اپ کیا جائے، اور وہ دو پیٹرن جنہیں ہم ذیلی روٹینز (sub-routines) اور باہمی روٹینز (co-routines) کہتے ہیں۔ مکمل رہنمائی کے لیے یہ <a href=\"/ur/articles/claude-code-routines-scheduled-cloud-agents\">تفصیلی مضمون</a> پڑھیں۔</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: شیڈول شدہ کلاؤڈ ایجنٹس، ذیلی روٹینز اور باہمی روٹینز\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>خلاصہ۔</strong> روٹین Claude Code کا ایک ایسا ٹاسک ہے جسے آپ ایک بار ترتیب دیتے ہیں (پرامپٹ، ریپوزٹریز، کلاؤڈ ماحول، کنیکٹرز) اور پھر وہ خودکار طور پر ٹرگر ہوتا ہے۔ یہ کلاؤڈ میں ایک مکمل خودمختار سیشن کے طور پر چلتا ہے، اس لیے آپ کا لیپ ٹاپ بند رہ سکتا ہے۔ Routines اس وقت ریسرچ پری ویو میں ہیں (14 اپریل 2026 سے) اور Pro، Max، Team اور Enterprise پلانز پر دستیاب ہیں۔\n</div>\n\n<h2>روٹین شروع کرنے کے تین طریقے</h2>\n<ul>\n  <li><strong>شیڈول:</strong> ہر گھنٹے، روزانہ، ہفتے کے کاروباری دنوں میں، ہفتہ وار یا کسی ایک مخصوص وقت پر، جو آپ اپنے مقامی ٹائم زون میں درج کرتے ہیں۔ حسبِ ضرورت cron <code>/schedule update</code> کے ذریعے دستیاب ہے، جس کا کم از کم وقفہ ایک گھنٹہ ہے۔</li>\n  <li><strong>API:</strong> ہر روٹین کا اپنا HTTPS اینڈ پوائنٹ اور اپنا bearer ٹوکن ہوتا ہے۔ آپ کا الرٹنگ ٹول یا ڈیپلائمنٹ پائپ لائن اس پر POST بھیجتی ہے، اور چاہے تو ساتھ سیاق و سباق کا متن بھی۔ یہ متن غیر معتبر (untrusted) کے لیبل کے ساتھ پہنچتا ہے، اس لیے لیک شدہ ٹوکن روٹین کی ہدایات کو دوبارہ نہیں لکھ سکتا۔</li>\n  <li><strong>GitHub:</strong> پُل ریکویسٹ یا ریلیز کے واقعات، جنہیں برانچ، لیبل، مصنف، ڈرافٹ یا مرج شدہ حالت کے لحاظ سے فلٹر کیا جا سکتا ہے۔</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"روٹین رن کی ساخت: ٹرگرز، محفوظ شدہ روٹین، کلاؤڈ سیشن اور نتائج\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>دو منٹ میں سیٹ اپ کریں</h2>\n<ol>\n  <li><code>claude.ai/code/routines</code> کھولیں اور <strong>New routine</strong> منتخب کریں، یا Claude Code CLI میں <code>/schedule</code> ٹائپ کریں۔</li>\n  <li>ایک خود مکتفی پرامپٹ لکھیں: دائرہ کار، اجازت یافتہ اقدامات، آؤٹ پُٹ کی منزل، اور یہ کہ جب کرنے کو کچھ نہ ہو تو کیا کیا جائے۔</li>\n  <li>ریپوزٹریز اور ماحول منتخب کریں۔ جن کنیکٹرز کی ٹاسک کو ضرورت نہیں انہیں ہٹا دیں، کیونکہ بطورِ طے شدہ سب شامل ہوتے ہیں۔</li>\n  <li>ٹرگر شامل کریں، جانچ کے لیے <strong>Run now</strong> منتخب کریں، پھر ٹرانسکرپٹ پڑھیں۔ سبز بیج کا مطلب صرف یہ ہے کہ سیشن چلا، یہ نہیں کہ ٹاسک کامیاب ہوا۔</li>\n</ol>\n\n<h2>ذیلی روٹینز: ایک رن، کئی مددگار</h2>\n<p>یہ ایک پیٹرن کے لیے ہمارا دیا ہوا نام ہے، Anthropic کا کوئی فیچر نہیں۔ روٹین کا پرامپٹ پورے عمل کی ہم آہنگی کرتا ہے اور ہر مرحلہ ریپوزٹری میں کمٹ کیے گئے کسی <strong>ذیلی ایجنٹ</strong> (<code>.claude/agents/</code>) یا <strong>اسکل</strong> کے سپرد کرتا ہے۔ ہر مددگار کو اپنی الگ کانٹیکسٹ ونڈو اور صرف ضروری ٹولز ملتے ہیں، جس سے طویل غیر نگرانی شدہ رنز مرکوز، کم خرچ اور زیادہ محفوظ رہتے ہیں۔</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"ذیلی روٹینز: ہم آہنگ کرنے والا پرامپٹ ذیلی ایجنٹس اور اسکلز کو کام سونپتا ہے\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>باہمی روٹینز: ایسی روٹینز جو کام آگے منتقل کرتی ہیں</h2>\n<p>روٹینز ایک دوسرے کو براہِ راست کال نہیں کر سکتیں، لیکن پائیدار آرٹیفیکٹس کے ذریعے باہم تعاون کر سکتی ہیں۔ مثال کے طور پر، رات کو چلنے والی ایک روٹین ڈرافٹ PR کھولتی ہے، GitHub سے ٹرگر ہونے والی روٹین اس کا جائزہ لیتی ہے، ایک انسان اسے مرج کرتا ہے، مرج سے ٹرگر ہونے والی روٹین دستاویزات اپ ڈیٹ کرتی ہے، اور آپ کی ڈیپلائمنٹ پائپ لائن ایک تصدیقی روٹین کو کال کرتی ہے۔ فلٹرز استعمال کریں تاکہ کوئی روٹین اپنے ہی آؤٹ پُٹ پر نہ چل پڑے، اور اس سلسلے میں انسانی مرج کا مرحلہ برقرار رکھیں۔</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"باہمی روٹینز: چار روٹینز GitHub واقعات، لیبلز اور API کالز کے ذریعے تعاون کرتی ہوئی\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>قابلِ ذکر حدود</h2>\n<ul>\n  <li>لانچ کے وقت روزانہ رنز کی حد Pro پر 5، Max پر 15، اور Team اور Enterprise پر 25 تھی، جو معمول کے سبسکرپشن استعمال کے علاوہ ہے۔ ایک بار کے رنز اس میں شمار نہیں ہوتے۔</li>\n  <li>روٹینز <strong>آپ کی</strong> شناخت سے کام کرتی ہیں۔ کمٹس، PRs اور Slack پیغامات پر آپ کی شناخت ہوتی ہے۔ جب تک کچھ اور نہ کہا جائے، Claude صرف <code>claude/</code> برانچز پر پُش کرتا ہے، اور محفوظ (protected) برانچز پر کبھی نہیں۔</li>\n  <li>منٹ کی سطح پر پولنگ یا مقامی فائلوں کی ضرورت ہے؟ اس کے بجائے <code>/loop</code> یا ڈیسک ٹاپ کے شیڈول شدہ ٹاسکس استعمال کریں۔</li>\n</ul>\n\n<p><strong>مزید پڑھیں:</strong> <a href=\"/ur/articles/claude-code-routines-scheduled-cloud-agents\">مکمل رہنما</a> میں API پے لوڈ کی سیکیورٹی، پرامپٹ ٹیمپلیٹس، ذیلی ایجنٹس کی مثالیں، GitHub Actions، n8n اور Trigger.dev سے موازنہ، اور گورننس چیک لسٹ شامل ہیں۔ ماخذ: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">Anthropic کا اعلان</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code دستاویزات</a>۔</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

@@ -1,0 +1,89 @@
+{
+  "uuid": "64d9c5dd-ce74-cf39-4119-74b10b1c8d04",
+  "excerpt": "Node.js اور MySQL پروجیکٹس میں REST APIs کو محفوظ کرنے کے لیے ایک عملی گائیڈ، جس میں تصدیق، اجازت، SQL انجیکشن کی روک تھام، HTTPS، اور بہت کچھ شامل ہے۔",
+  "sub_title": "Node.js اور MySQL میں API سیکیورٹی کے لیے بہترین طریقے",
+  "title": "Node.js اور MySQL پروجیکٹس میں API کو محفوظ کرنا: بہترین طریقہ کار اور کوڈ کی مثالیں",
+  "meta_title": "Node.js اور MySQL کے لیے API سیکیورٹی: بہترین طریقے",
+  "meta_description": "اپنے Node.js اور MySQL API کو تصدیق، اجازت، SQL انجیکشن کی روک تھام، HTTPS، اور مزید کے ساتھ محفوظ کرنے کا طریقہ سیکھیں۔ کوڈ کے نمونے اور خاکے شامل ہیں۔",
+  "meta_keywords": "اے پی آئی سیکیورٹی، نوڈجز، ایس کیو ایل، توثیق، اجازت، ایس کیو ایل انجیکشن، بہترین طریقہ کار",
+  "images": [
+    {
+      "document_id": 13,
+      "is_cover": true,
+      "url": "/img/api-security-diagram.svg",
+      "uuid": "cb00e71a-5b0c-bd71-fa53-aa421fe849ef",
+      "id": 9
+    },
+    {
+      "document_id": 13,
+      "is_cover": false,
+      "url": "/img/api-security-architecture.svg",
+      "uuid": "cb00e71a-5b0c-bd71-fa53-aa421fe849ef2",
+      "id": 10
+    },
+    {
+      "document_id": 13,
+      "is_cover": false,
+      "url": "/img/api-gateway-waf.svg",
+      "uuid": "cb00e71a-5b0c-bd71-fa53-aa421fe849ef3",
+      "id": 11
+    },
+    {
+      "document_id": 13,
+      "is_cover": false,
+      "url": "/img/api-user-db-flow.svg",
+      "uuid": "cb00e71a-5b0c-bd71-fa53-aa421fe849ef4",
+      "id": 12
+    }
+  ],
+  "content": "<h2>Node.js اور MySQL پروجیکٹس میں API کو محفوظ کرنا</h2><div style=\"margin: 2rem 0; text-align: center;\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 400\" width=\"800\" height=\"400\" font-family=\"Arial, sans-serif\"><defs><linearGradient id=\"sec-bg\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\"><stop offset=\"0%\" stop-color=\"#FFEBEE\"/><stop offset=\"100%\" stop-color=\"#FCE4EC\"/></linearGradient><marker id=\"sec-arrow\" markerWidth=\"10\" markerHeight=\"7\" refX=\"10\" refY=\"3.5\" orient=\"auto\"><polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#F44336\"/></marker></defs><rect width=\"800\" height=\"400\" rx=\"12\" fill=\"url(#sec-bg)\"/><text x=\"400\" y=\"35\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"bold\" fill=\"#B71C1C\">API سیکیورٹی لیئرز</text>XTAG15 XTAG15 کلائنٹ<text x=\"77\" y=\"215\" text-anchor=\"middle\" font-size=\"9\" fill=\"#BDBDBD\">براؤزر/ایپ</text><line x1=\"125\" y1=\"200\" x2=\"148\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"155\" y=\"145\" width=\"80\" height=\"110\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"195\" y=\"178\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">TLS</text><text x=\"195\" y=\"196\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">HTTPS</text><text x=\"195\" y=\"212\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">1.3</text><text x=\"195\" y=\"240\" text-anchor=\"middle\" font-size=\"16\" fill=\"#fff\">🔒</text><line x1=\"235\" y1=\"200\" x2=\"258\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"265\" y=\"145\" width=\"80\" height=\"110\" rx=\"8\" fill=\"#FF9800\" stroke=\"#E65100\" stroke-width=\"2\"/>Rate <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 400\" width=\"800\" height=\"400\" font-family=\"Arial, sans-serif\">mi <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 400\" width=\"800\" height=\"400\" font-family=\"Arial, sans-serif\">XT<text x=\"305\" y=\"212\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFE0B2\">DDoS</text><text x=\"305\" y=\"226\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFE0B2\">تحفظ</text><text x=\"305\" y=\"243\" text-anchor=\"middle\" font-size=\"16\" fill=\"#fff\">🛡️</text><line x1=\"345\" y1=\"200\" x2=\"368\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"375\" y=\"145\" width=\"80\" height=\"110\" rx=\"8\" fill=\"#F44336\" stroke=\"#C62828\" stroke-width=\"2\"/><text x=\"415\" y=\"175\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">Auth</text><text x=\"415\" y=\"195\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFCDD2\">JWT</text><text x=\"415\" y=\"210\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFCDD2\"></text>XTAG51<text x=\"415\" y=\"210\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFCDD2\"> </text><text x=\"415\" y=\"225\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFCDD2\">49X کی توثیق کریں</text><line x1=\"455\" y1=\"200\" x2=\"478\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"485\" y=\"145\" width=\"80\" height=\"110\" rx=\"8\" fill=\"#7E57C2\" stroke=\"#4527A0\" stroke-width=\"2\"/><text x=\"525\" y=\"175\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">ان پٹ</text><text x=\"525\" y=\"193\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">توثیق</text><text x=\"525\" y=\"212\" text-anchor=\"middle\" font-size=\"9\" fill=\"#D1C4E9\">سینیٹائز</text><text x=\"525\" y=\"226\" text-anchor=\"middle\" font-size=\"9\" fill=\"#D1C4E9\">جوئی/زوڈ</text><text x=\"525\" y=\"243\" text-anchor=\"middle\" font-size=\"16\" fill=\"#fff\">✅</text><line x1=\"565\" y1=\"200\" x2=\"588\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"595\" y=\"145\" width=\"80\" height=\"110\" rx=\"8\" fill=\"#2196F3\" stroke=\"#1565C0\" stroke-width=\"2\"/><text x=\"635\" y=\"175\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\"><stop offset=\"100%\" stop-color=\"#FCE4EC\"/>PR پیراگراف<text x=\"635\" y=\"212\" text-anchor=\"middle\" font-size=\"9\" fill=\"#BBDEFB\">تیار شدہ</text><text x=\"635\" y=\"226\" text-anchor=\"middle\" font-size=\"9\" fill=\"#BBDEFB\">بیانات</text><text x=\"635\" y=\"243\" text-anchor=\"middle\" font-size=\"16\" fill=\"#fff\">🗃️</text><line x1=\"675\" y1=\"200\" x2=\"698\" y2=\"200\" stroke=\"#F44336\" stroke-width=\"2\" marker-end=\"url(#sec-arrow)\"/><rect x=\"705\" y=\"160\" width=\"80\" height=\"80\" rx=\"8\" fill=\"#1565C0\" stroke=\"#0D47A1\" stroke-width=\"2\"/><text x=\"745\" y=\"195\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"bold\" fill=\"#fff\">MySQL</text><text x=\"745\" y=\"215\" text-anchor=\"middle\" font-size=\"9\" fill=\"#BBDEFB\">ڈیٹا بیس</text><rect x=\"100\" y=\"300\" width=\"600\" height=\"45\" rx=\"8\" fill=\"#fff\" stroke=\"#F44336\" stroke-width=\"1.5\" opacity=\"0.9\"/><text x=\"400\" y=\"320\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#C62828\">گہرائی میں XTAG8 پرت کی کوئی ایک XXTAG8 پرت کو روکنا نہیں ہے: ہر ایک XTAG8 پرت کی XTAG8 پرت کو روکتا ہے کافی — سیکیورٹی کے لیے ضروری ہے کہ تمام پرتیں ایک ساتھ کام کریں<text x=\"195\" y=\"124\" text-anchor=\"middle\" font-size=\"8\" fill=\"#2E7D32\">تمام ٹریفک</text><rect x=\"265\" y=\"90\" width=\"80\" height=\"48\" rx=\"4\" fill=\"#FFF3E0\" stroke=\"#FF9800\" stroke-width=\"1\"/><text x=\"305\" y=\"110\" text-anchor=\"middle\" font-size=\"8\" fill=\"#E65100\">بلاکس بروٹ</text><text x=\"305\" y=\"124\" text-anchor=\"middle\" font-size=\"8\" fill=\"#E65100\">فورس حملے</text><rect x=\"375\" y=\"90\" width=\"80\" height=\"48\" rx=\"4\" fill=\"#FFEBEE\" stroke=\"#F44336\" stroke-width=\"1\"/><text x=\"415\" y=\"110\" text-anchor=\"middle\" font-size=\"8\" fill=\"#C62828\"></text><text x=\"415\" y=\"124\" text-anchor=\"middle\" font-size=\"8\" fill=\"#C62828\">شناخت کی تصدیق کرتا ہے</text><text x=\"525\" y=\"110\" text-anchor=\"middle\" font-size=\"8\" fill=\"#4527A0\">TAG11SS</h2>TAG1</h2>TAG1116</h2>TAG117X کو روکتا ہے / انجیکشن</text><rect x=\"595\" y=\"90\" width=\"80\" height=\"48\" rx=\"4\" fill=\"#E3F2FD\" stroke=\"#2196F3\" stroke-width=\"1\"/><text x=\"635\" y=\"110\" text-anchor=\"middle\" font-size=\"8\" fill=\"#1565C0\"></text><text x=\"635\" y=\"124\" text-anchor=\"middle\" font-size=\"8\" fill=\"#1565C0\">SQL انجیکشن</text></svg></div>کو روکتا ہے<img src=\"/img/api-security-diagram.svg\" alt=\"API Security Diagram\" style=\"max-width: 100%; margin-bottom: 1em;\" /><p>APIs جدید ویب اور موبائل ایپلیکیشنز کی ریڑھ کی ہڈی ہیں۔ Node.js اور MySQL کے ساتھ APIs بناتے وقت، سیکیورٹی کو اولین ترجیح ہونی چاہیے۔ یہ گائیڈ ضروری بہترین طریقوں اور کوڈ کی مثالوں کا احاطہ کرتا ہے تاکہ آپ کو اپنے API کو محفوظ کرنے میں مدد ملے۔</p><h3>API سیکیورٹی آرکیٹیکچر</h3><img src=\"/img/api-security-architecture.svg\" alt=\"API Security Architecture\" style=\"max-width: 100%; margin-bottom: 1em;\" /><p>یہ خاکہ API سیکیورٹی کے لیے ایک تہہ دار نقطہ نظر کو ظاہر کرتا ہے، بشمول گیٹ وے، WAF، تصدیق، اور ڈیٹا بیس کی حفاظت۔</p><h3>API گیٹ وے اور WAF</h3><img src=\"/img/api-gateway-waf.svg\" alt=\"API Gateway and WAF\" style=\"max-width: 100%; margin-bottom: 1em;\" /><p>API گیٹ وے اور ویب ایپلیکیشن فائر وال (WAF) کو سیکورٹی کو مرکزی بنانے، شرح کو محدود کرنے، اور توثیق کی درخواست کرنے کے لیے استعمال کریں۔ یہ آپ کے Node.js ایپ تک پہنچنے سے پہلے نقصان دہ ٹریفک کو روکنے میں مدد کرتا ہے۔</p><h3>صارف سے DB فلو</h3><img src=\"/img/api-user-db-flow.svg\" alt=\"User to DB Flow\" style=\"max-width: 100%; margin-bottom: 1em;\" /><p>یہ خاکہ صارف سے ڈیٹا بیس تک محفوظ بہاؤ کو ظاہر کرتا ہے، ہر قدم پر تصدیق اور اجازت کی جانچ کے ساتھ۔</p><h3>1. HTTPS ہر جگہ</h3>استعمال کریں۔<p>ٹرانزٹ میں ڈیٹا کو انکرپٹ کرنے کے لیے ہمیشہ HTTPS پر اپنے API کو پیش کریں۔<code>letsencrypt</code>یا تجارتی SSL سرٹیفکیٹ استعمال کریں۔</p><h3>2. تصدیق اور اجازت</h3><ul><li><b>JWT (JSON ویب ٹوکنز):</b>ریاست کے بغیر تصدیق کے لیے JWT استعمال کریں۔ لاگ ان پر ٹوکن جاری کریں اور ہر درخواست پر ان کی تصدیق کریں۔</li><li><b>رول پر مبنی رسائی کنٹرول (RBAC):</b>صارف کے کردار کی بنیاد پر حساس اختتامی پوائنٹس تک رسائی کو محدود کریں۔</li></ul><pre><code class=\"language-js\">// Example: JWT middleware\nconst jwt = require('jsonwebtoken');\nfunction authenticateToken(req, res, next) {\n  const token = req.headers['authorization']?.split(' ')[1];\n  if (!token) return res.sendStatus(401);\n  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {\n    if (err) return res.sendStatus(403);\n    req.user = user;\n    next();\n  });\n}</code></pre><h3>3۔ SQL انجکشن کو روکیں دفاع</text><rect x=\"30\" y=\"55\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#F44336\" stroke=\"#C62828\" stroke-width=\"2\"/><text x=\"100\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">SQL انجکشن</text><text x=\"100\" y=\"100\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFCDD2\">نقصان دہ سوالات</text><line x1=\"170\" y1=\"87\" x2=\"220\" y2=\"87\" stroke=\"#4CAF50\" stroke-width=\"2\" marker-end=\"url(#ow-arrow)\"/><rect x=\"230\" y=\"55\" width=\"170\" height=\"65\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"315\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">پیرامیٹرائزڈ سوالات</text><text x=\"315\" y=\"100\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">تیار بیانات اور ORM</text><rect x=\"30\" y=\"140\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#E65100\" stroke=\"#BF360C\" stroke-width=\"2\"/><text x=\"100\" y=\"165\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">Broken Auth</text><text x=\"100\" y=\"185\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFE0B2\">کمزور اسناد</text><line x1=\"170\" y1=\"172\" x2=\"220\" y2=\"172\" stroke=\"#4CAF50\" stroke-width=\"2\" marker-end=\"url(#ow-arrow)\"/><rect x=\"230\" y=\"140\" width=\"170\" height=\"65\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"315\" y=\"165\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">JWT + MFA + bcrypt</text><text x=\"315\" y=\"185\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">ٹوکن گردش &amp; ہیشنگ</text><rect x=\"30\" y=\"225\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#FF9800\" stroke=\"#E65100\" stroke-width=\"2\"/><text x=\"100\" y=\"250\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">XSS</text><text x=\"100\" y=\"270\" text-anchor=\"middle\" font-size=\"9\" fill=\"#FFE0B2\">اسکرپٹ انجیکشن</text><line x1=\"170\" y1=\"257\" x2=\"220\" y2=\"257\" stroke=\"#4CAF50\" stroke-width=\"2\" marker-end=\"url(#ow-arrow)\"/><rect x=\"230\" y=\"225\" width=\"170\" height=\"65\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"315\" y=\"250\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">ان پٹ سینیٹائزیشن</text><text x=\"315\" y=\"270\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">CSP ہیڈر &amp; Escapeing</text><rect x=\"440\" y=\"55\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#7E57C2\" stroke=\"#4527A0\" stroke-width=\"2\"/><text x=\"510\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">SSRF</text><text x=\"510\" y=\"100\" text-anchor=\"middle\" font-size=\"9\" fill=\"#D1C4E9\">اندرونی رسائی</text><line x1=\"580\" y1=\"87\" x2=\"630\" y2=\"87\" stroke=\"#4CAF50\" stroke-width=\"2\" marker-end=\"url(#ow-arrow)\"/><rect x=\"640\" y=\"55\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"710\" y=\"80\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">URL اجازت یافتہ</text><text x=\"710\" y=\"100\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">نیٹ ورک سیگمنٹیشن</text></text>2</text>23X کی ترتیب<text x=\"510\" y=\"185\" text-anchor=\"middle\" font-size=\"9\" fill=\"#D7CCC8\">ڈیفالٹ سیٹنگز</text><line x1=\"580\" y1=\"172\" x2=\"630\" y2=\"172\" stroke=\"#4CAF50\" stroke-width=\"2\" marker-end=\"url(#ow-arrow)\"/><rect x=\"640\" y=\"140\" width=\"140\" height=\"65\" rx=\"8\" fill=\"#4CAF50\" stroke=\"#2E7D32\" stroke-width=\"2\"/><text x=\"710\" y=\"165\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#fff\">سیکیورٹی سختی</text><text x=\"710\" y=\"185\" text-anchor=\"middle\" font-size=\"9\" fill=\"#C8E6C9\">Helmet.js &amp; آڈٹ</text><rect x=\"150\" y=\"320\" width=\"500\" height=\"50\" rx=\"8\" fill=\"#fff\" stroke=\"#F44336\" stroke-width=\"1.5\" opacity=\"0.9\"/><text x=\"400\" y=\"342\" text-anchor=\"middle\" font-size=\"11\" font-weight=\"bold\" fill=\"#C62828\">ہر خطرے کا دفاع ہوتا ہے — مکمل تحفظ کے لیے تمام تہوں کو لاگو کریں</text><text x=\"400\" y=\"360\" text-anchor=\"middle\" font-size=\"10\" fill=\"#616161\">OWASP ٹاپ 10 ویب ایپلیکیشن سیکیورٹی رسکس کی بنیاد پر</text></svg></div><p>SQL انجیکشن کو روکنے کے لیے ہمیشہ پیرامیٹرائزڈ سوالات یا ORM لائبریریز (جیسے Sequelize یا Knex) استعمال کریں۔</p><pre><code class=\"language-js\">// Using mysql2 with placeholders\nconst [rows] = await db.execute('SELECT * FROM users WHERE id = ?', [userId]);</code></pre><h3>4. ان پٹ کی تصدیق اور صفائی</h3><p><code>express-validator</code>یا<code>joi</code>جیسی لائبریریوں کا استعمال کرتے ہوئے تمام آنے والے ڈیٹا کی توثیق اور صفائی کریں۔</p><h3>5. محفوظ حساس ڈیٹا</h3><ul><li>کبھی بھی سادہ متن والے پاس ورڈز کو اسٹور نہ کریں۔ ہمیشہ<code>bcrypt</code>کے ساتھ ہیش کریں۔</li><li>اسٹور کے راز (DB اسناد، JWT راز) ماحولیاتی متغیرات میں، کوڈ میں نہیں۔</li></ul><h3>6. شرح کی حد بندی اور تھروٹلنگ</h3><p><code>express-rate-limit</code>جیسے ریٹ محدود کرنے والے مڈل ویئر کا استعمال کرتے ہوئے اپنے API کو بروٹ فورس اور DDoS حملوں سے محفوظ رکھیں۔</p><h3>7. لاگنگ اور مانیٹرنگ</h3><p>تمام تصدیقی کوششوں اور غلطیوں کو لاگ کریں۔ مشکوک سرگرمی کا پتہ لگانے کے لیے مانیٹرنگ ٹولز کا استعمال کریں۔</p><h3>8. انحصار کو اپ ڈیٹ رکھیں</h3><p>باقاعدگی سے Node.js، MySQL، اور تمام انحصارات کو معلوم کمزوریوں کو درست کرنے کے لیے اپ ڈیٹ کریں۔</p><h3>مزید پڑھنا</h3><ul><li><a href=\"https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html\" target=\"_blank\">OWASP REST سیکیورٹی چیٹ شیٹ</a></li><li><a href=\"https://expressjs.com/ur/advanced/best-practice-security.html\" target=\"_blank\">Express.js سیکیورٹی کے بہترین طریقے</a></li></ul>\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> For an explainable edge Web Application Firewall on TenthMatrix WSL Proxy, see the <a href=\"/ur/docs/blogs/wslproxy-waf-web-application-firewall\">WAF blog</a>, the <a href=\"/ur/articles/wslproxy-waf-web-application-firewall\">technical article</a>, or <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>.\n</div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "tag_id": 10,
+      "document_id": 13,
+      "uuid": "14b26c7b-690d-52e4-a10f-f8595b13e81e",
+      "name": "mysql",
+      "updated_at": "2025-05-27 15:38:04",
+      "created_at": "2025-05-27 15:38:04",
+      "id": 23
+    },
+    {
+      "tag_id": 11,
+      "document_id": 13,
+      "uuid": "194f5501-b25b-f4d4-b159-35430324c062",
+      "name": "nodejs",
+      "updated_at": "2025-05-27 15:38:04",
+      "created_at": "2025-05-27 15:38:04",
+      "id": 24
+    },
+    {
+      "tag_id": 12,
+      "document_id": 13,
+      "uuid": "f365498a-b212-26f6-54d6-3aa9747ee9c1",
+      "name": "backend",
+      "updated_at": "2025-05-27 15:38:04",
+      "created_at": "2025-05-27 15:38:04",
+      "id": 25
+    }
+  ],
+  "created_at": "2025-05-27 15:38:04",
+  "id": "64d9c5dd-ce74-cf39-4119-74b10b1c8d04",
+  "updated_at": "2025-05-27 15:38:04",
+  "user": {
+    "active": true,
+    "uuid": "cb9c1a5b-6910-4fb2-b457-a9c72a392d90",
+    "created_at": "2025-05-19 15:25:06",
+    "email": "administrative@admin.com",
+    "username": "administrative",
+    "first_name": "Super",
+    "password": "$2b$10$bOsAevGqxA7hF/94.N9N1eXhdxpfJytG2T8cAyGgglIg.zfJauvbG",
+    "last_name": "User",
+    "id": 1,
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "status": true,
+  "slug": "secure-apis-nodejs-mysql",
+  "internal_id": 13,
+  "published_date": "2025-05-27"
+}

@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "অক্রিয় CI-এর জন্য টাকা খরচ বন্ধ করুন: Kubernetes-এর GitLab Runners",
+  "sub_title": "সোমবারের শীর্ষে CI-এর স্কেল বাড়ান, তারপর রাতে এবং সপ্তাহের ছুটির দিনে ক্যাপাসিটি কমিয়ে দিন — পাঁচ মিনিটের গাইড যার সাথে দুটি ওয়াকথ্রু ভিডিও।",
+  "excerpt": "অধিকাংশ দল CI-এর জন্য এমনভাবে খরচ করে যেন প্রতি রাতই এখনো সোমবার সকাল। Kubernetes-এর GitLab Runners তা পরিবর্তন করে: ক্ষণস্থায়ী জব পড, লোডের সময় বৃদ্ধি পায়, শান্তির সময় হ্রাস পায়।",
+  "meta_title": "অক্রিয় CI-এর জন্য টাকা খরচ বন্ধ করুন: Kubernetes-এর GitLab Runners | TenthMatrix",
+  "meta_description": "এক্সপিআরওএক্স-এ জিটল্যাব রানার: ক্ষণস্থায়ী জব পড, এক্সপিআরএক্সএক্স এবং অপারেটর ইনস্টল পথ, অটোস্কেলিং, এবং নিষ্ক্রিয় রাত ও শনি-রবিবারের জন্য পেমেন্ট বন্ধ করার উপায়।",
+  "meta_keywords": "GitLab রানার, Kubernetes এক্সিকিউটর, GitLab অপারেটর, Helm, k3s, অটোস্কেলিং সিআই, ফিনঅপস, ইডল সিআই খরচ, ডিনডি, হাইপারস্কেল রানার, TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>বেশিরভাগ দলই কন্টিনিউয়াস ইন্টিগ্রেশনের জন্য এমনভাবে খরচ করে যেন প্রতিটি রাত এবং প্রতিটি শনি-রবিবার এখনও সোমবার সকাল।<strong>Kubernetes-এর GitLab Runners</strong>সেই মডেলটিকে উল্টে দেয়: পাইপলাইনগুলো আসলেই ক্যাপাসিটি বাড়িয়ে দেয়, অফিস শান্ত হয়ে গেলে তা আবার ছেড়ে দেয়। Helm-এর মান, এক্সিকিউটর সেটিংস এবং খরচের মডেলের জন্য<a href=\"/bn/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">টেকনিক্যাল ডিপ ডাইভ</a>পড়ুন।</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>মূল বিষয়।</strong>শীর্ষে প্রস্তুত থাকুন, নিম্নে প্রস্তুত হন না। ডিমান্ড কমলে—বিশেষ করে রাত এবং শনি-রবিবারে—এফিমেরাল জব পডগুলো CPU, RAM এবং স্টোরেজ ফিরে পায়, তাই সোমবারের ফার্ম শনিবারের বিলকে নির্ধারণ করে না।</div><h2>ভিডিওগুলো দেখুন</h2><p><strong>1. Runners &amp; pipelines</strong>— Kubernetes-এর GitLab Runner ওয়ার্কলোডের অটোস্কেলিং।</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server on HA Kubernetes</strong>— অপারেটর দিয়ে কয়েক মিনিটে ডিপ্লয় করুন।</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· ডকস:<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>দামী অভ্যাস</h2><ul><li><strong>দিনের বেলা:</strong>মার্জ রিকোয়েস্ট এবং টেস্ট ডিমান্ড বাড়িয়ে দেয়।</li><li><strong>রাত:</strong>কার্যকলাপ কমে যায়; তবে ফিক্সড ভিএমগুলো এখনও CPU এবং RAM পোড়ায়।</li><li><strong>সপ্তাহের ছুটি:</strong>প্রায় নিষ্ক্রিয়—তবুও ডিস্ক এবং নোডের জন্য বিল হতে পারে।</li></ul><p>আপনি নির্মিত বিল্ডের জন্য পেমেন্ট করছেন না। আপনি এমন ক্যাপাসিটির জন্য পেমেন্ট করছেন যা কেউ ব্যবহার করুক না করুক না কেন বিদ্যমান থাকে।</p><h2>একটি সরল চিত্র</h2><p>GitLab-এর<strong>Runner</strong>পাইপলাইন জবগুলো চালায়।<strong>Kubernetes</strong>সেই কর্মীগুলোকে ক্ষণস্থায়ী পড হিসেবে তৈরি করতে পারে এবং জব শেষ হলে তাদের মুছে ফেলতে পারে। হাইপারস্কেলে একই ধারণা নোডগুলোর ক্ষেত্রে প্রযোজ্য: কুইয়ের গভীর থাকলে বেশি; রাতে এবং সপ্তাহের ছুটির দিনে কম — আদর্শভাবে প্রায় কোনোই।</p><h2>যেখানে বিশাল খরচের বাঁচা আসে</h2><ol><li><strong>মানুষ (অথবা বট) কাজ করছে—সমান্তরাল জব পড আপনার কনকাররেন্স এবং ক্লাস্টার সীমার মধ্যে পর্যায়ক্রমিকভাবে বাড়ান</strong><li><strong>চাহিদা হঠাৎ চলে গেলে কঠোরভাবে কমান—পডগুলো চলে যায়; ক্লাস্টার অটো-স্কেলিংয়ের সাথে, খালি নোডগুলো পুল থেকে বের হয়ে যায়।</li><li><strong>শান্ত সময়ের মধ্যে সর্বদা চালু রানার ফ্লিটগুলোর উপর CPU, RAM এবং স্টোরেজ</strong>নষ্ট করবেন না।</li><li><strong>GitLab এবং একটি পাতলা রানার ম্যানেজার রাখুন; ফার্ম যখন অব্যবহৃত হয় তখন তা বাষ্পীভূত হতে দিন—ফলাফলের জন্য পেমেন্ট করুন, না যে ফার্নিচারের জন্য</strong></ol><blockquote><p>বিশাল বাঁচা তখনই দেখা দেয় যখন মঙ্গলবারের শীর্ষ আর বুধবার রাত তিনটার বিল নির্ধারণ করে না—এবং যখন শনিবারের নীরবতা অবশেষে বিলের ওপর শান্ত মনে হয়।</p></blockquote><h2>অফিসিয়াল দলিল</h2><ul><li>Helm চার্ট দিয়ে GitLab Runner ইনস্টল করুন</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">Helm চার্ট কনফিগার করুন</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes এক্সিকিউটর</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Runner অটো-স্কেলিং</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab অপারেটর ইনস্টলেশন</a></li></ul><p><strong>পরবর্তী পড়ুন:</strong>the<a href=\"/bn/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">হাইপারস্কেল প্রযুক্তিগত লেখা</a>অপারেটর বনাম Helm ট্র্যাক, সমান্তরালতা, DinD, পর্যবেক্ষণযোগ্যতা এবং একটি FinOps চেকলিস্ট নিয়ে আলোচনা করে। কোর্স বিল্ড প্রম্পট:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>TenthMatrix ওয়েবসাইটের রিপোজিটরিতে (বাদ পড়া devops.git লিঙ্কের পরিবর্তে)।</p><p>প্রকাশিত হয়েছে<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>-এ।</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

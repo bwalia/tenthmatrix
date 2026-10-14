@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "حظر Rust غير المتزامن وRayon والتطبيقات الحديثة",
+  "sub_title": "ماذا يعني \"الحظر\" في Rust غير المتزامن، عندما يناسب Rayon العمل المرتبط بـ CPU، ولماذا يظل Rust قويًا بالنسبة لـ APIs والحافة والوكلاء ومنصات CI/CD",
+  "excerpt": "TenthMatrix على حظر Rust غير المتزامن، وRayon للعمل المرتبط بـ CPU، ولماذا يتناسب Rust مع APIs الحديثة والحافة والوكلاء وCI/CD - مستوحاة من إرشادات Rayon الخاصة بـ Alice Ryhl.",
+  "meta_title": "Rust Async Blocking وRayon للتطبيقات الحديثة | TenthMatrix",
+  "meta_description": "ماذا يعني الحظر في Rust غير المتزامن، عندما يساعد Rayon في العمل المرتبط بـ CPU، ولماذا يكون Rust قويًا بالنسبة لأنظمة APIs والحافة والوكلاء ومنصات CI/CD.",
+  "meta_keywords": "Rust، Rust غير المتزامن، Tokio، Rayon، spawn_blocking، الحظر، CPU المرتبط، Polyglot Benchmarks، APIs، الحافة، الوكلاء، CI/CD، TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>حول سبب بقاء Rust خيارًا من الدرجة الأولى للتطبيقات الحديثة - وما يعنيه \"الحظر\" حقًا عند مزج Tokio مع عمل CPU الثقيل. مستوحاة من<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Async الخاص بـ Alice Ryhl: ما هو الحظر؟</a>(قسم Rayon). الغوص العميق: مقال طويل<a href=\"/ar/articles/rust-async-blocking-rayon-modern-applications\"></a>.</em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>خلاصة القول.</strong>في Rust غير المتزامن، يعني \"الحظر\" إبقاء عامل وقت التشغيل بعيدًا عن<code>.await</code>لفترة كافية بحيث تتضور المهام الأخرى جوعًا. انقل عمل CPU الباهظ الثمن إلى مجموعة Tokio - غالبًا باستخدام<strong>Rayon</strong>بالإضافة إلى قناة oneshot - وحافظ على استجابة المسار غير المتزامن لـ APIs ووكلاء الحافة والوكلاء وطائرات التحكم CI/CD.</div><h2>لماذا يستمر Rust في الفوز بفتحات التطبيقات الحديثة</h2>تختار فرق<p>Rust عندما تحتاج إلى أمان الذاكرة بدون ضريبة الإيقاف المؤقت لـ GC، وزمن الوصول المتوقع تحت الحمل، والتزامن الذي يساعدك نظام الكتابة على تحقيقه بشكل صحيح. يظهر هذا المزيج في كل مكان يتم إنشاء TenthMatrix فيه: API عالية الإنتاجية، وبوابات الحافة، وأوقات تشغيل الوكيل، ومستويات التحكم في الترويج التي لا يمكن أن تتجمد عند وصول ارتفاع كبير في عمل CPU.</p><p>ليس \"Rust لكل شيء\". لوحة المعلومات<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>والمشاركات المصاحبة - مدونة<a href=\"/ar/docs/blogs/polyglot-benchmarks-right-tool-right-application\"></a>/ مقالة<a href=\"/ar/articles/polyglot-benchmarks-right-tool-right-application\"></a>- قارن Rust مع مكدسات Go وBun وJVM وحواف البرمجة النصية على نفس أحمال عمل HTTP. غالبًا ما يؤدي Rust إلى الصفوف المرتبطة بـ CPU والمزدحمة بالتزامن؛ تفوز أوقات التشغيل الأخرى بالسرعة أو تحويلات الحافة. وهذه النقطة هي الأدلة، ثم ADRs.</p><h2>ماذا يعني \"الحظر\" في Rust</h2>غير المتزامن \n تقوم أوقات التشغيل غير المتزامنة<p>(Tokio والأصدقاء) بتبديل المهام عند نقاط<code>.await</code>. إذا كانت مهمتك تحرق ميلي ثانية من CPU أو تستقر مع<code>std::thread::sleep</code>دون انتظار، فلن يتمكن العامل من جدولة أي شخص آخر في هذا الموضوع. محليًا، قد لا تلاحظ ذلك (بعض النوى تخفي الخطأ)؛ في الإنتاج، ينفد العمال، وتنفجر ذيول الكمون.</p><p>القاعدة الأساسية للنظام البيئي: ابق ضمن نطاق عشرات إلى مئات الميكروثانية بين فترات انتظار الخدمات الحساسة لزمن الوصول - وتعامل مع أي شيء أطول باعتباره عملًا ينتمي إلى مكان آخر.</p><h2>عندما يساعد Rayon (CPU-bound)</h2><ul><li><strong>spawn_blocking</strong>- مجموعة الحظر الخاصة بـ Tokio: رائعة لمزامنة IO (نظام الملفات، وحظر برامج تشغيل قاعدة البيانات)؛ يعتبر هذا الخيار دون المستوى الأمثل بالنسبة إلى CPU الثقيل لأنه يمكن أن يزيد من عدد النوى.</li><li><strong>Rayon</strong>- تجمع خيط صغير بحجم CPU للمكررات المتوازية والحسابات باهظة الثمن. قم بالتوصيل باستخدام<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>بحيث تنتظر المهمة غير المتزامنة النتيجة دون حظر مؤشر ترابط وقت التشغيل.</li><li><strong>مؤشر ترابط مخصص</strong>— للحلقات الدائمة (مديري الاتصال، العمال ذوي الأعمار الطويلة) التي يجب ألا تستهلك سعة المجمع بشكل دائم.</li></ul><p>إن نمط Rayon + oneshot هو بالضبط ما يمر به Alice Ryhl في قسم<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon</a>- رأي TenthMatrix هو كيفية وصول هذه الاختيارات إلى وكلاء ومنصات الشحن في العقارات متعددة اللغات، وليس إعادة طبع البرنامج التعليمي.</p><h2>حيث يظهر ذلك في منتجات TenthMatrix</h2><ul><li><strong>APIs وedge</strong>- احتفظ بعمال الطلب مجانًا للإدخال والإدخال؛ تتحول المروحة CPU إلى Rayon عندما يحتاجها المسار الساخن.</li><li><strong>Agents</strong>- يجب ألا يؤدي تضمين الإعداد المسبق، ودفعات التقييم، والأزمة من جانب الأداة إلى تعطيل حلقة التنسيق.</li>منصات<li><strong>CI/CD</strong>- تظل محركات الفحص الصحي والترويج (انظر<a href=\"/ar/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>) سريعة الاستجابة أثناء تنفيذ أعمال التحقق الأثقل خارج المجموعة.</li><li><strong>Kubernetes ops</strong>— يحتاج مساعدو الطيارون الحادثون مثل<a href=\"/ar/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>إلى حلقات تحكم سريعة حتى عندما يكون التحليل ثقيلًا بـ CPU.</li></ul><h2>اقرأ</h2>التالي<ol><li><a href=\"/ar/articles/rust-async-blocking-rayon-modern-applications\">مقالة طويلة</a>- ورقة الغش، والأنماط على شكل رمز، وملاحظات الهندسة المعمارية.</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— دليل Rust المباشر مقابل أقرانه.</li><li>Alice Ryhl —<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">Async: ما هو الحظر؟</a></li></ol><p>تم النشر بواسطة<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" role="img" aria-label="Feature comparison matrix between NebulaDB and agent memory platforms with cost, governance, sizing and SLO criteria">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0e27"/>
+      <stop offset="1" stop-color="#111940"/>
+    </linearGradient>
+    <linearGradient id="hdrN" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="hdrM" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#64748b"/>
+      <stop offset="1" stop-color="#475569"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 22px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: #94a3b8; font: 500 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .colHead { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .dim { fill: #f1f5f9; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .n { fill: #c7d2fe; font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .m { fill: #cbd5e1; font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #a5b4fc; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="820" fill="url(#bg)" rx="8"/>
+  <rect width="1200" height="820" fill="url(#grid)"/>
+
+  <text class="title" x="600" y="44" text-anchor="middle">Feature comparison matrix</text>
+  <text class="sub" x="600" y="66" text-anchor="middle">NebulaDB vs Agent Memory Platforms  -  built for OPS and architects to decide</text>
+
+  <rect x="40" y="86" width="280" height="40" rx="8" fill="#1e293b"/>
+  <text x="180" y="111" text-anchor="middle" class="colHead">Dimension</text>
+  <rect x="340" y="86" width="400" height="40" rx="8" fill="url(#hdrN)"/>
+  <text x="540" y="111" text-anchor="middle" class="colHead">NebulaDB (open source)</text>
+  <rect x="760" y="86" width="400" height="40" rx="8" fill="url(#hdrM)"/>
+  <text x="960" y="111" text-anchor="middle" class="colHead">Agent Memory Platforms</text>
+
+  <g font-size="11">
+    <rect x="40" y="132" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="155">Category</text>
+    <text class="n" x="355" y="155">AI-native hybrid database</text>
+    <text class="m" x="775" y="155">Context / memory infra for AI agents</text>
+
+    <rect x="40" y="172" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="195">Written in</text>
+    <text class="n" x="355" y="195">Rust (open source)</text>
+    <text class="m" x="775" y="195">Closed source (SaaS)</text>
+
+    <rect x="40" y="212" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="235">License</text>
+    <rect x="355" y="220" width="100" height="22" rx="4" fill="#14532d"/>
+    <text x="405" y="236" text-anchor="middle" class="ok">Apache-2.0</text>
+    <rect x="775" y="220" width="100" height="22" rx="4" fill="#7f1d1d"/>
+    <text x="825" y="236" text-anchor="middle" class="bad">Proprietary</text>
+
+    <rect x="40" y="252" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="275">Data model</text>
+    <text class="n" x="355" y="275">Documents + metadata + vector embeddings</text>
+    <text class="m" x="775" y="275">Temporal knowledge graph + vectors</text>
+
+    <rect x="40" y="292" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="315">Query interfaces</text>
+    <text class="n" x="355" y="315">REST + gRPC + Postgres wire + SQL</text>
+    <text class="m" x="775" y="315">REST + language SDKs only</text>
+
+    <rect x="40" y="332" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="355">Vector index</text>
+    <text class="n" x="355" y="355">HNSW (cosine / L2 / dot) SIMD</text>
+    <text class="m" x="775" y="355">Proprietary vector substrate</text>
+
+    <rect x="40" y="372" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="395">Relational queries</text>
+    <text class="n" x="355" y="395">SQL: JOIN + GROUP BY + metadata filters</text>
+    <text class="m" x="775" y="395">Graph traversal (multi-hop)</text>
+
+    <rect x="40" y="412" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="435">Temporal model</text>
+    <text class="warn" x="355" y="435">WAL-based event replay</text>
+    <text class="m" x="775" y="435">First-class immutable ledger</text>
+
+    <rect x="40" y="452" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="475">LLM integration</text>
+    <text class="n" x="355" y="475">Built-in streaming RAG (Ollama / OpenAI)</text>
+    <text class="m" x="775" y="475">Context retrieval for external LLMs</text>
+
+    <rect x="40" y="492" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="515">Caching</text>
+    <text class="n" x="355" y="515">Multi-tier (LRU + Redis)</text>
+    <text class="m" x="775" y="515">In-memory (managed)</text>
+
+    <rect x="40" y="532" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="555">Durability</text>
+    <text class="ok" x="355" y="555">WAL + snapshot recovery</text>
+    <text class="warn" x="775" y="555">Managed snapshots (opaque)</text>
+
+    <rect x="40" y="572" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="595">Deployment</text>
+    <text class="n" x="355" y="595">Docker + Helm + K8s operator + binary</text>
+    <text class="m" x="775" y="595">SaaS multi-tenant or enterprise self-host</text>
+
+    <rect x="40" y="612" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="635">Cost</text>
+    <rect x="355" y="620" width="130" height="22" rx="4" fill="#14532d"/>
+    <text x="420" y="636" text-anchor="middle" class="ok">infra only (free)</text>
+    <rect x="775" y="620" width="180" height="22" rx="4" fill="#7f1d1d"/>
+    <text x="865" y="636" text-anchor="middle" class="bad">usd 249 - 5000+ / month</text>
+
+    <rect x="40" y="652" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="675">Observability</text>
+    <text class="ok" x="355" y="675">Prometheus + Grafana + OTel</text>
+    <text class="warn" x="775" y="675">Not documented publicly</text>
+
+    <rect x="40" y="692" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.03)"/>
+    <text class="dim" x="55" y="715">Auth</text>
+    <text class="n" x="355" y="715">API keys + JWT (HS256 + JWKS)</text>
+    <text class="m" x="775" y="715">API keys</text>
+
+    <rect x="40" y="732" width="1120" height="36" rx="4" fill="rgba(255,255,255,0.06)"/>
+    <text class="dim" x="55" y="755">Data residency</text>
+    <text class="ok" x="355" y="755">your DC + region; full control</text>
+    <text class="warn" x="775" y="755">depends on vendor regions</text>
+  </g>
+
+  <text class="brand" x="40" y="800">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1160" y="800" text-anchor="end">OPS  /  ARCHITECTS  /  COMPLIANCE  /  FINOPS</text>
+</svg>

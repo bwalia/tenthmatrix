@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-muse-glimmer-001",
+  "internal_id": 961,
+  "slug": "muse-glimmer-ollama-local-agents-workstation-guide",
+  "title": "Muse Glimmer на Ollama: постоянные локальные агенты на одном GPU",
+  "sub_title": "Модель агента Meta 30B Apache 2.0 — использование инструментов, видение, восстановление после сбоев — и что это значит для частного ИИ на рабочих станциях",
+  "excerpt": "Meta Muse Glimmer обеспечивает постоянное подключение локальных агентов к одному GPU через Ollama: контекст 30B, Apache 2.0, 128K, видение и инструменты — бизнес-руководство TenthMatrix.",
+  "meta_title": "Muse Glimmer на Ollama — Руководство для локальных агентов | TenthMatrix",
+  "meta_description": "Руководство TenthMatrix по Meta Muse Glimmer на Ollama: 30B локальные агенты Apache 2.0, видение, инструменты, восстановление после сбоев, MLX на Apple Silicon и рекомендации по гибридному производству.",
+  "meta_keywords": "Muse Glimmer, Ollama, мета, локальные агенты, открытые веса, Apache 2.0, MLX, Apple Silicon, MCP, OpenClaw, TenthMatrix",
+  "cover_image": "/img/muse-glimmer-cover.svg",
+  "images": [
+    {
+      "url": "/img/muse-glimmer-cover.svg",
+      "id": 961,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Meta Muse Glimmer local agents on Ollama"
+    },
+    {
+      "url": "/img/muse-glimmer-local-agent-stack.svg",
+      "id": 962,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Muse Glimmer local agent stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>Meta<strong>Muse Glimmer</strong>— это открытая модель 30B, настроенная для постоянно работающих локальных агентов — использование инструментов, длительные задачи, восстановление после сбоев, зрение — и она поставляется с<a href=\"https://ollama.com/library/muse-glimmer\" target=\"_blank\" rel=\"noopener noreferrer\">Ollama</a>под Apache 2.0 для одного GPU или Apple Silicon. Вот бизнес-версия TenthMatrix. Спецификации, стенды, методология и производственный контрольный список в длинной статье<a href=\"/ru/articles/muse-glimmer-ollama-local-agents-workstation-guide\"></a>.</em></p><p><img src=\"/img/muse-glimmer-cover.svg\" alt=\"Meta Muse Glimmer local agents on Ollama\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Итог.</strong>Cloud Frontier API по-прежнему выигрывает в плане максимальной производительности и управляемых соглашений об уровне обслуживания. Muse Glimmer меняет стандартную настройку<em>для частных, постоянно работающих агентов.</em>: упрощенная модель 30B с кодером восприятия, который подходит для потребительского оборудования/рабочей станции (вес ~18 ГБ, контекст 128 КБ), лицензированный Apache 2.0 и подключенный к Claude Code, OpenCode, Hermes Agent и OpenClaw через<code>ollama launch</code>. Конфиденциальность, воздушный зазор и предсказуемая стоимость единицы продукции становятся характеристиками продукта, а не исследовательских проектов.</div><h2>Что поставляется (с точки зрения бизнеса)</h2><ul><li><strong>Постоянно работающие локальные агенты:</strong>предназначен для выполнения многоэтапных заданий без передачи каждого токена в гиперскейлер.</li><li><strong>Инструментальная дисциплина: вызов функций с точностью до схемы</strong>в длительных рабочих процессах — разница между демонстрационным чат-ботом и агентом, который формирует заявки, редактирует код или запрашивает инструменты MCP.</li><li><strong>Восстановление после сбоя:</strong>, когда инструмент выдает ошибку или возвращает неверную информацию, модель выполняет диагностику и повторяет попытку, а не приостанавливает выполнение.</li><li><strong>Мультимодальный: снимки экрана, диаграммы и документы</strong>помещаются вместе с текстом, что полезно для операционных консолей, счетов и автоматизации пользовательского интерфейса.</li><li><strong>Контролируемые усилия:</strong>увеличивает силу рассуждения для жестких билетов и уменьшает для путей, чувствительных к задержке.</li><li><strong>Лицензия:</strong>Apache 2.0 — более чистая коммерческая история, чем многие карты «открытого веса» с исключениями SaaS.</li></ul><p><img src=\"/img/muse-glimmer-local-agent-stack.svg\" alt=\"Muse Glimmer local agent stack from scaffold to Ollama\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>Почему советы директоров и предприятия малого и среднего бизнеса должны заботиться</h2><ol><li><strong>Местонахождение данных: персональные данные клиента</strong>, исходный код и финансовые документы могут оставаться на рабочей станции или в частном VPC.</li><li><strong>Единичная экономика: стоимость вывода</strong>равна амортизации оборудования + электричество, а не счетам за каждый токен, которые резко увеличиваются из-за циклов агентов.</li><li><strong>Непрерывность:</strong>в автономном режиме или на сайтах с ограниченной сетью (фабрики, клиники, полевые группы) обеспечивает работу агентов.</li><li><strong>Ясность закупок: распространение</strong>Apache 2.0 + Ollama снижает юридические и эксплуатационные трудности по сравнению с непрозрачными сбросами веса.</li></ol><h2>Где это<em>, а не</em>заменяет облако</h2><p>Храните закрытые API (или более крупные открытые MoE в кластере) для критически важных путей, генерации с учетом бренда и рабочих нагрузок, для которых требуются соглашения об уровне обслуживания с поддержкой поставщиков. Muse Glimmer — это мощная локальная/частная линия<strong>в гибридном маршрутизаторе <strong> — это не обязательно в одночасье вырвать Bedrock или Anthropic. Соедините его с evals, HITL и элементами управления в нашем кратком обзоре по агентной безопасности<a href=\"/ru/docs/blogs/agentic-ai-security-mcp-oauth-vault\"></a>.</p><h2>Совет TenthMatrix</h2><ul><li><strong>Малый и средний бизнес / магазины Mac:</strong>начинается с<code>ollama run muse-glimmer:30b-mlx</code>на Apple Silicon (или стандартного тега 18 ГБ на одной рабочей станции GPU среднего/высокого уровня).</li><li><strong>Команды разработчиков:</strong>проволочные леса с<code>ollama launch claude --model muse-glimmer</code>(или OpenCode / Hermes / OpenClaw) и измеряют ваши золотые задачи, а не только таблицу лидеров Meta.</li><li><strong>Enterprises: пилотные модули агентов с воздушным зазором</strong>с Review Bot + GitOps; сохраняйте аварийное переключение облака на случай переполнения.</li></ul><p>Полная техническая переработка — архитектура, теги Ollama, матрица тестов по сравнению с Gemma4-31B / Qwen3.6-27B, методология мета-оценки и производственный контрольный список: длинная статья<a href=\"/ru/articles/muse-glimmer-ollama-local-agents-workstation-guide\"></a>. Опубликовано<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ollama",
+      "id": 944
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "local-ai",
+      "id": 946
+    },
+    {
+      "name": "apple-silicon",
+      "id": 942
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    }
+  ],
+  "created_at": "2026-08-12T10:00:00Z",
+  "updated_at": "2026-08-12T10:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

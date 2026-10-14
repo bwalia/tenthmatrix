@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "الكشف عن اختناقات LLM: إمكانية المراقبة، وOTEL، والتحكم في التكلفة",
+  "sub_title": "موجز الأعمال: OpenTelemetry، وPrometheus/Grafana، وLangfuse — الإيجابيات والسلبيات والتكاليف ومقاييس الاستخدام التي تقلل من إنفاق الوكيل",
+  "excerpt": "TenthMatrix حول الكشف عن اختناقات وكيل LLM مع إمكانية المراقبة: OpenTelemetry، وPrometheus/Grafana/Thanos، وLangfuse - مع إيجابيات/سلبيات واضحة، ورافعات التكلفة، ومقاييس الاستخدام التي تحمي الهوامش.",
+  "meta_title": "الكشف عن اختناقات LLM: OTEL وإمكانية الملاحظة والتكلفة | TenthMatrix",
+  "meta_description": "يمكنك العثور على اختناقات وكيل LLM باستخدام OpenTelemetry وPrometheus/Grafana وLangfuse. الإيجابيات والسلبيات والتكاليف ومقاييس الاستخدام للذكاء الاصطناعي الجاهز لـ FinOps.",
+  "meta_keywords": "اختناقات LLM، OpenTelemetry، OTEL، إمكانية المراقبة، Langfuse، Prometheus، Grafana، Thanos، FinOps، وكلاء الذكاء الاصطناعي، TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\">ملخص أعمال<p class=\"lead\"><em><strong>TenthMatrix</strong>: اكتشف LLM واختناقات الوكيل من خلال إمكانية المراقبة - منصات OpenTelemetry وPrometheus/Grafana/Thanos وLLM مثل Langfuse - حتى تتمكن من خفض التكلفة وتشديد عمليات تحديد المستوى (SLO) وشحن الوكلاء بالأدلة. نظرة عميقة: مقال فني طويل عن<a href=\"/ar/articles/llm-bottlenecks-observability-otel-cost-control\">(OTEL، FinOps، ميزانيات الوكلاء)</a>. ذات صلة:<a href=\"/ar/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">الشحن التوربيني LLMs</a>·<a href=\"/ar/enterprise-ai\">Enterprise AI Lab</a>.</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>خلاصة القول.</strong>معظم تذاكر \"الذكاء الاصطناعي البطيء\" ليست حالات فشل غامضة في النماذج - فهي تفتقد الإسناد. يعمل وكيل الأجهزة باستخدام OpenTelemetry، ويسجل المخرجات، ويضع علامة على كل مكالمة باستخدام المستأجر / النموذج / المسار / الرموز المميزة / التكلفة، ويفرض الميزانيات. عادة ما تجد الفرق التي تقوم بذلك إهدارًا بنسبة 20-50% في عمليات إعادة المحاولة، والنماذج كبيرة الحجم، والمطالبات غير المخزنة مؤقتًا خلال دورة القياس الأولى.</div><h2>لماذا تختبئ الاختناقات بدون القياس عن بعد</h2>سلسلة مطالبات وكلاء<p>LLM، والأدوات، واسترجاع RAG، وإعادة المحاولة. الكمون والإنفاق المركب عبر القفزات. بدون الامتدادات والمقاييس، لا يمكنك معرفة ما إذا كان عنق الزجاجة هو النموذج، أو مخزن المتجهات، أو أداة غير مستقرة، أو حلقة تصحيح ذاتية غير محدودة. يقوم أصحاب المصلحة في الأعمال بعد ذلك بالإفراط في شراء حصص GPUs أو API بينما تظل جودة المنتج ثابتة.</p>موقف<p>TenthMatrix بالنسبة لعقارات الذكاء الاصطناعي: تعامل مع خطوط أنابيب الوكلاء مثل أي خدمة إنتاج أخرى - قابلية ملاحظة<strong>أولاً</strong>، ثم قم بتحسين الخدمة (راجع<a href=\"/ar/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>)، ثم قم بالترويج بانضباط (<a href=\"/ar/ring-promoter\">Ring Promoter</a>).</p><h2>مكدس إمكانية المراقبة الذي يدفع لنفسه</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— طبقة أدوات واحدة للتتبعات والمقاييس والسجلات (عندما تكون مفيدة). تصدير إلى جامع. مروحة إلى الواجهات الخلفية.</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>- الإشارات الذهبية: معدل الطلب، ومعدل الخطأ، وزمن الوصول، وإنتاجية الرمز المميز، والدولار المقدر لكل طلب، واستخدام GPU. يحتفظ Thanos (أو ما يعادله) بمقاييس طويلة المدى لمراجعات FinOps.</li><li><strong>LLM منصات المراقبة</strong>(على سبيل المثال.<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) - واجهة المستخدم للجلسة/التتبع، الإصدارات السريعة، البشرية&amp; عشرات الآلي، ومجموعات البيانات للانحدار.</li></ul><h2>إيجابيات وسلبيات هذا النهج</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\">البعد<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th>إيجابيات<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">سلبيات/مقايضات</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>مراقبة التكاليف</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">إسناد الإنفاق إلى المستأجر والميزة والنموذج وخطوة الوكيل؛ قتل المحاولات المهدرة.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">الوقت الهندسي للأداة؛ تكلفة تخزين الآثار إذا كان الاحتفاظ بها ساذجًا.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>الجودة</strong></td>تلتقط نتائج<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">+ مجموعات البيانات الانحدارات السريعة قبل أن يفعلها العملاء.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">يمكن أن يكون التسجيل الآلي صاخبًا؛ لا يزال البشر بحاجة إلى مسارات حرجة.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>العمليات</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">نفس مجموعة مهارات OTEL/Prometheus مثل الخدمات الصغيرة الأخرى.</td>تضيف واجهات المستخدم الخاصة بـ<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM (Langfuse وما إلى ذلك) منتجًا آخر للتشغيل أو الشراء.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>الامتثال</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تدقيق من الذي اتصل بالنموذج وبأي إصدار موجه.</td>يجب تصميم سياسات الاحتفاظ بـ<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Prompt/PII مقدمًا.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>سرعة القيمة</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">أول لوحات معلومات خلال أيام إذا كنت تقوم بالفعل بتشغيل Grafana.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">يستغرق إسناد التكلفة الكاملة عبر الرسوم البيانية متعددة الوكلاء وقتًا أطول.</td></tr></tbody></table>تكاليف<h2>: ما تنفقه مقابل ما توفره</h2><p><strong>تكلفة الأجهزة (منصة الوكيل النموذجية متوسطة الحجم):</strong></p><ul><li>1-2 أسبوع مهندس لاعتماد اتفاقيات OTEL + أسلاك المصدر.</li>جامع<li>+ الاحتفاظ بالمقاييس: غالبًا ما يقل عن 5-10% من إنفاق LLM API/GPU الشهري بمجرد ضبط أخذ العينات.</li><li>إمكانية ملاحظة SaaS LLM الاختيارية: يتم تسعيرها لكل حدث/أثر - قم بميزانيتها كنسبة مئوية من إنفاق النموذج، وليس كفكرة لاحقة.</li></ul><p><strong>أذرع التوفير (مقاييس الاستخدام التي تحرك الإبرة):</strong></p><ul><li><strong>الرموز المميزة لكل مهمة ناجحة</strong>- وليس الرموز المميزة لكل مكالمة أولية. حلقات أداة Cap وجولات التصحيح الذاتي.</li><li><strong>التكلفة لكل مهمة ناجحة</strong>— توجيه نماذج رخيصة للتصنيف/التوجيه؛ احتياطي النماذج الحدودية للخطوات الصعبة.</li><li><strong>معدل وصول ذاكرة التخزين المؤقت</strong>- التخزين المؤقت للموجه/البادئة حيث يكون آمنًا؛ قياس الصحة، وليس الكمون فقط.</li><li><strong>معدل إعادة المحاولة &amp; معدل الأحرف الميتة</strong>- أدوات غير مستقرة تتنكر على أنها مشكلات \"جودة النموذج\".</li><li><strong>p95 TTFT وزمن الوصول الشامل</strong>- حماية تجربة المستخدم مع تقليل الإنفاق.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>القاعدة الأساسية.</strong>إذا لم تتمكن من الإجابة على \"ما هي تكلفة هذا الوكيل الأسبوع الماضي حسب العميل وبالخطوة؟\" أنت لست مستعدًا لتوسيع نطاق الاستخدام — أنت مستعد لمفاجأة الشؤون المالية.</div>تسجيل<h2>: يدوي مقابل</h2>تلقائي<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\">طريقة<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">متى يتم استخدام</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">مذكرة الأعمال</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>التسجيل اليدوي</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مجموعات ذهبية، إجابات منظمة، نسخة حساسة للعلامة التجارية.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">باهظ الثمن ولكنه يعتمد على القضاة الآليين.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>التسجيل التلقائي</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">انحدار كبير الحجم، LLM كقاضي، فحوصات نموذجية.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">رخيص على نطاق واسع؛ معايرة ضد البشر شهريا.</td></tr></tbody></table><h2>دليل الهجرة (ابدأ صغيرًا)</h2><ol>أداة<li><strong>مسار وكيل إنتاج</strong>واحد من البداية إلى النهاية مع سمات OTEL + الرمز المميز/التكلفة.</li><li>قم بشحن لوحة Grafana للمعدل / الأخطاء / الكمون / $ / النجاح.</li><li>أضف Langfuse (أو ما يعادله) للإصدارات والنتائج السريعة على هذا المسار.</li><li>فرض الحدود القصوى: الحد الأقصى من الرموز المميزة، الحد الأقصى لاستدعاءات الأداة، الحد الأقصى لعدد مرات إعادة المحاولة لكل جلسة.</li><li>قم بالتوسيع إلى الوكيل التالي فقط بعد أن يُظهر المسار الأول تكلفة مُقاسة أو ربح زمن الوصول.</li></ol>شاهد<h2>: لماذا تعتبر إمكانية المراقبة مهمة لأنظمة الذكاء الاصطناعي</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">يتحدث السياق عن ثقافة الملاحظة - وليس عرضًا توضيحيًا لمنتج TenthMatrix. قم بالاقتران مع مستندات<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>والمقالة الفنية<a href=\"/ar/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix</a>.</p><h2>اقرأ</h2>التالي<ol><li><a href=\"/ar/articles/llm-bottlenecks-observability-otel-cost-control\">مقالة طويلة</a>— مخطط نطاق OTEL، المجمعات، صيغ التكلفة، الحدود القصوى للوكلاء، ملاحظات Langfuse/LMNR.</li><li><a href=\"/ar/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">الشحن التوربيني LLMs</a>- اختناقات في جانب التقديم بعد أن تتمكن من رؤيتها.</li><li><a href=\"/ar/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">الوكلاء المحليون</a>·<a href=\"/ar/enterprise-ai\">Enterprise AI Lab</a>·<a href=\"/ar/contact-us\">اتصل بـ TenthMatrix</a></li></ol><p>تم النشر بواسطة<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>. المراجع:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

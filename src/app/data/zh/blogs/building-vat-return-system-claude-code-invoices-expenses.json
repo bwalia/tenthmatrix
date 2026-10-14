@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-vat-return-claude-code-001",
+  "internal_id": 942,
+  "slug": "building-vat-return-system-claude-code-invoices-expenses",
+  "title": "使用发票和费用数据库中的 Claude Code 构建 VAT 退货系统",
+  "sub_title": "我如何通过确定性数学、审计跟踪和人工审批门从 Postgres 发票表和供应商 PDF 文件夹到 HMRC Box 1 到 9 个数字",
+  "excerpt": "英国季度 VAT 回报过去意味着一份电子表格、一杯咖啡和一次小小的信仰飞跃。本博客介绍了我现在使用 Claude Code 运行的版本：读取发票和费用数据库，通过 VAT 处理对每一行进行分类，使用纯 Python 数学将 Box 1 计算为 9，试运行 PDF，然后提交到 HMRC MTD。始终由人工签字。",
+  "meta_title": "使用 Claude Code 构建 VAT 返回系统 | TenthMatrix",
+  "meta_description": "使用 Claude Code 读取您的发票 + 费用数据库，对 VAT 进行分类，将 HMRC Box 1 计算为 9，试运行，然后提交到 MTD - 使用确定性引擎和人工审批门。",
+  "meta_keywords": "Claude Code VAT、VAT 退货自动化、HMRC MTD、Making Tax Digital、AI 代理记账、VAT Box 1 至 9、发票费用数据库、FinOps、Python VAT 引擎、小型企业 VAT",
+  "cover_image": "/img/vat-return-claude-code-cover.svg",
+  "images": [
+    {
+      "url": "/img/vat-return-claude-code-cover.svg",
+      "id": 942,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "VAT returns with Claude Code from invoices and expenses - cover diagram"
+    },
+    {
+      "url": "/img/vat-return-claude-code-workflow.svg",
+      "id": 943,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Claude Code VAT return workflow: source, ingest, categorise, VAT engine, submit, audit lanes plus decision matrix"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>简短易读的伴侣。有关代码、提示、架构、HMRC MTD 演练和边缘案例的完整约 5,000 字的深入研究，请阅读 <a href=\"/zh/articles/building-vat-return-system-claude-code-invoices-expenses\">长篇文章</a>.</em></p>\n<h2>季度 VAT 是我这个月最糟糕的部分</h2>\n<p>每个季度，英国小企业必须生成 VAT 报表：九个框的数字（销售、采购、VAT 到期、VAT 可回收、欧盟商品（如果您在北爱尔兰）、总计、净额），并通过 HMRC Making Tax Digital (MTD) 提交。多年来，我的流程是这样的：在 Postgres 中打开发票表，导出 CSV，将其粘贴到 Excel 中，手动对几百行进行分类，运行公式，将九个数字复制到第三方 MTD 桥中，单击“提交”，希望如此。</p>\n<p>它有效，但速度慢且有损耗。收据不见了。季度中期的利率变化打破了公式。 VAT 分类中的一个拼写错误可能会移动 <strong>Box 5</strong> 数百英镑。审计跟踪是“相信我，我有一个电子表格”。</p>\n<p>今年，我将整个项目重建为一个小型 Claude Code 项目，该项目读取我的发票 + 费用数据库，对每一行进行分类，计算九个框，试运行 PDF，然后才通过人工审批门提交给 HMRC MTD。该博客是简短版本。这篇长文章包含提示、Python、HMRC OAuth 流程和陷阱。</p>\n<p><img alt=\"VAT 从您的 DB 与 Claude Code 返回 - 封面图\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/vat-return-claude-code-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>观看演练</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/oVXqZ_1UY-c?si=OnB907VIT5ORrr2P\" title=\"YouTube 视频播放器\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">针对真实（匿名）发票 + 费用数据库端到端运行的 VAT 返回管道的简短演练。</p>\n<h2>五步管道</h2>\n<p><img alt=\"VAT 返回具有六个通道的 Claude Code 工作流程：源、摄取、分类、VAT 引擎、提交、审核\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/vat-return-claude-code-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>连接。</strong> Claude Code 获得 <em>只读</em> 与我的发票和费用表的数据库连接。它永远没有对源数据的写访问权限。来自 Stripe、Wise、Revolut 和一些银行提要的 CSV 被放入 <code>./imports/</code>.</li>\n<li><strong>正常化。</strong> Claude 生成并运行一个小型 Python 脚本，将每个源模式映射到一个规范视图： <code>id, date, supplier_or_customer, gross, net, vat_amount, vat_rate, vat_treatment, country_code, currency, source, run_key</code>。外币使用 HMRC 月汇率转换为 GBP。整个时期以幂等为关键 <code>run_key</code> 所以重新运行是安全的。</li>\n<li><strong>分类+协调。</strong> Claude 将每条线分为 VAT 待遇 - 标准 20%、降低 5%、零、豁免、范围外、反向收费、欧盟商品、欧盟服务、推迟进口 VAT - 使用小型 <code>vat-rules.md</code> 我保留在回购协议中。它还可以根据付款核对发票并标记异常情况（负净额、缺少供应商 VAT 编号、国家/地区代码不匹配、未注册 VAT 的供应商）。</li>\n<li><strong>计算。</strong> 纯函数 Python 模块 - <em>数学中没有 LLM</em> - 读取分类行并生成 Box 1 到 Box 9，以及 Markdown 中的试运行报告。统一费率方案、现金会计和年度会计分支是明确的代码路径，而不是提示指令。</li>\n<li><strong>提交。</strong> 只有在我（或我的会计师）签署试运行后，管道才会调用 HMRC MTD API。 OAuth2 代币。防欺诈标头。 <code>GET obligations</code> 找到开放时间。 <code>POST returns</code> 和 <code>finalised: true</code>。然后 <code>GET liabilities</code> 确认我欠什么以及何时欠。</li>\n</ol>\n<h2>为什么选择 Claude Code 而不是 Xero / QuickBooks / FreeAgent</h2>\n<p>老实说，对于大多数小型企业来说，打包的会计师 SaaS 是正确的答案。他们拥有 HMRC 认证、支持团队，并且您的会计师已经了解他们。那么我为什么要这样做呢？</p>\n<ul>\n<li><strong>我已经每天使用 Claude Code</strong> 用于软件工作。使用它来组装 VAT 管道的边际成本也很小。</li>\n<li><strong>我的数据是本地的。</strong> 发票数据库永远不会离开我的机器。分类器在行上运行；数学是本地Python；只有最后九个数字进入 HMRC。没有 SaaS 租户，没有第三方。</li>\n<li><strong>我想要完全控制分类规则。</strong> 我的一些供应商组合很尴尬（欧盟服务、推迟进口 VAT、一些零税率的边缘情况）。将这些规则编码为 <code>vat-rules.md</code> + 对我来说，Python 模块比配置 SaaS 更快。</li>\n<li><strong>审计线索是我的。</strong> 每个克劳德提示和每个差异都会与签名的周期快照一起提交到仅附加日志中。如果 HMRC 提出要求，我可以在几秒钟内完成精确的计算。</li>\n</ul>\n<p>如果您还没有使用 Claude Code 或者您不喜欢在午夜阅读 Python，请使用 Xero / QuickBooks / FreeAgent。这并不是建议您部署自己的 VAT 系统。这是一个关于当你这样做时一切皆有可能的故事。</p>\n<h2>LLM 在哪里和不在哪里</h2>\n<p>这是我想大声说出来的部分。 <strong>克劳德不在 VAT 算术中。</strong> Claude 对线条进行分类，提出协调建议，并生成和编辑执行数学运算的确定性 Python 模块。 Box 1 到 Box 9 的实际计算是带有单元测试的纯函数。 HMRC 提交需要人工审批。试运行报告是签字的事实来源。如果我无法通过查看代码和分类行来解释为什么某个数字是这样的，我不会提交。</p>\n<p>这是一条硬性规则，因为金融受到监管，而“人工智能做到了”并不是 MTD 下的辩护理由。这 <a href=\"/zh/articles/building-vat-return-system-claude-code-invoices-expenses\">长文章</a> 更详细地介绍如何在您自己的实现中绘制这条线。</p>\n<h2>我的建造成本和运营成本</h2>\n<p>构建时间大约是一周的晚上——主要花在模式规范化、分类器规则和为引擎编写测试上。 HMRC MTD OAuth 舞蹈是最慢的部分；首先在沙箱中运行是值得的。</p>\n<p>为了运行，每个季度我的费用大约是：我的 Claude Code 订阅（已经为其他工作付费）加上分类器的几美分代币使用量。 HMRC API 本身是免费的。 VAT 引擎和审核日志在我的 Mac 上本地运行。</p>\n<h2>重要免责声明</h2>\n<p>我是一名工程师，不是特许会计师。 <strong>本文不是税务建议。</strong> 在针对您的真实 HMRC 帐户运行此类操作之前，请让一位英国注册会计师对您的第一份报表进行端到端审核。使用 HMRC MTD <em>沙箱</em> 直到你和你的会计师都满意为止。糟糕的 VAT 提交的成本远高于会计师一小时时间的成本。</p>\n<h2>阅读长版本</h2>\n<p>如果您想要了解完整情况 - 确切的 CREATE TABLE 模式、Claude Code 提示、带有单元测试的确定性 Python 引擎、HMRC MTD OAuth 流程、欺诈预防标头以及有关边缘情况的完整部分（Brexit / NI 协议、反向收费、部分豁免、统一费率方案、季度中期费率变化、多币种发票、贷方票据、存款） - 请阅读 <a href=\"/zh/articles/building-vat-return-system-claude-code-invoices-expenses\">长文章</a>。这是我在开始之前就想阅读的版本。</p>\n<p><em>观看 <a href=\"https://www.youtube.com/watch?v=oVXqZ_1UY-c\" rel=\"noopener noreferrer\" target=\"_blank\">YouTube 演练</a>，订阅后续教程（自动导入银行数据、收据 OCR、预定 cron + Slack 批准），并记住：不是税务建议，需要会计师签字。</em></p>\n</div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "vat",
+      "id": 951
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "developer-tools",
+      "id": 959
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

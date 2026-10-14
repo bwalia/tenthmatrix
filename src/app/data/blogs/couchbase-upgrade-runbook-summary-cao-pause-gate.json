@@ -1,0 +1,49 @@
+{
+  "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+  "excerpt": "A support-friendly, SRE-ready overview of Couchbase Server rolling upgrades under the Couchbase Autonomous Operator (CAO), using spec.paused to gate swap-rebalance one node at a time—so you can stabilize, validate health, and keep rollback options open.",
+  "sub_title": "Controlled rolling upgrade using CAO native pause gates, health checks, and XDCR-aware monitoring",
+  "title": "Couchbase upgrades with CAO pause gates: a support-friendly overview",
+  "meta_title": "Couchbase Server Upgrade Runbook (CAO paced + pause) | TenthMatrix",
+  "meta_description": "Upgrade Couchbase Server under CAO using spec.paused to pace swap-rebalance: preflight checks, monitoring signals, XDCR strategy, rollback triggers, and post-upgrade validation—written for support, SRE, and database engineers.",
+  "meta_keywords": "Couchbase, Couchbase Autonomous Operator, CAO, Kubernetes, rolling upgrade, spec.paused, swap rebalance, XDCR, SRE, runbook, database upgrade",
+  "images": [
+    {
+      "url": "/img/couchbase-upgrade-cover.svg",
+      "id": 930,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Couchbase Server upgrade runbook cover"
+    }
+  ],
+  "content": "<div class='blog-content'><p>If you support a Couchbase platform (or you’re the person who gets paged when it <em>doesn’t</em> behave), upgrades can feel like a choice between “hands-off and hope” and “manual and risky”. This post captures a pragmatic middle ground: a <strong>controlled rolling upgrade</strong> for Couchbase Server running under the <strong>Couchbase Autonomous Operator (CAO)</strong>, paced by CAO’s native <code>spec.paused</code> field.</p><h2>Who this is for</h2><ul><li><strong>Tech Support / incident responders:</strong> what “normal” looks like during swap-rebalance and what to treat as a red flag.</li><li><strong>SRE / platform engineers:</strong> repeatable procedure with preflight checks, soak gates, and rollback triggers.</li><li><strong>Database engineers:</strong> rebalance expectations, XDCR behaviour, and post-upgrade validation.</li><li><strong>Developers:</strong> what your platform is doing during the maintenance window (and what you should alert on).</li></ul><h2>Typical CAO-managed topology (conceptual)</h2><p>The diagram below is a mental map for the runbook: where the operator sits, what the <code>CouchbaseCluster</code> CR controls, and what signals you should correlate during the upgrade.</p><p><img src=\"/img/couchbase-upgrade-cluster-topology.svg\" alt=\"Typical Couchbase on AKS topology\" width=\"1200\" height=\"640\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>The big idea: pace CAO with a pause gate</h2><p>CAO performs a rolling upgrade via swap-rebalance. The runbook adds a deliberate safety gate: pause reconcile between nodes, stabilize, verify health, then resume. That way, if node N misbehaves after its swap, you catch it <em>before</em> node N+1 starts.</p><p><img src=\"/img/couchbase-upgrade-paced-loop.svg\" alt=\"Paced upgrade loop\" width=\"1200\" height=\"520\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>Why the pause gate is worth it</h2><ul><li><strong>Fewer surprises:</strong> isolate symptoms to a single node change.</li><li><strong>Cleaner signals:</strong> correlate latency, error rate, rebalance state, and XDCR lag to one swap.</li><li><strong>Safer rollouts:</strong> stop the “conveyor belt” quickly by holding <code>spec.paused=true</code> while you investigate.</li></ul><h2>What “good” looks like during the upgrade</h2><ul><li><strong>Pod images:</strong> old → new progressively; ideally one swap at a time.</li><li><strong>Cluster phase:</strong> often returns to <code>Available</code> between swaps; brief transitions during rebalance are expected.</li><li><strong>XDCR (if enabled):</strong> <code>changes_left</code> rises during rebalance, then drains during stabilization.</li><li><strong>Restarts:</strong> new pods start at <code>RESTARTS=0</code>. Any increase is a signal to pause and investigate.</li></ul><h2>Preflight checks that save you later</h2><p>Before you touch anything, make sure the cluster is green (no active rebalance, no warning events), backups are current <em>and restorable</em>, and you’ve recorded the rollback image tag. Decide your XDCR strategy up-front: disable during upgrade for a quieter signal in production, keep running in pre-prod to exercise real behaviour, or use a third standby cluster for strategic cutovers.</p><h2>Rollback reality check</h2><p>The uncomfortable truth that mature runbooks say out loud: <strong>rollback is only cleanly possible while at least one node remains on the old version</strong>. Once every pod has been swapped and the cluster has fully rebalanced, “downgrade” can become “restore from backup”. That’s why pacing matters: it keeps the rollback window open longer.</p><h2>Next steps</h2><ul><li>Read the full operational guide: <a href=\"/en/articles/couchbase-server-upgrade-cao-paced\">Couchbase Server rolling upgrade under CAO (paced + pause gate)</a></li><li>Related background: <a href=\"/en/docs/blogs/couchbase-ha-production-multi-region\">Couchbase high availability in production (XDCR + Kubernetes operator)</a></li></ul></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "database",
+      "id": 930
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "observability",
+      "id": 934
+    }
+  ],
+  "created_at": "2026-04-22T12:30:00Z",
+  "updated_at": "2026-04-22T12:30:00Z",
+  "status": true,
+  "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "internal_id": 930,
+  "published_date": "2026-04-22"
+}

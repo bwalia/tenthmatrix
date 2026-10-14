@@ -1,0 +1,61 @@
+{
+  "uuid": "blog-claude-models-compare-001",
+  "internal_id": 952,
+  "slug": "claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "title": "Claude Models Compared: Haiku ਬਨਾਮ Sonnet ਬਨਾਮ Opus ਬਨਾਮ Fable 5 (Mythos 5)",
+  "sub_title": "ਸਹੀ Claude model tier ਚੁਣਨ ਦੀ ਤੇਜ਼ ਗਾਈਡ, plus ਇੱਕ cheap-to-frontier router.",
+  "excerpt": "ਸਹੀ Claude model tier ਚੁਣੋ: ਤੇਜ਼ routing ਲਈ Haiku, ਰੋਜ਼ਾਨਾ ਕੰਮ ਲਈ Sonnet, ਗੁੰਝਲਦਾਰ agentic coding ਲਈ Opus, ਅਤੇ long-horizon autonomy ਲਈ Fable 5. Token-budget router blueprint ਸ਼ਾਮਲ.",
+  "meta_title": "Claude Models Compared: Haiku ਬਨਾਮ Sonnet ਬਨਾਮ Opus ਬਨਾਮ Fable 5",
+  "meta_description": "Anthropic Claude Haiku, Sonnet, Opus, Fable 5 ਅਤੇ gated Mythos 5 ਦੀ ਤੁਲਨਾ ਕਰੋ. Specs, cost/token strategy ਅਤੇ routing blueprint ਸ਼ਾਮਲ.",
+  "meta_keywords": "Claude ਮਾਡਲ ਤੁਲਨਾ, Claude Opus 4.8, Claude Fable 5, Claude Sonnet 5, Claude Haiku 4.5, Claude Mythos 5, ਟੋਕਨ ਬਜਟਿੰਗ, ਏਜੰਟਿਕ ਕੋਡਿੰਗ",
+  "cover_image": "/img/claude-models-comparison-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-models-comparison-cover.svg",
+      "id": 952,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude models comparison cover: Haiku, Sonnet, Opus, Fable 5, Mythos 5"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Claude model tiers ਦੀ ਤੇਜ਼, ਅਮਲੀ ਗਾਈਡ. Routing blueprints, prompting patterns ਅਤੇ token-budget playbook ਵਾਲੇ ਪੂਰੇ deep-dive ਲਈ ਪੜ੍ਹੋ <a href=\"/pa/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">ਵੱਡਾ article</a>.</em></p>\n<p><img alt=\"Claude models ਤੁਲਨਾ: Haiku, Sonnet, Opus, Fable 5, Mythos 5\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-models-comparison-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>ਇੱਕ-ਪੈਰਾਗ੍ਰਾਫ਼ ਸੰਸਕਰਣ.</strong> Claude model ਚੋਣ ਮੁੱਖ ਤੌਰ ਤੇ trade ਹੈ ਵਿਚਕਾਰ <em>latency</em>, <em>ਲਾਗਤ</em>, ਅਤੇ <em>task ਨੂੰ model ਨੂੰ flow ਵਿੱਚ ਕਿੰਨੀ ਦੇਰ ਰਹਿਣਾ ਚਾਹੀਦਾ ਹੈ</em>. ਵਰਤੋ <code>claude-haiku-4-5</code> ਤੇਜ਼ ਅਤੇ ਸਸਤੇ intent ਕੰਮ ਲਈ, <code>claude-sonnet-5</code> ਸਭ ਤੋਂ ਵਧੀਆ speed/quality balance ਲਈ, <code>claude-opus-4-8</code> ਗੁੰਝਲਦਾਰ agentic coding ਅਤੇ enterprise ਕੰਮ ਲਈ, ਅਤੇ ਰਾਖਵਾਂ ਰੱਖੋ <code>claude-fable-5</code> (ਅਤੇ gated <code>claude-mythos-5</code>) ਅਸਲ ਵਿੱਚ ਔਖੀਆਂ, long-horizon jobs ਲਈ ਜੋ ਘੰਟੇ ਜਾਂ ਦਿਨ ਲੈਂਦੀਆਂ ਹਨ.\n</div>\n<h2>ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ model lineup</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0a2740;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ਮਾਡਲ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ਸਭ ਤੋਂ ਵਧੀਆ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Context window</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Max output</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Pricing (input / output)</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Thinking behavior</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Fable 5</strong> (<code>claude-fable-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Long-running agents ਅਤੇ ਸਭ ਤੋਂ ਔਖੀਆਂ unresolved ਸਮੱਸਿਆਵਾਂ</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$10 / $50 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Opus 4.8</strong> (<code>claude-opus-4-8</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ਗੁੰਝਲਦਾਰ agentic coding ਅਤੇ enterprise ਕੰਮ</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$5 / $25 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Sonnet 5</strong> (<code>claude-sonnet-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ਸਭ ਤੋਂ ਵਧੀਆ speed/quality balance</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$3 / $15 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Haiku 4.5</strong> (<code>claude-haiku-4-5-20251001</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ਸਸਤੇ, high-volume tasks ਲਈ ਸਭ ਤੋਂ ਤੇਜ਼ model</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">200K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">64K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$1 / $5 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Extended thinking available (adaptive off)</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Claude Mythos 5</strong> (<code>claude-mythos-5</code>) ਇੱਕ gated model ਹੈ ਜੋ Fable 5 ਵਰਗੀਆਂ specs ਅਤੇ pricing ਸਾਂਝੀਆਂ ਕਰਦਾ ਹੈ, ਪਰ Fable 5 ਵਾਲੇ safety classifiers ਸ਼ਾਮਲ ਨਹੀਂ ਕਰਦਾ. ਉਪਲਬਧਤਾ Project Glasswing ਰਾਹੀਂ ਮਨਜ਼ੂਰ partners ਤੱਕ ਸੀਮਿਤ ਹੈ.</p>\n<h2>ਸਹੀ model ਚੁਣੋ (ਤੇਜ਼ ਨਿਯਮ)</h2>\n<ul>\n<li><strong>Haiku 4.5</strong>: routing, classification, extraction, ਅਤੇ ਕੋਈ ਵੀ workflow ਜਿੱਥੇ ਤੇਜ਼ ਜਵਾਬ ਚਾਹੀਦੇ ਹੋਣ ਅਤੇ ਉੱਚ output-token budgets ਨਾ ਚੁੱਕੇ ਜਾ ਸਕਣ.</li>\n<li><strong>Sonnet 5</strong>: ਰੋਜ਼ਾਨਾ coding ਅਤੇ document ਕੰਮ ਜਿੱਥੇ Opus/Fable ਕੀਮਤ ਤੋਂ ਬਿਨਾਂ ਮਜ਼ਬੂਤ ਗੁਣਵੱਤਾ ਚਾਹੀਦੀ ਹੋਵੇ.</li>\n<li><strong>Opus 4.8</strong>: ਗੁੰਝਲਦਾਰ agentic coding, enterprise analysis, ਅਤੇ ਔਖੀ debugging ਜਿੱਥੇ ਲੰਬਾ, ਵਧੇਰੇ autonomous ਕੰਮ ਚਾਹੀਦਾ ਹੋਵੇ.</li>\n<li><strong>Fable 5</strong>: ਉਹ ਔਖੀਆਂ, long-horizon ਸਮੱਸਿਆਵਾਂ ਜੋ ਘੰਟੇ ਜਾਂ ਦਿਨ ਲੈਂਦੀਆਂ ਹਨ, ਖਾਸ ਕਰਕੇ ਜਦੋਂ model ਨੂੰ ਟੀਚਾ ਰੱਖਣਾ, sub-tasks ਸੌਂਪਣਾ ਅਤੇ ਇਕਸਾਰ ਰਹਿਣਾ ਹੋਵੇ.</li>\n</ul>\n<h2>Effort ਅਤੇ thinking: ਲਾਗਤ ਉੱਤੇ ਅਸਰ</h2>\n<p>API ਉੱਤੇ, <code>effort</code> Fable 5 ਅਤੇ Mythos 5 ਉੱਤੇ intelligence, latency ਅਤੇ cost ਵਿਚਕਾਰ trade-off ਦਾ ਮੁੱਖ ਨਿਯੰਤਰਣ ਹੈ. Opus 4.8 ਅਤੇ Sonnet 5 ਲਈ ਤੁਸੀਂ effort ਸਪਸ਼ਟ ਰੂਪ ਵਿੱਚ ਵੀ ਸੈੱਟ ਕਰ ਸਕਦੇ ਹੋ ਜਦੋਂ ਵੱਖਰਾ cost/latency profile ਚਾਹੀਦਾ ਹੋਵੇ.</p>\n<p>ਅਮਲੀ ਅਰਥ: ਹਰ request ਨੂੰ maximum effort ਉੱਤੇ ਡਿਫਾਲਟ ਕਰਨਾ ਅਕਸਰ output tokens ਉੱਤੇ ਬਜਟ ਖਰਚਣ ਦਾ ਸਭ ਤੋਂ ਤੇਜ਼ ਤਰੀਕਾ ਹੈ.</p>\n<h2>Token strategy ਜੋ ਸਾਰੇ tiers ਉੱਤੇ ਕੰਮ ਕਰੇ</h2>\n<p>Claude output tokens ਮਹਿੰਗਾ ਹਿੱਸਾ ਹਨ. ਇੱਕ ਸਧਾਰਨ ਨਿਯਮ ਹੈ: <strong>output length ਸੀਮਿਤ ਕਰੋ</strong>, <strong>TLDR-first ਲਈ prompt</strong>, ਅਤੇ ਵਰਤੋ <strong>prompt caching</strong> ਤਾਂ ਜੋ stable prefixes (system instructions ਅਤੇ tool schemas) ਦੁਬਾਰਾ ਵਰਤੇ ਜਾਣ.</p>\n<ul>\n<li><strong>ਸਭ ਤੋਂ ਸਸਤਾ model ਵਰਤੋ ਜੋ ਪੂਰਾ ਕਰ ਸਕੇ.</strong> ਇੱਕ router (Haiku -&gt; Sonnet/Opus -&gt; Fable) ਅਕਸਰ ਗੁਣਵੱਤਾ ਉੱਚੀ ਰੱਖਦਿਆਂ ਲਾਗਤ ਨਾਟਕੀ ਤੌਰ ਤੇ ਘਟਾਉਂਦਾ ਹੈ.</li>\n<li><strong>Output limits ਸੈੱਟ ਕਰੋ.</strong> Production ਵਿੱਚ ਹਮੇਸ਼ਾ max output / token cap ਸੈੱਟ ਕਰੋ. ਬੇਅੰਤ ਜਵਾਬ budgeting accident ਹਨ.</li>\n<li><strong>Summaries ਰਣਨੀਤਕ ਤੌਰ ਤੇ ਵਰਤੋ.</strong> ਹਰ turn ਉੱਤੇ ਪੂਰੇ transcripts ਭੇਜਣ ਦੀ ਬਜਾਏ, ਇੱਕ compact “lessons” memory ਰੱਖੋ ਅਤੇ ਸਿਰਫ਼ ਉਸ ਨੂੰ ਅੱਪਡੇਟ ਕਰੋ.</li>\n</ul>\n<h2>ਇੱਕ ਸਧਾਰਨ router blueprint</h2>\n<ol>\n<li>Intent ਅਤੇ ਅਨੁਮਾਨਿਤ complexity classify ਕਰੋ <code>claude-haiku-4-5</code>.</li>\n<li>“Normal hard” ਕੰਮ ਭੇਜੋ <code>claude-sonnet-5</code> (ਜਾਂ <code>claude-opus-4-8</code> ਜਦੋਂ ਤੁਸੀਂ heavier agentic coding ਦੀ ਉਮੀਦ ਕਰੋ).</li>\n<li>Escalate ਕਰੋ <code>claude-fable-5</code> ਸਿਰਫ਼ ਜਦੋਂ task ਸਪਸ਼ਟ ਤੌਰ ਤੇ long-horizon ਹੋਵੇ ਜਾਂ ਹੇਠਲੇ tiers ਉੱਤੇ fail ਹੋ ਚੁੱਕਿਆ ਹੋਵੇ.</li>\n<li>ਜੇ Fable 5 safety classifiers ਰਾਹੀਂ ਇਨਕਾਰ ਕਰੇ, Opus 4.8 ਉੱਤੇ ਵਾਪਸ ਜਾਓ (API configured ਹੋਣ ਤੇ fallbacks ਨਾਲ refiring ਸਹਾਰਦਾ ਹੈ).</li>\n</ol>\n<h2>ਹੋਰ ਪੜ੍ਹੋ (official)</h2>\n<ul>\n<li><a href=\"https://platform.claude.com/docs/pa/about-claude/models/overview\" rel=\"noopener noreferrer\" target=\"_blank\">Models overview</a></li>\n<li><a href=\"https://platform.claude.com/docs/pa/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">Fable 5 ਅਤੇ Mythos 5 ਦਾ ਪਰਿਚਯ</a></li>\n<li><a href=\"https://platform.claude.com/docs/pa/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">Prompting Claude Fable 5</a></li>\n</ul>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-07-08T09:00:00Z",
+  "updated_at": "2026-07-08T09:00:00Z",
+  "published_date": "2026-07-08",
+  "status": true
+}

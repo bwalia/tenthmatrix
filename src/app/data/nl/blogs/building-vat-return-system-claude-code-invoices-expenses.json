@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-vat-return-claude-code-001",
+  "internal_id": 942,
+  "slug": "building-vat-return-system-claude-code-invoices-expenses",
+  "title": "Een VAT-retoursysteem bouwen met Claude Code vanuit uw facturen- en onkostendatabase",
+  "sub_title": "Hoe ik van een Postgres-facturentabel en een map met leveranciers-pdf's naar HMRC Box 1 ging naar 9 cijfers, met deterministische wiskunde, een audittrail en een menselijke goedkeuringspoort",
+  "excerpt": "Driemaandelijkse Britse VAT-rendementen betekenden vroeger een spreadsheet, een kopje koffie en een kleine sprong in het diepe. Deze blog doorloopt de versie die ik nu gebruik met Claude Code: lees de facturen en onkostendatabase, classificeer elke regel op basis van VAT-behandeling, bereken Box 1 tot 9 met pure Python-wiskunde, maak een droogrun van een PDF en verzend deze vervolgens naar HMRC MTD. Altijd met een menselijke aftekening.",
+  "meta_title": "Bouw een VAT-retoursysteem met Claude Code | TenthMatrix",
+  "meta_description": "Gebruik Claude Code om uw facturen + onkostengegevens te lezen, classificeer VAT, bereken HMRC Box 1 naar 9, test ze en verzend ze vervolgens naar MTD - met een deterministische engine en menselijke goedkeuringspoort.",
+  "meta_keywords": "Claude Code VAT, VAT retourautomatisering, HMRC MTD, Making Tax Digital, AI-agentboekhouding, VAT Box 1 tot 9, database met facturen, FinOps, Python VAT-engine, klein bedrijf VAT",
+  "cover_image": "/img/vat-return-claude-code-cover.svg",
+  "images": [
+    {
+      "url": "/img/vat-return-claude-code-cover.svg",
+      "id": 942,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "VAT returns with Claude Code from invoices and expenses - cover diagram"
+    },
+    {
+      "url": "/img/vat-return-claude-code-workflow.svg",
+      "id": 943,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Claude Code VAT return workflow: source, ingest, categorise, VAT engine, submit, audit lanes plus decision matrix"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Een korte, vlot leesbare metgezel. Voor de volledige diepgaande duik van ongeveer 5000 woorden met code, aanwijzingen, schema, een HMRC MTD walkthrough en randgevallen leest u <a href=\"/nl/articles/building-vat-return-system-claude-code-invoices-expenses\">het lange artikel</a>.</em></p>\n<h2>Kwartaal VAT was het slechtste deel van mijn maand</h2>\n<p>Elk kwartaal moet een klein bedrijf in het Verenigd Koninkrijk een VAT-aangifte indienen: negen dozen met getallen (verkopen, aankopen, verschuldigde VAT, terug te vorderen VAT, EU-goederen als u zich in Noord-Ierland bevindt, totalen, netto) en deze indienen via HMRC Making Tax Digital (MTD). Jarenlang zag de mijne er zo uit: open de facturentabel in Postgres, exporteer een CSV, plak het in Excel, classificeer een paar honderd rijen met de hand, voer formules uit, kopieer negen getallen naar een MTD-bridge van derden, klik op Verzenden, hoop.</p>\n<p>Het werkte, maar het was traag en verlieslatend. De ontvangstbewijzen zijn verdwenen. Rentewijzigingen halverwege het kwartaal braken de formules. Een typefout in één VAT-classificatie kan worden verplaatst <strong>Box 5</strong> met honderden ponden. En het audittraject was: \"geloof me, ik had een spreadsheet\".</p>\n<p>Dit jaar heb ik het geheel opnieuw opgebouwd als een klein Claude Code-project dat mijn facturen + onkosten-DB leest, elke regel classificeert, de negen vakken berekent, een pdf droogmaakt en pas daarna indient bij HMRC MTD - met een menselijke goedkeuringspoort. Deze blog is de korte versie. Het lange artikel bevat de aanwijzingen, de Python, de HMRC OAuth-stroom en de valkuilen.</p>\n<p><img alt=\"VAT retourneert uw DB met Claude Code - omslagdiagram\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/vat-return-claude-code-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>Bekijk de walkthrough</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/oVXqZ_1UY-c?si=OnB907VIT5ORrr2P\" title=\"YouTube-videospeler\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">Een korte walkthrough van de VAT-retourpijplijn die end-to-end loopt tegen een echte (geanonimiseerde) database met facturen en onkosten.</p>\n<h2>De vijfstappenpijplijn</h2>\n<p><img alt=\"VAT retourneert Claude Code-workflow met zes rijstroken: bron, opname, categorisering, VAT-engine, indiening, audit\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/vat-return-claude-code-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>Verbinden.</strong> Claude Code krijgt een <em>alleen-lezen</em> DB-koppeling met mijn facturen en onkostentabellen. Het heeft nooit schrijftoegang tot de brongegevens. CSV's van Stripe, Wise, Revolut en een paar bankfeeds worden erin geplaatst <code>./imports/</code>.</li>\n<li><strong>Normaliseren.</strong> Claude genereert en voert een klein Python-script uit dat elk bronschema in één canonieke weergave in kaart brengt: <code>id, date, supplier_or_customer, gross, net, vat_amount, vat_rate, vat_treatment, country_code, currency, source, run_key</code>. Vreemde valuta worden omgerekend naar GBP met behulp van het maandtarief HMRC. De hele periode wordt ingetoetst door een idempotent <code>run_key</code> dus opnieuw rennen is veilig.</li>\n<li><strong>Categoriseren + afstemmen.</strong> Claude classificeert elke regel in een VAT-behandeling - standaard 20%, verlaagd 5%, nul, vrijgesteld, buiten bereik, verlegging, EU-goederen, EU-diensten, uitgestelde import VAT - met behulp van een kleine <code>vat-rules.md</code> Ik blijf in de repository. Het vergelijkt ook facturen met betalingen en signaleert afwijkingen (negatieve nettobedragen, ontbrekende VAT-nummers van leveranciers, niet-overeenkomende landcodes, leveranciers die niet VAT-geregistreerd zijn).</li>\n<li><strong>Berekenen.</strong> Een puur functionele Python-module - <em>geen LLM in de wiskunde</em> - leest de geclassificeerde rijen en produceert Box 1 tot en met Box 9, plus een drooglooprapport in Markdown. Het forfaitaire schema, de contante boekhouding en de jaarlijkse boekhoudkundige takken zijn expliciete codepaden en geen snelle instructies.</li>\n<li><strong>Indienen.</strong> Pas nadat ik (of mijn accountant) de proefperiode heb ondertekend, roept de pijplijn de HMRC MTD API aan. OAuth2-token. Kopteksten ter voorkoming van fraude. <code>GET obligations</code> om de open periode te vinden. <code>POST returns</code> met <code>finalised: true</code>. Dan <code>GET liabilities</code> om te bevestigen wat ik verschuldigd ben en wanneer.</li>\n</ol>\n<h2>Waarom Claude Code in plaats van Xero / QuickBooks / FreeAgent</h2>\n<p>Eerlijk gezegd is een SaaS-pakket voor accountants voor de meeste kleine bedrijven het juiste antwoord. Ze hebben een HMRC-certificering, ondersteuningsteams en uw accountant kent ze al. Dus waarom deed ik dit?</p>\n<ul>\n<li><strong>Ik gebruik Claude Code al elke dag</strong> voor softwarewerk. De marginale kosten om het ook te gebruiken om een ​​VAT-pijpleiding samen te stellen, zijn klein.</li>\n<li><strong>Mijn gegevens zijn lokaal.</strong> De facturen DB verlaten nooit mijn machine. De classificator loopt over rijen; de wiskunde is lokale Python; alleen de laatste negen cijfers gaan naar HMRC. Geen SaaS-tenant, geen derde partij.</li>\n<li><strong>Ik wilde volledige controle over de categorisatieregels.</strong> Een deel van mijn leveranciersmix is ​​lastig (EU-diensten, uitgestelde import VAT, een paar randgevallen met nulbeoordeling). Codeer deze regels in <code>vat-rules.md</code> + een Python-module is voor mij sneller dan het configureren van een SaaS.</li>\n<li><strong>Het audittraject is van mij.</strong> Elke Claude-prompt en elke diff wordt vastgelegd in een logboek dat alleen kan worden toegevoegd, naast de ondertekende momentopname. Als HMRC er ooit om vraagt, kan ik binnen enkele seconden de exacte berekening maken.</li>\n</ul>\n<p>Als u Claude Code nog niet gebruikt of als u het niet leuk vindt om Python om middernacht te lezen, gebruik dan Xero / QuickBooks / FreeAgent. Dit is geen aanbeveling om uw eigen VAT-systeem te gebruiken. Het is een verhaal over wat er mogelijk is als je dat doet.</p>\n<h2>Waar de LLM is en niet is</h2>\n<p>Dit is het deel waar ik luid over wil zijn. <strong>Claude zit niet in de VAT-rekenkunde.</strong> Claude classificeert lijnen, stelt afstemmingen voor en genereert en bewerkt de deterministische Python-modules die de wiskunde doen. De daadwerkelijke berekening van Box 1 tot en met Box 9 is een pure functie met eenheidstests. De HMRC-inzending vereist een menselijke goedkeuringspoort. Het proefrapport is de bron van waarheid voor ondertekening. Als ik niet kan uitleggen waarom een ​​getal is wat het is door naar de code en de geclassificeerde rijen te kijken, dien ik niet in.</p>\n<p>Dit is een harde regel omdat financiën gereguleerd zijn, en \"de AI heeft het gedaan\" is geen verdediging onder MTD. De <a href=\"/nl/articles/building-vat-return-system-claude-code-invoices-expenses\">lang artikel</a> gaat dieper in op hoe u deze lijn in uw eigen implementatie kunt trekken.</p>\n<h2>Wat het mij heeft gekost om te bouwen, en wat het mij kost om te runnen</h2>\n<p>De bouwtijd besloeg ongeveer een week van gerichte avonden - meestal besteed aan schemanormalisatie, de classificatieregels en het schrijven van tests voor de engine. De HMRC MTD OAuth-dans was het langzaamste deel; als eerste tegen de zandbak rennen was elke minuut waard.</p>\n<p>Om het uit te voeren, kost elk kwartaal me ongeveer: mijn Claude Code-abonnement (al betaald voor ander werk) plus een paar centen aan tokengebruik voor de classifier. De HMRC API zelf is gratis. De VAT-engine en het auditlogboek draaien lokaal op mijn Mac.</p>\n<h2>Belangrijke disclaimer</h2>\n<p>Ik ben een ingenieur, geen registeraccountant. <strong>Dit artikel is geen belastingadvies.</strong> Voordat u zoiets op uw echte HMRC-account uitvoert, moet u een in het Verenigd Koninkrijk geregistreerde accountant vragen uw eerste aangifte van begin tot eind te beoordelen. Gebruik de HMRC MTD <em>zandbak</em> totdat jij en je accountant allebei tevreden zijn. De kosten van een slechte VAT-inzending zijn veel hoger dan de kosten van een uur accountantstijd.</p>\n<h2>Lees de lange versie</h2>\n<p>Als u het volledige beeld wilt hebben - het exacte CREATE TABLE-schema, de Claude Code-prompts, de deterministische Python-engine met unit-tests, de HMRC MTD OAuth-stroom, headers ter preventie van fraude en een grondige sectie over randgevallen (Brexit/NI-protocol, verlegging, gedeeltelijke vrijstelling, forfaitaire regeling, tariefwijzigingen halverwege het kwartaal, facturen in meerdere valuta's, creditnota's, deposito's) - lees dan het <a href=\"/nl/articles/building-vat-return-system-claude-code-invoices-expenses\">lang artikel</a>. Het is de versie die ik graag had willen lezen voordat ik begon.</p>\n<p><em>Bekijk de <a href=\"https://www.youtube.com/watch?v=oVXqZ_1UY-c\" rel=\"noopener noreferrer\" target=\"_blank\">YouTube-walkthrough</a>, abonneer u op vervolgtutorials (bankfeeds automatisch importeren, OCR voor bonnen, geplande cron + Slack-goedkeuring) en onthoud: geen belastingadvies, aftekening door accountant vereist.</em></p>\n</div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "vat",
+      "id": 951
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "developer-tools",
+      "id": 959
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

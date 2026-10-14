@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-label="Paced rolling upgrade loop using spec.paused gate, with control plane actions, CR state, and observed cluster signals">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <style>
+      .title { fill: #ffffff; font: 800 28px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .step { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .stepWarn { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .stepOk { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .stepGate { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .stepFail { fill: #3a0e0e; stroke: #e53935; stroke-width: 1.5; }
+      .stepLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .stepText { fill: #bbc6ff; font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .num { fill: #ff8a65; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .flow { stroke: #9fb0ff; stroke-width: 2; fill: none; }
+      .loopBack { stroke: #ffca28; stroke-width: 2.5; fill: none; stroke-dasharray: 8 6; }
+      .failPath { stroke: #e57373; stroke-width: 2.5; fill: none; stroke-dasharray: 6 4; }
+      .timing { fill: #26c6da; font: 700 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#9fb0ff"/>
+    </marker>
+    <marker id="arLoop" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#ffca28"/>
+    </marker>
+    <marker id="arFail" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#e57373"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="980" fill="url(#bg)"/>
+
+  <text class="title" x="40" y="50">Paced rolling upgrade loop</text>
+  <text class="subtitle" x="40" y="72">Per-node sequence: patch image - pause - stabilize - health check - resume - repeat (until all pods on target image)</text>
+
+  <g>
+    <rect x="40" y="100" width="1320" height="80" rx="12" class="lane"/>
+    <text class="laneTitle" x="62" y="124">CONTINUOUSLY MONITORED</text>
+    <g transform="translate(220,140)">
+      <rect width="220" height="32" rx="8" class="step"/>
+      <text class="stepText" x="14" y="20">XDCR changes_left (drain timer)</text>
+    </g>
+    <g transform="translate(460,140)">
+      <rect width="220" height="32" rx="8" class="step"/>
+      <text class="stepText" x="14" y="20">App SLOs (p95 latency, errors)</text>
+    </g>
+    <g transform="translate(700,140)">
+      <rect width="200" height="32" rx="8" class="step"/>
+      <text class="stepText" x="14" y="20">Pod restarts on new image</text>
+    </g>
+    <g transform="translate(920,140)">
+      <rect width="200" height="32" rx="8" class="step"/>
+      <text class="stepText" x="14" y="20">Rebalance status (REST)</text>
+    </g>
+    <g transform="translate(1140,140)">
+      <rect width="200" height="32" rx="8" class="step"/>
+      <text class="stepText" x="14" y="20">Warning events and alerts</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="200" width="400" height="700" rx="12" class="lane"/>
+    <text class="laneTitle" x="62" y="224">OPERATOR / SCRIPT ACTIONS</text>
+
+    <rect x="460" y="200" width="340" height="700" rx="12" class="lane"/>
+    <text class="laneTitle" x="482" y="224">COUCHBASECLUSTER CR STATE</text>
+
+    <rect x="820" y="200" width="540" height="700" rx="12" class="lane"/>
+    <text class="laneTitle" x="842" y="224">CLUSTER SIGNALS / OBSERVATIONS</text>
+  </g>
+
+  <g transform="translate(62,250)">
+    <rect width="360" height="80" rx="10" class="step"/>
+    <text class="num" x="14" y="32">1</text>
+    <text class="stepLabel" x="44" y="32">Patch spec.image to target</text>
+    <text class="code" x="14" y="54">kubectl patch couchbasecluster $NS \</text>
+    <text class="code" x="14" y="70">  -p {spec: {image: couchbase/server:7.6.10}}</text>
+  </g>
+  <g transform="translate(478,250)">
+    <rect width="304" height="80" rx="10" class="stepGate"/>
+    <text class="stepLabel" x="14" y="26">spec.image = v2 (new)</text>
+    <text class="stepText" x="14" y="48">spec.paused = false (initial)</text>
+    <text class="stepText" x="14" y="66">status.phase = Available</text>
+  </g>
+  <g transform="translate(840,250)">
+    <rect width="500" height="80" rx="10" class="step"/>
+    <text class="stepLabel" x="14" y="26">CAO detects image drift</text>
+    <text class="stepText" x="14" y="48">CAO would now begin swap-rebalance of next node</text>
+    <text class="stepText" x="14" y="66">Script intervenes immediately to set pause first</text>
+  </g>
+
+  <g transform="translate(62,350)">
+    <rect width="360" height="80" rx="10" class="stepGate"/>
+    <text class="num" x="14" y="32">2</text>
+    <text class="stepLabel" x="44" y="32">Set spec.paused = true</text>
+    <text class="code" x="14" y="54">kubectl patch couchbasecluster $NS \</text>
+    <text class="code" x="14" y="70">  -p {spec: {paused: true}}</text>
+  </g>
+  <g transform="translate(478,350)">
+    <rect width="304" height="80" rx="10" class="stepGate"/>
+    <text class="stepLabel" x="14" y="26">spec.paused = true</text>
+    <text class="stepText" x="14" y="48">CAO holds reconciliation</text>
+    <text class="stepText" x="14" y="66">In-flight swap (if any) completes</text>
+  </g>
+  <g transform="translate(840,350)">
+    <rect width="500" height="80" rx="10" class="step"/>
+    <text class="stepLabel" x="14" y="26">Operator logs: reconciliation paused</text>
+    <text class="stepText" x="14" y="48">Next node will NOT start. Current swap (if running) finishes.</text>
+    <text class="stepText" x="14" y="66">Cluster phase typically returns to Available between swaps.</text>
+  </g>
+
+  <g transform="translate(62,450)">
+    <rect width="360" height="80" rx="10" class="step"/>
+    <text class="num" x="14" y="32">3</text>
+    <text class="stepLabel" x="44" y="32">Stabilize (timer)</text>
+    <text class="code" x="14" y="54">sleep $STABILIZATION_SECONDS</text>
+    <text class="timing" x="14" y="70">recommended: 120s (dev)  /  300-600s (prod)</text>
+  </g>
+  <g transform="translate(478,450)">
+    <rect width="304" height="80" rx="10" class="stepGate"/>
+    <text class="stepLabel" x="14" y="26">No CR changes during sleep</text>
+    <text class="stepText" x="14" y="48">spec.paused remains true</text>
+    <text class="stepText" x="14" y="66">CAO does nothing</text>
+  </g>
+  <g transform="translate(840,450)">
+    <rect width="500" height="80" rx="10" class="step"/>
+    <text class="stepLabel" x="14" y="26">XDCR drains; app traffic re-settles</text>
+    <text class="stepText" x="14" y="48">changes_left trends down. Rebalance status returns to none.</text>
+    <text class="stepText" x="14" y="66">If app errors persist past timer, stop and investigate.</text>
+  </g>
+
+  <g transform="translate(62,550)">
+    <rect width="360" height="80" rx="10" class="step"/>
+    <text class="num" x="14" y="32">4</text>
+    <text class="stepLabel" x="44" y="32">REST health check</text>
+    <text class="code" x="14" y="54">GET /pools/default  -  rebalanceStatus=none</text>
+    <text class="code" x="14" y="70">every node status = healthy</text>
+  </g>
+  <g transform="translate(478,550)">
+    <rect width="304" height="80" rx="10" class="step"/>
+    <text class="stepLabel" x="14" y="26">No CR mutation here</text>
+    <text class="stepText" x="14" y="48">Decision: pass or fail</text>
+    <text class="stepText" x="14" y="66">Fail before health timeout = abort</text>
+  </g>
+  <g transform="translate(840,550)">
+    <rect width="500" height="80" rx="10" class="stepOk"/>
+    <text class="stepLabel" x="14" y="26">PASS: cluster reports healthy</text>
+    <text class="stepText" x="14" y="48">All node statuses healthy. No active rebalance.</text>
+    <text class="timing" x="14" y="66">budget: HEALTH_TIMEOUT_SECONDS (600-1800)</text>
+  </g>
+
+  <g transform="translate(62,650)">
+    <rect width="360" height="80" rx="10" class="stepGate"/>
+    <text class="num" x="14" y="32">5</text>
+    <text class="stepLabel" x="44" y="32">Set spec.paused = false</text>
+    <text class="code" x="14" y="54">kubectl patch couchbasecluster $NS \</text>
+    <text class="code" x="14" y="70">  -p {spec: {paused: false}}</text>
+  </g>
+  <g transform="translate(478,650)">
+    <rect width="304" height="80" rx="10" class="stepGate"/>
+    <text class="stepLabel" x="14" y="26">spec.paused = false</text>
+    <text class="stepText" x="14" y="48">CAO resumes reconciliation</text>
+    <text class="stepText" x="14" y="66">Detects drift, swaps next node</text>
+  </g>
+  <g transform="translate(840,650)">
+    <rect width="500" height="80" rx="10" class="stepWarn"/>
+    <text class="stepLabel" x="14" y="26">Operator begins swap-rebalance of next node</text>
+    <text class="stepText" x="14" y="48">XDCR pipelines auto-pause for the source while rebalance runs.</text>
+    <text class="stepText" x="14" y="66">changes_left spikes, then drains once rebalance completes.</text>
+  </g>
+
+  <g transform="translate(62,750)">
+    <rect width="360" height="80" rx="10" class="step"/>
+    <text class="num" x="14" y="32">6</text>
+    <text class="stepLabel" x="44" y="32">Wait for swap to finish; loop</text>
+    <text class="stepText" x="14" y="54">Re-run from step 2 for the next pod.</text>
+    <text class="stepText" x="14" y="70">Stop when all pods are on the target image.</text>
+  </g>
+  <g transform="translate(478,750)">
+    <rect width="304" height="80" rx="10" class="stepOk"/>
+    <text class="stepLabel" x="14" y="26">Each iteration shifts one pod</text>
+    <text class="stepText" x="14" y="48">Eventually all images = target</text>
+    <text class="stepText" x="14" y="66">status.phase = Available</text>
+  </g>
+  <g transform="translate(840,750)">
+    <rect width="500" height="80" rx="10" class="stepOk"/>
+    <text class="stepLabel" x="14" y="26">All pods on target image - DONE</text>
+    <text class="stepText" x="14" y="48">Final validation: backups, XDCR, app SLOs, restarts = 0.</text>
+    <text class="stepText" x="14" y="66">Sign off and unlock next environment.</text>
+  </g>
+
+  <line x1="240" y1="330" x2="240" y2="350" class="flow" marker-end="url(#ar)"/>
+  <line x1="240" y1="430" x2="240" y2="450" class="flow" marker-end="url(#ar)"/>
+  <line x1="240" y1="530" x2="240" y2="550" class="flow" marker-end="url(#ar)"/>
+  <line x1="240" y1="630" x2="240" y2="650" class="flow" marker-end="url(#ar)"/>
+  <line x1="240" y1="730" x2="240" y2="750" class="flow" marker-end="url(#ar)"/>
+
+  <path d="M 422 790 H 460 V 390 H 422" class="loopBack" marker-end="url(#arLoop)"/>
+  <text class="tag" x="448" y="592" fill="#ffca28" transform="rotate(-90 448 592)">loop back to step 2</text>
+
+  <path d="M 1340 590 H 1370 V 880 H 880" class="failPath" marker-end="url(#arFail)"/>
+  <g transform="translate(880,872)">
+    <rect width="460" height="40" rx="10" class="stepFail"/>
+    <text class="stepLabel" x="14" y="26">If health fails or signals red - stop, investigate, rollback or restore</text>
+  </g>
+
+  <text class="footnote" x="40" y="940">The pause gate is the safety mechanism: CAO will not start the next node swap while spec.paused is true.</text>
+  <text class="footnote" x="40" y="958">A trap/EXIT handler in the runbook script restores spec.paused to false on any abnormal termination.</text>
+</svg>

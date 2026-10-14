@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "Системы глубокого обучения: технический бриф для инженеров и агентов",
+  "sub_title": "Обучение представлений, дискриминативные vs генеративные пути, метрики и маршрутизация buy/build — концепции AWS, переписанные для production-команд",
+  "excerpt": "Технический бриф TenthMatrix по deep learning: глубокие сети, обученные градиентом, дискриминативные vs генеративные модели, метрики задач и Bedrock vs serving в Kubernetes.",
+  "meta_title": "Системы глубокого обучения — технический бриф (TenthMatrix)",
+  "meta_description": "Технический бриф по deep learning: нейросети, backprop, дискриминативный vs генеративный ИИ, метрики задач и маршрутизация Bedrock vs self-host для инженеров и ИИ-агентов.",
+  "meta_keywords": "deep learning, neural networks, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Технический дайджест: deep learning как многослойная нейронная оптимизация, дискриминативные vs генеративные пути и как маршрутизировать работу в classic ML, обученный DL или API foundation-моделей. Полные уравнения, рисунки и чеклист агента в <a href=\"/ru/articles/what-is-deep-learning-workstation-guide\">длинной статье</a>.</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"Технический бриф систем deep learning — обучать, оптимизировать, обслуживать\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Определение.</strong> Deep learning — это обучение глубоких нейросетей на градиенте, чтобы f_&#x3b8;(x) извлекала иерархические признаки из высокоразмерного x. Это основа современного vision/ASR/NLP и субстрат generative AI (transformers / diffusion). Драйверы стоимости: объём чистых данных, время ускорителей и OpEx инференса — не слайды.\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Дайджест для агента.</strong> DL ⊂ ML. Дискриминативный = p(y|x). Генеративный = сэмплировать x или x|c. Предпочитайте GBM для сильных табличных признаков; обучайте DL для perception; используйте Bedrock/vLLM для языковых агентов. Serving через GitOps; gate money/auth/prod.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">Адаптировано из AWS — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — для инженерных команд <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n<h2>Разделение возможностей</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"Стек ML vs deep learning vs generative AI\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — инженерные признаки; деревья/линейные модели; лучший default для плотных табличных SLA.</li>\n  <li><strong>Deep learning</strong> — end-to-end сети на images/text/audio; backprop + GPU; serving через Triton/KServe/SageMaker.</li>\n  <li><strong>Generative AI</strong> — сэмплировать новый контент; LLM/diffusion + RAG/tools; API Bedrock или open-weight inference.</li>\n</ul>\n\n<h2>Семейства задач (метрики важны)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Семейство</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Типичная цель / метрика</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">детект/классификация — mAP, IoU, p99 latency</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER, real-time factor</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">classify / generate — F1, exact-match, groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ранжирование — NDCG, CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">успех задачи + safety + $/request</td></tr>\n</tbody>\n</table>\n\n<h2>Ограничения</h2>\n<ul>\n  <li><strong>Data</strong> — шум меток и shift доминируют; версионируйте datasets.</li>\n  <li><strong>Compute</strong> — обучение и decode LLM ограничены ускорителями.</li>\n  <li><strong>Ops</strong> — eval harness, drift, cost, GitOps rollback до широкого promote.</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"Поток решений train vs buy vs hybrid\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Рекомендация TenthMatrix</h2>\n<p>Сначала классифицируйте дискриминативное vs генеративное. Предпочитайте managed foundation models для языковых агентов, если residency/cost не требуют open weights. Оставляйте classic ML для tabular. Детали, layer diagram и чеклист: <a href=\"/ru/articles/what-is-deep-learning-workstation-guide\">длинной статье</a>. Опубликовано <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

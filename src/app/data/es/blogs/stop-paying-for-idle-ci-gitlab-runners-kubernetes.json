@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "Deja de pagar por CI inactivo: GitLab Runners en Kubernetes",
+  "sub_title": "Escala CI para las cimas del lunes, luego reduce la capacidad por la noche y los fines de semana — la guía de cinco minutos con videos de walkthrough.",
+  "excerpt": "La mayoría de los equipos pagan por CI como si cada noche fuera todavía lunes por la mañana. Los GitLab Runners en Kubernetes cambian eso: contenedores de trabajo efímeros, escalan bajo carga y se reducen cuando está tranquilo.",
+  "meta_title": "Deja de pagar por CI inactivo: GitLab Runners en Kubernetes | TenthMatrix",
+  "meta_description": "GitLab Runners en Kubernetes: contenedores de trabajo efímeros, rutas de instalación Helm y Operator, escalado automático y cómo dejar de pagar por noches y fines de semana inactivos.",
+  "meta_keywords": "GitLab Runner, Kubernetes executor, GitLab Operator, Helm, k3s, autoscaling CI, FinOps, coste de CI inactivo, DinD, runners a escala hiperbólica, TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>La mayoría de los equipos pagan por la integración continua como si cada noche y cada fin de semana fuera todavía lunes por la mañana.<strong>GitLab Runners en Kubernetes</strong>invierten ese modelo: escalan la capacidad cuando llegan las pipelines, y la reducen cuando la oficina se queda quieta. Lee el<a href=\"/es/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">análisis técnico profundo</a>para Helm valores, configuraciones de ejecutores y el modelo de costos.</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Lo esencial.</strong>Provisiona para la cumbre, desprovisiona para el valle. Los pods de trabajos efímeros recuperan CPU, RAM y almacenamiento cuando disminuye la demanda —especialmente las noches y los fines de semana— para que la granja del lunes no facture el sábado.</div><h2>Mira los videos</h2><p><strong>1. Runners &amp; pipelines</strong>— escalado automático de cargas de trabajo de GitLab Runner en Kubernetes.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server en HA Kubernetes</strong>— despliega con el Operator en unos minutos.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· Docs:<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>El hábito costoso</h2><ul><li><strong>Día:</strong>las solicitudes de fusión y las pruebas disparan la demanda.</li><li><strong>Noches:</strong>la actividad disminuye; las VMs fijas siguen consumiendo CPU y RAM.</li><li><strong>Fines de semana:</strong>a menudo casi inactivos —aunque los discos y nodos pueden seguir facturándose.</li></ul><p>No pagas por compilaciones realizadas. Pagas por capacidad que existe, independientemente de que alguien la use o no.</p><h2>Una imagen más sencilla</h2><p>El<strong>Runner</strong>de GitLab ejecuta los trabajos de la pipeline.<strong>Kubernetes</strong>puede crear esos trabajadores como pods de corta duración y eliminarlos cuando finaliza el trabajo. A escala hiper grande, la misma idea se aplica a los nodos: más cuando la cola está profunda; menos —idealmente casi ninguno— de noche y los fines de semana.</p><h2>De dónde provienen los enormes ahorros de costes</h2><ol><li><strong>Escalar hacia arriba</strong>cuando la gente (o los bots) trabaja —pods de trabajos en paralelo hasta los límites de concurrencia y del clúster—.</li><li><strong>Escalar hacia abajo con fuerza</strong>cuando desaparece la demanda —los pods se van; con el escalado automático del clúster, los nodos vacíos salen del pool—.</li><li><strong>Deja de desperdiciar CPU, RAM y almacenamiento</strong>en flotas de runners siempre encendidas durante las horas tranquilas.</li><li><strong>Paga por resultados, no por muebles</strong>—mantén GitLab y un gestor de runners delgado; deja que la granja se evapore cuando esté inactiva—.</li></ol><blockquote><p>Los grandes ahorros aparecen cuando la cumbre del lunes ya no dicta la factura de las 3 de la mañana del martes —y cuando el silencio del sábado finalmente parece tranquilo en la factura—.</p></blockquote><h2>Documentación oficial</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Instala GitLab Runner con el gráfico Helm</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">Configura el gráfico Helm</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Ejecutor Kubernetes</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">Escalado automático de GitLab Runner</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">Instalación de GitLab Operator</a></li></ul><p><strong>Lee la siguiente:</strong>el<a href=\"/es/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">artículo técnico de hiperscala</a>cubre Operator vs Helm, concurrencia, DinD, observabilidad y una lista de verificación de FinOps. Prompt para construir el curso:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>en el repositorio del sitio web de TenthMatrix (reemplaza el enlace devops.git retirado).</p><p>Publicado por<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

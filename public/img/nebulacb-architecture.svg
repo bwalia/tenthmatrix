@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="NebulaCB architecture and data flow: local machine, k3s cluster, control plane, data plane, observability">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 22px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .zone { fill: rgba(255,193,7,0.06); stroke: #eab308; stroke-width: 1.5; }
+      .zoneK8s { fill: rgba(2,132,199,0.10); stroke: #0284c7; stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .box { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAccent { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .boxOk { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .boxWarn { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .boxSrc { fill: #0f3a1c; stroke: #16a34a; stroke-width: 1.5; }
+      .boxTgt { fill: #3a0e0e; stroke: #dc2626; stroke-width: 1.5; }
+      .boxObs { fill: #1a0a3a; stroke: #7c3aed; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: #bbc6ff; font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .ctrl { stroke: #ff9560; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .data { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .xdcrA { stroke: #2563eb; stroke-width: 2.5; fill: none; }
+      .xdcrB { stroke: #dc2626; stroke-width: 2.5; fill: none; }
+      .obs { stroke: #ab47bc; stroke-width: 2; fill: none; stroke-dasharray: 4 4; }
+      .pf { stroke: #0891b2; stroke-width: 2; fill: none; }
+      .cli { stroke: rgba(255,255,255,0.45); stroke-width: 1.5; fill: none; stroke-dasharray: 4 3; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arData" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arA" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#2563eb"/>
+    </marker>
+    <marker id="arB" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#dc2626"/>
+    </marker>
+    <marker id="arObs" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ab47bc"/>
+    </marker>
+    <marker id="arPf" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#0891b2"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#grid)"/>
+
+  <text class="title" x="600" y="38" text-anchor="middle">NebulaCB  /  architecture and data flow</text>
+  <text class="subtitle" x="600" y="58" text-anchor="middle">Couchbase upgrade + XDCR validation platform on k3s. Storm, XDCR, Validator, Orchestrator, Monitor in one Go binary.</text>
+
+  <g transform="translate(20,80)">
+    <rect width="480" height="430" rx="12" class="zone"/>
+    <text class="laneTitle" x="20" y="22" fill="#fde68a">LOCAL  /  CONTROL + CLIENT PLANE  /  macOS</text>
+    <text class="boxText" x="20" y="40">Go 1.24  /  Node 18+  /  192.168.x.x</text>
+
+    <g transform="translate(20,58)">
+      <rect width="220" height="140" rx="10" class="boxAccent"/>
+      <text class="boxLabel" x="110" y="22" text-anchor="middle">NebulaCB server :8899</text>
+      <text class="nodeText" x="14" y="48">- Storm generator</text>
+      <text class="nodeText" x="14" y="62">- XDCR engine</text>
+      <text class="nodeText" x="14" y="76">- Validator</text>
+      <text class="nodeText" x="14" y="90">- Upgrade orchestrator</text>
+      <text class="nodeText" x="14" y="104">- Monitor (about 2s poll)</text>
+      <text class="nodeText" x="14" y="118">- Failover / backup helpers</text>
+      <text class="code" x="14" y="132">bin/nebulacb (single binary)</text>
+    </g>
+
+    <g transform="translate(252,58)">
+      <rect width="208" height="90" rx="10" class="boxObs"/>
+      <text class="boxLabel" x="104" y="22" text-anchor="middle">React dashboard</text>
+      <text class="nodeText" x="104" y="40" text-anchor="middle">web/nebulacb-ui :3000 dev</text>
+      <text class="nodeText" x="104" y="54" text-anchor="middle">WebSocket + REST to :8899</text>
+      <text class="nodeText" x="104" y="68" text-anchor="middle">Cluster cards / XDCR flow / alerts</text>
+      <text class="code" x="104" y="82" text-anchor="middle">React 19 + TS</text>
+    </g>
+
+    <g transform="translate(252,158)">
+      <rect width="208" height="40" rx="10" class="box"/>
+      <text class="boxLabel" x="104" y="20" text-anchor="middle">CLI client</text>
+      <text class="nodeText" x="104" y="34" text-anchor="middle">bin/nebulacb-cli  /  status / start-load / audit / report</text>
+    </g>
+
+    <g transform="translate(20,212)">
+      <rect width="220" height="80" rx="10" class="boxWarn"/>
+      <text class="boxLabel" x="110" y="22" text-anchor="middle">XDCR load test</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">cmd/xdcr-loadtest/main.go</text>
+      <text class="nodeText" x="110" y="52" text-anchor="middle">random writes to both clusters</text>
+      <text class="code" x="110" y="70" text-anchor="middle">go run ./cmd/xdcr-loadtest</text>
+    </g>
+
+    <g transform="translate(252,212)">
+      <rect width="208" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="104" y="22" text-anchor="middle">Config + kubeconfig</text>
+      <text class="nodeText" x="104" y="38" text-anchor="middle">config.json</text>
+      <text class="nodeText" x="104" y="52" text-anchor="middle">network=external for SDK</text>
+      <text class="code" x="104" y="68" text-anchor="middle">~/.kube/k3s0.yaml</text>
+    </g>
+
+    <g transform="translate(20,304)">
+      <rect width="440" height="46" rx="10" class="box"/>
+      <text class="boxLabel" x="220" y="22" text-anchor="middle">kubectl port-forward (auto-managed by NebulaCB)</text>
+      <text class="nodeText" x="220" y="38" text-anchor="middle">REST localhost:rand -> pod:8091  /  SDK couchbase://nodeIP:kvNodePort?network=external</text>
+    </g>
+
+    <g transform="translate(20,362)">
+      <rect width="100" height="22" rx="4" class="box"/>
+      <text class="nodeText" x="50" y="14" text-anchor="middle">Go 1.24</text>
+      <rect x="110" y="0" width="100" height="22" rx="4" class="box"/>
+      <text class="nodeText" x="160" y="14" text-anchor="middle">React 19 + TS</text>
+      <rect x="220" y="0" width="100" height="22" rx="4" class="box"/>
+      <text class="nodeText" x="270" y="14" text-anchor="middle">gocb/v2 SDK</text>
+      <rect x="330" y="0" width="100" height="22" rx="4" class="box"/>
+      <text class="nodeText" x="380" y="14" text-anchor="middle">Helm 3</text>
+    </g>
+
+    <g transform="translate(20,396)">
+      <rect width="440" height="24" rx="6" class="box"/>
+      <text class="code" x="14" y="16">source: 192.168.1.193:32451 (kv:32419)  /  target: :30953 (kv:31942)  /  auth: admin/nebulacb</text>
+    </g>
+  </g>
+
+  <g transform="translate(520,80)">
+    <rect width="660" height="640" rx="12" class="zoneK8s"/>
+    <text class="laneTitle" x="20" y="22" fill="#7dd3fc">k3s CLUSTER  /  DATA PLANE  /  3 nodes</text>
+    <text class="boxText" x="20" y="40">debian001 (140)  /  debian002 (47)  /  k3s-worker-01 (73)  /  slworker00 (193)</text>
+
+    <g transform="translate(20,58)">
+      <rect width="320" height="270" rx="12" class="boxSrc"/>
+      <text class="laneTitle" x="14" y="22" fill="#bbf7d0">namespace: couchbase  /  SOURCE</text>
+      <rect x="14" y="36" width="200" height="40" rx="8" class="boxOk"/>
+      <text class="nodeLabel" x="114" y="58" text-anchor="middle">CB Operator</text>
+      <text class="nodeText" x="114" y="72" text-anchor="middle">Helm: couchbase-operator</text>
+
+      <rect x="14" y="86" width="290" height="90" rx="8" class="boxOk"/>
+      <text class="nodeLabel" x="159" y="108" text-anchor="middle">cb-local-0003</text>
+      <text class="nodeText" x="159" y="124" text-anchor="middle">Couchbase Server v7.2.2 Enterprise</text>
+      <text class="nodeText" x="159" y="138" text-anchor="middle">services: data, index, query</text>
+      <text class="nodeText" x="159" y="152" text-anchor="middle">bucket: xdcr-test (18,800+ docs)</text>
+      <text class="nodeText" x="159" y="166" text-anchor="middle">node: slworker00 (192.168.1.193)</text>
+
+      <rect x="14" y="184" width="290" height="70" rx="8" class="box"/>
+      <text class="nodeLabel" x="159" y="200" text-anchor="middle">NodePorts</text>
+      <text class="nodeText" x="159" y="216" text-anchor="middle">mgmt: 32451   /   KV: 32419   /   query: 32247</text>
+      <text class="nodeText" x="159" y="232" text-anchor="middle">PVC: longhorn-replicated  /  10Gi data</text>
+      <text class="nodeText" x="159" y="246" text-anchor="middle">role: source</text>
+    </g>
+
+    <g transform="translate(360,58)">
+      <rect width="280" height="160" rx="12" class="boxAccent"/>
+      <text class="laneTitle" x="14" y="22" fill="#c4b5fd">CONTROL PLANE / MONITORING</text>
+      <rect x="14" y="36" width="252" height="36" rx="8" class="box"/>
+      <text class="nodeLabel" x="140" y="52" text-anchor="middle">Prometheus :9090/metrics</text>
+      <text class="nodeText" x="140" y="66" text-anchor="middle">ops/s  /  latency  /  doc counts</text>
+
+      <rect x="14" y="80" width="252" height="36" rx="8" class="box"/>
+      <text class="nodeLabel" x="140" y="96" text-anchor="middle">Longhorn storage</text>
+      <text class="nodeText" x="140" y="110" text-anchor="middle">PVC: couchbase-data (10Gi each)</text>
+
+      <rect x="14" y="124" width="252" height="30" rx="8" class="box"/>
+      <text class="nodeText" x="140" y="142" text-anchor="middle">CoreDNS  /  Service CIDR  /  NetworkPolicy</text>
+    </g>
+
+    <g transform="translate(360,228)">
+      <rect width="280" height="100" rx="12" class="boxObs"/>
+      <text class="laneTitle" x="14" y="22" fill="#ce93d8">UPGRADE TEST WORKFLOW</text>
+      <text class="boxText" x="14" y="40">1. make run</text>
+      <text class="boxText" x="14" y="54">2. nebulacb-cli start-load (Storm on source)</text>
+      <text class="boxText" x="14" y="68">3. xdcr-loadtest (write to both clusters)</text>
+      <text class="boxText" x="14" y="82">4. nebulacb-cli start-upgrade (rolling 7.2 -> 7.6)</text>
+      <text class="boxText" x="14" y="96">5. run-audit  /  6. report</text>
+    </g>
+
+    <g transform="translate(20,348)">
+      <rect width="320" height="270" rx="12" class="boxTgt"/>
+      <text class="laneTitle" x="14" y="22" fill="#fecaca">namespace: couchbase-test  /  TARGET</text>
+      <rect x="14" y="36" width="200" height="40" rx="8" class="box"/>
+      <text class="nodeLabel" x="114" y="58" text-anchor="middle">CB Operator</text>
+      <text class="nodeText" x="114" y="72" text-anchor="middle">Helm: couchbase-operator-test</text>
+
+      <rect x="14" y="86" width="290" height="90" rx="8" class="box"/>
+      <text class="nodeLabel" x="159" y="108" text-anchor="middle">cb-test-0002</text>
+      <text class="nodeText" x="159" y="124" text-anchor="middle">Couchbase Server v7.6.5 Enterprise</text>
+      <text class="nodeText" x="159" y="138" text-anchor="middle">services: data, index, query</text>
+      <text class="nodeText" x="159" y="152" text-anchor="middle">bucket: xdcr-test (18,800+ docs)</text>
+      <text class="nodeText" x="159" y="166" text-anchor="middle">node: slworker00 (192.168.1.193)</text>
+
+      <rect x="14" y="184" width="290" height="70" rx="8" class="box"/>
+      <text class="nodeLabel" x="159" y="200" text-anchor="middle">NodePorts</text>
+      <text class="nodeText" x="159" y="216" text-anchor="middle">mgmt: 30953   /   KV: 31942   /   query: 30438</text>
+      <text class="nodeText" x="159" y="232" text-anchor="middle">PVC: longhorn-replicated  /  10Gi data</text>
+      <text class="nodeText" x="159" y="246" text-anchor="middle">role: target (after migration)</text>
+    </g>
+
+    <path d="M 340 220 Q 320 340 340 410" class="xdcrA" marker-end="url(#arA)"/>
+    <path d="M 360 410 Q 380 340 360 220" class="xdcrB" marker-end="url(#arB)"/>
+    <rect x="340" y="298" width="80" height="32" rx="6" class="boxAccent"/>
+    <text class="tag" x="380" y="312" text-anchor="middle" fill="#c4b5fd">XDCR</text>
+    <text class="nodeText" x="380" y="325" text-anchor="middle" fill="#c4b5fd">bidirectional</text>
+  </g>
+
+  <line x1="240" y1="200" x2="520" y2="200" class="pf" marker-end="url(#arPf)"/>
+  <line x1="240" y1="450" x2="520" y2="450" class="pf" marker-end="url(#arPf)"/>
+  <line x1="120" y1="290" x2="120" y2="320" class="data" marker-end="url(#arData)"/>
+  <line x1="252" y1="180" x2="240" y2="170" class="obs" marker-end="url(#arObs)"/>
+  <line x1="252" y1="220" x2="252" y2="180" class="cli" marker-end="url(#ar)"/>
+
+  <g transform="translate(20,540)">
+    <rect width="480" height="170" rx="12" class="lane"/>
+    <text class="laneTitle" x="20" y="22">LEGEND</text>
+    <g transform="translate(20,34)">
+      <line x1="0" y1="8" x2="30" y2="8" class="data"/>
+      <text class="boxText" x="40" y="12">SDK data path (load test, KV ops)</text>
+    </g>
+    <g transform="translate(20,56)">
+      <line x1="0" y1="8" x2="30" y2="8" class="pf"/>
+      <text class="boxText" x="40" y="12">kubectl port-forward (auto-managed)</text>
+    </g>
+    <g transform="translate(20,78)">
+      <line x1="0" y1="8" x2="30" y2="8" class="xdcrA"/>
+      <text class="boxText" x="40" y="12">XDCR source -> target</text>
+    </g>
+    <g transform="translate(20,100)">
+      <line x1="0" y1="8" x2="30" y2="8" class="xdcrB"/>
+      <text class="boxText" x="40" y="12">XDCR target -> source (bidirectional)</text>
+    </g>
+    <g transform="translate(20,122)">
+      <line x1="0" y1="8" x2="30" y2="8" class="obs"/>
+      <text class="boxText" x="40" y="12">Dashboard / WebSocket</text>
+    </g>
+    <g transform="translate(20,144)">
+      <line x1="0" y1="8" x2="30" y2="8" class="cli"/>
+      <text class="boxText" x="40" y="12">CLI -> server (HTTP basic auth)</text>
+    </g>
+  </g>
+
+  <text class="footnote" x="600" y="870" text-anchor="middle">NebulaCB v1.0  /  github.com/bwalia/nebulacb  /  upgrade pacing + XDCR validation in one mission-control binary</text>
+</svg>

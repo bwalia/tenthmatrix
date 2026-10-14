@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS is een gezaghebbende DNS-server van Safe-Rust met een API-first-besturingsvlak, Prometheus-statistieken, propagatiepoorten en Kubernetes-native bewerkingen, gebouwd voor zichtbaarheid wanneer AI-services en -agents meer dan ooit afhankelijk zijn van DNS.",
+  "sub_title": "API – eerst DNS, waarneembaarheid en waarom het AI-tijdperk een nieuwe gezaghebbende stack nodig heeft",
+  "title": "NebulaDNS: waarom de gezaghebbende DNS een gamechanger is in het AI-tijdperk",
+  "meta_title": "NebulaDNS | Gezaghebbende DNS Rust AI Enterprise | TenthMatrix",
+  "meta_description": "Inleiding tot NebulaDNS: Rust-gezaghebbende DNS, API-besturingsvlak, propagatieverificatie, k3s- en Route 53-patronen, en waarom enterprise DNS waarneembaar moet zijn in het AI-tijdperk.",
+  "meta_keywords": "NebulaDNS, gezaghebbende DNS, Rust DNS, Kubernetes DNS, Route 53, CoreDNS, AI-infrastructuur, Prometheus DNS-statistieken, TSIG, AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Samenvatting</h2><p><strong><a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a></strong>is een moderne,<strong>API-eerste gezaghebbende DNS-server</strong>geschreven in<strong>veilige Rust</strong>(<code>#![forbid(unsafe_code)]</code>). Het richt zich op de operationele hiaten die zijn achtergelaten door tientallen jaren oude daemons en ondoorzichtige C-codebases:<strong>geen statistieken</strong>,<strong>geen propagatiewaarheid</strong>en<strong>geen machinaal leesbaar besturingsvlak</strong>. In het<strong>AI-tijdperk</strong>is DNS niet “slechts infrastructuur” – het is de manier waarop<strong>-agenten</strong>,<strong>eindpunten</strong>,<strong>GPU-knooppunten</strong>en<strong>multi-clusterservices</strong>elkaar vinden onder beleid. NebulaDNS behandelt<strong>elke zonewijziging als een release</strong>: geverifieerde secundaire waarden, expliciete statistieken en een API voor elke operatoractie - afgestemd op het publieke verhaal op de<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>-projectsite</a>en<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>GitHub-repository</a>.</p><h2>Waarom DNS belangrijker is als AI in productie is</h2><ul><li><strong>Servicedetectie voor agenten:</strong>Stabiele namen voor tool-eindpunten, ophaalservices en beleidsgateways verslaan hardgecodeerde IP's in kortstondige clusters.</li><li><strong>Ontploffingsradius:</strong>Een stil AXFR- of secundair drift-incident (zoals de interoperabiliteitsfouten in de echte wereld die op de site worden beschreven) kan de redundantie doorbreken lang voordat de LLM-dashboards dit merken.</li><li><strong>Naleving en bewijs:</strong>Auditvriendelijke DNS met gestructureerde logboeken en statistieken ondersteunt bewijs in SOC2-stijl voor wie welke zone heeft gewijzigd en of deze zich heeft voortgeplant.</li></ul><h2>Wat NebulaDNS anders maakt</h2><p>De landingspagina positioneert NebulaDNS als vervanging van brosse stapels door<strong>, een kleine binaire</strong>die<strong>-statistieken</strong>, een<strong>-besturingsvlak</strong>en een pad naar een<strong>verzendt Kubernetes-operator</strong>– zodat storingen binnen<strong>-seconden</strong>aan het licht komen, niet via klanttickets. Hoogtepunten zijn onder meer<strong>geverifieerde propagatie</strong>,<strong>peer-software-fingerprinting</strong>,<strong>configuratie met atomaire versie</strong>,<strong>deterministische SOA-series</strong>en<strong>Prometheus<code>/metrics</code></strong>met een kardinaliteitsbudget tijdens het compileren.</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS control plane, zone store, and DNS data plane' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Integratie-snapshot: Route&nbsp;53 en k3s</h2><p>Bedrijven koppelen<strong>AWS Route&nbsp;53</strong>openbare zones vaak met<strong>on-cluster of speciale gezaghebbende</strong>-lagen. NebulaDNS past als de<strong>gezaghebbende bron van waarheid</strong>voor zones waarvan u end-to-end eigenaar bent, met<strong>Helm</strong>,<strong>ServiceMonitor</strong>en<strong>operator/CRD</strong>verhaallijnen op de routekaart die op de site wordt beschreven. Het onderstaande diagram schetst een<strong>-delegatie + cluster-</strong>-patroon (geen leverancierspecifieke bedrading - pas aan uw netto-segmentatie aan).</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route 53 delegation to NebulaDNS and k3s CoreDNS integration' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Lees volgende</h2><p>Voor de<strong>-catalogus met volledige functies</strong>, metrische voorbeelden en diepere k3s/Route&nbsp;53-opmerkingen, zie het bijbehorende bericht<a href='/nl/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide'>NebulaDNS complete functiegids</a>op TenthMatrix.</p><h2>Hoe TenthMatrix kan helpen</h2><p>TenthMatrix ontwerpt<strong>-platformtechniek</strong>en<strong>SRE-ready DNS</strong>-patronen – GitOps, observatie en veilige cutovers – voor cloud en edge. Neem contact op met<strong>info@tenthmatrix.com</strong>voor architectuurbeoordelingen of leveringsondersteuning.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

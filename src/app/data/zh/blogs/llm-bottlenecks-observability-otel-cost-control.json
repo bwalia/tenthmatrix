@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "揭示 LLM 瓶颈：可观测性、OTEL 和成本控制",
+  "sub_title": "业务简介：OpenTelemetry、Prometheus/Grafana、Langfuse — 优点、缺点、成本以及可削减代理支出的使用指标",
+  "excerpt": "TenthMatrix 通过可观察性揭示 LLM 代理瓶颈：OpenTelemetry、Prometheus/Grafana/Thanos、Langfuse — 具有明确的优缺点、成本杠杆和保护利润的使用指标。",
+  "meta_title": "揭示 LLM 瓶颈：OTEL、可观测性和成本 | TenthMatrix",
+  "meta_description": "使用 OpenTelemetry、Prometheus/Grafana 和 Langfuse 查找 LLM 代理瓶颈。 FinOps 就绪型人工智能的优缺点、成本和使用指标。",
+  "meta_keywords": "LLM 瓶颈、OpenTelemetry、OTEL、可观测性、Langfuse、Prometheus、Grafana、Thanos、FinOps、AI 代理、TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>业务简介：通过可观察性发现 LLM 和代理瓶颈 — OpenTelemetry、Prometheus/Grafana/Thanos 和 LLM 平台（例如 Langfuse） — 这样您就可以削减成本、收紧 SLO 并向代理提供证据。深入探讨：<a href=\"/zh/articles/llm-bottlenecks-observability-otel-cost-control\">长篇技术文章（OTEL、FinOps、代理预算）</a>。相关：<a href=\"/zh/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">涡轮增压 LLMs</a>·<a href=\"/zh/enterprise-ai\">企业人工智能实验室</a>。</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。</strong>大多数“慢人工智能”问题并不是神秘的模型故障——它们缺少归因。仪器代理与 OpenTelemetry 一起运行，对输出进行评分，使用租户/模型/路线/令牌/成本标记每个调用，并执行预算。执行此操作的团队通常会在第一个测量周期内发现 20-50% 的浪费在于重试、过大的模型和未缓存的提示。</div><h2>为什么瓶颈会在没有遥测的情况下隐藏</h2><p>LLM 代理链提示、工具、RAG 检索和重试。跨跃点的延迟和花费复合。 如果没有跨度和指标，您就无法判断瓶颈是模型、向量存储、不稳定的工具还是无限的自调试循环。然后，业务利益相关者过度购买 GPU 或 API 配额，而产品质量却保持不变。</p><p>TenthMatrix 对 AI 资产的立场：像对待任何其他生产服务一样对待代理管道 —<strong>可观察性首先</strong>，然后优化服务（请参阅<a href=\"/zh/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>），然后按纪律进行推广（<a href=\"/zh/ring-promoter\">Ring Promoter</a>）。</p><h2>物有所值的可观察性堆栈</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— 用于跟踪、指标和（如果有用）日志的一个仪器层。导出至收集器；扇出到后端。</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>— 黄金信号：请求率、错误率、延迟、代币吞吐量、估计/请求美元、GPU 利用率。 Thanos（或同等机构）保留 FinOps 审核的长期指标。</li><li><strong>LLM 可观测平台</strong>（例如<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>、<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — 会话/跟踪 UI、提示版本、人工和跟踪版本自动评分、回归数据集。</li></ul><h2>这种方法的优点和缺点</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">尺寸</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">优点</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">缺点/权衡</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>成本控制</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">将支出归因于租户、功能、型号和代理步骤；消除浪费的重试。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">仪器的工程时间；如果保留是幼稚的，则痕迹的存储成本。</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>质量</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">分数 + 数据集在客户之前捕获即时回归。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">自动评分可能会很吵；关键路径仍然需要人类。</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>操作</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">与其他微服务相同的 OTEL/Prometheus 技能集。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM 特定 UI（Langfuse 等）添加另一个要运行或购买的产品。</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>合规性</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">审计谁调用了哪个型号，哪个提示版本。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">提示/PII 保留策略必须预先设计。</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>实现价值的速度</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">如果您已经运行 Grafana，几天后就会出现第一个仪表板。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">跨多代理图的完整成本归因需要更长的时间。</td></tr></tbody></table><h2>成本：您花费的费用与您节省的费用</h2><p><strong>仪器成本（典型的中型代理平台）：</strong></p><ul><li>1-2 工程师周采用 OTEL 跨度约定 + 出口接线。</li><li>收集器 + 指标保留：一旦调整采样，通常小于每月 LLM API/GPU 支出的 5-10%。</li><li>可选 SaaS LLM 可观测性：按事件/跟踪定价 — 将其预算为模型支出的百分比，而不是事后的想法。</li></ul><p><strong>节省杠杆（推动使用指标）：</strong></p><ul><li><strong>每个成功任务的令牌</strong>— 不是每个原始调用的令牌。限制工具循环和自调试轮次。</li><li><strong>每成功任务的成本</strong>— 路由廉价模型进行分类/路由；为艰难的步骤保留前沿模型。</li><li><strong>缓存命中率</strong>— 提示/前缀缓存安全；衡量正确性，而不仅仅是延迟。</li><li><strong>重试率&死信率</strong>— 脆弱的工具伪装成“模型质量”问题。</li><li><strong>p95 TTFT 和端到端延迟</strong>— 在削减支出的同时保护用户体验。</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>经验法则。</strong>如果您无法回答“该代理上周按客户分步花费了多少费用？”你还没有准备好扩展使用——你已经准备好给财务带来惊喜了。</div><h2>评分：手动与自动</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">方法</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">何时使用</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">商务笔记</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>手动评分</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">黄金套装、规范答案、品牌敏感副本。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">价格昂贵，但具有自动判断功能。</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>自动评分</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">大容量回归、LLM 作为判断、标题检查。</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">规模便宜；每月针对人类进行校准。</td></tr></tbody></table><h2>迁移手册（从小处开始）</h2><ol><li>仪器<strong>一条具有 OTEL + 令牌/成本属性的端到端</strong>生产代理路径。</li><li>运送 Grafana 板，以衡量速率/错误/延迟/成本/成功。</li><li>添加 Langfuse（或同等版本）以获取该路径上的提示版本和分数。</li><li>强制实施硬上限：最大令牌数、最大工具调用数、每个会话的最大重试次数。</li><li>仅在第一条路径显示测量的成本或延迟优势后才扩展到下一个代理。</li></ol><h2>观察：为什么可观察性对于 AI 系统很重要</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">关于可观察性文化的上下文讨论 — 不是 TenthMatrix 产品演示。与<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry 文档</a>和<a href=\"/zh/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix 技术文章</a>配对。</p><h2>读取下一个</h2><ol><li><a href=\"/zh/articles/llm-bottlenecks-observability-otel-cost-control\">长文</a>— OTEL 跨架构、收集器、成本公式、代理上限、Langfuse/LMNR 注释。</li><li><a href=\"/zh/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocharging LLMs</a>— 您可以看到服务端瓶颈。</li><li><a href=\"/zh/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">本地代理</a>·<a href=\"/zh/enterprise-ai\">企业人工智能实验室</a>·<a href=\"/zh/contact-us\">联系方式 TenthMatrix</a></li></ol><p>由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布。参考文献：<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>。</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-wise-developer-workflow-001",
+  "internal_id": 955,
+  "slug": "wise-developer-new-project-adr-pr-gitops-review-bot",
+  "title": "明智开发者如何推进新项目",
+  "sub_title": "头脑风暴、讨论、原型、图示、提案、ADR、MR/PR、GitOps — 外加自动评论的 Review Bot，让人类审风险",
+  "excerpt": "新项目的明智路径：头脑风暴、与队友讨论、原型、图示、提案、ADR、带 Review Bot 的小 PR，以及用 GitOps 保障生产级质量。",
+  "meta_title": "明智开发者如何推进新项目 — ADR、PR、GitOps、Review Bot",
+  "meta_description": "从头脑风暴到 GitOps：ADR、MR/PR、自动评论 PR 的 Review Bot、FDE 搭建，以及面向生产交付的 Claude Architect Certification。",
+  "meta_keywords": "明智开发者, ADR, pull request, merge request, GitOps, Review Bot, 代码审查, FDE, Claude Architect Certification, 生产级",
+  "cover_image": "/img/wise-developer-workflow-cover.svg",
+  "images": [
+    {
+      "url": "/img/wise-developer-workflow-cover.svg",
+      "id": 955,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Wise developer workflow ADR PR GitOps Review Bot"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>明智开发者如何启动新项目 — 头脑风暴、讨论、原型、图示、提案、记录 ADR、开 MR/PR，并用 GitOps 落地变更 — 同时 Review Bot 自动评论 pull request。完整手册见<a href=\"/zh/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">长文</a>.</em></p>\n\n<p><img src=\"/img/wise-developer-workflow-cover.svg\" alt=\"明智开发者工作流 ADR PR GitOps Review Bot\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>一段话版本。</strong> 不要直接跳到巨型 PR。先独自头脑风暴，再与队友讨论。对风险部分做原型。画图。写短提案。把决策记成 ADR。用绿灯 CI 交付小 MR/PR。通过 GitOps 晋升。让 Review Bot 起草第一轮评论，让人类审设计与风险 — 而不是格式。FDE 可以搭起这套系统；Claude Architect Certification 是强信号，证明你能设计并捍卫它。\n</div>\n\n<h2>明智路径（按顺序）</h2>\n<ol>\n  <li><strong>头脑风暴</strong> — 目标、约束、非目标、失败模式。</li>\n  <li><strong>讨论</strong> — 在代码定型前白板 / 与同事短暂同步。</li>\n  <li><strong>原型</strong> — 冲击未知；有意丢弃或晋升。</li>\n  <li><strong>图示</strong> — 上下文、时序、部署 — 足以争论。</li>\n  <li><strong>提案</strong> — 问题、选项、建议、回滚。</li>\n  <li><strong>ADR</strong> — 持久的「为何选 X 而非 Y」。</li>\n  <li><strong>MR / PR</strong> — 小 diff、清单、关联 ADR/工单。</li>\n  <li><strong>GitOps</strong> — 期望状态在 git；用 merge 晋升，用 revert 回滚。</li>\n</ol>\n\n<h2>Review Bot：自己写评论</h2>\n<p>接入 Review Bot（Bugbot、CodeRabbit、自定义 Claude/GitHub Action，或你的<a href=\"/zh/docs/blogs/building-ai-code-review-pipeline\">AI 代码审查流水线</a>），让每个 PR 自动获得关于以下内容的行内评论：</p>\n<ul>\n  <li>安全与密钥异味</li>\n  <li>缺失测试 / 脆弱模式</li>\n  <li>API 契约与迁移风险</li>\n  <li>逃过 pre-commit 的风格与 lint</li>\n</ul>\n<p>人类随后专注架构契合、产品意图与运维爆炸半径。这样在不降低生产标准的前提下简化开发者生活。</p>\n\n<h2>谁来搭建 — 以及为何要 Claude Architect Certification</h2>\n<p><strong>FDE（Forward Deployed Engineer）</strong> 很适合安装模板：ADR 目录、PR 清单、Review Bot、分支保护与 GitOps 应用。把这种交付能力与 <strong>Claude Architect Certification</strong> 配对 — 若你想要凭证证明你能设计智能体/AI 辅助系统、批判性审查 AI 生成代码，并辅导团队做生产级工作流，值得追求。</p>\n\n<h2>生产级质量门槛</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0c1424;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">门控</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">通过标准</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pre-commit</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">格式、lint、密钥扫描</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">CI</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">单元 + 契约测试绿灯</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Review Bot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">无未解决的高严重度发现</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Human review</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">设计 + 风险签字</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">GitOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">通过 merge 做环境晋升；revert 已测</td></tr>\n</tbody>\n</table>\n\n<p>阅读 <a href=\"/zh/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">长文</a>. 发布方 <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "fde",
+      "id": 1019
+    },
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    }
+  ],
+  "created_at": "2026-07-23T21:00:00Z",
+  "updated_at": "2026-07-23T21:00:00Z",
+  "published_date": "2026-07-23",
+  "status": true
+}

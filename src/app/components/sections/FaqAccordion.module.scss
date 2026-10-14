@@ -1,0 +1,63 @@
+@use './shared' as *;
+
+.faq {
+  border-top: 1px solid var(--tm-line-strong);
+  max-width: var(--tm-container-narrow);
+}
+
+.item {
+  border-bottom: 1px solid var(--tm-line);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tm-space-4);
+  min-height: var(--tm-tap-target);
+  padding: var(--tm-space-5) 0;
+  cursor: pointer;
+  list-style: none;
+  border-radius: var(--tm-radius-xs);
+  @include focus;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:hover .q {
+    color: var(--tm-accent);
+  }
+}
+
+.q {
+  margin: 0;
+  font-family: var(--tm-font-body);
+  font-size: var(--tm-text-md);
+  font-weight: var(--tm-weight-semibold);
+  line-height: var(--tm-leading-snug);
+  color: var(--tm-text);
+}
+
+.icon {
+  flex: none;
+  color: var(--tm-accent);
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform var(--tm-duration) var(--tm-ease-standard);
+  }
+
+  .item[open] & {
+    transform: rotate(45deg);
+  }
+}
+
+.answer {
+  padding: 0 0 var(--tm-space-6);
+  color: var(--tm-text-muted);
+  max-width: var(--tm-measure);
+
+  p {
+    margin: 0;
+  }
+}
