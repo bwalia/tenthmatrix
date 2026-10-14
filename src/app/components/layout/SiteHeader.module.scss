@@ -214,10 +214,14 @@
   align-content: start;
 }
 
-.panelGridWide {
+.panelGrid {
   @include up($bp-xl) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.panelGridWide {
+  row-gap: 0;
 }
 
 .panelLink {

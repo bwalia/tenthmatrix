@@ -3,7 +3,11 @@ import MarketingLanding from '@/app/components/sections/templates/MarketingLandi
 
 export const dynamic = 'force-static';
 
-const route = createRoute({ file: 'ai-agents.json', route: '/ai-agents', Template: MarketingLanding });
+const route = createRoute({
+  file: 'ai-agents.json',
+  route: '/ai-agents',
+  Template: MarketingLanding,
+});
 
 export const generateStaticParams = route.generateStaticParams;
 export const generateMetadata = route.generateMetadata;
