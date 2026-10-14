@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WorkstationInsightsBenchmarkResult",
+  "type": "object",
+  "required": [
+    "benchmark_id",
+    "version",
+    "date",
+    "dataset",
+    "task",
+    "system",
+    "model_version",
+    "n",
+    "latency_ms_p50",
+    "latency_includes_network",
+    "region",
+    "source_kind"
+  ],
+  "properties": {
+    "benchmark_id": { "type": "string" },
+    "version": { "type": "string" },
+    "date": { "type": "string" },
+    "dataset": { "type": "string" },
+    "task": { "type": "string" },
+    "prompt_or_criteria_hash": { "type": "string" },
+    "system": { "type": "string" },
+    "model_version": { "type": "string" },
+    "temperature_or_reasoning": { "type": "string" },
+    "n": { "type": "integer" },
+    "latency_ms_p50": { "type": "number" },
+    "latency_ms_p95": { "type": "number" },
+    "latency_includes_network": { "type": "boolean" },
+    "input_tokens_mean": { "type": "number" },
+    "output_tokens_mean": { "type": "number" },
+    "cost_usd_total": { "type": "number" },
+    "accuracy": { "type": "number" },
+    "precision": { "type": "number" },
+    "recall": { "type": "number" },
+    "f1": { "type": "number" },
+    "calibration_note": { "type": "string" },
+    "error_rate": { "type": "number" },
+    "retries_mean": { "type": "number" },
+    "infrastructure": { "type": "string" },
+    "region": { "type": "string" },
+    "source_kind": {
+      "type": "string",
+      "enum": ["vendor_reported", "independent", "workstation_methodology", "workstation_measured"]
+    },
+    "raw_results_uri": { "type": "string" }
+  }
+}

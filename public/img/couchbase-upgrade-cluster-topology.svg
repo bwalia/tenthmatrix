@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="980" viewBox="0 0 1400 980" role="img" aria-label="Couchbase on Kubernetes: control plane, data plane, and external systems during a paced rolling upgrade">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <style>
+      .title { fill: #ffffff; font: 800 28px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 0.2px; }
+      .subtitle { fill: #9fb0ff; font: 500 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAlt { fill: #0c1530; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxOk { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .boxWarn { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .boxAccent { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: #bbc6ff; font: 400 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .ctrlLink { stroke: #ff9560; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+      .dataLink { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .replLink { stroke: #42a5f5; stroke-width: 2; fill: none; }
+      .xdcrLink { stroke: #ab47bc; stroke-width: 2.5; fill: none; stroke-dasharray: 2 4; }
+      .obsLink { stroke: #26c6da; stroke-width: 2; fill: none; stroke-dasharray: 1 3; }
+      .bkpLink { stroke: #ffca28; stroke-width: 2; fill: none; stroke-dasharray: 4 4; }
+      .legendText { fill: #cfd6ff; font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="arr-ctrl" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arr-data" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#4caf50"/>
+    </marker>
+    <marker id="arr-repl" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#42a5f5"/>
+    </marker>
+    <marker id="arr-xdcr" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#ab47bc"/>
+    </marker>
+    <marker id="arr-obs" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#26c6da"/>
+    </marker>
+    <marker id="arr-bkp" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <polygon points="0 0,9 3,0 6" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <rect width="1400" height="980" fill="url(#bg)"/>
+
+  <text class="title" x="40" y="50">Couchbase on Kubernetes</text>
+  <text class="subtitle" x="40" y="72">Control plane, data plane, and external systems during a paced rolling upgrade (CAO + spec.paused gate)</text>
+
+  <g transform="translate(1080,30)">
+    <rect width="290" height="190" rx="10" class="lane"/>
+    <text class="tag" x="14" y="22">LEGEND</text>
+    <g transform="translate(14,40)">
+      <line x1="0" y1="8" x2="30" y2="8" class="ctrlLink"/>
+      <text class="legendText" x="40" y="12">Control flow (apply, patch, reconcile)</text>
+    </g>
+    <g transform="translate(14,62)">
+      <line x1="0" y1="8" x2="30" y2="8" class="dataLink"/>
+      <text class="legendText" x="40" y="12">Data path (SDK clients read/write)</text>
+    </g>
+    <g transform="translate(14,84)">
+      <line x1="0" y1="8" x2="30" y2="8" class="replLink"/>
+      <text class="legendText" x="40" y="12">Intra-cluster replication</text>
+    </g>
+    <g transform="translate(14,106)">
+      <line x1="0" y1="8" x2="30" y2="8" class="xdcrLink"/>
+      <text class="legendText" x="40" y="12">XDCR (cross-cluster replication)</text>
+    </g>
+    <g transform="translate(14,128)">
+      <line x1="0" y1="8" x2="30" y2="8" class="obsLink"/>
+      <text class="legendText" x="40" y="12">Observability scrape</text>
+    </g>
+    <g transform="translate(14,150)">
+      <line x1="0" y1="8" x2="30" y2="8" class="bkpLink"/>
+      <text class="legendText" x="40" y="12">Backups (cbbackupmgr)</text>
+    </g>
+    <g transform="translate(14,172)">
+      <rect width="30" height="8" rx="2" fill="#bf360c" stroke="#ffab40" stroke-width="1"/>
+      <text class="legendText" x="40" y="12">Pod currently swap-rebalancing</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="100" width="1020" height="200" rx="14" class="lane"/>
+    <text class="laneTitle" x="62" y="124">CONTROL PLANE</text>
+
+    <g transform="translate(70,150)">
+      <rect width="120" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="60" y="36" text-anchor="middle">Engineer / CI</text>
+      <text class="boxText" x="60" y="58" text-anchor="middle">kubectl / Helm</text>
+    </g>
+
+    <g transform="translate(230,150)">
+      <rect width="140" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="70" y="32" text-anchor="middle">Kube API Server</text>
+      <text class="boxText" x="70" y="52" text-anchor="middle">authn / authz</text>
+      <text class="boxText" x="70" y="68" text-anchor="middle">etcd persistence</text>
+    </g>
+
+    <g transform="translate(410,150)">
+      <rect width="160" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="80" y="32" text-anchor="middle">Admission Controller</text>
+      <text class="boxText" x="80" y="52" text-anchor="middle">validating webhook</text>
+      <text class="boxText" x="80" y="68" text-anchor="middle">image + paused checks</text>
+    </g>
+
+    <g transform="translate(610,150)">
+      <rect width="180" height="80" rx="10" class="boxAccent"/>
+      <text class="boxLabel" x="90" y="32" text-anchor="middle">CAO Operator</text>
+      <text class="boxText" x="90" y="52" text-anchor="middle">reconciles CouchbaseCluster</text>
+      <text class="boxText" x="90" y="68" text-anchor="middle">drives swap-rebalance</text>
+    </g>
+
+    <g transform="translate(830,150)">
+      <rect width="200" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="100" y="28" text-anchor="middle">CouchbaseCluster CR</text>
+      <text class="code" x="100" y="50" text-anchor="middle">spec.image: 7.6.10</text>
+      <text class="code" x="100" y="68" text-anchor="middle">spec.paused: true | false</text>
+    </g>
+
+    <line x1="190" y1="190" x2="230" y2="190" class="ctrlLink" marker-end="url(#arr-ctrl)"/>
+    <line x1="370" y1="190" x2="410" y2="190" class="ctrlLink" marker-end="url(#arr-ctrl)"/>
+    <line x1="570" y1="190" x2="610" y2="190" class="ctrlLink" marker-end="url(#arr-ctrl)"/>
+    <line x1="790" y1="190" x2="830" y2="190" class="ctrlLink" marker-end="url(#arr-ctrl)"/>
+
+    <path d="M700 230 V 320" class="ctrlLink" marker-end="url(#arr-ctrl)"/>
+    <text class="tag" x="710" y="258">reconcile</text>
+    <text class="tag" x="710" y="276">spec.paused gates next swap</text>
+  </g>
+
+  <g>
+    <rect x="40" y="320" width="1320" height="360" rx="14" class="lane"/>
+    <text class="laneTitle" x="62" y="344">DATA PLANE</text>
+    <text class="tag" x="190" y="344" fill="#9fb0ff">Namespace: couchbase-env-region</text>
+
+    <g transform="translate(70,370)">
+      <rect width="220" height="80" rx="10" class="box"/>
+      <text class="boxLabel" x="110" y="30" text-anchor="middle">Cluster service / Ingress</text>
+      <text class="boxText" x="110" y="52" text-anchor="middle">SDK connect on 11210 / 18091</text>
+      <text class="boxText" x="110" y="68" text-anchor="middle">TLS terminated at ingress</text>
+    </g>
+
+    <g transform="translate(70,470)">
+      <rect width="220" height="180" rx="10" class="boxAlt"/>
+      <text class="tag" x="14" y="22">SERVICES MAP</text>
+      <text class="boxText" x="14" y="46">KV       /  data engine</text>
+      <text class="boxText" x="14" y="66">Query    /  N1QL planner</text>
+      <text class="boxText" x="14" y="86">Index    /  GSI + primary</text>
+      <text class="boxText" x="14" y="106">Search   /  FTS</text>
+      <text class="boxText" x="14" y="126">Analytics / CBAS (optional)</text>
+      <text class="boxText" x="14" y="146">Eventing /  function runtime</text>
+      <text class="boxText" x="14" y="166">Backup   /  cbbackupmgr</text>
+    </g>
+
+    <g transform="translate(320,370)">
+      <rect width="320" height="280" rx="12" class="boxAlt"/>
+      <text class="tag" x="14" y="22">QUERY  /  N1QL</text>
+      <g transform="translate(20,40)">
+        <rect width="130" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="65" y="32" text-anchor="middle">cb-query-0</text>
+        <text class="boxText" x="65" y="54" text-anchor="middle">image v2</text>
+        <text class="boxText" x="65" y="72" text-anchor="middle">READY 2/2</text>
+        <text class="boxText" x="65" y="90" text-anchor="middle">restarts 0</text>
+      </g>
+      <g transform="translate(170,40)">
+        <rect width="130" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="65" y="32" text-anchor="middle">cb-query-1</text>
+        <text class="boxText" x="65" y="54" text-anchor="middle">image v2</text>
+        <text class="boxText" x="65" y="72" text-anchor="middle">READY 2/2</text>
+        <text class="boxText" x="65" y="90" text-anchor="middle">restarts 0</text>
+      </g>
+      <g transform="translate(20,160)">
+        <rect width="280" height="100" rx="10" class="boxOk"/>
+        <text class="boxLabel" x="140" y="32" text-anchor="middle">Query service</text>
+        <text class="boxText" x="140" y="54" text-anchor="middle">prepared statements + GSI lookups</text>
+        <text class="boxText" x="140" y="72" text-anchor="middle">fan-out to KV via vbucket map</text>
+        <text class="boxText" x="140" y="90" text-anchor="middle">stateless  /  restartable</text>
+      </g>
+    </g>
+
+    <g transform="translate(660,370)">
+      <rect width="320" height="280" rx="12" class="boxAlt"/>
+      <text class="tag" x="14" y="22">INDEX  /  GSI</text>
+      <g transform="translate(20,40)">
+        <rect width="130" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="65" y="32" text-anchor="middle">cb-index-0</text>
+        <text class="boxText" x="65" y="54" text-anchor="middle">image v2</text>
+        <text class="boxText" x="65" y="72" text-anchor="middle">indexes warm</text>
+        <text class="boxText" x="65" y="90" text-anchor="middle">PVC attached</text>
+      </g>
+      <g transform="translate(170,40)">
+        <rect width="130" height="100" rx="10" class="boxWarn"/>
+        <text class="boxLabel" x="65" y="32" text-anchor="middle">cb-index-1</text>
+        <text class="boxText" x="65" y="54" text-anchor="middle">swap-rebalance</text>
+        <text class="boxText" x="65" y="72" text-anchor="middle">v1 to v2</text>
+        <text class="boxText" x="65" y="90" text-anchor="middle">indexer rebuild</text>
+      </g>
+      <g transform="translate(20,160)">
+        <rect width="280" height="100" rx="10" class="boxOk"/>
+        <text class="boxLabel" x="140" y="32" text-anchor="middle">Index service</text>
+        <text class="boxText" x="140" y="54" text-anchor="middle">primary + secondary GSI</text>
+        <text class="boxText" x="140" y="72" text-anchor="middle">file-backed  /  warm-up on restart</text>
+        <text class="boxText" x="140" y="90" text-anchor="middle">stateful  /  PV-backed</text>
+      </g>
+    </g>
+
+    <g transform="translate(1000,370)">
+      <rect width="340" height="280" rx="12" class="boxAlt"/>
+      <text class="tag" x="14" y="22">KV  /  DATA</text>
+      <g transform="translate(20,40)">
+        <rect width="140" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="70" y="32" text-anchor="middle">cb-kv-0</text>
+        <text class="boxText" x="70" y="54" text-anchor="middle">image v2  /  active</text>
+        <text class="boxText" x="70" y="72" text-anchor="middle">vbuckets 0-341</text>
+        <text class="boxText" x="70" y="90" text-anchor="middle">PV: 500Gi SSD</text>
+      </g>
+      <g transform="translate(180,40)">
+        <rect width="140" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="70" y="32" text-anchor="middle">cb-kv-1</text>
+        <text class="boxText" x="70" y="54" text-anchor="middle">image v2  /  replica</text>
+        <text class="boxText" x="70" y="72" text-anchor="middle">vbuckets 342-682</text>
+        <text class="boxText" x="70" y="90" text-anchor="middle">PV: 500Gi SSD</text>
+      </g>
+      <g transform="translate(20,160)">
+        <rect width="140" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="70" y="32" text-anchor="middle">cb-kv-2</text>
+        <text class="boxText" x="70" y="54" text-anchor="middle">image v1  /  queued</text>
+        <text class="boxText" x="70" y="72" text-anchor="middle">vbuckets 683-1023</text>
+        <text class="boxText" x="70" y="90" text-anchor="middle">PV: 500Gi SSD</text>
+      </g>
+      <g transform="translate(180,160)">
+        <rect width="140" height="100" rx="10" class="box"/>
+        <text class="boxLabel" x="70" y="32" text-anchor="middle">cb-kv-3</text>
+        <text class="boxText" x="70" y="54" text-anchor="middle">image v1  /  replica</text>
+        <text class="boxText" x="70" y="72" text-anchor="middle">paired with kv-2</text>
+        <text class="boxText" x="70" y="90" text-anchor="middle">PV: 500Gi SSD</text>
+      </g>
+    </g>
+
+    <path d="M1090 555 q 70 30 140 0" class="replLink" marker-end="url(#arr-repl)"/>
+    <path d="M1230 555 q -70 30 -140 0" class="replLink" marker-end="url(#arr-repl)"/>
+    <text class="tag" x="1130" y="600" fill="#42a5f5">vbucket replicas</text>
+
+    <line x1="290" y1="410" x2="320" y2="410" class="dataLink" marker-end="url(#arr-data)"/>
+    <line x1="640" y1="450" x2="660" y2="450" class="dataLink" marker-end="url(#arr-data)"/>
+    <line x1="980" y1="450" x2="1000" y2="450" class="dataLink" marker-end="url(#arr-data)"/>
+  </g>
+
+  <g>
+    <rect x="40" y="700" width="1320" height="200" rx="14" class="lane"/>
+    <text class="laneTitle" x="62" y="724">EXTERNAL SYSTEMS</text>
+
+    <g transform="translate(70,740)">
+      <rect width="200" height="140" rx="10" class="box"/>
+      <text class="boxLabel" x="100" y="32" text-anchor="middle">Application clients</text>
+      <text class="boxText" x="100" y="56" text-anchor="middle">Couchbase SDK</text>
+      <text class="boxText" x="100" y="74" text-anchor="middle">retry + circuit break</text>
+      <text class="boxText" x="100" y="92" text-anchor="middle">TLS + RBAC</text>
+      <text class="boxText" x="100" y="110" text-anchor="middle">connection pool</text>
+      <text class="boxText" x="100" y="128" text-anchor="middle">vbucket-aware routing</text>
+    </g>
+    <path d="M170 740 V 480 H 290" class="dataLink" marker-end="url(#arr-data)"/>
+
+    <g transform="translate(310,740)">
+      <rect width="240" height="140" rx="10" class="boxAccent"/>
+      <text class="boxLabel" x="120" y="32" text-anchor="middle">XDCR remote cluster</text>
+      <text class="boxText" x="120" y="56" text-anchor="middle">paired region (DR target)</text>
+      <text class="boxText" x="120" y="74" text-anchor="middle">bidirectional pipelines</text>
+      <text class="boxText" x="120" y="92" text-anchor="middle">changes_left tracked</text>
+      <text class="boxText" x="120" y="110" text-anchor="middle">paused during prod swap</text>
+      <text class="boxText" x="120" y="128" text-anchor="middle">drain budget: ~30 min</text>
+    </g>
+    <path d="M430 740 V 670 H 1020" class="xdcrLink" marker-end="url(#arr-xdcr)"/>
+    <path d="M1020 690 H 430 V 760" class="xdcrLink" marker-end="url(#arr-xdcr)"/>
+
+    <g transform="translate(590,740)">
+      <rect width="240" height="140" rx="10" class="box"/>
+      <text class="boxLabel" x="120" y="32" text-anchor="middle">Backups</text>
+      <text class="boxText" x="120" y="56" text-anchor="middle">cbbackupmgr cronjob</text>
+      <text class="boxText" x="120" y="74" text-anchor="middle">delta + full</text>
+      <text class="boxText" x="120" y="92" text-anchor="middle">S3 / Blob / NFS</text>
+      <text class="boxText" x="120" y="110" text-anchor="middle">restore drill validated</text>
+      <text class="boxText" x="120" y="128" text-anchor="middle">retention policy enforced</text>
+    </g>
+    <path d="M710 740 V 660 H 1170" class="bkpLink" marker-end="url(#arr-bkp)"/>
+
+    <g transform="translate(870,740)">
+      <rect width="240" height="140" rx="10" class="box"/>
+      <text class="boxLabel" x="120" y="32" text-anchor="middle">Observability</text>
+      <text class="boxText" x="120" y="56" text-anchor="middle">Prometheus scrape</text>
+      <text class="boxText" x="120" y="74" text-anchor="middle">Grafana dashboards</text>
+      <text class="boxText" x="120" y="92" text-anchor="middle">Alertmanager  /  PagerDuty</text>
+      <text class="boxText" x="120" y="110" text-anchor="middle">cluster + app SLOs</text>
+      <text class="boxText" x="120" y="128" text-anchor="middle">XDCR drain timer</text>
+    </g>
+    <path d="M990 740 V 680 H 700" class="obsLink" marker-end="url(#arr-obs)"/>
+    <path d="M990 740 V 680 H 1100" class="obsLink" marker-end="url(#arr-obs)"/>
+
+    <g transform="translate(1140,740)">
+      <rect width="200" height="140" rx="10" class="box"/>
+      <text class="boxLabel" x="100" y="32" text-anchor="middle">SRE / Support</text>
+      <text class="boxText" x="100" y="56" text-anchor="middle">on-call view</text>
+      <text class="boxText" x="100" y="74" text-anchor="middle">runbook + dashboards</text>
+      <text class="boxText" x="100" y="92" text-anchor="middle">change ticket open</text>
+      <text class="boxText" x="100" y="110" text-anchor="middle">stop / rollback gates</text>
+      <text class="boxText" x="100" y="128" text-anchor="middle">decision log</text>
+    </g>
+  </g>
+
+  <text class="footnote" x="40" y="940">Topology is conceptual. Production deployments commonly separate KV, Index, Query, and Search across distinct node pools and PV classes.</text>
+  <text class="footnote" x="40" y="958">Upgrade pacing is enforced by toggling spec.paused on the CouchbaseCluster CR between node swaps. CAO holds reconciliation while paused is true.</text>
+</svg>

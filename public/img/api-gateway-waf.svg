@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320" role="img" aria-label="API gateway and WAF request flow with policy enforcement">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 16px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .gateway { fill: #1e293b; stroke: #38bdf8; stroke-width: 1.5; }
+      .waf { fill: #2a0a1f; stroke: #dc2626; stroke-width: 1.5; }
+      .api { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .db { fill: #0c2b18; stroke: #22c55e; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.78); font: 400 8.5px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .flow { stroke: #4F8EF7; stroke-width: 2; fill: none; }
+      .tag { fill: #9fb0ff; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .footer { fill: rgba(255,255,255,0.65); font: 600 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4F8EF7"/>
+    </marker>
+  </defs>
+
+  <rect width="600" height="320" rx="14" fill="url(#bg)"/>
+  <rect width="600" height="320" rx="14" fill="url(#grid)"/>
+
+  <text class="title" x="300" y="32" text-anchor="middle">API Gateway + WAF</text>
+  <text class="subtitle" x="300" y="50" text-anchor="middle">Edge layers in front of services and data</text>
+
+  <g transform="translate(30,80)">
+    <rect width="120" height="100" rx="10" class="gateway"/>
+    <text class="boxLabel" x="60" y="26" text-anchor="middle">Gateway</text>
+    <text class="boxText" x="60" y="46" text-anchor="middle">TLS terminate</text>
+    <text class="boxText" x="60" y="60" text-anchor="middle">rate limit</text>
+    <text class="boxText" x="60" y="74" text-anchor="middle">auth (JWT)</text>
+    <text class="boxText" x="60" y="88" text-anchor="middle">request routing</text>
+  </g>
+
+  <g transform="translate(170,80)">
+    <rect width="120" height="100" rx="10" class="waf"/>
+    <text class="boxLabel" x="60" y="26" text-anchor="middle">WAF</text>
+    <text class="boxText" x="60" y="46" text-anchor="middle">OWASP rules</text>
+    <text class="boxText" x="60" y="60" text-anchor="middle">bot mitigation</text>
+    <text class="boxText" x="60" y="74" text-anchor="middle">SQLi / XSS block</text>
+    <text class="boxText" x="60" y="88" text-anchor="middle">geo + IP rep</text>
+  </g>
+
+  <g transform="translate(310,80)">
+    <rect width="120" height="100" rx="10" class="api"/>
+    <text class="boxLabel" x="60" y="26" text-anchor="middle">API</text>
+    <text class="boxText" x="60" y="46" text-anchor="middle">business logic</text>
+    <text class="boxText" x="60" y="60" text-anchor="middle">input validation</text>
+    <text class="boxText" x="60" y="74" text-anchor="middle">RBAC enforce</text>
+    <text class="boxText" x="60" y="88" text-anchor="middle">audit log</text>
+  </g>
+
+  <g transform="translate(450,80)">
+    <rect width="120" height="100" rx="10" class="db"/>
+    <text class="boxLabel" x="60" y="26" text-anchor="middle">DB</text>
+    <text class="boxText" x="60" y="46" text-anchor="middle">least-priv user</text>
+    <text class="boxText" x="60" y="60" text-anchor="middle">TLS in transit</text>
+    <text class="boxText" x="60" y="74" text-anchor="middle">parameterised SQL</text>
+    <text class="boxText" x="60" y="88" text-anchor="middle">column encryption</text>
+  </g>
+
+  <line x1="150" y1="130" x2="170" y2="130" class="flow" marker-end="url(#ar)"/>
+  <line x1="290" y1="130" x2="310" y2="130" class="flow" marker-end="url(#ar)"/>
+  <line x1="430" y1="130" x2="450" y2="130" class="flow" marker-end="url(#ar)"/>
+
+  <text class="tag" x="160" y="200" text-anchor="middle">1 ROUTE</text>
+  <text class="tag" x="300" y="200" text-anchor="middle">2 FILTER</text>
+  <text class="tag" x="440" y="200" text-anchor="middle">3 EXECUTE</text>
+
+  <g transform="translate(30,220)">
+    <rect width="540" height="60" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text class="boxText" x="14" y="22">Defense in depth: each layer fails closed. Logs feed SIEM (security-monitoring SVG).</text>
+    <text class="boxText" x="14" y="40">Gateway: Kong / Envoy / AWS API Gateway  /  WAF: ModSecurity / AWS WAF / Cloudflare</text>
+    <text class="boxText" x="14" y="54">All planes emit Prometheus metrics + structured logs with trace IDs.</text>
+  </g>
+
+  <text class="footer" x="300" y="304" text-anchor="middle">API Gateway and WAF  /  edge security</text>
+</svg>

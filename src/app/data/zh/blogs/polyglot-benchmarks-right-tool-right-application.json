@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "多语言基准：为正确的工作选择正确的工具",
+  "sub_title": "多语言基准测试如何帮助您为每个应用程序选择正确的堆栈 - 不是一种语言可以统治所有应用程序",
+  "excerpt": "停止默认堆栈偏差。 Polyglot Benchmarks 在相同的工作负载上对 njs、Lua、Python、Go、Rust、Bun、Java 和 Kotlin 进行比较 - 可重复的工具 + 用于架构决策的实时仪表板。",
+  "meta_title": "多语言基准：适合工作的正确工具",
+  "meta_description": "在相同的 HTTP 测试上比较 njs、Lua、Python、Go、Rust、Bun、Java、Kotlin。可复制的工具+用于堆栈决策的实时仪表板。",
+  "meta_keywords": "多语言基准测试、语言比较、架构决策、工作流程示例、性能基准测试、Rust 与 Go、Java 与 Kotlin、FastAPI、Bun.js、Javalin、Ktor、Lua、OpenResty、njs、NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>简短易读的伴侣。要深入了解完整的架构 - 线束布局、决策矩阵、反模式以及如何分叉基准 - 请阅读<a href=\"/zh/articles/polyglot-benchmarks-right-tool-right-application\">长文</a>。</em></p><h2>您的组织在 2019 年选择了一个堆栈。您的工作负载没有。</h2><p>大多数团队仍然为每项新服务标准化单一语言：Node 中的所有内容、Python 中的所有内容、Java 中的所有内容，或者仅在 Rust 上进行大胆的赌注。这种习惯是可以理解的——当堆栈统一时，招聘、CI 模板和安全审查都会变得更容易。问题是工作负载不均匀。 API 网关、夜间 ETL 作业、NGINX 边缘转换、JVM 微服务资产以及具有长期连接的聊天后端对运行时的不同部分产生压力。从走廊辩论或单个微基准中选出一个获胜者，最终会导致错误的工具承载错误的负载。</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>多语言基准</strong></a>是解药：一种可重现的工具和实时仪表板，可在<em>上比较<strong>的八个</strong>运行时以及相同的</em>HTTP 工作负载，因此架构师可以将证据与有界上下文相匹配，而不是默认堆栈偏差。</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>它测量什么</h2><p>公共仪表板比较<strong>NGINX njs</strong>、<strong>OpenResty Lua</strong>、<strong>Python (FastAPI)</strong>、<strong>Go (net/http)</strong>、<strong>Rust (Actix)</strong>、<strong>Bun</strong>、<strong>Java (Javalin / Jetty)</strong>和<strong>Kotlin (Ktor / Netty)</strong>跨七个综合测试，反映真实的 API 和边缘模式：纯文本基线、JSON 序列化、CPU 绑定斐波那契、字符串操作、请求检查、内部子请求 + 转换和路由逻辑。每个测试都会报告每秒请求数、平均延迟和尾部延迟（包括 P99）、从curl 到第一个字节的时间以及错误计数——在<code>bench.sh</code>完成时进行实时流式传输。</p><p>Java 和 Kotlin 与编译和脚本运行时并存，因此 JVM 商店可以看到 Javalin 和 Ktor 如何在相同的路线上与 Go、Rust、Bun 和 FastAPI 进行交易，而不是与挥手的“企业 vs 绿地”叙述。该工具位于<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\">工作流程示例/基准</a>中：Docker Compose 服务、共享<code>wrk</code>配置文件（10 秒、4 个线程、100 个连接）以及仪表板使用的 JSON 结果。您可以为自己的候选人和热路径分叉它。</p><h2>为什么这是一个决策框架，而不是排行榜</h2><p>多语言基准测试不会永远为一种语言加冕。每个测试行的获胜者都会发生变化——这正是您在设计微服务时想要的。仪表板的结论部分将结果映射到用例（Lua/njs 中的边缘路由、Rust/Go 中的核心并发、Java/Kotlin 中的 JVM 服务、Python 中的速度）。这就是论文：<strong>设计的多语言</strong>，使用架构审查委员会的数据而不是意见。</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">一帧中的四步方法：定义工作负载、运行线束、在实时仪表板上进行比较，然后通过 ADR 做出决定。</figcaption></figure><h2>平台和工程主管的六大优势</h2><ul><li><strong>证据胜过意见</strong>— 将图表和配置附加到 ADR；通过测量运行来解决堆栈争论。</li><li><strong>特定工作负载的获胜者</strong>— 延迟敏感路径、批处理、边缘转换、JVM 资产获得不同的领先者。</li><li><strong>总体拥有成本</strong>— 原始 RPS 不够；权衡构建时间、图像大小、团队技能配合和运营负担。</li><li><strong>可重复的工作流程</strong>— 相同的存储库、相同的 Compose 文件、相同的 wrk 脚本；可在 CI 中重新运行。</li><li><strong>合法的多语言微服务</strong>— 每个服务边界使用不同的语言，无需感到羞耻或惊讶。</li><li><strong>降低风险</strong>— 在组织范围内授权之前获得亚军的原型。</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>快速入门</h2><ol><li>在运行过程中打开<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">实时仪表板</a>（或在本地启动运行）。</li><li>克隆<code>workflow-examples</code>、<code>cd benchmarks</code>、<code>docker compose up</code>— 八种语言服务以及仪表板和工作台运行程序。</li><li>读取仪表板上的<code>results.json</code>卷，并将获胜者映射到<em>您的</em>工作负载行。</li><li>写入 ADR — 包括持续时间、线程、连接和硬件类别。</li></ol><h2>阅读完整版本</h2><p><a href=\"/zh/articles/polyglot-benchmarks-right-tool-right-application\">长文</a>涵盖了完整的存储库布局、标准表、决策矩阵图、每个测试系列的案例模式（包括 Java 和 Kotlin）、反模式、限制以及可与 ARB 共享的 SEO 就绪片段。由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布；基准测试网站托管于<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>。</p><p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

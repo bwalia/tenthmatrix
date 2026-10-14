@@ -1,0 +1,61 @@
+{
+  "uuid": "blog-claude-models-compare-001",
+  "internal_id": 952,
+  "slug": "claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "title": "مقارنة نماذج Claude: Haiku مقابل Sonnet مقابل Opus مقابل Fable 5 (Mythos 5)",
+  "sub_title": "دليل سريع لاختيار مستوى نموذج Claude المناسب، إضافةً إلى موجّه cheap-to-frontier.",
+  "excerpt": "اختر مستوى نموذج Claude المناسب: Haiku للتوجيه السريع، وSonnet للعمل اليومي، وOpus للترميز الوكيلي المعقّد، وFable 5 للاستقلالية طويلة الأفق. يتضمن مخططًا لجهاز توجيه ميزانية الرموز.",
+  "meta_title": "مقارنة نماذج Claude: Haiku مقابل Sonnet مقابل Opus مقابل Fable 5",
+  "meta_description": "قارن Anthropic Claude Haiku وSonnet وOpus وFable 5 وMythos 5 المقيّد. يتضمن المواصفات واستراتيجية التكلفة/الرمز ومخطط توجيه.",
+  "meta_keywords": "مقارنة نماذج Claude, Claude Opus 4.8, Claude Fable 5, Claude Sonnet 5, Claude Haiku 4.5, Claude Mythos 5, ميزانية الرموز, الترميز الوكيلي",
+  "cover_image": "/img/claude-models-comparison-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-models-comparison-cover.svg",
+      "id": 952,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude models comparison cover: Haiku, Sonnet, Opus, Fable 5, Mythos 5"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>دليل سريع وعملي لمستويات نماذج Claude. للغوص العميق الكامل مع مخططات التوجيه وأنماط التوجيه وكتاب ميزانية الرموز، اقرأ <a href=\"/ar/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">مقال كبير</a>.</em></p>\n<p><img alt=\"مقارنة نماذج Claude: Haiku وSonnet وOpus وFable 5 وMythos 5\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-models-comparison-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>النسخة في فقرة واحدة.</strong> اختيار نموذج Claude هو في الغالب موازنة بين <em>زمن الاستجابة</em>, <em>التكلفة</em>، و <em>كم من الوقت تحتاج المهمة أن يبقى النموذج في التدفق</em>. استخدم <code>claude-haiku-4-5</code> لعمل النية السريع والرخيص، <code>claude-sonnet-5</code> لأفضل توازن سرعة/جودة، <code>claude-opus-4-8</code> للترميز الوكيلي المعقّد والعمل المؤسسي، واحتفظ بـ <code>claude-fable-5</code> (و المقيّد <code>claude-mythos-5</code>) للمهام الصعبة حقًا طويلة الأفق التي تستغرق ساعات أو أيامًا.\n</div>\n<h2>تشكيلة النماذج باختصار</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0a2740;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">النموذج</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">الأفضل لـ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">نافذة السياق</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">أقصى إخراج</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">التسعير (إدخال / إخراج)</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">سلوك thinking</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Fable 5</strong> (<code>claude-fable-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">وكلاء طويلو التشغيل وأصعب المشكلات غير المحلولة</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$10 / $50 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Opus 4.8</strong> (<code>claude-opus-4-8</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ترميز وكيلي معقّد وعمل مؤسسي</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$5 / $25 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Sonnet 5</strong> (<code>claude-sonnet-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">أفضل توازن سرعة/جودة</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$3 / $15 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Haiku 4.5</strong> (<code>claude-haiku-4-5-20251001</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">أسرع نموذج للمهام الرخيصة عالية الحجم</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">200K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">64K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$1 / $5 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Extended thinking available (adaptive off)</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Claude Mythos 5</strong> (<code>claude-mythos-5</code>) نموذج مقيّد يشارك نفس المواصفات والتسعير مع Fable 5، لكنه لا يتضمن مصنّفات السلامة المستخدمة في Fable 5. التوفّر محدود للشركاء المعتمدين عبر Project Glasswing.</p>\n<h2>اختر النموذج الصحيح (قواعد سريعة)</h2>\n<ul>\n<li><strong>Haiku 4.5</strong>: التوجيه والتصنيف والاستخراج وأي سير عمل تريد فيه ردودًا سريعة ولا تستطيع تحمّل ميزانيات عالية لرموز الإخراج.</li>\n<li><strong>Sonnet 5</strong>: الترميز اليومي وعمل المستندات حيث تريد جودة قوية دون تسعير Opus/Fable.</li>\n<li><strong>Opus 4.8</strong>: ترميز وكيلي معقّد وتحليل مؤسسي وتصحيح أصعب حيث يُطلب عمل أطول وأكثر استقلالية.</li>\n<li><strong>Fable 5</strong>: المشكلات الصعبة طويلة الأفق التي تستغرق ساعات أو أيامًا، خاصة عندما يجب أن يحافظ النموذج على الهدف ويفوّض المهام الفرعية ويبقى متماسكًا.</li>\n</ul>\n<h2>Effort وthinking: كيف يؤثران على التكلفة</h2>\n<p>على الواجهة، <code>effort</code> هو التحكّم الأساسي للموازنة بين الذكاء وزمن الاستجابة والتكلفة على Fable 5 وMythos 5. لـ Opus 4.8 وSonnet 5 يمكنك أيضًا تعيين effort صراحةً عندما تحتاج ملف تكلفة/زمن استجابة مختلفًا.</p>\n<p>الدلالة العملية: جعل كل طلب على أقصى effort عادةً أسرع طريقة لإنفاق ميزانيتك على رموز الإخراج.</p>\n<h2>استراتيجية رموز تعمل عبر كل المستويات</h2>\n<p>رموز إخراج Claude هي الجزء المكلف. قاعدة بسيطة: <strong>حدّ طول الإخراج</strong>, <strong>موجّه لـ TLDR أولًا</strong>، واستخدم <strong>prompt caching</strong> حتى تُعاد استخدام البادئات المستقرة (تعليمات النظام ومخططات الأدوات).</p>\n<ul>\n<li><strong>استخدم أرخص نموذج يستطيع الإنهاء.</strong> غالبًا ما يقطع الموجّه (Haiku -&gt; Sonnet/Opus -&gt; Fable) التكلفة بشكل كبير مع الإبقاء على جودة عالية.</li>\n<li><strong>عيّن حدود الإخراج.</strong> في الإنتاج، عيّن دائمًا حد أقصى للإخراج / الرموز. الإجابات بلا حدود حادث ميزانية.</li>\n<li><strong>استخدم الملخصات استراتيجيًا.</strong> بدل إرسال النصوص الكاملة كل دورة، احتفظ بذاكرة «lessons» مضغوطة وحدّثها فقط.</li>\n</ul>\n<h2>مخطط موجّه بسيط</h2>\n<ol>\n<li>صنّف النية والتعقيد المقدّر باستخدام <code>claude-haiku-4-5</code>.</li>\n<li>أرسل العمل «الصعب العادي» إلى <code>claude-sonnet-5</code> (أو <code>claude-opus-4-8</code> عندما تتوقع ترميزًا وكيليًا أثقل).</li>\n<li>صعّد إلى <code>claude-fable-5</code> فقط عندما تكون المهمة طويلة الأفق بوضوح أو فشلت على مستويات أدنى.</li>\n<li>إذا رفض Fable 5 عبر مصنّفات السلامة، تراجع إلى Opus 4.8 (تدعم الواجهة إعادة الإطلاق مع fallbacks عند التهيئة).</li>\n</ol>\n<h2>قراءات إضافية (رسمية)</h2>\n<ul>\n<li><a href=\"https://platform.claude.com/docs/ar/about-claude/models/overview\" rel=\"noopener noreferrer\" target=\"_blank\">نظرة عامة على النماذج</a></li>\n<li><a href=\"https://platform.claude.com/docs/ar/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">تقديم Fable 5 وMythos 5</a></li>\n<li><a href=\"https://platform.claude.com/docs/ar/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">Prompting Claude Fable 5</a></li>\n</ul>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-07-08T09:00:00Z",
+  "updated_at": "2026-07-08T09:00:00Z",
+  "published_date": "2026-07-08",
+  "status": true
+}

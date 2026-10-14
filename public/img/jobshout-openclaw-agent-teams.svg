@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Jobshout with OpenClaw auto-builds AI agent teams for fast business delivery">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="0.45" stop-color="#0c1f33"/>
+      <stop offset="1" stop-color="#0a2a28"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0.18" cy="0.2" r="0.55">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.88" cy="0.75" r="0.5">
+      <stop offset="0" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lane" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.0"/>
+      <stop offset="0.2" stop-color="#14b8a6" stop-opacity="0.55"/>
+      <stop offset="0.8" stop-color="#f59e0b" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0.0"/>
+    </linearGradient>
+    <linearGradient id="nodeFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#143044"/>
+      <stop offset="1" stop-color="#0d2233"/>
+    </linearGradient>
+    <linearGradient id="clawFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#134e4a"/>
+      <stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+    <linearGradient id="jsFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e3a5f"/>
+      <stop offset="1" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0 H0 V32" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .brand { fill: #5eead4; font: 800 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 3.5px; }
+      .title { fill: #ffffff; font: 800 40px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: -0.6px; }
+      .sub { fill: rgba(255,255,255,0.82); font: 500 16px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .h { fill: #ffffff; font: 700 15px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .p { fill: rgba(255,255,255,0.72); font: 500 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .chip { fill: #0b1724; font: 700 11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+      .tag { fill: #fde68a; font: 700 11px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .foot { fill: rgba(255,255,255,0.45); font: 600 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .role { fill: #ecfeff; font: 700 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .metric { fill: #5eead4; font: 800 22px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .metricLabel { fill: rgba(255,255,255,0.65); font: 600 11px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#glowA)"/>
+  <rect width="1600" height="900" fill="url(#glowB)"/>
+
+  <!-- Brand header -->
+  <text class="brand" x="64" y="58">JOBSHOUT  x  OPENCLAW</text>
+  <text class="title" x="64" y="112">Auto-build AI agent teams</text>
+  <text class="sub" x="64" y="148">Jobshout matches the mission. OpenClaw assembles the agents. Businesses ship outcomes faster.</text>
+
+  <!-- Top metrics strip -->
+  <g transform="translate(980,48)">
+    <rect width="540" height="92" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(94,234,212,0.25)" stroke-width="1.5"/>
+    <text class="metric" x="36" y="42">3x</text>
+    <text class="metricLabel" x="36" y="66">faster delivery</text>
+    <text class="metric" x="190" y="42">24/7</text>
+    <text class="metricLabel" x="190" y="66">agent coverage</text>
+    <text class="metric" x="360" y="42">1</text>
+    <text class="metricLabel" x="360" y="66">brief to live crew</text>
+  </g>
+
+  <!-- Flow spine -->
+  <rect x="80" y="310" width="1440" height="6" rx="3" fill="url(#lane)" opacity="0.85"/>
+
+  <!-- STEP 1: Business brief -->
+  <g transform="translate(64,220)" filter="url(#soft)">
+    <rect width="240" height="200" rx="18" fill="url(#nodeFill)" stroke="rgba(148,163,184,0.35)" stroke-width="1.5"/>
+    <text class="tag" x="20" y="32">01  BRIEF</text>
+    <text class="h" x="20" y="60">Business outcome</text>
+    <text class="p" x="20" y="86">Goal, constraints, SLA,</text>
+    <text class="p" x="20" y="104">and success metrics</text>
+    <text class="p" x="20" y="122">from the stakeholder.</text>
+    <rect x="20" y="148" width="120" height="28" rx="8" fill="rgba(245,158,11,0.18)" stroke="rgba(245,158,11,0.45)"/>
+    <text class="chip" x="34" y="167" fill="#fde68a">outcome-first</text>
+  </g>
+
+  <!-- STEP 2: Jobshout staffing -->
+  <g transform="translate(340,220)" filter="url(#soft)">
+    <rect width="260" height="200" rx="18" fill="url(#jsFill)" stroke="rgba(56,189,248,0.45)" stroke-width="1.5"/>
+    <text class="tag" x="20" y="32" fill="#e0f2fe">02  JOBSHOUT</text>
+    <text class="h" x="20" y="60">Compose the team</text>
+    <text class="p" x="20" y="86">Maps roles to skills:</text>
+    <text class="p" x="20" y="104">Planner, Builder, Reviewer,</text>
+    <text class="p" x="20" y="122">Ops, and Compliance.</text>
+    <rect x="20" y="148" width="200" height="28" rx="8" fill="rgba(7,17,31,0.35)" stroke="rgba(186,230,253,0.4)"/>
+    <text class="chip" x="32" y="167" fill="#e0f2fe">jobshout: team-compose</text>
+  </g>
+
+  <!-- STEP 3: OpenClaw spawn -->
+  <g transform="translate(640,220)" filter="url(#soft)">
+    <rect width="280" height="200" rx="18" fill="url(#clawFill)" stroke="rgba(45,212,191,0.5)" stroke-width="1.5"/>
+    <text class="tag" x="20" y="32" fill="#99f6e4">03  OPENCLAW</text>
+    <text class="h" x="20" y="60">Spawn agent crew</text>
+    <text class="p" x="20" y="86">OpenClaw boots the runtime,</text>
+    <text class="p" x="20" y="104">wires tools via MCP, and</text>
+    <text class="p" x="20" y="122">stands up the agent fleet.</text>
+    <rect x="20" y="148" width="210" height="28" rx="8" fill="rgba(7,17,31,0.35)" stroke="rgba(153,246,228,0.4)"/>
+    <text class="chip" x="32" y="167" fill="#ccfbf1">openclaw: crew-bootstrap</text>
+  </g>
+
+  <!-- STEP 4: Parallel delivery -->
+  <g transform="translate(960,220)" filter="url(#soft)">
+    <rect width="260" height="200" rx="18" fill="url(#nodeFill)" stroke="rgba(148,163,184,0.35)" stroke-width="1.5"/>
+    <text class="tag" x="20" y="32">04  EXECUTE</text>
+    <text class="h" x="20" y="60">Agents deliver in parallel</text>
+    <text class="p" x="20" y="86">Build, test, document, and</text>
+    <text class="p" x="20" y="104">integrate against the Spec</text>
+    <text class="p" x="20" y="122">with mini-reviews each step.</text>
+    <rect x="20" y="148" width="200" height="28" rx="8" fill="rgba(94,234,212,0.12)" stroke="rgba(94,234,212,0.35)"/>
+    <text class="chip" x="32" y="167" fill="#99f6e4">jobshout: parallel-run</text>
+  </g>
+
+  <!-- STEP 5: Business result -->
+  <g transform="translate(1260,220)" filter="url(#soft)">
+    <rect width="276" height="200" rx="18" fill="#12261f" stroke="rgba(52,211,153,0.55)" stroke-width="1.5"/>
+    <text class="tag" x="20" y="32" fill="#6ee7b7">05  RESULT</text>
+    <text class="h" x="20" y="60">Ship to the business</text>
+    <text class="p" x="20" y="86">Review-until-clean, then</text>
+    <text class="p" x="20" y="104">promote via GitOps to the</text>
+    <text class="p" x="20" y="122">environment that matters.</text>
+    <rect x="20" y="148" width="180" height="28" rx="8" fill="rgba(16,185,129,0.18)" stroke="rgba(110,231,183,0.45)"/>
+    <text class="chip" x="36" y="167" fill="#a7f3d0">FINALLY CLEAN -&gt; GITOPS</text>
+  </g>
+
+  <!-- Arrow markers on spine -->
+  <g fill="#5eead4">
+    <polygon points="318,313 332,313 325,320"/>
+    <polygon points="618,313 632,313 625,320"/>
+    <polygon points="938,313 952,313 945,320"/>
+    <polygon points="1238,313 1252,313 1245,320"/>
+  </g>
+
+  <!-- Agent team constellation -->
+  <text class="brand" x="64" y="500">AUTO-ASSEMBLED CREW</text>
+  <text class="sub" x="64" y="528">One Jobshout brief becomes a full OpenClaw agent team — sized to the job, not the org chart.</text>
+
+  <!-- Agent role cards -->
+  <g transform="translate(64,560)">
+    <!-- Planner -->
+    <g filter="url(#soft)">
+      <rect width="220" height="130" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(94,234,212,0.3)"/>
+      <circle cx="36" cy="36" r="16" fill="#14b8a6"/>
+      <text x="30" y="41" fill="#042f2e" font-size="14" font-weight="800" font-family="system-ui">P</text>
+      <text class="role" x="64" y="42">Planner Agent</text>
+      <text class="p" x="24" y="78">Breaks outcome into</text>
+      <text class="p" x="24" y="96">epics, stories, AC.</text>
+      <text class="chip" x="24" y="118" fill="#5eead4">openclaw/planner</text>
+    </g>
+    <!-- Builder -->
+    <g transform="translate(244,0)" filter="url(#soft)">
+      <rect width="220" height="130" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(56,189,248,0.3)"/>
+      <circle cx="36" cy="36" r="16" fill="#0ea5e9"/>
+      <text x="30" y="41" fill="#082f49" font-size="14" font-weight="800" font-family="system-ui">B</text>
+      <text class="role" x="64" y="42">Builder Agents</text>
+      <text class="p" x="24" y="78">Code, content, data,</text>
+      <text class="p" x="24" y="96">and integrations.</text>
+      <text class="chip" x="24" y="118" fill="#7dd3fc">openclaw/builders</text>
+    </g>
+    <!-- Reviewer -->
+    <g transform="translate(488,0)" filter="url(#soft)">
+      <rect width="220" height="130" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(251,191,36,0.35)"/>
+      <circle cx="36" cy="36" r="16" fill="#f59e0b"/>
+      <text x="30" y="41" fill="#451a03" font-size="14" font-weight="800" font-family="system-ui">R</text>
+      <text class="role" x="64" y="42">Reviewer Agents</text>
+      <text class="p" x="24" y="78">Quality, security, and</text>
+      <text class="p" x="24" y="96">Spec compliance.</text>
+      <text class="chip" x="24" y="118" fill="#fde68a">openclaw/reviewers</text>
+    </g>
+    <!-- Ops -->
+    <g transform="translate(732,0)" filter="url(#soft)">
+      <rect width="220" height="130" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(52,211,153,0.35)"/>
+      <circle cx="36" cy="36" r="16" fill="#34d399"/>
+      <text x="28" y="41" fill="#022c22" font-size="14" font-weight="800" font-family="system-ui">O</text>
+      <text class="role" x="64" y="42">Ops Agent</text>
+      <text class="p" x="24" y="78">GitOps promote, watch</text>
+      <text class="p" x="24" y="96">SLOs, roll back safely.</text>
+      <text class="chip" x="24" y="118" fill="#6ee7b7">openclaw/ops</text>
+    </g>
+    <!-- Human gate -->
+    <g transform="translate(976,0)" filter="url(#soft)">
+      <rect width="240" height="130" rx="16" fill="rgba(255,255,255,0.04)" stroke="rgba(248,113,113,0.35)"/>
+      <circle cx="36" cy="36" r="16" fill="#f87171"/>
+      <text x="30" y="41" fill="#450a0a" font-size="14" font-weight="800" font-family="system-ui">H</text>
+      <text class="role" x="64" y="42">Human gate</text>
+      <text class="p" x="24" y="78">Approve risky writes,</text>
+      <text class="p" x="24" y="96">spend, and go-live.</text>
+      <text class="chip" x="24" y="118" fill="#fecaca">jobshout: hitl</text>
+    </g>
+    <!-- Efficiency callout -->
+    <g transform="translate(1240,0)" filter="url(#soft)">
+      <rect width="296" height="130" rx="16" fill="rgba(20,184,166,0.12)" stroke="rgba(94,234,212,0.45)"/>
+      <text class="h" x="20" y="40">Why businesses win</text>
+      <text class="p" x="20" y="68">No waiting to hire a full squad.</text>
+      <text class="p" x="20" y="86">Jobshout + OpenClaw stand up</text>
+      <text class="p" x="20" y="104">a capable agent team in hours.</text>
+    </g>
+  </g>
+
+  <!-- Bottom skill chips -->
+  <g transform="translate(64,730)">
+    <rect width="200" height="32" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(94,234,212,0.25)"/>
+    <text class="chip" x="16" y="21" fill="#99f6e4">jobshout-workflow: intake</text>
+    <g transform="translate(220,0)">
+      <rect width="230" height="32" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(94,234,212,0.25)"/>
+      <text class="chip" x="16" y="21" fill="#99f6e4">jobshout-workflow: staffing</text>
+    </g>
+    <g transform="translate(470,0)">
+      <rect width="250" height="32" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(94,234,212,0.25)"/>
+      <text class="chip" x="16" y="21" fill="#99f6e4">openclaw-workflow: crew-run</text>
+    </g>
+    <g transform="translate(740,0)">
+      <rect width="260" height="32" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(94,234,212,0.25)"/>
+      <text class="chip" x="16" y="21" fill="#99f6e4">jobshout-workflow: review-clean</text>
+    </g>
+    <g transform="translate(1020,0)">
+      <rect width="220" height="32" rx="8" fill="rgba(255,255,255,0.06)" stroke="rgba(94,234,212,0.25)"/>
+      <text class="chip" x="16" y="21" fill="#99f6e4">openclaw-workflow: gitops</text>
+    </g>
+  </g>
+
+  <text class="foot" x="64" y="860">JOBSHOUT.COM  /  OPENCLAW FOR BUSINESS  /  AGENT TEAMS THAT SHIP</text>
+</svg>

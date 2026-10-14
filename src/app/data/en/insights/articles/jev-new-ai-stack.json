@@ -1,0 +1,929 @@
+{
+  "slug": "jev-new-ai-stack",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "Jev and the new AI stack: why the future of agents may be more than just bigger LLMs",
+  "subtitle": "A TenthMatrix long-form investigation of System One models, harnesses, routing, safety, RAG judgement, benchmarks and model selection — with strict attribution.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "45 min",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": "lab-v0.1-methodology",
+  "hero_image": "/img/insights/insights-cover.svg",
+  "hero_alt": "Jev and the new AI stack: why the future of agents may be more than just bigger LLMs",
+  "meta": {
+    "title": "Jev and the new AI stack: why the future of agents may be more than just bigger LLMs | TenthMatrix Insights",
+    "description": "A TenthMatrix long-form investigation of System One models, harnesses, routing, safety, RAG judgement, benchmarks and model selection — with strict attribu",
+    "keywords": "Jev, System One, AI agents, model routing, LLM, RAG, TenthMatrix",
+    "og_image": "/img/insights/insights-cover.svg"
+  },
+  "takeaways": [
+    "Composable AI systems need decide/route/evaluate layers — not only larger generators.",
+    "TypeSafe’s Jev is a major 2026 decision-model entrant; treat its multipliers as vendor-reported.",
+    "Independent benchmarks are nuanced: strong on some triage/judge settings, not universally dominant on hard high-cardinality tasks.",
+    "TenthMatrix’s contribution is methodology, diagrams, and living selection guidance."
+  ],
+  "toc": [
+    {
+      "id": "automation-problem",
+      "label": "The AI automation problem"
+    },
+    {
+      "id": "what-jev-is",
+      "label": "What Jev is"
+    },
+    {
+      "id": "system-one",
+      "label": "System One models"
+    },
+    {
+      "id": "differs",
+      "label": "How Jev differs from an LLM"
+    },
+    {
+      "id": "harness-problem",
+      "label": "The agent harness problem"
+    },
+    {
+      "id": "where-fit",
+      "label": "Where fast decision models fit"
+    },
+    {
+      "id": "routing",
+      "label": "Model routing"
+    },
+    {
+      "id": "tool-safety",
+      "label": "Tool safety"
+    },
+    {
+      "id": "rag",
+      "label": "RAG evaluation"
+    },
+    {
+      "id": "lab",
+      "label": "Our Jev benchmark lab"
+    },
+    {
+      "id": "latency",
+      "label": "Latency"
+    },
+    {
+      "id": "cost",
+      "label": "Cost"
+    },
+    {
+      "id": "accuracy",
+      "label": "Accuracy"
+    },
+    {
+      "id": "calibration",
+      "label": "Calibration"
+    },
+    {
+      "id": "independent",
+      "label": "Independent benchmark evidence"
+    },
+    {
+      "id": "prove",
+      "label": "What the benchmarks actually prove"
+    },
+    {
+      "id": "not-appropriate",
+      "label": "Where Jev is not appropriate"
+    },
+    {
+      "id": "choose",
+      "label": "How to choose models"
+    },
+    {
+      "id": "evolution",
+      "label": "The evolution of AI models"
+    },
+    {
+      "id": "specialised",
+      "label": "Specialised vs general models"
+    },
+    {
+      "id": "systems-arch",
+      "label": "Emerging AI systems architecture"
+    },
+    {
+      "id": "build-next",
+      "label": "What developers should build next"
+    },
+    {
+      "id": "landscape",
+      "label": "AI landscape notes (cutoff)"
+    },
+    {
+      "id": "suite-catalogue",
+      "label": "TenthMatrix benchmark suite catalogue"
+    },
+    {
+      "id": "economics2",
+      "label": "On inference economics"
+    },
+    {
+      "id": "computer-use",
+      "label": "On computer-use agents"
+    },
+    {
+      "id": "subagents",
+      "label": "On subagents"
+    },
+    {
+      "id": "structured-vs",
+      "label": "On structured outputs vs decision models"
+    },
+    {
+      "id": "open-weight",
+      "label": "On open-weight alternatives"
+    },
+    {
+      "id": "sec-review",
+      "label": "On security review"
+    },
+    {
+      "id": "conclusion",
+      "label": "Conclusion"
+    },
+    {
+      "id": "appendix",
+      "label": "Methodology appendix"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "The AI automation problem",
+      "id": "automation-problem"
+    },
+    {
+      "type": "p",
+      "text": "The last three years trained the industry to equate progress with larger generative models. That bet produced astonishing copilots and fragile automation. The fragility is not mysterious: software needs contracts, while chat models produce suggestions. Teams paper over the gap with JSON mode, retries, and human babysitting — then wonder why agents feel both magical and untrustworthy."
+    },
+    {
+      "type": "p",
+      "text": "When TypeSafe announced System One models and Jev in mid-September 2026, they attacked that gap directly. Their claim is that a large class of automation work is decision work: classify, route, score, gate, verify. LangChain’s harness article, published days later, showed how those decisions plug into agent middleware. Neither article is a substitute for engineering judgement — but together they mark a shift in the public conversation from “one model to rule the loop” toward “specialised models inside a system”."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix Insights takes that shift seriously. This long-form piece is our independent treatment: architecture, landscape, cited evidence, original diagrams, benchmark methodology, and a model-selection framework. We will repeatedly separate TypeSafe reports, LangChain demonstrations, independent published measurements, and TenthMatrix methodology."
+    },
+    {
+      "type": "callout",
+      "label": "Editorial rule",
+      "text": "Vendor numbers are labelled as vendor-reported. Independent numbers keep their authors. TenthMatrix experiments are labelled as methodology until a versioned live run ships.",
+      "tone": "warn"
+    },
+    {
+      "type": "h2",
+      "text": "What Jev is",
+      "id": "what-jev-is"
+    },
+    {
+      "type": "p",
+      "text": "TypeSafe describes Jev as a System One model: state in, typed probabilistic decisions out. It is not positioned as a chat model. In practical terms, you send context plus a map of questions; you receive structured answers with probabilities and confidence signals your application can branch on."
+    },
+    {
+      "type": "p",
+      "text": "Official documentation enumerates three primitives — Choice, Score and Noul — and emphasises asking multiple questions about one state in a single request. TypeSafe reports that questions are evaluated in parallel, so adding questions changes cost mostly by input tokens rather than by serial completions. That claim is central to their efficiency story; treat it as vendor-reported until you meter it yourself."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/jev-decision-pipeline.svg",
+      "caption": "TenthMatrix original: decision pipeline with application-owned gates.",
+      "alt": "TenthMatrix original: decision pipeline with application-owned gates."
+    },
+    {
+      "type": "quote",
+      "text": "TypeSafe’s metaphor: a frontier-intelligence function call. Useful — as long as you remember function calls still need tests."
+    },
+    {
+      "type": "h2",
+      "text": "System One models",
+      "id": "system-one"
+    },
+    {
+      "type": "p",
+      "text": "“System One” is TypeSafe’s name for a model class optimised for calibrated decisions rather than token generation. They contrast training aimed at human-preferred text (RLHF) or verifiable generative rewards (RLVR) with RLCD — Reinforcement Learning for Calibrated Decisions. We are not reproducing their training paper here; we are interested in the product consequences: constrained outputs, probability distributions, and an API that looks like software."
+    },
+    {
+      "type": "p",
+      "text": "Naming aside, the industry already had classifiers, rankers and guardrail models. What is new in the 2026 conversation is packaging those ideas at “frontier-like” decision quality with aggressive latency/cost claims, plus first-class agent-harness integrations from major orchestration frameworks."
+    },
+    {
+      "type": "h2",
+      "text": "How Jev differs from an LLM",
+      "id": "differs"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/system-one-vs-llm.svg",
+      "caption": "Generative path versus System One path.",
+      "alt": "Generative path versus System One path."
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Concern",
+        "LLM automation",
+        "System One automation"
+      ],
+      "rows": [
+        [
+          "Output",
+          "Text that must be parsed",
+          "Typed values by construction (vendor claim)"
+        ],
+        [
+          "Errors",
+          "Schema breaks, digressions",
+          "Wrong labels / miscalibration"
+        ],
+        [
+          "Speed structure",
+          "Serial tokens",
+          "Parallel questions (vendor claim)"
+        ],
+        [
+          "Best use",
+          "Generate & reason in language",
+          "Decide inside codepaths"
+        ]
+      ]
+    },
+    {
+      "type": "p",
+      "text": "This is complementarity, not a cage match. A customer-support stack that uses a decision model for urgency and a generative model for tone is not confused — it is layered."
+    },
+    {
+      "type": "h2",
+      "text": "The agent harness problem",
+      "id": "harness-problem"
+    },
+    {
+      "type": "p",
+      "text": "Agents run in loops: propose, act, observe, update. Tool calling and structured outputs made integration possible. They did not make loops cheap. Every additional “should we?” becomes another model call. Harness engineering — memory, tool policy, retries, subagents, budgets — is now as important as model choice."
+    },
+    {
+      "type": "p",
+      "text": "LangChain demonstrates two harness insertions for Jev: route the model tier from the latest user message, and classify risky tool calls before execution. Browser and email builders publicly described decision-model usage for high-frequency micro-judgements. The pattern is clear even when implementations differ: push narrow judgements out of the generative planner."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/agent-harness.svg",
+      "caption": "TenthMatrix harness model.",
+      "alt": "TenthMatrix harness model."
+    },
+    {
+      "type": "h2",
+      "text": "Where fast decision models fit",
+      "id": "where-fit"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Pre-planning routing and triage.",
+        "Pre-tool safety and compliance gates.",
+        "Post-tool failure classification.",
+        "Post-generation evaluation and abstention.",
+        "Continuous monitoring classifiers over streams of events."
+      ]
+    },
+    {
+      "type": "p",
+      "text": "If a decision happens hundreds of times per session, generative latency becomes structural debt. If a decision happens once per quarter, a reasoning model may be the correct luxury."
+    },
+    {
+      "type": "h2",
+      "text": "Model routing",
+      "id": "routing"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/model-routing.svg",
+      "caption": "Workload-aware routing.",
+      "alt": "Workload-aware routing."
+    },
+    {
+      "type": "p",
+      "text": "Routing is an economic control plane. LangChain’s middleware example chooses among model tiers using criteria strings evaluated by Jev. That is one design. Alternatives include deterministic rules, embedding similarity routers, cascading from cheap to expensive on low confidence, and mixture-of-experts inside a single provider."
+    },
+    {
+      "type": "p",
+      "text": "AyAutomate’s independent study is a useful corrective to triumphal routing narratives: on 77-way intent routing, a frontier GPT-class baseline led accuracy, while cascades recovered much of that quality at a fraction of cost. The lesson is not “routers win”. The lesson is “measure cascades and cardinality explicitly”."
+    },
+    {
+      "type": "h2",
+      "text": "Tool safety",
+      "id": "tool-safety"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/tool-safety.svg",
+      "caption": "Allow / deny / escalate before tools run.",
+      "alt": "Allow / deny / escalate before tools run."
+    },
+    {
+      "type": "p",
+      "text": "Safety-before-tool-execution is becoming table stakes for computer-use and coding agents. The closed harnesses taught the pattern; open middleware makes it portable. A decision model is attractive here because the ontology is closed (risk levels, irreversibility flags) and because false negatives are auditable events."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix Benchmark C encodes synthetic dangerous and benign tool calls. We optimise reporting for false negatives on irreversible classes. We do not execute destructive actions against shared systems — sandboxes only."
+    },
+    {
+      "type": "h2",
+      "text": "RAG evaluation",
+      "id": "rag"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/rag-evaluation.svg",
+      "caption": "Retrieve, generate, then decide whether to answer.",
+      "alt": "Retrieve, generate, then decide whether to answer."
+    },
+    {
+      "type": "p",
+      "text": "RAG quality collapses when systems answer from weak context. TypeSafe cookbooks describe classifying passages and checking citations with System One questions. Independently of vendor cookbooks, the architectural idea is sound: separate drafting from judging. Your judge can be Jev, a small LLM-as-judge, or a specialist reranker — but it should be measured for calibration, not vibes."
+    },
+    {
+      "type": "h2",
+      "text": "Our Jev benchmark lab",
+      "id": "lab"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/benchmark-architecture.svg",
+      "caption": "TenthMatrix original figure for Our Jev benchmark lab.",
+      "alt": "TenthMatrix original figure for Our Jev benchmark lab."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix publishes a Benchmark Lab at /insights/jev/benchmarks. Suites cover intent routing, model routing, tool safety, failure detection, RAG evaluation, support automation, coding-agent orchestration gates, and high-cardinality routing."
+    },
+    {
+      "type": "p",
+      "text": "Each suite records dataset identity, versions, sample counts, latency definition (network included or not), and source kind tags. We refuse composite leaderboards without explicit weights."
+    },
+    {
+      "type": "p",
+      "text": "Interactive charts let you filter vendor-reported vs independent vs methodology-demo rows. That UI is part of the editorial product: making methodology unavoidable."
+    },
+    {
+      "type": "h2",
+      "text": "Latency",
+      "id": "latency"
+    },
+    {
+      "type": "p",
+      "text": "Latency is not a vanity metric. It decides whether a gate can live inside a hot path. TypeSafe reports tens-to-hundreds of milliseconds end-to-end for System One calls from clients near their service, and warns that geography matters. Independent OpenRouter triage tables show sub-second p50 for Jev versus multi-second p50 for heavier LLMs on their set — still contingent on region, load and prompt size."
+    },
+    {
+      "type": "p",
+      "text": "When comparing, label: client region, DNS, TLS, server processing, and whether batching was used. Otherwise you are comparing theatre sets."
+    },
+    {
+      "type": "h2",
+      "text": "Cost",
+      "id": "cost"
+    },
+    {
+      "type": "p",
+      "text": "TypeSafe publicly advertises very low input-token pricing with free outputs for Jev, and homepage multipliers like 193.6× faster / 444.6× cheaper derived from their workflow evals against expensive references. They also caveat that those multipliers are likely high-end. AyAutomate reports that against cheap small LLMs, the realised speedups/cost downs are single-digit factors on their tasks — still meaningful, but not mythic."
+    },
+    {
+      "type": "p",
+      "text": "Cost accounting should use cost per successful completed workflow, including retries and escalations, not cost per optimistic single call."
+    },
+    {
+      "type": "h2",
+      "text": "Accuracy",
+      "id": "accuracy"
+    },
+    {
+      "type": "p",
+      "text": "Accuracy without cardinality context is misleading. Binary urgency is not 100-way routing. OpenRouter’s small triage set shows near ties. AyAutomate’s broader set shows frontier models still winning some hard routing problems. LangSmith judge experiments highlight agreement and variance, not just raw accuracy."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix reporting always pairs accuracy with task definition, label source, and confidence bands."
+    },
+    {
+      "type": "h2",
+      "text": "Calibration",
+      "id": "calibration"
+    },
+    {
+      "type": "p",
+      "text": "Calibration is the difference between a classifier and an automatable classifier. If a model is right 95% of the time but cannot tell you when it is in the 5%, you cannot set policy. TypeSafe markets calibrated probabilities as a first-class outcome of RLCD. Independent judges sometimes report extremely low variance for Jev on narrow evals. You still need reliability diagrams on your data."
+    },
+    {
+      "type": "h2",
+      "text": "Independent benchmark evidence",
+      "id": "independent"
+    },
+    {
+      "type": "p",
+      "text": "As of the landscape cutoff, notable public artefacts include: LangChain’s LangSmith evaluator comparison (20 Sep 2026); OpenRouter’s triage tutorial tables; AyAutomate’s 791-decision OpenRouter study (19 Sep 2026); and community JevBench result writeups. These disagree in emphasis — which is healthy. They agree that decision-model APIs are measurable with ordinary HTTP harnesses."
+    },
+    {
+      "type": "h2",
+      "text": "What the benchmarks actually prove",
+      "id": "prove"
+    },
+    {
+      "type": "p",
+      "text": "They prove that structured decision APIs can be competitive on certain classification-like workloads at attractive latency/cost points. They do not prove universal dominance. They do not prove that generative models are obsolete. They do not prove that your safety policy is correct."
+    },
+    {
+      "type": "h2",
+      "text": "Where Jev is not appropriate",
+      "id": "not-appropriate"
+    },
+    {
+      "type": "p",
+      "text": "Creative generation, open-ended research synthesis, multi-file coding, multimodal perception (unless/until explicitly supported for your modality), and any problem where the output vocabulary cannot be enumerated. Also inappropriate as an unmonitored sole authority over irreversible actions without shadow mode."
+    },
+    {
+      "type": "h2",
+      "text": "How to choose models",
+      "id": "choose"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/model-selection-flow.svg",
+      "caption": "TenthMatrix original figure for How to choose models.",
+      "alt": "TenthMatrix original figure for How to choose models."
+    },
+    {
+      "type": "p",
+      "text": "See the Model Selection Manual for the evergreen framework. Short version: start from workload, not from brand. Ask whether you need generation, deep reasoning, tool use, multimodality, or a calibrated decision. Then budget latency and risk."
+    },
+    {
+      "type": "h2",
+      "text": "The evolution of AI models",
+      "id": "evolution"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/ai-model-evolution.svg",
+      "caption": "TenthMatrix original figure for The evolution of AI models.",
+      "alt": "TenthMatrix original figure for The evolution of AI models."
+    },
+    {
+      "type": "p",
+      "text": "The path from base LLMs to instruction following, tools, structured outputs, reasoning models, multimodal models, agentic systems, long-running agents, harnesses, routers, specialised decision models and composable systems is not a straight line of size. It is a line of interfaces."
+    },
+    {
+      "type": "h2",
+      "text": "Specialised vs general models",
+      "id": "specialised"
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/specialised-ai-system.svg",
+      "caption": "TenthMatrix original figure for Specialised vs general models.",
+      "alt": "TenthMatrix original figure for Specialised vs general models."
+    },
+    {
+      "type": "p",
+      "text": "General models maximise optionality. Specialised models maximise fit per watt, per dollar, per millisecond. Production systems increasingly resemble distributed services: each model is a service with an SLA."
+    },
+    {
+      "type": "h2",
+      "text": "Emerging AI systems architecture",
+      "id": "systems-arch"
+    },
+    {
+      "type": "p",
+      "text": "Think in control planes (routing, policy, eval) and data planes (generation, tools, retrieval). MCP and tool servers expand the data plane. Decision models thicken the control plane. Observability must span both."
+    },
+    {
+      "type": "h2",
+      "text": "What developers should build next",
+      "id": "build-next"
+    },
+    {
+      "type": "p",
+      "text": "Golden sets for your top ten decisions. Shadow gates in staging. Routers with explicit escalation budgets. Eval dashboards that never hide network latency. Jobs and teams that own model policy as software."
+    },
+    {
+      "type": "h2",
+      "text": "AI landscape notes (cutoff)",
+      "id": "landscape"
+    },
+    {
+      "type": "p",
+      "text": "Beyond Jev, the September 2026 landscape includes rapid iteration in frontier LLMs and reasoning models across OpenAI, Anthropic, Google, Meta, DeepSeek, Mistral, xAI and cloud platforms; agent APIs and harnesses; OpenRouter-style aggregation; and a wave of evaluation tooling. Exact model names churn weekly — hence our cutoff stamp on every Insights page. Verify current model cards before you budget."
+    },
+    {
+      "type": "h2",
+      "text": "TenthMatrix benchmark suite catalogue",
+      "id": "suite-catalogue"
+    },
+    {
+      "type": "p",
+      "text": "The following catalogue is TenthMatrix’s original methodology design. It is influenced by public evaluation themes from TypeSafe, LangChain, OpenRouter and independent harnesses, but the task definitions, metrics and non-claims language are ours. Until a suite shows source_kind=workstation_measured, treat numeric dashboard rows tagged methodology as illustrative wiring — not lab certificates."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark A — Intent routing (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Customer request → {billing, technical, sales, security, account, support}. Compare decision model, fast LLM, reasoning LLM, open-weight model, and classical baseline where available. Report accuracy, latency, cost, and calibration. Network inclusion must be stated. Sample size targets start at n≥200 with dual annotation on a subset."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark B — Agent model routing (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Fixed premium model versus intelligent routing across simple/medium/complex/critical tiers. Primary metrics: cost reduction, latency, task success, escalation rate, error rate. Do not assume routing wins; publish both arms."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark C — Tool safety (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Tools: read_file, write_file, shell, git, deploy, delete, database, network. Decision before execution: allow/deny/escalate. Emphasise false negatives. Sandbox only."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark D — Failure detection (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Synthetic traces with healthy steps, tool errors, hallucinations, retries, irrelevant calls, stalls, failed APIs. Labels: healthy, recoverable, retry, escalate, failed."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark E — RAG evaluation (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Documents → chunk → embed → search → LLM draft → decision evaluation for relevance, answerability, confidence, citation completeness, escalation."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark F — Support automation (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Ticket → classification → urgency → intent → sentiment → team → LLM response → safety verification → human escalation. Report total latency/cost/accuracy/escalation/customer-impact risk."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark G — Coding agent orchestration (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Gates around coding agents: safe task?, repository area?, tests?, deploy risk?, human approval?. Explicitly not a claim that the decision model writes code."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h3",
+      "text": "Benchmark H — High-cardinality routing (methodology)"
+    },
+    {
+      "type": "p",
+      "text": "Cardinalities 10/25/50/100/200. Track accuracy, latency, calibration, failure rate. Document any multi-stage retrieval/scoring required above provider limits (TypeSafe notes multi-stage behaviour near high cardinality)."
+    },
+    {
+      "type": "p",
+      "text": "Reporting template fields: Benchmark ID, Version, Date, Dataset, Task, Prompt/criteria hash, Models, Model versions, Temperature/reasoning settings, Number of samples, Latency, Input tokens, Output tokens, Cost, Accuracy, Precision, Recall, F1, Calibration summary, Error rate, Retries, Infrastructure, Region, Network latency included?, Raw results URI. Missing fields invalidate external citation."
+    },
+    {
+      "type": "p",
+      "text": "Limitations paragraph required in every public release: state what the result does not prove, including prompt sensitivity, label noise, region effects, and non-transfer across cardinalities. Prefer Wilson intervals and paired tests on identical items when comparing systems. Keep v1/v2/v3 artefacts immutable once published."
+    },
+    {
+      "type": "h2",
+      "text": "On inference economics",
+      "id": "economics2"
+    },
+    {
+      "type": "p",
+      "text": "Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace. Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace. Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace. Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace. Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace. Inference economics changed agent design the moment completion prices fell — and will change again if decision tokens become nearly free. The correct response is not unbounded calling; it is deliberate saturation of high-ROI decisions with measurement. Cheap mistakes still scale. The Jevons metaphor TypeSafe invokes is a warning as much as a promise: efficiency can increase total consumption of risk unless policy keeps pace."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "On computer-use agents",
+      "id": "computer-use"
+    },
+    {
+      "type": "p",
+      "text": "Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure. Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure. Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure. Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure. Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure. Computer-use and browser agents multiply tool risk. Every click is a side effect. Decision layers that score irreversibility before actuation are disproportionately valuable here. Kyle Jeong’s public comments (via LangChain’s roundup) about low-cost browser-agent judgements are anecdotal signals of demand, not controlled studies — but they match the architectural pressure."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "On subagents",
+      "id": "subagents"
+    },
+    {
+      "type": "p",
+      "text": "Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices. Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices. Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices. Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices. Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices. Subagent architectures create nested loops. Without fast decisions, nested loops become nested invoices. Route subagent spawn decisions; gate their tool sets; evaluate their exit conditions. The parent planner should not micromanage via multi-thousand-token reflections if a typed gate suffices."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "On structured outputs vs decision models",
+      "id": "structured-vs"
+    },
+    {
+      "type": "p",
+      "text": "JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates. JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates. JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates. JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates. JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates. JSON mode and schema-constrained decoding reduced parse failures for LLMs. They did not remove serial token costs or guarantee calibrated probabilities. Decision models attack a different objective. Many stacks will use both: schema-constrained generation for artefacts, decision models for gates."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "On open-weight alternatives",
+      "id": "open-weight"
+    },
+    {
+      "type": "p",
+      "text": "Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported. Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported. Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported. Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported. Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported. Open-weight classifiers and small LLMs remain relevant for air-gapped deployments and cost control. A fair lab includes them. Winning on a hosted decision API does not automatically win on-prem. Document hardware when self-hosting latency is reported."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "On security review",
+      "id": "sec-review"
+    },
+    {
+      "type": "p",
+      "text": "Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles. Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles. Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles. Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles. Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles. Automated decisions that affect access control, payments, or medical advice inherit regulatory expectations. Insights pages are not legal advice. Build review workflows that include human editorial approval for policy changes — mirroring our own research→publish pipeline for Insights articles."
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix recommendation: pair this theme with an owner, a golden set, a dashboard panel, and a quarterly review date. If you cannot name those four, you are not ready to automate the theme in production, regardless of which vendor model is fashionable this week."
+    },
+    {
+      "type": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "type": "p",
+      "text": "The future of agents is probably not a single omniscient LLM. It is a system: generate, reason, decide, route, evaluate, feedback. Jev is one prominent 2026 entrant in the decide lane. TenthMatrix’s job is to help you measure whether that lane belongs in your architecture — with eyes open."
+    },
+    {
+      "type": "h3",
+      "text": "On hallucination and types"
+    },
+    {
+      "type": "p",
+      "text": "TypeSafe argues hallucination and type safety are linked: if the interface cannot emit illegal structures, a class of failures disappears. Semantic errors remain. Engineers should celebrate the removed failure class without pretending the remaining one is gone."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h3",
+      "text": "On Doom and Wikiracing demos"
+    },
+    {
+      "type": "p",
+      "text": "TypeSafe’s playful demos (real-time structured-state Doom; high-cardinality Wikiracing) are existence proofs for latency-sensitive and high-cardinality decision loops. They are not your SLA. Still, they communicate the product thesis better than a whitepaper table."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h3",
+      "text": "On early access realities"
+    },
+    {
+      "type": "p",
+      "text": "Jev launched into waitlisted early access. Capacity, regional presence and API stability may change. Design for graceful degradation if the decision service throttles — fall back to rules or queued review, not silent allow."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h3",
+      "text": "On MCP and tools"
+    },
+    {
+      "type": "p",
+      "text": "Model Context Protocol servers expand what agents can touch. That raises the value of gates. More tools means more ways to cause irreversible effects; decision layers become load-bearing."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h3",
+      "text": "On evaluation culture"
+    },
+    {
+      "type": "p",
+      "text": "The industry’s eval culture is improving but still ships vanity leaderboards. Insights commits to versioned suites, raw result retention, and explicit non-claims. If we cannot say what was measured, we do not show a trophy."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h3",
+      "text": "On TenthMatrix’s role"
+    },
+    {
+      "type": "p",
+      "text": "We connect research to agents, automation offerings, jobs and teams. Understanding Jev should help you hire for harness engineering, not only prompt engineering."
+    },
+    {
+      "type": "p",
+      "text": "In our TenthMatrix experiment plans, each of these themes maps to a suite in Benchmark Lab v0.1 methodology packs, with datasets stored under /insights/benchmarks/v1/. Live measured TenthMatrix numbers will be published as v1, v2, v3 without overwriting history."
+    },
+    {
+      "type": "h2",
+      "text": "Methodology appendix",
+      "id": "appendix"
+    },
+    {
+      "type": "p",
+      "text": "Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists. Methodology appendix for readers implementing their own lab: define the decision ontology first; collect dual-annotated labels on at least a few hundred items before claiming accuracy; freeze prompts and criteria in git; record model fingerprints from responses; separate warm-up calls from measured calls; publish confidence intervals; prefer paired tests on identical items when comparing systems; release raw JSONL when licensing allows; and document region and network path. This appendix intentionally reads like a compliance checklist because benchmark theatre thrives on missing checklists."
+    },
+    {
+      "type": "callout",
+      "label": "What we know / what we don’t",
+      "text": "We know public APIs, primitives, and multiple external measurements with caveats. We do not claim TenthMatrix has independently reproduced TypeSafe’s headline workflow multipliers in this publication."
+    },
+    {
+      "type": "p",
+      "text": "Next: use the Benchmark Lab, the selection manual, and the harness guide to turn this essay into instrumentation."
+    }
+  ],
+  "related": [
+    {
+      "href": "/insights/jev/benchmarks",
+      "label": "Benchmark Lab",
+      "note": "Interactive charts"
+    },
+    {
+      "href": "/insights/ai-model-selection",
+      "label": "Model selection manual",
+      "note": ""
+    },
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": ""
+    },
+    {
+      "href": "/ai-automation",
+      "label": "AI Automation",
+      "note": ""
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobs",
+      "note": ""
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Primary vendor source (15 Sep 2026)."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Harness integration (17 Sep 2026)."
+    },
+    {
+      "title": "TypeSafe documentation index",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Concepts, primitives, API, cookbooks."
+    },
+    {
+      "title": "LangChain — Can Jev Be a Better Agent Evaluator?",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "20 Sep 2026 LangSmith experiment."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM when to use each",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Published triage cost/latency/accuracy."
+    },
+    {
+      "title": "AyAutomate — Independent Jev benchmark",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 decisions; challenges headline multipliers vs small models."
+    },
+    {
+      "title": "JevBench RESULTS v1.2",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public community harness."
+    },
+    {
+      "title": "OpenAI — Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "note": "Landscape: agent platform primitives."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Explain this benchmark.",
+      "a": "Open the Benchmark Lab filters by source kind. Vendor rows cite TypeSafe; independent rows cite OpenRouter/AyAutomate/LangChain/JevBench; methodology rows show TenthMatrix’s planned harness shape without implying live reproduction."
+    },
+    {
+      "q": "Which architecture should I use?",
+      "a": "Planner LLM + decision layer for routing/safety/eval is the default TenthMatrix recommendation to trial — measured against a fixed premium baseline on your labels."
+    },
+    {
+      "q": "What changed since this article?",
+      "a": "Check the Updated and Benchmark version fields on this page and the lab. We keep historical suite versions rather than silently overwriting."
+    },
+    {
+      "q": "Why is Jev useful here?",
+      "a": "When you need calibrated, schema-bound decisions at high frequency. It is not useful as a writing or coding engine."
+    }
+  ]
+}

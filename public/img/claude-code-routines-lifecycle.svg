@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-label="Anatomy and lifecycle of a Claude Code routine: triggers, routine configuration, cloud session, outputs and run history">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#d97757"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" rx="16" fill="#15121a"/>
+  <g font-family="system-ui,sans-serif">
+    <text fill="#ffffff" font-size="26" font-weight="800" x="40" y="52">Anatomy of a routine run</text>
+    <text fill="#a8a29e" font-size="15" x="40" y="80">Any trigger starts a fresh, autonomous cloud session. Nothing runs on your machine.</text>
+
+    <text fill="#d97757" font-size="13" font-weight="700" letter-spacing="2" x="40" y="128">1 · TRIGGERS</text>
+    <rect x="40" y="142" width="230" height="100" rx="12" fill="#211a1f" stroke="#d97757" stroke-width="2"/>
+    <text fill="#f4a582" font-size="17" font-weight="700" x="58" y="174">Schedule</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="198">hourly · daily · weekdays</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="218">weekly · one-off · cron (≥1h)</text>
+    <rect x="40" y="258" width="230" height="100" rx="12" fill="#211a1f" stroke="#d97757" stroke-width="2"/>
+    <text fill="#f4a582" font-size="17" font-weight="700" x="58" y="290">API</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="314">POST …/routines/{id}/fire</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="334">bearer token + optional text</text>
+    <rect x="40" y="374" width="230" height="100" rx="12" fill="#211a1f" stroke="#d97757" stroke-width="2"/>
+    <text fill="#f4a582" font-size="17" font-weight="700" x="58" y="406">GitHub event</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="430">pull_request.* · release.*</text>
+    <text fill="#a8a29e" font-size="13" x="58" y="450">filters: branch, label, draft…</text>
+
+    <line x1="274" y1="192" x2="336" y2="290" stroke="#d97757" stroke-width="2.5" marker-end="url(#ar)"/>
+    <line x1="274" y1="308" x2="336" y2="308" stroke="#d97757" stroke-width="2.5" marker-end="url(#ar)"/>
+    <line x1="274" y1="424" x2="336" y2="326" stroke="#d97757" stroke-width="2.5" marker-end="url(#ar)"/>
+
+    <text fill="#d97757" font-size="13" font-weight="700" letter-spacing="2" x="344" y="128">2 · SAVED ROUTINE</text>
+    <rect x="344" y="142" width="240" height="332" rx="12" fill="#1d1a24" stroke="#8b5cf6" stroke-width="2"/>
+    <text fill="#c4b5fd" font-size="15" font-weight="700" x="364" y="176">Prompt</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="196">self-contained task + “done” test</text>
+    <text fill="#c4b5fd" font-size="15" font-weight="700" x="364" y="232">Model</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="252">same model on every run</text>
+    <text fill="#c4b5fd" font-size="15" font-weight="700" x="364" y="288">Repositories</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="308">cloned fresh from default branch</text>
+    <text fill="#c4b5fd" font-size="15" font-weight="700" x="364" y="344">Cloud environment</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="364">network policy · variables · setup</text>
+    <text fill="#c4b5fd" font-size="15" font-weight="700" x="364" y="400">Connectors (MCP)</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="420">Slack, Linear, Drive… keep only</text>
+    <text fill="#a8a29e" font-size="13" x="364" y="440">what the task needs</text>
+
+    <line x1="588" y1="308" x2="650" y2="308" stroke="#d97757" stroke-width="2.5" marker-end="url(#ar)"/>
+
+    <text fill="#d97757" font-size="13" font-weight="700" letter-spacing="2" x="658" y="128">3 · CLOUD SESSION</text>
+    <rect x="658" y="142" width="240" height="332" rx="12" fill="#1a211f" stroke="#10b981" stroke-width="2"/>
+    <text fill="#6ee7b7" font-size="15" font-weight="700" x="678" y="176">Clone + setup script</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="196">cached between runs</text>
+    <text fill="#6ee7b7" font-size="15" font-weight="700" x="678" y="236">Autonomous agent loop</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="256">shell, skills, subagents,</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="276">connector tools</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="296">no permission prompts</text>
+    <text fill="#6ee7b7" font-size="15" font-weight="700" x="678" y="336">Guardrails</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="356">pushes to claude/* branches</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="376">protected branches refused</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="396">fire text arrives as</text>
+    <text fill="#a8a29e" font-size="13" x="678" y="416">untrusted payload</text>
+
+    <line x1="902" y1="308" x2="964" y2="308" stroke="#d97757" stroke-width="2.5" marker-end="url(#ar)"/>
+
+    <text fill="#d97757" font-size="13" font-weight="700" letter-spacing="2" x="972" y="128">4 · OUTCOMES</text>
+    <rect x="972" y="142" width="190" height="72" rx="12" fill="#211a1f" stroke="#3f3a3f" stroke-width="2"/>
+    <text fill="#ffffff" font-size="15" font-weight="700" x="990" y="172">Draft pull request</text>
+    <text fill="#a8a29e" font-size="12" x="990" y="194">as your GitHub user</text>
+    <rect x="972" y="228" width="190" height="72" rx="12" fill="#211a1f" stroke="#3f3a3f" stroke-width="2"/>
+    <text fill="#ffffff" font-size="15" font-weight="700" x="990" y="258">Slack / Linear post</text>
+    <text fill="#a8a29e" font-size="12" x="990" y="280">via linked connectors</text>
+    <rect x="972" y="314" width="190" height="72" rx="12" fill="#211a1f" stroke="#3f3a3f" stroke-width="2"/>
+    <text fill="#ffffff" font-size="15" font-weight="700" x="990" y="344">Updated artifact</text>
+    <text fill="#a8a29e" font-size="12" x="990" y="366">status page, report</text>
+    <rect x="972" y="400" width="190" height="72" rx="12" fill="#211a1f" stroke="#3f3a3f" stroke-width="2"/>
+    <text fill="#ffffff" font-size="15" font-weight="700" x="990" y="430">Session transcript</text>
+    <text fill="#a8a29e" font-size="12" x="990" y="452">open, review, continue</text>
+
+    <rect x="40" y="506" width="1122" height="76" rx="12" fill="#1f1b17" stroke="#d97757" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text fill="#f4a582" font-size="15" font-weight="700" x="60" y="536">Run history</text>
+    <text fill="#d6d3d1" font-size="14" x="60" y="562">A green status only means the session started and exited cleanly. Open the transcript to confirm the task itself succeeded.</text>
+  </g>
+</svg>

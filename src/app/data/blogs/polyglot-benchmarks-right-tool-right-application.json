@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "Polyglot Benchmarks: Choosing the Right Tool for the Right Job",
+  "sub_title": "How polyglot benchmarks help you pick the right stack for each application — not one language to rule them all",
+  "excerpt": "Stop default-stack bias. Polyglot Benchmarks compares njs, Lua, Python, Go, Rust, Bun, Java, and Kotlin on the same workloads — reproducible harness + live dashboard for architecture decisions.",
+  "meta_title": "Polyglot Benchmarks: Right Tool for the Job",
+  "meta_description": "Compare njs, Lua, Python, Go, Rust, Bun, Java, Kotlin on the same HTTP tests. Reproducible harness + live dashboard for stack decisions.",
+  "meta_keywords": "polyglot benchmarks, language comparison, architecture decisions, workflow examples, performance benchmark, Rust vs Go, Java vs Kotlin, FastAPI, Bun.js, Javalin, Ktor, Lua, OpenResty, njs, NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>A short, skim-readable companion. For the full architecture deep-dive — harness layout, decision matrix, anti-patterns, and how to fork the benchmarks — read <a href=\"/en/articles/polyglot-benchmarks-right-tool-right-application\">the long article</a>.</em></p>\n\n<h2>Your org picked one stack in 2019. Your workloads did not.</h2>\n<p>Most teams still standardise on a single language for every new service: everything in Node, everything in Python, everything in Java, or a heroic bet on Rust for greenfield only. That habit is understandable — hiring, CI templates, and security review all get easier when the stack is uniform. The problem is that workloads are not uniform. An API gateway, a nightly ETL job, an NGINX edge transform, a JVM microservice estate, and a chat backend with long-lived connections stress different parts of the runtime. Picking one winner from a hallway debate or a single micro-benchmark is how you end up with the wrong tool carrying the wrong load.</p>\n<p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>Polyglot Benchmarks</strong></a> is the antidote: a reproducible harness and live dashboard that compares <strong>eight</strong> runtimes on the <em>same</em> HTTP workloads, so architects can match evidence to bounded contexts instead of default-stack bias.</p>\n\n<p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>What it measures</h2>\n<p>The public dashboard compares <strong>NGINX njs</strong>, <strong>OpenResty Lua</strong>, <strong>Python (FastAPI)</strong>, <strong>Go (net/http)</strong>, <strong>Rust (Actix)</strong>, <strong>Bun</strong>, <strong>Java (Javalin / Jetty)</strong>, and <strong>Kotlin (Ktor / Netty)</strong> across seven synthetic tests that mirror real API and edge patterns: plain text baseline, JSON serialization, CPU-bound fibonacci, string manipulation, request inspection, internal subrequest + transform, and routing logic. Each test reports requests per second, average and tail latency (including P99), time to first byte from curl, and error counts — streamed live as <code>bench.sh</code> completes.</p>\n<p>Java and Kotlin sit alongside the compiled and scripting runtimes so JVM shops can see how Javalin and Ktor trade against Go, Rust, Bun, and FastAPI on identical routes — not against a hand-wavy “enterprise vs greenfield” narrative. The harness lives in <a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\">workflow-examples/benchmarks</a>: Docker Compose services, a shared <code>wrk</code> profile (10 seconds, 4 threads, 100 connections), and JSON results consumed by the dashboard. You can fork it for your own candidates and hot paths.</p>\n\n<h2>Why this is a decision framework, not a leaderboard</h2>\n<p>Polyglot Benchmarks does not crown one language for all time. Winners change per test row — exactly what you want when designing microservices. The dashboard’s verdict section maps results to use cases (edge routing in Lua/njs, core concurrency in Rust/Go, JVM services in Java/Kotlin, velocity in Python). That is the thesis: <strong>polyglot by design</strong>, with data for architecture review boards instead of opinion.</p>\n\n<figure class=\"blog-figure\">\n  <img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" />\n  <figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">The four-step approach in one frame: define the workload, run the harness, compare on the live dashboard, then decide with an ADR.</figcaption>\n</figure>\n\n<h2>Six benefits for platform and engineering leads</h2>\n<ul>\n  <li><strong>Evidence over opinion</strong> — attach charts and config to ADRs; settle stack debates with measured runs.</li>\n  <li><strong>Workload-specific winners</strong> — latency-sensitive paths vs batch vs edge transforms vs JVM estates get different leaders.</li>\n  <li><strong>Total cost of ownership</strong> — raw RPS is not enough; weigh build time, image size, team skill fit, and ops burden.</li>\n  <li><strong>Reproducible workflows</strong> — same repo, same Compose file, same wrk script; rerunnable in CI.</li>\n  <li><strong>Legitimate polyglot microservices</strong> — different languages per service boundary without shame or surprise.</li>\n  <li><strong>Risk reduction</strong> — prototype in the runner-up before an org-wide mandate.</li>\n</ul>\n\n<p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Quick start</h2>\n<ol>\n  <li>Open the <a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">live dashboard</a> while a run is in progress (or start one locally).</li>\n  <li>Clone <code>workflow-examples</code>, <code>cd benchmarks</code>, <code>docker compose up</code> — eight language services plus dashboard and bench runner.</li>\n  <li>Read <code>results.json</code> on the dashboard volume and map winners to <em>your</em> workload rows.</li>\n  <li>Write the ADR — include duration, threads, connections, and hardware class.</li>\n</ol>\n\n<h2>Read the long version</h2>\n<p>The <a href=\"/en/articles/polyglot-benchmarks-right-tool-right-application\">long article</a> covers the full repo layout, a criteria table, the decision-matrix diagram, case patterns per test family (including Java and Kotlin), anti-patterns, limitations, and SEO-ready snippets for sharing with your ARB. Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>; benchmark site hosted at <a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>.</p>\n<p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-deep-learning-001",
+  "internal_id": 959,
+  "slug": "what-is-deep-learning-workstation-guide",
+  "title": "深度学习系统：面向工程师与智能体的技术简报",
+  "sub_title": "表征学习、判别式与生成式路径、指标以及购买/自建路由——为生产团队重写的 AWS 概念",
+  "excerpt": "TenthMatrix 深度学习技术简报：梯度训练的深度网络、判别式与生成式模型、任务指标，以及 Bedrock 与 Kubernetes serving 的选择。",
+  "meta_title": "深度学习系统 — 技术简报（TenthMatrix）",
+  "meta_description": "深度学习技术简报：神经网络、反向传播、判别式与生成式 AI、任务指标，以及面向工程师与 AI 智能体的 Bedrock vs 自托管路由。",
+  "meta_keywords": "deep learning, neural networks, backpropagation, generative AI, machine learning, transformers, Amazon Bedrock, SageMaker, Kubernetes, MLOps, TenthMatrix",
+  "cover_image": "/img/deep-learning-cover.svg",
+  "images": [
+    {
+      "url": "/img/deep-learning-cover.svg",
+      "id": 959,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Deep learning systems technical brief — train, optimise, serve"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>技术摘要：将深度学习视为多层神经优化、判别式与生成式路径，以及如何把工作路由到经典 ML、自训 DL 或基础模型 API。完整公式、图示与智能体清单见<a href=\"/zh/articles/what-is-deep-learning-workstation-guide\">长文</a>。</em></p>\n\n<p><img src=\"/img/deep-learning-cover.svg\" alt=\"深度学习系统技术简报 — 训练、优化、服务\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0e7490;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>定义。</strong> 深度学习是对深度神经网络进行基于梯度的训练，使 f_&#x3b8;(x) 从高维 x 中学习层次化特征。它支撑现代视觉/ASR/NLP，也是生成式 AI（transformers / diffusion）的底层。成本驱动因素：干净数据量、加速器时间与推理 OpEx——不是幻灯片。\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>智能体摘要。</strong> DL ⊂ ML。判别式 = p(y|x)。生成式 = 采样 x 或 x|c。表格强特征优先 GBM；感知任务训练 DL；语言智能体用 Bedrock/vLLM。GitOps serving；对 money/auth/prod 设门禁。\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">改编自 AWS — <a href=\"https://aws.amazon.com/what-is/deep-learning/\" target=\"_blank\" rel=\"noopener noreferrer\">What is Deep Learning?</a> — 面向 <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a> 工程团队。</p>\n\n<h2>能力划分</h2>\n<p><img src=\"/img/deep-learning-ml-stack.svg\" alt=\"ML vs 深度学习 vs 生成式 AI 技术栈\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>Classic ML</strong> — 人工特征；树/线性模型；稠密表格 SLA 的默认首选。</li>\n  <li><strong>Deep learning</strong> — 图像/文本/音频端到端网络；backprop + GPU；经 Triton/KServe/SageMaker 服务。</li>\n  <li><strong>Generative AI</strong> — 采样新内容；LLM/diffusion + RAG/工具；Bedrock API 或开源权重推理。</li>\n</ul>\n\n<h2>任务族（指标很重要）</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#5eead4;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">族</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">典型目标 / 指标</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Vision</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">检测/分类 — mAP、IoU、p99 延迟</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Speech</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ASR/TTS — WER、实时因子</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>NLP</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">分类 / 生成 — F1、exact-match、groundedness</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Recommend</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">排序 — NDCG、CTR/CVR</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Gen AI agents</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">任务成功 + 安全 + $/请求</td></tr>\n</tbody>\n</table>\n\n<h2>约束</h2>\n<ul>\n  <li><strong>Data</strong> — 标签噪声与分布偏移占主导；对数据集做版本管理。</li>\n  <li><strong>Compute</strong> — 训练与 LLM decode 受加速器约束。</li>\n  <li><strong>Ops</strong> — 评估套件、漂移、成本，大规模 promote 前先做 GitOps 回滚。</li>\n</ul>\n\n<p><img src=\"/img/deep-learning-decision-flow.svg\" alt=\"训练 vs 购买 vs 混合决策流\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>TenthMatrix 建议</h2>\n<p>先区分判别式与生成式。除非驻留/成本迫使使用开源权重，语言智能体优先托管基础模型。表格场景保留经典 ML。细节、层级图与清单：<a href=\"/zh/articles/what-is-deep-learning-workstation-guide\">长文</a>。由 <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a> 发布。</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    }
+  ],
+  "created_at": "2026-08-07T10:00:00Z",
+  "updated_at": "2026-08-07T10:00:00Z",
+  "published_date": "2026-08-07",
+  "status": true
+}

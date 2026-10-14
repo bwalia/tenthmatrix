@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="Claude OpenAI Cursor MCP security comparison">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .tag { fill: #0369a1; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .col { fill: #f8fafc; stroke: #64748b; stroke-width: 1.5; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .b { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="700"/>
+  <text class="tag" x="40" y="36">FIGURE C - VENDOR PATTERNS</text>
+  <text class="title" x="40" y="68">Recommended MCP auth setups: Claude, OpenAI, Cursor</text>
+  <text class="cap" x="40" y="94">Same industry baseline (OAuth 2.1 + PRM). Differences are client UX and enterprise controls.</text>
+
+  <rect class="col" x="40" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="60" y="170">Claude (Anthropic)</text>
+  <text class="b" x="60" y="205">- Prefer OAuth for remote MCP</text>
+  <text class="b" x="60" y="230">- 401 + WWW-Authenticate for discovery</text>
+  <text class="b" x="60" y="255">- Never put tokens in URL query</text>
+  <text class="b" x="60" y="280">- Headers / OAuth over static keys</text>
+  <text class="b" x="60" y="305">- Claude Code: local OAuth + secure store</text>
+  <text class="b" x="60" y="330">- Hosted Claude: Anthropic-held client creds</text>
+  <text class="b" x="60" y="355">- Align with MCP EMA for enterprise SSO</text>
+  <text class="b" x="60" y="395">Workstation: remote MCP + Vault</text>
+  <text class="b" x="60" y="420">for tool secrets; Claude holds</text>
+  <text class="b" x="60" y="445">only MCP access tokens</text>
+  <text class="b" x="60" y="485">Docs: claude.com connectors auth</text>
+
+  <rect class="col" x="420" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="440" y="170">OpenAI (Agents / tools)</text>
+  <text class="b" x="440" y="205">- Separate model API key from tool secrets</text>
+  <text class="b" x="440" y="230">- Use OAuth or short-lived tool tokens</text>
+  <text class="b" x="440" y="255">- Scope tools; deny by default</text>
+  <text class="b" x="440" y="280">- Run agents in VPC / private network</text>
+  <text class="b" x="440" y="305">- Log tool calls with user attribution</text>
+  <text class="b" x="440" y="330">- Rotate OpenAI org keys via Vault</text>
+  <text class="b" x="440" y="355">- Prefer MCP OAuth when exposing tools</text>
+  <text class="b" x="440" y="395">Workstation: agent runtime fetches</text>
+  <text class="b" x="440" y="420">Vault dynamic secrets per tool</text>
+  <text class="b" x="440" y="445">invocation; never embed in prompts</text>
+  <text class="b" x="440" y="485">Pattern: OBO + Vault JWT auth</text>
+
+  <rect class="col" x="800" y="130" width="360" height="420" rx="10"/>
+  <text class="h" x="820" y="170">Cursor (IDE + MCP)</text>
+  <text class="b" x="820" y="205">- MCP config: env vars, not hardcoded</text>
+  <text class="b" x="820" y="230">- Remote MCP: OAuth where supported</text>
+  <text class="b" x="820" y="255">- STDIO: Vault Agent injects env</text>
+  <text class="b" x="820" y="280">- Project rules: forbid secret paste</text>
+  <text class="b" x="820" y="305">- Team: approved MCP allowlist</text>
+  <text class="b" x="820" y="330">- VPN for internal MCP endpoints</text>
+  <text class="b" x="820" y="355">- Separate personal vs enterprise IdP</text>
+  <text class="b" x="820" y="395">Workstation: Cursor on corp VPN;</text>
+  <text class="b" x="820" y="420">MCP points to private URL;</text>
+  <text class="b" x="820" y="445">secrets only via Vault lease</text>
+  <text class="b" x="820" y="485">Keep .cursorignore for .env</text>
+
+  <text class="foot" x="40" y="600">Industry baseline for all three: OAuth 2.1 + PKCE, RFC 9728 PRM, audience-bound tokens, short TTL, Vault for backend secrets, VPN for private MCP.</text>
+  <text class="foot" x="40" y="630">Do not confuse LLM provider API keys with MCP/tool credentials - different blast radius, different rotation cadence.</text>
+  <text class="foot" x="40" y="670">workstation.co.uk</text>
+</svg>

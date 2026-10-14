@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Orbit vs Lanes views of int test acc prod">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1c2c"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <text fill="#86efac" font-family="system-ui,sans-serif" font-size="18" font-weight="700" letter-spacing="2" x="48" y="48">ORBIT  -  fleet view</text>
+  <circle cx="280" cy="320" r="36" fill="#22c55e"/>
+  <text fill="#052e16" font-family="system-ui,sans-serif" font-size="14" font-weight="800" x="252" y="325">Earth</text>
+  <circle cx="280" cy="320" r="90" fill="none" stroke="#86efac" stroke-width="2"/>
+  <circle cx="280" cy="320" r="140" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="6 6"/>
+  <circle cx="280" cy="320" r="190" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 8"/>
+  <circle cx="280" cy="230" r="14" fill="#86efac"/>
+  <text fill="#bbf7d0" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="300" y="220">PROD</text>
+  <circle cx="400" cy="280" r="12" fill="#4ade80"/>
+  <text fill="#bbf7d0" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="420" y="275">ACC</text>
+  <circle cx="420" cy="380" r="12" fill="none" stroke="#94a3b8" stroke-width="2"/>
+  <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="440" y="385">TEST</text>
+  <circle cx="280" cy="500" r="12" fill="none" stroke="#64748b" stroke-width="2"/>
+  <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="300" y="520">INT</text>
+  <text fill="#64748b" font-family="system-ui,sans-serif" font-size="13" x="80" y="590">Solid = newest earned  /  Hollow = older</text>
+
+  <line x1="560" y1="80" x2="560" y2="560" stroke="#334155" stroke-width="2"/>
+
+  <text fill="#86efac" font-family="system-ui,sans-serif" font-size="18" font-weight="700" letter-spacing="2" x="600" y="48">LANES  -  matrix view</text>
+  <g font-family="system-ui,sans-serif" font-size="13" font-weight="700">
+    <text fill="#94a3b8" x="720" y="100">INT</text>
+    <text fill="#94a3b8" x="820" y="100">TEST</text>
+    <text fill="#94a3b8" x="930" y="100">ACC</text>
+    <text fill="#94a3b8" x="1040" y="100">PROD</text>
+  </g>
+  <text fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="14" font-weight="700" x="600" y="160">payments-api</text>
+  <rect x="700" y="140" width="360" height="40" rx="20" fill="#14532d" stroke="#86efac" stroke-width="2"/>
+  <text fill="#bbf7d0" font-family="ui-monospace,Menlo,monospace" font-size="14" font-weight="700" x="820" y="165">v2.14.0</text>
+  <text fill="#e2e8f0" font-family="system-ui,sans-serif" font-size="14" font-weight="700" x="600" y="240">wslproxy</text>
+  <rect x="700" y="220" width="260" height="40" rx="20" fill="#14532d" stroke="#4ade80" stroke-width="2"/>
+  <text fill="#bbf7d0" font-family="ui-monospace,Menlo,monospace" font-size="14" font-weight="700" x="780" y="245">v1.9.2</text>
+  <rect x="1020" y="220" width="100" height="40" rx="20" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text fill="#fbbf24" font-family="ui-monospace,Menlo,monospace" font-size="13" font-weight="700" x="1035" y="245">v1.8.0</text>
+  <text fill="#64748b" font-family="system-ui,sans-serif" font-size="13" x="600" y="320">Spanning pill = parity across rings</text>
+  <text fill="#64748b" font-family="system-ui,sans-serif" font-size="13" x="600" y="348">Split at PROD = still has to earn the hop</text>
+  <text fill="#86efac" font-family="system-ui,sans-serif" font-size="14" font-weight="700" x="600" y="420">Same truth. Two instruments.</text>
+  <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="13" x="600" y="450">Pause on Orbit for the fleet.</text>
+  <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="13" x="600" y="478">Flip to Lanes when you need the matrix.</text>
+</svg>

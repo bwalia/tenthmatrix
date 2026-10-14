@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "ਟਰਬੋਚਾਰਜਿੰਗ LLMs",
+  "sub_title": "PagedAttention, vLLM, Self-Debugging, PowerInfer, ਅਤੇ EG-MLA — GPU ਕੇਵੀ ਕੈਚ ਨੂੰ ਬਰਬਾਦ ਕੀਤੇ ਬਿਨਾਂ LLM ਏਜੰਟਾਂ ਨੂੰ ਕਿਵੇਂ ਸਕੇਲ ਕਰਨਾ ਹੈ",
+  "excerpt": "ਟਰਬੋਚਾਰਜਿੰਗ LLMs 'ਤੇ TenthMatrix: KV ਕੈਸ਼ ਲਈ PagedAttention ਪੇਜਿੰਗ, vLLM ਸਰਵਿੰਗ, ਏਜੰਟਾਂ ਲਈ Self-Debugging, PowerInfer ਟੋਕਨ ਦਰਾਂ, ਅਤੇ EG-MLA ਮੈਮੋਰੀ ਕਟੌਤੀ — ਉਤਪਾਦਨ ਵਪਾਰ-ਆਫ ਦੇ ਨਾਲ।",
+  "meta_title": "ਟਰਬੋਚਾਰਜਿੰਗ LLMs: PagedAttention, vLLM, PowerInfer | TenthMatrix",
+  "meta_description": "ਸਕੇਲ LLM PagedAttention ਅਤੇ vLLM, ਏਜੰਟਾਂ ਲਈ Self-Debugging, PowerInfer ਟੋਕਨ ਜਨਰੇਸ਼ਨ, ਅਤੇ EG-MLA KV ਕੰਪਰੈਸ਼ਨ — ਨੋਬਸ ਅਤੇ ਟ੍ਰੇਡ-ਆਫ ਦੇ ਨਾਲ ਸੇਵਾ ਕਰਦਾ ਹੈ।",
+  "meta_keywords": "LLM, PagedAttention, vLLM, KV ਕੈਸ਼, PowerInfer, EG-MLA, Self-Debugging, GPU ਸਰਵਿੰਗ, Kubernetes, TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>ਉਤਪਾਦਨ ਵਿੱਚ ਵੱਡੇ ਭਾਸ਼ਾ ਮਾਡਲਾਂ ਨੂੰ ਕਿਵੇਂ ਟਰਬੋਚਾਰਜ ਕਰਨਾ ਹੈ: PagedAttention, vLLM, Self-Debugging, PowerInfer, ਅਤੇ EG-MLA — ਅਸਲ ਵਿੱਚ GPUs 'ਤੇ ਦਿਖਾਈ ਦੇਣ ਵਾਲੇ ਟ੍ਰੇਡ-ਆਫ ਦੇ ਨਾਲ। ਡੂੰਘੀ ਗੋਤਾਖੋਰੀ:<a href=\"/pa/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">ਲੰਬਾ ਲੇਖ</a>। ਪ੍ਰਾਈਮਰ:<a href=\"/pa/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs ਸਮਝਾਇਆ + Kubernetes</a>।</em></p><p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>ਹੇਠਲੀ ਲਾਈਨ। KV ਕੈਸ਼ ਦੇ ਟੁਕੜੇ ਹੋਣ 'ਤੇ</strong>ਥ੍ਰੋਪੁਟ ਮਰ ਜਾਂਦਾ ਹੈ। ਇੱਕ OS (vLLM ਦੇ ਅੰਦਰ PagedAttention) ਦੀ ਤਰ੍ਹਾਂ ਕੈਚ ਪੇਜ ਕਰੋ, ਇੱਕ ਟੋਕਨ ਇੰਜਣ ਚੁਣੋ ਜੋ ਬਾਕਸ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਹੋਵੇ (ਇੱਕ ਚਰਬੀ ਵਾਲੇ ਖਪਤਕਾਰ GPU 'ਤੇ PowerInfer, ਇੱਕ ਸਰਵਿੰਗ ਕਲੱਸਟਰ 'ਤੇ vLLM), ਜਦੋਂ ਆਰਕੀਟੈਕਚਰ ਇਜਾਜ਼ਤ ਦਿੰਦਾ ਹੈ (EG-MLA), ਅਤੇ ਕੈਪ ਏਜੰਟ ਡੀਬੱਗ ਲੂਪਸ ਨੂੰ ਸੁੰਗੜਦਾ ਹੈ, ਤਾਂ ਕਿ ਗੁਣਵੱਤਾ ਬੇਲੋੜੀ ਖਰੀਦ ਨਾ ਕਰੇ।</div><h2>ਵਾਚ: ਇੱਕ LLM ਅਸਲ ਵਿੱਚ</h2>ਕੀ ਹੈ<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">ਸੰਦਰਭ, ਉਤਪਾਦ ਡੈਮੋ ਨਹੀਂ:<a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">ਵੱਡੀ ਭਾਸ਼ਾ ਦੇ ਮਾਡਲਾਂ ਲਈ</a>(ਐਂਡਰੇਜ ਕਾਰਪੈਥੀ) ਦੀ ਪਛਾਣ। ਸਾਡੀ<a href=\"/pa/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">ਪਲੇਨ-ਅੰਗਰੇਜ਼ੀ LLM + Kubernetes ਗਾਈਡ</a>ਨਾਲ ਜੋੜਾ ਬਣਾਓ।</p><h2>ਸਕੇਲਿੰਗ ਸਮੱਸਿਆ</h2><p>LLMs ਨੇ ਗੱਲਬਾਤ ਵਾਲੀ AI ਅਤੇ ਪੀੜ੍ਹੀ ਨੂੰ ਅਨਲੌਕ ਕੀਤਾ, ਫਿਰ ਤੁਰੰਤ ਇੱਕ ਸੇਵਾ ਸਮੱਸਿਆ ਬਣ ਗਈ। ਹਰੇਕ ਡੀਕੋਡ ਪਗ ਇੱਕ KV ਕੈਸ਼ ਵਿੱਚ ਕੁੰਜੀਆਂ ਅਤੇ ਮੁੱਲ ਜੋੜਦਾ ਹੈ ਜੋ ਕ੍ਰਮ ਦੀ ਲੰਬਾਈ ਅਤੇ ਬੈਚ ਆਕਾਰ ਨਾਲ ਵਧਦਾ ਹੈ। ਭੋਲੇ-ਭਾਲੇ ਇੰਜਣ ਵੱਡੀਆਂ ਸੰਗਠਿਤ ਸਲੈਬਾਂ ਨੂੰ ਪੂਰਵ-ਰਿਜ਼ਰਵ ਰੱਖਦੇ ਹਨ। ਉਸ ਵਿੱਚੋਂ ਜ਼ਿਆਦਾਤਰ ਮੈਮੋਰੀ ਵਿਹਲੀ ਰਹਿੰਦੀ ਹੈ ਜਦੋਂ ਕਿ ਹੋਰ ਬੇਨਤੀਆਂ ਉਡੀਕ ਕਰਦੀਆਂ ਹਨ। GPU \"ਪੂਰਾ\" ਦਿਸਣ ਦੇ ਬਾਵਜੂਦ ਥ੍ਰੂਪੁੱਟ ਸਮੇਟਦਾ ਹੈ।</p><h2>PagedAttention: ਧਿਆਨ</h2>ਲਈ ਵਰਚੁਅਲ ਮੈਮੋਰੀ<p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>PagedAttention (Kwon et al., SOSP 2023) KV ਕੈਸ਼ ਨੂੰ OS ਪੇਜਿੰਗ ਵਾਂਗ ਵਰਤਦਾ ਹੈ: ਫਿਕਸਡ-ਸਾਈਜ਼ ਬਲਾਕ, ਪ੍ਰਤੀ ਬੇਨਤੀ ਇੱਕ ਬਲਾਕ ਟੇਬਲ, ਗੈਰ-ਸੰਬੰਧਿਤ ਭੌਤਿਕ ਪੰਨੇ<a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>। ਕਰਨਲ ਧਿਆਨ ਦੇ ਸਮੇਂ ਬਲਾਕਾਂ ਨੂੰ ਇਕੱਠਾ ਕਰਦਾ ਹੈ। ਤੁਹਾਨੂੰ ਅਜੇ ਵੀ<strong>ਬਲਾਕ ਆਕਾਰ</strong>,<strong>ਅਧਿਕਤਮ ਮਾਡਲ ਲੰਬਾਈ</strong>, ਅਤੇ<strong>ਕੈਸ਼ ਲੜੀ</strong>(GPU HBM ਬਨਾਮ CPU ਆਫਲੋਡ ਬਨਾਮ ਪ੍ਰੀਫਿਕਸ ਕੈਸ਼) ਨੂੰ ਟਿਊਨ ਕਰਨਾ ਚਾਹੀਦਾ ਹੈ। ਬਹੁਤ ਛੋਟੇ ਬਲਾਕ ਮੈਪਿੰਗ ਓਵਰਹੈੱਡ ਜੋੜਦੇ ਹਨ; ਬਹੁਤ ਵੱਡੇ ਬਲਾਕ ਕੂੜੇ ਨੂੰ ਦੁਬਾਰਾ ਪੇਸ਼ ਕਰਦੇ ਹਨ।</p><h2>vLLM:</h2>ਦੀ ਸੇਵਾ ਕਰਨ ਵਾਲਾ ਲਗਭਗ-ਜ਼ੀਰੋ ਵੇਸਟ<p>vLLM PagedAttention ਦੇ ਆਲੇ-ਦੁਆਲੇ ਬਣਾਇਆ ਸਰਵਿੰਗ ਸਿਸਟਮ ਹੈ। ਇਹ ਨੇੜੇ-ਜ਼ੀਰੋ ਕੇਵੀ ਰਹਿੰਦ-ਖੂੰਹਦ, ਨਿਰੰਤਰ ਬੈਚਿੰਗ, ਅਤੇ ਇੱਕ OpenAI- ਅਨੁਕੂਲ HTTP ਸਤਹ ਨੂੰ ਨਿਸ਼ਾਨਾ ਬਣਾਉਂਦਾ ਹੈ। ਉਤਪਾਦਨ ਵਿੱਚ, ਤਿੰਨ ਚੀਜ਼ਾਂ ਦੇਖੋ: (1)<code>gpu_memory_utilization</code>ਬਨਾਮ OOM, (2) ਟਾਈਮ-ਟੂ-ਫਸਟ-ਟੋਕਨ ਬਨਾਮ ਡੀਕੋਡ ਟੋਕਨ/s, (3) ਕੀ ਪ੍ਰੀਫਿਕਸ / ਪ੍ਰੋਂਪਟ ਕੈਚਿੰਗ ਤੁਹਾਡੇ ਈਵਲ ਸੈੱਟ ਲਈ ਜਵਾਬ ਬਦਲਦੀ ਹੈ। ਕੈਚਿੰਗ ਇੱਕ ਥ੍ਰੋਪੁੱਟ ਜਿੱਤ ਹੈ; ਇਹ ਸ਼ੁੱਧਤਾ ਅਤੇ ਟੇਲ-ਲੇਟੈਂਸੀ ਪ੍ਰਭਾਵਾਂ ਤੋਂ ਮੁਕਤ ਨਹੀਂ ਹੈ।</p><pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre><p>ਇਹ ਅਸਲ vLLM ਵਰਤੋਂ ਹੈ। ਇੱਕ ਹੱਗਿੰਗ ਫੇਸ BERT<code>forward()</code>ਕਾਲ<em>ਹੈ</em>PagedAttention ਨਹੀਂ — ਪੇਜਡ KV ਸਰਵਿੰਗ ਨਾਲ ਕਲਾਸੀਫਾਇਰ ਲੌਗਿਟਸ ਨੂੰ ਉਲਝਾਓ ਨਾ।</p><h2>Self-Debugging: ਲੇਟੈਂਸੀ ਬਜਟ</h2>ਦੇ ਨਾਲ ਕੁਆਲਿਟੀ ਲੂਪਸ<p>Self-Debugging (ਚੇਨ ਐਟ ਅਲ.) ਇੱਕ ਮਾਡਲ ਨੂੰ ਕੁਝ-ਸ਼ੌਟ ਟਰੇਸ, ਮੇਲ ਖਾਂਦੀਆਂ ਜਾਂ ਬੇਸਲਾਈਨਾਂ ਤੋਂ ਆਪਣੇ ਖੁਦ ਦੇ ਪੂਰਵ-ਅਨੁਮਾਨਿਤ ਪ੍ਰੋਗਰਾਮਾਂ ਨੂੰ ਠੀਕ ਕਰਨ ਲਈ ਸਿਖਾਉਂਦਾ ਹੈ ਜੋ 10 ਗੁਣਾ ਜ਼ਿਆਦਾ ਉਮੀਦਵਾਰਾਂ ਨੂੰ ਛੱਡਦਾ ਹੈ<a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2304.05128]</a>। ਏਜੰਟਾਂ ਲਈ, ਇਹ ਸੋਨਾ ਹੈ - ਜਦੋਂ ਤੱਕ ਫੀਡਬੈਕ ਰਾਊਂਡ ਸਟੈਕ ਨਹੀਂ ਹੁੰਦਾ। ਡੀਬੱਗ ਸੁਨੇਹਿਆਂ ਦੀ ਸੰਖਿਆ ਨੂੰ ਕੈਪ ਕਰੋ, ਹਰੇਕ ਗੇੜ ਨੂੰ ਲੌਗ ਕਰੋ, ਅਤੇ ਬਜਟ ਖਤਮ ਹੋਣ 'ਤੇ ਮਨੁੱਖੀ ਜਾਂ ਕਿਸੇ ਛੋਟੇ ਮਾਹਰ ਮਾਡਲ ਲਈ ਫੇਲ ਹੋਵੋ।</p><h2>ਵਾਚ: ਸਰਵਿੰਗ ਅਤੇ ਅਨੁਮਾਨ ਸੰਦਰਭ</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">ਤੇਜ਼ LLM ਸਰਵਿੰਗ 'ਤੇ ਸੰਦਰਭੀ ਗੱਲਬਾਤ — ਅਧਿਕਾਰਤ TenthMatrix ਡੈਮੋ ਨਹੀਂ। vLLM ਪੇਪਰ ਅਤੇ<a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a>ਨਾਲ ਜੋੜਾ ਬਣਾਓ।</p><h2>PowerInfer: ਸਿੰਗਲ ਫੈਟ GPU</h2>'ਤੇ ਟੋਕਨ<p>PowerInfer ਗਰਮ/ਠੰਡੇ ਨਿਊਰੋਨਸ ਨੂੰ ਵੰਡਦਾ ਹੈ ਤਾਂ ਕਿ ਇੱਕ ਖਪਤਕਾਰ GPU ਪਲੱਸ CPU ਤੇਜ਼ੀ ਨਾਲ ਟੋਕਨ ਤਿਆਰ ਕਰ ਸਕੇ। ਰਿਪੋਰਟ ਕੀਤੇ ਅੰਕੜੇ:<strong>13.20 ਟੋਕਨ/s ਔਸਤ</strong>, ਇੱਕ NVIDIA RTX 4090 'ਤੇ ਸਿਖਰ<strong>29.08 ਟੋਕਨ/s</strong>, ਸ਼ੁੱਧਤਾ ਰੱਖਦੇ ਹੋਏ<strong>11.69x</strong>ਬਨਾਮ llama.cpp ਤੱਕ। ਫਲੀਟ ਪੈਮਾਨੇ 'ਤੇ ਤੁਹਾਨੂੰ ਅਜੇ ਵੀ ਪਲੇਸਮੈਂਟ ਦੀ ਲੋੜ ਹੈ: GPU 'ਤੇ ਕਿਹੜੀਆਂ ਲੇਅਰਾਂ ਰਹਿੰਦੀਆਂ ਹਨ, ਤੁਸੀਂ ਨੋਡਾਂ ਵਿੱਚ ਕਿਵੇਂ ਸ਼ਾਰਡ ਕਰਦੇ ਹੋ, ਅਤੇ ਕੀ<em>ਦਾ ਸਥਾਨਕ ਪ੍ਰੋਫਾਈਲ ਤੁਹਾਡੇ</em>ਪ੍ਰੋਂਪਟ ਪੇਪਰ ਦੇ ਮਾਡਲਾਂ ਨਾਲ ਮੇਲ ਖਾਂਦਾ ਹੈ।</p><h2>EG-MLA: ਬੈਂਚ ਨੂੰ ਖਰਾਬ ਕੀਤੇ ਬਿਨਾਂ KV ਨੂੰ ਸੁੰਗੜੋ</h2><p>EG-MLA (ਏਮਬੈਡਿੰਗ-ਗੇਟਿਡ ਮਲਟੀ-ਹੈੱਡ ਲੇਟੈਂਟ ਅਟੈਨਸ਼ਨ) ਰਿਪੋਰਟ ਕਰਦਾ ਹੈ<strong>ਵੱਧ 91.6% KV ਕੈਸ਼ ਕਟੌਤੀ</strong>ਬਨਾਮ ਮਲਟੀ-ਹੈੱਡ ਅਟੈਨਸ਼ਨ ਨਾ-ਮਾਤਰ ਗਿਰਾਵਟ ਦੇ ਨਾਲ, ਵਾਧੂ ਬੱਚਤ ਬਨਾਮ MLA (59.9% ਤੱਕ), ਅਤੇ ਤਰਕ ਸੂਈਟਾਂ 'ਤੇ ਬਿਹਤਰ ਸਕੋਰ, XTAGX9 ਪੈਰਾਮੀਟਰ ਪਿਛਲੇ XTAGX9 ਪੇਪਰ ਸਕੇਲ</a>. ਇਸਨੂੰ ਇੱਕ ਆਰਕੀਟੈਕਚਰ ਵਿਕਲਪ ਦੇ ਰੂਪ ਵਿੱਚ ਸਮਝੋ, ਨਾ ਕਿ ਇੱਕ ਜੰਮੇ ਹੋਏ vLLM ਚੈਕਪੁਆਇੰਟ 'ਤੇ ਡ੍ਰੌਪ-ਇਨ ਫਲੈਗ - ਮੈਮੋਰੀ ਗ੍ਰਾਫ ਦਾ ਜਸ਼ਨ ਮਨਾਉਣ ਤੋਂ ਪਹਿਲਾਂ ਆਪਣੇ ਈਵਲ ਹਾਰਨੇਸ ਨੂੰ ਪ੍ਰਮਾਣਿਤ ਕਰੋ।</p><p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>ਇਸਨੂੰ ਇਕੱਠੇ ਰੱਖਣਾ</h2><p>ਕਲੱਸਟਰ ਸਰਵਿੰਗ ਲਈ PagedAttention + vLLM, PowerInfer ਜਦੋਂ ਬਾਕਸ ਇੱਕ ਵਰਕਸਟੇਸ਼ਨ GPU, Self-Debugging ਇੱਕ ਹਾਰਡ ਗੋਲ ਸੀਮਾ ਵਾਲੇ ਕੋਡਿੰਗ ਏਜੰਟਾਂ ਦੇ ਅੰਦਰ, ਅਤੇ EG-MLA ਨੂੰ ਜੋੜੋ ਜਦੋਂ ਤੁਸੀਂ ਮਾਡਲ ਪਰਿਵਾਰ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰਦੇ ਹੋ। ਡਿਸਟ੍ਰੀਬਿਊਟਡ ਸਰਵਿੰਗ ਗੁੰਝਲਦਾਰਤਾ ਨੂੰ ਜੋੜਦੀ ਹੈ: KV ਸਮਾਨਤਾ, ਪ੍ਰੀਫਿਲ/ਡੀਕੋਡ ਸਪਲਿਟ, ਅਤੇ ਆਟੋਸਕੇਲਿੰਗ ਜੋ ਪੇਜ ਟੇਬਲ ਨੂੰ ਨਹੀਂ ਥਰੈਸ਼ ਕਰਦਾ ਹੈ। ਮਾਪ. ਫਿਰ ADR ਲਿਖੋ।</p><h2>ਅਗਲਾ</h2>ਪੜ੍ਹੋ<ol><li><a href=\"/pa/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">ਲੰਮਾ ਲੇਖ</a>— ਨੋਬਸ, ਫੇਲ ਮੋਡ, Kubernetes ਨੋਟਸ।</li><li><a href=\"/pa/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">LLMs ਸਮਝਾਇਆ + Kubernetes</a></li>'ਤੇ ਆਪਣਾ ਖੁਦ ਚਲਾਓ<li><a href=\"/pa/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / ਸਥਾਨਕ ਏਜੰਟ</a>·<a href=\"/pa/enterprise-ai\">ਐਂਟਰਪ੍ਰਾਈਜ਼ AI ਲੈਬ</a></li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>ਦੁਆਰਾ ਪ੍ਰਕਾਸ਼ਿਤ।</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

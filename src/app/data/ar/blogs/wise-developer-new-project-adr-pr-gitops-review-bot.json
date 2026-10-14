@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-wise-developer-workflow-001",
+  "internal_id": 955,
+  "slug": "wise-developer-new-project-adr-pr-gitops-review-bot",
+  "title": "كيف يعمل المطوّر الحكيم على مشروع جديد",
+  "sub_title": "عصف ذهني ومناقشة ونموذج أولي ومخطط واقتراح وADR وMR/PR وGitOps — مع Review Bots تعلّق تلقائيًا ليراجع البشر المخاطر",
+  "excerpt": "المسار الحكيم لمشروع جديد: عصف ذهني ومناقشة الفريق ونماذج أولية ومخططات واقتراحات وADR وPR صغيرة مع Review Bots وGitOps لجودة الإنتاج.",
+  "meta_title": "كيف يعمل المطوّر الحكيم على مشروع جديد — ADR وPR وGitOps وReview Bot",
+  "meta_description": "من العصف الذهني إلى GitOps: ADR وMR/PR وReview Bots تعلّق تلقائيًا على طلبات السحب وإعداد FDE وClaude Architect Certification للتسليم الإنتاجي.",
+  "meta_keywords": "مطوّر حكيم, ADR, pull request, merge request, GitOps, Review Bot, مراجعة كود, FDE, Claude Architect Certification, مستوى إنتاج",
+  "cover_image": "/img/wise-developer-workflow-cover.svg",
+  "images": [
+    {
+      "url": "/img/wise-developer-workflow-cover.svg",
+      "id": 955,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Wise developer workflow ADR PR GitOps Review Bot"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>كيف يبدأ مطوّر حكيم مشروعًا جديدًا — عصف ذهني ومناقشة ونموذج أولي ومخطط واقتراح وتسجيل ADR وفتح MR/PR وإنزال التغييرات بـ GitOps — بينما تعلّق Review Bots تلقائيًا على طلبات السحب. الدليل الكامل في <a href=\"/ar/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">المقال الطويل</a>.</em></p>\n\n<p><img src=\"/img/wise-developer-workflow-cover.svg\" alt=\"سير عمل المطوّر الحكيم ADR PR GitOps Review Bot\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>النسخة في فقرة واحدة.</strong> لا تقفز مباشرة إلى PR عملاق. اعصف ذهنيًا وحدك ثم مع الفريق. اصنع نموذجًا للأجزاء الخطرة. ارسم مخططات. اكتب اقتراحًا قصيرًا. ثبّت القرارات كـ ADR. سلّم MR/PR صغيرة مع CI أخضر. رقِّ عبر GitOps. دع Review Bot يصوغ تعليقات المرور الأول ليراجع البشر التصميم والمخاطر — لا التنسيق. يمكن لـ FDE إقامة هذا النظام؛ Claude Architect Certification إشارة قوية أنك تستطيع تصميمه والدفاع عنه.\n</div>\n\n<h2>المسار الحكيم (بالترتيب)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — أهداف وقيود وغير-أهداف وأنماط فشل.</li>\n  <li><strong>Discuss</strong> — سبورة / مزامنة قصيرة مع الزملاء قبل تصلّب الكود.</li>\n  <li><strong>Prototype</strong> — اختبر المجهول؛ تخلّص أو رقِّ عمدًا.</li>\n  <li><strong>Diagrams</strong> — سياق وتسلسل ونشر — يكفي للنقاش.</li>\n  <li><strong>Proposal</strong> — مشكلة وخيارات وتوصية وتراجع.</li>\n  <li><strong>ADR</strong> — «لماذا اخترنا X بدل Y» الدائم.</li>\n  <li><strong>MR / PR</strong> — فروقات صغيرة وقائمة تحقق وADR/تذكرة مرتبطة.</li>\n  <li><strong>GitOps</strong> — الحالة المرغوبة في git؛ ترقية بالدمج وتراجع بالـ revert.</li>\n</ol>\n\n<h2>Review Bots: تعليقات تكتب نفسها</h2>\n<p>اربط Review Bot (Bugbot أو CodeRabbit أو Claude/GitHub Action مخصص أو <a href=\"/ar/docs/blogs/building-ai-code-review-pipeline\">خط أنابيب مراجعة كود بالذكاء الاصطناعي</a>) ليحصل كل PR تلقائيًا على تعليقات مضمّنة عن:</p>\n<ul>\n  <li>روائح أمنية وأسرار</li>\n  <li>اختبارات ناقصة / أنماط غير مستقرة</li>\n  <li>مخاطر عقود API والترحيل</li>\n  <li>أسلوب وlint أفلت من pre-commit</li>\n</ul>\n<p>يركّز البشر بعدها على ملاءمة البنية وقصد المنتج ونطاق الأثر التشغيلي. هكذا تسهّل حياة المطوّر دون خفض شريط الإنتاج.</p>\n\n<h2>من يقيمه — ولماذا Claude Architect Certification</h2>\n<p><strong>FDE (Forward Deployed Engineer)</strong> مؤهل جيدًا لتثبيت القوالب: مجلد ADR وقائمة تحقق PR وReview Bot وحماية الفروع وتطبيقات GitOps. اربط مهارة التسليم هذه بـ <strong>Claude Architect Certification</strong> — تستحق السعي إن أردت اعتمادًا يثبت أنك تصمّم أنظمة وكيلية/مدعومة بالذكاء الاصطناعي وتراجع الكود المُولَّد نقديًا وتدرّب الفرق على مسارات إنتاج.</p>\n\n<h2>شريط جودة الإنتاج</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0c1424;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">البوابة</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">معايير النجاح</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pre-commit</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تنسيق وlint وفحص أسرار</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">CI</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">اختبارات وحدة + عقد خضراء</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Review Bot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">لا نتائج عالية الخطورة بلا حل</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Human review</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تصميم + مخاطر موقّعة</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">GitOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ترقية البيئة عبر الدمج؛ revert مختبر</td></tr>\n</tbody>\n</table>\n\n<p>اقرأ  <a href=\"/ar/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">المقال الطويل</a>. نُشر بواسطة <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "fde",
+      "id": 1019
+    },
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    }
+  ],
+  "created_at": "2026-07-23T21:00:00Z",
+  "updated_at": "2026-07-23T21:00:00Z",
+  "published_date": "2026-07-23",
+  "status": true
+}

@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-claude-opus-5-aws-001",
+  "internal_id": 957,
+  "slug": "claude-opus-5-aws-bedrock-workstation-guide",
+  "title": "Claude Opus 5 en AWS: guía TenthMatrix para builders y negocio",
+  "sub_title": "Opus 5 en Bedrock y Claude Platform — qué cambió, cuándo usarlo, ZDR y un inicio rápido Converse",
+  "excerpt": "Visión TenthMatrix sobre Claude Opus 5 en Amazon Bedrock: coding agéntico, agentes de larga duración, contexto 1M, ZDR por defecto y cómo deben adoptarlo los equipos.",
+  "meta_title": "Claude Opus 5 en AWS Bedrock — Guía builders y negocio TenthMatrix",
+  "meta_description": "Claude Opus 5 en Amazon Bedrock y Claude Platform on AWS: capacidades, ZDR, contexto 1M, cuándo usarlo e inicio Converse para equipos de producción.",
+  "meta_keywords": "Claude Opus 5, Amazon Bedrock, Claude Platform on AWS, Anthropic, coding agéntico, ZDR, agentes de larga duración, TenthMatrix",
+  "cover_image": "/img/claude-opus-5-aws-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-opus-5-aws-cover.svg",
+      "id": 957,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Opus 5 on Amazon Bedrock AWS TenthMatrix guide"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Opus 5 está disponible en Amazon Bedrock y Claude Platform on AWS. Aquí la visión TenthMatrix — qué significa para desarrolladores y equipos de negocio, cuándo usarlo y cómo empezar. Análisis con código en el <a href=\"/es/articles/claude-opus-5-aws-bedrock-workstation-guide\">artículo largo</a>.</em></p>\n\n<p><img src=\"/img/claude-opus-5-aws-cover.svg\" alt=\"Claude Opus 5 en Amazon Bedrock AWS — guía TenthMatrix\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>En un párrafo.</strong> Opus 5 es el modelo Opus más fuerte de Anthropic en AWS (lanzado 24 jul 2026): mejor coding agéntico, agentes de larga duración y trabajo documental denso, con ventana de contexto de <strong>1M tokens</strong>. En <strong>Amazon Bedrock</strong> obtiene <strong>retención cero de datos (ZDR) por defecto</strong>, Guardrails e IAM/facturación AWS. Úselo para ingeniería dura y flotas de agentes; reserve Sonnet/Haiku para volumen. Consejo de enrutado completo: <a href=\"/es/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">comparación de modelos Claude</a>.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">Adaptado para lectores TenthMatrix desde el anuncio del AWS Machine Learning Blog — <a href=\"https://aws.amazon.com/blogs/machine-learning/introducing-claude-opus-5-on-aws-anthropics-most-capable-opus-model/\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Claude Opus 5 on AWS</a>.</p>\n\n<h2>Por qué deben importarle a los equipos de negocio</h2>\n<ul>\n  <li><strong>Agentes de producción que corren más tiempo</strong> — flujos multi-hora / overnight con mejor recuperación de errores.</li>\n  <li><strong>Ingeniería a escala de codebase</strong> — navegar repos grandes, entregar parches de mayor calidad, menos bucles de hand-holding.</li>\n  <li><strong>Trabajo documental empresarial</strong> — razonamiento más profundo sobre políticas largas, contratos y packs financieros.</li>\n  <li><strong>Gobernanza en Bedrock</strong> — ZDR por defecto, opciones de residencia regional, sin «shadow SaaS» para corpus sensibles.</li>\n</ul>\n\n<h2>Por qué deben importarle a los desarrolladores</h2>\n<ul>\n  <li>IDs de modelo en Bedrock: <code>global.anthropic.claude-opus-5</code> (y variantes geo <code>us.</code> / <code>eu.</code> / <code>au.</code>).</li>\n  <li>Llame vía <strong>Invoke</strong>, <strong>Converse</strong> o Anthropic Messages en <strong>bedrock-mantle</strong>.</li>\n  <li>Razonamiento adaptativo activado por defecto; prompt caching (5m / 1h); añadir/quitar herramientas a mitad de conversación.</li>\n  <li>Economía Opus-tier con inteligencia clase Fable reivindicada en muchos dominios — reserve Fable/Mythos para rutas peak-critical.</li>\n</ul>\n\n<h2>Dos puertas en AWS</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Ruta</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Mejor cuando</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ZDR por defecto, Guardrails, Knowledge Bases, AgentCore, seguridad nativa AWS</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Platform on AWS</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Consola/APIs nativas Anthropic con auth + facturación AWS; ZDR bajo petición</td></tr>\n</tbody>\n</table>\n\n<h2>Inicio rápido (Bedrock Converse)</h2>\n<pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.82rem;\">\nimport boto3\n\nclient = boto3.client(\"bedrock-runtime\", region_name=\"us-east-1\")\nresp = client.converse(\n    modelId=\"global.anthropic.claude-opus-5\",\n    messages=[{\"role\": \"user\", \"content\": [{\"text\": \"Refactor this service for multi-region failover.\"}]}],\n    inferenceConfig={\"maxTokens\": 4096},\n)\nprint(resp[\"output\"][\"message\"][\"content\"])\n</pre>\n\n<h2>Recomendación TenthMatrix</h2>\n<p>Combine Opus 5 en Bedrock con su stack de agentes existente (Review Bots, crews multiagente, gates GitOps). Use Opus 5 para agentes planificador/lead-engineer; enrute tickets rutinarios a modelos más baratos. Vea el  <a href=\"/es/articles/claude-opus-5-aws-bedrock-workstation-guide\">artículo largo</a>. Publicado por <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-26T07:00:00Z",
+  "updated_at": "2026-07-26T07:00:00Z",
+  "published_date": "2026-07-26",
+  "status": true
+}

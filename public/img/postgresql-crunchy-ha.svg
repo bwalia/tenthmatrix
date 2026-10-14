@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="PostgreSQL HA with Crunchy Data PGO: PostgresCluster CR, pgBouncer, pgBackRest">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1828"/>
+      <stop offset="0.55" stop-color="#16273f"/>
+      <stop offset="1" stop-color="#2a1505"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#ee7600" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ee7600" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #ffab40; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 56px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #ffab40; font: 800 24px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 17px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #ffab40; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #ffab40; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arRepl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#42a5f5"/>
+    </marker>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+    <marker id="arBkp" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">POSTGRESQL  /  CRUNCHY DATA PGO</text>
+  <text class="title" x="60" y="152">PostgreSQL HA</text>
+  <text class="tagline" x="60" y="194">Operator-managed: PGO + PostgresCluster CR</text>
+  <text class="sub" x="60" y="234">PGO reconciles topology, runs Patroni internally, and ships continuous backups via pgBackRest.</text>
+
+  <g>
+    <rect class="chip" x="60" y="276" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="302">01</text>
+    <text class="chipText" x="120" y="302">App - pgBouncer pool</text>
+
+    <rect class="chip" x="60" y="330" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="356">02</text>
+    <text class="chipText" x="120" y="356">PGO reconciles CR</text>
+
+    <rect class="chip" x="60" y="384" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="410">03</text>
+    <text class="chipText" x="120" y="410">Patroni HA inside cluster</text>
+
+    <rect class="chip" x="60" y="438" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="464">04</text>
+    <text class="chipText" x="120" y="464">pgBackRest continuous</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="450" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">CONTROL PLANE  /  KUBERNETES + PGO</text>
+    <g transform="translate(20,40)">
+      <rect x="0" y="0" width="220" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">PGO operator</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">watches CR  /  reconciles</text>
+      <text class="nodeText" x="110" y="50" text-anchor="middle">handles failover + upgrade</text>
+
+      <rect x="240" y="0" width="220" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="22" text-anchor="middle">PostgresCluster CR</text>
+      <text class="code" x="350" y="38" text-anchor="middle">spec.instances[]</text>
+      <text class="code" x="350" y="50" text-anchor="middle">spec.backups.pgbackrest</text>
+
+      <rect x="480" y="0" width="220" height="60" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="22" text-anchor="middle">Service - primary/replica</text>
+      <text class="nodeText" x="590" y="38" text-anchor="middle">stable endpoints reconfigured</text>
+      <text class="nodeText" x="590" y="50" text-anchor="middle">on failover automatically</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="128">CLIENT PLANE</text>
+    <rect x="20" y="140" width="200" height="44" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="120" y="162" text-anchor="middle">Application</text>
+    <text class="nodeText" x="120" y="176" text-anchor="middle">connect via pgBouncer</text>
+
+    <rect x="240" y="140" width="220" height="44" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="350" y="162" text-anchor="middle">pgBouncer (per cluster)</text>
+    <text class="nodeText" x="350" y="176" text-anchor="middle">transaction pooling  /  TLS  /  RBAC</text>
+
+    <text class="laneLabel" x="20" y="210">DATA PLANE  /  STATEFULSET INSTANCES</text>
+    <g transform="translate(20,222)">
+      <rect x="0" y="0" width="220" height="110" rx="10" fill="#0e2540" stroke="#336791" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="24" text-anchor="middle">Primary instance</text>
+      <text class="nodeText" x="110" y="42" text-anchor="middle">PG container</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">Patroni sidecar (in-pod)</text>
+      <text class="nodeText" x="110" y="70" text-anchor="middle">pgBackRest sidecar</text>
+      <text class="nodeText" x="110" y="84" text-anchor="middle">PVC: data + WAL</text>
+      <text class="nodeText" x="110" y="98" text-anchor="middle">role label: master</text>
+
+      <rect x="240" y="0" width="220" height="110" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="350" y="24" text-anchor="middle">Replica instance</text>
+      <text class="nodeText" x="350" y="42" text-anchor="middle">PG hot standby</text>
+      <text class="nodeText" x="350" y="56" text-anchor="middle">Patroni + pgBackRest sidecars</text>
+      <text class="nodeText" x="350" y="70" text-anchor="middle">streaming + WAL recovery</text>
+      <text class="nodeText" x="350" y="84" text-anchor="middle">PVC: independent</text>
+      <text class="nodeText" x="350" y="98" text-anchor="middle">role label: replica</text>
+
+      <rect x="480" y="0" width="220" height="110" rx="10" fill="#3a1f08" stroke="#ee7600" stroke-width="1.5"/>
+      <text class="nodeLabel" x="590" y="24" text-anchor="middle">pgBackRest repo</text>
+      <text class="nodeText" x="590" y="42" text-anchor="middle">full + diff + incr</text>
+      <text class="nodeText" x="590" y="56" text-anchor="middle">archive_command - WAL push</text>
+      <text class="nodeText" x="590" y="70" text-anchor="middle">S3 / GCS / Azure Blob</text>
+      <text class="nodeText" x="590" y="84" text-anchor="middle">verify restore on schedule</text>
+      <text class="nodeText" x="590" y="98" text-anchor="middle">PITR within retention</text>
+
+      <line x1="220" y1="55" x2="240" y2="55" stroke="#42a5f5" stroke-width="2" marker-end="url(#arRepl)"/>
+      <line x1="110" y1="0" x2="540" y2="0" stroke="#ffca28" stroke-width="0" />
+    </g>
+
+    <line x1="350" y1="100" x2="350" y2="140" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arCtrl)"/>
+    <line x1="120" y1="184" x2="120" y2="222" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="350" y1="184" x2="350" y2="222" stroke="rgba(255,255,255,0.55)" stroke-width="2" marker-end="url(#ar)"/>
+    <line x1="110" y1="332" x2="540" y2="332" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arBkp)"/>
+    <line x1="350" y1="332" x2="540" y2="332" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arBkp)"/>
+
+    <text class="laneLabel" x="20" y="362">FAILOVER WORKFLOW</text>
+    <g transform="translate(20,374)">
+      <rect x="0" y="0" width="700" height="40" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text class="nodeText" x="14" y="24">PGO observes Patroni leader change  -  updates role labels  -  Service selectors switch  -  pgBouncer reconnects  -  pgBackRest realigns archive stanza</text>
+    </g>
+
+    <g transform="translate(20,424)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#336791"/>
+      <text class="nodeText" x="22" y="11">Primary (writes)</text>
+      <rect x="140" y="0" width="14" height="14" rx="3" fill="#2e7d32"/>
+      <text class="nodeText" x="162" y="11">Replica (reads)</text>
+      <rect x="280" y="0" width="14" height="14" rx="3" fill="#6a3eff"/>
+      <text class="nodeText" x="302" y="11">PGO + PostgresCluster CR</text>
+      <line x1="450" y1="7" x2="480" y2="7" stroke="#42a5f5" stroke-width="2"/>
+      <text class="nodeText" x="486" y="11">WAL stream</text>
+      <line x1="555" y1="7" x2="585" y2="7" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4"/>
+      <text class="nodeText" x="591" y="11">pgBackRest backup</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">SRE  /  DBA  /  PLATFORM TEAMS</text>
+</svg>

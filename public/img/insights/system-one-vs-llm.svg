@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="system-one-vs-llm.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">WORKSTATION ORIGINAL</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="36">System One vs generative LLM</text>
+  <rect x="56" y="160" width="500" height="360" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="72" y="188" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Traditional LLM path</text>
+<text x="72" y="212" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">Input �→ generate text �→ parse �→ validate �→ act</text>
+  <text x="80" y="250" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">INPUT</text>
+  <text x="80" y="290" fill="#E8ECF8" font-family="IBM Plex Mono,monospace" font-size="16">LLM (autoregressive tokens)</text>
+  <text x="80" y="330" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">GENERATED TEXT</text>
+  <text x="80" y="370" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">PARSE + VALIDATE</text>
+  <text x="80" y="410" fill="#E8ECF8" font-family="IBM Plex Mono,monospace" font-size="16">APPLICATION DECISION</text>
+  <rect x="644" y="160" width="500" height="360" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="660" y="188" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">System One / Jev path</text>
+<text x="660" y="212" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">State �→ typed questions �→ probabilities �→ act</text>
+  <text x="668" y="250" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">APPLICATION STATE</text>
+  <text x="668" y="290" fill="#E8ECF8" font-family="IBM Plex Mono,monospace" font-size="16">JEV (parallel decisions)</text>
+  <text x="668" y="330" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">TYPED DECISION + PROBABILITY</text>
+  <text x="668" y="370" fill="#A7B0C8" font-family="IBM Plex Mono,monospace" font-size="14">CONFIDENCE GATE</text>
+  <text x="668" y="410" fill="#E8ECF8" font-family="IBM Plex Mono,monospace" font-size="16">APPLICATION ACTION</text>
+  <text x="56" y="580" fill="#A7B0C8" font-family="IBM Plex Sans,sans-serif" font-size="14">Not mutually exclusive — modern agents often need both.</text>
+
+</svg>

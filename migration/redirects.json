@@ -1,0 +1,1158 @@
+[
+ {
+  "from": "/:locale(en|es|fr|nl|hi|th|zh|ar|bn|pt|ru|ur|pa)/:path*",
+  "to": "https://www.tenthmatrix.com/:locale/:path*",
+  "status": 301,
+  "pattern": true,
+  "note": "Locale-prefix rule: the site uses next-intl localePrefix \"always\" (src/proxy.js, 13 locales). Every entry below applies to \"/{locale}<from>\" -> \"https://www.tenthmatrix.com/{locale}<from>\" for all 13 locales; the unprefixed form is listed explicitly (next-intl would otherwise redirect it to /en/...). Apply only for paths listed below, never as a catch-all."
+ },
+ {
+  "from": "/agent-building",
+  "to": "https://www.tenthmatrix.com/agent-building",
+  "status": 301
+ },
+ {
+  "from": "/ai-agents",
+  "to": "https://www.tenthmatrix.com/ai-agents",
+  "status": 301
+ },
+ {
+  "from": "/ai-automation",
+  "to": "https://www.tenthmatrix.com/ai-automation",
+  "status": 301
+ },
+ {
+  "from": "/ai-solutions",
+  "to": "https://www.tenthmatrix.com/ai-solutions",
+  "status": 301
+ },
+ {
+  "from": "/ai-upskilling",
+  "to": "https://www.tenthmatrix.com/ai-upskilling",
+  "status": 301
+ },
+ {
+  "from": "/applied-ai",
+  "to": "https://www.tenthmatrix.com/applied-ai",
+  "status": 301
+ },
+ {
+  "from": "/articles",
+  "to": "https://www.tenthmatrix.com/articles",
+  "status": 301
+ },
+ {
+  "from": "/claude-agents",
+  "to": "https://www.tenthmatrix.com/claude-agents",
+  "status": 301
+ },
+ {
+  "from": "/crm",
+  "to": "https://www.tenthmatrix.com/crm",
+  "status": 301
+ },
+ {
+  "from": "/docs",
+  "to": "https://www.tenthmatrix.com/docs",
+  "status": 301
+ },
+ {
+  "from": "/docs/apis",
+  "to": "https://www.tenthmatrix.com/docs/apis",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs",
+  "to": "https://www.tenthmatrix.com/docs/blogs",
+  "status": 301,
+  "note": "Only if Workstation drops its blog listing (it keeps 7 hardware posts). Otherwise keep listing on Workstation."
+ },
+ {
+  "from": "/docs/blogs/page/:page",
+  "to": "https://www.tenthmatrix.com/docs/blogs/page/:page",
+  "status": 301,
+  "note": "Pattern; only if Workstation drops its blog listing/tag pages."
+ },
+ {
+  "from": "/docs/blogs/tag/:tag",
+  "to": "https://www.tenthmatrix.com/docs/blogs/tag/:tag",
+  "status": 301,
+  "note": "Pattern; only if Workstation drops its blog listing/tag pages."
+ },
+ {
+  "from": "/docs/blogs/tag/:tag/page/:page",
+  "to": "https://www.tenthmatrix.com/docs/blogs/tag/:tag/page/:page",
+  "status": 301,
+  "note": "Pattern; only if Workstation drops its blog listing/tag pages."
+ },
+ {
+  "from": "/docs/documentation",
+  "to": "https://www.tenthmatrix.com/docs/documentation",
+  "status": 301
+ },
+ {
+  "from": "/docs/faqs",
+  "to": "https://www.tenthmatrix.com/docs/faqs",
+  "status": 301
+ },
+ {
+  "from": "/docs/introduction",
+  "to": "https://www.tenthmatrix.com/docs/introduction",
+  "status": 301
+ },
+ {
+  "from": "/docs/license",
+  "to": "https://www.tenthmatrix.com/docs/license",
+  "status": 301
+ },
+ {
+  "from": "/enterprise-ai",
+  "to": "https://www.tenthmatrix.com/enterprise-ai",
+  "status": 301
+ },
+ {
+  "from": "/generative-ai",
+  "to": "https://www.tenthmatrix.com/generative-ai",
+  "status": 301
+ },
+ {
+  "from": "/grok-bot",
+  "to": "https://www.tenthmatrix.com/grok-bot",
+  "status": 301
+ },
+ {
+  "from": "/insights",
+  "to": "https://www.tenthmatrix.com/insights",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev",
+  "to": "https://www.tenthmatrix.com/insights/jev",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev/benchmarks",
+  "to": "https://www.tenthmatrix.com/insights/jev/benchmarks",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev/harness",
+  "to": "https://www.tenthmatrix.com/insights/jev/harness",
+  "status": 301
+ },
+ {
+  "from": "/jobshout",
+  "to": "https://www.tenthmatrix.com/jobshout",
+  "status": 301
+ },
+ {
+  "from": "/marketing",
+  "to": "https://www.tenthmatrix.com/marketing",
+  "status": 301
+ },
+ {
+  "from": "/openai-agents",
+  "to": "https://www.tenthmatrix.com/openai-agents",
+  "status": 301
+ },
+ {
+  "from": "/ring-promoter",
+  "to": "https://www.tenthmatrix.com/ring-promoter",
+  "status": 301
+ },
+ {
+  "from": "/search",
+  "to": "https://www.tenthmatrix.com/search",
+  "status": 301
+ },
+ {
+  "from": "/services",
+  "to": "https://www.tenthmatrix.com/services",
+  "status": 301
+ },
+ {
+  "from": "/services/ai-native-digital-engineering",
+  "to": "https://www.tenthmatrix.com/services/ai-native-digital-engineering",
+  "status": 301
+ },
+ {
+  "from": "/services/ai-solutions-consultancy",
+  "to": "https://www.tenthmatrix.com/services/ai-solutions-consultancy",
+  "status": 301
+ },
+ {
+  "from": "/services/autonomous-operations",
+  "to": "https://www.tenthmatrix.com/services/autonomous-operations",
+  "status": 301
+ },
+ {
+  "from": "/services/cyber-security",
+  "to": "https://www.tenthmatrix.com/services/cyber-security",
+  "status": 301
+ },
+ {
+  "from": "/services/cybersecurity-fundamentals",
+  "to": "https://www.tenthmatrix.com/services/cybersecurity-fundamentals",
+  "status": 301
+ },
+ {
+  "from": "/services/data-foundations-ai",
+  "to": "https://www.tenthmatrix.com/services/data-foundations-ai",
+  "status": 301
+ },
+ {
+  "from": "/services/devops-automation",
+  "to": "https://www.tenthmatrix.com/services/devops-automation",
+  "status": 301
+ },
+ {
+  "from": "/services/enterprise-platform-modernisation",
+  "to": "https://www.tenthmatrix.com/services/enterprise-platform-modernisation",
+  "status": 301
+ },
+ {
+  "from": "/services/software-development",
+  "to": "https://www.tenthmatrix.com/services/software-development",
+  "status": 301
+ },
+ {
+  "from": "/stories",
+  "to": "https://www.tenthmatrix.com/stories",
+  "status": 301
+ },
+ {
+  "from": "/video-gallery",
+  "to": "https://www.tenthmatrix.com/video-gallery",
+  "status": 301
+ },
+ {
+  "from": "/workstation-ai-solutions",
+  "to": "https://www.tenthmatrix.com/workstation-ai-solutions",
+  "status": 301
+ },
+ {
+  "from": "/wsl-proxy",
+  "to": "https://www.tenthmatrix.com/wsl-proxy",
+  "status": 301
+ },
+ {
+  "from": "/wsl-vault",
+  "to": "https://www.tenthmatrix.com/wsl-vault",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/advanced-state-management-react",
+  "to": "https://www.tenthmatrix.com/docs/blogs/advanced-state-management-react",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/agentic-ai-security-mcp-oauth-vault",
+  "to": "https://www.tenthmatrix.com/docs/blogs/agentic-ai-security-mcp-oauth-vault",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-agent-workforce-business-automation",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-agent-workforce-business-automation",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-agents-business-solutions-setup-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-agents-business-solutions-setup-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-agents-real-world-use-cases",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-agents-real-world-use-cases",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-breakthroughs-2025",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-breakthroughs-2025",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-database-troubleshooting-integration",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-database-troubleshooting-integration",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-driven-business-models",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-driven-business-models",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-driven-business-process-automation",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-driven-business-process-automation",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-news-oct-2025",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-news-oct-2025",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-powered-crm-sales-marketing",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-powered-crm-sales-marketing",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-powered-devops-sre-observability",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-powered-devops-sre-observability",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-powered-penetration-testing",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-powered-penetration-testing",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-review-bot-vibe-coding",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-review-bot-vibe-coding",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-security-scanning-vulnerability-detection",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-security-scanning-vulnerability-detection",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ai-software-engineering-automation-2025",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ai-software-engineering-automation-2025",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "to": "https://www.tenthmatrix.com/docs/blogs/amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/boost-cyber-security-siem-solutions",
+  "to": "https://www.tenthmatrix.com/docs/blogs/boost-cyber-security-siem-solutions",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/build-cluster-kubernates",
+  "to": "https://www.tenthmatrix.com/docs/blogs/build-cluster-kubernates",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/building-ai-agents-from-scratch",
+  "to": "https://www.tenthmatrix.com/docs/blogs/building-ai-agents-from-scratch",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/building-ai-code-review-pipeline",
+  "to": "https://www.tenthmatrix.com/docs/blogs/building-ai-code-review-pipeline",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/building-vat-return-system-claude-code-invoices-expenses",
+  "to": "https://www.tenthmatrix.com/docs/blogs/building-vat-return-system-claude-code-invoices-expenses",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/can-ai-file-self-assessment-hmrc-filemytax",
+  "to": "https://www.tenthmatrix.com/docs/blogs/can-ai-file-self-assessment-hmrc-filemytax",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/claude-code-cowork-chatgpt-business-teams",
+  "to": "https://www.tenthmatrix.com/docs/blogs/claude-code-cowork-chatgpt-business-teams",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/claude-code-routines-scheduled-cloud-agents",
+  "to": "https://www.tenthmatrix.com/docs/blogs/claude-code-routines-scheduled-cloud-agents",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/claude-fable-5-mythos-class-guide-token-savings",
+  "to": "https://www.tenthmatrix.com/docs/blogs/claude-fable-5-mythos-class-guide-token-savings",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "to": "https://www.tenthmatrix.com/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/couchbase-ha-production-multi-region",
+  "to": "https://www.tenthmatrix.com/docs/blogs/couchbase-ha-production-multi-region",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "to": "https://www.tenthmatrix.com/docs/blogs/couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/database-backup-strategies-production",
+  "to": "https://www.tenthmatrix.com/docs/blogs/database-backup-strategies-production",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/deploy-secure-ai-agents-healthcare",
+  "to": "https://www.tenthmatrix.com/docs/blogs/deploy-secure-ai-agents-healthcare",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/diy-tax-return-wslproxy-edge-api-gateway",
+  "to": "https://www.tenthmatrix.com/docs/blogs/diy-tax-return-wslproxy-edge-api-gateway",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/efficient-devops-automation-technology-startups",
+  "to": "https://www.tenthmatrix.com/docs/blogs/efficient-devops-automation-technology-startups",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/enhancing-financial-services-software-development",
+  "to": "https://www.tenthmatrix.com/docs/blogs/enhancing-financial-services-software-development",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/enterprise-agentic-frameworks-langchain-airflow",
+  "to": "https://www.tenthmatrix.com/docs/blogs/enterprise-agentic-frameworks-langchain-airflow",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/future-of-tech-ai-automation",
+  "to": "https://www.tenthmatrix.com/docs/blogs/future-of-tech-ai-automation",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/half-built-house-why-it-projects-stall",
+  "to": "https://www.tenthmatrix.com/docs/blogs/half-built-house-why-it-projects-stall",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/hosting-ai-models-aws-bedrock-azure-ai-foundry-cost-control",
+  "to": "https://www.tenthmatrix.com/docs/blogs/hosting-ai-models-aws-bedrock-azure-ai-foundry-cost-control",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/how-ai-agents-work-complete-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/how-ai-agents-work-complete-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/implementing-ai-workflow-automation",
+  "to": "https://www.tenthmatrix.com/docs/blogs/implementing-ai-workflow-automation",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/integrating-ai-into-crm-systems",
+  "to": "https://www.tenthmatrix.com/docs/blogs/integrating-ai-into-crm-systems",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/jobshout-seo-analyst-ai-agent",
+  "to": "https://www.tenthmatrix.com/docs/blogs/jobshout-seo-analyst-ai-agent",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/kubeflow-argocd-gitops-mlops-kubernetes",
+  "to": "https://www.tenthmatrix.com/docs/blogs/kubeflow-argocd-gitops-mlops-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "to": "https://www.tenthmatrix.com/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/kubernetes-continuous-delivery",
+  "to": "https://www.tenthmatrix.com/docs/blogs/kubernetes-continuous-delivery",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes",
+  "to": "https://www.tenthmatrix.com/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/llm-bottlenecks-observability-otel-cost-control",
+  "to": "https://www.tenthmatrix.com/docs/blogs/llm-bottlenecks-observability-otel-cost-control",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/longhorn-k3s-storage-production-pvc-expansion",
+  "to": "https://www.tenthmatrix.com/docs/blogs/longhorn-k3s-storage-production-pvc-expansion",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/mastering-flutter-mobile-apps",
+  "to": "https://www.tenthmatrix.com/docs/blogs/mastering-flutter-mobile-apps",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/mcp-servers-ai-integration",
+  "to": "https://www.tenthmatrix.com/docs/blogs/mcp-servers-ai-integration",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/mcp-servers-setup-guide-enterprise",
+  "to": "https://www.tenthmatrix.com/docs/blogs/mcp-servers-setup-guide-enterprise",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/monetising-ai-business-models-startups",
+  "to": "https://www.tenthmatrix.com/docs/blogs/monetising-ai-business-models-startups",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/mongodb-ha-production-replica-sharding",
+  "to": "https://www.tenthmatrix.com/docs/blogs/mongodb-ha-production-replica-sharding",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/multi-agent-ai-systems-autonomous-teams",
+  "to": "https://www.tenthmatrix.com/docs/blogs/multi-agent-ai-systems-autonomous-teams",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/mysql-ha-production-kubernetes-cloud",
+  "to": "https://www.tenthmatrix.com/docs/blogs/mysql-ha-production-kubernetes-cloud",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nebulacb-enterprise-couchbase-management",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nebulacb-enterprise-couchbase-management",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nebulacr-enterprise-oci-registry",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nebulacr-enterprise-oci-registry",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nebuladb-vs-managed-agent-memory-platforms",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nebuladb-vs-managed-agent-memory-platforms",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/observability-standard-big-prometheus-moscow",
+  "to": "https://www.tenthmatrix.com/docs/blogs/observability-standard-big-prometheus-moscow",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/optimizing-api-performance-node-mysql",
+  "to": "https://www.tenthmatrix.com/docs/blogs/optimizing-api-performance-node-mysql",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/polyglot-benchmarks-right-tool-right-application",
+  "to": "https://www.tenthmatrix.com/docs/blogs/polyglot-benchmarks-right-tool-right-application",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/postgresql-ha-crunchy-data-pgo",
+  "to": "https://www.tenthmatrix.com/docs/blogs/postgresql-ha-crunchy-data-pgo",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/postgresql-ha-zalando-operator-kubernetes",
+  "to": "https://www.tenthmatrix.com/docs/blogs/postgresql-ha-zalando-operator-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/postgresql-native-ha-patroni-replication",
+  "to": "https://www.tenthmatrix.com/docs/blogs/postgresql-native-ha-patroni-replication",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/rag-systems-enterprise-ai",
+  "to": "https://www.tenthmatrix.com/docs/blogs/rag-systems-enterprise-ai",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/rapid-mobile-ui-flutter",
+  "to": "https://www.tenthmatrix.com/docs/blogs/rapid-mobile-ui-flutter",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/redis-ha-production-sentinel-cluster",
+  "to": "https://www.tenthmatrix.com/docs/blogs/redis-ha-production-sentinel-cluster",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ring-promoter-every-release-earns-production",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ring-promoter-every-release-earns-production",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ring-promoter-qa-gates-before-production",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ring-promoter-qa-gates-before-production",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/ring-promoter-vs-argo-cd-kargo-adr",
+  "to": "https://www.tenthmatrix.com/docs/blogs/ring-promoter-vs-argo-cd-kargo-adr",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/robust-backend-nodejs-mysql",
+  "to": "https://www.tenthmatrix.com/docs/blogs/robust-backend-nodejs-mysql",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/rust-async-blocking-rayon-modern-applications",
+  "to": "https://www.tenthmatrix.com/docs/blogs/rust-async-blocking-rayon-modern-applications",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/scalable-ui-flutter-riverpod",
+  "to": "https://www.tenthmatrix.com/docs/blogs/scalable-ui-flutter-riverpod",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/scaling-infrastructure-kubernetes-rke2",
+  "to": "https://www.tenthmatrix.com/docs/blogs/scaling-infrastructure-kubernetes-rke2",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/secure-apis-nodejs-mysql",
+  "to": "https://www.tenthmatrix.com/docs/blogs/secure-apis-nodejs-mysql",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "to": "https://www.tenthmatrix.com/docs/blogs/stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/streamlining-devops-kubernetes-operators",
+  "to": "https://www.tenthmatrix.com/docs/blogs/streamlining-devops-kubernetes-operators",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/stunning-web-interfaces-react",
+  "to": "https://www.tenthmatrix.com/docs/blogs/stunning-web-interfaces-react",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/transformers-revolutionizing-ai",
+  "to": "https://www.tenthmatrix.com/docs/blogs/transformers-revolutionizing-ai",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer",
+  "to": "https://www.tenthmatrix.com/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/web-apps-concept-to-launch-react",
+  "to": "https://www.tenthmatrix.com/docs/blogs/web-apps-concept-to-launch-react",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wise-developer-new-project-adr-pr-gitops-review-bot",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wise-developer-new-project-adr-pr-gitops-review-bot",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wise-developer-project-workflow-multi-agent-teams",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wise-developer-project-workflow-multi-agent-teams",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/workstation-wsl-proxy-api-gateway-cdn",
+  "to": "https://www.tenthmatrix.com/docs/blogs/workstation-wsl-proxy-api-gateway-cdn",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslproxy-docker-image-cache-faster-deploys",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslproxy-docker-image-cache-faster-deploys",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslproxy-waf-web-application-firewall",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslproxy-waf-web-application-firewall",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslvault-ai-agents-cryptographic-refusal",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslvault-steal-the-server-not-the-secrets",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslvault-steal-the-server-not-the-secrets",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/wslvault-zero-trust-tenant-isolation",
+  "to": "https://www.tenthmatrix.com/docs/blogs/wslvault-zero-trust-tenant-isolation",
+  "status": 301
+ },
+ {
+  "from": "/articles/observability-standard-big-prometheus-moscow",
+  "to": "https://www.tenthmatrix.com/articles/observability-standard-big-prometheus-moscow",
+  "status": 301
+ },
+ {
+  "from": "/articles/wslvault-zero-trust-tenant-isolation",
+  "to": "https://www.tenthmatrix.com/articles/wslvault-zero-trust-tenant-isolation",
+  "status": 301
+ },
+ {
+  "from": "/articles/ring-promoter-vs-argo-cd-kargo-adr",
+  "to": "https://www.tenthmatrix.com/articles/ring-promoter-vs-argo-cd-kargo-adr",
+  "status": 301
+ },
+ {
+  "from": "/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation",
+  "to": "https://www.tenthmatrix.com/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation",
+  "status": 301
+ },
+ {
+  "from": "/articles/diy-tax-return-wslproxy-edge-api-gateway",
+  "to": "https://www.tenthmatrix.com/articles/diy-tax-return-wslproxy-edge-api-gateway",
+  "status": 301
+ },
+ {
+  "from": "/articles/claude-code-routines-scheduled-cloud-agents",
+  "to": "https://www.tenthmatrix.com/articles/claude-code-routines-scheduled-cloud-agents",
+  "status": 301
+ },
+ {
+  "from": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2",
+  "to": "https://www.tenthmatrix.com/articles/ring-promoter-rings-orbit-lanes-v1-0-2",
+  "status": 301
+ },
+ {
+  "from": "/articles/wslvault-ai-agents-cryptographic-refusal",
+  "to": "https://www.tenthmatrix.com/articles/wslvault-ai-agents-cryptographic-refusal",
+  "status": 301
+ },
+ {
+  "from": "/articles/jobshout-seo-analyst-ai-agent",
+  "to": "https://www.tenthmatrix.com/articles/jobshout-seo-analyst-ai-agent",
+  "status": 301
+ },
+ {
+  "from": "/articles/wslvault-steal-the-server-not-the-secrets",
+  "to": "https://www.tenthmatrix.com/articles/wslvault-steal-the-server-not-the-secrets",
+  "status": 301
+ },
+ {
+  "from": "/articles/deploy-secure-ai-agents-healthcare",
+  "to": "https://www.tenthmatrix.com/articles/deploy-secure-ai-agents-healthcare",
+  "status": 301
+ },
+ {
+  "from": "/articles/workstation-wsl-proxy-docker-image-optimisation-deploy-workflow",
+  "to": "https://www.tenthmatrix.com/articles/workstation-wsl-proxy-docker-image-optimisation-deploy-workflow",
+  "status": 301
+ },
+ {
+  "from": "/articles/claude-code-cowork-chatgpt-business-teams",
+  "to": "https://www.tenthmatrix.com/articles/claude-code-cowork-chatgpt-business-teams",
+  "status": 301
+ },
+ {
+  "from": "/articles/enterprise-agentic-frameworks-langchain-airflow",
+  "to": "https://www.tenthmatrix.com/articles/enterprise-agentic-frameworks-langchain-airflow",
+  "status": 301
+ },
+ {
+  "from": "/articles/workstation-wsl-proxy-waf-engine-v2",
+  "to": "https://www.tenthmatrix.com/articles/workstation-wsl-proxy-waf-engine-v2",
+  "status": 301
+ },
+ {
+  "from": "/articles/wslproxy-waf-web-application-firewall",
+  "to": "https://www.tenthmatrix.com/articles/wslproxy-waf-web-application-firewall",
+  "status": 301
+ },
+ {
+  "from": "/articles/ring-promoter-every-release-earns-production",
+  "to": "https://www.tenthmatrix.com/articles/ring-promoter-every-release-earns-production",
+  "status": 301
+ },
+ {
+  "from": "/articles/ring-promoter-qa-gates-before-production",
+  "to": "https://www.tenthmatrix.com/articles/ring-promoter-qa-gates-before-production",
+  "status": 301
+ },
+ {
+  "from": "/articles/llm-bottlenecks-observability-otel-cost-control",
+  "to": "https://www.tenthmatrix.com/articles/llm-bottlenecks-observability-otel-cost-control",
+  "status": 301
+ },
+ {
+  "from": "/articles/turbocharging-llms-pagedattention-vllm-powerinfer",
+  "to": "https://www.tenthmatrix.com/articles/turbocharging-llms-pagedattention-vllm-powerinfer",
+  "status": 301
+ },
+ {
+  "from": "/articles/rust-async-blocking-rayon-modern-applications",
+  "to": "https://www.tenthmatrix.com/articles/rust-async-blocking-rayon-modern-applications",
+  "status": 301
+ },
+ {
+  "from": "/articles/ring-promoter-modern-cicd-ai-powered-deployments",
+  "to": "https://www.tenthmatrix.com/articles/ring-promoter-modern-cicd-ai-powered-deployments",
+  "status": 301
+ },
+ {
+  "from": "/articles/workstation-wsl-proxy-api-gateway-cdn",
+  "to": "https://www.tenthmatrix.com/articles/workstation-wsl-proxy-api-gateway-cdn",
+  "status": 301
+ },
+ {
+  "from": "/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "to": "https://www.tenthmatrix.com/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/articles/agentic-ai-security-mcp-oauth-vault",
+  "to": "https://www.tenthmatrix.com/articles/agentic-ai-security-mcp-oauth-vault",
+  "status": 301
+ },
+ {
+  "from": "/articles/wise-developer-project-workflow-multi-agent-teams",
+  "to": "https://www.tenthmatrix.com/articles/wise-developer-project-workflow-multi-agent-teams",
+  "status": 301
+ },
+ {
+  "from": "/articles/wise-developer-new-project-adr-pr-gitops-review-bot",
+  "to": "https://www.tenthmatrix.com/articles/wise-developer-new-project-adr-pr-gitops-review-bot",
+  "status": 301
+ },
+ {
+  "from": "/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "to": "https://www.tenthmatrix.com/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "status": 301
+ },
+ {
+  "from": "/articles/kubeflow-argocd-gitops-mlops-kubernetes",
+  "to": "https://www.tenthmatrix.com/articles/kubeflow-argocd-gitops-mlops-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "to": "https://www.tenthmatrix.com/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "status": 301
+ },
+ {
+  "from": "/articles/claude-fable-5-mythos-class-guide-token-savings",
+  "to": "https://www.tenthmatrix.com/articles/claude-fable-5-mythos-class-guide-token-savings",
+  "status": 301
+ },
+ {
+  "from": "/articles/large-language-models-explained-run-your-own-on-kubernetes",
+  "to": "https://www.tenthmatrix.com/articles/large-language-models-explained-run-your-own-on-kubernetes",
+  "status": 301
+ },
+ {
+  "from": "/articles/polyglot-benchmarks-right-tool-right-application",
+  "to": "https://www.tenthmatrix.com/articles/polyglot-benchmarks-right-tool-right-application",
+  "status": 301
+ },
+ {
+  "from": "/articles/can-ai-file-self-assessment-hmrc-filemytax",
+  "to": "https://www.tenthmatrix.com/articles/can-ai-file-self-assessment-hmrc-filemytax",
+  "status": 301
+ },
+ {
+  "from": "/articles/building-vat-return-system-claude-code-invoices-expenses",
+  "to": "https://www.tenthmatrix.com/articles/building-vat-return-system-claude-code-invoices-expenses",
+  "status": 301
+ },
+ {
+  "from": "/articles/nebuladb-vs-managed-agent-memory-platforms",
+  "to": "https://www.tenthmatrix.com/articles/nebuladb-vs-managed-agent-memory-platforms",
+  "status": 301
+ },
+ {
+  "from": "/articles/couchbase-server-upgrade-cao-paced",
+  "to": "https://www.tenthmatrix.com/articles/couchbase-server-upgrade-cao-paced",
+  "status": 301
+ },
+ {
+  "from": "/articles/nebuladns-launch-enterprise-dns-ai-era",
+  "to": "https://www.tenthmatrix.com/articles/nebuladns-launch-enterprise-dns-ai-era",
+  "status": 301
+ },
+ {
+  "from": "/articles/nebuladns-full-features-k3s-route53",
+  "to": "https://www.tenthmatrix.com/articles/nebuladns-full-features-k3s-route53",
+  "status": 301
+ },
+ {
+  "from": "/articles/nebulacr-enterprise-oci-registry-mission-control",
+  "to": "https://www.tenthmatrix.com/articles/nebulacr-enterprise-oci-registry-mission-control",
+  "status": 301
+ },
+ {
+  "from": "/articles/nebulacb-enterprise-couchbase-mission-control",
+  "to": "https://www.tenthmatrix.com/articles/nebulacb-enterprise-couchbase-mission-control",
+  "status": 301
+ },
+ {
+  "from": "/articles/systems-monitoring-service-health",
+  "to": "https://www.tenthmatrix.com/articles/systems-monitoring-service-health",
+  "status": 301
+ },
+ {
+  "from": "/articles/build-systematic-ai-agents-open-source-llms",
+  "to": "https://www.tenthmatrix.com/articles/build-systematic-ai-agents-open-source-llms",
+  "status": 301
+ },
+ {
+  "from": "/articles/production-agent-workflows-langchain-autogen-llama",
+  "to": "https://www.tenthmatrix.com/articles/production-agent-workflows-langchain-autogen-llama",
+  "status": 301
+ },
+ {
+  "from": "/articles/evaluation-monitoring-ai-agents",
+  "to": "https://www.tenthmatrix.com/articles/evaluation-monitoring-ai-agents",
+  "status": 301
+ },
+ {
+  "from": "/articles/the-rise-of-ai-agents",
+  "to": "https://www.tenthmatrix.com/articles/the-rise-of-ai-agents",
+  "status": 301
+ },
+ {
+  "from": "/articles/ai-revolution-enterprise-software",
+  "to": "https://www.tenthmatrix.com/articles/ai-revolution-enterprise-software",
+  "status": 301
+ },
+ {
+  "from": "/articles/devops-transformation-healthcare",
+  "to": "https://www.tenthmatrix.com/articles/devops-transformation-healthcare",
+  "status": 301
+ },
+ {
+  "from": "/articles/sre-practices-financial-services",
+  "to": "https://www.tenthmatrix.com/articles/sre-practices-financial-services",
+  "status": 301
+ },
+ {
+  "from": "/articles/observability-manufacturing-smart-factory",
+  "to": "https://www.tenthmatrix.com/articles/observability-manufacturing-smart-factory",
+  "status": 301
+ },
+ {
+  "from": "/articles/ai-powered-ecommerce-personalization",
+  "to": "https://www.tenthmatrix.com/articles/ai-powered-ecommerce-personalization",
+  "status": 301
+ },
+ {
+  "from": "/articles/devops-telecommunications-5g",
+  "to": "https://www.tenthmatrix.com/articles/devops-telecommunications-5g",
+  "status": 301
+ },
+ {
+  "from": "/articles/sre-energy-sector-smart-grid",
+  "to": "https://www.tenthmatrix.com/articles/sre-energy-sector-smart-grid",
+  "status": 301
+ },
+ {
+  "from": "/articles/observability-transportation-fleet",
+  "to": "https://www.tenthmatrix.com/articles/observability-transportation-fleet",
+  "status": 301
+ },
+ {
+  "from": "/articles/ai-education-technology-learning",
+  "to": "https://www.tenthmatrix.com/articles/ai-education-technology-learning",
+  "status": 301
+ },
+ {
+  "from": "/articles/devops-government-digital-transformation",
+  "to": "https://www.tenthmatrix.com/articles/devops-government-digital-transformation",
+  "status": 301
+ },
+ {
+  "from": "/insights/agent-harnesses-fast-decisions",
+  "to": "https://www.tenthmatrix.com/insights/agent-harnesses-fast-decisions",
+  "status": 301
+ },
+ {
+  "from": "/insights/ai-guardrails-tool-safety",
+  "to": "https://www.tenthmatrix.com/insights/ai-guardrails-tool-safety",
+  "status": 301
+ },
+ {
+  "from": "/insights/ai-model-evolution",
+  "to": "https://www.tenthmatrix.com/insights/ai-model-evolution",
+  "status": 301
+ },
+ {
+  "from": "/insights/ai-model-selection",
+  "to": "https://www.tenthmatrix.com/insights/ai-model-selection",
+  "status": 301
+ },
+ {
+  "from": "/insights/building-jev-agent-harness",
+  "to": "https://www.tenthmatrix.com/insights/building-jev-agent-harness",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev-agent-harness",
+  "to": "https://www.tenthmatrix.com/insights/jev-agent-harness",
+  "status": 301
+ },
+ {
+  "from": "/insights/future-of-ai-automation",
+  "to": "https://www.tenthmatrix.com/insights/future-of-ai-automation",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev-benchmark-lab",
+  "to": "https://www.tenthmatrix.com/insights/jev-benchmark-lab",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev-benchmarks",
+  "to": "https://www.tenthmatrix.com/insights/jev-benchmarks",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev-system-one",
+  "to": "https://www.tenthmatrix.com/insights/jev-system-one",
+  "status": 301
+ },
+ {
+  "from": "/insights/jev-new-ai-stack",
+  "to": "https://www.tenthmatrix.com/insights/jev-new-ai-stack",
+  "status": 301
+ },
+ {
+  "from": "/insights/model-routing",
+  "to": "https://www.tenthmatrix.com/insights/model-routing",
+  "status": 301
+ },
+ {
+  "from": "/insights/system-one-vs-llms",
+  "to": "https://www.tenthmatrix.com/insights/system-one-vs-llms",
+  "status": 301
+ },
+ {
+  "from": "/insights/what-is-jev",
+  "to": "https://www.tenthmatrix.com/insights/what-is-jev",
+  "status": 301
+ },
+ {
+  "from": "/events/cybersecurity-and-devops-summit",
+  "to": "https://www.tenthmatrix.com/events/cybersecurity-and-devops-summit",
+  "status": 301
+ },
+ {
+  "from": "/events/financial-services-data-expo",
+  "to": "https://www.tenthmatrix.com/events/financial-services-data-expo",
+  "status": 301
+ },
+ {
+  "from": "/events/healthcare-data-science-workshop",
+  "to": "https://www.tenthmatrix.com/events/healthcare-data-science-workshop",
+  "status": 301
+ },
+ {
+  "from": "/industries",
+  "to": "https://www.tenthmatrix.com/industries",
+  "status": 301
+ },
+ {
+  "from": "/pricing",
+  "to": "https://www.tenthmatrix.com/pricing",
+  "status": 301
+ },
+ {
+  "from": "/sysops247",
+  "to": "https://www.tenthmatrix.com/sysops247",
+  "status": 301
+ },
+ {
+  "from": "/why-workstation",
+  "to": "https://www.tenthmatrix.com/why-tenthmatrix",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/claude-opus-5-aws-bedrock-workstation-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/claude-opus-5-aws-bedrock-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/kimi-k3-open-weights-adoption-workstation-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/kimi-k3-open-weights-adoption-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/nvidia-openshell-secure-agents-mac-studio",
+  "to": "https://www.tenthmatrix.com/docs/blogs/nvidia-openshell-secure-agents-mac-studio",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/openclaw-ai-robotics-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/openclaw-ai-robotics-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/what-is-deep-learning-workstation-guide",
+  "to": "https://www.tenthmatrix.com/docs/blogs/what-is-deep-learning-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/docs/blogs/workstation-ai-shop-ring-promoter-int-to-prod",
+  "to": "https://www.tenthmatrix.com/docs/blogs/workstation-ai-shop-ring-promoter-int-to-prod",
+  "status": 301
+ },
+ {
+  "from": "/articles/workstation-ai-shop-ring-promoter-int-to-prod",
+  "to": "https://www.tenthmatrix.com/articles/workstation-ai-shop-ring-promoter-int-to-prod",
+  "status": 301
+ },
+ {
+  "from": "/articles/muse-glimmer-ollama-local-agents-workstation-guide",
+  "to": "https://www.tenthmatrix.com/articles/muse-glimmer-ollama-local-agents-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/articles/what-is-deep-learning-workstation-guide",
+  "to": "https://www.tenthmatrix.com/articles/what-is-deep-learning-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/articles/kimi-k3-open-weights-adoption-workstation-guide",
+  "to": "https://www.tenthmatrix.com/articles/kimi-k3-open-weights-adoption-workstation-guide",
+  "status": 301
+ },
+ {
+  "from": "/articles/claude-opus-5-aws-bedrock-workstation-guide",
+  "to": "https://www.tenthmatrix.com/articles/claude-opus-5-aws-bedrock-workstation-guide",
+  "status": 301
+ }
+]

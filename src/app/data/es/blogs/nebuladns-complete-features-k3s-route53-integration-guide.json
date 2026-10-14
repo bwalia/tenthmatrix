@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "Recorrido completo por las características de NebulaDNS: primer plano de control de API, métricas de Prometheus, puertas de propagación, huellas digitales de pares, hoja de ruta de DNSSEC, historia del operador de Helm/k3s y cómo integrarse con AWS, Route 53 y CoreDNS.",
+  "sub_title": "Todas las funciones, integraciones y postura empresarial de DNS con “batería incluida”",
+  "title": "Guía completa de funciones de NebulaDNS: k3s, Route53, observabilidad y Enterprise DNS",
+  "meta_title": "Características de NebulaDNS | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "Referencia de funciones completas de NebulaDNS: plano de datos de Rust, plano de control API, verificador de propagación, TSIG, catálogo de métricas, operador Kubernetes Helm, patrones de integración Route 53 y k3s.",
+  "meta_keywords": "Funciones NebulaDNS, DNS autorizado, métricas Prometheus DNS, operador Kubernetes DNS, delegación Route53, CoreDNS, TSIG AXFR, hoja de ruta DNSSEC, servidor Rust DNS",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Fuentes</h2><p>Esta guía sintetiza el sitio público<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a>y el repositorio<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>. Los hitos y los elementos GA evolucionan: verifique las notas de la versión de su versión.</p><h2>Arquitectura de un vistazo</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>La pila separa el plano de control<strong></strong>(REST/gRPC, authn/z), gestión de zonas<strong></strong>(validación, firma DNSSEC, confirmaciones atómicas), verificación de propagación<strong></strong>(informes secundarios SOA),<strong>almacén de zona con dirección de contenido</strong>y el plano de datos<strong>DNS</strong>(UDP/TCP/DoT/DoH/DoQ, transferencias, firmante en línea DNSSEC).</p><h2>Catálogo de funciones (“baterías incluidas”)</h2><p>El proyecto comercializa<strong>doce capacidades principales</strong>, resumidas aquí desde la página de inicio.</p><ul><li><strong>API-first:</strong>REST/gRPC para zonas, registros, rotación TSIG, reversión: CLI/UI como clientes ligeros.</li><li><strong>Observable de forma predeterminada:</strong>Prometheus<code>/metrics</code>, etiquetas enumeradas, registros JSON, seguimientos OTLP.</li><li><strong>Propagación verificada:</strong>La implementación se completa solo cuando los secundarios declarados reconocen el nuevo serial SOA.</li><li><strong>Huellas digitales de software de pares:</strong>Graba señales estilo CHAOS de<code>version.bind</code>para que las actualizaciones silenciosas de BIND no puedan erosionar la redundancia de manera invisible.</li><li><strong>Óxido seguro:</strong>No<code>unsafe</code>; fuzzing continuo en códec, analizador, firmante DNSSEC.</li><li><strong>Latencia de cola cero-GC:</strong>Asignación determinista; Instantáneas de zonas sin bloqueo a través de<code>arc-swap</code>.</li><li><strong>Configuración versionada atómica:</strong>Zonas direccionadas por contenido; avanzar/retroceder sin lecturas parciales.</li><li><strong>Series SOA deterministas:</strong>Estrategia serial monótona para evitar recuperaciones en cuña.</li><li><strong>Kubernetes nativo:</strong>Gráfico Helm, operador, CRD (<code>Zone</code>,<code>Record</code>,<code>Secondary</code>,<code>TsigKey</code>,<code>DeployGate</code>); Compatible con GitOps; Ruta de reemplazo del clúster CoreDNS-DNS en la hoja de ruta.</li><li><strong>Cable conforme a los estándares:</strong>Estricta cobertura RFC; tipos de errores explícitos (por ejemplo,<code>QdCountMismatch</code>).</li><li><strong>Redundancia que puede ver:</strong>Intención del panel para visibilidad de transferencia entre zonas.</li><li><strong>Valores predeterminados reforzados: refuerzo systemd</strong>, seccomp, contenedores no raíz, imágenes pequeñas sin distribución.</li></ul><h2>Posicionamiento de comparación (alto nivel)</h2><p>El sitio publica una matriz competitiva (TinyDNS, BIND 9, Knot, NSD, PowerDNS, CoreDNS, NebulaDNS). Los diferenciadores mencionados incluyen<strong>REST completo API</strong>,<strong>siempre activo Prometheus</strong>,<strong>puerta de propagación incorporada</strong>,<strong>Operador Kubernetes + CRDs</strong>,<strong>huellas dactilares de pares</strong>y<strong>Implementación de memoria segura</strong>. Utilice la matriz ascendente para reclamos específicos de la versión.</p><h2>Catálogo de métricas (muestra)</h2><p>Los ejemplos del sitio incluyen contadores de consultas, histogramas de latencia, seguimiento FORMERR, intentos AXFR, marcas de tiempo del último éxito por igual, retraso de propagación e información de compilación. Trate los nombres como ilustrativos hasta que obtenga una compilación en ejecución.</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s, CoreDNS y AWS Ruta 53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>Ruta 53:</strong>Mantener la delegación pública y la salud comprueba en AWS; apunte registros NS a los secundarios NebulaDNS o ejecute patrones de horizonte dividido que coincidan con su modelo de seguridad.</li><li><strong>k3s / RKE2:</strong>Implemente NebulaDNS a través de Helm con PDB + ServiceMonitor; alinee CoreDNS<strong>hacia adelante/stub</strong>con NebulaDNS para las zonas a las que presta servicios autorizados dentro del estado.</li><li><strong>ExternoDNS:</strong>Puente opcional desde objetos Ingress/LB a registros públicos: coordine con puertas de propagación para que la automatización no pueda marcar \"terminado\" antes de tiempo.</li></ul><h2>Notas de la hoja de ruta</h2><p>La hoja de ruta pública enumera los hitos a través de GA (integridad de cable/zona, transferencias, DNSSEC, verificador de propagación, HA/multirregión, operador). Consulte<code>PROJECT_PROMPT.md</code>y los lanzamientos en el repositorio para conocer las fechas.</p><h2>Artículo de lanzamiento relacionado</h2><p>Para conocer la narrativa del “por qué ahora/era de la IA”, lea<a href='/es/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS: un punto de inflexión en la era de la IA</a>.</p><h2>Cómo puede ayudar TenthMatrix</h2><p>Ayudamos a las empresas a enviar patrones observables<strong>DNS</strong>y<strong>GitOps</strong>alrededor de pilas autorizadas; comuníquese con<strong>info@tenthmatrix.com</strong>.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

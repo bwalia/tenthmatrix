@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="LLM agent observability stack: OpenTelemetry traces to Prometheus metrics, Langfuse evals, and Grafana dashboards">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <text fill="#0f172a" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="22" font-weight="800" x="40" y="48">LLM agent observability stack</text>
+  <text fill="#64748b" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" x="40" y="76">Instrument once with OpenTelemetry; fan out to metrics, traces, and LLM eval platforms.</text>
+
+  <rect x="40" y="110" width="220" height="100" rx="12" fill="#0f172a"/>
+  <text fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="60" y="150">User / Agent</text>
+  <text fill="#cbd5e1" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="60" y="176">tools · RAG · retries</text>
+
+  <path d="M270 160 H330" stroke="#64748b" stroke-width="3" fill="none"/>
+  <polygon points="330,160 318,154 318,166" fill="#64748b"/>
+
+  <rect x="340" y="110" width="240" height="100" rx="12" fill="#0ea5e9"/>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="360" y="150">OpenTelemetry SDK</text>
+  <text fill="#e0f2fe" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="360" y="176">spans · attrs · baggage</text>
+
+  <path d="M460 210 V250" stroke="#64748b" stroke-width="3" fill="none"/>
+  <polygon points="460,250 454,238 466,238" fill="#64748b"/>
+
+  <rect x="340" y="255" width="240" height="90" rx="12" fill="#1e293b"/>
+  <text fill="#a5b4fc" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="360" y="295">OTEL Collector</text>
+  <text fill="#cbd5e1" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="360" y="320">filter · sample · export</text>
+
+  <path d="M340 300 H280" stroke="#64748b" stroke-width="3" fill="none"/>
+  <path d="M580 300 H640" stroke="#64748b" stroke-width="3" fill="none"/>
+  <path d="M460 345 V390" stroke="#64748b" stroke-width="3" fill="none"/>
+
+  <rect x="40" y="400" width="240" height="110" rx="12" fill="#ffffff" stroke="#0ea5e9" stroke-width="2"/>
+  <text fill="#0369a1" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="60" y="440">Prometheus / Thanos</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="60" y="468">tokens/s · cost/$ · p95</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="60" y="490">long-term retention</text>
+
+  <rect x="340" y="400" width="240" height="110" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="2"/>
+  <text fill="#5b21b6" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="360" y="440">Langfuse / LMNR</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="360" y="468">traces · scores · datasets</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="360" y="490">prompt diffs · sessions</text>
+
+  <rect x="640" y="400" width="240" height="110" rx="12" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+  <text fill="#047857" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="660" y="440">Grafana</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="660" y="468">SLO boards · alerts</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="660" y="490">exec + on-call views</text>
+
+  <rect x="920" y="400" width="240" height="110" rx="12" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+  <text fill="#b45309" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="940" y="440">FinOps gates</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="940" y="468">budgets · model routing</text>
+  <text fill="#475569" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" x="940" y="490">retry / tool caps</text>
+
+  <text fill="#64748b" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" x="40" y="560">Key attributes on every LLM span: model, tenant, route, prompt_tokens, completion_tokens, estimated_cost_usd, tool_name, retry_n.</text>
+  <text fill="#0f172a" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="40" y="590">Workstation guidance: one schema for cost attribution — do not invent a second telemetry dialect per agent framework.</text>
+</svg>

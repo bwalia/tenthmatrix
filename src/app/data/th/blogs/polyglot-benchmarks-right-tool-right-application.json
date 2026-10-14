@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "เกณฑ์มาตรฐานที่พูดได้หลายภาษา: การเลือกเครื่องมือที่เหมาะสมสำหรับงานที่เหมาะสม",
+  "sub_title": "วิธีที่การวัดประสิทธิภาพแบบหลายภาษาช่วยให้คุณเลือกสแต็กที่เหมาะสมสำหรับแต่ละแอปพลิเคชันได้อย่างไร ไม่ใช่ภาษาเดียวที่จะควบคุมแอปพลิเคชันทั้งหมด",
+  "excerpt": "หยุดอคติสแต็กเริ่มต้น เกณฑ์มาตรฐาน Polyglot เปรียบเทียบ njs, Lua, Python, Go, Rust, Bun, Java และ Kotlin บนเวิร์กโหลดเดียวกัน - ชุดควบคุมที่ทำซ้ำได้ + แดชบอร์ดแบบสดสำหรับการตัดสินใจด้านสถาปัตยกรรม",
+  "meta_title": "เกณฑ์มาตรฐานที่พูดได้หลายภาษา: เครื่องมือที่เหมาะสมสำหรับงาน",
+  "meta_description": "เปรียบเทียบ njs, Lua, Python, Go, Rust, Bun, Java, Kotlin ในการทดสอบ HTTP เดียวกัน สายรัดที่ทำซ้ำได้ + แดชบอร์ดแบบสดสำหรับการตัดสินใจแบบสแต็ก",
+  "meta_keywords": "เกณฑ์มาตรฐานหลายภาษา, การเปรียบเทียบภาษา, การตัดสินใจทางสถาปัตยกรรม, ตัวอย่างเวิร์กโฟลว์, เกณฑ์มาตรฐานประสิทธิภาพ, Rust vs Go, Java กับ Kotlin, FastAPI, Bun.js, Javalin, Ktor, Lua, OpenResty, njs, NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>เพื่อนแบบสั้นที่อ่านได้แบบสกิม สำหรับการเจาะลึกสถาปัตยกรรมเต็มรูปแบบ — รูปแบบการควบคุม, เมทริกซ์การตัดสินใจ, การต่อต้านรูปแบบ และวิธีการแยกการวัดประสิทธิภาพ — อ่าน<a href=\"/th/articles/polyglot-benchmarks-right-tool-right-application\">บทความขนาดยาว</a></em></p><h2>องค์กรของคุณเลือกหนึ่งสแต็กในปี 2019 แต่ปริมาณงานของคุณไม่ได้เลือก</h2><p>ทีมส่วนใหญ่ยังคงสร้างมาตรฐานในภาษาเดียวสำหรับบริการใหม่ทุกอย่าง: ทุกอย่างใน Node ทุกอย่างใน Python ทุกอย่างใน Java หรือการเดิมพันอย่างกล้าหาญกับ Rust สำหรับกรีนฟิลด์เท่านั้น นิสัยดังกล่าวเป็นสิ่งที่เข้าใจได้ ไม่ว่าจะเป็นการจ้างงาน เทมเพลต CI และการตรวจสอบความปลอดภัย ทุกอย่างจะง่ายขึ้นเมื่อสแต็กมีความสม่ำเสมอ ปัญหาคือปริมาณงานไม่สม่ำเสมอ เกตเวย์ API, งาน ETL ทุกคืน, การแปลง Edge ของ NGINX, ไมโครเซอร์วิสของ JVM และแบ็กเอนด์แชทที่มีการเชื่อมต่อที่มีอายุการใช้งานยาวนานจะเน้นย้ำถึงส่วนต่างๆ ของรันไทม์ การเลือกผู้ชนะหนึ่งรายจากการอภิปรายในโถงทางเดินหรือการวัดประสิทธิภาพแบบไมโครเพียงตัวเดียวจะทำให้คุณใช้เครื่องมือผิดที่แบกภาระที่ไม่ถูกต้อง</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>เกณฑ์มาตรฐาน Polyglot</strong></a>เป็นยาแก้พิษ: ชุดควบคุมที่ทำซ้ำได้และแดชบอร์ดแบบสดที่เปรียบเทียบรันไทม์<strong>แปด</strong>บน<em>ปริมาณงาน</em>HTTP เดียวกัน ดังนั้นสถาปนิกจึงสามารถจับคู่หลักฐานกับบริบทที่มีขอบเขต แทนที่จะมีอคติแบบสแต็กเริ่มต้น</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>ใช้วัดอะไร</h2><p>แดชบอร์ดสาธารณะเปรียบเทียบ<strong>NGINX njs</strong>,<strong>OpenResty Lua</strong>,<strong>Python (FastAPI)</strong>,<strong>Go (net/http)</strong>,<strong>Rust (Actix)</strong>,<strong>Bun</strong>,<strong>Java (Javalin / Jetty)</strong>และ<strong>Kotlin (Ktor / Netty)</strong>ในการทดสอบสังเคราะห์เจ็ดรายการที่สะท้อน API จริงและรูปแบบขอบ: ข้อความพื้นฐาน, การทำให้เป็นอนุกรม JSON, ฟีโบนักชีที่ถูกผูกไว้ CPU, การจัดการสตริง, การตรวจสอบคำขอ, คำขอย่อยภายใน + การแปลง และตรรกะการกำหนดเส้นทาง การทดสอบแต่ละรายการจะรายงานคำขอต่อวินาที เวลาแฝงโดยเฉลี่ยและส่วนท้าย (รวมถึง P99) เวลาที่ไบต์แรกจาก curl และจำนวนข้อผิดพลาด — สตรีมสดเมื่อ<code>bench.sh</code>เสร็จสิ้น</p><p>Java และ Kotlin อยู่เคียงข้างรันไทม์ที่คอมไพล์และสคริปต์ ดังนั้นร้านค้า JVM จึงสามารถดูว่า Javalin และ Ktor แลกเปลี่ยนกับ Go, Rust, Bun และ FastAPI บนเส้นทางที่เหมือนกันได้อย่างไร — ไม่ใช่ขัดแย้งกับการเล่าเรื่อง “องค์กร vs กรีนฟิลด์” ที่วาดด้วยมือ ชุดควบคุมอยู่ใน<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\">เวิร์กโฟลว์-ตัวอย่าง/เกณฑ์มาตรฐาน</a>: Docker Compose services, โปรไฟล์<code>wrk</code>ที่ใช้ร่วมกัน (10 วินาที, 4 เธรด, 100 การเชื่อมต่อ) และผลลัพธ์ JSON ที่แดชบอร์ดใช้ คุณสามารถแยกมันให้กับผู้สมัครของคุณเองและเส้นทางที่ร้อนแรงได้ เอ็กซ์แท็ก49เอ็กซ์<h2>เหตุใดจึงเป็นกรอบการตัดสินใจ ไม่ใช่กระดานผู้นำ</h2><p>Polyglot Benchmarks ไม่ได้ครองตำแหน่งภาษาเดียวตลอดเวลา ผู้ชนะจะเปลี่ยนตามแถวทดสอบ - สิ่งที่คุณต้องการเมื่อออกแบบไมโครเซอร์วิส ส่วนคำตัดสินของแดชบอร์ดจะแมปผลลัพธ์เพื่อใช้กรณีต่างๆ (การกำหนดเส้นทาง Edge ใน Lua/njs, การทำงานพร้อมกันหลักใน Rust/Go, บริการ JVM ใน Java/Kotlin, ความเร็วใน Python) นั่นคือวิทยานิพนธ์:<strong>polyglot โดยการออกแบบ</strong>พร้อมข้อมูลสำหรับบอร์ดตรวจสอบสถาปัตยกรรมแทนความคิดเห็น</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">แนวทางสี่ขั้นตอนในเฟรมเดียว: กำหนดปริมาณงาน ดำเนินการควบคุม เปรียบเทียบบนแดชบอร์ดสด จากนั้นตัดสินใจด้วย ADR</figcaption></figure><h2>ประโยชน์หกประการสำหรับแพลตฟอร์มและโอกาสในการขายทางวิศวกรรม</h2><ul><li><strong>หลักฐานเหนือความคิดเห็น</strong>— แนบแผนภูมิและกำหนดค่าให้กับ ADR ยุติการโต้วาทีแบบกองซ้อนด้วยการวิ่งที่วัดผล</li><li><strong>ผู้ชนะเฉพาะเวิร์กโหลด</strong>— พาธที่ไวต่อความหน่วง เทียบกับการแปลงแบบแบตช์และเอดจ์ เทียบกับคุณสมบัติ JVM จะได้รับผู้นำที่แตกต่างกัน</li><li><strong>ต้นทุนรวมในการเป็นเจ้าของ</strong>— RPS แบบดิบไม่เพียงพอ ชั่งน้ำหนักเวลาในการสร้าง ขนาดภาพ ทักษะของทีมที่พอดี และภาระการปฏิบัติงาน</li><li><strong>เวิร์กโฟลว์ที่ทำซ้ำได้</strong>- repo เดียวกัน, ไฟล์เขียนเดียวกัน, สคริปต์ wrk เดียวกัน; เรียกใช้ซ้ำได้ใน CI</li><li><strong>microservices ที่พูดได้หลายภาษาที่ถูกต้องตามกฎหมาย</strong>— ภาษาที่แตกต่างกันตามขอบเขตบริการโดยไม่ต้องละอายใจหรือแปลกใจ</li><li><strong>การลดความเสี่ยง</strong>— ต้นแบบในรองชนะเลิศก่อนได้รับมอบอำนาจทั่วทั้งองค์กร</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>เริ่มต้นอย่างรวดเร็ว</h2><ol><li>เปิดแดชบอร์ดสด<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"></a>ในขณะที่กำลังดำเนินการ (หรือเริ่มการทำงานในเครื่อง)</li><li>Clone<code>workflow-examples</code>,<code>cd benchmarks</code>,<code>docker compose up</code>— บริการแปดภาษาพร้อมแดชบอร์ดและนักวิ่งม้านั่ง</li><li>อ่าน<code>results.json</code>บนวอลุ่มแดชบอร์ดและแมปผู้ชนะไปยัง<em>แถวภาระงาน</em>ของคุณ</li><li>เขียน ADR — รวมระยะเวลา เธรด การเชื่อมต่อ และคลาสฮาร์ดแวร์</li></ol><h2>อ่าน</h2>เวอร์ชั่นยาว<p>บทความยาว<a href=\"/th/articles/polyglot-benchmarks-right-tool-right-application\"></a>ครอบคลุมโครงร่าง repo แบบเต็ม ตารางเกณฑ์ แผนภาพเมทริกซ์การตัดสินใจ รูปแบบเคสต่อตระกูลการทดสอบ (รวมถึง Java และ Kotlin) รูปแบบการต่อต้าน ข้อจำกัด และตัวอย่างข้อมูลที่พร้อมทำ SEO สำหรับการแบ่งปันกับ ARB ของคุณ เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>; ไซต์มาตรฐานที่โฮสต์ที่<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a></p><p>#สนิม #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

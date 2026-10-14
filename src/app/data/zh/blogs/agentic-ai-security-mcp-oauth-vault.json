@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-agentic-security-001",
+  "internal_id": 960,
+  "slug": "agentic-ai-security-mcp-oauth-vault",
+  "title": "智能体 AI 安全：MCP OAuth、VPN 与 HashiCorp Vault 租约",
+  "sub_title": "面向 MCP 的 OAuth 2.1、私有网络路径与短时 Vault 密钥 — Claude、OpenAI 与 Cursor 基线",
+  "excerpt": "用 MCP OAuth 2.1、VPN 隔离工具以及自动轮换并过期的 HashiCorp Vault 租约保护企业 AI 智能体 — 并附 Claude、OpenAI 与 Cursor 建议。",
+  "meta_title": "智能体 AI 安全 — MCP OAuth、VPN、Vault 租约",
+  "meta_description": "如何保护企业 AI 智能体：MCP OAuth 2.1、VPN/私有 MCP、HashiCorp Vault 动态密钥与租约，以及 Claude、OpenAI、Cursor 配置。",
+  "meta_keywords": "智能体 AI 安全, MCP OAuth, Model Context Protocol, HashiCorp Vault, 动态密钥, 租约, VPN, Claude, OpenAI, Cursor, 企业智能体",
+  "cover_image": "/img/agentic-security-cover.svg",
+  "images": [
+    {
+      "url": "/img/agentic-security-cover.svg",
+      "id": 960,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Agentic AI security MCP OAuth VPN Vault"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>企业智能体需要静态 API 密钥无法提供的三项控制：<strong>绑定 OAuth 的 MCP 访问</strong>、<strong>私有网络路径（VPN/mesh）</strong>，以及用于工具密钥的<strong>短时 Vault 租约</strong>。本摘要梳理 Claude、OpenAI 与 Cursor 的行业基线。完整参考架构见<a href=\"/zh/articles/agentic-ai-security-mcp-oauth-vault\">长文</a>.</em></p>\n\n<p><img src=\"/img/agentic-security-cover.svg\" alt=\"智能体 AI 安全：MCP OAuth、VPN、Vault 租约\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff1f2;border-left:4px solid #9f1239;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>定义。</strong> 智能体安全是 LLM 可调用工具的身份 + 授权 + 密钥生命周期。MCP 远程服务器作为 OAuth 2.1 <em>resource servers</em>（Protected Resource Metadata / RFC 9728）。后端凭证（数据库、云、SaaS）必须来自 HashiCorp Vault 的租约、可轮换密钥 — 绝不能来自 MCP 配置文件或聊天上下文。\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> For explainable edge protection on the same live-config proxy that will front agent and MCP traffic, see the <a href=\"/zh/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a>, the <a href=\"/zh/articles/wslproxy-waf-web-application-firewall\">WAF technical article</a>, the <a href=\"/zh/wsl-proxy\">WSL Proxy product page</a>, or <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a> · tour: <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/r10XSonA5JE</a>.\n</div>\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>智能体摘要。</strong> (1) 通过 OAuth 2.1 + PKCE + audience 绑定做 AuthN/AuthZ。(2) 组织级 MCP 优先 Enterprise-Managed Authorization（EMA / ID-JAG）。(3) 将 MCP + Vault 放在 VPN/私有链路上。(4) 签发带 TTL 的 Vault 动态密钥；续订/轮换；停止时撤销。(5) 将 LLM 提供商密钥与工具密钥分离。\n</div>\n\n<h2>参考路径</h2>\n<p><img src=\"/img/agentic-security-architecture.svg\" alt=\"IdP → MCP → Vault → 工具架构\" width=\"1200\" height=\"760\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>厂商基线（Claude / OpenAI / Cursor）</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#fda4af;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">产品</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">推荐配置</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">通过 OAuth 的远程 MCP；401 + WWW-Authenticate 发现；切勿把令牌放进 URL；用 Vault 管工具密钥</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>OpenAI</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">隔离模型 API 密钥；OBO/用户归属的工具令牌；VPC 智能体；每次工具调用用 Vault 动态凭证</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Cursor</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">仅用环境变量配置 MCP；STDIO 用 Vault Agent；企业 VPN 到私有 MCP；团队服务器允许列表</td></tr>\n</tbody>\n</table>\n\n<h2>Vault 租约（短时密钥）</h2>\n<p><img src=\"/img/agentic-security-vault-leases.svg\" alt=\"Vault 租约续订、轮换、撤销生命周期\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>动态密钥</strong> — 唯一凭证 + <code>lease_id</code> + TTL；智能体会话结束时过期或撤销。</li>\n  <li><strong>自动轮换</strong> — 静态角色按周期轮换；Vault Agent 在接近 TTL 时刷新（默认约 90%）。</li>\n  <li><strong>企业</strong> — Agent Registry + OAuth 资源服务器，用于已登记的智能体身份（Vault Enterprise）。</li>\n</ul>\n\n<h2>TenthMatrix 建议</h2>\n<p>把 MCP OAuth 当作<em>前门</em>，VPN 当作<em>网络门</em>，Vault 当作<em>密钥门</em>。完整清单、RFC 与反模式： <a href=\"/zh/articles/agentic-ai-security-mcp-oauth-vault\">长文</a>. 发布方 <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "llm",
+      "id": 975
+    }
+  ],
+  "created_at": "2026-08-08T10:00:00Z",
+  "updated_at": "2026-08-08T10:00:00Z",
+  "published_date": "2026-08-08",
+  "status": true
+}

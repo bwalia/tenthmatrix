@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Three tools, three questions: Argo CD and Flux ask whether the cluster matches Git; CI asks whether the deploy job exited 0; Ring Promoter asks whether this exact version is healthy and allowed into the next ring" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="1200" height="720" fill="#0D0B21"/>
+  <text x="60" y="70" fill="#FF7AA2" font-size="20" font-weight="700" letter-spacing="4">THEY ANSWER DIFFERENT QUESTIONS</text>
+  <text x="60" y="122" fill="#FFFFFF" font-size="38" font-weight="800">Sync, build and promotion are separate jobs</text>
+
+  <!-- Column 1 -->
+  <rect x="60" y="164" width="340" height="476" rx="20" fill="#221D4C" stroke="#5B53A6" stroke-width="2"/>
+  <text x="90" y="216" fill="#FFFFFF" font-size="32" font-weight="800">Argo CD / Flux</text>
+  <text x="90" y="252" fill="#B9B4E8" font-size="20" font-weight="600">GitOps sync engine</text>
+  <rect x="90" y="276" width="280" height="132" rx="14" fill="#0D0B21"/>
+  <text x="110" y="320" fill="#FFFFFF" font-size="25" font-weight="700">&#8220;Does the cluster</text>
+  <text x="110" y="354" fill="#FFFFFF" font-size="25" font-weight="700">match the manifests</text>
+  <text x="110" y="388" fill="#FFFFFF" font-size="25" font-weight="700">in Git?&#8221;</text>
+  <text x="90" y="452" fill="#D6D3F0" font-size="22">Owns: sync, drift</text>
+  <text x="90" y="484" fill="#D6D3F0" font-size="22">detection, self-heal</text>
+  <text x="90" y="540" fill="#FF9BB8" font-size="22">Leaves to you: moving</text>
+  <text x="90" y="572" fill="#FF9BB8" font-size="22">a version staging &#8594; prod</text>
+
+  <!-- Column 2 -->
+  <rect x="430" y="164" width="340" height="476" rx="20" fill="#221D4C" stroke="#5B53A6" stroke-width="2"/>
+  <text x="460" y="216" fill="#FFFFFF" font-size="32" font-weight="800">CI pipelines</text>
+  <text x="460" y="252" fill="#B9B4E8" font-size="20" font-weight="600">Actions, Jenkins, GitLab</text>
+  <rect x="460" y="276" width="280" height="132" rx="14" fill="#0D0B21"/>
+  <text x="480" y="320" fill="#FFFFFF" font-size="25" font-weight="700">&#8220;Did the deploy</text>
+  <text x="480" y="354" fill="#FFFFFF" font-size="25" font-weight="700">job exit 0?&#8221;</text>
+  <text x="460" y="452" fill="#D6D3F0" font-size="22">Owns: build, test,</text>
+  <text x="460" y="484" fill="#D6D3F0" font-size="22">package, anything scripted</text>
+  <text x="460" y="540" fill="#FF9BB8" font-size="22">Leaves to you: per-env</text>
+  <text x="460" y="572" fill="#FF9BB8" font-size="22">record and auto-rollback</text>
+
+  <!-- Column 3 -->
+  <rect x="800" y="164" width="340" height="476" rx="20" fill="#2C2559" stroke="#FF004E" stroke-width="3"/>
+  <text x="830" y="216" fill="#FFFFFF" font-size="32" font-weight="800">Ring Promoter</text>
+  <text x="830" y="252" fill="#FFD1DE" font-size="20" font-weight="600">Release control plane</text>
+  <rect x="830" y="276" width="280" height="132" rx="14" fill="#0D0B21"/>
+  <text x="850" y="320" fill="#FFFFFF" font-size="25" font-weight="700">&#8220;Is this exact</text>
+  <text x="850" y="354" fill="#FFFFFF" font-size="25" font-weight="700">version healthy, and</text>
+  <text x="850" y="388" fill="#FFFFFF" font-size="25" font-weight="700">allowed next?&#8221;</text>
+  <text x="830" y="452" fill="#D6D3F0" font-size="22">Owns: ring order, gates,</text>
+  <text x="830" y="484" fill="#D6D3F0" font-size="22">version check, rollback</text>
+  <text x="830" y="540" fill="#FF9BB8" font-size="22">Leaves to others: Git</text>
+  <text x="830" y="572" fill="#FF9BB8" font-size="22">sync, traffic shifting</text>
+
+  <text x="60" y="690" fill="#A9A4D8" font-size="18">Source: Ring Promoter&#8217;s own comparison at ringpromoter.com/compare. Verify against each vendor&#8217;s current docs.</text>
+</svg>

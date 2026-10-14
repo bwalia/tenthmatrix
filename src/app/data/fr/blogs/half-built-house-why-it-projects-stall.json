@@ -1,0 +1,118 @@
+{
+  "uuid": "blog-half-built-house-001",
+  "internal_id": 1032,
+  "slug": "half-built-house-why-it-projects-stall",
+  "title": "The Half-Built House: Why IT Projects Stall, and How to Get Them Moving Again",
+  "sub_title": "Why IT projects get stuck between nearly done and live — and how MoSCoW, a stakeholder vote and a firm deadline get them moving again.",
+  "excerpt": "Why IT projects get stuck between 'nearly done' and 'live', and a simple way out: the house analogy, MoSCoW, a stakeholder vote, clear options and a deadline. Plus how to use AI with non-technical stakeholders.",
+  "meta_title": "The Half-Built House: Why IT Projects Stall, and How to Get Them Moving Again | TenthMatrix",
+  "meta_description": "Why IT projects get stuck between 'nearly done' and 'live', and a simple way out: the house analogy, MoSCoW, a stakeholder vote, clear options and a deadline. Plus how to use AI with non-technical stakeholders.",
+  "meta_keywords": "half-built house, IT projects stall, MoSCoW, project management, stakeholders, delivery leadership, AI, decision deadline, exit plan, TenthMatrix",
+  "cover_image": "/img/blog/half-built-house/02-unfinished-house.webp",
+  "images": [
+    {
+      "url": "/img/blog/half-built-house/02-unfinished-house.webp",
+      "id": 1032,
+      "is_cover": true,
+      "width": 1200,
+      "height": 750,
+      "alt": "Illustration of an unfinished brick house. Labels map each part to the project: foundation is code and cloud, roof half on is security, bare rafters is HMRC live approval, hanging window is the slow AI chat, empty hole is the App Store launch, no front door means users can't come in, a running meter shows monthly costs, three owners with question marks and two builders waiting."
+    },
+    {
+      "url": "/img/blog/half-built-house/01-progress-report.webp",
+      "id": 1033,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "A one-page progress report showing which parts of LedgerLark are built, on test, in sandbox or not started, with a sticky note saying the blocker is the decision, not the code."
+    },
+    {
+      "url": "/img/blog/half-built-house/03-moscow.webp",
+      "id": 1034,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "MoSCoW grid. Must: funding decision by a date, pay for past work, keep data safe, security and pen test, tax authority approval. Should: shared goal and date, AI assistant, payments, App Store. Could: more income types, AI test agent, user stats. Won't for now: Android, new big features before the vote, running every test environment."
+    },
+    {
+      "url": "/img/blog/half-built-house/04-stakeholder-survey.webp",
+      "id": 1035,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "A printed survey matrix with items, effort and votes from Owner A, B and C, and a result column showing Must, Should or Won't, with a handwritten note from Owner B agreeing security is a Must."
+    },
+    {
+      "url": "/img/blog/half-built-house/05-options-timeline.webp",
+      "id": 1036,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "Timeline chart with three options. A: lean launch with Musts only in about five weeks. B: Musts and Shoulds, launching before the tax deadline. C: everything, with risky timing. A note reminds that outside waits sit on top."
+    },
+    {
+      "url": "/img/blog/half-built-house/06-exit-plan-signoff.webp",
+      "id": 1037,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "A printed exit plan with a four-week shutdown timeline and a sign-off table for three owners, two signed and one blank, with a red stamp saying waiting: 1 of 3."
+    },
+    {
+      "url": "/img/blog/half-built-house/07-ai-translator.webp",
+      "id": 1038,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "Table showing engineer jargon on the left and AI plain-English versions on the right, for example 'WAF is only on INT' becomes 'The roof is half on. Real users can't move in until it's finished.'"
+    },
+    {
+      "url": "/img/blog/half-built-house/08-decision-path.webp",
+      "id": 1039,
+      "is_cover": false,
+      "width": 1200,
+      "height": 700,
+      "alt": "Flow chart: show the real picture, MoSCoW and vote, options with time and cost, then a deadline. Yes leads to Finish it with agreed Musts and one date. No leads to Close it well with an exit plan, keeping the IP."
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p>Most IT projects don't fail in one dramatic moment. They slow down. The demos still look good and the team is still busy, but launch day keeps moving. The money gets tighter and the people paying for it stop agreeing on what \"done\" means.</p>\n\n<p>In this post we walk through a real kind of situation using a made-up example: <b>LedgerLark</b>, an AI-powered app that helps UK sole traders and landlords file their tax return through HMRC's Making Tax Digital (MTD) service. We look at why projects like this get stuck and the tools that get them moving: the house analogy, MoSCoW, a stakeholder vote, honest options and a firm deadline. We also cover how to use AI to bring non-technical stakeholders along.</p>\n\n<p class=\"note\"><b>Note:</b> LedgerLark is a made-up name. The example is based on patterns we see again and again in software projects. Any match with a real product is by chance.</p>\n\n<h2>Where LedgerLark got stuck</h2>\n<p>On paper, LedgerLark was in great shape. Users could upload bank statements, and the app sorted transactions with rules first, then AI, then a human check. A chat assistant helped fill in income forms. Filing worked end to end in HMRC's sandbox (its practice system). The team had strong CI/CD, automated tests, backups and monitoring.</p>\n\n<p>But it wasn't live. Here is why:</p>\n<ul>\n <li>Security work wasn't finished. The API gateway and web firewall were only on the test system, and no pen test had been booked.</li>\n <li>HMRC hadn't approved the app for production yet. <b>Every route to filing real returns with software needs HMRC approval</b>, so there's no shortcut.</li>\n <li>The AI chat assistant worked, but took close to a minute to answer.</li>\n <li>The iPhone app and payments hadn't started.</li>\n <li>Three equal owners each wanted something different, and nobody had committed money beyond the current month.</li>\n <li>Hosting, cloud and AI bills kept arriving every month, with no income yet.</li>\n</ul>\n\n<figure>\n <img src=\"/img/blog/half-built-house/01-progress-report.webp\" alt=\"A one-page progress report showing which parts of LedgerLark are built, on test, in sandbox or not started, with a sticky note saying the blocker is the decision, not the code.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>The monthly report made it plain: the code wasn't the blocker. The decision was.</figcaption>\n</figure>\n\n<h2>The house analogy: one picture everyone understands</h2>\n<p>Engineers say things like \"WAF is only on INT\" or \"MTD production credentials are pending\". Business owners hear noise. So we drew the project as a house.</p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/02-unfinished-house.webp\" alt=\"Illustration of an unfinished brick house. Labels map each part to the project: foundation is code and cloud, roof half on is security, bare rafters is HMRC live approval, hanging window is the slow AI chat, empty hole is the App Store launch, no front door means users can't come in, a running meter shows monthly costs, three owners with question marks and two builders waiting.\" width=\"1200\" height=\"750\" loading=\"eager\" decoding=\"async\">\n <figcaption>Strong foundations, but no front door. Every stakeholder got this in ten seconds.</figcaption>\n</figure>\n\n<ul>\n <li><b>Foundation and walls</b> are the parts that are built: code, cloud, tests and the core app.</li>\n <li><b>A roof that's half on</b> is security. You wouldn't let a family move in while rain still gets in.</li>\n <li><b>Bare rafters</b> are HMRC live approval. The frame is up, but it isn't signed off.</li>\n <li><b>A hanging window</b> is the AI assistant. It works, but it isn't finished.</li>\n <li><b>No front door</b> means real users can't come in yet.</li>\n <li><b>The meter is running</b>, so costs keep going whether you build or not.</li>\n <li><b>Owners with question marks</b> and <b>builders about to put their tools down</b> show the real blocker: no shared plan and no committed budget.</li>\n</ul>\n\n<p>The picture does one important job. It shows that \"nearly finished\" and \"ready for people to live in\" are two very different things. Non-technical stakeholders often see a working demo and think launch is one step away. The house shows them the roof and the front door.</p>\n\n<h2>Why projects like this derail</h2>\n<p>LedgerLark had all of the usual warning signs:</p>\n<ol>\n <li><b>No shared \"done\".</b> One owner wanted a quick launch, another wanted the full AI chat, and a third wanted the iPhone app. Everyone was right in their own head, and the team was pulled three ways.</li>\n <li><b>Invisible work.</b> Security, compliance, data protection and pen-test prep don't show up in a demo, so they feel optional to people who don't see them. They aren't optional.</li>\n <li><b>Outside gates.</b> HMRC reviews, Apple's App Store review and pen-test bookings take weeks that you don't control. Plans that ignore them always slip.</li>\n <li><b>Funding one month at a time.</b> When money is agreed month by month, every month turns into a fresh debate. The team spends energy on staying alive, not on finishing.</li>\n <li><b>The meter keeps running.</b> Four environments, GPU hosting and cloud registries all cost money even when nothing ships.</li>\n <li><b>Small team, big upkeep.</b> Two developers spent a lot of their week keeping tests and servers green rather than building toward launch.</li>\n <li><b>No decision date.</b> This is the most dangerous one. Without a date, \"we'll talk about it next week\" can go on for months.</li>\n</ol>\n\n<blockquote>A project rarely fails because the team can't build it. It fails because the people around it can't agree what to build, by when, and for how much.</blockquote>\n\n<h2>Step 1: MoSCoW, for the situation and for the features</h2>\n<p>MoSCoW is a simple way to sort a long list into four groups: <b>Must, Should, Could, Won't (for now)</b>. We used it twice: once for the situation, and once for the features.</p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/03-moscow.webp\" alt=\"MoSCoW grid. Must: funding decision by a date, pay for past work, keep data safe, security and pen test, tax authority approval. Should: shared goal and date, AI assistant, payments, App Store. Could: more income types, AI test agent, user stats. Won't for now: Android, new big features before the vote, running every test environment.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>MoSCoW turns \"everything is important\" into a short, honest Must list.</figcaption>\n</figure>\n\n<p>The situation-level list was the eye-opener. Before any new feature, the Musts were: <b>get a clear yes or no on funding by a set date, pay for work already done, keep users' data safe, and stop paying for things nobody uses.</b> Writing these down took the heat out of the room, because they're hard to argue with.</p>\n\n<h2>Step 2: let every stakeholder vote</h2>\n<p>Next, we gave each owner the same list of 15 items with a rough effort estimate next to each one. Each owner marked every item M, S, C or W on their own. The rule was simple: <b>an item is a Must if two of the three owners say so.</b></p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/04-stakeholder-survey.webp\" alt=\"A printed survey matrix with items, effort and votes from Owner A, B and C, and a result column showing Must, Should or Won't, with a handwritten note from Owner B agreeing security is a Must.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>A one-page survey shows who wants what, without a long argument in a meeting.</figcaption>\n</figure>\n\n<p>This does three things:</p>\n<ul>\n <li>It gives quieter stakeholders an equal voice.</li>\n <li>It shows where people already agree, which is often more than they expect.</li>\n <li>It puts a cost next to every wish. When an owner sees \"Android app: 4+ weeks\", it often moves from Must to Won't on its own.</li>\n</ul>\n\n<h2>Step 3: offer honest options with dates</h2>\n<p>Stakeholders can't choose between ideas. They can choose between options that have a time and a cost. We gave LedgerLark's owners three:</p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/05-options-timeline.webp\" alt=\"Timeline chart with three options. A: lean launch with Musts only in about five weeks. B: Musts and Shoulds, launching before the tax deadline. C: everything, with risky timing. A note reminds that outside waits sit on top.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>Three options, each with real weeks. Outside waits are shown, not hidden.</figcaption>\n</figure>\n\n<table>\n <tr><th>Option</th><th>What's in it</th><th>Rough time</th></tr>\n <tr><td><b>A. Lean launch</b></td><td>Musts only: security, pen test, HMRC approval, data protection, cost cuts. Web only, free at first.</td><td>~4–5 weeks of work, plus the HMRC review</td></tr>\n <tr><td><b>B. Peak-season launch</b></td><td>A, plus the AI assistant, payments and the App Store</td><td>~8–9 weeks, ready before the January tax deadline</td></tr>\n <tr><td><b>C. Everything</b></td><td>B, plus the nice-to-haves</td><td>~13–15 weeks, which lands right on the deadline (risky)</td></tr>\n</table>\n\n<h2>Step 4: set a deadline, and make \"stop\" a safe answer</h2>\n<p>This is the step most teams skip, and it's the one that matters most. We set one clear rule: <b>if every owner hasn't committed funding in writing by Friday at 4pm, development stops and we close down safely within four weeks.</b></p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/06-exit-plan-signoff.webp\" alt=\"A printed exit plan with a four-week shutdown timeline and a sign-off table for three owners, two signed and one blank, with a red stamp saying waiting: 1 of 3.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>A signed exit plan makes the deadline real, and makes stopping safe.</figcaption>\n</figure>\n\n<p>A good exit plan isn't a threat. It's a safety net:</p>\n<ul>\n <li><b>Week 1, save:</b> archive the code, back up the data and secrets, and collect handover notes.</li>\n <li><b>Week 2, switch off test:</b> shut the test systems and revoke every API key.</li>\n <li><b>Week 3, switch off live:</b> tell users, handle personal data properly under UK GDPR, and remove the servers.</li>\n <li><b>Week 4, confirm:</b> check every bill shows zero. Keep the domains and code, so a restart is possible.</li>\n</ul>\n<p>We also put one more thing in writing: <b>every owner remains liable for their equal share of work already done</b>, whatever they decide about new funding. Saying this early stops the hardest argument from happening late. (Always check the wording against your own shareholder agreement.)</p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/08-decision-path.webp\" alt=\"Flow chart: show the real picture, MoSCoW and vote, options with time and cost, then a deadline. Yes leads to Finish it with agreed Musts and one date. No leads to Close it well with an exit plan, keeping the IP.\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>Both answers are a win. \"No decision\" is the only real failure.</figcaption>\n</figure>\n\n<h2>Handling the objections you will hear</h2>\n<table>\n <tr><th style=\"width:38%\">What a stakeholder says</th><th>A calm, honest answer</th></tr>\n <tr><td>\"It works in the demo. Why can't we just launch?\"</td><td>\"The walls are up, but there's no front door yet. Real users bring real money and real data. We need the security work and HMRC approval first.\"</td></tr>\n <tr><td>\"Why pay for security nobody can see?\"</td><td>\"It's the roof. You only notice it when it rains, and in a tax app, rain means leaked bank statements.\"</td></tr>\n <tr><td>\"Can't we use a simpler API and skip HMRC approval?\"</td><td>\"No. Every software route to file real returns needs HMRC sign-off. The fastest path is to finish the approval, not to go around it.\"</td></tr>\n <tr><td>\"AI writes code now. Why is this taking weeks?\"</td><td>\"AI speeds up building. It doesn't speed up HMRC reviews, Apple reviews or pen testers. Those waits are on the timeline for a reason.\"</td></tr>\n <tr><td>\"Let's add Android too.\"</td><td>\"Happy to. It's about 4+ weeks. Shall we vote on it as a Must, or put it on the Won't-for-now list until after launch?\"</td></tr>\n <tr><td>\"I didn't agree to pay for past work.\"</td><td>\"That's why it's in writing now, before any new decision. Past work is shared. New funding is a separate choice.\"</td></tr>\n <tr><td>\"Let's decide next month.\"</td><td>\"Every month without a decision costs us hosting and team time. Friday at 4pm gives everyone a week, and both answers are fine.\"</td></tr>\n</table>\n\n<h2>The best use of AI with non-technical stakeholders</h2>\n<p>AI was a big help on LedgerLark. It didn't make the decisions. It made the decisions easier to see. Here is what worked:</p>\n\n<figure>\n <img src=\"/img/blog/half-built-house/07-ai-translator.webp\" alt=\"Table showing engineer jargon on the left and AI plain-English versions on the right, for example 'WAF is only on INT' becomes 'The roof is half on. Real users can't move in until it's finished.'\" width=\"1200\" height=\"700\" loading=\"lazy\" decoding=\"async\">\n <figcaption>Use AI as a translator. Then check every line yourself.</figcaption>\n</figure>\n\n<ol>\n <li><b>Turn activity into a progress report.</b> AI read a month of team chat and merged pull requests and wrote a plain summary: what shipped, what got fixed, and what's still blocking launch. That took minutes, not a day.</li>\n <li><b>Translate jargon.</b> \"Production credentials pending\" becomes \"the tax office must approve us before it's real\". Same facts, words everyone understands.</li>\n <li><b>Draw the picture.</b> The house, the MoSCoW grid and the option timelines were all drafted with AI help, then checked by people.</li>\n <li><b>Prepare for objections.</b> Before the meeting, ask AI: \"You're a non-technical shareholder who wants a fast, cheap launch. What will you push back on?\" Then practise your answers.</li>\n <li><b>Check the rules.</b> AI helped research what HMRC actually requires for software filing, with links to the official guidance, so the conversation started from facts instead of guesses.</li>\n <li><b>Draft the paperwork.</b> The survey, the exit plan and the sign-off sheet were drafted quickly and then reviewed line by line.</li>\n</ol>\n\n<p><b>Where to be careful:</b></p>\n<ul>\n <li>AI estimates are a first guess. Have the people doing the work check every number.</li>\n <li>Never paste secrets, passwords or customers' personal data into a chat tool.</li>\n <li>AI can write a clear summary. It can't build trust between owners. That still takes a real conversation.</li>\n</ul>\n\n<h2>The decisions that kept things moving</h2>\n<ul>\n <li><b>Show, don't tell:</b> one honest progress report and one picture, not a 40-slide deck.</li>\n <li><b>Separate the past from the future:</b> agree how to settle work already done before debating new spend.</li>\n <li><b>Vote, with costs visible:</b> each wish has a time next to it, and two out of three votes makes a Must.</li>\n <li><b>Give options, not opinions:</b> A, B or C, each with weeks and outside waits.</li>\n <li><b>Set a date:</b> a firm deadline, with \"stop\" as a safe and planned answer.</li>\n <li><b>Stop the meter:</b> cut unused environments and services right away, whatever the decision.</li>\n <li><b>Protect users first:</b> security and data protection stay on the Must list in every option.</li>\n</ul>\n\n<h2>A quick checklist for your own stuck project</h2>\n<ol>\n <li>Can you explain your project's status in one picture?</li>\n <li>Do all stakeholders agree what \"launched\" means?</li>\n <li>Is there a written Must list that everyone has voted on?</li>\n <li>Does every option have a time, a cost and the outside waits?</li>\n <li>Is there a decision date, and an exit plan if the answer is no?</li>\n <li>Is it clear who pays for work already done?</li>\n <li>Do you know what the project costs each month while you wait?</li>\n</ol>\n<p>If you answered \"no\" to two or more, your project may be a half-built house. The good news is that the fix usually isn't more code. It's a clear plan that everyone signs.</p>\n\n<div class=\"cta\">\n <h3 style=\"margin-top:0;color:#fff\">Need help getting a stuck project moving?</h3>\n <p style=\"margin-bottom:0\">TenthMatrix helps teams plan, build and ship AI-powered software, from strong foundations to the front door. We can help you size the work honestly, prepare for security and compliance reviews, and give stakeholders a plan they can say yes to. <a href=\"/en/contact-us\">Talk to us</a>.</p>\n</div>\n\n<p class=\"blog-disclaimer\">LedgerLark is a made-up example used for illustration only. This article is general guidance, not legal or financial advice.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "tenthmatrix-team",
+    "email": "hello@tenthmatrix.com",
+    "first_name": "TenthMatrix",
+    "last_name": "team",
+    "name": "TenthMatrix team",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "delivery-leadership",
+      "id": 1033
+    },
+    {
+      "name": "project-management",
+      "id": 1034
+    },
+    {
+      "name": "moscow",
+      "id": 1035
+    },
+    {
+      "name": "stakeholders",
+      "id": 1036
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-10-04T11:00:00Z",
+  "updated_at": "2026-10-04T11:00:00Z",
+  "published_date": "2026-10-04",
+  "status": true
+}

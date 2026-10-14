@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="rag-evaluation.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">RAG EVALUATION</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="34">Retrieve �→ generate �→ decide to answer</text>
+  <rect x="60" y="220" width="160" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="76" y="248" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Docs</text>
+<text x="76" y="272" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">chunk</text>
+  <rect x="260" y="220" width="160" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="276" y="248" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Embed</text>
+<text x="276" y="272" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">vector</text>
+  <rect x="460" y="220" width="160" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="476" y="248" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Search</text>
+<text x="476" y="272" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">context</text>
+  <rect x="660" y="220" width="160" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="676" y="248" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">LLM</text>
+<text x="676" y="272" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">draft</text>
+  <rect x="860" y="220" width="240" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="876" y="248" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Decision layer</text>
+<text x="876" y="272" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">relevance / escalate</text>
+  <path d="M220,270 L260,270" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M420,270 L460,270" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M620,270 L660,270" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M820,270 L860,270" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <text x="56" y="420" fill="#A7B0C8" font-family="IBM Plex Sans,sans-serif" font-size="15">Use a judge/decision model for answerability — not only for drafting the answer.</text>
+
+</svg>

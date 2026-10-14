@@ -1,0 +1,66 @@
+{
+  "uuid": "blog-wslproxy-waf-001",
+  "internal_id": 970,
+  "slug": "wslproxy-waf-web-application-firewall",
+  "title": "WSL Proxy WAF: Explainable Web Application Firewall at the Edge",
+  "sub_title": "Live policies, stages and signatures on TenthMatrix WSL Proxy — monitor or block, with support IDs on every decision",
+  "excerpt": "TenthMatrix WSL Proxy WAF: governed stages and signatures on a live-config OpenResty edge — monitor or block, with explainable support IDs.",
+  "meta_title": "WSL Proxy WAF — Edge Web Application Firewall",
+  "meta_description": "TenthMatrix WSL Proxy WAF: OpenResty stages, governed signatures, monitor/block bindings, and explainable X-WAF / support ID headers.",
+  "meta_keywords": "WSL Proxy, WSLProxy, WAF, Web Application Firewall, OpenResty, API gateway, edge security, TenthMatrix, wslproxy.org",
+  "cover_image": "/img/wslproxy-waf-cover.svg",
+  "images": [
+    {
+      "url": "/img/wslproxy-waf-cover.svg",
+      "id": 970,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "TenthMatrix WSL Proxy WAF — Web Application Firewall"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>TenthMatrix WSL Proxy</strong> puts a governed Web Application Firewall on the same live-config edge that routes and caches your traffic. Policies bind per domain and route, run in monitor or block, and every decision names a support ID. Companion deep dive: <a href=\"/en/articles/wslproxy-waf-web-application-firewall\">long article</a>. Product: <a href=\"/en/wsl-proxy\">/wsl-proxy</a>.</em></p>\n\n<p><img src=\"/img/wslproxy-waf-cover.svg\" alt=\"TenthMatrix WSL Proxy WAF — Web Application Firewall\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Watch: WSL Proxy WAF tour</h2>\n<p><a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg\" alt=\"TenthMatrix WSL Proxy WAF tour\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/r10XSonA5JE\" title=\"TenthMatrix WSL Proxy WAF tour\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Watch: <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/r10XSonA5JE</a> · Product: <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a> · WAF: <a href=\"https://wslproxy.org/waf/\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org/waf</a></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c45c26;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> A WAF you cannot explain is a liability. TenthMatrix WSL Proxy runs stages and governed signatures on the OpenResty request path after rate limiting, fails open by default so a WAF bug cannot take the site down, and returns <code>X-WAF-*</code> headers plus an <code>X-Support-ID</code> when it blocks.\n</div>\n\n<h2>The problem with opaque edge security</h2>\n<p>Most teams still protect APIs with a static nginx snippet, a shared ModSecurity pack nobody owns, or a cloud checkbox they cannot tune per route. When something breaks at 2 a.m., the ticket says “403 from the edge” with no policy name, no binding, and no safe way to dry-run a change. Reloading the whole POP for every rule change makes security and platform teams fight over the same config file.</p>\n<p>TenthMatrix WSL Proxy treats the edge as a product: live JSON and MCP configs for day-to-day routing and WAF, with nginx reloads reserved for listen and SSL changes. Security becomes operable — not a frozen regex list.</p>\n\n<h2>Where WAF sits in the pipeline</h2>\n<p>A request hits a POP. OpenResty accepts TLS and enters the Lua hot path. <code>gateway_ack.lua</code> matches a routing rule. The gateway pipeline then runs rate limits, then the WAF engine, then the response action and balancer. Typical outcomes include reverse-proxy to an upstream, redirect, static HTML, CAPTCHA challenge, or a 403 WAF block with support headers.</p>\n<p>Inside the engine the order is fixed: load the policy, resolve the winning binding, run first-class stages, then governed signature matching and anomaly scoring. Each stage is fail-open under protected execution so an internal error logs and allows the request rather than blacking out the site.</p>\n\n<h2>What you get today</h2>\n<ul>\n  <li><strong>Policy packs</strong> bound per virtual host, with route and server overrides for monitor vs block.</li>\n  <li><strong>Eight first-class stages</strong> before signatures: method allow-list, filetype deny, HTTP smuggling/desync, IP and geo deny, JWT algorithm policy, JSON depth/size, brute-force velocity, and OpenAPI positive security.</li>\n  <li><strong>Governed signatures</strong> with stable IDs (SQLi, XSS, command injection, LFI, SSRF, SSTI, XXE, Log4Shell, Spring4Shell, JWT none, GraphQL introspection, scanner UAs, and related categories), plus disable / stage / set toggles and an anomaly threshold.</li>\n  <li><strong>Explainable blocks:</strong> <code>X-WAF-Block</code>, <code>X-WAF-Rule</code>, <code>X-WAF-Violation</code>, <code>X-Support-ID</code>.</li>\n  <li><strong>Layered edge controls</strong> on the same POP: per-server rate limit, CAPTCHA (rule status 306), JWT / S3 / cookie rule matches, and geo/IP routing rules independent of WAF stages.</li>\n  <li><strong>Control plane:</strong> Admin UI, Swagger REST, MCP tools for Claude/Cursor, and <code>wslproxy-cli</code> pull/push for <code>waf_rules</code> and <code>waf_policies</code>.</li>\n</ul>\n\n<h2>Monitor first, then stage, then block</h2>\n<p>Binding precedence is deliberate: route override wins over per-server override, which wins over the policy default. That lets <code>/preview</code> stay in transparent (monitor/alarm) mode while <code>/api/pay</code> blocks. Signature <em>stage</em> windows alarm only until a timestamp and do not inflate the anomaly score — a safe rollout path before you flip a set to block.</p>\n<p>Start in monitor on a staging POP or a low-risk path. Read structured <code>wafsec</code> logs and the events API. Promote sets when the noise is understood. Do not flip production to block without a soak.</p>\n\n<h2>Who it is for</h2>\n<p>Platform, SRE, and security teams who already run OpenResty or need an API gateway and CDN edge that security can actually operate. It is also for teams bringing AI agents to the same edge: MCP tools can already configure and inspect WSLProxy, while Agents Gateway and MCP Gateway integrations remain labelled in progress on the product page — not claimed as live WAF features.</p>\n\n<h2>Where to start</h2>\n<ol>\n  <li>Watch the tour above, then open <a href=\"https://wslproxy.org/waf/\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org/waf</a>.</li>\n  <li>Read the <a href=\"/en/articles/wslproxy-waf-web-application-firewall\">technical article</a> for stages, headers, and rollout practice.</li>\n  <li>Explore the product overview at <a href=\"/en/wsl-proxy\">/wsl-proxy</a> and the general intro at <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>.</li>\n  <li>Engine deep dive: <a href=\"/en/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement\">WAF Engine v2 blog</a> · <a href=\"/en/articles/workstation-wsl-proxy-waf-engine-v2\">Engine v2 article</a>.</li>\n</ol>\n\n<p>Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n<p style=\"margin-top:1.5rem;\"><strong>Product site:</strong> <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">https://wslproxy.org</a> · <strong>WAF:</strong> <a href=\"https://wslproxy.org/waf/\" target=\"_blank\" rel=\"noopener noreferrer\">https://wslproxy.org/waf/</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "security",
+      "id": 311
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-09-16T18:00:00Z",
+  "updated_at": "2026-09-16T18:00:00Z",
+  "published_date": "2026-09-16",
+  "status": true,
+  "language_code": "pa"
+}

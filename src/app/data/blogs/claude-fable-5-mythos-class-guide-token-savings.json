@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-claude-fable-5-001",
+  "internal_id": 948,
+  "slug": "claude-fable-5-mythos-class-guide-token-savings",
+  "title": "Claude Fable 5: The Complete Guide to Anthropic's Mythos-Class Model",
+  "sub_title": "What Fable 5 is, how the community reacted, the best YouTube deep-dives, when to use it vs Opus or Sonnet, and practical token-saving tactics",
+  "excerpt": "Claude Fable 5 is Anthropic's Mythos-class frontier model for long-horizon agents. Community reactions, YouTube reviews, when to use it, and how to save tokens.",
+  "meta_title": "Claude Fable 5 Guide: Reactions, YouTube, Token Savings",
+  "meta_description": "Claude Fable 5 explained: Mythos-class model, community reactions, top YouTube reviews, when to use Fable vs Opus, and token-saving tips.",
+  "meta_keywords": "Claude Fable 5, claude-fable-5, Anthropic Fable 5, Mythos class, Fable 5 token savings, Claude Fable 5 vs Opus, agentic coding, AI agents",
+  "cover_image": "/img/claude-fable-5-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-fable-5-cover.svg",
+      "id": 948,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Fable 5 — Mythos-class AI for long-horizon agentic work"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Anthropic's Claude Fable 5 is the first generally available Mythos-class model — built for long-horizon agentic work, not quick chat. This post covers what changed, how people are reacting, which YouTube deep-dives are worth your time, and how to use Fable 5 without burning through your token budget. For the full playbook, read <a href=\"/en/articles/claude-fable-5-mythos-class-guide-token-savings\">the long article</a>.</em></p>\n\n<p><img src=\"/img/claude-fable-5-cover.svg\" alt=\"Claude Fable 5 — Mythos-class AI for long-horizon agentic work\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>The one-paragraph version.</strong> Claude Fable 5 (<code>claude-fable-5</code>) is Anthropic's most capable widely released model — a Mythos-class tier above Opus 4.8, with a 1M-token context window and up to 128K output tokens per request. It is designed for work that takes a person hours, days, or weeks: large codebase refactors, autonomous coding agents, multi-document analysis, and long-running workflows. It costs $10 per million input tokens and $50 per million output tokens — roughly double Opus — so the winning strategy is to reserve it for hard problems and route everything else to Sonnet or Haiku.\n</div>\n\n<h2>What is Claude Fable 5?</h2>\n<p>On 9 June 2026, Anthropic launched <strong>Claude Fable 5</strong> — the public-facing version of capabilities first previewed as <em>Claude Mythos Preview</em> under Project Glasswing. Fable 5 shares the same underlying weights as the invitation-only <strong>Claude Mythos 5</strong>, but adds safety classifiers that route sensitive cybersecurity and biology queries to Claude Opus 4.8. Anthropic reports these fallbacks fire in fewer than 5% of sessions, meaning most of the time you are running on full Mythos-class intelligence.</p>\n<p>Where Opus 4.8 is Anthropic's workhorse for complex agentic coding, Fable 5 is the model you reach for when the task is <em>too long, too ambiguous, or too multi-step</em> for anything else. Anthropic's own framing: the longer and more complex the task, the larger Fable's lead over prior models.</p>\n\n<h2>Five takeaways from launch week</h2>\n<ol>\n  <li><strong>Benchmarks jumped, especially on agentic coding.</strong> Community testers and Anthropic's own numbers show large gains on SWE-bench Pro, OSWorld, and long-horizon coding tasks — often 15–20% ahead of GPT-5.5 and prior Claude models on software engineering workloads.</li>\n  <li><strong>It is a different kind of model, not a faster Opus.</strong> Fable 5 runs longer per turn, dispatches parallel subagents more readily, and benefits from leaner prompts than the prescriptive skills many teams built for Opus. Drop-in replacement without prompt changes often disappoints.</li>\n  <li><strong>Effort level is your cost dial.</strong> API users can set effort to low, medium, high, or extra-high. Medium Fable 5 frequently matches or beats Opus at extra-high — at a fraction of the cost. Defaulting everything to maximum is the most common budget mistake.</li>\n  <li><strong>Guardrails became a community flashpoint.</strong> Early invisible fallbacks to Opus 4.8 frustrated researchers who did not know which model they were talking to. Anthropic walked back parts of the approach after backlash from Wired, The Verge, and Hacker News — transparency matters when you are paying frontier prices.</li>\n  <li><strong>Think in loops, not prompts.</strong> The builders getting the most from Fable 5 treat it as an autonomous worker: goal statements, hourly check-in loops, integration with project tools like Linear, and async harnesses that do not block on each subagent.</li>\n</ol>\n\n<h2>How the community is reacting</h2>\n<p>Reactions split along predictable lines — capability versus cost versus control.</p>\n<ul>\n  <li><strong>Builders are impressed on hard tasks.</strong> Simon Willison called Fable 5 slow and expensive but noted it keeps working through difficult problems that stall other models. Hacker News launch threads focused on autonomous coding and whether this is the inflection point for \"agent that actually finishes.\"</li>\n  <li><strong>Skeptics question daily-driver value.</strong> Several independent testers (including $200+ API spend comparisons) found Fable 5 is often the <em>best</em> model but not always the <em>best value</em> — especially at medium effort on routine coding, where Opus 4.8 at high effort is close enough and cheaper.</li>\n  <li><strong>YouTube hype is loud; task traces are signal.</strong> Titles like \"Greatest AI Model Ever\" are marketing. What matters is whether a reviewer shows multi-hour agent runs, failure modes, side-by-side UI rebuilds, and honest cost accounting — not thumbnail superlatives.</li>\n  <li><strong>Subscription access shifted.</strong> Fable 5 rolled out to Pro, Max, Team, and Enterprise plans with usage credits. Anthropic signalled API-first pricing for sustained frontier access — a hint that heavily subsidised flat-rate subscriptions may not carry Mythos-class models indefinitely.</li>\n</ul>\n\n<h2>YouTube videos worth watching</h2>\n<p>These are among the most-viewed and most substantive Fable 5 videos as of July 2026. Watch for the <em>actual tests</em>, not the titles.</p>\n\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#1a0f0a;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">Video</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">Why watch it</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=Pl7uo3vqp5s\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Fable 5 in 7 Minutes</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Fast launch overview: benchmarks, pricing, positioning vs Mythos preview.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=54Fky0JpSbw\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Fable 5 IS INCREDIBLE! (Fully Tested)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Broad stress test: coding, 3D/WebGL, vision, agentic workflows, real benchmarks.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=RwsUnvHYmyw\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Fable 5 just dropped and I'm speechless</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Claude Code loops, goal statements, Linear integration — practical agent patterns.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=AW3TJDuViF8\" target=\"_blank\" rel=\"noopener noreferrer\">Fable 5 vs Opus — Don't Waste Your Credits</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Side-by-side UI rebuilds, 3D games, document analysis — honest first impressions.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=xoNGy_JDFi4\" target=\"_blank\" rel=\"noopener noreferrer\">I Spent $200 Testing Fable 5 (Worth It?)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Same app built three ways; effort levels, cost-quality trade-off — essential for FinOps.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=VNbW4wrcfSw\" target=\"_blank\" rel=\"noopener noreferrer\">Vibe Coding With Claude Fable 5</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Live coding session: FPS in one HTML file, codebase performance review — real-world vibe checks.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=2XhM_8DlgnQ\" target=\"_blank\" rel=\"noopener noreferrer\">How to Use Fable 5 the Right Way</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Walkthrough of Anthropic's official prompting guide: effort, subagents, lean prompts.</td>\n</tr>\n</tbody>\n</table>\n\n<h2>When to use Fable 5 (and when not to)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#fff7ed;\">Reach for Fable 5</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f1f5f9;\">Use Sonnet or Opus instead</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Multi-day codebase migrations or large refactors</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Single-file bug fixes and small PRs</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Autonomous agents that run for hours with tool use</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Quick Q&amp;A and drafting emails</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Ambiguous specs where the model must scope and clarify</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Well-defined extraction with a schema</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Cross-repo code review and deep debugging</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Linting, formatting, boilerplate generation</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Enterprise docs: financial models, slides, long reports</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">High-volume classification at scale (use Haiku)</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Problems you already failed twice on Opus</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Latency-sensitive chat with sub-second replies</td></tr>\n</tbody>\n</table>\n\n<h2>How to save tokens on Fable 5</h2>\n<p>Fable 5's output tokens cost five times its input tokens ($50 vs $10 per million). On long agent runs, <strong>output dominates your bill</strong>. These practices matter more here than on any prior Claude model.</p>\n<ul>\n  <li><strong>Match effort to the task.</strong> Use <code>medium</code> for routine work; reserve <code>high</code> and <code>xhigh</code> for genuinely hard problems. Many teams overpay by maxing effort on every call.</li>\n  <li><strong>Trim prescriptive prompts.</strong> Skills written for Opus are often too verbose for Fable 5 and can <em>degrade</em> quality. Start lean; add constraints only when default behaviour misses.</li>\n  <li><strong>Never ask it to echo reasoning in the response.</strong> Instructions to \"show your thinking\" in user-visible text can trigger safety refusals and Opus fallbacks — use structured <code>thinking</code> blocks and a <code>send_to_user</code> tool for progress instead.</li>\n  <li><strong>Use prompt caching.</strong> Fable 5 supports Anthropic's 90% input discount on cached prefixes — critical for agents that resend the same system prompt and tool definitions every turn.</li>\n  <li><strong>Delegate with parallel subagents.</strong> Independent subtasks in parallel beats one monolithic thread that accumulates context.</li>\n  <li><strong>Give a memory file, not a transcript.</strong> One lesson per Markdown note beats re-pasting entire chat history each session.</li>\n  <li><strong>Route the router.</strong> Classify incoming requests with Haiku; escalate to Sonnet, then Fable 5 only when complexity warrants it.</li>\n  <li><strong>Cap output length.</strong> Set <code>max_tokens</code> intentionally. Ask for TLDR-first summaries: \"Lead with the outcome; supporting detail after.\"</li>\n</ul>\n\n<div style=\"background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;color:#166534;\">\n<strong>Rule of thumb.</strong> If the task finishes in one short exchange, you probably did not need Fable 5. If it would take a senior engineer a full day and involves tools, files, and judgment calls — that is Fable territory.\n</div>\n\n<h2>Getting started</h2>\n<ul>\n  <li><strong>Claude.ai / Claude Code:</strong> select Fable 5 in the model picker or run <code>/model fable</code> in Claude Code (v2.1.170+).</li>\n  <li><strong>API:</strong> <code>model: \"claude-fable-5\"</code> on the Messages API, AWS Bedrock, Google Vertex, or Microsoft Foundry.</li>\n  <li><strong>Docs:</strong> <a href=\"https://platform.claude.com/docs/en/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Claude Fable 5</a> and <a href=\"https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5\" target=\"_blank\" rel=\"noopener noreferrer\">Prompting Claude Fable 5</a>.</li>\n</ul>\n\n<h2>Read the long version</h2>\n<p>The <a href=\"/en/articles/claude-fable-5-mythos-class-guide-token-savings\">long article</a> covers Mythos-class history, a full task matrix, effort-level economics, guardrail and fallback handling, harness scaffolding for async agents, community reaction timeline, and an API integration checklist. Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-fable-5",
+      "id": 972
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "prompt-engineering",
+      "id": 977
+    },
+    {
+      "name": "mythos",
+      "id": 978
+    },
+    {
+      "name": "claude-code",
+      "id": 979
+    }
+  ],
+  "created_at": "2026-07-07T09:00:00Z",
+  "updated_at": "2026-07-07T09:00:00Z",
+  "published_date": "2026-07-07",
+  "status": true
+}

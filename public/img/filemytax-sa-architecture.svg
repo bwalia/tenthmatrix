@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="FileMyTax system architecture: nginx, Next.js, FastAPI, opsapi, PostgreSQL, HMRC MTD">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06121f"/>
+      <stop offset="0.55" stop-color="#0a2740"/>
+      <stop offset="1" stop-color="#1a0b3a"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #fcd34d; font: 700 13px system-ui, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 36px system-ui, sans-serif; }
+      .section { fill: #fcd34d; font: 700 11px system-ui, sans-serif; letter-spacing: 2px; }
+      .boxTitle { fill: #ffffff; font: 700 13px system-ui, sans-serif; }
+      .boxSub { fill: rgba(255,255,255,0.75); font: 400 10px system-ui, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, sans-serif; letter-spacing: 2px; }
+      .note { fill: #fbbf24; font: 600 10px system-ui, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#fbbf24"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect width="1200" height="720" fill="url(#grid)"/>
+
+  <text class="kicker" x="60" y="44">FILEMYTAX  /  SYSTEM ARCHITECTURE</text>
+  <text class="title" x="60" y="80">nginx  -&gt;  services  -&gt;  HMRC MTD</text>
+
+  <text class="section" x="60" y="120">USER TOUCHPOINTS</text>
+  <g transform="translate(60,130)">
+    <rect width="200" height="64" rx="10" fill="#0e2540" stroke="#42a5f5" stroke-width="1.5"/>
+    <text class="boxTitle" x="100" y="28" text-anchor="middle">Web App</text>
+    <text class="boxSub" x="100" y="44" text-anchor="middle">Next.js / React</text>
+    <text class="boxSub" x="100" y="56" text-anchor="middle">review + approve UI</text>
+  </g>
+  <g transform="translate(280,130)">
+    <rect width="200" height="64" rx="10" fill="#0c2b18" stroke="#22c55e" stroke-width="1.5"/>
+    <text class="boxTitle" x="100" y="28" text-anchor="middle">Mobile / LAN</text>
+    <text class="boxSub" x="100" y="44" text-anchor="middle">same WiFi testing</text>
+    <text class="boxSub" x="100" y="56" text-anchor="middle">./start.sh --env=lan</text>
+  </g>
+  <g transform="translate(940,130)">
+    <rect width="200" height="64" rx="10" fill="#3a1f08" stroke="#ef6c00" stroke-width="1.5"/>
+    <text class="boxTitle" x="100" y="28" text-anchor="middle">HMRC</text>
+    <text class="boxSub" x="100" y="44" text-anchor="middle">MTD Self Assessment</text>
+    <text class="boxSub" x="100" y="56" text-anchor="middle">sandbox + production</text>
+  </g>
+
+  <text class="section" x="60" y="230">API GATEWAY</text>
+  <g transform="translate(60,240)">
+    <rect width="1080" height="56" rx="10" fill="#1a0f00" stroke="#f59e0b" stroke-width="1.5"/>
+    <text class="boxTitle" x="540" y="24" text-anchor="middle">Nginx Reverse Proxy (localhost)</text>
+    <text class="boxSub" x="540" y="42" text-anchor="middle">/  -&gt;  Next.js  |  /fastapi/*  -&gt;  FastAPI  |  /opsapi/*  -&gt;  opsapi (Lua Lapis)</text>
+  </g>
+
+  <text class="section" x="60" y="330">BACKEND SERVICES</text>
+  <g transform="translate(60,340)">
+    <rect width="320" height="88" rx="10" fill="#0c2b18" stroke="#22c55e" stroke-width="1.5"/>
+    <text class="boxTitle" x="160" y="24" text-anchor="middle">FastAPI (AI ops)</text>
+    <text class="boxSub" x="160" y="40" text-anchor="middle">upload / extract / classify</text>
+    <text class="boxSub" x="160" y="54" text-anchor="middle">reconcile / calculate / file</text>
+    <text class="boxSub" x="160" y="68" text-anchor="middle">HMRC client + LLM services</text>
+    <text class="boxSub" x="160" y="82" text-anchor="middle">port 8847 direct debug</text>
+  </g>
+  <g transform="translate(400,340)">
+    <rect width="320" height="88" rx="10" fill="#1a1240" stroke="#7c3aed" stroke-width="1.5"/>
+    <text class="boxTitle" x="160" y="24" text-anchor="middle">opsapi (Lua Lapis)</text>
+    <text class="boxSub" x="160" y="40" text-anchor="middle">JWT auth + refresh tokens</text>
+    <text class="boxSub" x="160" y="54" text-anchor="middle">tax profile + encrypted NINO</text>
+    <text class="boxSub" x="160" y="68" text-anchor="middle">HMRC OAuth initiate</text>
+    <text class="boxSub" x="160" y="82" text-anchor="middle">/opsapi/swagger</text>
+  </g>
+  <g transform="translate(740,340)">
+    <rect width="400" height="88" rx="10" fill="#0e2540" stroke="#26c6da" stroke-width="1.5"/>
+    <text class="boxTitle" x="200" y="24" text-anchor="middle">Data + storage</text>
+    <text class="boxSub" x="200" y="40" text-anchor="middle">PostgreSQL + SQLModel ORM</text>
+    <text class="boxSub" x="200" y="54" text-anchor="middle">MinIO S3-compatible objects</text>
+    <text class="boxSub" x="200" y="68" text-anchor="middle">Statement / Transaction / TaxReturn</text>
+    <text class="boxSub" x="200" y="82" text-anchor="middle">DECIMAL(18,2) monetary fields</text>
+  </g>
+
+  <text class="section" x="60" y="460">AI + MONITORING</text>
+  <g transform="translate(60,470)">
+    <rect width="520" height="72" rx="10" fill="#1f2a44" stroke="#fcd34d" stroke-width="1"/>
+    <text class="boxTitle" x="260" y="22" text-anchor="middle">AI / LLM layer</text>
+    <text class="boxSub" x="260" y="38" text-anchor="middle">LLM_PROVIDER: openai or anthropic</text>
+    <text class="boxSub" x="260" y="52" text-anchor="middle">pdfplumber native PDF + Claude Vision OCR</text>
+    <text class="boxSub" x="260" y="66" text-anchor="middle">classification confidence scoring</text>
+  </g>
+  <g transform="translate(600,470)">
+    <rect width="540" height="72" rx="10" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+    <text class="boxTitle" x="270" y="22" text-anchor="middle">Gatus health dashboard</text>
+    <text class="boxSub" x="270" y="38" text-anchor="middle">localhost:8085  |  10-30s interval checks</text>
+    <text class="boxSub" x="270" y="52" text-anchor="middle">Frontend + FastAPI + opsapi + direct ports</text>
+    <text class="boxSub" x="270" y="66" text-anchor="middle">Docker Compose stack</text>
+  </g>
+
+  <g transform="translate(60,570)">
+    <rect width="1080" height="48" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text class="note" x="540" y="30" text-anchor="middle">CognoAI owns system IP  |  developed by Workstation  |  FileMyTax is the publication demo name</text>
+  </g>
+
+  <line x1="160" y1="194" x2="160" y2="240" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#ar)"/>
+  <line x1="220" y1="296" x2="220" y2="340" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#ar)"/>
+  <line x1="500" y1="296" x2="500" y2="340" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#ar)"/>
+  <line x1="1040" y1="194" x2="1040" y2="340" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#ar)"/>
+
+  <text class="brand" x="60" y="700">WORKSTATION.CO.UK</text>
+</svg>

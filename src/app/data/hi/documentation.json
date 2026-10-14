@@ -1,0 +1,61 @@
+{
+  "pagTitle": "चलिए उड़ान भरें",
+  "pagDescription": "यह पृष्ठ का विवरण है",
+  "sections": {
+    "firstSection": {
+      "title": "क्लोन करें",
+      "id": "clone-step",
+      "content": {
+        "heading": "डिफ़ॉल्ट कोड उदाहरण:",
+        "text": "git clone https://github.com/bwalia/webimpetus-src.git"
+      }
+    },
+    "secondSection": {
+      "title": "स्थापना",
+      "id": "install-step",
+      "content": {
+        "first": {
+          "id": "first-1",
+          "heading": "पहला",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "code": {
+            "language": "bash",
+            "title": "डिफ़ॉल्ट कोड उदाहरण:",
+            "codes": [
+              "sudo bash ./deploy-to-docker.sh",
+              "sudo bash ./deploy-to-kubernates.sh"
+            ]
+          }
+        },
+        "second": {
+          "id": "second-1",
+          "heading": "दूसरा",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "diff": {
+            "left": {
+              "language": "bash",
+              "title": "डिफ़ॉल्ट कोड उदाहरण:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            },
+            "right": {
+              "language": "bash",
+              "title": "डिफ़ॉल्ट कोड उदाहरण:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            }
+          }
+        },
+        "third": {
+          "id": "third-1",
+          "heading": "तीसरा",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes."
+        }
+      }
+    }
+  }
+}

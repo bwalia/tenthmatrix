@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-label="Docker layer order for WSLProxy prebuilt and app images">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #0f766e; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .stable { fill: #ccfbf1; stroke: #0d9488; stroke-width: 1.5; }
+      .mid { fill: #e0f2fe; stroke: #0284c7; stroke-width: 1.5; }
+      .vol { fill: #ffedd5; stroke: #c45c26; stroke-width: 1.5; }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect class="bg" width="1200" height="560"/>
+  <text class="tag" x="40" y="36">FIGURE — LAYER ORDER (STABLE FIRST)</text>
+  <text class="title" x="40" y="68">Keep compile layers warm; put volatile bits last</text>
+  <text class="cap" x="40" y="94">Prebuilt OpenResty image (left) vs fat app Dockerfile (right). Late invalidation preserves Buildx/GHA cache.</text>
+
+  <!-- Prebuilt stack -->
+  <text class="h" x="60" y="140">infra/openresty-prebuilt/Dockerfile</text>
+  <rect class="stable" x="60" y="160" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="190">1. apt build deps + libc-bin (ldconfig on PATH)</text>
+  <rect class="stable" x="60" y="218" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="248">2. OpenResty configure + make (pinned version)</text>
+  <rect class="mid" x="60" y="276" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="306">3. luarocks (Lua 5.1) + rocks into LuaJIT tree</text>
+  <rect class="mid" x="60" y="334" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="364">4. opm packages + prometheus / healthcheck libs</text>
+  <rect class="vol" x="60" y="392" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="422">5. mc (AIStor URL) — late so Hub cache survives URL tweaks</text>
+  <rect class="vol" x="60" y="450" width="500" height="48" rx="8"/>
+  <text class="s" x="80" y="480">6. Runtime stage: copy /usr/local/openresty only</text>
+
+  <!-- App stack -->
+  <text class="h" x="640" y="140">Root Dockerfile (app / Compose image)</text>
+  <rect class="stable" x="640" y="160" width="500" height="48" rx="8"/>
+  <text class="s" x="660" y="190">1. Base OS + package installs</text>
+  <rect class="mid" x="640" y="218" width="500" height="48" rx="8"/>
+  <text class="s" x="660" y="248">2. Heavy binaries (mc) BEFORE app COPY</text>
+  <rect class="vol" x="640" y="276" width="500" height="48" rx="8"/>
+  <text class="s" x="660" y="306">3. COPY ./api and changing trees last</text>
+  <rect class="vol" x="640" y="334" width="500" height="90" rx="8"/>
+  <text class="h" x="660" y="362">Teaching point</text>
+  <text class="s" x="660" y="386">App image = runtime for Compose/Hub.</text>
+  <text class="s" x="660" y="406">Prebuilt image = distribution format for</text>
+  <text class="s" x="660" y="426">bare-metal extract — different problems.</text>
+
+  <text class="foot" x="40" y="530">Classic dl.min.io/client/mc ��→ HTTP 410 · use AIStor path · pin OPENRESTY_VERSION and lua-resty-jwt 0.2.3</text>
+</svg>

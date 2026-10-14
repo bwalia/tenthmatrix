@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Ring Promoter deployers kubectl GitHub Actions k8sjob">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #16a34a; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .a { fill: #dbeafe; stroke: #326ce5; stroke-width: 2; }
+      .b { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .c { fill: #ecfdf5; stroke: #047857; stroke-width: 2; }
+      .hub { fill: #0b1c2c; stroke: #22c55e; stroke-width: 2; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .hw { fill: #ffffff; font: 700 16px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sw { fill: #86efac; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#m); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="640"/>
+  <text class="tag" x="40" y="36">FIGURE - RING PROMOTER DEPLOYERS</text>
+  <text class="title" x="40" y="68">One control plane — Kubernetes and VM apps side by side</text>
+  <text class="cap" x="40" y="94">Deployer chosen per application. Same health gates, rollback, and audit trail for all.</text>
+
+  <rect class="hub" x="460" y="160" width="280" height="140" rx="12"/>
+  <text class="hw" x="490" y="210">Ring Promoter</text>
+  <text class="sw" x="490" y="240">REST API + Web UI</text>
+  <text class="sw" x="490" y="265">Postgres history</text>
+  <text class="sw" x="490" y="290">Advisory locks</text>
+
+  <rect class="a" x="60" y="380" width="320" height="160" rx="10"/>
+  <text class="h" x="80" y="420">KubectlDeployer</text>
+  <text class="s" x="80" y="450">kubectl set image</text>
+  <text class="s" x="80" y="475">+ rollout status</text>
+  <text class="s" x="80" y="500">In-cluster ServiceAccount</text>
+  <text class="s" x="80" y="525">AI inference, agents, APIs</text>
+
+  <rect class="b" x="440" y="380" width="320" height="160" rx="10"/>
+  <text class="h" x="460" y="420">GitHubActionsDeployer</text>
+  <text class="s" x="460" y="450">workflow-dispatch</text>
+  <text class="s" x="460" y="475">Wait for run conclusion</text>
+  <text class="s" x="460" y="500">VM / CI apps (e.g. WSL Proxy)</text>
+  <text class="s" x="460" y="525">Reuse existing pipelines</text>
+
+  <rect class="c" x="820" y="380" width="320" height="160" rx="10"/>
+  <text class="h" x="840" y="420">k8sjob executor</text>
+  <text class="s" x="840" y="450">Runner Jobs in ring-exec</text>
+  <text class="s" x="840" y="475">Live stdout logs</text>
+  <text class="s" x="840" y="500">Exit code = success</text>
+  <text class="s" x="840" y="525">RP_APP, RP_RING, RP_VERSION</text>
+
+  <path class="ln" d="M220 380 V330 H600 V300"/>
+  <path class="ln" d="M600 380 V300"/>
+  <path class="ln" d="M980 380 V330 H600 V300"/>
+
+  <text class="foot" x="40" y="610">Every release earns production  ·  ringpromoter.com</text>
+</svg>

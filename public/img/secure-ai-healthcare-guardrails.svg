@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="AI decides intent; system enforces healthcare guardrails">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 28px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #047857; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .ai { fill: #eef2ff; stroke: #4f46e5; stroke-width: 2; }
+      .gate { fill: #fff7ed; stroke: #ea580c; stroke-width: 2.5; }
+      .sys { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">2. Do not use the AI as your security guard</text>
+  <text class="sub" x="48" y="78">Flexible conversation + fixed, rule-based security</text>
+
+  <rect class="ai" x="48" y="130" width="340" height="200" rx="10"/>
+  <text class="lbl" x="72" y="175">AI agent layer</text>
+  <text class="sm" x="72" y="210">Understand patient intent</text>
+  <text class="sm" x="72" y="238">Choose next dialogue step</text>
+  <text class="sm" x="72" y="266">Propose an allowed tool call</text>
+  <text class="ok" x="72" y="300">Decides WHAT to attempt</text>
+
+  <path class="arrow" d="M400 230 H470"/>
+
+  <rect class="gate" x="480" y="130" width="280" height="200" rx="10"/>
+  <text class="lbl" x="504" y="175">Guardrail gate</text>
+  <text class="sm" x="504" y="210">AuthN / AuthZ</text>
+  <text class="sm" x="504" y="238">Policy engine</text>
+  <text class="sm" x="504" y="266">Scope + risk class</text>
+  <text class="ok" x="504" y="300">Decides IF allowed</text>
+
+  <path class="arrow" d="M770 230 H840"/>
+
+  <rect class="sys" x="850" y="130" width="300" height="200" rx="10"/>
+  <text class="lbl" x="874" y="175">Fixed systems</text>
+  <text class="sm" x="874" y="210">EHR / scheduling</text>
+  <text class="sm" x="874" y="238">Payment processor</text>
+  <text class="sm" x="874" y="266">Claims / CRM</text>
+  <text class="ok" x="874" y="300">Least-privilege tools</text>
+
+  <rect class="box" x="48" y="380" width="1104" height="280" rx="12"/>
+  <text class="lbl" x="72" y="430">Healthcare guardrails (always the same)</text>
+  <text class="sm" x="72" y="470">" Login and role scopes sit outside the model</text>
+  <text class="sm" x="72" y="500">" High-risk actions require dual control or human approval</text>
+  <text class="sm" x="72" y="530">" Prompt injection or model error cannot widen tool permissions</text>
+  <text class="sm" x="72" y="560">" Agent may start payment or record actions — never open browse-all access</text>
+  <text class="sm" x="72" y="590">" Population health insights use de-identified or purpose-bound feeds</text>
+  <text class="ok" x="72" y="630">The model decides what to do. The system sets the limits.</text>
+</svg>

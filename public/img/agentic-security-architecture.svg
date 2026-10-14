@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-label="Agentic security architecture MCP OAuth VPN Vault">
+  <defs>
+    <style>
+      .bg { fill: #ffffff; }
+      .tag { fill: #9f1239; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #f8fafc; stroke: #64748b; stroke-width: 1.5; }
+      .idp { fill: #ffe4e6; stroke: #9f1239; stroke-width: 2; }
+      .mcp { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2; }
+      .vault { fill: #ecfdf5; stroke: #047857; stroke-width: 2; }
+      .vpn { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .t { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#a); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="760"/>
+  <text class="tag" x="40" y="36">FIGURE A - REFERENCE ARCHITECTURE</text>
+  <text class="title" x="40" y="68">Enterprise agent path: IdP -&gt; client -&gt; MCP -&gt; Vault -&gt; tools</text>
+  <text class="cap" x="40" y="94">User-attributed tokens; short-lived secrets; private network for high-risk tools.</text>
+
+  <rect class="idp" x="40" y="140" width="220" height="120" rx="8"/>
+  <text class="t" x="60" y="180">Enterprise IdP</text>
+  <text class="s" x="60" y="205">Okta / Entra / OIDC</text>
+  <text class="s" x="60" y="225">SSO + ID-JAG (EMA)</text>
+  <text class="s" x="60" y="245">policy + groups</text>
+
+  <path class="ln" d="M260 200 H310"/>
+
+  <rect class="mcp" x="310" y="140" width="240" height="120" rx="8"/>
+  <text class="t" x="330" y="180">MCP client / agent host</text>
+  <text class="s" x="330" y="205">Claude / Cursor / OpenAI</text>
+  <text class="s" x="330" y="225">Bearer access token</text>
+  <text class="s" x="330" y="245">PKCE; no query tokens</text>
+
+  <path class="ln" d="M550 200 H600"/>
+
+  <rect class="mcp" x="600" y="140" width="240" height="120" rx="8"/>
+  <text class="t" x="620" y="180">Remote MCP server</text>
+  <text class="s" x="620" y="205">OAuth resource server</text>
+  <text class="s" x="620" y="225">PRM RFC 9728</text>
+  <text class="s" x="620" y="245">aud validation RFC 8707</text>
+
+  <path class="ln" d="M840 200 H890"/>
+
+  <rect class="vault" x="890" y="140" width="270" height="120" rx="8"/>
+  <text class="t" x="910" y="180">HashiCorp Vault</text>
+  <text class="s" x="910" y="205">JWT / OAuth to Vault</text>
+  <text class="s" x="910" y="225">dynamic DB/cloud creds</text>
+  <text class="s" x="910" y="245">lease TTL + revoke</text>
+
+  <path class="ln" d="M720 260 V310"/>
+
+  <rect class="vpn" x="520" y="310" width="400" height="100" rx="8"/>
+  <text class="t" x="540" y="350">VPN / private link / service mesh</text>
+  <text class="s" x="540" y="375">MCP + Vault + prod APIs on private CIDR</text>
+  <text class="s" x="540" y="395">egress allowlist per agent / tool scope</text>
+
+  <path class="ln" d="M720 410 V460"/>
+
+  <rect class="box" x="40" y="460" width="350" height="140" rx="8"/>
+  <text class="t" x="60" y="500">Tool backends</text>
+  <text class="s" x="60" y="530">Git, Jira, cloud APIs, DBs</text>
+  <text class="s" x="60" y="555">creds from Vault only</text>
+  <text class="s" x="60" y="580">never baked into MCP config</text>
+
+  <rect class="box" x="425" y="460" width="350" height="140" rx="8"/>
+  <text class="t" x="445" y="500">Controls</text>
+  <text class="s" x="445" y="530">least-privilege scopes</text>
+  <text class="s" x="445" y="555">human gates: money/auth/prod</text>
+  <text class="s" x="445" y="580">audit: IdP + MCP + Vault</text>
+
+  <rect class="box" x="810" y="460" width="350" height="140" rx="8"/>
+  <text class="t" x="830" y="500">Agent tip</text>
+  <text class="s" x="830" y="530">1) AuthN/AuthZ via OAuth</text>
+  <text class="s" x="830" y="555">2) Secrets via Vault lease</text>
+  <text class="s" x="830" y="580">3) Network via VPN/mesh</text>
+
+  <text class="foot" x="40" y="650">STDIO/local MCP: env credentials from Vault Agent sidecar - skip interactive OAuth. Remote/public MCP: OAuth 2.1 required.</text>
+  <text class="foot" x="40" y="680">Enterprise Managed Authorization (EMA): IdP grants approved MCP servers at SSO - no per-server consent spam.</text>
+  <text class="foot" x="40" y="730">workstation.co.uk</text>
+</svg>

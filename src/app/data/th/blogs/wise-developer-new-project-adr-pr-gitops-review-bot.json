@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-wise-developer-workflow-001",
+  "internal_id": 955,
+  "slug": "wise-developer-new-project-adr-pr-gitops-review-bot",
+  "title": "นักพัฒนาที่ฉลาดทำงานกับโปรเจกต์ใหม่อย่างไร",
+  "sub_title": "Brainstorm อภิปราย ต้นแบบ แผนภาพ ข้อเสนอ ADR MR/PR GitOps — พร้อม Review Bot ที่คอมเมนต์อัตโนมัติให้มนุษย์รีวิวความเสี่ยง",
+  "excerpt": "เส้นทางที่ฉลาดสำหรับโปรเจกต์ใหม่: brainstorm อภิปรายกับทีม ต้นแบบ แผนภาพ ข้อเสนอ ADR PR เล็กพร้อม Review Bot และ GitOps เพื่อคุณภาพระดับ production",
+  "meta_title": "นักพัฒนาที่ฉลาดทำงานกับโปรเจกต์ใหม่อย่างไร — ADR, PR, GitOps, Review Bot",
+  "meta_description": "จาก brainstorming ถึง GitOps: ADR, MR/PR, Review Bot ที่คอมเมนต์อัตโนมัติบน pull request การตั้งค่า FDE และ Claude Architect Certification สำหรับการส่งมอบ production",
+  "meta_keywords": "นักพัฒนาที่ฉลาด, ADR, pull request, merge request, GitOps, Review Bot, รีวิวโค้ด, FDE, Claude Architect Certification, ระดับ production",
+  "cover_image": "/img/wise-developer-workflow-cover.svg",
+  "images": [
+    {
+      "url": "/img/wise-developer-workflow-cover.svg",
+      "id": 955,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Wise developer workflow ADR PR GitOps Review Bot"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>นักพัฒนาที่ฉลาดเริ่มโปรเจกต์ใหม่อย่างไร — brainstorm อภิปราย ต้นแบบ แผนภาพ ข้อเสนอ บันทึก ADR เปิด MR/PR และลงการเปลี่ยนแปลงด้วย GitOps — ขณะที่ Review Bot คอมเมนต์อัตโนมัติบน pull request คู่มือฉบับเต็มใน<a href=\"/th/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">บทความฉบับเต็ม</a>.</em></p>\n\n<p><img src=\"/img/wise-developer-workflow-cover.svg\" alt=\"เวิร์กโฟลว์นักพัฒนาที่ฉลาด ADR PR GitOps Review Bot\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>เวอร์ชันหนึ่งย่อหน้า.</strong> อย่ากระโดดตรงไปที่ PR ยักษ์ Brainstorm คนเดียว แล้วกับทีม สร้างต้นแบบส่วนเสี่ยง วาดแผนภาพ เขียนข้อเสนอสั้น จับการตัดสินใจเป็น ADR ส่ง MR/PR เล็กที่มี CI สีเขียว Promote ผ่าน GitOps ให้ Review Bot ร่างคอมเมนต์รอบแรกให้มนุษย์รีวิวดีไซน์และความเสี่ยง — ไม่ใช่การจัดรูปแบบ FDE สามารถตั้งระบบนี้ได้; Claude Architect Certification เป็นสัญญาณแรงว่าคุณออกแบบและปกป้องมันได้\n</div>\n\n<h2>เส้นทางที่ฉลาด (ตามลำดับ)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — เป้าหมาย ข้อจำกัด non-goals โหมดความล้มเหลว</li>\n  <li><strong>Discuss</strong> — whiteboard / ซิงก์สั้นกับเพื่อนร่วมงานก่อนโค้ดแข็งตัว</li>\n  <li><strong>Prototype</strong> — spike สิ่งที่ไม่รู้; ทิ้งหรือ promote โดยตั้งใจ</li>\n  <li><strong>Diagrams</strong> — บริบท ลำดับ การปรับใช้ — พอให้โต้เถียง</li>\n  <li><strong>Proposal</strong> — ปัญหา ตัวเลือก คำแนะนำ rollback</li>\n  <li><strong>ADR</strong> — «ทำไมเราเลือก X แทน Y» ที่คงทน</li>\n  <li><strong>MR / PR</strong> — diff เล็ก เช็คลิสต์ ADR/ตั๋วที่ลิงก์</li>\n  <li><strong>GitOps</strong> — สถานะที่ต้องการใน git; promote ด้วย merge rollback ด้วย revert</li>\n</ol>\n\n<h2>Review Bots: คอมเมนต์ที่เขียนเอง</h2>\n<p>ต่อ Review Bot (Bugbot, CodeRabbit, Claude/GitHub Action แบบกำหนดเอง หรือ <a href=\"/th/docs/blogs/building-ai-code-review-pipeline\">ไพพ์ไลน์รีวิวโค้ดด้วย AI</a>) ของคุณ เพื่อให้ทุก PR ได้คอมเมนต์อินไลน์อัตโนมัติเกี่ยวกับ:</p>\n<ul>\n  <li>กลิ่นความปลอดภัยและความลับ</li>\n  <li>ทดสอบที่ขาด / แพตเทิร์น flaky</li>\n  <li>ความเสี่ยงสัญญา API และการย้าย</li>\n  <li>สไตล์และ lint ที่หลุดจาก pre-commit</li>\n</ul>\n<p>จากนั้นมนุษย์โฟกัสที่ความเข้ากันของสถาปัตยกรรม เจตนาผลิตภัณฑ์ และรัศมีผลกระทบเชิงปฏิบัติการ นั่นคือวิธีทำให้ชีวิตนักพัฒนาง่ายขึ้นโดยไม่ลดมาตรฐาน production</p>\n\n<h2>ใครตั้งค่า — และทำไมต้อง Claude Architect Certification</h2>\n<p><strong>FDE (Forward Deployed Engineer)</strong> เหมาะสมที่จะติดตั้งเทมเพลต: โฟลเดอร์ ADR เช็คลิสต์ PR Review Bot การป้องกันสาขา และแอป GitOps จับคู่ทักษะการส่งมอบนั้นกับ <strong>Claude Architect Certification</strong> — คุ้มค่าที่จะไล่ตามหากคุณต้องการ credential ที่พิสูจน์ว่าคุณออกแบบระบบเอเจนต์/AI-assisted รีวิวโค้ดที่ AI สร้างอย่างวิพากษ์ และโค้ชทีมเรื่องเวิร์กโฟลว์ระดับ production ได้</p>\n\n<h2>มาตรฐานคุณภาพระดับ production</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0c1424;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ประตู</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">เกณฑ์ผ่าน</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pre-commit</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">จัดรูปแบบ lint สแกนความลับ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">CI</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ทดสอบยูนิต + สัญญาสีเขียว</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Review Bot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ไม่มี finding ความรุนแรงสูงที่ยังไม่แก้</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Human review</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ดีไซน์ + ความเสี่ยงเซ็นรับ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">GitOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">เลื่อน env ผ่าน merge; ทดสอบ revert แล้ว</td></tr>\n</tbody>\n</table>\n\n<p>อ่าน <a href=\"/th/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">บทความฉบับเต็ม</a>. เผยแพร่โดย <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "fde",
+      "id": 1019
+    },
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    }
+  ],
+  "created_at": "2026-07-23T21:00:00Z",
+  "updated_at": "2026-07-23T21:00:00Z",
+  "published_date": "2026-07-23",
+  "status": true
+}

@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "NebulaDNS ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਦਾ ਪੂਰਾ ਦੌਰਾ: API-ਪਹਿਲਾ ਕੰਟਰੋਲ ਪਲੇਨ, Prometheus ਮੈਟ੍ਰਿਕਸ, ਪ੍ਰਸਾਰ ਗੇਟਸ, ਪੀਅਰ ਫਿੰਗਰਪ੍ਰਿੰਟਿੰਗ, DNSSEC ਰੋਡਮੈਪ, Helm/k3s ਆਪਰੇਟਰ ਕਹਾਣੀ, ਅਤੇ AWS Route 53 ਅਤੇ CoreDNS ਨਾਲ ਕਿਵੇਂ ਏਕੀਕ੍ਰਿਤ ਕੀਤਾ ਜਾਵੇ।",
+  "sub_title": "ਹਰ \"ਬੈਟਰੀ ਸ਼ਾਮਲ\" ਵਿਸ਼ੇਸ਼ਤਾ, ਏਕੀਕਰਣ, ਅਤੇ ਐਂਟਰਪ੍ਰਾਈਜ਼ DNS ਆਸਣ",
+  "title": "NebulaDNS ਸੰਪੂਰਨ ਵਿਸ਼ੇਸ਼ਤਾ ਗਾਈਡ: k3s, Route53, ਨਿਰੀਖਣਯੋਗਤਾ, ਅਤੇ Enterprise DNS",
+  "meta_title": "NebulaDNS ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "NebulaDNS ਪੂਰਾ ਵਿਸ਼ੇਸ਼ਤਾ ਸੰਦਰਭ: ਜੰਗਾਲ ਡੇਟਾ ਪਲੇਨ, ਕੰਟਰੋਲ ਪਲੇਨ API, ਪ੍ਰਸਾਰ ਪ੍ਰਮਾਣਕ, TSIG, ਮੈਟ੍ਰਿਕਸ ਕੈਟਾਲਾਗ, Kubernetes Helm ਆਪਰੇਟਰ, Route 53 ਅਤੇ k3s ਏਕੀਕਰਣ ਪੈਟਰਨ।",
+  "meta_keywords": "NebulaDNS ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ, ਅਧਿਕਾਰਤ DNS, Prometheus ਮੈਟ੍ਰਿਕਸ DNS, Kubernetes DNS ਆਪਰੇਟਰ, Route53 ਡੈਲੀਗੇਸ਼ਨ, CoreDNS, TSIG AXFR, DNSSEC ਰੋਡਮੈਪ, Rust DNS ਸਰਵਰ",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>ਸਰੋਤ</h2><p>ਇਹ ਗਾਈਡ ਜਨਤਕ<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS ਸਾਈਟ</a>ਅਤੇ ਰਿਪੋਜ਼ਟਰੀ<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>ਦਾ ਸੰਸਲੇਸ਼ਣ ਕਰਦੀ ਹੈ। ਮੀਲਪੱਥਰ ਅਤੇ GA ਆਈਟਮਾਂ ਵਿਕਸਿਤ ਹੁੰਦੀਆਂ ਹਨ—ਤੁਹਾਡੇ ਸੰਸਕਰਣ ਲਈ ਰੀਲੀਜ਼ ਨੋਟਸ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ।</p><h2>ਆਰਕੀਟੈਕਚਰ ਇੱਕ ਨਜ਼ਰ ਵਿੱਚ</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>ਸਟੈਕ<strong>ਕੰਟਰੋਲ ਪਲੇਨ ਨੂੰ ਵੱਖ ਕਰਦਾ ਹੈ</strong>(REST/gRPC, authn/z),<strong>ਜ਼ੋਨ ਪ੍ਰਬੰਧਨ</strong>(ਪ੍ਰਮਾਣਿਕਤਾ, XPR8gX 19 ਪ੍ਰਤੀਨਿਧਤਾ, XPR8g19 ਦੀ ਪ੍ਰਤੀਬੱਧਤਾ ਦਾ ਨਿਸ਼ਾਨ) ਤਸਦੀਕ</strong>(ਸੈਕੰਡਰੀ ਰਿਪੋਰਟ SOA),<strong>ਸਮੱਗਰੀ-ਪਤਾ ਜ਼ੋਨ ਸਟੋਰ</strong>, ਅਤੇ<strong>DNS ਡਾਟਾ ਪਲੇਨ</strong>(UDP/TCP/DoT/DoH/DoQ, ਟ੍ਰਾਂਸਫਰ, DNSSEC ਔਨਲਾਈਨ ਹਸਤਾਖਰਕਰਤਾ)।</p><h2>ਵਿਸ਼ੇਸ਼ਤਾ ਕੈਟਾਲਾਗ (\"ਬੈਟਰੀਆਂ ਸ਼ਾਮਲ\")</h2><p>ਪ੍ਰੋਜੈਕਟ<strong>ਬਾਰਾਂ ਸਿਰਲੇਖ ਸਮਰੱਥਾਵਾਂ</strong>ਨੂੰ ਮਾਰਕੀਟ ਕਰਦਾ ਹੈ — ਲੈਂਡਿੰਗ ਪੰਨੇ ਤੋਂ ਇੱਥੇ ਸੰਖੇਪ ਕੀਤਾ ਗਿਆ ਹੈ।</p><ul><li><strong>API-ਪਹਿਲਾ:</strong>REST/gRPC ਜ਼ੋਨ, ਰਿਕਾਰਡ, TSIG ਰੋਟੇਸ਼ਨ, ਰੋਲਬੈਕ—ਪਤਲੇ ਗਾਹਕਾਂ ਵਜੋਂ CLI/UI।</li><li><strong>ਪੂਰਵ-ਨਿਰਧਾਰਤ ਤੌਰ 'ਤੇ ਦੇਖਣਯੋਗ:</strong>Prometheus<code>/metrics</code>, ਐਨਮ-ਟਾਈਪ ਲੇਬਲ, JSON ਲੌਗ, OTLP ਟਰੇਸ।</li><li><strong>ਪ੍ਰਮਾਣਿਤ ਪ੍ਰਸਾਰ:</strong>ਤੈਨਾਤ ਉਦੋਂ ਹੀ ਪੂਰਾ ਹੁੰਦਾ ਹੈ ਜਦੋਂ ਘੋਸ਼ਿਤ ਸੈਕੰਡਰੀ ਨਵੇਂ SOA ਸੀਰੀਅਲ ਨੂੰ ਸਵੀਕਾਰ ਕਰਦੇ ਹਨ।</li><li><strong>ਪੀਅਰ ਸੌਫਟਵੇਅਰ ਫਿੰਗਰਪ੍ਰਿੰਟਿੰਗ:</strong>ਰਿਕਾਰਡਸ<code>version.bind</code>CHAOS-ਸ਼ੈਲੀ ਦੇ ਸਿਗਨਲ ਇਸ ਲਈ ਚੁੱਪ BIND ਅੱਪਗਰੇਡ ਅਦਿੱਖ ਰੂਪ ਵਿੱਚ ਰਿਡੰਡੈਂਸੀ ਨੂੰ ਖਤਮ ਨਹੀਂ ਕਰ ਸਕਦੇ ਹਨ।</li><li><strong>ਸੁਰੱਖਿਅਤ ਜੰਗਾਲ:</strong>ਨਹੀਂ<code>unsafe</code>; ਕੋਡੇਕ, ਪਾਰਸਰ, DNSSEC ਸਾਈਨਰ 'ਤੇ ਲਗਾਤਾਰ ਫਜ਼ਿੰਗ।</li><li><strong>ਜ਼ੀਰੋ-GC ਟੇਲ ਲੇਟੈਂਸੀ:</strong>ਡਿਟਰਮਿਨਿਸਟਿਕ ਐਲੋਕੇਸ਼ਨ; ਲਾਕ-ਫ੍ਰੀ ਜ਼ੋਨ ਸਨੈਪਸ਼ਾਟ<code>arc-swap</code>ਰਾਹੀਂ।</li><li><strong>ਪਰਮਾਣੂ ਸੰਸਕਰਣ ਸੰਰਚਨਾ:</strong>ਸਮਗਰੀ-ਸੰਬੋਧਿਤ ਜ਼ੋਨ; ਅੰਸ਼ਕ ਰੀਡਜ਼ ਤੋਂ ਬਿਨਾਂ ਅੱਗੇ/ਰੋਲਬੈਕ ਕਰੋ।</li><li><strong>ਡੈਟਰਮਿਨਿਸਟਿਕ SOA ਸੀਰੀਅਲ: ਪਾੜੇ ਦੀ ਰਿਕਵਰੀ ਤੋਂ ਬਚਣ ਲਈ</strong>ਮੋਨੋਟੋਨਿਕ ਸੀਰੀਅਲ ਰਣਨੀਤੀ।</li><li><strong>Kubernetes-ਨੇਟਿਵ:</strong>Helm ਚਾਰਟ, ਆਪਰੇਟਰ, CRDs (<code>Zone</code>,<code>Record</code>,<code>Secondary</code>,<code>TsigKey</code>,<code>DeployGate</code>); GitOps-ਅਨੁਕੂਲ; ਰੋਡਮੈਪ 'ਤੇ CoreDNS ਕਲੱਸਟਰ-DNS ਬਦਲੀ ਮਾਰਗ।</li><li><strong>ਸਟੈਂਡਰਡ-ਅਨਫਾਰਮੈਂਟ ਵਾਇਰ:</strong>ਸਖਤ RFC ਕਵਰੇਜ; ਸਪਸ਼ਟ ਤਰੁਟੀ ਕਿਸਮਾਂ (ਜਿਵੇਂ ਕਿ<code>QdCountMismatch</code>)।</li><li><strong>ਰਿਡੰਡੈਂਸੀ ਤੁਸੀਂ ਦੇਖ ਸਕਦੇ ਹੋ:</strong>ਜ਼ੋਨਾਂ ਵਿੱਚ ਤਬਾਦਲੇ ਦੀ ਦਿੱਖ ਲਈ ਡੈਸ਼ਬੋਰਡ ਇਰਾਦਾ।</li><li><strong>ਹਾਰਡਨਡ ਡਿਫਾਲਟ:</strong>ਸਿਸਟਮਡ ਹਾਰਡਨਿੰਗ, ਸੈਕੌਂਪ, ਗੈਰ-ਰੂਟ ਕੰਟੇਨਰ, ਛੋਟੀਆਂ ਡਿਸਟ੍ਰੋਲੈੱਸ ਤਸਵੀਰਾਂ।</li></ul><h2>ਤੁਲਨਾਤਮਕ ਸਥਿਤੀ (ਉੱਚ ਪੱਧਰ)</h2><p>ਸਾਈਟ ਇੱਕ ਪ੍ਰਤੀਯੋਗੀ ਮੈਟ੍ਰਿਕਸ ਪ੍ਰਕਾਸ਼ਿਤ ਕਰਦੀ ਹੈ (TinyDNS, BIND 9, Knot, NSD, PowerDNS, CoreDNS, NebulaDNS)। ਬੁਲਾਏ ਗਏ ਵਿਭਿੰਨਤਾਵਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹਨ<strong>ਪੂਰੀ REST API</strong>,<strong>ਹਮੇਸ਼ਾ-ਚਾਲੂ Prometheus</strong>,<strong>ਬਿਲਟ-ਇਨ ਪ੍ਰਸਾਰ ਗੇਟ</strong>,<strong>Kubernetes ਆਪਰੇਟਰ + CRDs</strong>, </strong>, XTAG10nter, XTAG10nter<strong>ਮੈਮੋਰੀ-ਸੁਰੱਖਿਅਤ ਲਾਗੂਕਰਨ</strong>। ਸੰਸਕਰਣ-ਵਿਸ਼ੇਸ਼ ਦਾਅਵਿਆਂ ਲਈ ਅੱਪਸਟ੍ਰੀਮ ਮੈਟਰਿਕਸ ਦੀ ਵਰਤੋਂ ਕਰੋ।</p><h2>ਮੈਟ੍ਰਿਕਸ ਕੈਟਾਲਾਗ (ਨਮੂਨਾ)</h2><p>ਸਾਈਟ ਦੀਆਂ ਉਦਾਹਰਨਾਂ ਵਿੱਚ ਪੁੱਛਗਿੱਛ ਕਾਊਂਟਰ, ਲੇਟੈਂਸੀ ਹਿਸਟੋਗ੍ਰਾਮ, FORMERR ਟਰੈਕਿੰਗ, AXFR ਕੋਸ਼ਿਸ਼ਾਂ, ਪ੍ਰਤੀ-ਪੀਅਰ ਆਖਰੀ-ਸਫਲਤਾ ਟਾਈਮਸਟੈਂਪ, ਪ੍ਰਸਾਰ ਪਛੜ, ਅਤੇ ਬਿਲਡ ਜਾਣਕਾਰੀ ਸ਼ਾਮਲ ਹਨ। ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ ਇੱਕ ਚੱਲ ਰਹੇ ਬਿਲਡ ਨੂੰ ਸਕ੍ਰੈਪ ਨਹੀਂ ਕਰਦੇ, ਉਦੋਂ ਤੱਕ ਨਾਮਾਂ ਨੂੰ ਉਦਾਹਰਣ ਵਜੋਂ ਸਮਝੋ।</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s, CoreDNS, ਅਤੇ AWS ਰੂਟ&nbsp;53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>ਰੂਟ&nbsp; ਜਨਤਕ ਸਿਹਤ ਦੀ ਜਾਂਚ ਅਤੇ XTAG2253 ਦੀ ਜਾਂਚ ਰੱਖੋ: AWS; NebulaDNS ਸੈਕੰਡਰੀ 'ਤੇ NS ਰਿਕਾਰਡਾਂ ਨੂੰ ਪੁਆਇੰਟ ਕਰੋ ਜਾਂ ਤੁਹਾਡੇ ਸੁਰੱਖਿਆ ਮਾਡਲ ਨਾਲ ਮੇਲ ਖਾਂਦੇ ਸਪਲਿਟ-ਹੋਰੀਜ਼ਨ ਪੈਟਰਨ ਚਲਾਓ।</li><li><strong>k3s / RKE2:</strong>NebulaDNS ਨੂੰ Helm ਦੁਆਰਾ PDB + ServiceMonitor ਨਾਲ ਤੈਨਾਤ ਕਰੋ; ਉਹਨਾਂ ਜ਼ੋਨਾਂ ਲਈ CoreDNS<strong>ਫਾਰਵਰਡ/ਸਟੱਬ</strong>ਨੂੰ NebulaDNS ਨੂੰ ਅਲਾਈਨ ਕਰੋ ਜੋ ਤੁਸੀਂ ਅਸਟੇਟ ਦੇ ਅੰਦਰ ਅਧਿਕਾਰਤ ਤੌਰ 'ਤੇ ਸੇਵਾ ਕਰਦੇ ਹੋ।</li><li><strong>ExternalDNS:</strong>Ingress/LB ਵਸਤੂਆਂ ਤੋਂ ਜਨਤਕ ਰਿਕਾਰਡਾਂ ਤੱਕ ਵਿਕਲਪਿਕ ਪੁਲ—ਪ੍ਰਸਾਰ ਗੇਟਾਂ ਦੇ ਨਾਲ ਤਾਲਮੇਲ ਕਰੋ ਤਾਂ ਕਿ ਆਟੋਮੇਸ਼ਨ ਛੇਤੀ \"ਹੋ ਗਿਆ\" ਦੀ ਨਿਸ਼ਾਨਦੇਹੀ ਨਾ ਕਰ ਸਕੇ।</li></ul><h2>ਰੋਡਮੈਪ ਨੋਟਸ</h2><p>ਜਨਤਕ ਰੋਡਮੈਪ GA (ਤਾਰ/ਜ਼ੋਨ ਸੰਪੂਰਨਤਾ, ਟ੍ਰਾਂਸਫਰ, DNSSEC, ਪ੍ਰਸਾਰ ਪ੍ਰਮਾਣਕ, HA/ਮਲਟੀ-ਰੀਜਨ, ਆਪਰੇਟਰ) ਦੁਆਰਾ ਮੀਲਪੱਥਰ ਸੂਚੀਬੱਧ ਕਰਦਾ ਹੈ। ਤਾਰੀਖਾਂ ਲਈ ਰੇਪੋ ਵਿੱਚ<code>PROJECT_PROMPT.md</code>ਅਤੇ ਰਿਲੀਜ਼ਾਂ ਦੀ ਜਾਂਚ ਕਰੋ।</p><h2>ਸੰਬੰਧਿਤ ਲਾਂਚ ਲੇਖ</h2><p>“ਹੁਣ ਕਿਉਂ / AI ਯੁੱਗ” ਬਿਰਤਾਂਤ ਲਈ,<a href='/pa/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS ਪੜ੍ਹੋ: AI ਯੁੱਗ ਵਿੱਚ ਗੇਮ ਚੇਂਜਰ</a>।</p><h2>TenthMatrix</h2><p>ਦੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹੈ ਅਸੀਂ ਅਧਿਕਾਰਤ ਸਟੈਕ ਦੇ ਆਲੇ-ਦੁਆਲੇ<strong>ਨਿਰੀਖਣਯੋਗ DNS</strong>ਅਤੇ<strong>GitOps</strong>ਪੈਟਰਨ ਭੇਜਣ ਵਿੱਚ ਉਦਯੋਗਾਂ ਦੀ ਮਦਦ ਕਰਦੇ ਹਾਂ—<strong>ਜਾਣਕਾਰੀ.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

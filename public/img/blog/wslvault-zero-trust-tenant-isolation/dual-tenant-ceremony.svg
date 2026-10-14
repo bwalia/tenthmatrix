@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="WSL Vault dual-tenant ceremony workflow">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 26px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .p { fill: #334155; font: 500 13px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .step { fill: #fff7ed; stroke: #c2410c; stroke-width: 2; }
+      .token { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .gate { fill: #0f172a; }
+      .gt { fill: #fde68a; font: 700 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Ceremony: personal oath + dual-tenant control</text>
+  <text class="sub" x="48" y="78">Teams keep their own tokens secret; wide-audience secrets need both sides present</text>
+
+  <rect class="step" x="48" y="120" width="340" height="160" rx="12"/>
+  <text class="h" x="72" y="160">1. Tenant ceremony</text>
+  <text class="p" x="72" y="195">Each team / app / environment</text>
+  <text class="p" x="72" y="218">receives its own signed token.</text>
+  <text class="p" x="72" y="248">Custodians take an oath: never</text>
+  <text class="p" x="72" y="271">share, paste, or store in chat.</text>
+
+  <path class="arrow" d="M400 200 H460"/>
+
+  <rect class="token" x="470" y="120" width="260" height="160" rx="12"/>
+  <text class="h" x="494" y="160">2. Day-to-day use</text>
+  <text class="p" x="494" y="195">Team A token opens only</text>
+  <text class="p" x="494" y="218">Tenant A sealed secrets.</text>
+  <text class="p" x="494" y="248">Team B cannot decrypt A</text>
+  <text class="p" x="494" y="271">even if paths look similar.</text>
+
+  <path class="arrow" d="M740 200 H800"/>
+
+  <rect class="step" x="810" y="120" width="340" height="160" rx="12"/>
+  <text class="h" x="834" y="160">3. Wide-audience request</text>
+  <text class="p" x="834" y="195">Shared release, joint audit,</text>
+  <text class="p" x="834" y="218">or cross-team break-glass.</text>
+  <text class="p" x="834" y="248">Policy requires Tenant A</text>
+  <text class="p" x="834" y="271">and Tenant B tokens together.</text>
+
+  <rect class="gate" x="200" y="360" width="800" height="90" rx="12"/>
+  <text class="gt" x="280" y="415">DUAL CONTROL GATE — both tenant tokens must be presented</text>
+
+  <path class="arrow" d="M400 450 V500"/>
+  <path class="arrow" d="M800 450 V500"/>
+
+  <rect class="token" x="120" y="510" width="420" height="140" rx="12"/>
+  <text class="h" x="144" y="550">Tenant A custodian</text>
+  <text class="p" x="144" y="585">Presents A token + MFA</text>
+  <text class="p" x="144" y="610">Attests purpose in audit chain</text>
+
+  <rect class="token" x="660" y="510" width="420" height="140" rx="12"/>
+  <text class="h" x="684" y="550">Tenant B custodian</text>
+  <text class="p" x="684" y="585">Presents B token + MFA</text>
+  <text class="p" x="684" y="610">Joint approval unlocks shared path</text>
+</svg>

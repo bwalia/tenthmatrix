@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="NebulaDNS authoritative DNS decision matrix versus PowerDNS, BIND, Route 53, NS1, plus sizing, config knobs and SLOs">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e3a5f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#6366f1"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #67e8f9; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 44px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #22d3ee; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.22); stroke-width: 1.2; }
+      .chipText { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #22d3ee; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #67e8f9; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+
+  <text class="kicker" x="40" y="50">AUTHORITATIVE DNS  /  RUST  /  API-FIRST  /  K8S</text>
+  <text class="title" x="40" y="110">NebulaDNS</text>
+  <text class="tagline" x="40" y="138">Observable DNS for agents, clusters and enterprise zones</text>
+  <text class="sub" x="40" y="158">Rust authoritative DNS with REST + gRPC control plane, DoT / DoH / DoQ, propagation gates and audit log.</text>
+
+  <g transform="translate(40,180)">
+    <rect class="chip" x="0" y="0" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="20">01</text>
+    <text class="chipText" x="40" y="20">REST + gRPC zone API</text>
+
+    <rect class="chip" x="0" y="40" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="60">02</text>
+    <text class="chipText" x="40" y="60">DoT / DoH / DoQ wire</text>
+
+    <rect class="chip" x="0" y="80" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="100">03</text>
+    <text class="chipText" x="40" y="100">Propagation verify</text>
+
+    <rect class="chip" x="0" y="120" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="140">04</text>
+    <text class="chipText" x="40" y="140">Audit + metrics out</text>
+  </g>
+
+  <g transform="translate(40,360)">
+    <text class="laneLabel" x="0" y="0">SIZING / CAPACITY</text>
+    <rect x="0" y="8" width="280" height="158" rx="8" fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+    <text class="h" x="10" y="28">QPS: 50k / pod baseline (UDP)</text>
+    <text class="c" x="10" y="44">scale by ingress rate; pods stateless</text>
+    <text class="h" x="10" y="62">Zones: up to 10k per cluster</text>
+    <text class="c" x="10" y="78">sled / redb embedded store; mmap-backed</text>
+    <text class="h" x="10" y="96">Peers: 3 (HA) / 5+ (multi-region)</text>
+    <text class="c" x="10" y="112">SOA serial sync + IXFR</text>
+    <text class="h" x="10" y="130">Memory: 256 MB - 2 GB / pod</text>
+    <text class="c" x="10" y="146">scales with zone count + cache</text>
+    <text class="c" x="10" y="160">QUIC keep-alive saves ~30 percent CPU</text>
+  </g>
+
+  <g transform="translate(440,180)">
+    <text class="laneLabel" x="0" y="0">DECISION MATRIX  /  AUTHORITATIVE DNS</text>
+    <rect x="0" y="8" width="720" height="190" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <text class="h" x="14" y="28">Option</text>
+    <text class="h" x="150" y="28">Host model</text>
+    <text class="h" x="250" y="28">API-first</text>
+    <text class="h" x="330" y="28">DoT/DoH/DoQ</text>
+    <text class="h" x="440" y="28">K8s operator</text>
+    <text class="h" x="540" y="28">Cost band</text>
+    <text class="h" x="620" y="28">Lock-in</text>
+    <line x1="14" y1="36" x2="710" y2="36" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <text class="c" x="14" y="56">NebulaDNS</text>
+    <text class="ok" x="150" y="56">self-host</text>
+    <text class="ok" x="250" y="56">REST + gRPC</text>
+    <text class="ok" x="330" y="56">all three</text>
+    <text class="ok" x="440" y="56">native CRDs</text>
+    <text class="ok" x="540" y="56">infra only</text>
+    <text class="ok" x="620" y="56">none</text>
+
+    <text class="c" x="14" y="78">PowerDNS</text>
+    <text class="ok" x="150" y="78">self-host</text>
+    <text class="ok" x="250" y="78">REST</text>
+    <text class="ok" x="330" y="78">via dnsdist</text>
+    <text class="warn" x="440" y="78">community charts</text>
+    <text class="ok" x="540" y="78">infra only</text>
+    <text class="ok" x="620" y="78">low</text>
+
+    <text class="c" x="14" y="100">BIND9</text>
+    <text class="ok" x="150" y="100">self-host</text>
+    <text class="warn" x="250" y="100">rndc / scripts</text>
+    <text class="warn" x="330" y="100">DoT + DoH 9.18+</text>
+    <text class="bad" x="440" y="100">manual</text>
+    <text class="ok" x="540" y="100">infra only</text>
+    <text class="ok" x="620" y="100">none</text>
+
+    <text class="c" x="14" y="122">Route 53</text>
+    <text class="bad" x="150" y="122">aws cloud</text>
+    <text class="ok" x="250" y="122">SDK + API</text>
+    <text class="warn" x="330" y="122">resolver only</text>
+    <text class="warn" x="440" y="122">ExternalDNS</text>
+    <text class="warn" x="540" y="122">usd / zone / qry</text>
+    <text class="bad" x="620" y="122">high (aws)</text>
+
+    <text class="c" x="14" y="144">NS1 / IBM</text>
+    <text class="bad" x="150" y="144">managed</text>
+    <text class="ok" x="250" y="144">REST + GraphQL</text>
+    <text class="ok" x="330" y="144">DoH supported</text>
+    <text class="warn" x="440" y="144">helm + tf</text>
+    <text class="bad" x="540" y="144">enterprise sub</text>
+    <text class="bad" x="620" y="144">high (vendor)</text>
+
+    <text class="c" x="14" y="166">CoreDNS (k8s only)</text>
+    <text class="warn" x="150" y="166">in-cluster</text>
+    <text class="warn" x="250" y="166">plugins</text>
+    <text class="warn" x="330" y="166">DoH plugin</text>
+    <text class="ok" x="440" y="166">built-in</text>
+    <text class="ok" x="540" y="166">infra only</text>
+    <text class="ok" x="620" y="166">low</text>
+
+    <text class="laneLabel" x="0" y="220">CONFIG KNOBS</text>
+    <rect x="0" y="228" width="350" height="172" rx="8" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+    <text class="h" x="10" y="246">soa.refresh = 3600 / retry 600 / expire 86400</text>
+    <text class="c" x="10" y="260">tighten retry on multi-region setups</text>
+    <text class="h" x="10" y="278">cache.negative_ttl = 60</text>
+    <text class="c" x="10" y="292">cap NXDOMAIN flood; raises miss rate</text>
+    <text class="h" x="10" y="310">edns.udp_size = 1232</text>
+    <text class="c" x="10" y="324">fragmentation-safe across most paths</text>
+    <text class="h" x="10" y="342">propagation.gate_seconds = 120</text>
+    <text class="c" x="10" y="356">CI waits this long before deploying</text>
+    <text class="h" x="10" y="374">dnssec.algorithm = ECDSAP256SHA256</text>
+    <text class="c" x="10" y="388">smaller signatures vs RSA; rotate KSK / ZSK</text>
+
+    <text class="laneLabel" x="370" y="220">SLO / BREACH ACTION</text>
+    <rect x="370" y="228" width="350" height="172" rx="8" fill="rgba(220,38,38,0.08)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
+    <text class="h" x="380" y="246">resolve p99 gt 50 ms  ->  warm cache</text>
+    <text class="c" x="380" y="260">check upstream + zone count budget</text>
+    <text class="h" x="380" y="278">SERVFAIL rate gt 0.5 percent  ->  page</text>
+    <text class="c" x="380" y="292">verify DNSSEC keys + zone consistency</text>
+    <text class="h" x="380" y="310">peer drift gt 1 SOA serial  ->  reconcile</text>
+    <text class="c" x="380" y="324">trigger IXFR + propagation verify</text>
+    <text class="h" x="380" y="342">QPS spike gt 3x  ->  rate-limit class</text>
+    <text class="c" x="380" y="356">protect zone store; shed abusive sources</text>
+    <text class="h" x="380" y="374">CPU gt 70 percent sustained  ->  scale up</text>
+    <text class="c" x="380" y="388">add pod or move to bigger node</text>
+  </g>
+
+  <text class="brand" x="40" y="610">WORKSTATION.CO.UK  /  github.com/balinderwalia/nebuladns</text>
+  <text class="audience" x="1160" y="610" text-anchor="end">OPS  /  ARCHITECTS  /  NETWORKING  /  SRE</text>
+</svg>

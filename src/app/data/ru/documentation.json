@@ -1,0 +1,61 @@
+{
+  "pagTitle": "Полетели",
+  "pagDescription": "Это описание страницы",
+  "sections": {
+    "firstSection": {
+      "title": "Клонировать",
+      "id": "clone-step",
+      "content": {
+        "heading": "Пример кода по умолчанию:",
+        "text": "git clone https://github.com/bwalia/webimpetus-src.git"
+      }
+    },
+    "secondSection": {
+      "title": "Установка",
+      "id": "install-step",
+      "content": {
+        "first": {
+          "id": "first-1",
+          "heading": "Первый",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "code": {
+            "language": "bash",
+            "title": "Пример кода по умолчанию:",
+            "codes": [
+              "sudo bash ./deploy-to-docker.sh",
+              "sudo bash ./deploy-to-kubernates.sh"
+            ]
+          }
+        },
+        "second": {
+          "id": "second-1",
+          "heading": "Второй",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "diff": {
+            "left": {
+              "language": "bash",
+              "title": "Пример кода по умолчанию:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            },
+            "right": {
+              "language": "bash",
+              "title": "Пример кода по умолчанию:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            }
+          }
+        },
+        "third": {
+          "id": "third-1",
+          "heading": "Третий",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes."
+        }
+      }
+    }
+  }
+}

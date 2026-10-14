@@ -1,0 +1,125 @@
+@use '../../styles/mixins' as *;
+
+.btn {
+  --_h: var(--tm-tap-target);
+  --_px: 1.15rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--_h);
+  padding: 0 var(--_px);
+  border: 1px solid transparent;
+  border-radius: var(--tm-radius-sm);
+  font-family: var(--tm-font-body);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-semibold);
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--tm-duration-fast) var(--tm-ease-standard),
+    border-color var(--tm-duration-fast) var(--tm-ease-standard),
+    color var(--tm-duration-fast) var(--tm-ease-standard),
+    transform var(--tm-duration-instant) var(--tm-ease-standard);
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.label {
+  min-width: 0;
+}
+
+.icon {
+  flex: none;
+}
+
+.arrow {
+  transition: transform var(--tm-duration-fast) var(--tm-ease-out);
+}
+
+.btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+.sm {
+  --_h: 36px;
+  --_px: 0.85rem;
+
+  // keep a 44px hit area
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px 0;
+  }
+}
+
+.lg {
+  --_h: 52px;
+  --_px: 1.5rem;
+  font-size: 1rem;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+.primary {
+  background: var(--tm-accent);
+  color: var(--tm-accent-contrast);
+
+  &:hover {
+    background: var(--tm-accent-hover);
+    color: var(--tm-accent-contrast);
+  }
+}
+
+.secondary {
+  background: transparent;
+  border-color: var(--tm-line-strong);
+  color: var(--tm-text);
+
+  &:hover {
+    border-color: var(--tm-text);
+    background: var(--tm-surface);
+    color: var(--tm-text);
+  }
+}
+
+.tertiary {
+  --_px: 0;
+  min-height: var(--tm-tap-target);
+  background: transparent;
+  color: var(--tm-accent);
+  border-radius: var(--tm-radius-xs);
+
+  &:hover {
+    color: var(--tm-accent-hover);
+  }
+}
+
+.night {
+  background: var(--tm-night-accent);
+  color: var(--tm-brand-graphite);
+
+  &:hover {
+    background: var(--tm-night-accent-hover);
+    color: var(--tm-brand-graphite);
+  }
+}

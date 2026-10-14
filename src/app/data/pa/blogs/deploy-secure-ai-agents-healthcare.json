@@ -1,0 +1,62 @@
+{
+  "uuid": "blog-secure-ai-healthcare-001",
+  "internal_id": 976,
+  "slug": "deploy-secure-ai-agents-healthcare",
+  "title": "How to Deploy Secure AI Agents in Healthcare",
+  "sub_title": "Give agents the right access for appointments, billing and clinical support — with guardrails that keep PHI and payments out of the model",
+  "excerpt": "AI agents can book appointments, take payments and support clinical work. Here is how healthcare teams can give them the right access, and no more.",
+  "meta_title": "Deploy Secure AI Agents in Healthcare | TenthMatrix",
+  "meta_description": "AI agents can book appointments, take payments and support clinical work. Give them the right access — and no more — with PHI separation, guardrails and audits.",
+  "meta_keywords": "AI agents, healthcare, security, HIPAA, PCI DSS, compliance, PHI, guardrails, citizen health, TenthMatrix",
+  "cover_image": "/img/secure-ai-healthcare-cover.svg",
+  "images": [
+    {
+      "url": "/img/secure-ai-healthcare-cover.svg",
+      "id": 976,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Secure AI agents in healthcare"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>AI agents can book appointments, take payments and support clinical work. Healthcare teams should give them the <strong>right access — and no more</strong>. Companion deep dive: <a href=\"/en/articles/deploy-secure-ai-agents-healthcare\">long article</a>.</em></p>\n\n<p><img src=\"/img/secure-ai-healthcare-cover.svg\" alt=\"How to deploy secure AI agents in healthcare\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #0891b2;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Do not ask whether the AI is “safe enough” to see all PHI. Ask what access the agent needs to finish the patient’s request — then keep everything else on fixed, rule-based paths with audit trails that do not copy more sensitive data.\n</div>\n\n<p>Healthcare teams are moving past AI pilots. Agents can work out what a patient wants, pick a tool, connect to systems and take action: appointments, billing questions, payments and clinical support. That creates a new security problem. Normal software follows a fixed path. An agent does not — the path changes with the conversation. Near Protected Health Information (PHI) or payment data, the key question is least privilege, not model trust.</p>\n\n<h2>Three ideas for healthcare leaders</h2>\n\n<p><img src=\"/img/secure-ai-healthcare-data-separation.svg\" alt=\"Keep sensitive data away from the AI agent\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<ol>\n  <li><strong>Keep sensitive data away from the AI.</strong> On a bill-pay call, the agent needs intent and payment status — not the card number. Use DTMF or a locked digital payment flow; return only a token or “approved”. Context must be chosen on purpose, not passed by default.</li>\n  <li><strong>Do not use the AI as your security guard.</strong> Let the model understand language. Let fixed controls decide login, permissions and high-risk actions.</li>\n  <li><strong>Track what the agent did, not just what it said.</strong> Audit agent, workflow, tools, permission decisions, boundary crossings and results — without dumping PHI into logs and analytics.</li>\n</ol>\n\n<p><img src=\"/img/secure-ai-healthcare-guardrails.svg\" alt=\"AI decides intent; system enforces healthcare guardrails\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<p><img src=\"/img/secure-ai-healthcare-citizen-governance.svg\" alt=\"Citizen health dynamic answers with protected data\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<p>For national and regional programmes, citizens still need spontaneous, dynamic answers — appointments, guidance, capacity messaging — while charts and payment data stay behind purpose-bound feeds, tokenisation and governance. A BAA (HIPAA) and AOC (PCI DSS) are starting points, not the whole design.</p>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>TenthMatrix practice.</strong> Pair flexible agents with MCP OAuth, Vault leases, edge controls (WSL Proxy), and promotion discipline (Ring Promoter). See also <a href=\"/en/articles/agentic-ai-security-mcp-oauth-vault\">agentic security</a> and <a href=\"https://www.workstation.co.uk/en/ai-healthcare\">AI Healthcare</a>.\n</div>\n\n<p><a href=\"/en/articles/deploy-secure-ai-agents-healthcare\">Read the full technical brief</a> · <a href=\"/en/contact-us\">Talk to TenthMatrix</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-09-17T10:00:00Z",
+  "updated_at": "2026-09-17T10:00:00Z",
+  "published_date": "2026-09-17",
+  "status": true,
+  "language_code": "pa"
+}

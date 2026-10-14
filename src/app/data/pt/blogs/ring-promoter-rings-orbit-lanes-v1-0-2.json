@@ -1,0 +1,74 @@
+{
+  "uuid": "blog-ring-promoter-orbit-lanes-001",
+  "internal_id": 980,
+  "slug": "ring-promoter-rings-orbit-lanes-v1-0-2",
+  "title": "Ring Promoter v1.0.2 — Rings, Orbit and Lanes Side by Side",
+  "sub_title": "Orbit for the fleet, Lanes for the APP × environment matrix — two views of int → test → acc → prod in the Happy Friday release",
+  "excerpt": "Ring Promoter v1.0.2 ships Orbit and Lanes side by side — pause on Orbit for the fleet, flip to Lanes when you need the matrix.",
+  "meta_title": "Ring Promoter v1.0.2 — Rings, Orbit and Lanes | TenthMatrix",
+  "meta_description": "Ring Promoter v1.0.2: Orbit Deployer Board and NEW Lanes matrix side by side. Release notes, TenthMatrix product page, and walkthrough video.",
+  "meta_keywords": "Ring Promoter, v1.0.2, Orbit, Lanes, deployment rings, CI/CD, int test acc prod, Kubernetes, ringpromoter.com, TenthMatrix",
+  "cover_image": "/img/ring-promoter-orbit-lanes-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-orbit-lanes-cover.svg",
+      "id": 980,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter v1.0.2 Rings Orbit and Lanes"
+    },
+    {
+      "url": "/img/ring-promoter-orbit-lanes-diagram.svg",
+      "id": 981,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Orbit fleet view beside Lanes matrix"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>Ring Promoter v1.0.2</strong> puts Rings, Orbit, and Lanes side by side — two instruments for the same promotion truth across <code>int → test → acc → prod</code>. Product page: <a href=\"/en/ring-promoter\">/ring-promoter</a> · Site: <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> · Deep dive: <a href=\"/en/articles/ring-promoter-rings-orbit-lanes-v1-0-2\">long article</a>.</em></p>\n\n<p><img src=\"/img/ring-promoter-orbit-lanes-cover.svg\" alt=\"Ring Promoter v1.0.2 — Rings, Orbit and Lanes\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0;\">\n<iframe src=\"https://www.youtube.com/embed/hNU4sWxrDFk\" title=\"Ring Promoter v1.0.2 — Rings, Orbit and Lanes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p class=\"text-muted\" style=\"font-size:0.9rem;\"><a href=\"https://youtu.be/hNU4sWxrDFk\" target=\"_blank\" rel=\"noopener noreferrer\">Watch on YouTube</a> · Release: <a href=\"https://github.com/bwalia/ring-promoter/releases/tag/v1.0.2\" target=\"_blank\" rel=\"noopener noreferrer\">v1.0.2</a> (25 Sep 2026)</p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Pause on <strong>Orbit</strong> for the fleet. Flip to <strong>Lanes</strong> when you need the APP × environment matrix. Both views answer the same question: where versions sit, and how far the newest build has earned toward production.\n</div>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>QA tests failing on a Friday?</strong> No worries. Ring Promoter keeps applications healthy and <strong>auto-rolls back</strong> if a hop stays unhealthy. When <strong>QA gates pass</strong>, auto-promote carries the release through early rings <strong>all the way to Acceptance</strong> — and still holds the human gate before production. More on gates: <a href=\"/en/docs/blogs/ring-promoter-qa-gates-before-production\">QA Gates Before Production</a>.\n</div>\n\n<h2>What shipped in v1.0.2</h2>\n<ul>\n  <li><strong>Orbit Deployer Board</strong> — Earth at the centre (live users); PROD closest in, then ACC, TEST, INT as outer spokes. Newest versions light solid; older stay hollow.</li>\n  <li><strong>Lanes</strong> — NEW multi-environment matrix of APP × INT / TEST / ACC / PROD. Spanning version pills mean parity; a split at PROD means the hop still has to be earned.</li>\n  <li><strong>Descent and cinematic stage</strong> — rings as orbits (Lanes as fallback), more sky, quieter labels, collision-aware leaders.</li>\n  <li><strong>Ops polish since v1.0.1</strong> — in-place ring restart, external QA agent scaffolding, multi-arch images, longer Helm waits, clearer workstation prod-password secrets.</li>\n</ul>\n\n<p><img src=\"/img/ring-promoter-orbit-lanes-diagram.svg\" alt=\"Orbit fleet view beside Lanes matrix view\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Why this matters on TenthMatrix</h2>\n<p>Platform teams running many apps through shared rings need a control room, not a pile of per-app pages. Orbit shows how far each release climbed. Lanes makes prod lag obvious in one glance. The promotion protocol underneath is unchanged: one hop at a time, health-gated, auto-rollback, full history.</p>\n\n<h2>Previous videos</h2>\n<ul>\n  <li><a href=\"https://youtu.be/SjXwaTVuYhM\" target=\"_blank\" rel=\"noopener noreferrer\">Ring Promoter quick intro (5 min)</a> — <a href=\"/en/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">modern CI/CD blog</a></li>\n  <li><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">QA Gates Before Production</a> — <a href=\"/en/docs/blogs/ring-promoter-qa-gates-before-production\">QA gates blog</a></li>\n</ul>\n\n<h2>Where to go next</h2>\n<ul>\n  <li><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> — landing and “what shipped”</li>\n  <li><a href=\"/en/ring-promoter\">TenthMatrix Ring Promoter</a> — product overview and release context</li>\n  <li><a href=\"https://github.com/bwalia/ring-promoter/releases/tag/v1.0.2\" target=\"_blank\" rel=\"noopener noreferrer\">GitHub release notes</a></li>\n  <li><a href=\"/en/articles/ring-promoter-rings-orbit-lanes-v1-0-2\">Technical brief</a> · <a href=\"/en/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Modern CI/CD overview</a></li>\n</ul>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-25T16:00:00Z",
+  "updated_at": "2026-09-25T16:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true,
+  "language_code": "pt"
+}

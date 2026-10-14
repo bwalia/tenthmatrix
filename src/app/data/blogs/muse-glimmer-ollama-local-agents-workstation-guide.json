@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-muse-glimmer-001",
+  "internal_id": 961,
+  "slug": "muse-glimmer-ollama-local-agents-workstation-guide",
+  "title": "Muse Glimmer on Ollama: Always-On Local Agents on One GPU",
+  "sub_title": "Meta’s 30B Apache 2.0 agent model — tool use, vision, failure recovery — and what it means for private AI on workstations",
+  "excerpt": "Meta Muse Glimmer brings always-on local agents to a single GPU via Ollama: 30B, Apache 2.0, 128K context, vision and tools — TenthMatrix business guide.",
+  "meta_title": "Muse Glimmer on Ollama — Local Agents Guide | TenthMatrix",
+  "meta_description": "TenthMatrix guide to Meta Muse Glimmer on Ollama: 30B Apache 2.0 local agents, vision, tools, failure recovery, MLX on Apple Silicon, and hybrid production advice.",
+  "meta_keywords": "Muse Glimmer, Ollama, Meta, local agents, open weights, Apache 2.0, MLX, Apple Silicon, MCP, OpenClaw, TenthMatrix",
+  "cover_image": "/img/muse-glimmer-cover.svg",
+  "images": [
+    {
+      "url": "/img/muse-glimmer-cover.svg",
+      "id": 961,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Meta Muse Glimmer local agents on Ollama"
+    },
+    {
+      "url": "/img/muse-glimmer-local-agent-stack.svg",
+      "id": 962,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Muse Glimmer local agent stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Meta’s <strong>Muse Glimmer</strong> is a 30B open model tuned for always-on local agents — tool use, long tasks, failure recovery, vision — and it ships on <a href=\"https://ollama.com/library/muse-glimmer\" target=\"_blank\" rel=\"noopener noreferrer\">Ollama</a> under Apache 2.0 for a single GPU or Apple Silicon. Here is the TenthMatrix business take. Specs, benches, methodology, and a production checklist in the <a href=\"/en/articles/muse-glimmer-ollama-local-agents-workstation-guide\">long article</a>.</em></p>\n\n<p><img src=\"/img/muse-glimmer-cover.svg\" alt=\"Meta Muse Glimmer local agents on Ollama\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Cloud frontier APIs still win on peak polish and managed SLAs. Muse Glimmer changes the <em>default for private, always-on agents</em>: a distilled 30B model with a perception encoder that fits consumer / workstation hardware (~18GB weights, 128K context), licensed Apache 2.0, and wired into Claude Code, OpenCode, Hermes Agent, and OpenClaw via <code>ollama launch</code>. Privacy, air-gap, and predictable unit cost become product features — not research projects.\n</div>\n\n<h2>What shipped (in business terms)</h2>\n<ul>\n  <li><strong>Always-on local agents:</strong> designed to keep working through multi-step jobs without round-tripping every token to a hyperscaler.</li>\n  <li><strong>Tool discipline:</strong> schema-accurate function calling across long workflows — the difference between a demo chatbot and an agent that files tickets, edits code, or queries MCP tools.</li>\n  <li><strong>Failure recovery:</strong> when a tool errors or returns nonsense, the model diagnoses and retries instead of freezing the run.</li>\n  <li><strong>Multimodal:</strong> screenshots, charts, and documents go in alongside text — useful for ops consoles, invoices, and UI automation.</li>\n  <li><strong>Controllable effort:</strong> dial reasoning strength up for hard tickets, down for latency-sensitive paths.</li>\n  <li><strong>Licence:</strong> Apache 2.0 — a cleaner commercial story than many “open weights” cards with SaaS carve-outs.</li>\n</ul>\n\n<p><img src=\"/img/muse-glimmer-local-agent-stack.svg\" alt=\"Muse Glimmer local agent stack from scaffold to Ollama\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Why boards and SMEs should care</h2>\n<ol>\n  <li><strong>Data residency:</strong> customer PII, source code, and financial docs can stay on the workstation or private VPC.</li>\n  <li><strong>Unit economics:</strong> inference cost becomes hardware amortisation + electricity, not per-token invoices that spike with agent loops.</li>\n  <li><strong>Continuity:</strong> offline or degraded-network sites (factories, clinics, field teams) keep agents running.</li>\n  <li><strong>Procurement clarity:</strong> Apache 2.0 + Ollama distribution lowers legal and ops friction versus opaque weight dumps.</li>\n</ol>\n\n<h2>Where it does <em>not</em> replace the cloud</h2>\n<p>Keep closed APIs (or larger open MoEs on a cluster) for peak-critical paths, brand-sensitive generation, and workloads that need vendor support SLAs. Muse Glimmer is the strong <strong>local / private lane</strong> in a hybrid router — not a mandate to rip out Bedrock or Anthropic overnight. Pair it with evals, HITL, and the controls in our <a href=\"/en/docs/blogs/agentic-ai-security-mcp-oauth-vault\">agentic security brief</a>.</p>\n\n<h2>TenthMatrix advice</h2>\n<ul>\n  <li><strong>SMEs / Mac shops:</strong> start with <code>ollama run muse-glimmer:30b-mlx</code> on Apple Silicon (or the standard 18GB tag on a single mid/high <a href=\"https://www.workstation.co.uk/ai-workstations\" target=\"_blank\" rel=\"noopener\">GPU workstation</a>).</li>\n  <li><strong>Dev teams:</strong> wire scaffolds with <code>ollama launch claude --model muse-glimmer</code> (or OpenCode / Hermes / OpenClaw) and measure your golden tasks — not Meta’s leaderboard alone.</li>\n  <li><strong>Enterprises:</strong> pilot air-gapped agent pods with Review Bot + GitOps; keep a cloud failover for overflow.</li>\n</ul>\n\n<p>Full technical rewrite — architecture, Ollama tags, benchmark matrix vs Gemma4-31B / Qwen3.6-27B, Meta evaluation methodology, and a production checklist: <a href=\"/en/articles/muse-glimmer-ollama-local-agents-workstation-guide\">long article</a>. Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ollama",
+      "id": 944
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "local-ai",
+      "id": 946
+    },
+    {
+      "name": "apple-silicon",
+      "id": 942
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    }
+  ],
+  "created_at": "2026-08-12T10:00:00Z",
+  "updated_at": "2026-08-12T10:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

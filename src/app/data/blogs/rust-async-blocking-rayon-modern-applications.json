@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "Rust Async Blocking, Rayon & Modern Applications",
+  "sub_title": "What “blocking” means in async Rust, when Rayon fits CPU-bound work, and why Rust stays strong for APIs, edge, agents, and CI/CD platforms",
+  "excerpt": "TenthMatrix on async Rust blocking, Rayon for CPU-bound work, and why Rust fits modern APIs, edge, agents, and CI/CD — inspired by Alice Ryhl’s Rayon guidance.",
+  "meta_title": "Rust Async Blocking & Rayon for Modern Apps | TenthMatrix",
+  "meta_description": "What blocking means in async Rust, when Rayon helps CPU-bound work, and why Rust is strong for APIs, edge, agents, and CI/CD platforms.",
+  "meta_keywords": "Rust, async Rust, Tokio, Rayon, spawn_blocking, blocking, CPU-bound, Polyglot Benchmarks, APIs, edge, agents, CI/CD, TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>TenthMatrix</strong> on why Rust stays a first-class choice for modern applications — and what “blocking” really means when you mix Tokio with CPU-heavy work. Inspired by Alice Ryhl’s <a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Async: What is blocking?</a> (Rayon section). Deep dive: <a href=\"/en/articles/rust-async-blocking-rayon-modern-applications\">long article</a>.</em></p>\n\n<p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> In async Rust, “blocking” means holding a runtime worker away from <code>.await</code> long enough that other tasks starve. Move expensive CPU work off Tokio’s pool — often with <strong>Rayon</strong> plus a oneshot channel — and keep the async path responsive for APIs, edge proxies, agents, and CI/CD control planes.\n</div>\n\n<h2>Why Rust keeps winning modern application slots</h2>\n<p>Teams pick Rust when they need memory safety without a GC pause tax, predictable latency under load, and concurrency that the type system helps you get right. That combination shows up everywhere TenthMatrix builds: high-throughput APIs, edge gateways, agent runtimes, and promotion control planes that cannot freeze when a spike of CPU work arrives.</p>\n<p>It is not “Rust for everything.” Our <a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a> dashboard and companion posts — <a href=\"/en/docs/blogs/polyglot-benchmarks-right-tool-right-application\">blog</a> / <a href=\"/en/articles/polyglot-benchmarks-right-tool-right-application\">article</a> — compare Rust with Go, Bun, JVM stacks, and scripting edges on the same HTTP workloads. Rust often leads on CPU-bound and concurrency-heavy rows; other runtimes win on velocity or edge transforms. The point is evidence, then ADRs.</p>\n\n<h2>What “blocking” means in async Rust</h2>\n<p>Async runtimes (Tokio and friends) swap tasks at <code>.await</code> points. If your task burns milliseconds of CPU or sleeps with <code>std::thread::sleep</code> without awaiting, the worker cannot schedule anyone else on that thread. Locally you might not notice (a few cores hide the bug); in production you run out of workers and latency tails explode.</p>\n<p>Rule of thumb from the ecosystem: stay within tens to hundreds of microseconds between awaits for latency-sensitive services — and treat anything longer as work that belongs elsewhere.</p>\n\n<h2>When Rayon helps (CPU-bound)</h2>\n<ul>\n  <li><strong>spawn_blocking</strong> — Tokio’s blocking pool: great for sync IO (filesystem, blocking DB drivers); suboptimal for heavy CPU because it can oversubscribe cores.</li>\n  <li><strong>Rayon</strong> — a small, CPU-sized thread pool for parallel iterators and expensive computations. Bridge with <code>rayon::spawn</code> + <code>tokio::sync::oneshot</code> so the async task awaits the result without blocking the runtime thread.</li>\n  <li><strong>Dedicated thread</strong> — for forever-loops (connection managers, long-lived workers) that must not permanently consume pool capacity.</li>\n</ul>\n<p>That Rayon + oneshot pattern is exactly what Alice Ryhl walks through in the <a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon section</a> — TenthMatrix’s take is how those choices land in polyglot estates shipping agents and platforms, not a reprint of the tutorial.</p>\n\n<h2>Where this shows up in TenthMatrix products</h2>\n<ul>\n  <li><strong>APIs and edge</strong> — keep request workers free for IO; fan CPU transforms onto Rayon when a hot path needs it.</li>\n  <li><strong>Agents</strong> — embedding prep, eval batches, and tool-side crunch should not stall the orchestration loop.</li>\n  <li><strong>CI/CD platforms</strong> — health checks and promotion engines (see <a href=\"/en/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>) stay responsive while heavier verification work runs off-pool.</li>\n  <li><strong>Kubernetes ops</strong> — incident copilots like <a href=\"/en/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a> need snappy control loops even when analysis is CPU-heavy.</li>\n</ul>\n\n<h2>Read next</h2>\n<ol>\n  <li><a href=\"/en/articles/rust-async-blocking-rayon-modern-applications\">Long article</a> — cheat sheet, code-shaped patterns, and architecture notes.</li>\n  <li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a> — live Rust vs peers evidence.</li>\n  <li>Alice Ryhl — <a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">Async: What is blocking?</a></li>\n</ol>\n\n<p>Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

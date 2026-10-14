@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-kubeflow-argocd-001",
+  "internal_id": 953,
+  "slug": "kubeflow-argocd-gitops-mlops-kubernetes",
+  "title": "Kubeflow + Argo CD: GitOps MLOps บน Kubernetes",
+  "sub_title": "เทรนด้วย Kubeflow ส่งมอบด้วย Argo CD — pipelines, Model Registry, KServe และ rollback ผ่าน git revert",
+  "excerpt": "จับคู่ Kubeflow กับ Argo CD สำหรับ MLOps บน Kubernetes: เทรนและลงทะเบียนโมเดลใน Kubeflow promote InferenceServices ด้วย GitOps ย้อนกลับด้วย git revert",
+  "meta_title": "Kubeflow + Argo CD: GitOps MLOps บน Kubernetes",
+  "meta_description": "รวม Kubeflow Pipelines, Model Registry และ KServe กับ Argo CD GitOps สำหรับ training-to-serving ที่ตรวจสอบได้บน Kubernetes",
+  "meta_keywords": "Kubeflow Argo CD, GitOps MLOps, KServe, Kubeflow Pipelines, ML บน Kubernetes, model registry, InferenceService",
+  "cover_image": "/img/kubeflow-argocd-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubeflow-argocd-cover.svg",
+      "id": 953,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kubeflow and Argo CD GitOps MLOps on Kubernetes"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>คู่มือปฏิบัติจับคู่ Kubeflow (train / evaluate / register) กับ Argo CD (GitOps deliver / rollback) สำหรับสถาปัตยกรรมเต็ม manifests และ anti-patterns อ่าน <a href=\"/th/articles/kubeflow-argocd-gitops-mlops-kubernetes\">บทความยาว</a>.</em></p>\n<p><img alt=\"Kubeflow และ Argo CD GitOps MLOps บน Kubernetes\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/kubeflow-argocd-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>เวอร์ชันหนึ่งย่อหน้า</strong> Kubeflow เป็นเจ้าของวงจรชีวิต ML บน Kubernetes — pipelines, training jobs, model registry และ KServe Argo CD เป็นเจ้าของการส่งมอบ: ทุก <code>InferenceService</code>, คำจำกัดความ pipeline และคอมโพเนนต์แพลตฟอร์มถูก reconcile จาก Git เทรนและประเมินใน Kubeflow; promote โดยอัปเดต Git manifest; ย้อนกลับด้วย <code>git revert</code>. เก็บโมเดลใน object storage — Git เก็บ URIs และคอนฟิก ไม่ใช่น้ำหนัก\n</div>\n<h2>ทำไมต้องสองเครื่องมือ?</h2>\n<p><strong>Kubeflow</strong> ตอบ: เราจะรันการเทรนและการประเมินที่ทำซ้ำได้บน GPUs อย่างไร? <strong>Argo CD</strong> ตอบ: เราจะส่งโมเดลที่ได้ไปยังโปรดักชันโดยไม่มีคลัสเตอร์ snowflake อย่างไร? การใช้แค่ Kubeflow มักจบที่การทำแบบมือ <code>kubectl apply</code> สำหรับการเสิร์ฟ การใช้แค่ Argo CD ทำให้คุณไม่มี ML pipeline และระบบทดลองระดับชั้นหนึ่ง รวมกันแล้วเป็นลูป MLOps ปิด</p>\n<h2>การแบ่งงาน</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">ข้อกังวล</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">เครื่องมือ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">อะไรอยู่ใน Git</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pipeline DAGs, TrainJobs, การทดลอง</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow Pipelines / Trainer</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pipeline YAML / สเปกคอมโพเนนต์</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">อาร์ติแฟกต์โมเดล &amp; สายเลือด</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Model Registry + object storage</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">URI + metadata — ไม่ใช่ไฟล์น้ำหนัก</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Serving, canaries, rollbacks</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">KServe + Argo CD</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><code>InferenceService</code> overlays</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ติดตั้งแพลตฟอร์ม &amp; อัปเกรด</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Argo CD Applications</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Helm/Kustomize สำหรับ Kubeflow เอง</td></tr>\n</tbody>\n</table>\n<h2>ลูป end-to-end (ลักษณะที่ดีหน้าตาเป็นอย่างไร)</h2>\n<ol>\n<li>นักวิทยาศาสตร์ข้อมูล merge การเปลี่ยน pipeline → Argo CD sync pipeline CRDs</li>\n<li>Kubeflow รันการเทรนบนโหนด GPU (จัดคิวผ่าน Kueue ได้ตามต้องการ)</li>\n<li>ประตูการประเมินผ่าน → ลงทะเบียน model URI; PR อัปเดต prod <code>InferenceService</code> <code>storageUri</code>.</li>\n<li>Argo CD ตรวจพบ OutOfSync แล้ว rollout (ทราฟฟิก canary ก่อน)</li>\n<li>Drift หรือเมตริกแย่ → <code>git revert</code> คืน URI ก่อนหน้า; Argo CD reconcile</li>\n</ol>\n<h2>ห้าแนวปฏิบัติที่ลดความเจ็บปวด</h2>\n<ul>\n<li><strong>แยก repos หรือโฟลเดอร์:</strong> แพลตฟอร์ม (ติดตั้ง Kubeflow) vs แอป (pipelines + InferenceServices)</li>\n<li><strong>อย่า commit ไบนารีโมเดล</strong> — อ้างอิง <code>s3://</code> / <code>gs://</code> / PVC URIs.</li>\n<li><strong>Sync waves:</strong> MySQL/MinIO (หรือเทียบเท่าที่จัดการ) ก่อนคอมโพเนนต์ KFP</li>\n<li><strong>ขีดจำกัดทรัพยากรทุกขั้น</strong> — งานเทรนไร้ขีดจำกัดจะทำให้คลัสเตอร์อด</li>\n<li><strong>Promotion = PR,</strong> ไม่ใช่ปุ่มในโน้ตบุ๊ก เส้นทางตรวจสอบได้ฟรี</li>\n</ul>\n<h2>เมื่อสแต็กนี้เกินจำเป็น</h2>\n<p>Mac Studio เครื่องเดียวที่รัน Ollama สำหรับแชทบอท SME ไม่ต้องการ Kubeflow + Argo CD ใช้แพทเทิร์นนี้เมื่อคุณมีหลายโมเดล มีการแย่ง GPU ความต้องการ compliance หรือมากกว่าหนึ่งสภาพแวดล้อม (dev/staging/prod) ที่ต้องเหมือนกัน</p>\n<div style=\"background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>อ่านที่เกี่ยวข้อง</strong> เราเผยแพร่ภาพรวม GitOps ที่โฟกัส Argo CD และ Flux แล้ว: <a href=\"/th/docs/blogs/kubernetes-continuous-delivery\">Kubernetes Continuous Delivery: GitOps Pipelines ด้วย ArgoCD &amp; Flux</a>. โพสต์นี้เป็นคู่มือเฉพาะ ML — Kubeflow ในลูป\n</div>\n<h2>อ่านเวอร์ชันยาว</h2>\n<p>การ <a href=\"/th/articles/kubeflow-argocd-gitops-mlops-kubernetes\">บทความยาว</a> ครอบคลุมแผนที่ Kubernetes MLOps ปี 2026 (KFP v2, Trainer, KServe, Kueue) แพทเทิร์น Argo CD Application ประตู promote canary serving, GPU FinOps และเช็กลิสต์ rollout เผยแพร่โดย <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubeflow",
+      "id": 980
+    },
+    {
+      "name": "argocd",
+      "id": 981
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "kserve",
+      "id": 983
+    }
+  ],
+  "created_at": "2026-07-20T09:00:00Z",
+  "updated_at": "2026-07-20T09:00:00Z",
+  "published_date": "2026-07-20",
+  "status": true
+}

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="VAT return workflow with Claude Code: source, ingest, categorise, VAT engine, submit, audit lanes plus decision matrix">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06121f"/>
+      <stop offset="0.55" stop-color="#0a2740"/>
+      <stop offset="1" stop-color="#1a0b3a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.1" r="0.6">
+      <stop offset="0" stop-color="#fbbf24" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.1" cy="0.9" r="0.5">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #fcd34d; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 38px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #fbbf24; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.85); font: 500 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .laneLabel { fill: #fcd34d; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.78); font: 400 9.5px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeTextSm { fill: rgba(255,255,255,0.78); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .annotation { fill: #fcd34d; font: 600 9px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .num { fill: #fbbf24; font: 800 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .matrixHead { fill: #fcd34d; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .matrixCell { fill: rgba(255,255,255,0.85); font: 500 9.5px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .matrixRow { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxNum { fill: #fcd34d; font: 700 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+    <marker id="arRight" markerWidth="9" markerHeight="9" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#fbbf24"/>
+    </marker>
+    <marker id="arDown" markerWidth="9" markerHeight="9" refX="4.5" refY="8" orient="auto">
+      <polygon points="0 0,9 0,4.5 8" fill="#fbbf24"/>
+    </marker>
+    <marker id="arGreen" markerWidth="9" markerHeight="9" refX="8" refY="3.5" orient="auto">
+      <polygon points="0 0,9 3.5,0 7" fill="#22c55e"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect width="1200" height="720" fill="url(#grid)"/>
+  <rect width="1200" height="720" fill="url(#glow)"/>
+  <rect width="1200" height="720" fill="url(#glow2)"/>
+
+  <text class="kicker" x="60" y="44">CLAUDE CODE  /  HMRC MTD  /  VAT RETURNS WORKFLOW</text>
+  <text class="title" x="60" y="80">DB to Box 1-9 to MTD: the full pipeline</text>
+  <text class="tagline" x="60" y="106">Six lanes: source  -&gt;  normalise  -&gt;  categorise  -&gt;  engine  -&gt;  submit  -&gt;  audit</text>
+  <text class="sub" x="60" y="126">Deterministic VAT computation. LLM only for classification and reconciliation hints. Human gate before submission.</text>
+
+  <g transform="translate(40,150)">
+    <rect width="1120" height="68" rx="12" fill="rgba(66,165,245,0.06)" stroke="#42a5f5" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">SOURCE PLANE  /  YOUR INVOICES + EXPENSES</text>
+    <g transform="translate(14,28)">
+      <rect width="180" height="32" rx="8" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="14" text-anchor="middle">Postgres / MySQL / SQLite</text>
+      <text class="nodeTextSm" x="90" y="26" text-anchor="middle">invoices + invoice_lines + expenses</text>
+    </g>
+    <g transform="translate(204,28)">
+      <rect width="180" height="32" rx="8" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="14" text-anchor="middle">Stripe / Wise / Revolut CSV</text>
+      <text class="nodeTextSm" x="90" y="26" text-anchor="middle">payments + fees, multi-currency</text>
+    </g>
+    <g transform="translate(394,28)">
+      <rect width="180" height="32" rx="8" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="14" text-anchor="middle">Bank feeds + supplier PDFs</text>
+      <text class="nodeTextSm" x="90" y="26" text-anchor="middle">OFX / CSV / OCR for receipts</text>
+    </g>
+    <g transform="translate(584,28)">
+      <rect width="180" height="32" rx="8" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="14" text-anchor="middle">VAT period filter</text>
+      <text class="nodeTextSm" x="90" y="26" text-anchor="middle">2026-04-01 to 2026-06-30</text>
+    </g>
+    <g transform="translate(774,28)">
+      <rect width="332" height="32" rx="8" fill="#0e2540" stroke="#42a5f5" stroke-width="1"/>
+      <text class="nodeLabel" x="166" y="14" text-anchor="middle">Read-only DB role  /  idempotent run_key  /  GBP normalisation</text>
+      <text class="nodeTextSm" x="166" y="26" text-anchor="middle">Claude never gets write access to source data</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,228)">
+    <rect width="1120" height="68" rx="12" fill="rgba(124,58,237,0.06)" stroke="#7c3aed" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">INGEST + NORMALISE PLANE  /  CLAUDE CODE EMITS DETERMINISTIC SCRIPTS</text>
+    <g transform="translate(14,28)">
+      <rect width="200" height="32" rx="8" fill="#1a1240" stroke="#7c3aed" stroke-width="1"/>
+      <text class="nodeLabel" x="100" y="14" text-anchor="middle">Schema mapping</text>
+      <text class="nodeTextSm" x="100" y="26" text-anchor="middle">columns -&gt; canonical model</text>
+    </g>
+    <g transform="translate(224,28)">
+      <rect width="200" height="32" rx="8" fill="#1a1240" stroke="#7c3aed" stroke-width="1"/>
+      <text class="nodeLabel" x="100" y="14" text-anchor="middle">Currency to GBP</text>
+      <text class="nodeTextSm" x="100" y="26" text-anchor="middle">HMRC daily / monthly rate</text>
+    </g>
+    <g transform="translate(434,28)">
+      <rect width="200" height="32" rx="8" fill="#1a1240" stroke="#7c3aed" stroke-width="1"/>
+      <text class="nodeLabel" x="100" y="14" text-anchor="middle">Date-range + dedupe</text>
+      <text class="nodeTextSm" x="100" y="26" text-anchor="middle">tax point / supply date</text>
+    </g>
+    <g transform="translate(644,28)">
+      <rect width="200" height="32" rx="8" fill="#1a1240" stroke="#7c3aed" stroke-width="1"/>
+      <text class="nodeLabel" x="100" y="14" text-anchor="middle">Idempotent run_key</text>
+      <text class="nodeTextSm" x="100" y="26" text-anchor="middle">re-run safe, same hash =&gt; skip</text>
+    </g>
+    <g transform="translate(854,28)">
+      <rect width="252" height="32" rx="8" fill="#1a1240" stroke="#7c3aed" stroke-width="1"/>
+      <text class="nodeLabel" x="126" y="14" text-anchor="middle">Outputs: normalised view</text>
+      <text class="nodeTextSm" x="126" y="26" text-anchor="middle">Parquet / SQLite snapshot for the period</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,306)">
+    <rect width="1120" height="84" rx="12" fill="rgba(34,197,94,0.06)" stroke="#22c55e" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">CATEGORISE + RECONCILE PLANE  /  CLAUDE CODE CLASSIFIER + ANOMALY FLAGS</text>
+    <g transform="translate(14,28)">
+      <rect width="220" height="48" rx="8" fill="#0c2b18" stroke="#22c55e" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="14" text-anchor="middle">VAT treatment per line</text>
+      <text class="nodeTextSm" x="110" y="26" text-anchor="middle">standard 20% / reduced 5% / zero</text>
+      <text class="nodeTextSm" x="110" y="38" text-anchor="middle">exempt / outside-scope</text>
+    </g>
+    <g transform="translate(244,28)">
+      <rect width="220" height="48" rx="8" fill="#0c2b18" stroke="#22c55e" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="14" text-anchor="middle">Reverse charge + EU rules</text>
+      <text class="nodeTextSm" x="110" y="26" text-anchor="middle">EU services + EU goods</text>
+      <text class="nodeTextSm" x="110" y="38" text-anchor="middle">postponed import VAT (PVA)</text>
+    </g>
+    <g transform="translate(474,28)">
+      <rect width="220" height="48" rx="8" fill="#0c2b18" stroke="#22c55e" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="14" text-anchor="middle">Invoice  &lt;-&gt;  payment match</text>
+      <text class="nodeTextSm" x="110" y="26" text-anchor="middle">amount + date + currency</text>
+      <text class="nodeTextSm" x="110" y="38" text-anchor="middle">credit notes + part-payments</text>
+    </g>
+    <g transform="translate(704,28)">
+      <rect width="220" height="48" rx="8" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="14" text-anchor="middle">Anomaly flags</text>
+      <text class="nodeTextSm" x="110" y="26" text-anchor="middle">negative net / missing VAT no.</text>
+      <text class="nodeTextSm" x="110" y="38" text-anchor="middle">country mismatch / non-registered</text>
+    </g>
+    <g transform="translate(934,28)">
+      <rect width="172" height="48" rx="8" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="86" y="14" text-anchor="middle">Human review queue</text>
+      <text class="nodeTextSm" x="86" y="26" text-anchor="middle">accept / override / split</text>
+      <text class="nodeTextSm" x="86" y="38" text-anchor="middle">reasons captured</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,400)">
+    <rect width="1120" height="100" rx="12" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">VAT ENGINE PLANE  /  PURE-FUNCTION ARITHMETIC, NO LLM IN MATHS</text>
+
+    <g transform="translate(14,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 1</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">VAT due</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">on sales</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(output VAT)</text>
+    </g>
+    <g transform="translate(108,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 2</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">VAT due</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">acquisitions</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">from NI</text>
+    </g>
+    <g transform="translate(202,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 3</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">Total VAT</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">due</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(1 + 2)</text>
+    </g>
+    <g transform="translate(296,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 4</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">VAT</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">reclaimable</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">on purchases</text>
+    </g>
+    <g transform="translate(390,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 5</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">Net VAT</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">payable</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(3 - 4)</text>
+    </g>
+    <g transform="translate(484,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 6</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">Total sales</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">excl. VAT</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(net)</text>
+    </g>
+    <g transform="translate(578,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 7</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">Total</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">purchases</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">excl. VAT</text>
+    </g>
+    <g transform="translate(672,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 8</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">NI to EU</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">goods value</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(net)</text>
+    </g>
+    <g transform="translate(766,26)">
+      <rect width="84" height="64" rx="8" fill="#1f2a44" stroke="#fbbf24" stroke-width="1"/>
+      <text class="boxNum" x="42" y="14" text-anchor="middle">BOX 9</text>
+      <text class="nodeTextSm" x="42" y="28" text-anchor="middle">EU goods</text>
+      <text class="nodeTextSm" x="42" y="40" text-anchor="middle">acquisitions</text>
+      <text class="nodeTextSm" x="42" y="54" text-anchor="middle">(NI)</text>
+    </g>
+
+    <g transform="translate(866,26)">
+      <rect width="240" height="64" rx="8" fill="#1a0f00" stroke="#f59e0b" stroke-width="1"/>
+      <text class="nodeLabel" x="120" y="16" text-anchor="middle">Scheme branching</text>
+      <text class="nodeTextSm" x="120" y="30" text-anchor="middle">Flat-rate scheme  /  cash accounting</text>
+      <text class="nodeTextSm" x="120" y="42" text-anchor="middle">Annual accounting  /  partial exemption</text>
+      <text class="nodeTextSm" x="120" y="56" text-anchor="middle">Box 6/7 differ under FRS</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,510)">
+    <rect width="1120" height="56" rx="12" fill="rgba(239,108,0,0.06)" stroke="#ef6c00" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">SUBMIT PLANE  /  HMRC MTD API</text>
+    <g transform="translate(14,24)">
+      <rect width="180" height="26" rx="6" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="12" text-anchor="middle">OAuth2 token + refresh</text>
+      <text class="nodeTextSm" x="90" y="22" text-anchor="middle">scope: write:vat read:vat</text>
+    </g>
+    <g transform="translate(204,24)">
+      <rect width="180" height="26" rx="6" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="12" text-anchor="middle">Fraud-prevention headers</text>
+      <text class="nodeTextSm" x="90" y="22" text-anchor="middle">Gov-Client-* + Gov-Vendor-*</text>
+    </g>
+    <g transform="translate(394,24)">
+      <rect width="180" height="26" rx="6" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="12" text-anchor="middle">GET obligations</text>
+      <text class="nodeTextSm" x="90" y="22" text-anchor="middle">find open period</text>
+    </g>
+    <g transform="translate(584,24)">
+      <rect width="180" height="26" rx="6" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="90" y="12" text-anchor="middle">POST returns + idempotency</text>
+      <text class="nodeTextSm" x="90" y="22" text-anchor="middle">finalised = true (one-shot)</text>
+    </g>
+    <g transform="translate(774,24)">
+      <rect width="332" height="26" rx="6" fill="#3a1f08" stroke="#ef6c00" stroke-width="1"/>
+      <text class="nodeLabel" x="166" y="12" text-anchor="middle">GET liabilities + payments  -&gt;  reconcile receipt</text>
+      <text class="nodeTextSm" x="166" y="22" text-anchor="middle">sandbox first, only flip to production after dry-run signed off</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,576)">
+    <rect width="1120" height="56" rx="12" fill="rgba(38,198,218,0.06)" stroke="#26c6da" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="18">AUDIT + GOVERNANCE PLANE  /  PROVE WHAT THE AGENT DID</text>
+    <g transform="translate(14,24)">
+      <rect width="220" height="26" rx="6" fill="#0e2540" stroke="#26c6da" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="12" text-anchor="middle">Append-only Claude prompt log</text>
+      <text class="nodeTextSm" x="110" y="22" text-anchor="middle">prompt + diff + commit hash</text>
+    </g>
+    <g transform="translate(244,24)">
+      <rect width="220" height="26" rx="6" fill="#0e2540" stroke="#26c6da" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="12" text-anchor="middle">Signed snapshot per period</text>
+      <text class="nodeTextSm" x="110" y="22" text-anchor="middle">SHA-256 + author + timestamp</text>
+    </g>
+    <g transform="translate(474,24)">
+      <rect width="220" height="26" rx="6" fill="#0e2540" stroke="#26c6da" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="12" text-anchor="middle">Human approval gate</text>
+      <text class="nodeTextSm" x="110" y="22" text-anchor="middle">required before MTD POST</text>
+    </g>
+    <g transform="translate(704,24)">
+      <rect width="220" height="26" rx="6" fill="#0e2540" stroke="#26c6da" stroke-width="1"/>
+      <text class="nodeLabel" x="110" y="12" text-anchor="middle">Export PDF + CSV bundle</text>
+      <text class="nodeTextSm" x="110" y="22" text-anchor="middle">accountant review path</text>
+    </g>
+    <g transform="translate(934,24)">
+      <rect width="172" height="26" rx="6" fill="#0e2540" stroke="#26c6da" stroke-width="1"/>
+      <text class="nodeLabel" x="86" y="12" text-anchor="middle">6-year retention</text>
+      <text class="nodeTextSm" x="86" y="22" text-anchor="middle">HMRC + GDPR controls</text>
+    </g>
+  </g>
+
+  <g transform="translate(40,646)">
+    <rect width="1120" height="58" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.20)" stroke-width="1.2"/>
+    <text class="laneLabel" x="14" y="16">DECISION MATRIX  /  CLAUDE CODE vs PACKAGED SaaS vs BESPOKE LEDGER</text>
+
+    <g transform="translate(14,22)">
+      <text class="matrixHead" x="0" y="10">DIMENSION</text>
+      <text class="matrixHead" x="180" y="10">CLAUDE CODE (this article)</text>
+      <text class="matrixHead" x="450" y="10">XERO / QUICKBOOKS / FREEAGENT</text>
+      <text class="matrixHead" x="770" y="10">BESPOKE LEDGER</text>
+    </g>
+    <g transform="translate(14,38)">
+      <text class="matrixRow" x="0" y="0">Cost</text>
+      <text class="matrixCell" x="180" y="0">Claude sub  +  pennies in tokens</text>
+      <text class="matrixCell" x="450" y="0">~14 to 70 GBP / month per entity</text>
+      <text class="matrixCell" x="770" y="0">High build  +  ongoing eng cost</text>
+    </g>
+    <g transform="translate(14,52)">
+      <text class="matrixRow" x="0" y="0">Control / data</text>
+      <text class="matrixCell" x="180" y="0">100% local, your DB, your code</text>
+      <text class="matrixCell" x="450" y="0">SaaS tenant, vendor cloud</text>
+      <text class="matrixCell" x="770" y="0">100% local, you own everything</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="710">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="710" text-anchor="end">FOUNDERS  /  FINANCE OPS  /  DEVELOPERS</text>
+</svg>

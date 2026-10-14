@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "Volledige rondleiding door NebulaDNS-functies: API-eerste besturingsvlak, Prometheus-statistieken, propagatiepoorten, peer-fingerprinting, DNSSEC-roadmap, Helm/k3s-operatorverhaal en hoe te integreren met AWS, Route 53 en CoreDNS.",
+  "sub_title": "Elke ‘batterij inbegrepen’-functie, integraties en zakelijke DNS-houding",
+  "title": "NebulaDNS Volledige functiegids: k3s, Route53, Observability en Enterprise DNS",
+  "meta_title": "NebulaDNS-functies | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "NebulaDNS referentie met volledige functies: Rust-datavlak, besturingsvlak API, voortplantingsverificatie, TSIG, metrische catalogus, Kubernetes Helm-operator, Route 53- en k3s-integratiepatronen.",
+  "meta_keywords": "NebulaDNS-functies, gezaghebbende DNS, Prometheus-metrieken DNS, Kubernetes DNS-operator, Route53-delegatie, CoreDNS, TSIG AXFR, DNSSEC-roadmap, Rust DNS-server",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Bronnen</h2><p>Deze gids is een samenvatting van de openbare<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS-site</a>en repository<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>. Mijlpalen en GA-items evolueren: controleer de releaseopmerkingen voor uw versie.</p><h2>-architectuur in één oogopslag</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>De stapel scheidt het<strong>-besturingsvlak</strong>(REST/gRPC, authn/z),<strong>zonebeheer</strong>(validatie, DNSSEC-ondertekening, atomaire commits),<strong>-propagatieverificatie</strong>(secundaire rapporten SOA),<strong>inhoudsgeadresseerde zoneopslag</strong>en het<strong>DNS-datavlak</strong>(UDP/TCP/DoT/DoH/DoQ, overdrachten, DNSSEC online ondertekenaar).</p><h2>Functiecatalogus (“batterijen inbegrepen”)</h2><p>Het project brengt<strong>twaalf belangrijkste mogelijkheden op de markt</strong>– hier samengevat vanaf de landingspagina.</p><ul><li><strong>API als eerste:</strong>REST/gRPC voor zones, records, TSIG-rotatie, rollback – CLI/UI als thin clients.</li><li><strong>Standaard waarneembaar:</strong>Prometheus<code>/metrics</code>, enum-getypeerde labels, JSON-logboeken, OTLP-traceringen.</li><li><strong>Geverifieerde propagatie:</strong>Implementatie wordt alleen voltooid wanneer gedeclareerde secundaire bestanden de nieuwe SOA-serie bevestigen.</li><li><strong>Peer-software-fingerprinting:</strong>neemt<code>version.bind</code>CHAOS-achtige signalen op, zodat stille BIND-upgrades redundantie niet onzichtbaar kunnen eroderen.</li><li><strong>Veilig Roest:</strong>Nee<code>unsafe</code>; continu fuzzing op codec, parser, DNSSEC-ondertekenaar.</li><li><strong>Zero-GC staartlatentie:</strong>Deterministische toewijzing; lock-free zone-snapshots via<code>arc-swap</code>.</li><li><strong>Configuratie met atomaire versie:</strong>Zones met inhoudsadres; vooruit/terugrollen zonder gedeeltelijk lezen.</li><li><strong>Deterministische SOA-series:</strong>Monotone seriële strategie om vastgelopen herstel te voorkomen.</li><li><strong>Kubernetes-native:</strong>Helm diagram, operator, CRDs (<code>Zone</code>,<code>Record</code>,<code>Secondary</code>,<code>TsigKey</code>,<code>DeployGate</code>); GitOps-vriendelijk; Vervangingspad CoreDNS cluster-DNS op routekaart.</li><li><strong>Standaard-conforme draad:</strong>Strikte RFC-dekking; expliciete fouttypen (bijv.<code>QdCountMismatch</code>).</li><li><strong>Redundantie die u kunt zien:</strong>Dashboard-intentie voor overdrachtszichtbaarheid tussen zones.</li><li><strong>Geharde standaardwaarden:</strong>systemd-verharding, seccomp, niet-rootcontainers, kleine distroloze afbeeldingen.</li></ul><h2>Vergelijking positionering (hoog niveau)</h2><p>De site publiceert een competitieve matrix (TinyDNS, BIND 9, Knot, NSD, PowerDNS, CoreDNS, NebulaDNS). Differentiatoren die worden genoemd zijn onder meer<strong>volledige REST API</strong>,<strong>altijd aan Prometheus</strong>,<strong>ingebouwde propagatiepoort</strong>,<strong>Kubernetes-operator + CRDs</strong>,<strong>peer-fingerprinting</strong>, en<strong>geheugenveilige implementatie</strong>. Gebruik de upstream-matrix voor versiespecifieke claims.</p><h2>Statistiekencatalogus (voorbeeld)</h2><p>Voorbeelden van de site zijn onder meer querytellers, latentiehistogrammen, FORMERR-tracking, AXFR-pogingen, tijdstempels van het laatste succes per peer, propagatievertraging en build-informatie. Behandel namen als illustratief totdat je een lopende build schraapt.</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s, CoreDNS en AWS Route&nbsp;53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>Route&nbsp;53:</strong>Behoud publieke delegatie en gezondheid controles in AWS; wijs NS-records op NebulaDNS-secundaire bestanden of voer gesplitste horizonpatronen uit die overeenkomen met uw beveiligingsmodel.</li><li><strong>k3s / RKE2:</strong>Implementeer NebulaDNS via Helm met PDB + ServiceMonitor; lijn CoreDNS<strong>voorwaarts/stub</strong>uit met NebulaDNS voor zones die u op gezaghebbende wijze binnen het landgoed bedient.</li><li><strong>ExternalDNS:</strong>Optionele brug van Ingress/LB-objecten naar openbare records: coördineer met propagatiepoorten, zodat automatisering niet vroegtijdig 'klaar' kan markeren.</li></ul><h2>Routekaartnotities</h2><p>De openbare routekaart vermeldt mijlpalen via GA (volledigheid draad/zone, overdrachten, DNSSEC, propagatieverificatie, HA/multiregio, operator). Controleer<code>PROJECT_PROMPT.md</code>en releases in de repository voor datums.</p><h2>Gerelateerd lanceringsartikel</h2><p>Voor het “waarom nu / AI-tijdperk”-verhaal, lees<a href='/nl/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS: game changer in het AI-tijdperk</a>.</p><h2>Hoe TenthMatrix</h2>kan helpen<p>Wij helpen bedrijven<strong>waarneembare DNS</strong>en<strong>GitOps</strong>patronen rond gezaghebbende stapels te verzenden - neem contact op met<strong>info@tenthmatrix.com</strong>.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

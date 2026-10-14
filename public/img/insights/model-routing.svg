@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="model-routing.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">MODEL ROUTING</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="34">Workload �→ decision �→ specialised model</text>
+  <rect x="80" y="180" width="280" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="96" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Incoming task</text>
+<text x="96" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">ticket / prompt / event</text>
+  <rect x="460" y="180" width="280" height="100" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="476" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Router decision</text>
+<text x="476" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">complexity / risk / domain</text>
+  <rect x="80" y="380" width="220" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="96" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Fast model</text>
+<text x="96" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">simple lookups</text>
+  <rect x="340" y="380" width="220" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="356" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Standard model</text>
+<text x="356" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">medium tasks</text>
+  <rect x="600" y="380" width="220" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="616" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Reasoning model</text>
+<text x="616" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">hard problems</text>
+  <rect x="860" y="380" width="260" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="876" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Premium + human</text>
+<text x="876" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">critical actions</text>
+  <path d="M360,230 L460,230" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M520,280 L190,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M600,280 L450,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M650,280 L710,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M700,280 L960,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+
+</svg>

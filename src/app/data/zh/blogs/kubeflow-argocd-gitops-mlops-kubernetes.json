@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-kubeflow-argocd-001",
+  "internal_id": 953,
+  "slug": "kubeflow-argocd-gitops-mlops-kubernetes",
+  "title": "Kubeflow + Argo CD：Kubernetes 上的 GitOps MLOps",
+  "sub_title": "用 Kubeflow 训练，用 Argo CD 交付——流水线、Model Registry、KServe，以及经 git revert 回滚",
+  "excerpt": "在 Kubernetes 上用 Kubeflow 与 Argo CD 做 MLOps：在 Kubeflow 中训练并注册模型，用 GitOps 晋级 InferenceServices，用 git revert 回滚。",
+  "meta_title": "Kubeflow + Argo CD：Kubernetes 上的 GitOps MLOps",
+  "meta_description": "将 Kubeflow Pipelines、Model Registry 与 KServe 与 Argo CD GitOps 结合，实现 Kubernetes 上可审计的训练到服务。",
+  "meta_keywords": "Kubeflow Argo CD, GitOps MLOps, KServe, Kubeflow Pipelines, Kubernetes 上的机器学习, model registry, InferenceService",
+  "cover_image": "/img/kubeflow-argocd-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubeflow-argocd-cover.svg",
+      "id": 953,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kubeflow and Argo CD GitOps MLOps on Kubernetes"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>将 Kubeflow（训练 / 评估 / 注册）与 Argo CD（GitOps 交付 / 回滚）配对的实用指南。完整架构、manifest 与反模式，请阅读 <a href=\"/zh/articles/kubeflow-argocd-gitops-mlops-kubernetes\">长文章</a>.</em></p>\n<p><img alt=\"Kubernetes 上的 Kubeflow 与 Argo CD GitOps MLOps\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/kubeflow-argocd-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>一段话版。</strong> Kubeflow 掌管 Kubernetes 上的 ML 生命周期——流水线、训练作业、model registry 与 KServe。Argo CD 掌管交付：每一个 <code>InferenceService</code>、流水线定义与平台组件均从 Git 调和。在 Kubeflow 中训练与评估；通过更新 Git manifest 晋级；回滚用 <code>git revert</code>。把模型放在对象存储——Git 存 URI 与配置，不存权重。\n</div>\n<h2>为何两者都要？</h2>\n<p><strong>Kubeflow</strong> 回答：我们如何在 GPU 上做可复现的训练与评估？ <strong>Argo CD</strong> 回答：我们如何把得到的模型交付到生产，而不造雪花集群？只用 Kubeflow 往往止于手工 <code>kubectl apply</code> 用于服务。仅用 Argo CD 会缺少一流的 ML 流水线与实验系统。两者合起来形成闭环 MLOps。</p>\n<h2>分工</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">关注点</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">工具</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Git 中存什么</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">流水线 DAG、TrainJobs、实验</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow Pipelines / Trainer</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">流水线 YAML / 组件规格</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">模型产物与血缘</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Model Registry + object storage</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">URI + 元数据——不是权重文件</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">服务、金丝雀、回滚</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">KServe + Argo CD</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><code>InferenceService</code> overlays</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">平台安装与升级</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Argo CD Applications</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow 本身用 Helm/Kustomize</td></tr>\n</tbody>\n</table>\n<h2>端到端闭环（好的样子是什么样）</h2>\n<ol>\n<li>数据科学家合并流水线变更 → Argo CD 同步流水线 CRD。</li>\n<li>Kubeflow 在 GPU 节点上运行训练（可选经 Kueue 排队）。</li>\n<li>评估门禁通过 → 注册模型 URI；PR 更新生产 <code>InferenceService</code> <code>storageUri</code>.</li>\n<li>Argo CD 检测到 OutOfSync 并上线（先金丝雀流量）。</li>\n<li>漂移或指标变差 → <code>git revert</code> 恢复先前 URI；Argo CD 进行调和。</li>\n</ol>\n<h2>帮你少踩坑的五项实践</h2>\n<ul>\n<li><strong>分离仓库或文件夹：</strong> 平台（Kubeflow 安装）vs 应用（pipelines + InferenceServices）。</li>\n<li><strong>切勿提交模型二进制文件</strong> — 参考 <code>s3://</code> / <code>gs://</code> / PVC URIs。</li>\n<li><strong>Sync waves：</strong> 在 KFP 组件之前准备好 MySQL/MinIO（或托管等价物）。</li>\n<li><strong>每一步的资源限制</strong> — 无限制的训练作业会饿死集群。</li>\n<li><strong>晋级 = PR，</strong> 不是笔记本里的一个按钮。审计轨迹免费附带。</li>\n</ul>\n<h2>何时这套栈过重</h2>\n<p>一台运行 Ollama 的 Mac Studio 服务中小企业聊天机器人，并不需要 Kubeflow + Argo CD。当你有多个模型、GPU 争用、合规需求，或必须保持一致的多个环境（dev/staging/prod）时，再采用这一模式。</p>\n<div style=\"background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>相关阅读。</strong> 我们已发布聚焦 Argo CD 与 Flux 的 GitOps 概览： <a href=\"/zh/docs/blogs/kubernetes-continuous-delivery\">Kubernetes Continuous Delivery：用 ArgoCD 与 Flux 的 GitOps 流水线</a>。本文是面向 ML 的配套文——把 Kubeflow 纳入闭环。\n</div>\n<h2>阅读长文版本</h2>\n<p>该 <a href=\"/zh/articles/kubeflow-argocd-gitops-mlops-kubernetes\">长文章</a> 涵盖 2026 Kubernetes MLOps 地图（KFP v2、Trainer、KServe、Kueue）、Argo CD Application 模式、晋级门禁、金丝雀服务、GPU FinOps 与上线清单。发布方为 <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubeflow",
+      "id": 980
+    },
+    {
+      "name": "argocd",
+      "id": 981
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "kserve",
+      "id": 983
+    }
+  ],
+  "created_at": "2026-07-20T09:00:00Z",
+  "updated_at": "2026-07-20T09:00:00Z",
+  "published_date": "2026-07-20",
+  "status": true
+}

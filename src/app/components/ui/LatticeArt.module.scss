@@ -1,0 +1,60 @@
+@use '../../styles/mixins' as *;
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.field rect {
+  fill: var(--tm-line);
+}
+
+.cluster rect {
+  fill: var(--tm-text);
+}
+
+.tenth {
+  fill: var(--tm-accent);
+}
+
+.trail rect {
+  fill: var(--tm-accent);
+  opacity: calc(0.5 - var(--i) * 0.11);
+}
+
+@include motion {
+  .animate .trail rect {
+    animation: tick 3.2s var(--tm-ease-step) infinite;
+    animation-delay: calc(var(--i) * 160ms);
+  }
+
+  .animate .tenth {
+    animation: pulse 3.2s var(--tm-ease-standard) infinite;
+  }
+}
+
+@keyframes tick {
+  0%,
+  8% {
+    opacity: 0;
+  }
+  20%,
+  60% {
+    opacity: calc(0.85 - var(--i) * 0.18);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}

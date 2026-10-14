@@ -1,0 +1,49 @@
+{
+  "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+  "excerpt": "Een ondersteuningsvriendelijk, voor SRE geschikt overzicht van doorlopende upgrades van de Couchbase-server onder de Couchbase Autonomous Operator (CAO), waarbij gebruik wordt gemaakt van spec.paused om één knooppunt tegelijk opnieuw in evenwicht te brengen, zodat u de status kunt stabiliseren, valideren en terugdraaiopties open kunt houden.",
+  "sub_title": "Gecontroleerde rolling upgrade met behulp van CAO native pauzepoorten, statuschecks en XDCR-bewuste monitoring",
+  "title": "Couchbase-upgrades met CAO-pauzepoorten: een ondersteuningsvriendelijk overzicht",
+  "meta_title": "Couchbase Server Upgrade Runbook (CAO gestimuleerd + pauze) | TenthMatrix",
+  "meta_description": "Upgrade de Couchbase-server onder CAO met behulp van spec.paused om het evenwicht tussen swaps te versnellen: preflight-controles, monitoringsignalen, XDCR-strategie, rollback-triggers en validatie na de upgrade, geschreven voor ondersteuning, SRE en database-ingenieurs.",
+  "meta_keywords": "Couchbase, Couchbase Autonome operator, CAO, Kubernetes, rolling upgrade, spec.paused, swap herbalanceren, XDCR, SRE, runbook, database-upgrade",
+  "images": [
+    {
+      "url": "/img/couchbase-upgrade-cover.svg",
+      "id": 930,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Couchbase Server upgrade runbook cover"
+    }
+  ],
+  "content": "<div class='blog-content'><p>Als u een Couchbase-platform ondersteunt (of u bent de persoon die wordt opgeroepen als de<em>zich niet</em>gedraagt), kunnen upgrades aanvoelen als een keuze tussen 'hands-off en hoop' en 'handmatig en riskant'. Dit bericht legt een pragmatische middenweg vast: een<strong>-gecontroleerde rollende upgrade</strong>voor Couchbase-server die draait onder de<strong>Couchbase Autonomous Operator (CAO)</strong>, gestimuleerd door het eigen<code>spec.paused</code>-veld van CAO.</p><h2>Voor wie is dit bedoeld</h2><ul><li><strong>Technische ondersteuning / incidentresponders:</strong>hoe “normaal” eruit ziet tijdens het opnieuw in evenwicht brengen van de swap en wat te behandelen als een waarschuwingssignaal.</li><li><strong>SRE / platformingenieurs:</strong>herhaalbare procedure met preflightcontroles, soak-gates en rollback-triggers.</li><li><strong>Database-ingenieurs:</strong>brengt de verwachtingen, het XDCR-gedrag en de validatie na de upgrade opnieuw in evenwicht.</li><li><strong>Ontwikkelaars:</strong>wat uw platform doet tijdens het onderhoudsvenster (en waar u op moet letten).</li></ul><h2>Typische door CAO beheerde topologie (conceptueel)</h2><p>Het onderstaande diagram is een mentale kaart voor het runbook: waar de operator zit, wat de<code>CouchbaseCluster</code>CR bestuurt en welke signalen u tijdens de upgrade moet correleren.</p><p><img src=\"/img/couchbase-upgrade-cluster-topology.svg\" alt=\"Typical Couchbase on AKS topology\" width=\"1200\" height=\"640\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>Het grote idee: tempo CAO met een pauzepoort</h2><p>CAO voert een doorlopende upgrade uit via swap-herbalancering. Het runbook voegt een bewuste veiligheidspoort toe: pauzeer de afstemming tussen knooppunten, stabiliseer, verifieer de status en hervat vervolgens. Op die manier kun je, als knooppunt N zich misdraagt ​​na de swap, het<em>opmerken voordat</em>knooppunt N+1 start.</p><p><img src=\"/img/couchbase-upgrade-paced-loop.svg\" alt=\"Paced upgrade loop\" width=\"1200\" height=\"520\" style=\"max-width:100%;height:auto;border-radius:8px\" loading=\"lazy\" decoding=\"async\" /></p><h2>Waarom de pauzepoort de moeite waard is</h2><ul><li><strong>Minder verrassingen:</strong>isoleert symptomen tot een enkele knooppuntverandering.</li><li><strong>Schonere signalen:</strong>correleren latentie, foutenpercentage, herbalanceringsstatus en XDCR-vertraging tot één swap.</li><li><strong>Veiliger uitrollen:</strong>stopt de “lopende band” snel door<code>spec.paused=true</code>vast te houden terwijl u onderzoekt.</li></ul><h2>Hoe ‘goed’ eruit ziet tijdens de upgrade</h2><ul><li><strong>Pod-afbeeldingen:</strong>oud → geleidelijk nieuw; idealiter één ruil tegelijk.</li><li><strong>Clusterfase:</strong>keert tussen swaps vaak terug naar<code>Available</code>; Er worden korte overgangen tijdens het herbalanceren verwacht.</li><li><strong>XDCR (indien ingeschakeld):</strong><code>changes_left</code>stijgt tijdens het opnieuw in evenwicht brengen en daalt vervolgens tijdens stabilisatie.</li><li><strong>herstart:</strong>nieuwe pods beginnen bij<code>RESTARTS=0</code>. Elke stijging is een signaal om te pauzeren en te onderzoeken.</li></ul><h2>Preflight-controles die u later besparen</h2><p>Voordat u iets aanraakt, zorgt u ervoor dat het cluster groen is (geen actieve herbalancering, geen waarschuwingsgebeurtenissen), dat de back-ups actueel zijn<em>en herstelbare</em>, en dat u de rollback-afbeeldingstag hebt opgenomen. Bepaal vooraf uw XDCR-strategie: schakel deze uit tijdens de upgrade voor een stiller signaal in de productie, blijf pre-prod draaien om echt gedrag uit te oefenen, of gebruik een derde standby-cluster voor strategische omschakelingen.</p><h2>Rollback reality check</h2><p>De ongemakkelijke waarheid die volwassen runbooks hardop zeggen:<strong>rollback is alleen netjes mogelijk zolang ten minste één knooppunt op de oude versie</strong>blijft staan. Zodra elke pod is verwisseld en het cluster volledig opnieuw in balans is gebracht, kan “downgrade” worden omgezet in “herstellen vanaf een back-up”. Daarom is tempo belangrijk: het houdt het terugdraaivenster langer open.</p><h2>Volgende stappen</h2><ul><li>Lees de volledige operationele handleiding:<a href=\"/nl/articles/couchbase-server-upgrade-cao-paced\">Couchbase Server rolling upgrade onder CAO (getemperd + pauze poort)</a></li><li>Gerelateerde achtergrond:<a href=\"/nl/docs/blogs/couchbase-ha-production-multi-region\">Couchbase hoge beschikbaarheid in productie (XDCR + Kubernetes operator)</a></li></ul></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "database",
+      "id": 930
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "observability",
+      "id": 934
+    }
+  ],
+  "created_at": "2026-04-22T12:30:00Z",
+  "updated_at": "2026-04-22T12:30:00Z",
+  "status": true,
+  "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+  "internal_id": 930,
+  "published_date": "2026-04-22"
+}

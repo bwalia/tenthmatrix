@@ -1,0 +1,86 @@
+{
+  "uuid": "blog-workstation-ai-shop-ring-promoter-001",
+  "internal_id": 1035,
+  "slug": "workstation-ai-shop-ring-promoter-int-to-prod",
+  "title": "Workstation AI Shop: Promoting the AI Sales Storefront Through int → test → acc → prod",
+  "sub_title": "GPU machines, an autonomous AI Sales Agent, and a release board stakeholders can read — how shop.workstation.co.uk earns every ring",
+  "excerpt": "Workstation AI Shop sells GPU machines with a fully autonomous AI Sales Agent that configures the basket. See how Ring Promoter moves each build through int → test → acc → prod — with Orbit screenshots release engineers and stakeholders share.",
+  "meta_title": "Workstation AI Shop: Promoting the AI Sales Storefront Through int → test → acc → prod | TenthMatrix",
+  "meta_description": "How Workstation AI Shop — GPU storefront with an autonomous AI Sales Agent — is promoted through Ring Promoter rings int → test → acc → prod, with Orbit visibility for release engineers and stakeholders.",
+  "meta_keywords": "Workstation AI Shop, shop.workstation.co.uk, Ring Promoter, int test acc prod, AI Sales Agent, GPU workstation, Orbit, Lanes, promotion protocol, version-verified health, release engineering, TenthMatrix",
+  "cover_image": "/img/blog/workstation-ai-shop-ring-promoter/cover.svg",
+  "images": [
+    {
+      "url": "/img/blog/workstation-ai-shop-ring-promoter/cover.svg",
+      "id": 1035,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Workstation AI Shop promoted through Ring Promoter int test acc prod"
+    },
+    {
+      "url": "/img/blog/workstation-ai-shop-ring-promoter/orbit-console.webp",
+      "id": 1036,
+      "is_cover": false,
+      "width": 1600,
+      "height": 934,
+      "alt": "Ring Promoter Orbit console with Workstation AI Shop deploying on INT"
+    },
+    {
+      "url": "/img/blog/workstation-ai-shop-ring-promoter/rings-flow.svg",
+      "id": 1037,
+      "is_cover": false,
+      "width": 1200,
+      "height": 520,
+      "alt": "Shop promotion path INT TEST ACC PROD"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>Workstation AI Shop</strong> is where customers configure GPU machines with a fully autonomous <strong>AI Sales Agent</strong> — the assistant builds the basket, not a static form. That storefront still has to ship safely. Here is how release engineers and stakeholders see the same truth in Ring Promoter: one version, ordered rings <code>int → test → acc → prod</code>, health at every hop. Product: <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> · Storefront: <a href=\"https://www.workstation.co.uk/ai-workstations\" target=\"_blank\" rel=\"noopener noreferrer\">shop.workstation.co.uk</a> · Deep dive: <a href=\"/en/articles/workstation-ai-shop-ring-promoter-int-to-prod\">long technical article</a>.</em></p>\n\n\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0;\">\n<iframe src=\"https://www.youtube.com/embed/J_aNJ5UvCmM\"\n  title=\"Workstation AI Shop on Ring Promoter — int to prod walkthrough\"\n  style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\"\n  allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\"\n  referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p><a href=\"https://youtu.be/J_aNJ5UvCmM\" target=\"_blank\" rel=\"noopener noreferrer\">Watch on YouTube</a>\n· Product: <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p>\n\n\n<figure>\n<img src=\"/img/blog/workstation-ai-shop-ring-promoter/orbit-console.webp\" alt=\"Ring Promoter Orbit console showing Workstation AI Shop deploying on the INT ring with version 7cd70f6, path int to test to acc to prod, TTFB metrics and application roster\" width=\"1600\" height=\"934\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" />\n<figcaption>Orbit view: Workstation AI Shop on the INT ring while a promotion is in flight — blue means deploying, Earth at the centre is live users in PROD.</figcaption>\n</figure>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #059669;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Why stakeholders should care.</strong> The AI Sales Agent can configure a full GPU basket in minutes. A bad release can also mis-configure a quote, break catalogue sync, or take chat offline. Ring Promoter makes “is this build allowed in front of customers?” a visible, auditable answer — not a Slack thread.\n</div>\n\n<h2>What Workstation AI Shop actually is</h2>\n<p>It is not a brochure site. Punters browse GPU workstations and kits; an autonomous AI Engineer / Sales Agent asks the right questions (workload, budget, GPU class, delivery) and <strong>configures the basket</strong> for them. Behind the scenes the shop talks to OpsAPI, keeps a live market catalogue, and can hand off to quote or Stripe Checkout when payments are enabled.</p>\n<p>That makes the shop both a revenue surface and an AI product. Releases need the same discipline you would give a payments API — because for many buyers, the chat <em>is</em> the sales desk.</p>\n\n<h2>The picture release engineers already recognise</h2>\n<p>In the Orbit console the app is labelled <strong>Workstation AI Shop</strong>. A recent hop showed commit <code>7cd70f6</code> on <strong>INT</strong> with status <em>Deploying</em> — “has reached int, rings still to earn.” TTFB sat around <strong>71ms</strong> from London. Neighbouring apps (OpsAPI, Vault HA, Jobshout agents) sit on the same rings, so the shop is not a special snowflake: it rides the same promotion protocol as the rest of the estate.</p>\n\n<figure>\n<img src=\"/img/blog/workstation-ai-shop-ring-promoter/rings-flow.svg\" alt=\"Four columns showing Workstation AI Shop moving from INT through TEST and ACC into PROD with stakeholder sign-off before production\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" />\n</figure>\n\n<h2>Benefits for stakeholders (without the jargon pile)</h2>\n<ul>\n  <li><strong>One story for every environment.</strong> INT is where new builds land first (<code>int-shop.workstation.co.uk</code>). TEST and ACC soak the AI agent, catalogue and checkout paths. PROD is <code>shop.workstation.co.uk</code> — only after the version has earned each prior ring.</li>\n  <li><strong>No silent “green deploy, old shop”.</strong> Health is checked on the running app. If the new pods never take traffic, the hop fails and rolls back — you do not discover it from angry buyers.</li>\n  <li><strong>Humans still own production.</strong> Auto-promote can speed early rings; the gate into PROD stays deliberate (password / sign-off). Incidents can still roll back without fighting the gate.</li>\n  <li><strong>Shared language with engineering.</strong> Orbit and Lanes show how far the newest shop build got. Product and ops look at the same board instead of translating CI logs in a meeting.</li>\n  <li><strong>AI sales stays trustworthy.</strong> Promoting the agent, the BFF keys and the catalogue together reduces “chat works on INT but lies on PROD” surprises.</li>\n</ul>\n\n<h2>Benefits for release engineers</h2>\n<ul>\n  <li><strong>Promotion is a protocol</strong> — one ring at a time; source must be healthy; target must earn it; failure undoes itself; everything is written down (<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>).</li>\n  <li><strong>CI builds; Ring Promoter moves.</strong> Shop images still come from your pipeline; seeding INT and promoting onward is a small, fail-closed API surface.</li>\n  <li><strong>Fleet context.</strong> When Shop is blue on INT while Vault is green on TEST, you see contention and order of operations without opening six dashboards.</li>\n  <li><strong>Friday-safe defaults.</strong> Detached operations and per-app locks mean a dropped laptop session cannot leave PROD half-updated.</li>\n</ul>\n\n<h2>How this maps to the shop hosts</h2>\n<table style=\"width:100%;border-collapse:collapse;margin:1.25rem 0;\">\n  <thead>\n    <tr style=\"background:#0f172a;color:#fff;\">\n      <th style=\"text-align:left;padding:0.65rem 0.75rem;\">Ring</th>\n      <th style=\"text-align:left;padding:0.65rem 0.75rem;\">Typical host</th>\n      <th style=\"text-align:left;padding:0.65rem 0.75rem;\">Who cares</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr style=\"border-bottom:1px solid #e2e8f0;\"><td style=\"padding:0.65rem 0.75rem;\"><strong>INT</strong></td><td style=\"padding:0.65rem 0.75rem;\"><code>int-shop.workstation.co.uk</code></td><td style=\"padding:0.65rem 0.75rem;\">Engineers — first look at agent + catalogue</td></tr>\n    <tr style=\"border-bottom:1px solid #e2e8f0;\"><td style=\"padding:0.65rem 0.75rem;\"><strong>TEST</strong></td><td style=\"padding:0.65rem 0.75rem;\">Test shop namespace / ring</td><td style=\"padding:0.65rem 0.75rem;\">QA — regressions, market sync, chat turns</td></tr>\n    <tr style=\"border-bottom:1px solid #e2e8f0;\"><td style=\"padding:0.65rem 0.75rem;\"><strong>ACC</strong></td><td style=\"padding:0.65rem 0.75rem;\">Acceptance / staging</td><td style=\"padding:0.65rem 0.75rem;\">Product &amp; sales — basket UX sign-off</td></tr>\n    <tr><td style=\"padding:0.65rem 0.75rem;\"><strong>PROD</strong></td><td style=\"padding:0.65rem 0.75rem;\"><code>shop.workstation.co.uk</code></td><td style=\"padding:0.65rem 0.75rem;\">Customers — live GPU configuration</td></tr>\n  </tbody>\n</table>\n\n<h2>What “good” looks like in a release review</h2>\n<ol>\n  <li>Newest shop SHA is healthy on INT (agent answers, health endpoint matches version).</li>\n  <li>TEST and ACC show the same SHA with soak notes — no half-promoted catalogue.</li>\n  <li>PROD still on the previous good version until someone intentionally promotes with the production gate.</li>\n  <li>Orbit/Lanes agree with the hosts you can click in a browser.</li>\n</ol>\n\n<p>For the protocol detail, deployers, CI <code>curl</code> surface and shop Helm wiring, read the <a href=\"/en/articles/workstation-ai-shop-ring-promoter-int-to-prod\">technical article</a>. For the control plane itself, start at <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> or TenthMatrix’s <a href=\"/en/ring-promoter\">Ring Promoter product page</a>.</p>\n\n<p class=\"cta\">Want the same Orbit board for your GPU storefront or AI agent APIs? <a href=\"/en/contact-us\">Talk to TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "tenthmatrix-team",
+    "email": "hello@tenthmatrix.com",
+    "first_name": "TenthMatrix",
+    "last_name": "team",
+    "name": "TenthMatrix team",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ring-promoter",
+      "id": 1040
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-10-06T12:00:00Z",
+  "updated_at": "2026-10-06T12:00:00Z",
+  "published_date": "2026-10-06",
+  "status": true
+}

@@ -1,0 +1,236 @@
+{
+  "meta": {
+    "title": "Jev Benchmark Lab | TenthMatrix Insights",
+    "description": "Interactive TenthMatrix lab for Jev and decision-model comparisons with vendor, independent and methodology-tagged results."
+  },
+  "title": "Jev Benchmark Lab",
+  "lede": "Compare systems by metric with mandatory source-kind labels. Vendor claims, independent publications and TenthMatrix methodology demos are never mixed silently.",
+  "version": "lab-v0.1",
+  "updated": "26 September 2026",
+  "landscape_cutoff": "26 September 2026",
+  "methodology_notice": "Rows tagged vendor_reported quote TypeSafe (or partners) with links. Rows tagged independent quote third-party publications. Rows tagged workstation_methodology illustrate harness wiring and must not be cited as TenthMatrix-measured production results until a suite is promoted to workstation_measured in a later lab version.",
+  "metrics": [
+    {
+      "id": "latency_ms_p50",
+      "label": "p50 latency (ms)"
+    },
+    {
+      "id": "accuracy_pct",
+      "label": "Accuracy (%)"
+    },
+    {
+      "id": "cost_per_1k_usd",
+      "label": "Cost per 1k tasks (USD)"
+    }
+  ],
+  "suites": [
+    {
+      "id": "intent-routing-cited",
+      "title": "A — Intent / triage (cited public results)",
+      "version": "cite-2026-09-19",
+      "date": "19–20 Sep 2026",
+      "samples": "60–791 depending on source",
+      "latency_includes_network": true,
+      "description": "Public triage/intent-style measurements from OpenRouter and AyAutomate, plus TypeSafe’s qualitative positioning. Not a single merged leaderboard.",
+      "does_not_prove": "These rows do not prove TenthMatrix reproduced the runs. Different datasets and cardinalities are not comparable as one ranking.",
+      "results": [
+        {
+          "system": "Jev 1.13 (OpenRouter triage)",
+          "source_kind": "independent",
+          "source": "OpenRouter tutorial tables",
+          "source_url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+          "metrics": {
+            "latency_ms_p50": 194,
+            "accuracy_pct": 98.3,
+            "cost_per_1k_usd": 0.0248
+          },
+          "metrics_display": {
+            "latency_ms_p50": "194 ms p50",
+            "accuracy_pct": "59/60 intent (98.3%)",
+            "cost_note": "$0.0248 / 1k (author table)"
+          }
+        },
+        {
+          "system": "GPT Luna (OpenRouter triage)",
+          "source_kind": "independent",
+          "source": "OpenRouter tutorial tables",
+          "source_url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+          "metrics": {
+            "latency_ms_p50": 1106,
+            "accuracy_pct": 98.3,
+            "cost_per_1k_usd": 0.0921
+          },
+          "metrics_display": {
+            "latency_ms_p50": "1.106 s p50",
+            "accuracy_pct": "59/60 intent (98.3%)",
+            "cost_note": "$0.0921 / 1k (author table)"
+          }
+        },
+        {
+          "system": "Claude Opus (OpenRouter triage)",
+          "source_kind": "independent",
+          "source": "OpenRouter tutorial tables",
+          "source_url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+          "metrics": {
+            "latency_ms_p50": 1957,
+            "accuracy_pct": 100,
+            "cost_per_1k_usd": 2.88
+          },
+          "metrics_display": {
+            "latency_ms_p50": "1.957 s p50",
+            "accuracy_pct": "60/60 intent (100%)",
+            "cost_note": "$2.88 / 1k (author table)"
+          }
+        },
+        {
+          "system": "TypeSafe workflow Pareto claim",
+          "source_kind": "vendor_reported",
+          "source": "TypeSafe announcement",
+          "source_url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+          "metrics": {
+            "latency_ms_p50": 100,
+            "accuracy_pct": 95,
+            "cost_per_1k_usd": 0.01
+          },
+          "metrics_display": {
+            "latency_ms_p50": "Vendor: ~70–500 ms class",
+            "accuracy_pct": "Workflow-eval Pareto (qualitative)",
+            "cost_note": "Homepage cites up to 444.6× cheaper vs refs — vendor caveat: likely high-end"
+          }
+        }
+      ]
+    },
+    {
+      "id": "judge-variance-cited",
+      "title": "D-adjacent — Agent evaluator variance (LangChain)",
+      "version": "cite-2026-09-20",
+      "date": "20 Sep 2026",
+      "samples": "5 fixed runs × 100 reps (author setup)",
+      "latency_includes_network": true,
+      "description": "LangChain/LangSmith experiment comparing judges on fixed agent traces for quality score variance and does_pass agreement with a human oracle.",
+      "does_not_prove": "Does not prove Jev is the best general judge across domains. Small weather-agent dataset; defaults for LLM sampling not fully locked.",
+      "results": [
+        {
+          "system": "Jev (does_pass agreement)",
+          "source_kind": "independent",
+          "source": "LangChain LangSmith post",
+          "source_url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+          "metrics": {
+            "latency_ms_p50": 250,
+            "accuracy_pct": 100,
+            "cost_per_1k_usd": 0.05
+          },
+          "metrics_display": {
+            "latency_ms_p50": "n/a in post summary",
+            "accuracy_pct": "500/500 oracle match (author)",
+            "cost_note": "See post for stack versions"
+          }
+        },
+        {
+          "system": "GPT-5.6 Terra (does_pass)",
+          "source_kind": "independent",
+          "source": "LangChain LangSmith post",
+          "source_url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+          "metrics": {
+            "latency_ms_p50": 2000,
+            "accuracy_pct": 99.8,
+            "cost_per_1k_usd": 1
+          },
+          "metrics_display": {
+            "latency_ms_p50": "n/a in post summary",
+            "accuracy_pct": "99.8% (author)",
+            "cost_note": "See post"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ws-methodology-routing",
+      "title": "B — Model routing (TenthMatrix methodology demo)",
+      "version": "method-0.1",
+      "date": "26 Sep 2026",
+      "samples": "demo n=120 synthetic",
+      "latency_includes_network": false,
+      "description": "Illustrative dashboard wiring for fixed-premium vs router arms. Numbers are placeholders for UI testing — not measured API results.",
+      "does_not_prove": "Nothing about real Jev or LLM quality. Do not cite externally.",
+      "results": [
+        {
+          "system": "Fixed premium (demo)",
+          "source_kind": "workstation_methodology",
+          "source": "TenthMatrix methodology demo",
+          "source_url": "/insights/benchmarks/v1/README.md",
+          "metrics": {
+            "latency_ms_p50": 4200,
+            "accuracy_pct": 96,
+            "cost_per_1k_usd": 12
+          },
+          "metrics_display": {
+            "latency_ms_p50": "4200 ms (demo)",
+            "accuracy_pct": "96% (demo)",
+            "cost_note": "$12 / 1k (demo)"
+          }
+        },
+        {
+          "system": "Intelligent router (demo)",
+          "source_kind": "workstation_methodology",
+          "source": "TenthMatrix methodology demo",
+          "source_url": "/insights/benchmarks/v1/README.md",
+          "metrics": {
+            "latency_ms_p50": 900,
+            "accuracy_pct": 94,
+            "cost_per_1k_usd": 3.5
+          },
+          "metrics_display": {
+            "latency_ms_p50": "900 ms (demo)",
+            "accuracy_pct": "94% (demo)",
+            "cost_note": "$3.5 / 1k (demo)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ws-methodology-safety",
+      "title": "C — Tool safety (TenthMatrix methodology demo)",
+      "version": "method-0.1",
+      "date": "26 Sep 2026",
+      "samples": "demo n=80 synthetic",
+      "latency_includes_network": false,
+      "description": "Placeholder metrics for allow/deny/escalate UI. Replace upon first workstation_measured release.",
+      "does_not_prove": "No real detection performance. Sandbox-only future runs.",
+      "results": [
+        {
+          "system": "Decision gate (demo)",
+          "source_kind": "workstation_methodology",
+          "source": "TenthMatrix methodology demo",
+          "source_url": "/insights/benchmarks/v1/README.md",
+          "metrics": {
+            "latency_ms_p50": 180,
+            "accuracy_pct": 93,
+            "cost_per_1k_usd": 0.04
+          },
+          "metrics_display": {
+            "latency_ms_p50": "180 ms (demo)",
+            "accuracy_pct": "93% detection (demo)",
+            "cost_note": "$0.04 / 1k (demo)"
+          }
+        },
+        {
+          "system": "Fast LLM gate (demo)",
+          "source_kind": "workstation_methodology",
+          "source": "TenthMatrix methodology demo",
+          "source_url": "/insights/benchmarks/v1/README.md",
+          "metrics": {
+            "latency_ms_p50": 850,
+            "accuracy_pct": 94,
+            "cost_per_1k_usd": 0.4
+          },
+          "metrics_display": {
+            "latency_ms_p50": "850 ms (demo)",
+            "accuracy_pct": "94% detection (demo)",
+            "cost_note": "$0.40 / 1k (demo)"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "جولة كاملة لميزات NebulaDNS: مستوى التحكم الأول لـ API، ومقاييس Prometheus، وبوابات الانتشار، وبصمات الأقران، وخريطة طريق DNSSEC، وقصة مشغل Helm/k3s، وكيفية التكامل مع AWS Route 53 وCoreDNS.",
+  "sub_title": "كل ميزة \"مضمنة في البطارية\"، وعمليات التكامل، ووضعية DNS الخاصة بالمؤسسة",
+  "title": "دليل الميزات الكامل لـ NebulaDNS: k3s، وRoute53، وقابلية المراقبة، وDNS للمؤسسات",
+  "meta_title": "مميزات NebulaDNS | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "مرجع ميزات NebulaDNS الكامل: مستوى بيانات الصدأ، ومستوى التحكم API، ومدقق الانتشار، وTSIG، وكتالوج المقاييس، ومشغل Kubernetes Helm، وأنماط التكامل Route 53 وk3s.",
+  "meta_keywords": "ميزات NebulaDNS ومقاييس DNS وPrometheus الموثوقة DNS ومشغل Kubernetes DNS وتفويض Route53 وCoreDNS وTSIG AXFR وخريطة طريق DNSSEC وخادم Rust DNS",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "مصادر<div class='blog-content'><h2></h2><p>يجمع هذا الدليل موقع<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS العام</a>والمستودع<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>. تتطور المعالم الرئيسية وعناصر GA — تحقق من ملاحظات الإصدار الخاصة بإصدارك. لمحة سريعة عن بنية</p><h2></h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>يفصل المكدس مستوى التحكم<strong></strong>(REST/gRPC، authn/z)، إدارة منطقة<strong></strong>(التحقق من الصحة، توقيع DNSSEC، الالتزامات الذرية)،<strong>التحقق من الانتشار</strong>(تقرير المرتبات الثانوية SOA)، ومخزن المنطقة المخصصة للمحتوى<strong>، و</strong>، ومستوى بيانات<strong>DNS</strong>(UDP/TCP/DoT/DoH/DoQ، والتحويلات، والموقع عبر الإنترنت DNSSEC).</p><h2>كتالوج الميزات (\"البطاريات متضمنة\")</h2><p>يقوم المشروع بتسويق<strong>اثنتي عشرة إمكانات رئيسية لـ</strong>- تم تلخيصها هنا من الصفحة المقصودة.</p><ul><li><strong>API-الأول:</strong>REST/gRPC للمناطق والسجلات وتدوير TSIG والتراجع - CLI/UI كعملاء رفيعين.</li><li><strong>يمكن ملاحظتها بشكل افتراضي:</strong>Prometheus<code>/metrics</code>والتسميات المكتوبة بالتعداد وسجلات JSON وتتبعات OTLP.</li><li><strong>النشر الذي تم التحقق منه: يكتمل نشر</strong>فقط عندما تعترف العناصر الثانوية المعلنة بتسلسل SOA الجديد.</li><li><strong>بصمة البرامج النظيرة: يسجل</strong>إشارات على نمط<code>version.bind</code>CHAOS، لذلك لا يمكن أن تؤدي ترقيات BIND الصامتة إلى تآكل التكرار بشكل غير مرئي.</li><li><strong>الصدأ الآمن:</strong>No<code>unsafe</code>؛ التشويش المستمر على برنامج الترميز والمحلل اللغوي وموقع DNSSEC.</li><li><strong>زمن استجابة ذيل Zero-GC:</strong>التخصيص الحتمي؛ لقطات منطقة خالية من القفل عبر<code>arc-swap</code>.</li><li><strong>التكوين ذو الإصدار الذري:</strong>المناطق التي تتناول المحتوى؛ التمرير للأمام/التراجع دون قراءات جزئية.</li><li><strong>مسلسلات SOA الحتمية:</strong>استراتيجية تسلسلية رتيبة لتجنب عمليات الاسترداد المثبتة.</li><li><strong>Kubernetes أصلي: مخطط</strong>Helm، المشغل، CRDs (<code>Zone</code>,<code>Record</code>,<code>Secondary</code>,<code>TsigKey</code>,<code>DeployGate</code>); متوافق مع GitOps؛ مسار استبدال مجموعة CoreDNS-DNS على خريطة الطريق.</li><li><strong>سلك متوافق مع المعايير:</strong>تغطية RFC صارمة؛ أنواع الأخطاء الصريحة (مثل<code>QdCountMismatch</code>).</li><li><strong>التكرار الذي يمكنك رؤيته: نية لوحة المعلومات</strong>لنقل الرؤية عبر المناطق.</li><li><strong>الإعدادات الافتراضية المقواة: تقوية النظام</strong>، seccomp، الحاويات غير الجذرية، الصور الصغيرة غير الموزعة.</li></ul><h2>مقارنة تحديد المواقع (المستوى العالي)</h2><p>ينشر الموقع مصفوفة تنافسية (TinyDNS، BIND 9، Knot، NSD، PowerDNS، CoreDNS، NebulaDNS). تشتمل أدوات التفاضل التي تم استدعاؤها على<strong>full REST API</strong>و<strong>الدائم Prometheus</strong>وبوابة النشر المدمجة<strong></strong>ومشغل<strong>Kubernetes + CRDs</strong>و<strong>بصمة الأقران</strong>، وتنفيذ<strong>للذاكرة الآمنة</strong>. استخدم المصفوفة الأولية للمطالبات الخاصة بالإصدار.</p><h2>كتالوج المقاييس (عينة)</h2><p>تتضمن الأمثلة من الموقع عدادات الاستعلام، والرسوم البيانية لزمن الاستجابة، وتتبع FORMERR، ومحاولات AXFR، والطوابع الزمنية للنجاح الأخير لكل نظير، وتأخر النشر، ومعلومات البناء. تعامل مع الأسماء على أنها توضيحية حتى تتخلص من البنية قيد التشغيل. طريق</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s وCoreDNS وAWS&nbsp;53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>طريق&nbsp;53:</strong>احتفظ بالتفويض العام و الفحوصات الصحية في AWS؛ قم بتسجيل سجلات NS في المرتبات الثانوية NebulaDNS أو قم بتشغيل أنماط الأفق المقسم التي تتوافق مع نموذج الأمان الخاص بك.</li><li><strong>k3s / RKE2:</strong>نشر NebulaDNS عبر Helm مع PDB + ServiceMonitor؛ قم بمحاذاة CoreDNS<strong>للأمام/كعب</strong>إلى NebulaDNS للمناطق التي تخدمها بشكل رسمي داخل التركة.</li><li><strong>ExternalDNS:</strong>جسر اختياري من كائنات الدخول/LB إلى السجلات العامة - يتم التنسيق مع بوابات النشر حتى لا تتمكن الأتمتة من وضع علامة \"تم\" مبكرًا.</li></ul><h2>ملاحظات خريطة الطريق</h2><p>تسرد خريطة الطريق العامة المعالم الرئيسية من خلال GA (اكتمال الأسلاك/المنطقة، عمليات النقل، DNSSEC، أداة التحقق من الانتشار، HA/متعدد المناطق، المشغل). تحقق من<code>PROJECT_PROMPT.md</code>والإصدارات في الريبو لمعرفة التواريخ.</p><h2>مقالة الإطلاق ذات الصلة</h2><p>للاطلاع على سرد \"لماذا الآن / عصر الذكاء الاصطناعي\"، اقرأ<a href='/ar/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS: مغير قواعد اللعبة في عصر الذكاء الاصطناعي</a>.</p><h2>كيف يمكن لـ TenthMatrix مساعدة</h2><p>نحن نساعد المؤسسات على شحن أنماط<strong>DNS</strong>و<strong>GitOps</strong>حول الأكوام الموثوقة - اتصل بـ<strong>info@tenthmatrix.com</strong>.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

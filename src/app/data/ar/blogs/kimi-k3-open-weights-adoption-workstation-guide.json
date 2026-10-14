@@ -1,0 +1,77 @@
+{
+  "uuid": "blog-kimi-k3-open-weights-001",
+  "internal_id": 958,
+  "slug": "kimi-k3-open-weights-adoption-workstation-guide",
+  "title": "Kimi K3 والأوزان المفتوحة: وكلاء حدود دون واجهات مغلقة",
+  "sub_title": "Moonshot Kimi K3 وvLLM day-0 وMCP يصبح بلا حالة وكيف تعتمد الشركات النماذج المفتوحة",
+  "excerpt": "يدفع Kimi K3 نماذج الأوزان المفتوحة إلى نطاق الوكلاء الحدودي. ما تغيّر للمطورين وserving عبر vLLM وMCP ونصائح الإنتاج من TenthMatrix.",
+  "meta_title": "دليل Kimi K3 للأوزان المفتوحة — vLLM وMCP ووكلاء هجين | TenthMatrix",
+  "meta_description": "دليل TenthMatrix حول Moonshot Kimi K3 وتبنّي الأوزان المفتوحة: معايير وserving vLLM day-0 وتحديث MCP بلا حالة ورادار النماذج والتوجيه الهجين.",
+  "meta_keywords": "Kimi K3, Moonshot, open weights, open-weight LLM, vLLM, MCP, Laguna, Solar Open 2, DeepSeek, Qwen, TenthMatrix",
+  "cover_image": "/img/kimi-k3-open-weights-cover.svg",
+  "images": [
+    {
+      "url": "/img/kimi-k3-open-weights-cover.svg",
+      "id": 958,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kimi K3 open-weight models TenthMatrix guide"
+    },
+    {
+      "url": "/img/open-weights-production-stack.svg",
+      "id": 959,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Open-weight production stack diagram"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>وضع Kimi K3 من Moonshot نماذج الأوزان المفتوحة في نفس الحوار مع واجهات frontier المغلقة — للبرمجة الوكيلية لا مجرد عروض الدردشة. نظرة TenthMatrix للأعمال والمطوّرين. التحليل وقائمة الرادار وقائمة الإنتاج في <a href=\"/ar/articles/kimi-k3-open-weights-adoption-workstation-guide\">المقال الطويل</a>.</em></p>\n\n<p><img src=\"/img/kimi-k3-open-weights-cover.svg\" alt=\"نماذج Kimi K3 ذات الأوزان المفتوحة تسرّع ذكاء المؤسسات\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>الخلاصة.</strong> الأوزان المفتوحة لم تعد «تقريبًا جيدة بما يكفي». وصل Kimi K3 (2.8T MoE، سياق 1M، متعدد الوسائط أصليًا) بدعم <strong>vLLM</strong> / SGLang day-0 ودرجات تضع النماذج المفتوحة بجانب أنظمة Claude/GPT على مقاعد الوكلاء. القرار الحقيقي ليس «مفتوح أو مغلق» — بل <strong>أي نموذج لأي مهمة</strong> على عتاد وعمليات تستطيع تشغيلها فعلًا.\n</div>\n\n<h2>ما الذي غيّره Kimi K3</h2>\n<ul>\n  <li><strong>المقياس:</strong> أول نموذج مفتوح يُناقش على نطاق واسع في فئة ~3T معاملات (Moonshot؛ الأوزان على Hugging Face كـ <code>moonshotai/Kimi-K3</code>).</li>\n  <li><strong>ملاءمة الوكلاء:</strong> مقاعد مستقلة (مثل تقارير SWE-bench / LiveCodeBench بأسلوب MindStudio في يوليو 2026) تضع K3 في نفس النطاق مع أفضل النماذج المملوكة في مهام الترميز/الوكلاء.</li>\n  <li><strong>سرعة الخدمة:</strong> قدّم vLLM وصفات day-0 (نوى KDA، تفكيك P/D، فكّ تشفير تخميني DSpark) — الاستضافة الذاتية مشروع هندسي لا ورقة بحث.</li>\n  <li><strong>تحذير الترخيص:</strong> «open weights» ≠ MIT لكل استخدام SaaS تجاري — اقرأ رخصة Kimi K3 قبل التسويق كمنتج.</li>\n</ul>\n\n<p><img src=\"/img/open-weights-production-stack.svg\" alt=\"مكدس إنتاج الأوزان المفتوحة من الأوزان إلى الوكلاء\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>إشارة الصناعة (نفس الأسبوعين)</h2>\n<ul>\n  <li><strong>MCP 2026-07-28</strong> — يصبح البروتوكول إلى حد كبير <em>بلا حالة</em> (بدون handshake جلسة / معرّفات جلسة)؛ توسّع أفقي أسهل لأدوات الوكلاء. امتدادات: MCP Apps وMCP Tasks.</li>\n  <li><strong>Open Secure AI Alliance</strong> (NVIDIA + أكثر من 100 شركة) + رسالة «Open Weights and American AI Leadership» — إطار سياسي وأمني للنماذج المفتوحة كبنية دفاعية.</li>\n  <li><strong>التبنّي ≠ الإنتاج:</strong> استطلاعات الذكاء الاصطناعي المفتوح بأسلوب Mozilla ما زالت تُظهر <em>تجريبًا</em> عاليًا للنماذج المفتوحة لكن فجوة عنيدة نحو الإنتاج — العمليات والتقييم لا الذكاء الخام هي الاختناق.</li>\n</ul>\n\n<h2>شاهد: خدمة النماذج المفتوحة بـ vLLM</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/a9T9kWwpaNg\" title=\"تحسين ونشر وقياس أداء LLM مفتوح المصدر مع vLLM\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n\n<h2>نصيحة TenthMatrix</h2>\n<ol>\n  <li><strong>الشركات الصغيرة:</strong> فضّل MoE مفتوحة أصغر (Laguna S 2.1 وSolar Open 2 وفئة Qwen/DeepSeek) على محطات AI / عقد GPU صغيرة؛ استخدم واجهات K3 المُدارة إن أردت ذلك الذكاء دون رف.</li>\n  <li><strong>المؤسسات:</strong> استضف فئة K3 ذاتيًا فقط مع عنقود GPU وميزانية MLOps؛ وإلا هجين — مفتوح لـ RAG/وكلاء خاصين ومغلق للمسارات الحرجة.</li>\n  <li><strong>دائمًا:</strong> إطار تقييم وReview Bot وGitOps وأدوات MCP مع HITL — انظر <a href=\"/ar/docs/blogs/wise-developer-project-workflow-multi-agent-teams\">سير العمل متعدد الوكلاء</a>.</li>\n</ol>\n\n<p>الرادار الكامل (Kimi وLaguna وSolar وDeepSeek وQwen وLlama وNemotron وGLM وKAT-Coder وMage-Flow وInflect وغيرها) وملاحظات MCP وقائمة الإنتاج: <a href=\"/ar/articles/kimi-k3-open-weights-adoption-workstation-guide\">المقال الطويل</a>. نُشر بواسطة <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "kimi",
+      "id": 1024
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-08-05T22:00:00Z",
+  "updated_at": "2026-08-05T22:00:00Z",
+  "published_date": "2026-08-05",
+  "status": true
+}

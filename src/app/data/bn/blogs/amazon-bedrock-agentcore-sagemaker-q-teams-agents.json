@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-aws-bedrock-teams-agents-001",
+  "internal_id": 954,
+  "slug": "amazon-bedrock-agentcore-sagemaker-q-teams-agents",
+  "title": "Amazon Bedrock, AgentCore, SageMaker & Q: Microsoft Teams-এ Agents",
+  "sub_title": "FDE playbook: কোন AWS service ব্যবহার করবেন, প্রথম Teams agent path, এবং RAG, MLOps ও LLM apps-এর calendar estimates",
+  "excerpt": "Amazon Bedrock, Bedrock AgentCore, SageMaker এবং Amazon Q বাস্তবায়ন করুন, তারপর Microsoft Teams-এ প্রথম business agent চালু করুন — requirements, tooling ও time boxesসহ।",
+  "meta_title": "Amazon Bedrock, AgentCore, SageMaker & Q — Microsoft Teams-এ Agents",
+  "meta_description": "Amazon Bedrock, Bedrock AgentCore, SageMaker এবং Amazon Q-এর FDE গাইড: architecture, Microsoft Teams-এ প্রথম agent, tooling, এবং RAG ও MLOps-এর সময় অনুমান।",
+  "meta_keywords": "Amazon Bedrock, Bedrock AgentCore, Amazon SageMaker, Amazon Q, Microsoft Teams এজেন্ট, RAG, MLOps, FDE, Entra ID",
+  "cover_image": "/img/aws-bedrock-teams-agents-cover.svg",
+  "images": [
+    {
+      "url": "/img/aws-bedrock-teams-agents-cover.svg",
+      "id": 954,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Amazon Bedrock AgentCore SageMaker Amazon Q agents in Microsoft Teams"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Amazon Bedrock, Bedrock AgentCore, SageMaker এবং Amazon Q কীভাবে মিলে যায় — এবং একজন FDE কীভাবে Microsoft Teams-এ প্রথম business agent পাঠায়। পূর্ণ setup guide, tooling list ও calendar estimates-এর জন্য পড়ুন <a href=\"/bn/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">দীর্ঘ article</a>.</em></p>\n<p><img alt=\"Amazon Bedrock AgentCore SageMaker Amazon Q agents Microsoft Teams-এ\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/aws-bedrock-teams-agents-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #ff9900;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>এক-অনুচ্ছেদের সংস্করণ।</strong> ব্যবহার করুন <strong>Amazon Bedrock</strong> Managed foundation models ও RAG knowledge bases-এর জন্য। ব্যবহার করুন <strong>Bedrock AgentCore</strong> custom agents-এর runtime হিসেবে (memory, tools, identity, observability)। ব্যবহার করুন <strong>SageMaker</strong> যখন custom training, fine-tuning বা MLOps pipelines দরকার। ব্যবহার করুন <strong>Amazon Q</strong> (Business / Developer) যখন কম engineering-এ productised employee বা builder assistant চান। Agents রাখুন যেখানে মানুষ ইতিমধ্যে কাজ করে — <strong>Microsoft Teams</strong> — Bot Framework / Azure Bot relay দিয়ে AgentCore Runtime-এ, auth-এর জন্য Entra IDসহ।\n</div>\n<h2>AWS stack-এ কে কী করে</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#ffb84d;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">সার্ভিস</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">সেরা</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">এর জন্য নয়</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Serverless FMs, Guardrails, Knowledge Bases (RAG), Agents APIs</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Scratch থেকে বড় models train করা</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Bedrock AgentCore</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Custom agent runtime, Gateway tools (incl. Teams Graph), Identity, Memory</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">শুধু low-code “chat with my docs”</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon SageMaker</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Train / fine-tune / host custom models, Pipelines, Feature Store, MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Teams chatbot MVP-এর দ্রুততম path</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Q</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Employee knowledge assistant; AWS-এ developer coding help</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">গভীরভাবে custom multi-agent products</td></tr>\n</tbody>\n</table>\n<h2>প্রস্তাবিত business pattern</h2>\n<ol>\n<li><strong>সপ্তাহ 0–2:</strong> Pilot corpus-এ Bedrock + Knowledge Base RAG দাঁড় করান; Guardrails চালু করুন।</li>\n<li><strong>সপ্তাহ 2–4:</strong> AgentCore Runtime-এ production agent প্যাকেজ করুন; Gateway দিয়ে tools সংযুক্ত করুন (SharePoint, CRM, Teams Graph)।</li>\n<li><strong>সপ্তাহ 3–5:</strong> এমন Teams bot পাঠান যা messages AgentCore-এ relay করে; sessions রাখুন <code>teams-{aadObjectId}-{conversationId}</code>.</li>\n<li><strong>Parallel / later:</strong> Custom classifiers বা fine-tunes-এর জন্য SageMaker; কম build-এ org-wide Q&amp;A-এর জন্য Amazon Q Business।</li>\n</ol>\n<h2>Teams-এ প্রথম agent (FDE snapshot)</h2>\n<p>Production-minded pilots-এ কাজ করে এমন ন্যূনতম path:</p>\n<ul>\n<li>Azure Bot + Teams app registration (Entra ID)</li>\n<li>Bot messaging endpoint হিসেবে AWS Lambda (বা container)</li>\n<li><code>POST</code> AgentCore Runtime-এ <code>/invocations</code> JWTসহ</li>\n<li>RAG-এর জন্য Bedrock Knowledge Base; নিরাপত্তার জন্য Guardrails</li>\n<li>Pilot channel, human feedback loop, CloudWatch traces</li>\n</ul>\n<p>প্রায় আশা করুন <strong>3–6 সপ্তাহ</strong> scoped internal agent-এর জন্য (এক বিভাগ, এক knowledge source, বেশিরভাগ read-mostly tools) FDE + platform engineer + security reviewসহ। Full MLOps + multi-agent + line-of-business systems-এ write-actions একটি <strong>ত্রৈমাসিক+</strong>.</p>\n<h2>Time boxes (indicative)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">Workstream</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f8fafc;\">Calendar (FDE-led)</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Bedrock chat + Guardrails MVP</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">3–5 দিন</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Knowledge Base RAG (one corpus)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 সপ্তাহ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">AgentCore agent + 2–3 tools</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">2–3 সপ্তাহ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Teams bot + admin publish pilot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–2 weeks (overlap)</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Amazon Q Business (managed assistant)</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1–3 সপ্তাহ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">SageMaker fine-tune + endpoint + MLOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">4–8+ সপ্তাহ</td></tr>\n</tbody>\n</table>\n<h2>দীর্ঘ সংস্করণ পড়ুন</h2>\n<p>The <a href=\"/bn/articles/amazon-bedrock-agentcore-sagemaker-q-teams-agents\">দীর্ঘ article</a> গদ্যে architecture diagrams, Teams first-agent setup ধাপে ধাপে, Entra ID with AgentCore Identity, tool Gateway targets, FDE training curriculum, requirements/tooling checklists, এবং LLM apps, RAG ও MLOps-এর phased estimates কভার করে। প্রকাশিত <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "agentcore",
+      "id": 1012
+    },
+    {
+      "name": "sagemaker",
+      "id": 1013
+    },
+    {
+      "name": "amazon-q",
+      "id": 1014
+    },
+    {
+      "name": "microsoft-teams",
+      "id": 1015
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "rag",
+      "id": 945
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-21T09:00:00Z",
+  "updated_at": "2026-07-21T09:00:00Z",
+  "published_date": "2026-07-21",
+  "status": true
+}

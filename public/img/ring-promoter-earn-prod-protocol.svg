@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Ring Promoter promotion protocol steps">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a0a0a"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <text fill="#86efac" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="3" x="48" y="52">PROMOTION PROTOCOL</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="32" font-weight="800" x="48" y="98">Five rules every hop must pass</text>
+  <g font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif">
+    <rect x="48" y="140" width="520" height="80" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text fill="#22c55e" font-size="20" font-weight="800" x="72" y="188">01</text>
+    <text fill="#ffffff" font-size="20" font-weight="700" x="120" y="178">One ring at a time</text>
+    <text fill="#94a3b8" font-size="15" x="120" y="204">Never skip — promote always targets the next ring</text>
+
+    <rect x="632" y="140" width="520" height="80" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text fill="#22c55e" font-size="20" font-weight="800" x="656" y="188">02</text>
+    <text fill="#ffffff" font-size="20" font-weight="700" x="704" y="178">Source must prove it</text>
+    <text fill="#94a3b8" font-size="15" x="704" y="204">Live health check before anything deploys</text>
+
+    <rect x="48" y="250" width="520" height="80" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text fill="#22c55e" font-size="20" font-weight="800" x="72" y="298">03</text>
+    <text fill="#ffffff" font-size="20" font-weight="700" x="120" y="288">Target must earn it</text>
+    <text fill="#94a3b8" font-size="15" x="120" y="314">Post-deploy health with configurable retries</text>
+
+    <rect x="632" y="250" width="520" height="80" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+    <text fill="#22c55e" font-size="20" font-weight="800" x="656" y="298">04</text>
+    <text fill="#ffffff" font-size="20" font-weight="700" x="704" y="288">Failure undoes itself</text>
+    <text fill="#94a3b8" font-size="15" x="704" y="314">Unhealthy target rolls back to previous version</text>
+
+    <rect x="48" y="360" width="1104" height="80" rx="12" fill="#0f172a" stroke="#22c55e" stroke-width="1.5"/>
+    <text fill="#22c55e" font-size="20" font-weight="800" x="72" y="408">05</text>
+    <text fill="#ffffff" font-size="20" font-weight="700" x="120" y="398">Everything is written down</text>
+    <text fill="#94a3b8" font-size="15" x="120" y="424">Every seed, promote and rollback lands in history — success or failure</text>
+
+    <rect x="48" y="480" width="1104" height="100" rx="12" fill="#052e16" stroke="#166534" stroke-width="1.5"/>
+    <text fill="#86efac" font-size="16" font-weight="700" x="72" y="522">OPTIONAL: version-verified health</text>
+    <text fill="#bbf7d0" font-size="15" x="72" y="552">health_version_field / health_version_header must report the exact version just deployed — catches 200 OK but still the old build.</text>
+  </g>
+</svg>

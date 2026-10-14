@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Uncovering LLM bottlenecks with observability, OpenTelemetry, and cost control">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.5" stop-color="#132033"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.2" cy="0.25" r="0.55">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.85" cy="0.7" r="0.5">
+      <stop offset="0" stop-color="#34d399" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <text fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="3" x="60" y="78">OBSERVABILITY  /  OPENTELEMETRY  /  AGENT COST CONTROL</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="44" font-weight="800" x="60" y="150">Uncovering LLM Bottlenecks</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" x="60" y="198">Traces, metrics, and FinOps for agent pipelines</text>
+  <text fill="rgba(255,255,255,0.82)" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="18" font-weight="500" x="60" y="250">Find where tokens, latency, and money leak — then fix them with evidence.</text>
+  <rect x="60" y="292" width="70" height="36" rx="8" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="78" y="315">OTEL</text>
+  <rect x="146" y="292" width="120" height="36" rx="8" fill="none" stroke="#34d399" stroke-width="1.5"/>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="162" y="315">Prometheus</text>
+  <rect x="282" y="292" width="100" height="36" rx="8" fill="none" stroke="#a78bfa" stroke-width="1.5"/>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="302" y="315">Langfuse</text>
+  <rect x="398" y="292" width="90" height="36" rx="8" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="418" y="315">FinOps</text>
+  <g transform="translate(720,90)">
+    <rect x="0" y="0" width="400" height="420" rx="16" fill="rgba(15,23,42,0.78)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text fill="#7dd3fc" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" x="24" y="36">SIGNAL STACK</text>
+    <rect x="24" y="56" width="352" height="52" rx="10" fill="rgba(56,189,248,0.15)" stroke="#38bdf8"/>
+    <text fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="40" y="88">Agent / LLM spans (OTEL)</text>
+    <rect x="24" y="124" width="352" height="52" rx="10" fill="rgba(167,139,250,0.15)" stroke="#a78bfa"/>
+    <text fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="40" y="156">Metrics: tokens, TTFT, cost</text>
+    <rect x="24" y="192" width="352" height="52" rx="10" fill="rgba(52,211,153,0.15)" stroke="#34d399"/>
+    <text fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="40" y="224">Dashboards + eval scores</text>
+    <rect x="24" y="260" width="352" height="52" rx="10" fill="rgba(251,191,36,0.15)" stroke="#fbbf24"/>
+    <text fill="#e2e8f0" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" x="40" y="292">Budgets, caps, alerts</text>
+    <text fill="#94a3b8" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" x="24" y="350">Without telemetry, the model is slow</text>
+    <text fill="#94a3b8" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" x="24" y="372">is a guess — not an engineering decision.</text>
+    <text fill="#34d399" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" x="24" y="404">Measure ��→ attribute ��→ cap ��→ improve</text>
+  </g>
+  <text fill="rgba(255,255,255,0.5)" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2" x="60" y="580">WORKSTATION  /  ENTERPRISE AI LAB  /  WORKSTATION.CO.UK</text>
+</svg>

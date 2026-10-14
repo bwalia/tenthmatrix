@@ -1,0 +1,76 @@
+@use '../../styles/mixins' as *;
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--tm-radius);
+  color: var(--tm-text);
+}
+
+.surface {
+  @include card-surface;
+}
+
+.sunken {
+  background: var(--tm-sunken);
+  border: 1px solid transparent;
+}
+
+.accent {
+  background: var(--tm-accent-soft);
+  border: 1px solid var(--tm-accent-line);
+}
+
+.night {
+  background: var(--tm-night-bg);
+  border: 1px solid var(--tm-night-line);
+  color: var(--tm-night-text);
+}
+
+.p-none {
+  padding: 0;
+}
+
+.p-sm {
+  padding: var(--tm-space-4);
+}
+
+.p-md {
+  padding: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+}
+
+.p-lg {
+  padding: clamp(1.5rem, 1rem + 1.6vw, 2.5rem);
+}
+
+.interactive {
+  transition:
+    border-color var(--tm-duration-fast) var(--tm-ease-standard),
+    box-shadow var(--tm-duration) var(--tm-ease-standard),
+    transform var(--tm-duration) var(--tm-ease-out);
+
+  &:hover {
+    border-color: var(--tm-line-strong);
+    box-shadow: var(--tm-shadow);
+  }
+
+  @include motion {
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.link {
+  text-decoration: none;
+
+  &:hover {
+    color: var(--tm-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}

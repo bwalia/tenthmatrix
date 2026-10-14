@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Kubeflow and Argo CD GitOps MLOps on Kubernetes">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.5" stop-color="#0f2744"/>
+      <stop offset="1" stop-color="#132a1f"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.2" cy="0.2" r="0.6">
+      <stop offset="0" stop-color="#326ce5" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#326ce5" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.85" cy="0.75" r="0.55">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #86efac; font: 700 13px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 48px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: -0.5px; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 18px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(134,239,172,0.4); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.5); font: 700 12px system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <text class="kicker" x="60" y="78">MLOPS  /  GITOPS  /  KUBERNETES</text>
+  <text class="title" x="60" y="155">Kubeflow + Argo CD</text>
+  <text class="sub" x="60" y="205">Train with Kubeflow. Deliver with GitOps. Roll back with git revert.</text>
+  <rect class="chip" x="60" y="260" width="150" height="36" rx="8"/>
+  <text class="chipText" x="82" y="283">Kubeflow</text>
+  <rect class="chip" x="225" y="260" width="130" height="36" rx="8"/>
+  <text class="chipText" x="250" y="283">Argo CD</text>
+  <rect class="chip" x="370" y="260" width="110" height="36" rx="8"/>
+  <text class="chipText" x="395" y="283">KServe</text>
+  <rect class="chip" x="495" y="260" width="140" height="36" rx="8"/>
+  <text class="chipText" x="515" y="283">Model Registry</text>
+  <rect x="60" y="340" width="1080" height="2" fill="rgba(134,239,172,0.25)"/>
+  <text class="sub" x="60" y="400">Pipeline DAGs, InferenceServices, and GPU quotas as declarative Git state</text>
+  <text class="brand" x="60" y="580">WORKSTATION.CO.UK</text>
+</svg>

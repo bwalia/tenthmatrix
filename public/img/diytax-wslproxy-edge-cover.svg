@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+  <title id="t">How we protected the Payments Secure app with WSLProxy Edge</title>
+  <desc id="d">Internet traffic passes through the WSLProxy Edge open-source API gateway, which filters bad requests before they reach the Payments Secure API.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#13233f"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34d399"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.08" stroke="#ffffff">
+    <path d="M0 105H1200M0 210H1200M0 315H1200M0 420H1200M0 525H1200"/>
+    <path d="M150 0V630M300 0V630M450 0V630M600 0V630M750 0V630M900 0V630M1050 0V630"/>
+  </g>
+
+  <text x="60" y="92" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="600" fill="#34d399" letter-spacing="3">CASE STUDY · OPEN-SOURCE API GATEWAY</text>
+  <text x="60" y="160" font-family="Inter, Arial, sans-serif" font-size="50" font-weight="800" fill="#ffffff">How we protected the</text>
+  <text x="60" y="222" font-family="Inter, Arial, sans-serif" font-size="50" font-weight="800" fill="#ffffff">Payments Secure app</text>
+  <text x="60" y="284" font-family="Inter, Arial, sans-serif" font-size="50" font-weight="800" fill="#34d399">with WSLProxy Edge</text>
+
+  <!-- traffic lane -->
+  <g font-family="Inter, Arial, sans-serif">
+    <g>
+      <circle cx="110" cy="420" r="11" fill="#60a5fa"/>
+      <circle cx="160" cy="455" r="11" fill="#f87171"/>
+      <circle cx="115" cy="490" r="11" fill="#60a5fa"/>
+      <circle cx="170" cy="525" r="11" fill="#f87171"/>
+      <circle cx="210" cy="410" r="11" fill="#60a5fa"/>
+      <text x="80" y="580" font-size="20" fill="#cbd5e1">Internet traffic</text>
+    </g>
+    <path d="M250 470H470" stroke="#94a3b8" stroke-width="4" stroke-dasharray="10 8"/>
+    <path d="M462 460l14 10-14 10z" fill="#94a3b8"/>
+
+    <!-- shield -->
+    <path d="M600 360l110 38v70c0 64-47 108-110 128-63-20-110-64-110-128v-70z" fill="url(#shield)"/>
+    <path d="M556 478l30 30 62-66" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="600" y="624" font-size="20" fill="#cbd5e1" text-anchor="middle">WSLProxy Edge</text>
+
+    <!-- blocked -->
+    <path d="M660 360l60-60" stroke="#f87171" stroke-width="4" stroke-dasharray="8 6"/>
+    <circle cx="738" cy="284" r="24" fill="none" stroke="#f87171" stroke-width="4"/>
+    <path d="M721 267l34 34" stroke="#f87171" stroke-width="4"/>
+
+    <path d="M730 470H930" stroke="#34d399" stroke-width="4"/>
+    <path d="M922 460l14 10-14 10z" fill="#34d399"/>
+
+    <!-- app -->
+    <rect x="950" y="395" width="190" height="150" rx="18" fill="#1e293b" stroke="#34d399" stroke-width="3"/>
+    <rect x="975" y="425" width="140" height="14" rx="7" fill="#334155"/>
+    <rect x="975" y="452" width="100" height="14" rx="7" fill="#334155"/>
+    <rect x="975" y="479" width="120" height="14" rx="7" fill="#334155"/>
+    <text x="1045" y="522" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">Payments API</text>
+    <text x="1045" y="580" font-size="20" fill="#cbd5e1" text-anchor="middle">Payments Secure</text>
+  </g>
+</svg>

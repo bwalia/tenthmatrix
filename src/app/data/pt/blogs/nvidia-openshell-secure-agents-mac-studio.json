@@ -1,0 +1,94 @@
+{
+  "uuid": "blog-nvidia-openshell-001",
+  "internal_id": 1033,
+  "slug": "nvidia-openshell-secure-agents-mac-studio",
+  "title": "NVIDIA OpenShell: Secure Agent Runtime on Mac Studio and GPU Workstations",
+  "sub_title": "A TenthMatrix guide to NVIDIA OpenShell — sandboxed agents, policy, and inference routes — including how to run the gateway on a Mac Studio GPU machine and when to use NVIDIA --gpu passthrough.",
+  "excerpt": "NVIDIA OpenShell governs autonomous agents with sandboxes, policy, and credential isolation. TenthMatrix explains how to run it on Mac Studio (Apple GPU host inference) and on Linux with NVIDIA --gpu.",
+  "meta_title": "NVIDIA OpenShell: Secure Agent Runtime on Mac Studio and GPU Workstations | TenthMatrix",
+  "meta_description": "TenthMatrix guide to NVIDIA OpenShell: sandboxed AI agents, policy enforcement, openshell term, Mac Studio and Apple GPU local inference, and NVIDIA --gpu passthrough on Linux workstations.",
+  "meta_keywords": "NVIDIA OpenShell, Open Shell, secure agent runtime, Mac Studio, Apple Silicon GPU, local inference, openshell sandbox, --gpu, MCP, agent policy, TenthMatrix, DGX, Ollama",
+  "cover_image": "/img/blog/nvidia-openshell/cover.svg",
+  "images": [
+    {
+      "url": "/img/blog/nvidia-openshell/cover.svg",
+      "id": 1033,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "NVIDIA OpenShell secure agent runtime on Mac Studio and GPU workstations"
+    },
+    {
+      "url": "/img/blog/nvidia-openshell/architecture.svg",
+      "id": 1034,
+      "is_cover": false,
+      "width": 1200,
+      "height": 680,
+      "alt": "OpenShell architecture: gateway, sandboxes, supervisor, and policy enforcement outside the agent"
+    },
+    {
+      "url": "/img/blog/nvidia-openshell/mac-studio-stack.svg",
+      "id": 1035,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Mac Studio running OpenShell gateway with Apple GPU local inference routed to sandboxes via inference.local"
+    },
+    {
+      "url": "/img/blog/nvidia-openshell/gpu-paths.svg",
+      "id": 1036,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "When to use Mac Studio host GPU inference versus NVIDIA GPU passthrough with openshell sandbox create --gpu"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>NVIDIA <strong>OpenShell</strong> is an open, policy-governed runtime for autonomous agents — sandboxes, credential isolation, supervised network egress, and configurable inference routes. NVIDIA’s overview lives at <a href=\"https://build.nvidia.com/openshell\" target=\"_blank\" rel=\"noopener noreferrer\">build.nvidia.com/openshell</a>; this is the <strong>TenthMatrix</strong> rewrite for teams deciding where to run it, including on a <strong>Mac Studio GPU machine</strong>.</em></p>\n\n<p><img src=\"/img/blog/nvidia-openshell/cover.svg\" alt=\"NVIDIA OpenShell secure agent runtime on Mac Studio and GPU workstations\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #059669;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> OpenShell separates <em>what the agent runs</em> from <em>what it is allowed to reach</em>. You can run the gateway on a developer laptop, a <strong>Mac Studio</strong> in the office, or a Linux/NVIDIA fleet — same CLI (`openshell sandbox create`, `openshell term`, policy files). On Mac Studio, the Apple Silicon GPU typically powers <strong>local inference on the host</strong> (Ollama, MLX, vLLM) while sandboxes stay isolated; on Linux with NVIDIA GPUs you can also pass hardware into sandboxes with experimental <code>--gpu</code>.\n</div>\n\n<h2>What OpenShell actually gives you</h2>\n<p>Most “agent security” slides stop at prompt filters. OpenShell treats agents like untrusted code with real side effects:</p>\n<ul>\n  <li><strong>Sandboxed execution</strong> — each workload gets kernel-level filesystem and network boundaries that survive generated code and child processes.</li>\n  <li><strong>Supervised egress</strong> — HTTP, GraphQL, and MCP traffic can be allowed for reads while writes to the same API are blocked.</li>\n  <li><strong>Credential brokering</strong> — service keys stay outside the agent; the supervisor injects them only after policy checks.</li>\n  <li><strong>Central gateway</strong> — one place to manage lifecycles, team workspaces, and formal policy verification before changes go live.</li>\n  <li><strong>Operator UI</strong> — <code>openshell term</code> is a live terminal dashboard (gateway health, sandboxes, logs) similar in spirit to k9s.</li>\n</ul>\n<p>OpenShell sits in NVIDIA’s broader <strong>Open Agent Safety Platform</strong> story (alongside Sentry and BlueField enforcement). Even if you never deploy BlueField, the sandbox + policy model is the useful part for SMEs and product teams shipping agents this year.</p>\n\n<p><img src=\"/img/blog/nvidia-openshell/architecture.svg\" alt=\"OpenShell architecture diagram: gateway, sandboxes, supervisor, and external credentials\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Mac Studio: yes, OpenShell runs here — and your GPU still matters</h2>\n<p>A common misconception is that OpenShell is only for DGX racks. It is not. NVIDIA documents macOS support through the <strong>VM compute driver</strong> (Apple Hypervisor.framework) and through <strong>Docker Desktop</strong> on Mac — you configure <code>compute_drivers</code> on the gateway, then use the same sandbox CLI everywhere.</p>\n\n<p>On a <strong>Mac Studio</strong> (M2 Ultra, M3 Ultra, M4 Max/Ultra class machines with large unified memory), the practical pattern looks like this:</p>\n<ol>\n  <li>Install the OpenShell CLI and start <code>openshell-gateway</code> on the Mac.</li>\n  <li>Serve a local model on the <strong>host</strong> with Ollama, MLX, or vLLM bound to a port the gateway can reach (often <code>0.0.0.0:8000</code>).</li>\n  <li>Point sandboxes at that endpoint: <code>openshell inference set --provider local-vllm --model &lt;handle&gt;</code> so agents inside sandboxes use <code>inference.local</code>.</li>\n  <li>Create sandboxes for your agent stack, e.g. <code>openshell sandbox create --from openclaw -- …</code> or your coding agent of choice.</li>\n</ol>\n<p>The <strong>Apple GPU</strong> accelerates token generation on the host. The sandbox remains the trust boundary — the agent never holds your production API keys or unfettered network access.</p>\n\n<p><img src=\"/img/blog/nvidia-openshell/mac-studio-stack.svg\" alt=\"Mac Studio running OpenShell gateway with Apple GPU local inference and isolated agent sandboxes\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<div style=\"background:#eff6ff;border-left:4px solid #2563eb;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Clarity on <code>--gpu</code>.</strong> Experimental GPU passthrough (<code>openshell sandbox create --gpu</code>) targets <strong>NVIDIA</strong> hosts with drivers and the NVIDIA Container Toolkit (Docker/Podman CDI, or Kubernetes <code>nvidia.com/gpu</code> limits). That path is for CUDA inside the sandbox — fine-tuning, in-container inference, GPU tools. It is <em>not</em> how Apple Silicon exposes its GPU. On Mac Studio, treat the GPU as a <strong>host inference accelerator</strong> wired through <code>openshell inference set</code>, not as a device passed into the sandbox.\n</div>\n\n<h2>Linux and NVIDIA workstations: when to pass a GPU into the sandbox</h2>\n<p>When you have a Linux box with NVIDIA GPUs (workstation, DGX Spark, or a cloud GPU node), OpenShell can request GPUs at create time:</p>\n<pre><code>openshell sandbox create --gpu -- claude\nopenshell sandbox create --gpu 2 -- claude\nopenshell sandbox create \\\n  --gpu \\\n  --driver-config-json '{\"docker\":{\"cdi_devices\":[\"nvidia.com/gpu=0\"]}}' \\\n  -- claude</code></pre>\n<p>You still need a <strong>GPU-ready sandbox image</strong> — the default base image does not ship CUDA stacks. Plan a custom image (BYOC) when agents must compile CUDA code or run in-container models.</p>\n\n<p><img src=\"/img/blog/nvidia-openshell/gpu-paths.svg\" alt=\"Comparison table: Mac Studio host GPU inference versus NVIDIA GPU passthrough in OpenShell\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Day-one commands worth memorising</h2>\n<ul>\n  <li><code>openshell sandbox create -- …</code> — spin up an isolated agent environment.</li>\n  <li><code>openshell sandbox connect &lt;name&gt;</code> — shell into a running sandbox for debugging.</li>\n  <li><code>openshell policy set --policy file.yaml</code> — apply egress and credential rules.</li>\n  <li><code>openshell inference set --provider … --model …</code> — route all sandboxes to your local or remote model.</li>\n  <li><code>openshell term</code> — live dashboard for gateway and sandbox status.</li>\n</ul>\n\n<h2>How this fits a TenthMatrix deployment</h2>\n<p>We see three mature patterns among clients:</p>\n<ul>\n  <li><strong>Studio on the desk</strong> — Mac Studio gateway for product and legal teams; local models for PII-heavy workflows; cloud API fallback only for overflow.</li>\n  <li><strong>Shared Linux gateway</strong> — Docker or Kubernetes driver in a private VPC; MCP tools pointed at internal APIs; GitOps for policy YAML.</li>\n  <li><strong>Hybrid</strong> — OpenShell policy on-prem, Ring Promoter or similar for app releases, and <a href=\"/en/docs/blogs/agentic-ai-security-mcp-oauth-vault\">vault-backed credentials</a> so agents never see long-lived secrets.</li>\n</ul>\n<p>If you are standardising on agents in 2026, OpenShell is a credible control plane — not a replacement for human approval on destructive actions, but a strong default for “agents are code with network access.”</p>\n\n<h2>Further reading</h2>\n<ul>\n  <li><a href=\"https://github.com/nvidia/openShell\" target=\"_blank\" rel=\"noopener noreferrer\">NVIDIA OpenShell on GitHub</a></li>\n  <li><a href=\"https://docs.nvidia.com/openshell/sandboxes/manage-sandboxes\" target=\"_blank\" rel=\"noopener noreferrer\">Manage sandboxes (GPU flags)</a></li>\n  <li><a href=\"https://docs.nvidia.com/openshell/reference/sandbox-compute-drivers\" target=\"_blank\" rel=\"noopener noreferrer\">Compute drivers (Docker, VM, Kubernetes)</a></li>\n  <li>TenthMatrix: <a href=\"https://www.workstation.co.uk/en/ai-workstations\">AI workstations</a> · <a href=\"/en/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">local agents on Ollama</a></li>\n</ul>\n\n<p class=\"cta\">Need help standing up OpenShell on Mac Studio or NVIDIA Linux, wiring MCP tools, or writing policy YAML? <a href=\"/en/contact-us\">Talk to TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "tenthmatrix-team",
+    "email": "hello@tenthmatrix.com",
+    "first_name": "TenthMatrix",
+    "last_name": "team",
+    "name": "TenthMatrix team",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "openshell",
+      "id": 1037
+    },
+    {
+      "name": "nvidia",
+      "id": 1038
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "mac-studio",
+      "id": 1039
+    },
+    {
+      "name": "apple-silicon",
+      "id": 942
+    },
+    {
+      "name": "local-ai",
+      "id": 946
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-10-05T09:00:00Z",
+  "updated_at": "2026-10-05T09:00:00Z",
+  "published_date": "2026-10-05",
+  "status": true
+}

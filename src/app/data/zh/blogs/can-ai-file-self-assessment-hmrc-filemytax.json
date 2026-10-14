@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-filemytax-sa-001",
+  "internal_id": 944,
+  "slug": "can-ai-file-self-assessment-hmrc-filemytax",
+  "title": "AI系统可以自动处理Self Assessment纳税申报表并将其提交到HMRC吗？",
+  "sub_title": "演示 FileMyTax — 由 TenthMatrix 为 CognoAI 构建的从银行 PDF 到 HMRC MTD 归档的 AI 驱动管道",
+  "excerpt": "AI可以将UK Self Assessment转为HMRC吗？ FileMyTax 显示银行 PDF → 提取 → 分类 → 计算 → MTD 与人门。由 TenthMatrix 为 CognoAI 构建。不是税务建议。",
+  "meta_title": "AI可以将Self Assessment归档到HMRC吗？ | FileMyTax",
+  "meta_description": "FileMyTax 演示：AI 提取银行 PDF、对 SA 交易进行分类、计算 2025-26 税、通过 HMRC MTD 归档 — 并进行人工审核。由 TenthMatrix 为 CognoAI 构建。",
+  "meta_keywords": "AI自我评估、FileMyTax、HMRC MTD、自动报税、银行对账单AI、CognoAI、TenthMatrix、Making Tax Digital、房东税",
+  "cover_image": "/img/filemytax-sa-cover.svg",
+  "images": [
+    {
+      "url": "/img/filemytax-sa-cover.svg",
+      "id": 944,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "FileMyTax AI to HMRC Self Assessment - cover diagram"
+    },
+    {
+      "url": "/img/filemytax-sa-workflow.svg",
+      "id": 945,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "FileMyTax six-lane workflow from bank PDF to HMRC MTD"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>简短易读的伴侣。如需全面深入了解架构、HMRC OAuth、curl 示例和限制，请阅读 <a href=\"/zh/articles/can-ai-file-self-assessment-hmrc-filemytax\">长篇文章</a>. <strong>不是税务建议。</strong></em></p>\n<h2>AI可以将您的Self Assessment归档到HMRC吗？</h2>\n<p>每年一月都会出现同样的问题：人工智能可以读取我的银行对账单并提交我的英国纳税申报表吗？我们构建的系统给出的实际答案 <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">认知人工智能</a> — 在此发布为 <strong>FileMyTax</strong> - 是 <strong>是的，用于准备，而不是用于无人值守的归档</strong>。 AI可以从PDF中提取交易，将其分类为HMRC Self Assessment类别，核对余额，并确定性地计算2025-26年税收；在任何东西到达生产 MTD 之前，人类仍然会进行审查，会计师仍然会签字，纳税人仍然会完成 HMRC OAuth。</p>\n<p>TenthMatrix开发底层平台； CognoAI拥有知识产权。这篇文章解释了六个 API 调用的情况 - 没有使用其他地方拥有的产品名称。</p>\n<p><img alt=\"FileMyTax AI 至 HMRC Self Assessment 盖\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/filemytax-sa-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>观看演示</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/dDx5n0975vw\" title=\"FileMyTax 演示 - AI Self Assessment 到 HMRC\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">通过分类和计算将 PDF 存入 HMRC MTD 沙箱 — 在 UI 中提供审核门。</p>\n<h2>六步管道</h2>\n<p><img alt=\"FileMyTax 工作流程：客户端、摄取、AI、税务引擎、HMRC、审计\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/filemytax-sa-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>上传</strong> — <code>POST /fastapi/api/upload</code> 通过 nginx 将 PDF 发送到 MinIO。</li>\n<li><strong>提炼</strong> — 用于本机表的 pdfplumber；克劳德视力扫描。</li>\n<li><strong>分类</strong> — LLM 将行映射到带有置信度分数的 SA 费用类别。</li>\n<li><strong>调和</strong> — 余额检查和收入/支出汇总。</li>\n<li><strong>计算</strong> — 确定性 2025-26 所得税 + 4 类 NI（数学中没有 LLM）。</li>\n<li><strong>文件</strong> — <code>POST /fastapi/api/file</code> OAuth 和人工批准后更改为 HMRC MTD。</li>\n</ol>\n<p>JWT auth来自opsapi； NINO 静态加密；端口 8085 上的 Gatus 监视每项服务。</p>\n<h2>谁建造的</h2>\n<p><a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">认知人工智能</a> 拥有系统IP和产品方向。 <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> 构建了 Dockerized 平台 — nginx 路径路由、FastAPI AI 服务、opsapi auth、PostgreSQL、MinIO、Gatus 监控和 Next.js 审核 UI。我们以名义发布 <strong>FileMyTax</strong> 描述演示；我们在本文中不使用其他 CognoAI 产品名称。</p>\n<h2>为什么人工智能会有所帮助——以及它的局限性</h2>\n<p>AI 在数百条银行线的速度和一致性、异常标记以及将混乱的描述映射到 HMRC 类别方面获胜。它并不能取代判断：转移与租金、资本与收入、个人与企业仍然需要关注。税务引擎是带有 DECIMAL 字段的纯 Python - 我们坚持对受监管的金融进行同样的分离： <strong>LLM 代表语言，代码代表法律</strong>.</p>\n<p>在测试中我们使用了 <strong>虚构的汇丰风格的房东声明固定装置</strong> （仅限合成数据）在高周转情况下进行压力提取 - 包括 pdfplumber 选择错误列的教训（余额与付费）。这些失败就是协调和审查存在的原因。</p>\n<h2>架构一览</h2>\n<p>本地主机上的一个 nginx 负责一切：用于人类的 Next.js、用于 AI 和归档的 FastAPI、用于登录的 opsapi 和加密的 NINO。 PostgreSQL存储报表和分类交易； MinIO 保存 PDF。税收计算器应用 Python 中的英国 2025/26 频段 — 个人津贴锥度、所得税、4 类 NI — 以及 DECIMAL(18,2) 货币字段。这种划分是有意为之的：监管机构和会计师需要可重复的数学，而不是概率代币。</p>\n<h2>对财务团队的好处</h2>\n<ul>\n<li><strong>速度</strong> — 在 Excel 中，只需几分钟（而不是几天）即可分类数百行。</li>\n<li><strong>一致性</strong> — 每行都有相同的 HMRC 类别规则。</li>\n<li><strong>异常现象</strong> - 调节表尽早显示平衡和映射错误。</li>\n<li><strong>审计追踪</strong> — 处理状态、信心、有理由的推翻。</li>\n<li><strong>隐私</strong> — 本地堆栈选项，无需通过 SaaS 租户传递语句。</li>\n<li><strong>会计时间</strong> — 审阅者看到的是回报草稿，而不是原始 PDF。</li>\n</ul>\n<h2>HMRC MTD 一段</h2>\n<p>通过 opsapi 保存 NINO，启动 OAuth，获取业务和义务，然后在沙箱中归档，直到您的会计师满意为止。欺诈预防标头和令牌刷新在服务器端处理。翻动 <code>HMRC_ENVIRONMENT=production</code> 仅当您真心实意时。</p>\n<h2>免责声明</h2>\n<ul>\n<li><strong>不是税务建议。</strong> 在实时提交之前请一位英国会计师进行审核。</li>\n<li><strong>FileMyTax</strong> 是本文中的演示名称；其他 CognoAI 产品名称是独立的 - 不要将它们混淆。</li>\n<li><strong>虚构的银行数据</strong> 其中提到了测试夹具。</li>\n<li><strong>没有无人值守的归档</strong> ——之前的人门 <code>POST /api/file</code>.</li>\n</ul>\n<h2>您将在视频中看到什么</h2>\n<p>YouTube 演练显示了 Next.js UI：上传声明、观察提取和分类进度、检查置信度分数、运行 2025-26 纳税年度计算、在沙箱中连接 HMRC，并在文件步骤暂停直至人工确认。这种停顿是产品的决定——而不是缺失的功能。完全无人值守的提交速度会更快，而且在法律上也很脆弱。</p>\n<p>拥有多个租赁账户的房东以及个人和企业混合的个体经营者是主要受众。支持他们的财务运营团队获得相同的管道：更少的 CSV 导出、更少的 1 月 31 日之前的通宵工作、更多的时间解释数字而不是查找数字。</p>\n<h2>安全地尝试一下</h2>\n<p>克隆堆栈，运行 <code>./start.sh</code>，粘贴长文章中的curl示例，并留在HMRC沙箱中，直到您的会计师完成完整的申报。放 <code>HMRC_ENVIRONMENT=sandbox</code>，如果需要的话创建一​​个测试用户，并对待 <code>POST /api/file</code> 就像生产型导弹一样——因为在实时模式下，它就是这样。</p>\n<p>如果 nginx 80 端口繁忙，请使用 <code>NGINX_HOST_PORT=8080</code>。如果 JWT 突然失败，请验证 opsapi 和 FastAPI 共享相同的密钥。如果需要协调，请在覆盖分类之前修复 PDF 列映射 - 该顺序可以节省时间。</p>\n<h2>OAuth 不是可选的</h2>\n<p>HMRC 不会接受仅包含国民保险号码的后台 cron 作业的提交。纳税人必须通过政府网关授权您的应用程序，该网关返回后端存储和刷新的令牌。 FileMyTax 的设置流程如下：保存加密的 NINO，打开 HMRC 授权 URL，通过回调返回，获取业务和义务，然后归档。欺诈预防标头伴随着每个 API 呼叫 — 设备 ID、用户代理和 Gov-* 的其余部分从客户端设置平台转发。</p>\n<p>这就是为什么营销幻灯片中的“自动”真正意味着 <em>最后通过人工和 OAuth 门进行自动准备</em>。该工程仍然很有价值：六个卷曲步骤是可重复的，可在沙箱中测试，并且可在 Gatus 中观察。</p>\n<h2>阅读长版本</h2>\n<p>这 <a href=\"/zh/articles/can-ai-file-self-assessment-hmrc-filemytax\">长文章</a> 涵盖归因、架构 SVG、完整卷曲示例、收益表、OAuth 步骤、限制、Gatus 监控、2025-26 税收参数和路线图。手表 <a href=\"https://youtu.be/dDx5n0975vw\" rel=\"noopener noreferrer\" target=\"_blank\">YouTube 演示</a> 并参观 <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">英国科格诺艾</a> 针对产品背景； <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> 用于工程。</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "filemytax",
+      "id": 960
+    },
+    {
+      "name": "self-assessment",
+      "id": 961
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "tax-return",
+      "id": 962
+    },
+    {
+      "name": "cognoai",
+      "id": 963
+    }
+  ],
+  "created_at": "2026-05-20T09:00:00Z",
+  "updated_at": "2026-05-20T09:00:00Z",
+  "published_date": "2026-05-20",
+  "status": true
+}

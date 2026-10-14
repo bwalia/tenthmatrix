@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="320" viewBox="0 0 600 320" role="img" aria-label="API security architecture: client, API, auth, database with zero-trust controls">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 16px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .client { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .api { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .auth { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .db { fill: #0c2b18; stroke: #22c55e; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.78); font: 400 8.5px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .flow { stroke: #4F8EF7; stroke-width: 2; fill: none; }
+      .tag { fill: #9fb0ff; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .footer { fill: rgba(255,255,255,0.65); font: 600 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4F8EF7"/>
+    </marker>
+  </defs>
+
+  <rect width="600" height="320" rx="14" fill="url(#bg)"/>
+  <rect width="600" height="320" rx="14" fill="url(#grid)"/>
+
+  <text class="title" x="300" y="32" text-anchor="middle">API security architecture</text>
+  <text class="subtitle" x="300" y="50" text-anchor="middle">Client - API - Auth - DB with zero-trust controls at each hop</text>
+
+  <g transform="translate(20,80)">
+    <rect width="130" height="110" rx="10" class="client"/>
+    <text class="boxLabel" x="65" y="26" text-anchor="middle">Client</text>
+    <text class="boxText" x="65" y="46" text-anchor="middle">TLS 1.3 only</text>
+    <text class="boxText" x="65" y="60" text-anchor="middle">OAuth PKCE</text>
+    <text class="boxText" x="65" y="74" text-anchor="middle">no secrets in code</text>
+    <text class="boxText" x="65" y="88" text-anchor="middle">certificate pinning</text>
+    <text class="boxText" x="65" y="102" text-anchor="middle">CSP + SRI</text>
+  </g>
+
+  <g transform="translate(170,80)">
+    <rect width="130" height="110" rx="10" class="api"/>
+    <text class="boxLabel" x="65" y="26" text-anchor="middle">API</text>
+    <text class="boxText" x="65" y="46" text-anchor="middle">verify JWT</text>
+    <text class="boxText" x="65" y="60" text-anchor="middle">scope evaluation</text>
+    <text class="boxText" x="65" y="74" text-anchor="middle">input validation</text>
+    <text class="boxText" x="65" y="88" text-anchor="middle">rate limit + quota</text>
+    <text class="boxText" x="65" y="102" text-anchor="middle">audit + tracing</text>
+  </g>
+
+  <g transform="translate(320,80)">
+    <rect width="130" height="110" rx="10" class="auth"/>
+    <text class="boxLabel" x="65" y="26" text-anchor="middle">Auth</text>
+    <text class="boxText" x="65" y="46" text-anchor="middle">OIDC IdP</text>
+    <text class="boxText" x="65" y="60" text-anchor="middle">MFA + WebAuthn</text>
+    <text class="boxText" x="65" y="74" text-anchor="middle">RBAC + ABAC</text>
+    <text class="boxText" x="65" y="88" text-anchor="middle">short JWT TTL</text>
+    <text class="boxText" x="65" y="102" text-anchor="middle">key rotation + JWKS</text>
+  </g>
+
+  <g transform="translate(470,80)">
+    <rect width="120" height="110" rx="10" class="db"/>
+    <text class="boxLabel" x="60" y="26" text-anchor="middle">DB</text>
+    <text class="boxText" x="60" y="46" text-anchor="middle">parameterised SQL</text>
+    <text class="boxText" x="60" y="60" text-anchor="middle">least-priv user</text>
+    <text class="boxText" x="60" y="74" text-anchor="middle">row-level security</text>
+    <text class="boxText" x="60" y="88" text-anchor="middle">at-rest encrypt</text>
+    <text class="boxText" x="60" y="102" text-anchor="middle">audit log + WAL</text>
+  </g>
+
+  <line x1="150" y1="135" x2="170" y2="135" class="flow" marker-end="url(#ar)"/>
+  <line x1="300" y1="135" x2="320" y2="135" class="flow" marker-end="url(#ar)"/>
+  <line x1="450" y1="135" x2="470" y2="135" class="flow" marker-end="url(#ar)"/>
+
+  <text class="tag" x="160" y="210" text-anchor="middle">1 AUTH</text>
+  <text class="tag" x="310" y="210" text-anchor="middle">2 AUTHZ</text>
+  <text class="tag" x="460" y="210" text-anchor="middle">3 QUERY</text>
+
+  <g transform="translate(20,220)">
+    <rect width="560" height="60" rx="10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text class="boxText" x="14" y="22">Zero-trust: identity verified at each hop. No layer trusts the previous one.</text>
+    <text class="boxText" x="14" y="40">Secrets in a vault (Vault / KMS). Connection strings rotated. Service identity via mTLS.</text>
+    <text class="boxText" x="14" y="54">Observability: all 4 layers emit OpenTelemetry traces correlated by request ID.</text>
+  </g>
+
+  <text class="footer" x="300" y="304" text-anchor="middle">API security architecture</text>
+</svg>

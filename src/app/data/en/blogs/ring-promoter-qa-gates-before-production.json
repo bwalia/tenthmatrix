@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter — QA Gates Before Production",
+  "sub_title": "Don’t auto-promote to prod: where QA and human gates sit in int → test → acc → prod, plus auto-promote vs gated hops",
+  "excerpt": "Ring Promoter QA gates: auto-promote early rings, keep a human gate before prod, and treat health plus version checks as first-class quality gates.",
+  "meta_title": "Ring Promoter — QA Gates Before Production | TenthMatrix",
+  "meta_description": "Don’t auto-promote to prod. Ring Promoter QA gates: auto-promote early rings, human gate before production, health and version verification, rollback.",
+  "meta_keywords": "Ring Promoter, QA gates, quality gates, auto-promote, production gate, CI/CD, GitOps, Kubernetes, health-gated promote, TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<h2>Watch: QA gates before production</h2>\n<p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Video: <a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a> · Product: <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p>\n\n<p class=\"lead\"><em><strong>Ring Promoter</strong> moves releases through ordered rings <code>int → test → acc → prod</code>. The business question is not “can we auto-promote?” — it is <strong>where QA and human gates belong</strong>, especially before production. Product: <a href=\"/en/ring-promoter\">/ring-promoter</a>. Deep dive: <a href=\"/en/articles/ring-promoter-qa-gates-before-production\">long technical article</a>. Companion overview: <a href=\"/en/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter modern CI/CD</a>.</em></p>\n\n<p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Auto-promote early rings when health and version checks pass. Keep a <strong>human / QA gate on the hop into prod</strong>. Do not auto-promote straight to production — every release should still earn customers.\n</div>\n\n<h2>What QA gates mean in Ring Promoter</h2>\n<p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<p>A “gate” is anything that can stop a promotion hop:</p>\n<ul>\n  <li><strong>Health gates</strong> — source must be healthy before promote; target must stay healthy after deploy (or auto-rollback).</li>\n  <li><strong>Version gates</strong> — optional: the endpoint must report the exact version just deployed (critical for AI sidecars and agents).</li>\n  <li><strong>Human / QA gates</strong> — no auto-promote on that ring; an owner or QA approves the next hop (typical for <code>acc → prod</code>).</li>\n</ul>\n\n<h2>Auto-promote vs gated hops</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1c2c;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Mode</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Pros</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Cons / when to avoid</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Auto-promote (early rings)</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Faster feedback; CI stays green without waiting for a click; same locked operation continues onward.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Amplifies bad builds if health is weak. Never enable blindly into prod.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Human / QA gate (esp. before prod)</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Business sign-off, change windows, compliance, last look at acceptance.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adds latency; needs a clear owner so releases do not stall.</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Health + version gates (always)</strong></td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Stops “green but wrong version”; pairs with auto-rollback.</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Requires honest health endpoints that expose version.</td>\n</tr>\n</tbody>\n</table>\n\n<h2>When to gate</h2>\n<ul>\n  <li><strong>Gate into prod</strong> for customer-facing apps, regulated change, or shared platforms many teams depend on.</li>\n  <li><strong>Auto-promote int→test→acc</strong> when evals, smoke, and version-verified health are strong.</li>\n  <li><strong>Tighten gates</strong> for AI stacks (models, agents, gateways) where a stale binary can still answer <code>200 OK</code>.</li>\n</ul>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Policy we recommend.</strong> Auto-promote on <code>int</code> / <code>test</code> when healthy; keep <code>acc</code> human-gated before <code>prod</code>. Health and version verification on every hop. Failed checks roll back — no silent “partial promote.”\n</div>\n\n<h2>Where to go next</h2>\n<ol>\n  <li>Watch the video above — <a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>.</li>\n  <li>Read the <a href=\"/en/articles/ring-promoter-qa-gates-before-production\">technical article</a> (config, API, rollback, AI-team implications).</li>\n  <li>Open <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> or the TenthMatrix <a href=\"/en/ring-promoter\">product page</a>.</li>\n  <li>Star <a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a>.</li>\n</ol>\n\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Hashtags.</strong> #RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation\n</div>\n\n<p>Published by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n<p style=\"margin-top:1.5rem;\"><strong>Product site:</strong> <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

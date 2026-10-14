@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-agentic-security-001",
+  "internal_id": 960,
+  "slug": "agentic-ai-security-mcp-oauth-vault",
+  "title": "এজেন্টিক AI নিরাপত্তা: MCP OAuth, VPN ও HashiCorp Vault লিজ",
+  "sub_title": "MCP-এর জন্য OAuth 2.1, প্রাইভেট নেটওয়ার্ক পথ এবং স্বল্পকালীন Vault সিক্রেট — Claude, OpenAI ও Cursor বেসলাইন",
+  "excerpt": "MCP OAuth 2.1, VPN-বিচ্ছিন্ন টুল এবং অটো-রোটেট/মেয়াদোত্তীর্ণ HashiCorp Vault লিজ দিয়ে এন্টারপ্রাইজ AI এজেন্ট সুরক্ষিত করুন — সাথে Claude, OpenAI ও Cursor সুপারিশ।",
+  "meta_title": "এজেন্টিক AI নিরাপত্তা — MCP OAuth, VPN, Vault লিজ",
+  "meta_description": "এন্টারপ্রাইজ AI এজেন্ট সুরক্ষা: MCP OAuth 2.1, VPN/প্রাইভেট MCP, HashiCorp Vault ডায়নামিক সিক্রেট ও লিজ, প্লাস Claude, OpenAI, Cursor সেটআপ।",
+  "meta_keywords": "এজেন্টিক AI নিরাপত্তা, MCP OAuth, Model Context Protocol, HashiCorp Vault, ডায়নামিক সিক্রেট, লিজ, VPN, Claude, OpenAI, Cursor, এন্টারপ্রাইজ এজেন্ট",
+  "cover_image": "/img/agentic-security-cover.svg",
+  "images": [
+    {
+      "url": "/img/agentic-security-cover.svg",
+      "id": 960,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Agentic AI security MCP OAuth VPN Vault"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>এন্টারপ্রাইজ এজেন্টের তিনটি নিয়ন্ত্রণ দরকার যা স্ট্যাটিক API কী দেয় না: <strong>OAuth-বাউন্ড MCP অ্যাক্সেস</strong>, <strong>প্রাইভেট নেটওয়ার্ক পথ (VPN/mesh)</strong> এবং টুল সিক্রেটের জন্য <strong>স্বল্পকালীন Vault লিজ</strong>। এই ডাইজেস্ট Claude, OpenAI ও Cursor-এর ইন্ডাস্ট্রি বেসলাইন ম্যাপ করে। পূর্ণ রেফারেন্স আর্কিটেকচার <a href=\"/bn/articles/agentic-ai-security-mcp-oauth-vault\">দীর্ঘ নিবন্ধ</a>.</em></p>\n\n<p><img src=\"/img/agentic-security-cover.svg\" alt=\"এজেন্টিক AI নিরাপত্তা: MCP OAuth, VPN, Vault লিজ\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff1f2;border-left:4px solid #9f1239;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>সংজ্ঞা।</strong> এজেন্টিক নিরাপত্তা হলো LLM যে টুল কল করতে পারে তার পরিচয় + অনুমোদন + সিক্রেট লাইফসাইকেল। MCP রিমোট সার্ভার OAuth 2.1 <em>resource servers</em> হিসেবে কাজ করে (Protected Resource Metadata / RFC 9728)। ব্যাকএন্ড ক্রেডেনশিয়াল (DB, ক্লাউড, SaaS) HashiCorp Vault থেকে লিজড, রোটেটেবল সিক্রেট হিসেবে আসা উচিত — কখনো MCP কনফিগ বা চ্যাট কনটেক্সট থেকে নয়।\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> For explainable edge protection on the same live-config proxy that will front agent and MCP traffic, see the <a href=\"/bn/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a>, the <a href=\"/bn/articles/wslproxy-waf-web-application-firewall\">WAF technical article</a>, the <a href=\"/bn/wsl-proxy\">WSL Proxy product page</a>, or <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a> · tour: <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/r10XSonA5JE</a>.\n</div>\n</div>\n\n<div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>এজেন্ট ডাইজেস্ট।</strong> (1) OAuth 2.1 + PKCE + audience বাইন্ডিং দিয়ে AuthN/AuthZ। (2) org-wide MCP-এর জন্য Enterprise-Managed Authorization (EMA / ID-JAG) পছন্দ করুন। (3) MCP + Vault VPN/প্রাইভেট লিঙ্কে রাখুন। (4) TTLসহ Vault ডায়নামিক সিক্রেট ইস্যু করুন; renew/rotate; থামলে revoke। (5) LLM প্রোভাইডার কী টুল সিক্রেট থেকে আলাদা রাখুন।\n</div>\n\n<h2>রেফারেন্স পথ</h2>\n<p><img src=\"/img/agentic-security-architecture.svg\" alt=\"IdP থেকে MCP থেকে Vault থেকে টুল আর্কিটেকচার\" width=\"1200\" height=\"760\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>ভেন্ডর বেসলাইন (Claude / OpenAI / Cursor)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0f172a;color:#fda4af;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">পণ্য</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">সুপারিশকৃত সেটআপ</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">OAuth দিয়ে রিমোট MCP; 401 + WWW-Authenticate ডিসকভারি; URL-এ কখনো টোকেন নয়; টুল সিক্রেটের জন্য Vault</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>OpenAI</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">মডেল API কী আলাদা করুন; OBO/user-attributed টুল টোকেন; VPC এজেন্ট; প্রতি টুল কলে Vault ডায়নামিক creds</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Cursor</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">শুধু env MCP কনফিগ; STDIO-এর জন্য Vault Agent; প্রাইভেট MCP-এ কর্প VPN; টিম সার্ভার allowlist</td></tr>\n</tbody>\n</table>\n\n<h2>Vault লিজ (স্বল্পকালীন সিক্রেট)</h2>\n<p><img src=\"/img/agentic-security-vault-leases.svg\" alt=\"Vault লিজ renew rotate revoke লাইফসাইকেল\" width=\"1200\" height=\"680\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<ul>\n  <li><strong>ডায়নামিক সিক্রেট</strong> — ইউনিক creds + <code>lease_id</code> + TTL; এজেন্ট সেশন শেষে expire বা revoke।</li>\n  <li><strong>অটো-রোটেট</strong> — স্ট্যাটিক রোল পর্যায়ক্রমে রোটেট; Vault Agent TTL-এর কাছাকাছি refresh (ডিফল্ট ~90%)।</li>\n  <li><strong>এন্টারপ্রাইজ</strong> — নিবন্ধিত এজেন্ট পরিচয়ের জন্য Agent Registry + OAuth resource server (Vault Enterprise)।</li>\n</ul>\n\n<h2>TenthMatrix সুপারিশ</h2>\n<p>MCP OAuth-কে <em>সামনের দরজা</em>, VPN-কে <em>নেটওয়ার্ক দরজা</em> এবং Vault-কে <em>সিক্রেট দরজা</em> হিসেবে দেখুন। পূর্ণ চেকলিস্ট, RFC ও অ্যান্টি-প্যাটার্ন: <a href=\"/bn/articles/agentic-ai-security-mcp-oauth-vault\">দীর্ঘ নিবন্ধ</a>. প্রকাশিত <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "llm",
+      "id": 975
+    }
+  ],
+  "created_at": "2026-08-08T10:00:00Z",
+  "updated_at": "2026-08-08T10:00:00Z",
+  "published_date": "2026-08-08",
+  "status": true
+}

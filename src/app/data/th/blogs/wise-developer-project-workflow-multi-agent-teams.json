@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-wise-developer-multi-agent-001",
+  "internal_id": 956,
+  "slug": "wise-developer-project-workflow-multi-agent-teams",
+  "title": "เวิร์กโฟลว์นักพัฒนาที่ฉลาด + ทีมพัฒนาแบบมัลติเอเจนต์",
+  "sub_title": "จาก brainstorm ถึง GitOps, Review Bot บนทุก PR และสถาปัตยกรรมมัลติเอเจนต์ TenthMatrix ที่สร้างทีมพัฒนาที่ยอดเยี่ยม",
+  "excerpt": "นักพัฒนาที่ฉลาดทำงานโปรเจกต์ใหม่อย่างไร — brainstorm อภิปราย ต้นแบบ แผนภาพ ข้อเสนอ ADR PR GitOps — พร้อม Review Bot และทีมมัลติเอเจนต์ TenthMatrix",
+  "meta_title": "เวิร์กโฟลว์นักพัฒนาที่ฉลาด, Review Bot และทีมมัลติเอเจนต์ | TenthMatrix",
+  "meta_description": "จาก brainstorming ถึง GitOps พร้อม ADR และ Review Bot รวมถึงสถาปัตยกรรมมัลติเอเจนต์ TenthMatrix เพื่อสร้างทีมพัฒนาที่ยอดเยี่ยมสำหรับการส่งมอบ production โดยอัตโนมัติ",
+  "meta_keywords": "นักพัฒนาที่ฉลาด, ADR, pull request, GitOps, Review Bot, มัลติเอเจนต์, OpenClaw, Jobshout, TenthMatrix, ทีมพัฒนา, ระดับ production",
+  "cover_image": "/img/jobshout-openclaw-agent-teams-cover.svg",
+  "images": [
+    {
+      "url": "/img/jobshout-openclaw-agent-teams-cover.svg",
+      "id": 956,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Jobshout OpenClaw auto-build AI agent teams for business"
+    },
+    {
+      "url": "/img/jobshout-openclaw-agent-teams.svg",
+      "id": 957,
+      "is_cover": false,
+      "width": 1600,
+      "height": 900,
+      "alt": "Jobshout OpenClaw multi-agent development team workflow"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>นักพัฒนาที่ฉลาดเริ่มโปรเจกต์ใหม่อย่างไร — brainstorm อภิปราย ต้นแบบ แผนภาพ ข้อเสนอ ADR MR/PR GitOps — พร้อม Review Bot บนทุกการเปลี่ยนแปลง และสถาปัตยกรรมมัลติเอเจนต์ TenthMatrix เพื่อสร้างทีมที่ยอดเยี่ยม คู่มือฉบับเต็มใน<a href=\"/th/articles/wise-developer-project-workflow-multi-agent-teams\">บทความฉบับเต็ม</a>.</em></p>\n\n<p><img src=\"/img/jobshout-openclaw-agent-teams-cover.svg\" alt=\"Jobshout และ OpenClaw สร้างทีมเอเจนต์ AI สำหรับการส่งมอบธุรกิจโดยอัตโนมัติ\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #14b8a6;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>เวอร์ชันหนึ่งย่อหน้า.</strong> อย่ากระโดดไปที่ PR ยักษ์ Brainstorm อภิปรายกับเพื่อนร่วมงาน สร้างต้นแบบสิ่งที่ไม่รู้ วาดแผนภาพ เขียนข้อเสนอ จับ ADR แล้วค่อยส่ง MR/PR เล็ก ๆ Promote ด้วย GitOps ให้ <strong>Review Bot</strong> เขียนคอมเมนต์รอบแรก สเกลวินัยเดียวกันด้วย <strong>สถาปัตยกรรมมัลติเอเจนต์ TenthMatrix</strong> — เอเจนต์ Planner, Builder, Reviewer และ Ops ที่สร้างทีมพัฒนาจริงรอบ Spec ของคุณ\n</div>\n\n<h2>เส้นทางที่ฉลาด (ตามลำดับ)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — เป้าหมาย ข้อจำกัด non-goals โหมดความล้มเหลว</li>\n  <li><strong>Discuss</strong> — ซิงก์สั้นกับเพื่อนร่วมงานก่อนโค้ดแข็งตัว</li>\n  <li><strong>Prototype</strong> — spike ส่วนเสี่ยง; promote หรือทิ้งโดยตั้งใจ</li>\n  <li><strong>Diagrams</strong> — บริบท ลำดับ การปรับใช้</li>\n  <li><strong>Proposal</strong> — ตัวเลือก คำแนะนำ rollback</li>\n  <li><strong>ADR</strong> — «ทำไมเราเลือก X» ที่คงทน</li>\n  <li><strong>MR / PR</strong> — diff เล็ก เช็คลิสต์ ADR ที่ลิงก์</li>\n  <li><strong>GitOps</strong> — สถานะที่ต้องการใน git; promote ด้วย merge rollback ด้วย revert</li>\n</ol>\n\n<h2>Review Bot — ผู้รีวิวคนแรกที่ไม่เคยนอน</h2>\n<p>Review Bot โพสต์คอมเมนต์อินไลน์บนทุก PR: กลิ่นความปลอดภัย ทดสอบที่ขาด การทำลายสัญญา ความเสี่ยงการย้าย แล้วมนุษย์รีวิวดีไซน์และรัศมีผลกระทบ — ไม่ใช่การจัดรูปแบบ นั่นรักษาคุณภาพระดับ production โดยไม่เผาทีมกับเรื่องจุกจิก ดูเพิ่ม <a href=\"/th/docs/blogs/building-ai-code-review-pipeline\">สร้างไพพ์ไลน์รีวิวโค้ดด้วย AI</a>.</p>\n\n<h2>สถาปัตยกรรมมัลติเอเจนต์ TenthMatrix = ทีมพัฒนาที่ยอดเยี่ยม</h2>\n<p><img src=\"/img/jobshout-openclaw-agent-teams.svg\" alt=\"เวิร์กโฟลว์ Jobshout OpenClaw สร้างทีมเอเจนต์ AI โดยอัตโนมัติ\" width=\"1600\" height=\"900\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<p>TenthMatrix แพ็กเกจรันไทม์แบบเอเจนต์ (และ OpenClaw for Business ที่ทีมมีตัวตน/เอเจนต์ใช้ได้) เพื่อให้คุณ<strong>ประกอบทีมพัฒนาอัตโนมัติ</strong>รอบบรีฟ:</p>\n<ul>\n  <li><strong>Planner</strong> — epic สตอรี่ และเกณฑ์การยอมรับจาก Spec</li>\n  <li><strong>Builders</strong> — ลงมือคู่ขนานตาม AC</li>\n  <li><strong>Reviewers</strong> — การปฏิบัติตาม Spec ความปลอดภัย Review Bot + ประตูมนุษย์</li>\n  <li><strong>Ops</strong> — GitOps promote เฝ้า SLO rollback ที่ปลอดภัย</li>\n</ul>\n<p>มนุษย์อยู่ในลูปสำหรับการเขียนเสี่ยงและ go-live เอเจนต์จัดการ throughput แบบนี้ SME และองค์กรส่งมอบเร็วขึ้นโดยไม่ลดมาตรฐาน</p>\n\n<p>อ่าน <a href=\"/th/articles/wise-developer-project-workflow-multi-agent-teams\">บทความฉบับเต็ม</a>. เผยแพร่โดย <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "openclaw",
+      "id": 1021
+    },
+    {
+      "name": "jobshout",
+      "id": 1022
+    }
+  ],
+  "created_at": "2026-07-24T00:30:00Z",
+  "updated_at": "2026-07-24T00:30:00Z",
+  "published_date": "2026-07-24",
+  "status": true
+}

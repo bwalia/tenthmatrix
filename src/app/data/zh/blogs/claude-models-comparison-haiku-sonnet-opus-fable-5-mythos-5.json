@@ -1,0 +1,61 @@
+{
+  "uuid": "blog-claude-models-compare-001",
+  "internal_id": 952,
+  "slug": "claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5",
+  "title": "Claude 模型对比：Haiku vs Sonnet vs Opus vs Fable 5（Mythos 5）",
+  "sub_title": "快速指南：如何选择合适的 Claude 模型档位，外加 cheap-to-frontier 路由器。",
+  "excerpt": "选择合适的 Claude 模型档位：Haiku 用于快速路由，Sonnet 用于日常工作，Opus 用于复杂智能体编码，Fable 5 用于长周期自主。含 token 预算路由器蓝图。",
+  "meta_title": "Claude 模型对比：Haiku vs Sonnet vs Opus vs Fable 5",
+  "meta_description": "对比 Anthropic Claude Haiku、Sonnet、Opus、Fable 5 与受限的 Mythos 5。含规格、成本/token 策略与路由蓝图。",
+  "meta_keywords": "Claude 模型对比, Claude Opus 4.8, Claude Fable 5, Claude Sonnet 5, Claude Haiku 4.5, Claude Mythos 5, token 预算, 智能体编码",
+  "cover_image": "/img/claude-models-comparison-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-models-comparison-cover.svg",
+      "id": 952,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude models comparison cover: Haiku, Sonnet, Opus, Fable 5, Mythos 5"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Claude 模型档位的快速实用指南。含路由蓝图、提示模式与 token 预算手册的完整深潜，请阅读 <a href=\"/zh/articles/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">长文大作</a>.</em></p>\n<p><img alt=\"Claude 模型对比：Haiku、Sonnet、Opus、Fable 5、Mythos 5\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-models-comparison-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>一段话版。</strong> Claude 模型选择主要是在以下之间权衡 <em>延迟</em>, <em>成本</em>，以及 <em>任务需要模型在流程中停留多久</em>。使用 <code>claude-haiku-4-5</code> 用于快速且廉价的意图工作， <code>claude-sonnet-5</code> 以求最佳速度/质量平衡， <code>claude-opus-4-8</code> 用于复杂智能体编码与企业工作，并保留 <code>claude-fable-5</code> （以及受限的 <code>claude-mythos-5</code>) 用于真正困难、耗时数小时或数天的长周期任务。\n</div>\n<h2>模型阵容一览</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0a2740;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">模型</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">最适合</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">上下文窗口</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">最大输出</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">定价（输入 / 输出）</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Thinking 行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Fable 5</strong> (<code>claude-fable-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">长时运行智能体与最难未解问题</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$10 / $50 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Opus 4.8</strong> (<code>claude-opus-4-8</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">复杂智能体编码与企业工作</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$5 / $25 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Sonnet 5</strong> (<code>claude-sonnet-5</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">最佳速度/质量平衡</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">1M tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">128K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$3 / $15 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Adaptive thinking always on</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Haiku 4.5</strong> (<code>claude-haiku-4-5-20251001</code>)</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">面向廉价、高流量任务的最快模型</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">200K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">64K tokens</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">$1 / $5 per MTok</td>\n<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Extended thinking available (adaptive off)</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Claude Mythos 5</strong> (<code>claude-mythos-5</code>) 是一个受限发布模型，规格与定价与 Fable 5 相同，但不包含 Fable 5 所用的安全分类器。仅向经 Project Glasswing 批准的合作伙伴开放。</p>\n<h2>选择正确模型（快速规则）</h2>\n<ul>\n<li><strong>Haiku 4.5</strong>：路由、分类、抽取，以及任何需要快速回复、且无法承受高输出 token 预算的工作流。</li>\n<li><strong>Sonnet 5</strong>：日常编码与文档工作，既要强质量又不要 Opus/Fable 定价。</li>\n<li><strong>Opus 4.8</strong>：复杂智能体编码、企业分析，以及需要更长、更自主工作的高难度调试。</li>\n<li><strong>Fable 5</strong>：那些耗时数小时或数天的硬题、长周期问题，尤其当模型必须守住目标、委派子任务并保持连贯时。</li>\n</ul>\n<h2>Effort 与 thinking：如何影响成本</h2>\n<p>在 API 上， <code>effort</code> 是 Fable 5 与 Mythos 5 上在智能、延迟与成本之间权衡的主要控制项。对 Opus 4.8 与 Sonnet 5，当你需要不同的成本/延迟画像时，也可以显式设置 effort。</p>\n<p>实践含义：把每个请求默认设为最大 effort，通常是最快把预算烧在输出 token 上的方式。</p>\n<h2>跨所有档位通用的 token 策略</h2>\n<p>Claude 输出 token 是昂贵的部分。简单规则是： <strong>限制输出长度</strong>, <strong>优先 TLDR 的提示</strong>，并使用 <strong>prompt caching</strong> 以便稳定前缀（系统指令与工具 schema）被复用。</p>\n<ul>\n<li><strong>使用能完成任务的最便宜模型。</strong> 路由器（Haiku -&gt; Sonnet/Opus -&gt; Fable）常能大幅降本，同时保持高质量。</li>\n<li><strong>设置输出上限。</strong> 生产中务必设置最大输出 / token 上限。无界回答是预算事故。</li>\n<li><strong>有策略地使用摘要。</strong> 不要每轮发送完整对话记录，保留紧凑的「lessons」记忆并只更新它。</li>\n</ul>\n<h2>简单路由器蓝图</h2>\n<ol>\n<li>用以下方式对意图与估计复杂度分类 <code>claude-haiku-4-5</code>.</li>\n<li>把「正常偏难」的工作发给 <code>claude-sonnet-5</code> （或 <code>claude-opus-4-8</code> 当你预期更重的智能体编码时）。</li>\n<li>升级到 <code>claude-fable-5</code> 仅当任务明显是长周期，或在更低档位已失败时。</li>\n<li>若 Fable 5 因安全分类器拒绝，回退到 Opus 4.8（配置后 API 支持带 fallback 的重试）。</li>\n</ol>\n<h2>延伸阅读（官方）</h2>\n<ul>\n<li><a href=\"https://platform.claude.com/docs/zh/about-claude/models/overview\" rel=\"noopener noreferrer\" target=\"_blank\">模型概览</a></li>\n<li><a href=\"https://platform.claude.com/docs/zh/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">介绍 Fable 5 与 Mythos 5</a></li>\n<li><a href=\"https://platform.claude.com/docs/zh/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">Prompting Claude Fable 5</a></li>\n</ul>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    }
+  ],
+  "created_at": "2026-07-08T09:00:00Z",
+  "updated_at": "2026-07-08T09:00:00Z",
+  "published_date": "2026-07-08",
+  "status": true
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="benchmark-architecture.svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0B1020"/>
+      <stop offset="100%" stop-color="#151B36"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF004E"/>
+      <stop offset="100%" stop-color="#3DD6C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="640" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="592" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <defs><marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3DD6C6"/></marker></defs>
+  <text x="56" y="70" fill="#3DD6C6" font-family="IBM Plex Sans,sans-serif" font-size="14" letter-spacing="2">BENCHMARK ARCHITECTURE</text>
+  <text x="56" y="110" fill="#E8ECF8" font-family="Georgia,serif" font-size="34">Workstation Jev Benchmark Lab</text>
+  <rect x="60" y="180" width="250" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="76" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Datasets</text>
+<text x="76" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">labeled JSONL</text>
+  <rect x="360" y="180" width="250" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="376" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Harness</text>
+<text x="376" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">adapters + ledger</text>
+  <rect x="660" y="180" width="250" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="676" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Systems under test</text>
+<text x="676" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">Jev / LLM / classifier</text>
+  <rect x="960" y="180" width="180" height="120" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="976" y="208" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Meters</text>
+<text x="976" y="232" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">latency + cost</text>
+  <rect x="220" y="380" width="320" height="140" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="236" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Raw results</text>
+<text x="236" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">prediction per item</text>
+  <rect x="600" y="380" width="360" height="140" rx="8" fill="#1A2144" stroke="rgba(255,255,255,0.14)"/>
+<text x="616" y="408" fill="#E8ECF8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="18" font-weight="700">Reports</text>
+<text x="616" y="432" fill="#A7B0C8" font-family="IBM Plex Sans,Segoe UI,sans-serif" font-size="13">accuracy / cal / cost</text>
+  <path d="M310,240 L360,240" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M610,240 L660,240" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M910,240 L960,240" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M480,300 L380,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+  <path d="M780,300 L760,380" stroke="url(#accent)" stroke-width="2" marker-end="url(#m)"/>
+
+</svg>

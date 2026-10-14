@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-wise-developer-workflow-001",
+  "internal_id": 955,
+  "slug": "wise-developer-new-project-adr-pr-gitops-review-bot",
+  "title": "Hoe een wijze developer aan een nieuw project werkt",
+  "sub_title": "Brainstorm, discussie, prototype, diagram, voorstel, ADR, MR/PR, GitOps — plus Review Bots die auto-commenten zodat mensen risico reviewen",
+  "excerpt": "Het wijze pad voor een nieuw project: brainstorm, teammate-discussie, prototypes, diagrammen, voorstellen, ADR’s, kleine PR’s met Review Bots, en GitOps voor productiekwaliteit.",
+  "meta_title": "Hoe een wijze developer aan een nieuw project werkt — ADR, PR, GitOps, Review Bot",
+  "meta_description": "Van brainstormen tot GitOps: ADR’s, MR’s/PR’s, Review Bots die auto-commenten op pull requests, FDE-setup en Claude Architect Certification voor productie-oplevering.",
+  "meta_keywords": "wijze developer, ADR, pull request, merge request, GitOps, Review Bot, code review, FDE, Claude Architect Certification, productie",
+  "cover_image": "/img/wise-developer-workflow-cover.svg",
+  "images": [
+    {
+      "url": "/img/wise-developer-workflow-cover.svg",
+      "id": 955,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Wise developer workflow ADR PR GitOps Review Bot"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Hoe een wijze developer een nieuw project start — brainstorm, discussie, prototype, diagram, voorstel, ADR’s vastleggen, MR’s/PR’s openen en changes landen met GitOps — terwijl Review Bots auto-commenten op pull requests. Volledig playbook in het <a href=\"/nl/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">lang artikel</a>.</em></p>\n\n<p><img src=\"/img/wise-developer-workflow-cover.svg\" alt=\"Wijze developer-workflow ADR PR GitOps Review Bot\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>De versie in één alinea.</strong> Spring niet meteen naar een gigantische PR. Brainstorm alleen, dan met teammates. Prototypeer de risicovolle delen. Teken diagrammen. Schrijf een kort voorstel. Leg beslissingen vast als ADR’s. Ship kleine MR’s/PR’s met CI groen. Promote via GitOps. Laat een Review Bot first-pass comments opstellen zodat mensen design en risico reviewen — niet formatting. Een FDE kan dit systeem opzetten; Claude Architect Certification is een sterk signaal dat u het kunt ontwerpen en verdedigen.\n</div>\n\n<h2>Het wijze pad (in volgorde)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — doelen, constraints, non-goals, failure modes.</li>\n  <li><strong>Discuss</strong> — whiteboard / korte sync met collega’s voordat code hard wordt.</li>\n  <li><strong>Prototype</strong> — spike het onbekende; gooi weg of promoteer bewust.</li>\n  <li><strong>Diagrammen</strong> — context, sequence, deployment — genoeg om over te discussiëren.</li>\n  <li><strong>Voorstel</strong> — probleem, opties, aanbeveling, rollback.</li>\n  <li><strong>ADR</strong> — duurzame «waarom we X boven Y kozen».</li>\n  <li><strong>MR / PR</strong> — kleine diffs, checklist, gekoppelde ADR/ticket.</li>\n  <li><strong>GitOps</strong> — gewenste state in git; promote via merge, rollback via revert.</li>\n</ol>\n\n<h2>Review Bots: comments die zichzelf schrijven</h2>\n<p>Koppel een Review Bot (Bugbot, CodeRabbit, custom Claude/GitHub Action, of uw <a href=\"/nl/docs/blogs/building-ai-code-review-pipeline\">AI code-review pipeline</a>) zodat elke PR automatisch inline comments krijgt over:</p>\n<ul>\n  <li>Security- en secrets-smells</li>\n  <li>Ontbrekende tests / flaky patterns</li>\n  <li>API-contract- en migratierisico’s</li>\n  <li>Style en lint die pre-commit ontsnapten</li>\n</ul>\n<p>Mensen focussen dan op architectuurfit, productintentie en operationele blast radius. Zo stroomlijnt u developer-leven zonder de productielat te verlagen.</p>\n\n<h2>Wie zet het op — en waarom Claude Architect Certification</h2>\n<p>Een <strong>FDE (Forward Deployed Engineer)</strong> is goed geplaatst om de templates te installeren: ADR-map, PR-checklist, Review Bot, branch protection en GitOps-apps. Koppel die delivery-skill aan <strong>Claude Architect Certification</strong> — het nastreven waard als u een credential wilt dat bewijst dat u agentic/AI-assisted systemen kunt ontwerpen, AI-gegenereerde code kritisch kunt reviewen, en teams kunt coachen op productie-workflows.</p>\n\n<h2>Productiekwaliteitslat</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0c1424;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Gate</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Pass-criteria</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pre-commit</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Format, lint, secrets scan</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">CI</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Unit + contract tests groen</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Review Bot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Geen onopgeloste high-severity findings</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Human review</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Design + risico afgetekend</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">GitOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Env-promotie via merge; revert getest</td></tr>\n</tbody>\n</table>\n\n<p>Lees het  <a href=\"/nl/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">lang artikel</a>. Gepubliceerd door <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "fde",
+      "id": 1019
+    },
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    }
+  ],
+  "created_at": "2026-07-23T21:00:00Z",
+  "updated_at": "2026-07-23T21:00:00Z",
+  "published_date": "2026-07-23",
+  "status": true
+}

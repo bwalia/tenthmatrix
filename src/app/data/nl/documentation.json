@@ -1,0 +1,61 @@
+{
+  "pagTitle": "Aan de slag",
+  "pagDescription": "Dit is een beschrijving van de pagina",
+  "sections": {
+    "firstSection": {
+      "title": "Klonen",
+      "id": "clone-step",
+      "content": {
+        "heading": "Standaard codevoorbeeld:",
+        "text": "git clone https://github.com/bwalia/webimpetus-src.git"
+      }
+    },
+    "secondSection": {
+      "title": "Installatie",
+      "id": "install-step",
+      "content": {
+        "first": {
+          "id": "first-1",
+          "heading": "Eerste",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "code": {
+            "language": "bash",
+            "title": "Standaard codevoorbeeld:",
+            "codes": [
+              "sudo bash ./deploy-to-docker.sh",
+              "sudo bash ./deploy-to-kubernates.sh"
+            ]
+          }
+        },
+        "second": {
+          "id": "second-1",
+          "heading": "Tweede",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes.",
+          "diff": {
+            "left": {
+              "language": "bash",
+              "title": "Standaard codevoorbeeld:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            },
+            "right": {
+              "language": "bash",
+              "title": "Standaard codevoorbeeld:",
+              "lists": [
+                "Lorem ipsum dolor sit amet.",
+                "Lorem ipsumds dolsdor sait amet."
+              ]
+            }
+          }
+        },
+        "third": {
+          "id": "third-1",
+          "heading": "Derde",
+          "text": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes."
+        }
+      }
+    }
+  }
+}

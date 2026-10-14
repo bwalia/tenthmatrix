@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: เอเจนต์บนคลาวด์ตามกำหนดเวลา รูทีนย่อย และรูทีนร่วม",
+  "sub_title": "รัน Claude Code ตามกำหนดเวลา จากการเรียก API หรือจากเหตุการณ์บน GitHub โดยไม่ต้องใช้แล็ปท็อปหรือเซิร์ฟเวอร์ คู่มือฉบับห้านาที",
+  "excerpt": "Claude Code Routines รันงานเอเจนต์ที่บันทึกไว้บนคลาวด์ของ Anthropic ตามกำหนดเวลา ผ่าน API หรือจากเหตุการณ์บน GitHub ทำงานอย่างไร ตั้งค่าอย่างไร และเชื่อมต่อเป็นห่วงโซ่ได้อย่างไร",
+  "meta_title": "Claude Code Routines: เอเจนต์บนคลาวด์ตามกำหนดเวลา | TenthMatrix",
+  "meta_description": "อธิบาย Claude Code Routines: ทริกเกอร์ตามเวลา API และ GitHub การตั้งค่า การเขียนพรอมต์ รูทีนย่อยกับซับเอเจนต์ ไปป์ไลน์รูทีนร่วม ความปลอดภัย และขีดจำกัดแพ็กเกจ",
+  "meta_keywords": "Claude Code Routines, เอเจนต์ AI ตามกำหนดเวลา, ตั้งเวลา Claude Code, /schedule, เอเจนต์บนคลาวด์, ทริกเกอร์ GitHub, ทริกเกอร์ API, ซับเอเจนต์, รูทีนย่อย, รูทีนร่วม, sub-routines, co-routines, Anthropic, ระบบอัตโนมัติด้วย AI, ระบบอัตโนมัติ DevOps",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code ไม่จำเป็นต้องมีคุณนั่งเฝ้าหน้าคีย์บอร์ดอีกต่อไป <strong>Routines</strong> (งานอัตโนมัติบนคลาวด์ตามกำหนดเวลา) จะรันงานของเอเจนต์ที่บันทึกไว้บนคลาวด์ของ Anthropic ตามกำหนดเวลา เมื่อมีการเรียก API หรือเมื่อเกิดเหตุการณ์บน GitHub บทความนี้อธิบายว่า Routines คืออะไร ตั้งค่าอย่างไร และแนะนำสองรูปแบบที่เราเรียกว่ารูทีนย่อย (sub-routines) และรูทีนร่วม (co-routines) หากต้องการคู่มือฉบับเต็ม อ่านได้ที่<a href=\"/th/articles/claude-code-routines-scheduled-cloud-agents\">บทความฉบับยาว</a></em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: เอเจนต์บนคลาวด์ตามกำหนดเวลา รูทีนย่อย และรูทีนร่วม\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>สรุปสาระสำคัญ</strong> routine คืองานของ Claude Code ที่คุณกำหนดค่าเพียงครั้งเดียว (พรอมต์ รีโพสิทอรี สภาพแวดล้อมบนคลาวด์ และคอนเนกเตอร์) แล้วสั่งให้ทำงานโดยอัตโนมัติ โดยจะรันเป็นเซสชันอัตโนมัติเต็มรูปแบบบนคลาวด์ คุณจึงปิดแล็ปท็อปได้เลย ขณะนี้ Routines อยู่ในช่วง research preview (ตั้งแต่ 14 เมษายน 2026) และใช้ได้กับแพ็กเกจ Pro, Max, Team และ Enterprise\n</div>\n\n<h2>สามวิธีในการเริ่ม routine</h2>\n<ul>\n  <li><strong>ตามกำหนดเวลา:</strong> ทุกชั่วโมง ทุกวัน ทุกวันทำการ ทุกสัปดาห์ หรือครั้งเดียว ณ เวลาที่ระบุ โดยกรอกเวลาตามเขตเวลาท้องถิ่นของคุณ สามารถกำหนด cron เองได้ผ่าน <code>/schedule update</code> โดยมีช่วงห่างขั้นต่ำหนึ่งชั่วโมง</li>\n  <li><strong>API:</strong> HTTPS endpoint เฉพาะของแต่ละ routine พร้อม bearer token ของตัวเอง ระบบแจ้งเตือนหรือไปป์ไลน์การดีพลอยของคุณส่ง POST มายัง endpoint นี้ได้ พร้อมแนบข้อความบริบทหากต้องการ ข้อความนั้นจะถูกระบุว่าเป็นข้อมูลที่ไม่น่าเชื่อถือ ดังนั้นแม้ token รั่วไหล ก็ไม่สามารถเขียนคำสั่งของ routine ใหม่ได้</li>\n  <li><strong>GitHub:</strong> เหตุการณ์ pull request หรือ release โดยกรองได้ตามแบรนช์ ป้ายกำกับ ผู้เขียน สถานะดราฟต์ หรือสถานะการ merge</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"องค์ประกอบของการรัน routine: ทริกเกอร์ routine ที่บันทึกไว้ เซสชันบนคลาวด์ และผลลัพธ์\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>ตั้งค่าเสร็จในสองนาที</h2>\n<ol>\n  <li>เปิด <code>claude.ai/code/routines</code> แล้วเลือก <strong>New routine</strong> หรือพิมพ์ <code>/schedule</code> ใน Claude Code CLI</li>\n  <li>เขียนพรอมต์ที่ครบถ้วนในตัวเอง ได้แก่ ขอบเขตงาน การกระทำที่อนุญาต ปลายทางของผลลัพธ์ และสิ่งที่ต้องทำเมื่อไม่มีงานให้ทำ</li>\n  <li>เลือกรีโพสิทอรีและสภาพแวดล้อม นำคอนเนกเตอร์ที่งานไม่จำเป็นต้องใช้ออก เพราะค่าเริ่มต้นจะรวมคอนเนกเตอร์ทั้งหมดไว้</li>\n  <li>เพิ่มทริกเกอร์ เลือก <strong>Run now</strong> เพื่อทดสอบ แล้วอ่านบันทึกการทำงาน (transcript) ป้ายสีเขียวหมายความเพียงว่าเซสชันได้รันแล้ว ไม่ได้หมายความว่างานสำเร็จ</li>\n</ol>\n\n<h2>รูทีนย่อย: การรันครั้งเดียว ผู้ช่วยหลายตัว</h2>\n<p>นี่คือชื่อที่เราใช้เรียกรูปแบบการออกแบบหนึ่ง ไม่ใช่ฟีเจอร์ของ Anthropic พรอมต์ของ routine ทำหน้าที่ประสานงาน และส่งแต่ละขั้นตอนให้ <strong>ซับเอเจนต์</strong> (<code>.claude/agents/</code>) หรือ <strong>สกิล</strong> ที่คอมมิตไว้ในรีโพสิทอรี ผู้ช่วยแต่ละตัวมีหน้าต่างบริบทของตัวเองและได้รับเฉพาะเครื่องมือที่จำเป็น ทำให้การรันแบบไม่มีคนดูแลที่ใช้เวลานานยังคงโฟกัส ประหยัด และปลอดภัยกว่า</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"รูทีนย่อย: พรอมต์ผู้ประสานงานมอบหมายงานให้ซับเอเจนต์และสกิล\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>รูทีนร่วม: routine ที่ส่งต่องานให้กัน</h2>\n<p>routine ไม่สามารถเรียกใช้กันโดยตรงได้ แต่ทำงานร่วมกันได้ผ่านสิ่งที่คงอยู่ถาวร (artefact) ตัวอย่างเช่น routine ที่รันทุกคืนเปิด PR แบบดราฟต์ routine ที่ทริกเกอร์จาก GitHub รีวิว PR นั้น มนุษย์เป็นผู้ merge routine ที่ทริกเกอร์จากการ merge อัปเดตเอกสาร และไปป์ไลน์การดีพลอยเรียก routine สำหรับตรวจสอบ ควรใช้ตัวกรองเพื่อไม่ให้ routine ใดทำงานจากผลลัพธ์ของตัวเอง และคงขั้นตอนให้มนุษย์อนุมัติการ merge ไว้ในห่วงโซ่เสมอ</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"รูทีนร่วม: routine สี่ตัวทำงานร่วมกันผ่านเหตุการณ์ GitHub ป้ายกำกับ และการเรียก API\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>ข้อจำกัดที่ควรรู้</h2>\n<ul>\n  <li>เพดานจำนวนการรันต่อวันในช่วงเปิดตัวคือ 5 ครั้งสำหรับ Pro, 15 ครั้งสำหรับ Max และ 25 ครั้งสำหรับ Team และ Enterprise ซึ่งเป็นส่วนเพิ่มจากการใช้งานตามปกติของการสมัครสมาชิก การรันแบบครั้งเดียวไม่นับรวม</li>\n  <li>routine ทำงานในนามของ<strong>คุณ</strong> คอมมิต PR และข้อความใน Slack จะแสดงตัวตนของคุณ Claude จะพุชไปยังแบรนช์ <code>claude/</code> เท่านั้น เว้นแต่จะสั่งเป็นอย่างอื่น และจะไม่พุชไปยังแบรนช์ที่ได้รับการป้องกันเด็ดขาด</li>\n  <li>ต้องการตรวจสอบเป็นรายนาทีหรือใช้ไฟล์ในเครื่อง? ให้ใช้ <code>/loop</code> หรือ scheduled tasks ของ Desktop แทน</li>\n</ul>\n\n<p><strong>อ่านต่อ:</strong> <a href=\"/th/articles/claude-code-routines-scheduled-cloud-agents\">คู่มือฉบับสมบูรณ์</a>ครอบคลุมความปลอดภัยของ payload ใน API เทมเพลตพรอมต์ ตัวอย่างซับเอเจนต์ การเปรียบเทียบกับ GitHub Actions, n8n และ Trigger.dev รวมถึงเช็กลิสต์ด้านการกำกับดูแล แหล่งที่มา: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">ประกาศของ Anthropic</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">เอกสาร Claude Code</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

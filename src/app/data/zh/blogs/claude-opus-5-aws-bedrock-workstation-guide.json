@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-claude-opus-5-aws-001",
+  "internal_id": 957,
+  "slug": "claude-opus-5-aws-bedrock-workstation-guide",
+  "title": "AWS 上的 Claude Opus 5：面向构建者与业务的 TenthMatrix 指南",
+  "sub_title": "Bedrock 与 Claude Platform 上的 Opus 5 — 变化点、何时使用、ZDR 与 Converse 快速入门",
+  "excerpt": "TenthMatrix 对 Amazon Bedrock 上 Claude Opus 5 的观点：智能体编程、长时运行智能体、1M 上下文、默认 ZDR，以及团队应如何采用。",
+  "meta_title": "AWS Bedrock 上的 Claude Opus 5 — TenthMatrix 构建者与业务指南",
+  "meta_description": "Amazon Bedrock 与 Claude Platform on AWS 上的 Claude Opus 5：能力、ZDR、1M 上下文、何时使用，以及面向生产团队的 Converse 快速入门。",
+  "meta_keywords": "Claude Opus 5, Amazon Bedrock, Claude Platform on AWS, Anthropic, 智能体编程, ZDR, 长时运行智能体, TenthMatrix",
+  "cover_image": "/img/claude-opus-5-aws-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-opus-5-aws-cover.svg",
+      "id": 957,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Opus 5 on Amazon Bedrock AWS TenthMatrix guide"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Opus 5 已在 Amazon Bedrock 与 Claude Platform on AWS 上线。以下是 TenthMatrix 的观点 — 对开发者与业务团队意味着什么、何时使用、如何起步。含代码的深入分析见<a href=\"/zh/articles/claude-opus-5-aws-bedrock-workstation-guide\">长文</a>.</em></p>\n\n<p><img src=\"/img/claude-opus-5-aws-cover.svg\" alt=\"Amazon Bedrock AWS 上的 Claude Opus 5 — TenthMatrix 指南\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>一段话总结。</strong> Opus 5 是 Anthropic 在 AWS 上最强的 Opus 级模型（2026 年 7 月 24 日发布）：更好的智能体编程、长时运行智能体与文档密集型知识工作，具备 <strong>100 万 token 上下文</strong>窗口。在 <strong>Amazon Bedrock</strong> 上默认获得 <strong>零数据保留（ZDR）</strong>、Guardrails 与 AWS IAM/账单。用于高难度工程与智能体集群；用 Sonnet/Haiku 承载量。完整路由建议： <a href=\"/zh/docs/blogs/claude-models-comparison-haiku-sonnet-opus-fable-5-mythos-5\">Claude 模型对比</a>.\n</div>\n\n<p style=\"font-size:0.9rem;color:#64748b;\">根据 AWS Machine Learning Blog 公告改写，面向 TenthMatrix 读者 — <a href=\"https://aws.amazon.com/blogs/machine-learning/introducing-claude-opus-5-on-aws-anthropics-most-capable-opus-model/\" target=\"_blank\" rel=\"noopener noreferrer\">Introducing Claude Opus 5 on AWS</a>.</p>\n\n<h2>业务团队为何关心</h2>\n<ul>\n  <li><strong>运行更久的生产智能体</strong> — 多小时 / 过夜工作流，错误恢复更好。</li>\n  <li><strong>代码库规模工程</strong> — 导航大型仓库，交付更高质量补丁，更少手把手循环。</li>\n  <li><strong>企业文档工作</strong> — 对长政策、合同与财务材料做更深推理。</li>\n  <li><strong>Bedrock 上的治理</strong> — 默认 ZDR、区域驻留选项，敏感语料无需「影子 SaaS」。</li>\n</ul>\n\n<h2>开发者为何关心</h2>\n<ul>\n  <li>Bedrock 上的模型 ID：<code>global.anthropic.claude-opus-5</code>（以及地理变体 <code>us.</code> / <code>eu.</code> / <code>au.</code>）。</li>\n  <li>通过 <strong>Invoke</strong>、<strong>Converse</strong> 或 <strong>bedrock-mantle</strong> 上的 Anthropic Messages 调用。</li>\n  <li>默认开启自适应推理；提示缓存（5 分钟 / 1 小时）；对话中途增删工具。</li>\n  <li>Opus 级经济性，在许多领域声称具备 Fable 级智能 — 将 Fable/Mythos 留给峰值关键路径。</li>\n</ul>\n\n<h2>AWS 上的两扇门</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">路径</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">最适合何时</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Amazon Bedrock</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">默认 ZDR、Guardrails、Knowledge Bases、AgentCore、AWS 原生安全</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Claude Platform on AWS</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Anthropic 原生控制台/API，配合 AWS 认证与账单；按需 ZDR</td></tr>\n</tbody>\n</table>\n\n<h2>快速入门（Bedrock Converse）</h2>\n<pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.82rem;\">\nimport boto3\n\nclient = boto3.client(\"bedrock-runtime\", region_name=\"us-east-1\")\nresp = client.converse(\n    modelId=\"global.anthropic.claude-opus-5\",\n    messages=[{\"role\": \"user\", \"content\": [{\"text\": \"Refactor this service for multi-region failover.\"}]}],\n    inferenceConfig={\"maxTokens\": 4096},\n)\nprint(resp[\"output\"][\"message\"][\"content\"])\n</pre>\n\n<h2>TenthMatrix 建议</h2>\n<p>将 Bedrock 上的 Opus 5 与现有智能体栈（Review Bot、多智能体团队、GitOps 门控）配对。用 Opus 5 做规划/首席工程师智能体；常规工单路由到更便宜的模型。详见 <a href=\"/zh/articles/claude-opus-5-aws-bedrock-workstation-guide\">长文</a>. 发布方 <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "aws",
+      "id": 1010
+    },
+    {
+      "name": "amazon-bedrock",
+      "id": 1011
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "devops",
+      "id": 932
+    }
+  ],
+  "created_at": "2026-07-26T07:00:00Z",
+  "updated_at": "2026-07-26T07:00:00Z",
+  "published_date": "2026-07-26",
+  "status": true
+}

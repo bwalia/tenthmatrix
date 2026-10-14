@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Redis High Availability with Sentinel and Cluster">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0710"/>
+      <stop offset="0.55" stop-color="#3d0a14"/>
+      <stop offset="1" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#dc382d" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#dc382d" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #ff8a80; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 70px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 0.2px; }
+      .tagline { fill: #ff5252; font: 800 30px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #ff5252; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #ff8a80; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arSync" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#42a5f5"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">REDIS  /  HIGH AVAILABILITY</text>
+  <text class="title" x="60" y="160">Redis HA</text>
+  <text class="tagline" x="60" y="208">Sentinel + Cluster, automatic failover</text>
+  <text class="sub" x="60" y="248">Quorum-elected promotion. Clients reconfigure via Sentinel-aware library.</text>
+
+  <g>
+    <rect class="chip" x="60" y="290" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="317">01</text>
+    <text class="chipText" x="120" y="317">Client - Sentinel discovery</text>
+
+    <rect class="chip" x="60" y="346" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="373">02</text>
+    <text class="chipText" x="120" y="373">Sentinels heartbeat master</text>
+
+    <rect class="chip" x="60" y="402" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="429">03</text>
+    <text class="chipText" x="120" y="429">Quorum on failure (2 of 3)</text>
+
+    <rect class="chip" x="60" y="458" rx="20" ry="20" width="290" height="44"/>
+    <text class="num" x="80" y="485">04</text>
+    <text class="chipText" x="120" y="485">Promote + reconfigure</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="440" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">CLIENT PLANE</text>
+    <rect x="20" y="40" width="160" height="60" rx="10" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+    <text class="nodeLabel" x="100" y="64" text-anchor="middle">Application</text>
+    <text class="nodeText" x="100" y="80" text-anchor="middle">Sentinel-aware client</text>
+    <text class="nodeText" x="100" y="92" text-anchor="middle">retry + circuit break</text>
+
+    <text class="laneLabel" x="220" y="28">CONTROL PLANE  /  SENTINEL QUORUM (3)</text>
+    <g transform="translate(220,40)">
+      <rect x="0" y="0" width="160" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="80" y="22" text-anchor="middle">Sentinel #1</text>
+      <text class="nodeText" x="80" y="38" text-anchor="middle">monitor + notify</text>
+      <text class="nodeText" x="80" y="50" text-anchor="middle">quorum vote</text>
+
+      <rect x="170" y="0" width="160" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="250" y="22" text-anchor="middle">Sentinel #2</text>
+      <text class="nodeText" x="250" y="38" text-anchor="middle">monitor + notify</text>
+      <text class="nodeText" x="250" y="50" text-anchor="middle">quorum vote</text>
+
+      <rect x="340" y="0" width="160" height="60" rx="10" fill="#1a1240" stroke="#6a3eff" stroke-width="1.5"/>
+      <text class="nodeLabel" x="420" y="22" text-anchor="middle">Sentinel #3</text>
+      <text class="nodeText" x="420" y="38" text-anchor="middle">leader election</text>
+      <text class="nodeText" x="420" y="50" text-anchor="middle">SDOWN/ODOWN</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="148">DATA PLANE  /  REPLICATION RING</text>
+    <g transform="translate(20,160)">
+      <rect x="0" y="0" width="180" height="100" rx="10" fill="#3d0a14" stroke="#ff5252" stroke-width="1.5"/>
+      <text class="nodeLabel" x="90" y="24" text-anchor="middle">Master</text>
+      <text class="nodeText" x="90" y="42" text-anchor="middle">accepts writes</text>
+      <text class="nodeText" x="90" y="56" text-anchor="middle">AOF + RDB persistence</text>
+      <text class="nodeText" x="90" y="70" text-anchor="middle">role: master</text>
+      <text class="nodeText" x="90" y="84" text-anchor="middle">offset 0x...</text>
+
+      <rect x="200" y="0" width="180" height="100" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="290" y="24" text-anchor="middle">Replica #1</text>
+      <text class="nodeText" x="290" y="42" text-anchor="middle">read-only</text>
+      <text class="nodeText" x="290" y="56" text-anchor="middle">async stream</text>
+      <text class="nodeText" x="290" y="70" text-anchor="middle">lag: tens of ms</text>
+      <text class="nodeText" x="290" y="84" text-anchor="middle">candidate</text>
+
+      <rect x="400" y="0" width="180" height="100" rx="10" fill="#0c2b18" stroke="#2e7d32" stroke-width="1.5"/>
+      <text class="nodeLabel" x="490" y="24" text-anchor="middle">Replica #2</text>
+      <text class="nodeText" x="490" y="42" text-anchor="middle">read-only</text>
+      <text class="nodeText" x="490" y="56" text-anchor="middle">async stream</text>
+      <text class="nodeText" x="490" y="70" text-anchor="middle">lag: tens of ms</text>
+      <text class="nodeText" x="490" y="84" text-anchor="middle">candidate</text>
+    </g>
+
+    <line x1="180" y1="70" x2="220" y2="70" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#ar)"/>
+    <line x1="300" y1="100" x2="300" y2="160" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar)"/>
+    <line x1="470" y1="100" x2="470" y2="160" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar)"/>
+    <line x1="640" y1="100" x2="640" y2="160" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ar)"/>
+    <line x1="200" y1="210" x2="220" y2="210" stroke="#42a5f5" stroke-width="2" marker-end="url(#arSync)"/>
+    <line x1="400" y1="210" x2="420" y2="210" stroke="#42a5f5" stroke-width="2" marker-end="url(#arSync)"/>
+
+    <text class="laneLabel" x="20" y="290">FAILOVER (less than 30 s)</text>
+    <g transform="translate(20,300)">
+      <rect x="0" y="0" width="680" height="40" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text class="nodeText" x="14" y="24">detect SDOWN  -  reach ODOWN quorum  -  elect Sentinel leader  -  pick replica with highest offset  -  SLAVEOF NO ONE  -  publish +switch-master  -  clients reconnect</text>
+    </g>
+
+    <g transform="translate(20,360)">
+      <rect x="0" y="0" width="14" height="14" rx="3" fill="#ff5252"/>
+      <text class="nodeText" x="22" y="11">Master (writes)</text>
+      <rect x="140" y="0" width="14" height="14" rx="3" fill="#2e7d32"/>
+      <text class="nodeText" x="162" y="11">Replica (reads)</text>
+      <rect x="280" y="0" width="14" height="14" rx="3" fill="#6a3eff"/>
+      <text class="nodeText" x="302" y="11">Sentinel control plane</text>
+      <line x1="430" y1="7" x2="460" y2="7" stroke="#42a5f5" stroke-width="2"/>
+      <text class="nodeText" x="466" y="11">Replication stream</text>
+      <line x1="580" y1="7" x2="610" y2="7" stroke="#ff9560" stroke-width="2" stroke-dasharray="6 4"/>
+      <text class="nodeText" x="616" y="11">Monitor heartbeat</text>
+    </g>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">SRE  /  DBA  /  PLATFORM TEAMS</text>
+</svg>

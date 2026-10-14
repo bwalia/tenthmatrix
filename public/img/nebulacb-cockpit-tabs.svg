@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420" role="img" aria-label="NebulaCB React UI cockpit tabs and mission-control workspace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <linearGradient id="cockpit" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c2540"/>
+      <stop offset="1" stop-color="#0a1a2e"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 19px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .tab { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.2; }
+      .tabActive { fill: url(#cockpit); stroke: #38bdf8; stroke-width: 1.5; }
+      .tabAI { fill: #101a3a; stroke: #a855f7; stroke-width: 1.2; }
+      .tabOrange { fill: #101a3a; stroke: #f97316; stroke-width: 1.2; }
+      .tabOps { fill: #101a3a; stroke: #326ce5; stroke-width: 1.2; }
+      .tabRun { fill: #101a3a; stroke: #22c55e; stroke-width: 1.2; }
+      .tabBlue { fill: #101a3a; stroke: #0ea5e9; stroke-width: 1.2; }
+      .tabKnow { fill: #101a3a; stroke: #eab308; stroke-width: 1.2; }
+      .tabLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tabLabelActive { fill: #e0f2fe; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tabText { fill: rgba(255,255,255,0.70); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .cockpitLabel { fill: #cfd6ff; font: 800 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .cockpitText { fill: rgba(255,255,255,0.78); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="420" fill="url(#bg)"/>
+  <rect width="1100" height="420" fill="url(#grid)"/>
+
+  <text class="title" x="550" y="32" text-anchor="middle">NebulaCB React UI  /  workspace tabs (web/nebulacb-ui)</text>
+  <text class="subtitle" x="550" y="52" text-anchor="middle">Real-time WebSocket updates  /  Cockpit is the default NASA-style mission-control grid</text>
+
+  <g transform="translate(28,78)">
+    <rect width="200" height="56" rx="8" class="tabActive"/>
+    <text class="tabLabelActive" x="100" y="32" text-anchor="middle">Cockpit</text>
+    <text class="tabText" x="100" y="48" text-anchor="middle">default  /  timeline  /  integrity</text>
+
+    <rect x="214" width="200" height="56" rx="8" class="tab"/>
+    <text class="tabLabel" x="314" y="32" text-anchor="middle">Dashboard</text>
+    <text class="tabText" x="314" y="48" text-anchor="middle">legacy panel stack</text>
+
+    <rect x="428" width="200" height="56" rx="8" class="tabAI"/>
+    <text class="tabLabel" x="528" y="32" text-anchor="middle">Ask AI</text>
+    <text class="tabText" x="528" y="48" text-anchor="middle">full cluster context chat</text>
+
+    <rect x="642" width="200" height="56" rx="8" class="tabAI"/>
+    <text class="tabLabel" x="742" y="32" text-anchor="middle">RCA</text>
+    <text class="tabText" x="742" y="48" text-anchor="middle">evidence + remediation</text>
+
+    <rect x="856" width="188" height="56" rx="8" class="tabKnow"/>
+    <text class="tabLabel" x="950" y="32" text-anchor="middle">Knowledge</text>
+    <text class="tabText" x="950" y="48" text-anchor="middle">12+ guides</text>
+  </g>
+
+  <g transform="translate(28,150)">
+    <rect width="200" height="56" rx="8" class="tabBlue"/>
+    <text class="tabLabel" x="100" y="32" text-anchor="middle">Insights</text>
+    <text class="tabText" x="100" y="48" text-anchor="middle">AI history</text>
+
+    <rect x="214" width="200" height="56" rx="8" class="tab"/>
+    <text class="tabLabel" x="314" y="32" text-anchor="middle">Pod Logs</text>
+    <text class="tabText" x="314" y="48" text-anchor="middle">operator + CB pods</text>
+
+    <rect x="428" width="200" height="56" rx="8" class="tabOrange"/>
+    <text class="tabLabel" x="528" y="32" text-anchor="middle">Events</text>
+    <text class="tabText" x="528" y="48" text-anchor="middle">k8s event stream</text>
+
+    <rect x="642" width="200" height="56" rx="8" class="tabOps"/>
+    <text class="tabLabel" x="742" y="32" text-anchor="middle">Operator</text>
+    <text class="tabText" x="742" y="48" text-anchor="middle">CouchbaseCluster CR</text>
+
+    <rect x="856" width="188" height="56" rx="8" class="tabRun"/>
+    <text class="tabLabel" x="950" y="32" text-anchor="middle">Runbooks</text>
+    <text class="tabText" x="950" y="48" text-anchor="middle">remediation</text>
+  </g>
+
+  <g transform="translate(28,232)">
+    <rect width="1044" height="160" rx="12" class="lane"/>
+    <text class="cockpitLabel" x="20" y="26">COCKPIT HIGHLIGHTS</text>
+    <text class="cockpitText" x="20" y="52">- Cluster health  /  XDCR lag and GOXDCR delay  /  data integrity verdict (PASS / FAIL)</text>
+    <text class="cockpitText" x="20" y="72">- Upgrade timeline with phase rail  /  Storm metrics (P50 / P95 / P99)  /  current node + replica state</text>
+    <text class="cockpitText" x="20" y="92">- Mission Control actions: load, upgrade or downgrade, XDCR, audit, AI, backup, failover</text>
+    <text class="cockpitText" x="20" y="112">- Tab badges surface alerts and unread AI insights  /  WebSocket reconnect indicator</text>
+    <text class="cockpitText" x="20" y="132">- CLI mirrors many actions: nebulacb-cli start-load  /  start-upgrade  /  run-audit  /  report</text>
+  </g>
+</svg>

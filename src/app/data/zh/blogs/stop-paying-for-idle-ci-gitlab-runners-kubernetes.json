@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "停止为闲置的 CI 付费：在 Kubernetes 上运行 GitLab Runners",
+  "sub_title": "在周一高峰期扩展 CI 规模，然后在夜间和周末缩减容量——附带操作演示视频的五分钟指南。",
+  "excerpt": "大多数团队为 CI 付费的方式，仿佛每个夜晚仍是周一清晨。部署在 Kubernetes 上的 GitLab Runners 颠覆了这一现状：使用临时作业 Pod，负载时自动扩容，空闲时自动缩容。",
+  "meta_title": "停止为闲置的 CI 付费：在 Kubernetes 上运行 GitLab Runners | TenthMatrix",
+  "meta_description": "Kubernetes 上的 GitLab Runners：临时作业 Pod、Helm 与 Operator 安装路径、自动扩缩容，以及如何停止为空闲的夜晚和周末付费。",
+  "meta_keywords": "GitLab Runner、Kubernetes 执行器、GitLab Operator、Helm、k3s、自动扩展 CI、FinOps、空闲 CI 成本、DinD、超大规模 Runner、TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>大多数团队为持续集成付费的方式，仿佛每个夜晚和周末仍然是周一早晨。<strong>GitLab Runners 在 Kubernetes 上</strong>颠覆了这一模式：当流水线到来时扩展容量，当办公室安静下来时再缩减。阅读<a href=\"/zh/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">技术深度解析</a>以了解 Helm 价值、执行器设置及成本模型。</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。</strong>为峰值预留资源，为低谷释放资源。临时作业容器在需求下降时（尤其是夜晚和周末）回收 CPU、内存和存储空间，因此周一的资源池不会为周六的账单买单。</div><h2>观看视频</h2><p><strong>1. Runners &amp; pipelines</strong>— 在 Kubernetes 上自动扩展 GitLab Runner 工作负载。</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server on HA Kubernetes</strong>— 几分钟内通过 Operator 部署。</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· 文档：<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>昂贵的习惯</h2><ul><li>白天：</strong>合并请求和测试使需求激增。</li><li><strong>夜晚：</strong>活动减少；固定虚拟机仍在消耗 CPU 和内存。</li><li><strong>周末：</strong>通常接近空闲——但磁盘和节点可能仍在计费。</li></ul><p>您不是在为已完成的构建付费，而是在为无论是否有人使用都存在的容量付费。</p><h2>更简洁的架构图</h2><p>GitLab 的<strong>Runner</strong>执行流水线任务。<strong>Kubernetes</strong>可以将这些工作节点创建为短生命周期的 Pod，并在任务完成后将其删除。在超大规模场景下，同样的思路适用于节点：队列积压时增加节点；夜间和周末则减少——理想情况下几乎为零。</p><h2>巨大成本节省的来源</h2><ol><li><strong>在工作时间（人类或机器人活跃时）弹性扩容</strong>——并行启动任务 Pod，直至达到并发和集群限制。</li><li><strong>需求消失时强力缩容</strong>——Pod 自动消失；借助集群自动伸缩，空闲节点离开集群。</li><li><strong>停止在安静时段浪费 CPU、内存和存储</strong>来维持始终在线的 Runner 集群。</li><li><strong>为成果付费，而非为基础设施付费</strong>——保留 GitLab 和轻量级 Runner 管理器；让空闲时的资源池自然蒸发。</li></ol><blockquote><p>巨大的节省体现在：周一的峰值不再决定周二凌晨的账单——而周六的寂静终于在发票上显得安静了。</p></blockquote><h2>官方文档</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">使用 Helm 图表安装 GitLab Runner</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">配置 Runner Helm 图表</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes 执行器</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Runner 自动伸缩</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator 安装</a></li></ul><p><strong>下一篇：</strong><a href=\"/zh/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">超大规模技术文章</a>涵盖 Operator 与 Helm 轨道、并发、DinD、可观测性以及 FinOps 检查清单。课程构建提示：<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>在 TenthMatrix 网站仓库中（替换已退役的 devops.git 链接）。</p><p>由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布。</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

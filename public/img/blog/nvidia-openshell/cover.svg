@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="NVIDIA OpenShell secure agent runtime on Mac Studio and GPU workstations">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d0b21"/>
+      <stop offset="0.5" stop-color="#15132b"/>
+      <stop offset="1" stop-color="#1a1538"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.15" cy="0.2" r="0.5">
+      <stop offset="0" stop-color="#76b900" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#76b900" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="0.85" cy="0.75" r="0.45">
+      <stop offset="0" stop-color="#ff004e" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#ff004e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0 H0 V36" fill="none" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #a3e635; font: 700 12px system-ui, sans-serif; letter-spacing: 2.5px; }
+      .title { fill: #ffffff; font: 800 44px system-ui, sans-serif; letter-spacing: -0.5px; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 18px system-ui, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.07); stroke: rgba(118,185,0,0.55); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 13px system-ui, sans-serif; }
+      .brand { fill: rgba(255,255,255,0.45); font: 700 11px system-ui, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <rect width="1200" height="630" fill="url(#g2)"/>
+  <text class="kicker" x="56" y="72">NVIDIA OPENSHELL  /  SECURE AGENT RUNTIME</text>
+  <text class="title" x="56" y="148">Sandboxes, policy,</text>
+  <text class="title" x="56" y="206">and GPU where you need it</text>
+  <text class="sub" x="56" y="262">Mac Studio Apple Silicon or Linux NVIDIA - same CLI, governed agents.</text>
+  <rect class="chip" x="56" y="310" width="118" height="36" rx="8"/>
+  <text class="chipText" x="78" y="333">Mac Studio</text>
+  <rect class="chip" x="188" y="310" width="100" height="36" rx="8"/>
+  <text class="chipText" x="210" y="333">--gpu</text>
+  <rect class="chip" x="302" y="310" width="88" height="36" rx="8"/>
+  <text class="chipText" x="324" y="333">MCP</text>
+  <rect class="chip" x="404" y="310" width="120" height="36" rx="8"/>
+  <text class="chipText" x="426" y="333">Policy</text>
+  <text class="brand" x="56" y="580">WORKSTATION GUIDE</text>
+  <!-- Shell icon -->
+  <rect x="820" y="120" width="320" height="380" rx="24" fill="rgba(255,255,255,0.04)" stroke="rgba(118,185,0,0.4)" stroke-width="2"/>
+  <rect x="860" y="180" width="240" height="48" rx="10" fill="rgba(118,185,0,0.15)"/>
+  <text fill="#76b900" font="700 14px monospace" x="880" y="210">openshell term</text>
+  <rect x="860" y="250" width="200" height="32" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <rect x="860" y="295" width="160" height="32" rx="6" fill="rgba(255,255,255,0.06)"/>
+  <rect x="860" y="340" width="220" height="32" rx="6" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="875" cy="266" r="6" fill="#76b900"/>
+  <circle cx="875" cy="311" r="6" fill="#ff004e"/>
+  <circle cx="875" cy="356" r="6" fill="#38bdf8"/>
+</svg>

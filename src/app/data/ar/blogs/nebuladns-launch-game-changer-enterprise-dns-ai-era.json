@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS هو خادم DNS موثوق وآمن مع مستوى تحكم API الأول ومقاييس Prometheus وبوابات نشر وعمليات Kubernetes الأصلية - تم تصميمه لتحقيق الرؤية عندما تعتمد خدمات الذكاء الاصطناعي ووكلاءه على DNS أكثر من أي وقت مضى.",
+  "sub_title": "API-أول DNS، وإمكانية الملاحظة، ولماذا يحتاج عصر الذكاء الاصطناعي إلى مجموعة موثوقة جديدة",
+  "title": "NebulaDNS: لماذا يعتبر DNS الموثوق مغيرًا لقواعد اللعبة في عصر الذكاء الاصطناعي",
+  "meta_title": "NebulaDNS | مؤسسة DNS Rust AI الموثوقة | TenthMatrix",
+  "meta_description": "مقدمة إلى NebulaDNS: الصدأ DNS، ومستوى التحكم API، والتحقق من الانتشار، وأنماط k3s وRoute 53، ولماذا يجب أن يكون DNS للمؤسسة قابلاً للملاحظة في عصر الذكاء الاصطناعي.",
+  "meta_keywords": "NebulaDNS، DNS الموثوق، Rust DNS، Kubernetes DNS، Route 53، CoreDNS، البنية التحتية للذكاء الاصطناعي، مقاييس Prometheus DNS، TSIG، AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>ملخص تنفيذي</h2><p><strong><a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">NebulaDNS</a></strong> هو حديث، <strong>API - أول خادم DNS موثوق</strong> مكتوب في <strong>الصدأ الآمن</strong> (<code>#![forbid(unsafe_code)]</code>). إنه يستهدف الفجوات التشغيلية التي خلفتها برامج الشياطين القديمة وقواعد تعليمات C الغامضة: <strong>لا مقاييس</strong>, <strong>لا حقيقة الانتشار</strong>، و <strong>لا توجد طائرة تحكم يمكن قراءتها آليًا</strong>. في <strong>عصر الذكاء الاصطناعي</strong>، DNS ليس \"مجرد بنية تحتية\" - بل هو كيف <strong>وكلاء</strong>, <strong>نقاط النهاية الاستدلال</strong>, <strong>العقد GPU</strong>، و <strong>خدمات متعددة المجموعات</strong> تجد بعضها البعض في إطار السياسة. يعامل NebulaDNS <strong>كل منطقة تتغير كإصدار</strong>: المرتبات الثانوية التي تم التحقق منها، والمقاييس الصريحة، وAPI لكل إجراء يقوم به المشغل - تتماشى مع السرد العام على <a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">موقع المشروع</a> و <a href=\"https://github.com/bwalia/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">مستودع جيثب</a>.</p><h2>لماذا يهم DNS أكثر عندما يكون الذكاء الاصطناعي في مرحلة الإنتاج</h2><ul><li><strong>اكتشاف الخدمة للوكلاء:</strong> تتفوق الأسماء الثابتة لنقاط نهاية الأدوات وخدمات الاسترجاع وبوابات السياسة على عناوين IP ذات الترميز الثابت عبر المجموعات سريعة الزوال.</li><li><strong>نصف قطر الانفجار:</strong> يمكن أن يؤدي حادث AXFR الصامت أو حادث الانجراف الثانوي (مثل حالات فشل التشغيل المتداخل في العالم الحقيقي الموضحة في الموقع) إلى قطع التكرار قبل فترة طويلة من إشعار لوحات معلومات LLM.</li><li><strong>الامتثال والأدلة:</strong> يدعم DNS سهل التدقيق مع السجلات والمقاييس المنظمة دليلاً على نمط SOC2 لمعرفة من قام بتغيير المنطقة وما إذا كان قد تم نشرها.</li></ul><h2>ما الذي يجعل NebulaDNS مختلفًا</h2><p>تضع الصفحة المقصودة NebulaDNS كبديل للأكوام الهشة <strong>ثنائي صغير واحد</strong> تلك السفن <strong>المقاييس</strong>، أ <strong>طائرة التحكم</strong>، والطريق إلى أ <strong>مشغل Kubernetes</strong>- لذلك تظهر حالات الفشل <strong>ثواني</strong>، وليس عن طريق تذاكر العملاء. تشمل النقاط البارزة <strong>انتشار التحقق منها</strong>, <strong>بصمة البرمجيات النظيرة</strong>, <strong>تكوين الإصدار الذري</strong>, <strong>مسلسلات SOA الحتمية</strong>، و <strong>Prometheus <code>/metrics</code></strong> مع ميزانية أصل وقت الترجمة.</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"مستوى التحكم NebulaDNS ومخزن المنطقة ومستوى بيانات DNS\" decoding=\"async\" height=\"640\" loading=\"lazy\" src=\"/img/nebuladns-architecture-stack.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1000\"/></figure><h2>لقطة التكامل: الطريق 53 وk3s</h2><p>الشركات في كثير من الأحيان الاقتران <strong>طريق AWS 53</strong> المناطق العامة مع <strong>على المجموعة أو موثوقة مخصصة</strong> طبقات. NebulaDNS يناسب مثل <strong>مصدر موثوق للحقيقة</strong> للمناطق التي تمتلكها بشكل شامل <strong>Helm</strong>, <strong>مراقبة الخدمة</strong>، و <strong>المشغل/CRD</strong> الوقائع المنظورة على خارطة الطريق الموضحة على الموقع. الرسم البياني أدناه يرسم أ <strong>الوفد + الكتلة</strong> النمط (وليس الأسلاك الخاصة بالبائع - التكيف مع تجزئة الشبكة الخاصة بك).</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"تفويض Route 53 إلى تكامل NebulaDNS وk3s مع CoreDNS\" decoding=\"async\" height=\"520\" loading=\"lazy\" src=\"/img/nebuladns-k3s-route53-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1100\"/></figure><h2>اقرأ التالي</h2><p>ل <strong>كتالوج الميزات الكاملة</strong>وأمثلة للمقاييس وملاحظات أعمق حول k3s/Route 53، راجع المشاركة المصاحبة <a href=\"/ar/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide\">دليل الميزات الكامل لـNebulaDNS</a> على TenthMatrix.</p><h2>كيف يمكن أن يساعد TenthMatrix</h2><p>تصاميم TenthMatrix <strong>هندسة المنصة</strong> و <strong>SRE-DNS جاهز</strong> الأنماط—GitOps وإمكانية المراقبة والقطع الآمن—للسحابة والحافة. اتصال <strong>info@tenthmatrix.com</strong> لمراجعات الهندسة المعمارية أو دعم التسليم.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

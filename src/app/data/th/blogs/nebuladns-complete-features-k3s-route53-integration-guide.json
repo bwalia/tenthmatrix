@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-features-002",
+  "excerpt": "ทัวร์ชมฟีเจอร์ NebulaDNS ฉบับสมบูรณ์: ระนาบควบคุม API ตัวแรก, ตัวชี้วัด Prometheus, ประตูการแพร่กระจาย, การพิมพ์ลายนิ้วมือเพียร์, แผนงาน DNSSEC, เรื่องราวของผู้ปฏิบัติงาน Helm/k3s และวิธีการผสานรวมกับ AWS Route 53 และ CoreDNS",
+  "sub_title": "คุณสมบัติ “รวมแบตเตอรี่” ทุกประการ การผสานรวม และรูปแบบ DNS ระดับองค์กร",
+  "title": "คู่มือคุณสมบัติ NebulaDNS ฉบับสมบูรณ์: k3s, Route53, ความสามารถในการสังเกต และ DNS ระดับองค์กร",
+  "meta_title": "คุณสมบัติ NebulaDNS | k3s Route53 Prometheus DNS | TenthMatrix",
+  "meta_description": "ข้อมูลอ้างอิงคุณสมบัติครบถ้วนของ NebulaDNS: ส่วนข้อมูลสนิม, ส่วนควบคุม API, ตัวตรวจสอบการแพร่กระจาย, TSIG, แค็ตตาล็อกหน่วยเมตริก, ตัวดำเนินการ Kubernetes Helm, รูปแบบการรวม Route 53 และ k3s",
+  "meta_keywords": "คุณสมบัติ NebulaDNS, DNS ที่เชื่อถือได้, เมตริก Prometheus DNS, ตัวดำเนินการ Kubernetes DNS, การมอบหมาย Route53, CoreDNS, TSIG AXFR, แผนงาน DNSSEC, เซิร์ฟเวอร์ Rust DNS",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 811,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>แหล่งที่มา</h2><p>คู่มือนี้สังเคราะห์ไซต์<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS สาธารณะ</a>และที่เก็บ<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>github.com/bwalia/nebuladns</a>เหตุการณ์สำคัญและรายการ GA พัฒนาขึ้น—ตรวจสอบบันทึกประจำรุ่นสำหรับเวอร์ชันของคุณ สรุปสถาปัตยกรรม</p><h2></h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS architecture stack' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><p>สแต็กแยกระนาบควบคุม<strong></strong>(REST/gRPC, authn/z), การจัดการโซน<strong></strong>(การตรวจสอบ, การลงนาม DNSSEC, การคอมมิตแบบอะตอมมิก), การตรวจสอบการขยายพันธุ์<strong></strong>(รายงานรอง SOA),<strong>พื้นที่จัดเก็บโซนที่ระบุเนื้อหา</strong>และระนาบข้อมูล<strong>DNS</strong>(UDP/TCP/DoT/DoH/DoQ, การถ่ายโอน, ผู้ลงนามออนไลน์ DNSSEC)</p><h2>แค็ตตาล็อกคุณลักษณะ (“รวมแบตเตอรี่”)</h2><p>โครงการจำหน่าย<strong>ความสามารถหัวข้อข่าวสิบสองประการ</strong>— สรุปไว้ที่นี่จากหน้า Landing Page</p><ul><li><strong>API-อันดับแรก:</strong>REST/gRPC สำหรับโซน บันทึก การหมุนเวียน TSIG การย้อนกลับ—CLI/UI ในฐานะไคลเอ็นต์แบบธิน</li><li><strong>สังเกตได้ตามค่าเริ่มต้น:</strong>Prometheus<code>/metrics</code>, ป้ายกำกับประเภท enum, บันทึก JSON, การติดตาม OTLP</li><li><strong>การขยายพันธุ์ที่ได้รับการยืนยัน:</strong>การปรับใช้จะเสร็จสมบูรณ์เฉพาะเมื่อมีการประกาศให้รองรับทราบซีเรียล SOA ใหม่</li><li><strong>การพิมพ์ลายนิ้วมือของซอฟต์แวร์เพียร์:</strong>บันทึกสัญญาณสไตล์<code>version.bind</code>CHAOS ดังนั้นการอัพเกรด BIND ที่เงียบเชียบจึงไม่กัดกร่อนความซ้ำซ้อนอย่างมองไม่เห็น</li><li><strong>สนิมที่ปลอดภัย:</strong>ไม่มี<code>unsafe</code>; การฟัซซิ่งอย่างต่อเนื่องบนตัวแปลงสัญญาณ, ตัวแยกวิเคราะห์, ผู้ลงนาม DNSSEC</li><li><strong>Zero-GC tail latency:</strong>การจัดสรรเชิงกำหนด; สแนปชอตโซนปลอดล็อคผ่าน<code>arc-swap</code></li><li><strong>การกำหนดค่าเวอร์ชันอะตอม:</strong>โซนที่ระบุเนื้อหา; ย้อนกลับ/ย้อนกลับโดยไม่ต้องอ่านบางส่วน</li><li><strong>อนุกรม SOA แบบกำหนด:</strong>กลยุทธ์อนุกรมแบบโมโนโทนิคเพื่อหลีกเลี่ยงการกู้คืนแบบลิ่ม</li><li><strong>Kubernetes-native:</strong>Helm แผนภูมิ, โอเปอเรเตอร์, CRDs (<code>Zone</code>,<code>Record</code>,<code>Secondary</code>,<code>TsigKey</code>,<code>DeployGate</code>); เป็นมิตรกับ GitOps; เส้นทางการแทนที่คลัสเตอร์ CoreDNS-DNS บนแผนงาน</li><li><strong>สายไฟที่ตรงตามมาตรฐาน:</strong>ครอบคลุม RFC ที่เข้มงวด; ประเภทข้อผิดพลาดที่ชัดเจน (เช่น<code>QdCountMismatch</code>)</li><li><strong>ความซ้ำซ้อนที่คุณสามารถดูได้:</strong>แดชบอร์ดมีจุดประสงค์ในการถ่ายโอนการมองเห็นข้ามโซน</li><li><strong>ค่าเริ่มต้นที่แข็งตัว:</strong>การชุบแข็งของระบบ, seccomp, คอนเทนเนอร์ที่ไม่ใช่รูท, อิมเมจ distroless ขนาดเล็ก</li></ul><h2>การวางตำแหน่งเปรียบเทียบ (ระดับสูง)</h2><p>เว็บไซต์เผยแพร่เมทริกซ์การแข่งขัน (TinyDNS, BIND 9, Knot, NSD, PowerDNS, CoreDNS, NebulaDNS) ตัวสร้างความแตกต่างที่เรียกออกมา ได้แก่<strong>full REST API</strong>,<strong>ที่เปิดตลอดเวลา Prometheus</strong>,<strong>ประตูการแพร่กระจายในตัว</strong>,<strong>ตัวดำเนินการ Kubernetes + CRDs</strong>,<strong>peer ลายนิ้วมือ</strong>และ<strong>การใช้งานหน่วยความจำที่ปลอดภัย</strong>ใช้เมทริกซ์อัปสตรีมสำหรับการอ้างสิทธิ์เฉพาะเวอร์ชัน แค็ตตาล็อกเมตริก</p><h2>(ตัวอย่าง)</h2><p>ตัวอย่างจากไซต์ ได้แก่ ตัวนับคิวรี ฮิสโตแกรมเวลาในการตอบสนอง การติดตาม FORMERR ความพยายามของ AXFR การประทับเวลาความสำเร็จครั้งล่าสุดต่อเพียร์ การหน่วงเวลาในการเผยแพร่ และข้อมูลบิวด์ ถือว่าชื่อเป็นตัวอย่างจนกว่าคุณจะขูดบิลด์ที่กำลังรันอยู่</p><pre style='background:#0f172a;color:#e2e8f0;padding:1rem;border-radius:8px;overflow:auto;font-size:12px'>nebula_dns_queries_total{proto,qtype,rcode}\nnebula_dns_query_duration_seconds_bucket{proto,qtype,le}\nnebula_axfr_attempts_total{peer,zone,direction,result}\nnebula_peer_version_info{peer,software,version}\nnebula_zone_propagation_converged{zone}</pre><h2>k3s, CoreDNS และ AWS เส้นทาง&nbsp;53</h2><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route53 and k3s integration workflow' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><ul><li><strong>เส้นทาง&nbsp;53:</strong>เก็บการมอบหมายสาธารณะและการตรวจสุขภาพใน AWS; ชี้บันทึก NS ที่ระดับรอง NebulaDNS หรือเรียกใช้รูปแบบแยกขอบฟ้าที่ตรงกับโมเดลความปลอดภัยของคุณ</li><li><strong>k3s / RKE2:</strong>ปรับใช้ NebulaDNS ผ่าน Helm ด้วย PDB + ServiceMonitor; จัดตำแหน่ง CoreDNS<strong>ไปข้างหน้า/stub</strong>เป็น NebulaDNS สำหรับโซนที่คุณให้บริการอย่างเป็นทางการภายในพื้นที่</li><li><strong>ExternalDNS:</strong>บริดจ์เสริมจากวัตถุ Ingress/LB ไปยังบันทึกสาธารณะ—ประสานงานกับประตูการแพร่กระจาย ดังนั้นระบบอัตโนมัติจึงไม่สามารถทำเครื่องหมาย \"เสร็จสิ้น\" ได้ตั้งแต่เนิ่นๆ</li></ul><h2>โรดแมปหมายเหตุ</h2><p>โรดแมปสาธารณะแสดงรายการเหตุการณ์สำคัญผ่าน GA (ความสมบูรณ์ของสาย/โซน, การถ่ายโอน, DNSSEC, ตัวตรวจสอบการแพร่กระจาย, HA/หลายภูมิภาค, ตัวดำเนินการ) ตรวจสอบ<code>PROJECT_PROMPT.md</code>และเผยแพร่ใน repo เพื่อดูวันที่</p><h2>บทความเปิดตัวที่เกี่ยวข้อง</h2><p>สำหรับการเล่าเรื่อง \"ทำไมต้องเป็นตอนนี้ / ยุค AI\" โปรดอ่าน<a href='/th/docs/blogs/nebuladns-launch-game-changer-enterprise-dns-ai-era'>NebulaDNS: ผู้เปลี่ยนเกมในยุค AI</a></p><h2>TenthMatrix สามารถช่วย</h2><p>ได้อย่างไร เราช่วยให้องค์กรต่างๆ จัดส่งรูปแบบ<strong>DNS</strong>และ<strong>GitOps</strong>รอบสแต็กที่เชื่อถือได้ โปรดติดต่อ<strong>info@tenthmatrix.com</strong></p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 814
+    },
+    {
+      "name": "kubernetes",
+      "id": 815
+    },
+    {
+      "name": "security",
+      "id": 816
+    },
+    {
+      "name": "ai",
+      "id": 817
+    }
+  ],
+  "created_at": "2026-04-19T11:00:00Z",
+  "updated_at": "2026-04-19T11:00:00Z",
+  "status": true,
+  "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
+  "internal_id": 811,
+  "published_date": "2026-04-19"
+}

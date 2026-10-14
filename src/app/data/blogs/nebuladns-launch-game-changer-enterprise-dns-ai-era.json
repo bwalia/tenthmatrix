@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS is a safe-Rust authoritative DNS server with an API-first control plane, Prometheus metrics, propagation gates, and Kubernetes-native operations—built for visibility when AI services and agents depend on DNS more than ever.",
+  "sub_title": "API-first DNS, observability, and why the AI era needs a new authoritative stack",
+  "title": "NebulaDNS: Why Authoritative DNS Is a Game Changer in the AI Era",
+  "meta_title": "NebulaDNS | Authoritative DNS Rust AI Enterprise | TenthMatrix",
+  "meta_description": "Introduction to NebulaDNS: Rust authoritative DNS, API control plane, propagation verification, k3s and Route 53 patterns, and why enterprise DNS must be observable in the AI age.",
+  "meta_keywords": "NebulaDNS, authoritative DNS, Rust DNS, Kubernetes DNS, Route 53, CoreDNS, AI infrastructure, Prometheus DNS metrics, TSIG, AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Executive summary</h2><p><strong><a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a></strong> is a modern, <strong>API-first authoritative DNS server</strong> written in <strong>safe Rust</strong> (<code>#![forbid(unsafe_code)]</code>). It targets the operational gaps left by decades-old daemons and opaque C codebases: <strong>no metrics</strong>, <strong>no propagation truth</strong>, and <strong>no machine-readable control plane</strong>. In the <strong>AI era</strong>, DNS is not “just infrastructure”—it is how <strong>agents</strong>, <strong>inference endpoints</strong>, <strong>GPU nodes</strong>, and <strong>multi-cluster services</strong> find each other under policy. NebulaDNS treats <strong>every zone change as a release</strong>: verified secondaries, explicit metrics, and an API for every operator action—aligned with the public narrative on the <a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>project site</a> and <a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'>GitHub repository</a>.</p><h2>Why DNS matters more when AI is in production</h2><ul><li><strong>Service discovery for agents:</strong> Stable names for tool endpoints, retrieval services, and policy gateways beat hard-coded IPs across ephemeral clusters.</li><li><strong>Blast radius:</strong> A silent AXFR or secondary drift incident (like the real-world interop failures described on the site) can break redundancy long before LLM dashboards notice.</li><li><strong>Compliance and evidence:</strong> Audit-friendly DNS with structured logs and metrics supports SOC2-style evidence for who changed which zone and whether it propagated.</li></ul><h2>What makes NebulaDNS different</h2><p>The landing page positions NebulaDNS as replacing brittle stacks with <strong>one small binary</strong> that ships <strong>metrics</strong>, a <strong>control plane</strong>, and a path to a <strong>Kubernetes operator</strong>—so failures surface in <strong>seconds</strong>, not via customer tickets. Highlights include <strong>verified propagation</strong>, <strong>peer software fingerprinting</strong>, <strong>atomic versioned configuration</strong>, <strong>deterministic SOA serials</strong>, and <strong>Prometheus <code>/metrics</code></strong> with a compile-time cardinality budget.</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS control plane, zone store, and DNS data plane' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Integration snapshot: Route&nbsp;53 and k3s</h2><p>Enterprises often pair <strong>AWS Route&nbsp;53</strong> public zones with <strong>on-cluster or dedicated authoritative</strong> tiers. NebulaDNS fits as the <strong>authoritative source of truth</strong> for zones you own end-to-end, with <strong>Helm</strong>, <strong>ServiceMonitor</strong>, and <strong>operator/CRD</strong> storylines on the roadmap described on the site. The diagram below sketches a <strong>delegation + cluster</strong> pattern (not vendor-specific wiring—adapt to your net-segmentation).</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route 53 delegation to NebulaDNS and k3s CoreDNS integration' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Read next</h2><p>For the <strong>full feature catalogue</strong>, metrics examples, and deeper k3s/Route&nbsp;53 notes, see the companion post <a href='/en/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide'>NebulaDNS complete feature guide</a> on TenthMatrix.</p><h2>How TenthMatrix can help</h2><p>TenthMatrix designs <strong>platform engineering</strong> and <strong>SRE-ready DNS</strong> patterns—GitOps, observability, and safe cutovers—for cloud and edge. Contact <strong>info@tenthmatrix.com</strong> for architecture reviews or delivery support.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

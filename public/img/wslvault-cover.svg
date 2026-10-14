@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="WSLVault steal the server not the secrets">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c1410"/>
+      <stop offset="1" stop-color="#3f2a1a"/>
+    </linearGradient>
+    <style>
+      .title { fill: #f8fafc; font: 800 40px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #d6d3d1; font: 500 18px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .kicker { fill: #f59e0b; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #2a1c14; stroke: #78716c; stroke-width: 1.5; }
+      .a { fill: rgba(245,158,11,0.14); stroke: #f59e0b; stroke-width: 2; }
+      .b { fill: rgba(234,179,8,0.1); stroke: #eab308; stroke-width: 2; }
+      .c { fill: rgba(168,162,158,0.12); stroke: #a8a29e; stroke-width: 2; }
+      .lbl { fill: #fafaf9; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #a8a29e; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .brand { fill: #78716c; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="8" height="630" fill="#f59e0b"/>
+  <text class="kicker" x="48" y="52">WSLVAULT  |  OPEN SOURCE SECRETS MANAGER</text>
+  <text class="title" x="48" y="110">Steal the server.</text>
+  <text class="title" x="48" y="160">Not the secrets.</text>
+  <text class="sub" x="48" y="210">AES-256-GCM envelope encryption  |  per-tenant key hierarchy  |  zero plaintext at rest</text>
+
+  <rect class="a" x="48" y="260" width="340" height="150" rx="10"/>
+  <text class="lbl" x="72" y="310">Envelope encryption</text>
+  <text class="sm" x="72" y="342">DEK to tenant KEK to root KEK</text>
+  <text class="sm" x="72" y="366">KMS / HSM / Shamir unseal</text>
+
+  <rect class="b" x="420" y="260" width="340" height="150" rx="10"/>
+  <text class="lbl" x="444" y="310">True multi-tenancy</text>
+  <text class="sm" x="444" y="342">Team A cannot decrypt Team B</text>
+  <text class="sm" x="444" y="366">Cryptographic refusal</text>
+
+  <rect class="c" x="792" y="260" width="360" height="150" rx="10"/>
+  <text class="lbl" x="816" y="310">Ops-ready engines</text>
+  <text class="sm" x="816" y="342">KV  |  Transit  |  PKI  |  Leases</text>
+  <text class="sm" x="816" y="366">MFA  |  Regions  |  Audit chain</text>
+
+  <rect class="box" x="48" y="440" width="1104" height="110" rx="10"/>
+  <text class="lbl" x="72" y="490">Workstation WSL Vault</text>
+  <text class="sm" x="72" y="522">Console  |  CLI  |  Go / Python / Rust / TypeScript SDKs  |  Helm on Kubernetes  |  wslvault.org</text>
+
+  <text class="brand" x="48" y="590">WORKSTATION TOOLS</text>
+</svg>

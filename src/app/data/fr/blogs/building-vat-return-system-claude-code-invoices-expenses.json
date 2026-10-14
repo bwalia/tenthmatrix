@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-vat-return-claude-code-001",
+  "internal_id": 942,
+  "slug": "building-vat-return-system-claude-code-invoices-expenses",
+  "title": "Construire un système de retour VAT avec Claude Code à partir de votre base de données de factures et de dépenses",
+  "sub_title": "Comment je suis passé d'un tableau de factures Postgres et d'un dossier de PDF fournisseurs à HMRC Box 1 à 9 chiffres, avec des mathématiques déterministes, une piste d'audit et une porte d'approbation humaine",
+  "excerpt": "Les rendements trimestriels du VAT au Royaume-Uni signifiaient autrefois une feuille de calcul, un café et un petit acte de foi. Ce blog présente la version que j'utilise maintenant avec Claude Code : lisez la base de données des factures et des dépenses, classez chaque ligne par traitement VAT, calculez Box 1 à 9 avec des mathématiques purement Python, exécutez un PDF à sec, puis soumettez-le à HMRC MTD. Toujours avec une signature humaine.",
+  "meta_title": "Construisez un système de retour VAT avec Claude Code | TenthMatrix",
+  "meta_description": "Utilisez Claude Code pour lire la base de données de vos factures et dépenses, classer VAT, calculer HMRC Box 1 à 9, effectuer un essai à sec, puis soumettre à MTD - avec un moteur déterministe et une porte d'approbation humaine.",
+  "meta_keywords": "Claude Code VAT, automatisation des retours VAT, HMRC MTD, Making Tax Digital, comptabilité des agents IA, VAT Box 1 à 9, base de données de factures et dépenses, FinOps, moteur Python VAT, petite entreprise VAT",
+  "cover_image": "/img/vat-return-claude-code-cover.svg",
+  "images": [
+    {
+      "url": "/img/vat-return-claude-code-cover.svg",
+      "id": 942,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "VAT returns with Claude Code from invoices and expenses - cover diagram"
+    },
+    {
+      "url": "/img/vat-return-claude-code-workflow.svg",
+      "id": 943,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Claude Code VAT return workflow: source, ingest, categorise, VAT engine, submit, audit lanes plus decision matrix"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Un compagnon court et lisible. Pour une analyse approfondie d'environ 5 000 mots avec le code, les invites, le schéma, une procédure pas à pas HMRC MTD et les cas extrêmes, lisez <a href=\"/fr/articles/building-vat-return-system-claude-code-invoices-expenses\">le long article</a>.</em></p>\n<h2>Le VAT trimestriel a été la pire période de mon mois</h2>\n<p>Chaque trimestre, une petite entreprise britannique doit produire une déclaration VAT : neuf cases de chiffres (ventes, achats, VAT dus, VAT récupérables, marchandises de l'UE si vous êtes en Irlande du Nord, totaux, nets) et les soumettre via HMRC Making Tax Digital (MTD). Pendant des années, le mien ressemblait à ceci : ouvrez le tableau des factures dans Postgres, exportez un CSV, collez-le dans Excel, classez manuellement quelques centaines de lignes, exécutez des formules, copiez neuf nombres dans un pont MTD tiers, cliquez sur Soumettre, j'espère.</p>\n<p>Cela a fonctionné, mais c'était lent et avec perte. Les reçus ont disparu. Les changements de taux au milieu du trimestre ont brisé les formules. Une faute de frappe dans une classification VAT pourrait bouger <strong>Box 5</strong> par centaines de livres. Et la piste d'audit était \"croyez-moi, j'avais une feuille de calcul\".</p>\n<p>Cette année, j'ai reconstruit le tout comme un petit projet Claude Code qui lit ma base de données de factures et de dépenses, classe chaque ligne, calcule les neuf cases, exécute un PDF à sec, et le soumet ensuite seulement à HMRC MTD - avec une porte d'approbation humaine. Ce blog est la version courte. Le long article contient les invites, Python, le flux HMRC OAuth et les pièges.</p>\n<p><img alt=\"VAT revient de votre base de données avec Claude Code - schéma de couverture\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/vat-return-claude-code-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>Regardez la procédure pas à pas</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/oVXqZ_1UY-c?si=OnB907VIT5ORrr2P\" title=\"Lecteur vidéo YouTube\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">Une brève présentation du pipeline de retour VAT fonctionnant de bout en bout avec une base de données réelle (anonymisée) de factures + dépenses.</p>\n<h2>Le pipeline en cinq étapes</h2>\n<p><img alt=\"VAT renvoie le flux de travail Claude Code avec six voies : source, ingération, catégorisation, moteur VAT, soumission, audit\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/vat-return-claude-code-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>Connecter.</strong> Claude Code obtient un <em>en lecture seule</em> Connexion DB à mes factures et tableaux de dépenses. Il n'a jamais accès en écriture aux données source. Les CSV de Stripe, Wise, Revolut et quelques flux bancaires sont déposés dans <code>./imports/</code>.</li>\n<li><strong>Normaliser.</strong> Claude génère et exécute un petit script Python qui mappe chaque schéma source en une seule vue canonique : <code>id, date, supplier_or_customer, gross, net, vat_amount, vat_rate, vat_treatment, country_code, currency, source, run_key</code>. La devise étrangère est convertie en GBP en utilisant le taux mensuel HMRC. Toute la période est marquée par un idempotent <code>run_key</code> donc la réexécution est sûre.</li>\n<li><strong>Catégoriser + réconcilier.</strong> Claude classe chaque ligne dans un traitement VAT - standard 20 %, réduit 5 %, zéro, exonéré, hors champ d'application, autoliquidation, biens de l'UE, services de l'UE, importation différée VAT - en utilisant un petit <code>vat-rules.md</code> Je garde dans le repo. Il rapproche également les factures avec les paiements et signale les anomalies (montants nets négatifs, numéros VAT de fournisseur manquants, incompatibilités de codes de pays, fournisseurs non enregistrés VAT).</li>\n<li><strong>Calculer.</strong> Un module Python purement fonctionnel - <em>pas de LLM en maths</em> - lit les lignes classifiées et produit Box 1 à Box 9, ainsi qu'un rapport d'essai à sec dans Markdown. Le régime forfaitaire, la comptabilité de caisse et les succursales de comptabilité annuelle sont des chemins de code explicites et non des instructions rapides.</li>\n<li><strong>Soumettre.</strong> Ce n'est qu'après que moi (ou mon comptable) ayez signé l'essai à sec que le pipeline appelle le HMRC MTD API. Jeton OAuth2. En-têtes de prévention de la fraude. <code>GET obligations</code> pour trouver la période ouverte. <code>POST returns</code> avec <code>finalised: true</code>. Alors <code>GET liabilities</code> pour confirmer ce que je dois et quand.</li>\n</ol>\n<h2>Pourquoi Claude Code au lieu de Xero / QuickBooks / FreeAgent</h2>\n<p>Honnêtement, pour la plupart des petites entreprises, un package SaaS pour comptable est la bonne réponse. Ils ont la certification HMRC, des équipes d'assistance et votre comptable les connaît déjà. Alors pourquoi ai-je fait ça ?</p>\n<ul>\n<li><strong>J'utilise déjà Claude Code tous les jours</strong> pour le travail logiciel. Le coût marginal de son utilisation également pour assembler un pipeline VAT est faible.</li>\n<li><strong>Mes données sont locales.</strong> La base de données des factures ne quitte jamais ma machine. Le classificateur s'exécute sur les lignes ; les calculs sont en Python local ; seuls les neuf derniers numéros vont à HMRC. Pas de locataire SaaS, pas de tiers.</li>\n<li><strong>Je voulais un contrôle total sur les règles de catégorisation.</strong> Certains de mes fournisseurs sont délicats (services de l'UE, importation VAT reportée, quelques cas extrêmes détaxés). Encoder ces règles dans <code>vat-rules.md</code> + un module Python est pour moi plus rapide que de configurer un SaaS.</li>\n<li><strong>La piste d'audit m'appartient.</strong> Chaque invite Claude et chaque différence sont enregistrées dans un journal en ajout uniquement aux côtés de l'instantané de période signé. Si HMRC me le demande, je peux produire le calcul exact en quelques secondes.</li>\n</ul>\n<p>Si vous n'utilisez pas déjà Claude Code ou si vous n'aimez pas lire Python à minuit, veuillez utiliser Xero / QuickBooks / FreeAgent. Ce n'est pas une recommandation de déployer votre propre système VAT. C'est une histoire de ce qui est possible lorsque vous le faites.</p>\n<h2>Où se trouve et n'est pas le LLM</h2>\n<p>C’est la partie sur laquelle je veux parler fort. <strong>Claude n'est pas dans l'arithmétique VAT.</strong> Claude classe les lignes, suggère des rapprochements, génère et édite les modules Python déterministes qui font les calculs. Le calcul réel de Box 1 à Box 9 est une fonction pure avec des tests unitaires. La soumission HMRC nécessite une porte d'approbation humaine. Le rapport d’essais à sec est la source de vérité pour l’approbation. Si je ne peux pas expliquer pourquoi un nombre est ce qu'il est en regardant le code et les lignes classées, je ne le soumets pas.</p>\n<p>Il s’agit d’une règle stricte car la finance est réglementée et « l’IA l’a fait » n’est pas une défense sous MTD. Le <a href=\"/fr/articles/building-vat-return-system-claude-code-invoices-expenses\">long article</a> explique plus en détail comment tracer cette ligne dans votre propre implémentation.</p>\n<h2>Ce qu'il m'a coûté de construire et ce qu'il m'a coûté de fonctionner</h2>\n<p>Le temps de construction était d'environ une semaine de soirées ciblées - principalement consacrées à la normalisation du schéma, aux règles du classificateur et à l'écriture de tests pour le moteur. La danse HMRC MTD OAuth était la partie la plus lente ; Courir d’abord contre le bac à sable valait chaque minute.</p>\n<p>Pour fonctionner, chaque trimestre me coûte environ : mon abonnement Claude Code (déjà payé pour d'autres travaux) plus quelques centimes d'utilisation de jetons pour le classificateur. Le HMRC API lui-même est gratuit. Le moteur VAT et le journal d'audit s'exécutent localement sur mon Mac.</p>\n<h2>Avertissement important</h2>\n<p>Je suis ingénieur, pas expert-comptable. <strong>Cet article ne constitue pas un conseil fiscal.</strong> Avant d'exécuter quoi que ce soit de ce genre sur votre véritable compte HMRC, demandez à un comptable enregistré au Royaume-Uni d'examiner votre première déclaration de bout en bout. Utilisez le HMRC MTD <em>bac à sable</em> jusqu'à ce que vous et votre comptable soyez tous les deux heureux. Le coût d’une mauvaise soumission VAT est bien plus élevé que le coût d’une heure de travail d’un comptable.</p>\n<h2>Lire la version longue</h2>\n<p>Si vous voulez une image complète - le schéma CREATE TABLE exact, les invites Claude Code, le moteur Python déterministe avec tests unitaires, le flux HMRC MTD OAuth, les en-têtes de prévention de la fraude et une section approfondie sur les cas extrêmes (protocole Brexit / NI, autoliquidation, exemption partielle, régime forfaitaire, modifications de taux en cours de trimestre, factures multidevises, notes de crédit, dépôts) - lisez le <a href=\"/fr/articles/building-vat-return-system-claude-code-invoices-expenses\">long article</a>. C'est la version que j'aurais voulu lire avant de commencer.</p>\n<p><em>Regardez le <a href=\"https://www.youtube.com/watch?v=oVXqZ_1UY-c\" rel=\"noopener noreferrer\" target=\"_blank\">Procédure pas à pas YouTube</a>, abonnez-vous aux didacticiels de suivi (flux bancaires d'importation automatique, OCR pour les reçus, cron programmé + approbation Slack) et rappelez-vous : pas de conseils fiscaux, approbation du comptable requise.</em></p>\n</div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "vat",
+      "id": 951
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "developer-tools",
+      "id": 959
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

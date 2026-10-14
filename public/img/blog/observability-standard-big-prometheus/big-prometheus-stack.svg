@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Big Prometheus architecture options">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 24px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .p { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .a { fill: #fff7ed; stroke: #c2410c; stroke-width: 2; }
+      .b { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; }
+      .c { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .d { fill: #faf5ff; stroke: #7c3aed; stroke-width: 2; }
+      .core { fill: #0f172a; }
+      .ct { fill: #f8fafc; font: 700 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="44">Big Prometheus: four open-source paths to global scale</text>
+  <text class="sub" x="48" y="72">Inspired by the Monitoring Monitoring essay on Thanos, Cortex, M3DB and VictoriaMetrics</text>
+
+  <rect class="core" x="360" y="100" width="480" height="70" rx="10"/>
+  <text class="ct" x="420" y="142">Prometheus per cluster + Grafana + Alertmanager</text>
+
+  <rect class="a" x="48" y="220" width="260" height="420" rx="12"/>
+  <text class="h" x="68" y="260">Thanos</text>
+  <text class="p" x="68" y="295">Sidecar / receive</text>
+  <text class="p" x="68" y="320">Object store (S3)</text>
+  <text class="p" x="68" y="345">Global Querier</text>
+  <text class="p" x="68" y="380">Less centralised</text>
+  <text class="p" x="68" y="405">Data can stay local</text>
+  <text class="p" x="68" y="440">Pros: cheap history,</text>
+  <text class="p" x="68" y="465">CNCF ecosystem</text>
+  <text class="p" x="68" y="500">Cons: query fan-out,</text>
+  <text class="p" x="68" y="525">ops surface area</text>
+  <text class="p" x="68" y="560">Best: many clusters,</text>
+  <text class="p" x="68" y="585">object-store friendly</text>
+
+  <rect class="b" x="328" y="220" width="260" height="420" rx="12"/>
+  <text class="h" x="348" y="260">Cortex / Mimir</text>
+  <text class="p" x="348" y="295">Remote-write push</text>
+  <text class="p" x="348" y="320">Central multi-tenant</text>
+  <text class="p" x="348" y="345">SaaS-like model</text>
+  <text class="p" x="348" y="380">Pros: tenancy built-in,</text>
+  <text class="p" x="348" y="405">Grafana Cloud DNA</text>
+  <text class="p" x="348" y="440">Cons: heavier ops,</text>
+  <text class="p" x="348" y="465">write-path care</text>
+  <text class="p" x="348" y="500">Mimir is the modern</text>
+  <text class="p" x="348" y="525">Grafana Labs lineage</text>
+  <text class="p" x="348" y="560">Best: central platform</text>
+  <text class="p" x="348" y="585">team owns the store</text>
+
+  <rect class="c" x="608" y="220" width="260" height="420" rx="12"/>
+  <text class="h" x="628" y="260">VictoriaMetrics</text>
+  <text class="p" x="628" y="295">PromQL-compatible</text>
+  <text class="p" x="628" y="320">Single-node or cluster</text>
+  <text class="p" x="628" y="345">Cost/perf focus</text>
+  <text class="p" x="628" y="380">Pros: simple ops,</text>
+  <text class="p" x="628" y="405">strong compression</text>
+  <text class="p" x="628" y="440">Cons: smaller CNCF</text>
+  <text class="p" x="628" y="465">mindshare vs Thanos</text>
+  <text class="p" x="628" y="500">Also: managed cloud</text>
+  <text class="p" x="628" y="525">option from vendor</text>
+  <text class="p" x="628" y="560">Best: cost-sensitive</text>
+  <text class="p" x="628" y="585">self-hosted platforms</text>
+
+  <rect class="d" x="888" y="220" width="264" height="420" rx="12"/>
+  <text class="h" x="908" y="260">M3DB / Chronosphere</text>
+  <text class="p" x="908" y="295">Uber-born scale</text>
+  <text class="p" x="908" y="320">Hot historical reads</text>
+  <text class="p" x="908" y="345">Commercial path</text>
+  <text class="p" x="908" y="380">Pros: proven at</text>
+  <text class="p" x="908" y="405">extreme cardinality</text>
+  <text class="p" x="908" y="440">Cons: complexity;</text>
+  <text class="p" x="908" y="465">OSS vs SaaS choice</text>
+  <text class="p" x="908" y="500">Think carefully before</text>
+  <text class="p" x="908" y="525">you truly need this</text>
+  <text class="p" x="908" y="560">Best: hyperscale or</text>
+  <text class="p" x="908" y="585">buy Chronosphere</text>
+</svg>

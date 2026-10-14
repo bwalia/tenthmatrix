@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "การบล็อก Rust Async, Rayon และแอปพลิเคชันสมัยใหม่",
+  "sub_title": "“การบล็อก” หมายถึงอะไรใน async Rust เมื่อ Rayon เหมาะกับงานที่เกี่ยวข้องกับ CPU และเหตุใด Rust จึงยังคงแข็งแกร่งสำหรับ APIs, Edge, Agent และแพลตฟอร์ม CI/CD",
+  "excerpt": "TenthMatrix เกี่ยวกับการบล็อก async Rust, Rayon สำหรับงานที่เกี่ยวข้องกับ CPU และเหตุใด Rust จึงเหมาะกับ API, Edge, Agent และ CI/CD สมัยใหม่ - ได้รับแรงบันดาลใจจากคำแนะนำ Rayon ของ Alice Ryhl",
+  "meta_title": "Rust Async Blocking & Rayon สำหรับแอปสมัยใหม่ | TenthMatrix",
+  "meta_description": "การบล็อกมีความหมายอย่างไรใน async Rust เมื่อ Rayon ช่วยงานที่ถูกผูกกับ CPU และเหตุใด Rust จึงแข็งแกร่งสำหรับ APIs, edge, เอเจนต์ และแพลตฟอร์ม CI/CD",
+  "meta_keywords": "Rust, async Rust, Tokio, Rayon, spawn_blocking, การบล็อก, CPU-bound, Polyglot Benchmarks, APIs, edge, เอเจนต์, CI/CD, TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>กล่าวถึงสาเหตุที่ Rust ยังคงเป็นตัวเลือกระดับเฟิร์สคลาสสำหรับแอปพลิเคชันสมัยใหม่ และความหมายของ \"การบล็อก\" จริงๆ เมื่อคุณผสม Tokio เข้ากับงานหนัก CPU แรงบันดาลใจจาก<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Async ของ Alice Ryhl: อะไรคือการบล็อก?</a>(ส่วน Rayon) เจาะลึก: บทความยาว<a href=\"/th/articles/rust-async-blocking-rayon-modern-applications\"></a></em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>สิ่งสำคัญที่สุด</strong>ใน async Rust “การบล็อก” หมายความว่าให้รันไทม์เวิร์กเวอร์อยู่ห่างจาก<code>.await</code>นานพอที่จะทำให้งานอื่นๆ หยุดทำงาน ย้ายงาน CPU ที่มีราคาแพงออกจากพูลของ Tokio ซึ่งมักจะใช้<strong>Rayon</strong>บวกกับช่อง oneshot และรักษาเส้นทางอะซิงก์ที่ตอบสนองต่อ API, Edge Proxies, เอเจนต์ และ Control Plane CI/CD</div><h2>เหตุใด Rust จึงชนะสล็อตแอปพลิเคชั่นสมัยใหม่</h2>ทีม<p>เลือก Rust เมื่อพวกเขาต้องการความปลอดภัยของหน่วยความจำโดยไม่ต้องเสียภาษี GC หยุดชั่วคราว เวลาแฝงที่คาดการณ์ได้ภายใต้ภาระงาน และความสอดคล้องที่ระบบประเภทช่วยให้คุณทำงานได้อย่างถูกต้อง การรวมกันนั้นจะแสดงทุกที่ที่ TenthMatrix บิวด์: API ที่มีปริมาณงานสูง, Edge Gateway, รันไทม์ของตัวแทน และส่วนควบคุมการเลื่อนระดับที่ไม่สามารถหยุดทำงานเมื่อมีงาน CPU พุ่งสูงขึ้น</p><p>ไม่ใช่ “Rust สำหรับทุกสิ่ง” แดชบอร์ด<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>ของเราและโพสต์ร่วม - บล็อก<a href=\"/th/docs/blogs/polyglot-benchmarks-right-tool-right-application\">บทความ</a>/<a href=\"/th/articles/polyglot-benchmarks-right-tool-right-application\"></a>- เปรียบเทียบ Rust กับสแต็ค Go, Bun, JVM และขอบการเขียนสคริปต์บนปริมาณงาน HTTP เดียวกัน Rust มักจะนำไปสู่แถวที่ผูกกับ CPU และแถวที่มีการทำงานพร้อมกันจำนวนมาก รันไทม์อื่นๆ จะชนะตามความเร็วหรือการแปลงขอบ ประเด็นคือหลักฐาน แล้วก็ ADR</p><h2>“การบล็อก” หมายถึงอะไรใน async Rust</h2><p>Async runtimes (Tokio และเพื่อนๆ) สลับงานที่จุด<code>.await</code>หากงานของคุณเปลือง CPU ในระดับมิลลิวินาทีหรืออยู่ในโหมดสลีปด้วย<code>std::thread::sleep</code>โดยไม่รอ ผู้ปฏิบัติงานจะไม่สามารถจัดกำหนดการบุคคลอื่นบนเธรดนั้นได้ ภายในเครื่องคุณอาจไม่สังเกตเห็น (มีคอร์บางตัวซ่อนจุดบกพร่อง) ในการผลิต คุณจะไม่มีพนักงานเหลืออยู่และส่วนแฝงของความล่าช้าจะระเบิด</p><p>หลักง่ายๆ จากระบบนิเวศ: อยู่ภายในช่วงสิบถึงหลายร้อยไมโครวินาทีระหว่างการรอคอยบริการที่มีความอ่อนไหวต่อความหน่วง — และปฏิบัติต่อสิ่งใดก็ตามอีกต่อไปเสมือนเป็นงานที่เป็นของที่อื่น</p><h2>เมื่อ Rayon ช่วย (ผูกกับ CPU)</h2><ul><li><strong>spawn_blocking</strong>— การบล็อกพูลของ Tokio: เหมาะสำหรับการซิงค์ IO (ระบบไฟล์ การบล็อกไดรเวอร์ DB); ไม่เหมาะสมสำหรับ CPU ที่มีน้ำหนักมากเนื่องจากสามารถสมัครสมาชิกคอร์มากเกินไปได้</li><li><strong>Rayon</strong>— เธรดพูลขนาดเล็กขนาด CPU สำหรับตัววนซ้ำแบบขนานและการคำนวณราคาแพง บริดจ์ด้วย<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>ดังนั้นงาน async รอผลลัพธ์โดยไม่บล็อกเธรดรันไทม์</li><li><strong>เธรดเฉพาะ</strong>— สำหรับการวนซ้ำตลอดไป (ตัวจัดการการเชื่อมต่อ ผู้ปฏิบัติงานที่มีอายุการใช้งานยาวนาน) ที่ต้องไม่ใช้ความจุพูลอย่างถาวร</li></ul><p>รูปแบบ Rayon + oneshot นั้นเป็นสิ่งที่ Alice Ryhl ดำเนินการในส่วน<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon</a>- การดำเนินการของ TenthMatrix คือวิธีที่ตัวเลือกเหล่านั้นลงจอดในตัวแทนจัดส่งและแพลตฟอร์มของ Polyglot Estate ไม่ใช่การพิมพ์ซ้ำของบทช่วยสอน</p><h2>โดยที่สิ่งนี้ปรากฏในผลิตภัณฑ์ TenthMatrix</h2><ul><li><strong>APIs และ edge</strong>— ให้คำขอของผู้ปฏิบัติงานฟรีสำหรับ IO; พัดลม CPU แปลงเป็น Rayon เมื่อเส้นทางลัดต้องการ</li><li><strong>Agent</strong>— การฝังการเตรียมการ การประเมินแบทช์ และการดำเนินการด้านเครื่องมือไม่ควรทำให้ลูปการประสานหยุดชะงัก</li><li><strong>CI/CD แพลตฟอร์ม</strong>— การตรวจสุขภาพและกลไกการส่งเสริมการขาย (ดู<a href=\"/th/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>) ยังคงตอบสนองในขณะที่งานตรวจสอบที่หนักกว่าดำเนินไปนอกระบบ</li><li><strong>Kubernetes ดำเนินการ</strong>— โปรแกรมควบคุมเหตุการณ์ เช่น<a href=\"/th/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>จำเป็นต้องมีลูปควบคุมที่รวดเร็ว แม้ว่าการวิเคราะห์จะหนัก CPU ก็ตาม</li></ul><h2>อ่าน</h2>ถัดไป<ol><li><a href=\"/th/articles/rust-async-blocking-rayon-modern-applications\">บทความขนาดยาว</a>— เอกสารสรุป รูปแบบโค้ด และบันทึกสถาปัตยกรรม</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— Rust แบบสดเทียบกับหลักฐานอื่นๆ</li><li>Alice Ryhl —<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">Async: การบล็อกคืออะไร?</a></li></ol><p>เผยแพร่โดย<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

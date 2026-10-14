@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-filemytax-sa-001",
+  "internal_id": 944,
+  "slug": "can-ai-file-self-assessment-hmrc-filemytax",
+  "title": "¿Puede un sistema de inteligencia artificial procesar y presentar una declaración de impuestos Self Assessment a HMRC automáticamente?",
+  "sub_title": "Demostración de FileMyTax: un canal impulsado por IA desde archivos PDF bancarios hasta archivos HMRC MTD, creado por TenthMatrix para CognoAI",
+  "excerpt": "¿Puede AI presentar UK Self Assessment a HMRC? FileMyTax muestra PDF bancario → extraer → clasificar → calcular → MTD con una puerta humana. Construido por TenthMatrix para CognoAI. No asesoramiento fiscal.",
+  "meta_title": "¿Puede AI presentar archivos Self Assessment a HMRC? | FileMyTax",
+  "meta_description": "Demostración de FileMyTax: la IA extrae archivos PDF bancarios, clasifica transacciones SA, calcula impuestos 2025-26, presenta archivos a través de HMRC MTD, con revisión humana. Construido por TenthMatrix para CognoAI.",
+  "meta_keywords": "Autoevaluación AI, FileMyTax, HMRC MTD, declaración automática de impuestos, extracto bancario AI, CognoAI, TenthMatrix, Making Tax Digital, impuesto de propietario",
+  "cover_image": "/img/filemytax-sa-cover.svg",
+  "images": [
+    {
+      "url": "/img/filemytax-sa-cover.svg",
+      "id": 944,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "FileMyTax AI to HMRC Self Assessment - cover diagram"
+    },
+    {
+      "url": "/img/filemytax-sa-workflow.svg",
+      "id": 945,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "FileMyTax six-lane workflow from bank PDF to HMRC MTD"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Un compañero breve y de lectura rápida. Para obtener información detallada sobre arquitectura, HMRC OAuth, ejemplos de curl y limitaciones, lea <a href=\"/es/articles/can-ai-file-self-assessment-hmrc-filemytax\">el artículo largo</a>. <strong>No asesoramiento fiscal.</strong></em></p>\n<h2>¿Puede AI presentar su Self Assessment a HMRC?</h2>\n<p>Cada enero aparece la misma pregunta: ¿puede una IA leer mis extractos bancarios y presentar mi declaración de impuestos del Reino Unido? La respuesta práctica de un sistema que construimos para <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">CognoAI</a> - publicado aquí como <strong>FileMyTax</strong> - es <strong>sí para preparación, no para presentación desatendida</strong>. La IA puede extraer transacciones de archivos PDF, clasificarlas en categorías HMRC Self Assessment, conciliar saldos y calcular los impuestos 2025-26 de forma determinista; un humano aún revisa, un contador aún aprueba y el contribuyente aún completa HMRC OAuth antes de que algo llegue a producción MTD.</p>\n<p>TenthMatrix desarrolló la plataforma subyacente; CognoAI posee la propiedad intelectual. Esta publicación explica cómo se ve eso en seis llamadas API, sin utilizar nombres de productos que pertenecen a otros lugares.</p>\n<p><img alt=\"Cubierta FileMyTax AI a HMRC Self Assessment\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/filemytax-sa-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<h2>Mira la demostración</h2>\n<div style=\"margin: 2rem 0; text-align: center;\">\n<iframe allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen=\"\" frameborder=\"0\" height=\"315\" referrerpolicy=\"strict-origin-when-cross-origin\" src=\"https://www.youtube.com/embed/dDx5n0975vw\" title=\"Demostración de FileMyTax: AI Self Assessment a HMRC\" width=\"560\"></iframe>\n</div>\n<p style=\"text-align:center;font-size:0.9rem;color:#64748b;margin-top:-0.5rem;\">Almacene PDF mediante clasificación y cálculo en el entorno de pruebas HMRC MTD, con puertas de revisión en la interfaz de usuario.</p>\n<h2>El proceso de seis pasos</h2>\n<p><img alt=\"Flujo de trabajo FileMyTax: cliente, ingesta, IA, motor de impuestos, HMRC, auditoría\" decoding=\"async\" height=\"720\" loading=\"lazy\" src=\"/img/filemytax-sa-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<ol>\n<li><strong>Subir</strong> — <code>POST /fastapi/api/upload</code> envía el PDF a MinIO a través de nginx.</li>\n<li><strong>Extracto</strong> — pdfplomber para mesas nativas; Claude Vision para exploraciones.</li>\n<li><strong>Clasificar</strong> — LLM asigna líneas a categorías de gastos de SA con puntuaciones de confianza.</li>\n<li><strong>Conciliar</strong> — verificaciones de saldo y acumulaciones de ingresos/gastos.</li>\n<li><strong>Calcular</strong> – impuesto sobre la renta determinista 2025-26 + Clase 4 NI (sin LLM en matemáticas).</li>\n<li><strong>Archivo</strong> — <code>POST /fastapi/api/file</code> a HMRC MTD después de OAuth y la aprobación humana.</li>\n</ol>\n<p>La autenticación JWT proviene de opsapi; NINO está cifrado en reposo; Gatus en el puerto 8085 vigila cada servicio.</p>\n<h2>quien lo construyo</h2>\n<p><a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">CognoAI</a> posee la propiedad intelectual del sistema y la dirección del producto. <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> creó la plataforma Dockerised: enrutamiento de ruta nginx, servicios de IA FastAPI, autenticación opsapi, PostgreSQL, MinIO, monitoreo Gatus y la interfaz de usuario de revisión Next.js. Publicamos bajo el nombre. <strong>FileMyTax</strong> describir la demostración; No utilizamos otros nombres de productos CognoAI en este artículo.</p>\n<h2>Por qué ayuda la IA y dónde termina</h2>\n<p>La IA gana en velocidad y coherencia en cientos de líneas bancarias, señalización de anomalías y asignación de descripciones confusas a categorías HMRC. No reemplaza el juicio: transferencias versus alquileres, capital versus ingresos, y personal versus negocios todavía necesitan ojos. El motor de impuestos es Python puro con campos DECIMALES, la misma separación en la que insistimos para las finanzas reguladas: <strong>LLM para lenguaje, código para ley</strong>.</p>\n<p>En las pruebas utilizamos <strong>Accesorios ficticios de declaración de propietario al estilo HSBC</strong> (solo datos sintéticos) con escenarios de alta rotación para enfatizar la extracción, incluidas lecciones en las que pdfplomber eligió la columna incorrecta (saldo versus pago). Esos fracasos son la razón por la que existen la reconciliación y la revisión.</p>\n<h2>Arquitectura de un vistazo</h2>\n<p>Un nginx en localhost está al frente de todo: Next.js para humanos, FastAPI para IA y archivado, opsapi para iniciar sesión y NINO cifrado. PostgreSQL almacena extractos y transacciones clasificadas; MinIO contiene archivos PDF. La calculadora de impuestos aplica bandas del Reino Unido 2025/26 en Python (reducción de asignación personal, impuesto sobre la renta, Clase 4 NI) con campos monetarios DECIMAL(18,2). Esa división es intencional: los reguladores y los contadores necesitan matemáticas reproducibles, no tokens probabilísticos.</p>\n<h2>Beneficios para los equipos financieros</h2>\n<ul>\n<li><strong>Velocidad</strong> — cientos de líneas clasificadas en minutos, no en días en Excel.</li>\n<li><strong>Consistencia</strong> — las mismas reglas de categoría HMRC en cada fila.</li>\n<li><strong>Anomalías</strong> — la conciliación saca a la luz errores de equilibrio y mapeo tempranamente.</li>\n<li><strong>Pista de auditoría</strong> — estado de procesamiento, confianza, anulaciones con motivos.</li>\n<li><strong>Privacidad</strong> — opción de pila local sin pasar declaraciones a través de un inquilino SaaS.</li>\n<li><strong>tiempo de contador</strong> – los revisores ven un borrador de declaración, no archivos PDF sin formato.</li>\n</ul>\n<h2>HMRC MTD en un párrafo</h2>\n<p>Guarde NINO a través de opsapi, inicie OAuth, obtenga negocios y obligaciones, luego archive en la zona de pruebas hasta que su contador esté satisfecho. Los encabezados de prevención de fraude y la actualización de tokens se manejan en el lado del servidor. Voltear <code>HMRC_ENVIRONMENT=production</code> sólo cuando lo dices en serio.</p>\n<h2>Descargos de responsabilidad</h2>\n<ul>\n<li><strong>No asesoramiento fiscal.</strong> Consiga que un contador del Reino Unido lo revise antes de realizar el envío en vivo.</li>\n<li><strong>FileMyTax</strong> es el nombre de la demostración en este artículo; Otros nombres de productos de CognoAI están separados; no los combine.</li>\n<li><strong>Datos bancarios ficticios</strong> donde se mencionan los accesorios de prueba.</li>\n<li><strong>Sin presentación desatendida</strong> - puerta humana antes <code>POST /api/file</code>.</li>\n</ul>\n<h2>Lo que verás en el vídeo.</h2>\n<p>El tutorial de YouTube muestra la interfaz de usuario de Next.js: cargue una declaración, observe el progreso de extracción y clasificación, inspeccione las puntuaciones de confianza, ejecute el cálculo para el año fiscal 2025-26, conecte HMRC en la zona de pruebas y haga una pausa en el paso del archivo hasta que un humano lo confirme. Esa pausa es la decisión sobre el producto, no una característica faltante. La presentación totalmente desatendida sería más rápida y jurídicamente frágil.</p>\n<p>Los propietarios con múltiples cuentas de alquiler y los comerciantes individuales con líneas comerciales y personales mixtas son el público principal. Los equipos de operaciones financieras que los apoyan obtienen el mismo canal: menos exportaciones de CSV, menos noches en vela antes del 31 de enero, más tiempo para explicar las cifras en lugar de encontrarlas.</p>\n<h2>Pruébalo de forma segura</h2>\n<p>Clona la pila, ejecuta <code>./start.sh</code>, pegue los ejemplos de rizos del artículo extenso y permanezca en la zona de pruebas de HMRC hasta que su contador haya revisado una declaración completa. Colocar <code>HMRC_ENVIRONMENT=sandbox</code>, cree un usuario de prueba si es necesario y trate <code>POST /api/file</code> como un misil de producción, porque en modo real lo es.</p>\n<p>Si el puerto 80 de nginx está ocupado, utilice <code>NGINX_HOST_PORT=8080</code>. Si JWT falla repentinamente, verifique que opsapi y FastAPI compartan el mismo secreto. Si la conciliación lo exige, corrija la asignación de columnas del PDF antes de anular las clasificaciones: ese orden ahorra horas.</p>\n<h2>OAuth no es opcional</h2>\n<p>HMRC no aceptará una presentación de un trabajo cron en segundo plano con solo un número de seguro nacional. El contribuyente debe autorizar su solicitud a través de Government Gateway, que devuelve tokens que el backend almacena y actualiza. FileMyTax aparece en la configuración: guarde un NINO cifrado, abra la URL de autorización de HMRC, regrese mediante devolución de llamada, busque negocios y obligaciones, luego presente el archivo. Los encabezados de prevención de fraude acompañan a cada llamada API: la identificación del dispositivo, el agente de usuario y el resto del Gov-* configuran la plataforma desde el cliente.</p>\n<p>Es por eso que \"automático\" en las diapositivas de marketing realmente significa <em>preparación automática con una puerta deliberada humana y OAuth al final</em>. La ingeniería sigue siendo valiosa: los seis pasos de curl son repetibles, comprobables en sandbox y observables en Gatus.</p>\n<h2>Lea la versión larga</h2>\n<p>El <a href=\"/es/articles/can-ai-file-self-assessment-hmrc-filemytax\">artículo largo</a> cubre atribución, arquitectura SVG, ejemplos completos de rizos, tabla de beneficios, pasos de OAuth, limitaciones, monitoreo de Gatus, parámetros fiscales 2025-26 y hoja de ruta. Mirar <a href=\"https://youtu.be/dDx5n0975vw\" rel=\"noopener noreferrer\" target=\"_blank\">la demostración de youtube</a> y visitar <a href=\"https://cognoai.uk/\" rel=\"noopener noreferrer\" target=\"_blank\">cognoai.es</a> para el contexto del producto; <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a> para ingeniería.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "filemytax",
+      "id": 960
+    },
+    {
+      "name": "self-assessment",
+      "id": 961
+    },
+    {
+      "name": "hmrc",
+      "id": 952
+    },
+    {
+      "name": "mtd",
+      "id": 953
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "accounting",
+      "id": 954
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "tax-return",
+      "id": 962
+    },
+    {
+      "name": "cognoai",
+      "id": 963
+    }
+  ],
+  "created_at": "2026-05-20T09:00:00Z",
+  "updated_at": "2026-05-20T09:00:00Z",
+  "published_date": "2026-05-20",
+  "status": true
+}

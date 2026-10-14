@@ -1,0 +1,68 @@
+@use '../../styles/mixins' as *;
+
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  max-width: 100%;
+  border-radius: var(--tm-radius-pill);
+  background: var(--tm-accent-soft);
+  color: var(--tm-accent);
+  font-family: var(--tm-font-mono);
+  font-weight: var(--tm-weight-medium);
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.md {
+  min-height: 32px;
+  padding: 0.3rem 0.8rem;
+  font-size: var(--tm-text-xs);
+}
+
+.sm {
+  min-height: 24px;
+  padding: 0.15rem 0.6rem;
+  font-size: var(--tm-text-2xs);
+}
+
+.link {
+  border: 1px solid transparent;
+  transition:
+    border-color var(--tm-duration-fast) var(--tm-ease-standard),
+    background-color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  // 44px hit target for the 32px pill
+  &.md::after {
+    content: '';
+    position: absolute;
+    inset: -6px -2px;
+  }
+
+  &:hover {
+    border-color: var(--tm-accent-line);
+    color: var(--tm-accent);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.active {
+  background: var(--tm-accent);
+  color: var(--tm-accent-contrast);
+
+  &:hover {
+    color: var(--tm-accent-contrast);
+    border-color: transparent;
+  }
+}
+
+.count {
+  opacity: 0.8;
+}

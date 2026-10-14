@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: agentes en la nube programados, subrutinas y corrutinas",
+  "sub_title": "Ejecuta Claude Code según una programación, desde una llamada a la API o con eventos de GitHub, sin portátil y sin servidor. La guía de cinco minutos.",
+  "excerpt": "Las Routines de Claude Code ejecutan tareas de agente guardadas en la nube de Anthropic según una programación, mediante API o con eventos de GitHub. Cómo funcionan, cómo configurar una y cómo encadenarlas.",
+  "meta_title": "Claude Code Routines: agentes programados en la nube | TenthMatrix",
+  "meta_description": "Claude Code Routines: disparadores por programación, API y GitHub, configuración, diseño de prompts, subrutinas con subagentes, corrutinas, seguridad y límites.",
+  "meta_keywords": "Claude Code Routines, agentes de IA programados, programación en Claude Code, /schedule, agentes en la nube, disparador de GitHub, disparador de API, subagentes, subrutinas, corrutinas, Anthropic, automatización con IA, automatización DevOps",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code ya no necesita que estés delante del teclado. Las <strong>Routines</strong> (rutinas) ejecutan tareas de agente guardadas en la nube de Anthropic según una programación, a partir de una llamada a la API o cuando ocurre algo en GitHub. Te explicamos qué son, cómo configurar una y dos patrones que llamamos subrutinas (sub-routines) y corrutinas (co-routines). Para la guía completa, lee el <a href=\"/es/articles/claude-code-routines-scheduled-cloud-agents\">artículo extenso</a>.</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: agentes en la nube programados, subrutinas y corrutinas\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>En resumen.</strong> Una routine es una tarea de Claude Code que configuras una sola vez (prompt, repositorios, entorno en la nube, conectores) y que se activa automáticamente. Se ejecuta como una sesión autónoma completa en la nube, así que puedes dejar el portátil cerrado. Las routines están en vista previa de investigación (desde el 14 de abril de 2026) en los planes Pro, Max, Team y Enterprise.\n</div>\n\n<h2>Tres formas de iniciar una routine</h2>\n<ul>\n  <li><strong>Programación:</strong> cada hora, a diario, entre semana, semanalmente o en un momento puntual, indicado en tu zona horaria local. Hay cron personalizado disponible mediante <code>/schedule update</code>, con un intervalo mínimo de una hora.</li>\n  <li><strong>API:</strong> un endpoint HTTPS propio de cada routine, con su propio token bearer. Tu herramienta de alertas o tu pipeline de despliegue le envía un POST, opcionalmente con texto de contexto. Ese texto llega etiquetado como no fiable, de modo que un token filtrado no puede reescribir las instrucciones de la routine.</li>\n  <li><strong>GitHub:</strong> eventos de pull request o de release, filtrados por rama, etiqueta, autor, estado de borrador o de fusión.</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"Anatomía de una ejecución de routine: disparadores, routine guardada, sesión en la nube y resultados\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Configura una en dos minutos</h2>\n<ol>\n  <li>Abre <code>claude.ai/code/routines</code> y elige <strong>New routine</strong>, o escribe <code>/schedule</code> en la CLI de Claude Code.</li>\n  <li>Escribe un prompt autosuficiente: alcance, acciones permitidas, destino del resultado y qué hacer cuando no haya nada que hacer.</li>\n  <li>Elige los repositorios y un entorno. Quita los conectores que la tarea no necesite, porque todos se incluyen por defecto.</li>\n  <li>Añade un disparador, elige <strong>Run now</strong> para probarla y luego lee la transcripción. Una insignia verde solo significa que la sesión se ejecutó, no que la tarea tuviera éxito.</li>\n</ol>\n\n<h2>Subrutinas: una ejecución, muchos ayudantes</h2>\n<p>Este es el nombre que damos a un patrón, no una funcionalidad de Anthropic. El prompt de la routine orquesta y delega cada paso en un <strong>subagente</strong> (<code>.claude/agents/</code>) o en una <strong>skill</strong> incluida en el repositorio. Cada ayudante recibe su propia ventana de contexto y solo las herramientas que necesita, lo que mantiene las ejecuciones largas y desatendidas más centradas, baratas y seguras.</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"Subrutinas: un prompt orquestador que delega en subagentes y skills\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Corrutinas: routines que se pasan el trabajo</h2>\n<p>Las routines no pueden llamarse entre sí directamente, pero sí cooperar a través de artefactos duraderos. Por ejemplo, una routine nocturna abre un PR en borrador, una routine activada por GitHub lo revisa, una persona lo fusiona, una routine activada por la fusión actualiza la documentación y tu pipeline de despliegue llama a una routine de verificación. Usa filtros para que ninguna routine se dispare con su propia salida y mantén una aprobación humana de la fusión en la cadena.</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"Corrutinas: cuatro routines que cooperan mediante eventos de GitHub, etiquetas y llamadas a la API\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Límites que conviene conocer</h2>\n<ul>\n  <li>En el lanzamiento, los límites diarios de ejecuciones eran 5 en Pro, 15 en Max y 25 en Team y Enterprise, además del uso normal de la suscripción. Las ejecuciones puntuales no cuentan.</li>\n  <li>Las routines actúan como <strong>tú</strong>. Los commits, los PR y los mensajes de Slack llevan tu identidad. Claude solo hace push a ramas <code>claude/</code> salvo que se le indique lo contrario, y nunca a ramas protegidas.</li>\n  <li>¿Necesitas sondeo cada minuto o archivos locales? Usa <code>/loop</code> o las tareas programadas de Desktop.</li>\n</ul>\n\n<p><strong>Sigue leyendo:</strong> la <a href=\"/es/articles/claude-code-routines-scheduled-cloud-agents\">guía completa</a> cubre la seguridad del payload de la API, plantillas de prompts, ejemplos de subagentes, comparativas con GitHub Actions, n8n y Trigger.dev, y una lista de verificación de gobernanza. Fuentes: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">anuncio de Anthropic</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">documentación de Claude Code</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

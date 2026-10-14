@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Ring Promoter v1.0.2 CI/CD Orbit + Lanes">
+  <title>Ring Promoter v1.0.2 - CI/CD Orbit + Lanes</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1c2c"/>
+      <stop offset="1" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="10" height="630" fill="#86efac"/>
+
+  <text fill="#86efac" font-family="system-ui,sans-serif" font-size="16" font-weight="700" letter-spacing="3" x="56" y="64">RING PROMOTER  /  v1.0.2</text>
+  <text fill="#ffffff" font-family="system-ui,sans-serif" font-size="44" font-weight="800" x="56" y="130">CI/CD Orbit + Lanes</text>
+  <rect x="56" y="150" width="380" height="4" fill="#86efac"/>
+  <text fill="#bbf7d0" font-family="system-ui,sans-serif" font-size="20" font-weight="600" x="56" y="195">Two views of the same promotion truth</text>
+
+  <!-- Object cards with titles + subtitles -->
+  <g transform="translate(56,240)">
+    <g>
+      <title>Orbit - fleet view</title>
+      <rect x="0" y="0" width="220" height="140" rx="14" fill="#052e16" stroke="#86efac" stroke-width="2"/>
+      <text fill="#86efac" font-family="system-ui,sans-serif" font-size="24" font-weight="800" x="24" y="48">Orbit</text>
+      <text fill="#ffffff" font-family="system-ui,sans-serif" font-size="16" font-weight="700" x="24" y="82">Fleet view</text>
+      <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14" x="24" y="112">How far each app earned</text>
+    </g>
+    <g transform="translate(240,0)">
+      <title>Lanes - matrix view</title>
+      <rect x="0" y="0" width="220" height="140" rx="14" fill="#052e16" stroke="#86efac" stroke-width="2"/>
+      <text fill="#86efac" font-family="system-ui,sans-serif" font-size="24" font-weight="800" x="24" y="48">Lanes</text>
+      <text fill="#ffffff" font-family="system-ui,sans-serif" font-size="16" font-weight="700" x="24" y="82">Matrix view</text>
+      <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14" x="24" y="112">APP x INT/TEST/ACC/PROD</text>
+    </g>
+    <g transform="translate(480,0)">
+      <title>Rings - promotion pipeline</title>
+      <rect x="0" y="0" width="220" height="140" rx="14" fill="#052e16" stroke="#86efac" stroke-width="2"/>
+      <text fill="#86efac" font-family="system-ui,sans-serif" font-size="24" font-weight="800" x="24" y="48">Rings</text>
+      <text fill="#ffffff" font-family="system-ui,sans-serif" font-size="16" font-weight="700" x="24" y="82">Promotion pipeline</text>
+      <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14" x="24" y="112">int - test - acc - prod</text>
+    </g>
+  </g>
+
+  <!-- Mini orbit diagram with object titles -->
+  <g transform="translate(860,200)">
+    <title>Orbit diagram - Earth and rings</title>
+    <circle cx="120" cy="140" r="26" fill="#22c55e"/>
+    <text fill="#052e16" font-family="system-ui,sans-serif" font-size="12" font-weight="800" x="100" y="144">Earth</text>
+    <circle cx="120" cy="140" r="58" fill="none" stroke="#86efac" stroke-width="2"/>
+    <circle cx="120" cy="140" r="92" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="5 5"/>
+    <circle cx="120" cy="140" r="126" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="4 7"/>
+    <circle cx="120" cy="82" r="10" fill="#86efac"/>
+    <text fill="#bbf7d0" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="136" y="76">PROD</text>
+    <circle cx="198" cy="120" r="9" fill="#4ade80"/>
+    <text fill="#bbf7d0" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="212" y="116">ACC</text>
+    <circle cx="210" cy="190" r="9" fill="none" stroke="#94a3b8" stroke-width="2"/>
+    <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="224" y="194">TEST</text>
+    <circle cx="120" cy="258" r="9" fill="none" stroke="#64748b" stroke-width="2"/>
+    <text fill="#94a3b8" font-family="system-ui,sans-serif" font-size="12" font-weight="700" x="136" y="275">INT</text>
+  </g>
+
+  <text fill="#64748b" font-family="system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="2" x="56" y="560">ringpromoter.com  /  workstation.co.uk</text>
+  <text fill="#64748b" font-family="system-ui,sans-serif" font-size="14" x="56" y="590">Solid = newest earned   Hollow = older</text>
+</svg>

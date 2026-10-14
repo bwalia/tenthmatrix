@@ -1,0 +1,274 @@
+{
+  "slug": "ai-guardrails-tool-safety",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "AI guardrails and tool safety",
+  "subtitle": "Put allow / deny / escalate in front of shell, deploy, delete and data-mutating tools — and measure false negatives like production incidents.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "17 min",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": null,
+  "hero_image": "/img/insights/tool-safety.svg",
+  "hero_alt": "AI guardrails and tool safety",
+  "meta": {
+    "title": "AI guardrails and tool safety | TenthMatrix Insights",
+    "description": "Put allow / deny / escalate in front of shell, deploy, delete and data-mutating tools — and measure false negatives like production incidents.",
+    "keywords": "Jev, System One, AI agents, model routing, TenthMatrix Insights, LLM",
+    "og_image": "/img/insights/tool-safety.svg"
+  },
+  "takeaways": [
+    "Tool safety is a decision problem, not a prose refusal problem.",
+    "Optimise for false negatives on irreversible actions.",
+    "Never test destructive gates against production."
+  ],
+  "toc": [
+    {
+      "id": "why",
+      "label": "Why this matters"
+    },
+    {
+      "id": "policy",
+      "label": "Reference policy"
+    },
+    {
+      "id": "bench",
+      "label": "Benchmark C methodology"
+    },
+    {
+      "id": "known",
+      "label": "What we know / don’t"
+    },
+    {
+      "id": "extended-notes",
+      "label": "Extended implementation notes"
+    },
+    {
+      "id": "conclusion",
+      "label": "Conclusion"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "Why this matters",
+      "id": "why"
+    },
+    {
+      "type": "p",
+      "text": "Coding harnesses learned the hard way that agents will cheerfully run dangerous commands when persuaded. LangChain’s Auto Mode narrative argues that cheap classifiers make the same pattern available to every agent runtime."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/tool-safety.svg",
+      "caption": "TenthMatrix tool-safety gate before execution.",
+      "alt": "TenthMatrix tool-safety gate before execution."
+    },
+    {
+      "type": "h2",
+      "text": "Reference policy",
+      "id": "policy"
+    },
+    {
+      "type": "ol",
+      "items": [
+        "Classify tool name + args + recent trace.",
+        "Score irreversibility and blast radius.",
+        "Deny on high risk; escalate on medium/uncertain; allow on low.",
+        "Log evidence for later training and audit."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "Benchmark C methodology",
+      "id": "bench"
+    },
+    {
+      "type": "p",
+      "text": "TenthMatrix’s suite uses synthetic tool calls spanning read_file, write_file, shell, git, deploy, delete, database and network. Labels are reviewed. Metrics: detection rate, false positives, false negatives, latency, cost. Destructive calls execute only in ephemeral sandboxes — never against shared prod."
+    },
+    {
+      "type": "h2",
+      "text": "What we know / don’t",
+      "id": "known"
+    },
+    {
+      "type": "p",
+      "text": "We know policy middleware is shipping in multiple ecosystems. We do not know a universal risk taxonomy — your deny list is product-specific."
+    },
+    {
+      "type": "h2",
+      "text": "Extended implementation notes",
+      "id": "extended-notes"
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 1: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 2: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 3: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 4: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 5: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 6: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 7: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 8: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 9: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 10: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 11: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 12: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 13: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 14: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 15: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 16: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 17: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 18: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 19: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for AI guardrails and tool safety: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 20: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "type": "p",
+      "text": "If an action can delete customer data, the gate must fail closed. Speed matters, but false negatives matter more."
+    }
+  ],
+  "related": [
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": ""
+    },
+    {
+      "href": "/insights/jev/benchmarks",
+      "label": "Benchmark lab",
+      "note": ""
+    },
+    {
+      "href": "/insights/ai-model-selection",
+      "label": "Model selection",
+      "note": ""
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobs",
+      "note": ""
+    },
+    {
+      "href": "/applied-ai",
+      "label": "Applied AI",
+      "note": ""
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Vendor announcement."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Harness patterns."
+    },
+    {
+      "title": "TypeSafe docs index",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Official primitives and API."
+    },
+    {
+      "title": "LangChain — Jev as agent evaluator",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "Judge variance experiment."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Triage tables."
+    },
+    {
+      "title": "AyAutomate independent benchmark",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 decisions."
+    },
+    {
+      "title": "JevBench RESULTS",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public harness."
+    },
+    {
+      "title": "OpenAI — Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "note": "Agent platform context in the wider landscape."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Why is Jev useful here?",
+      "a": "Because the output is a probability you can threshold in code, at latencies that make per-tool gating affordable — according to vendor and early independent latency reports. Still validate on your labels."
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "uuid": "blog-ring-promoter-earn-prod-001",
+  "internal_id": 969,
+  "slug": "ring-promoter-every-release-earns-production",
+  "title": "Every Release Earns Production: Making Promotions Boring and Safe",
+  "sub_title": "Ordered rings int → test → acc → prod, health gates, version verification, auto-rollback, and humans still controlling production",
+  "excerpt": "Ring Promoter makes promotion a protocol: health-gated hops through int → test → acc → prod, auto-rollback, and full history — every release earns production.",
+  "meta_title": "Every Release Earns Production | Ring Promoter",
+  "meta_description": "Ring Promoter: health-gated promotions through int → test → acc → prod, version verification, auto-rollback, and human control of production.",
+  "meta_keywords": "Ring Promoter, every release earns production, deployment rings, health-gated promote, auto-rollback, Kubernetes, continuous delivery, TenthMatrix",
+  "cover_image": "/img/ring-promoter-earn-prod-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-earn-prod-cover.svg",
+      "id": 969,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — Every release earns production"
+    },
+    {
+      "url": "/img/ring-promoter-earn-prod-protocol.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter promotion protocol five rules"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p>Most release incidents are not exotic. Someone skipped a ring “just this once”. A health check returned 200 while the old build was still answering. A promotion ran after the client disconnected and left the cluster half-updated. Or production was reached because an auto-promote flag was left on somewhere it should not have been.</p>\n\n<p>Ring Promoter treats promotion as a protocol: ordered rings <code>int → test → acc → prod</code>, live health gates, optional version verification, automatic rollback, and a full history for every hop. Tagline: <strong>Every release earns production.</strong> The control plane is deliberately small — one binary, configuration-driven apps, and a REST API built so CI can fail closed with <code>curl --fail</code>.</p>\n\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0\">\n  <iframe src=\"https://www.youtube.com/embed/O4-yqHdeq8Q\"\n    title=\"Ring Promoter full demo: promoting one app from int to prod\"\n    style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0\"\n    allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\"\n    referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p><a href=\"https://youtu.be/O4-yqHdeq8Q\">Watch the full Ring Promoter demo on YouTube</a> — one application promoted live through all four rings in a single session.</p>\n\n<p><img src=\"/img/ring-promoter-earn-prod-cover.svg\" alt=\"Ring Promoter — Every release earns production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>The problem with ad-hoc promotion</h2>\n<p>Platform teams inherit a patchwork of scripts, pipeline stages, and tribal knowledge. Integration might be a namespace; acceptance might be a spreadsheet; production might be a Slack approval that nobody can replay six months later. That works until it does not — usually on a Friday afternoon or during an incident when the person who “knows the runbook” is offline.</p>\n<ul>\n  <li><strong>Skipped environments</strong> — a hotfix jumps straight to prod because “test is behind” or the staging cluster is in an unknown state.</li>\n  <li><strong>Green that lies</strong> — the deploy job succeeded, the endpoint answers 200, but the new version never became the process answering traffic.</li>\n  <li><strong>2 a.m. rollbacks</strong> — someone has to remember the previous image tag and the exact command that undoes the last hop, under paging pressure.</li>\n  <li><strong>No attributable history</strong> — who moved which version where, and did it hold? Chat logs are not an audit trail.</li>\n  <li><strong>Mixed estates</strong> — Kubernetes services and VM apps with their own GitHub Actions pipelines use different promotion rituals, so “are we safe to go?” means different things for each team.</li>\n</ul>\n<p>CI already builds and tests. What is missing is a control plane that moves what CI produced through environments with the same discipline every time — boring on purpose, so release decisions stay about risk and readiness rather than about which script to run.</p>\n\n<h2>How it works in 60 seconds</h2>\n<p><img src=\"/img/ring-promoter-earn-prod-protocol.svg\" alt=\"Ring Promoter promotion protocol five rules\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<p>Ring Promoter is a small, production-grade control plane: one Go binary with web UI, JSON REST API and promoter in a single process. It runs on k3s/Kubernetes and stores current/previous version and full history per (application, ring).</p>\n<ol>\n  <li><strong>One ring at a time</strong> — <code>promote {from_ring}</code> always targets the next ring. Skipping is impossible by design.</li>\n  <li><strong>Source must be healthy</strong> — a live health check gates the start of every promotion.</li>\n  <li><strong>Target must earn it</strong> — after deploy, health checks run with configurable retries.</li>\n  <li><strong>Optional version verification</strong> — the health endpoint must report the exact version just deployed (<code>health_version_field</code> or <code>health_version_header</code>).</li>\n  <li><strong>Failure undoes itself</strong> — if the target stays unhealthy, it rolls back to its previous version automatically. Every seed, promote and rollback is written to history.</li>\n</ol>\n\n<h2>Safety by default</h2>\n<p>Promotion is not a shell script you hope someone ran carefully. The control plane serialises per-app operations with a Postgres session advisory lock, so correctness holds across replicas — scaling the control plane up cannot start two promotions on the same app at once. Operations run in a context detached from the HTTP request and bounded by <code>operation_timeout</code> — a client disconnect or load-balancer timeout cannot abort an in-flight deploy or its rollback. State is updated as soon as a deploy lands, so it never lags the cluster even if a later health check fails.</p>\n<p>That combination is what makes the protocol safe enough for Friday afternoons: the rules are enforced in one place, not rediscovered in each team’s pipeline YAML.</p>\n\n<h2>Automatic rollback</h2>\n<p>When post-deploy health fails after all retries, Ring Promoter rolls the target ring back to its previous version and records the failure. You do not depend on someone remembering last week’s tag at 2 a.m. The same protocol that promoted the version is what undoes it.</p>\n\n<h2>Full audit trail</h2>\n<p>Every seed, promote and rollback lands in history — success or failure — per application and ring. The UI surfaces live jobs with step-level status and logs. When a job fails, AI-assisted diagnosis (listed on <a href=\"https://ringpromoter.com\">ringpromoter.com</a>) can summarise the persisted evidence rather than guessing from a truncated CI log.</p>\n\n<h2>Humans stay in control of production</h2>\n<p>Two controls keep production deliberate:</p>\n<ul>\n  <li><strong>Production password</strong> (<code>RP_PROD_PASSWORD</code>) — required to promote into prod, seed prod, or enable auto-promote into prod. Rollbacks are deliberately exempt so incident response is never blocked.</li>\n  <li><strong>Auto-promote per ring</strong> — a version that lands healthy can continue hop by hop inside the same operation and lock, and stops at the first ring with the flag off. Typical setup: on for <code>test</code> (so int → test carries on to acc), off for <code>acc</code> (so nothing reaches prod without a human). Config may not set <code>auto_promote: true</code> on the ring before prod; that is refused at start-up so config cannot bypass the password.</li>\n</ul>\n<p>Optional promotion gates (maintenance windows, QA Go-No-Go for the exact version, change-request codes, Grafana go/no-go) run <em>before</em> any deploy, so a failed gate leaves state untouched.</p>\n\n<h2>Kubernetes and VMs in one place</h2>\n<p>The deployer is chosen per application:</p>\n<ul>\n  <li><strong>KubectlDeployer</strong> — <code>kubectl set image</code> + rollout status via the in-cluster ServiceAccount.</li>\n  <li><strong>GitHubActionsDeployer</strong> — for VM apps with existing CI/CD (for example wslproxy on OpenResty). Dispatch, wait, then the same health check and auto-rollback.</li>\n  <li><strong>k8sjob</strong> — each operation as a Kubernetes Job with runner contract env vars and live log streaming.</li>\n</ul>\n<p>One control plane can promote cluster services and VM pipelines side by side.</p>\n\n<h2>Config-only onboarding</h2>\n<p>Add an application with YAML only — no plugin, no SDK, no rebuild. Declare where each ring lives and how to check health, apply the ConfigMap, and the app appears in the console. Apps only define the rings they actually live in. Adding a ring is a single-line change in the ordered pipeline; promotion order, API and UI follow.</p>\n\n<h2>CI-friendly API</h2>\n<p>After CI builds and pushes, seed int and promote with ordinary HTTP. Sync by default returns 200 on success or 422 when the operation ran but failed (so <code>curl --fail</code> works). Use <code>?async=1</code> for a job ID with live step-by-step progress.</p>\n<pre><code>curl --fail -sS -X POST \"$RP/api/apps/$APP/seed\" \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -H \"Content-Type: application/json\" \\\n  -d \"{\\\"ring\\\":\\\"int\\\",\\\"version\\\":\\\"$VERSION\\\"}\"\n\ncurl --fail -sS -X POST \"$RP/api/apps/$APP/promote\" \\\n  -H \"Authorization: Bearer $TOKEN\" \\\n  -d '{\"from_ring\":\"int\"}'\n</code></pre>\n\n<h2>Who it is for</h2>\n<p>Engineering managers, heads of platform, CTOs and DevOps leads who need release discipline without another sprawling toolchain. Platform engineers who are tired of owning one-off promote scripts per app. SRE teams who want rollback to be automatic and attributable. If your pain is skipped environments, lying green checks, and opaque rollbacks — not “we need more dashboards” — this is the control plane for that job.</p>\n<p>It does not replace your build system. It does not pretend every organisation has identical rings. It enforces a small set of rules that make promotions safe enough to run when people are tired — which is when most release mistakes happen.</p>\n\n<h2>Where to go next</h2>\n<p>Watch the <a href=\"https://youtu.be/O4-yqHdeq8Q\">full demo</a>, then visit <a href=\"https://ringpromoter.com\">ringpromoter.com</a>. For the implementation detail — gates, deployers, locks, and the REST contract — read the <a href=\"/en/articles/ring-promoter-every-release-earns-production\">technical deep dive</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T18:00:00Z",
+  "updated_at": "2026-09-10T18:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true,
+  "language_code": "fr"
+}

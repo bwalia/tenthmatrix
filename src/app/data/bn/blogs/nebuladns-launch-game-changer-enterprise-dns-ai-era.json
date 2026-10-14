@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS হল একটি নিরাপদ-মরিচা প্রামাণিক DNS সার্ভার যার একটি API-প্রথম কন্ট্রোল প্লেন, Prometheus মেট্রিক্স, প্রপাগেশন গেটস এবং Kubernetes-নেটিভ ক্রিয়াকলাপ রয়েছে—যখন AI পরিষেবা এবং এজেন্টরা DNS-এর উপর আগের চেয়ে বেশি নির্ভর করে তখন দৃশ্যমানতার জন্য তৈরি৷",
+  "sub_title": "API-প্রথম DNS, পর্যবেক্ষণযোগ্যতা এবং কেন এআই যুগের একটি নতুন প্রামাণিক স্ট্যাকের প্রয়োজন",
+  "title": "NebulaDNS: কেন প্রামাণিক DNS এআই যুগে একটি গেম চেঞ্জার",
+  "meta_title": "NebulaDNS | প্রামাণিক DNS মরিচা এআই এন্টারপ্রাইজ | TenthMatrix",
+  "meta_description": "NebulaDNS এর ভূমিকা: মরিচা প্রামাণিক DNS, API কন্ট্রোল প্লেন, প্রচার যাচাইকরণ, k3s এবং Route 53 প্যাটার্ন এবং কেন এন্টারপ্রাইজ DNS AI যুগে অবশ্যই পর্যবেক্ষণযোগ্য হতে হবে।",
+  "meta_keywords": "NebulaDNS, প্রামাণিক DNS, Rust DNS, Kubernetes DNS, Route 53, CoreDNS, AI পরিকাঠামো, Prometheus DNS মেট্রিক্স, TSIG, AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>কার্যনির্বাহী সারাংশ</h2><p><strong><a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">NebulaDNS</a></strong> একটি আধুনিক, <strong>API-প্রথম অনুমোদিত DNS সার্ভার</strong> লিখিত <strong>নিরাপদ মরিচা</strong> (<code>#![forbid(unsafe_code)]</code>) এটি কয়েক দশক-পুরাতন ডেমন এবং অস্বচ্ছ সি কোডবেস দ্বারা ছেড়ে যাওয়া অপারেশনাল ফাঁকগুলিকে লক্ষ্য করে: <strong>কোনো মেট্রিক্স নেই</strong>, <strong>কোন প্রচার সত্য</strong>, এবং <strong>কোন মেশিন-পাঠযোগ্য নিয়ন্ত্রণ সমতল</strong>. মধ্যে <strong>এআই যুগ</strong>, DNS \"শুধু অবকাঠামো\" নয়—এটি কীভাবে <strong>এজেন্ট</strong>, <strong>অনুমান শেষ বিন্দু</strong>, <strong>GPU নোড</strong>, এবং <strong>মাল্টি ক্লাস্টার পরিষেবা</strong> নীতির অধীনে একে অপরকে খুঁজুন। NebulaDNS আচরণ করে <strong>রিলিজ হিসাবে প্রতিটি জোন পরিবর্তন</strong>: যাচাইকৃত সেকেন্ডারি, সুস্পষ্ট মেট্রিক্স, এবং প্রতিটি অপারেটর অ্যাকশনের জন্য একটি API-এ পাবলিক ন্যারেটিভের সাথে সারিবদ্ধ <a href=\"https://bwalia.github.io/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">প্রকল্প সাইট</a> এবং <a href=\"https://github.com/bwalia/nebuladns\" rel=\"noopener noreferrer\" target=\"_blank\">GitHub সংগ্রহস্থল</a>.</p><h2>যখন AI উৎপাদনে থাকে তখন কেন DNS বেশি গুরুত্বপূর্ণ</h2><ul><li><strong>এজেন্টদের জন্য পরিষেবা আবিষ্কার:</strong> টুল এন্ডপয়েন্ট, পুনরুদ্ধার পরিষেবা এবং পলিসি গেটওয়েগুলির জন্য স্থিতিশীল নামগুলি ক্ষণস্থায়ী ক্লাস্টার জুড়ে হার্ড-কোডেড আইপিগুলিকে হারায়।</li><li><strong>বিস্ফোরণ ব্যাসার্ধ:</strong> একটি নীরব AXFR বা সেকেন্ডারি ড্রিফ্ট ঘটনা (সাইটে বর্ণিত বাস্তব-বিশ্বের ইন্টারপ ব্যর্থতার মতো) LLM ড্যাশবোর্ডের নোটিশের অনেক আগেই অপ্রয়োজনীয়তা ভাঙতে পারে।</li><li><strong>সম্মতি এবং প্রমাণ:</strong> স্ট্রাকচার্ড লগ এবং মেট্রিক্স সহ অডিট-বান্ধব DNS SOC2-শৈলীর প্রমাণ সমর্থন করে যে কে কোন অঞ্চল পরিবর্তন করেছে এবং এটি প্রচার করেছে কিনা।</li></ul><h2>কি NebulaDNS ভিন্ন করে তোলে</h2><p>ল্যান্ডিং পৃষ্ঠা NebulaDNS কে ভঙ্গুর স্ট্যাকের সাথে প্রতিস্থাপন করে <strong>একটি ছোট বাইনারি</strong> যে জাহাজ <strong>মেট্রিক্স</strong>, ক <strong>নিয়ন্ত্রণ সমতল</strong>, এবং একটি পথ একটি <strong>Kubernetes অপারেটর</strong>-তাই ব্যর্থতা উপরে উঠে আসে <strong>সেকেন্ড</strong>, গ্রাহকের টিকিটের মাধ্যমে নয়। হাইলাইট অন্তর্ভুক্ত <strong>যাচাইকৃত প্রচার</strong>, <strong>পিয়ার সফটওয়্যার ফিঙ্গারপ্রিন্টিং</strong>, <strong>পারমাণবিক সংস্করণ কনফিগারেশন</strong>, <strong>নির্ধারক SOA সিরিয়াল</strong>, এবং <strong>Prometheus <code>/metrics</code></strong> একটি কম্পাইল-টাইম কার্ডিনালিটি বাজেট সহ।</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"NebulaDNS কন্ট্রোল প্লেন, জোন স্টোর এবং DNS ডেটা প্লেন\" decoding=\"async\" height=\"640\" loading=\"lazy\" src=\"/img/nebuladns-architecture-stack.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1000\"/></figure><h2>ইন্টিগ্রেশন স্ন্যাপশট: রুট 53 এবং k3s</h2><p>এন্টারপ্রাইজগুলি প্রায়শই জোড়া দেয় <strong>AWS রুট 53</strong> সঙ্গে পাবলিক জোন <strong>অন-ক্লাস্টার বা ডেডিকেটেড প্রামাণিক</strong> স্তর NebulaDNS হিসাবে ফিট করে <strong>সত্যের প্রামাণিক উৎস</strong> আপনি এন্ড-টু-এন্ডের মালিকানাধীন অঞ্চলগুলির জন্য <strong>Helm</strong>, <strong>সার্ভিস মনিটর</strong>, এবং <strong>অপারেটর/CRD</strong> সাইটে বর্ণিত রোডম্যাপে গল্পের লাইন। নিচের চিত্রটি একটি স্কেচ করে <strong>প্রতিনিধি + ক্লাস্টার</strong> প্যাটার্ন (বিক্রেতা-নির্দিষ্ট ওয়্যারিং নয়—আপনার নেট-সেগমেন্টেশনের সাথে মানিয়ে নিন)।</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img alt=\"Route 53 প্রতিনিধি NebulaDNS এবং k3s CoreDNS ইন্টিগ্রেশন\" decoding=\"async\" height=\"520\" loading=\"lazy\" src=\"/img/nebuladns-k3s-route53-workflow.svg\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" width=\"1100\"/></figure><h2>পরবর্তী পড়ুন</h2><p>জন্য <strong>সম্পূর্ণ বৈশিষ্ট্য ক্যাটালগ</strong>, মেট্রিক্স উদাহরণ, এবং গভীরতর k3s/Route 53 নোট, সহচর পোস্ট দেখুন <a href=\"/bn/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide\">NebulaDNS সম্পূর্ণ বৈশিষ্ট্য নির্দেশিকা</a> Workstation-এ।</p><h2>কিভাবে TenthMatrix সাহায্য করতে পারে</h2><p>TenthMatrix ডিজাইন <strong>প্ল্যাটফর্ম ইঞ্জিনিয়ারিং</strong> এবং <strong>SRE- প্রস্তুত DNS</strong> নিদর্শন—GitOps, পর্যবেক্ষণযোগ্যতা, এবং নিরাপদ কাটওভার—ক্লাউড এবং প্রান্তের জন্য। যোগাযোগ <strong>info@tenthmatrix.com</strong> আর্কিটেকচার রিভিউ বা ডেলিভারি সাপোর্টের জন্য।</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

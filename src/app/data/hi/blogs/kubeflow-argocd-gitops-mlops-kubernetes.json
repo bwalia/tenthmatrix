@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-kubeflow-argocd-001",
+  "internal_id": 953,
+  "slug": "kubeflow-argocd-gitops-mlops-kubernetes",
+  "title": "Kubeflow + Argo CD: Kubernetes पर GitOps MLOps",
+  "sub_title": "Kubeflow से train करें, Argo CD से deliver करें — pipelines, Model Registry, KServe, और git revert से rollback",
+  "excerpt": "Kubernetes पर MLOps के लिए Kubeflow और Argo CD जोड़ें: Kubeflow में models train और register करें, GitOps से InferenceServices promote करें, git revert से roll back करें।",
+  "meta_title": "Kubeflow + Argo CD: Kubernetes पर GitOps MLOps",
+  "meta_description": "Kubeflow Pipelines, Model Registry और KServe को Argo CD GitOps के साथ जोड़ें — Kubernetes पर auditable training-to-serving के लिए।",
+  "meta_keywords": "Kubeflow Argo CD, GitOps MLOps, KServe, Kubeflow Pipelines, Kubernetes पर ML, मॉडल रजिस्ट्री, InferenceService",
+  "cover_image": "/img/kubeflow-argocd-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubeflow-argocd-cover.svg",
+      "id": 953,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Kubeflow and Argo CD GitOps MLOps on Kubernetes"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Kubeflow (train / evaluate / register) को Argo CD (GitOps deliver / rollback) से जोड़ने की व्यावहारिक गाइड। पूर्ण architecture, manifests और anti-patterns के लिए पढ़ें <a href=\"/hi/articles/kubeflow-argocd-gitops-mlops-kubernetes\">लंबा article</a>.</em></p>\n<p><img alt=\"Kubernetes पर Kubeflow और Argo CD GitOps MLOps\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/kubeflow-argocd-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>एक-पैराग्राफ़ संस्करण।</strong> Kubeflow Kubernetes पर ML lifecycle का मालिक है — pipelines, training jobs, model registry और KServe। Argo CD delivery का मालिक है: हर <code>InferenceService</code>, pipeline definition और platform component Git से reconcile होता है। Kubeflow में train और evaluate करें; Git manifest अपडेट कर promote करें; roll back करें <code>git revert</code>। Models को object storage में रखें — Git URIs और config संग्रहीत करता है, weights नहीं।\n</div>\n<h2>दोनों tools क्यों?</h2>\n<p><strong>Kubeflow</strong> जवाब देता है: GPUs पर reproducible training और evaluation कैसे चलाएँ? <strong>Argo CD</strong> जवाब देता है: resulting model को snowflake clusters के बिना production में कैसे पहुँचाएँ? केवल Kubeflow उपयोग अक्सर manual पर समाप्त होता है <code>kubectl apply</code> serving के लिए। केवल Argo CD उपयोग करने से आपके पास first-class ML pipeline और experiment system नहीं रहता। साथ मिलकर वे एक बंद MLOps loop बनाते हैं।</p>\n<h2>श्रम का विभाजन</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0b1220;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">चिंता</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">टूल</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Git में क्या रहता है</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pipeline DAGs, TrainJobs, experiments</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow Pipelines / Trainer</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pipeline YAML / component specs</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Model artifacts एवं lineage</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Model Registry + object storage</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">URI + metadata — weights file नहीं</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Serving, canaries, rollbacks</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">KServe + Argo CD</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><code>InferenceService</code> overlays</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Platform install एवं upgrades</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Argo CD Applications</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Kubeflow स्वयं के लिए Helm/Kustomize</td></tr>\n</tbody>\n</table>\n<h2>End-to-end loop (अच्छा कैसा दिखता है)</h2>\n<ol>\n<li>Data scientist pipeline बदलाव merge करता है → Argo CD pipeline CRDs sync करता है।</li>\n<li>Kubeflow GPU nodes पर training चलाता है (वैकल्पिक रूप से Kueue से queued)।</li>\n<li>Evaluation gates पास → model URI registered; एक PR prod अपडेट करता है <code>InferenceService</code> <code>storageUri</code>.</li>\n<li>Argo CD OutOfSync पहचानता है और rollout करता है (पहले canary traffic)।</li>\n<li>Drift या खराब metrics → <code>git revert</code> पिछला URI restore करता है; Argo CD reconcile करता है।</li>\n</ol>\n<h2>पाँच practices जो दर्द बचाती हैं</h2>\n<ul>\n<li><strong>अलग repos या folders:</strong> platform (Kubeflow install) बनाम apps (pipelines + InferenceServices)।</li>\n<li><strong>Model binaries कभी commit न करें</strong> — संदर्भ <code>s3://</code> / <code>gs://</code> / PVC URIs।</li>\n<li><strong>Sync waves:</strong> KFP components से पहले MySQL/MinIO (या managed equivalents)।</li>\n<li><strong>हर step पर resource limits</strong> — बिना limits के training jobs cluster को भूखा छोड़ देंगे।</li>\n<li><strong>Promotion = PR,</strong> notebook में बटन नहीं। Audit trail मुफ़्त मिलता है।</li>\n</ul>\n<h2>जब यह stack overkill हो</h2>\n<p>SME chatbot के लिए Ollama चलाता एक अकेला Mac Studio Kubeflow + Argo CD नहीं चाहता। इस pattern को तब अपनाएँ जब कई models हों, GPU contention हो, compliance जरूरतें हों, या एक से अधिक environments (dev/staging/prod) जो एक जैसे रहने चाहिए।</p>\n<div style=\"background:#eff6ff;border:1px solid #93c5fd;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>संबंधित पढ़ाई।</strong> हम पहले ही Argo CD और Flux पर केंद्रित एक GitOps overview प्रकाशित कर चुके हैं: <a href=\"/hi/docs/blogs/kubernetes-continuous-delivery\">Kubernetes Continuous Delivery: ArgoCD &amp; Flux के साथ GitOps Pipelines</a>। यह पोस्ट ML-specific companion है — loop में Kubeflow।\n</div>\n<h2>लंबा संस्करण पढ़ें</h2>\n<p>The <a href=\"/hi/articles/kubeflow-argocd-gitops-mlops-kubernetes\">लंबा article</a> 2026 Kubernetes MLOps map (KFP v2, Trainer, KServe, Kueue), Argo CD Application patterns, promotion gates, canary serving, GPU FinOps और rollout checklist कवर करता है। प्रकाशित <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubeflow",
+      "id": 980
+    },
+    {
+      "name": "argocd",
+      "id": 981
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "kserve",
+      "id": 983
+    }
+  ],
+  "created_at": "2026-07-20T09:00:00Z",
+  "updated_at": "2026-07-20T09:00:00Z",
+  "published_date": "2026-07-20",
+  "status": true
+}

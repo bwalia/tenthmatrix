@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-kubepilot-001",
+  "internal_id": 962,
+  "slug": "kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "title": "KubePilot: CoPilot, Pilot & AutoPilot for Faster Kubernetes Incidents",
+  "sub_title": "Open-source cockpit from the TenthMatrix team — AI diagnosis, SRE browse, and policy-gated fixes on kubepilot.org",
+  "excerpt": "KubePilot helps SRE, DevOps, and platform teams move from noisy cluster signals to a safe fix — CoPilot, Pilot, and AutoPilot. Open source at kubepilot.org.",
+  "meta_title": "KubePilot — AI CoPilot, Pilot & AutoPilot for Kubernetes | TenthMatrix",
+  "meta_description": "Open-source Kubernetes cockpit by TenthMatrix: CoPilot AI RCA, Pilot SRE browser, AutoPilot policy-gated fixes. kubepilot.org · github.com/bwalia/kubepilot",
+  "meta_keywords": "KubePilot, Kubernetes, SRE, DevOps, Platform Engineering, AIOps, AutoPilot, CoPilot, Ollama, MCP, open source, TenthMatrix, kubepilot.org",
+  "cover_image": "/img/kubepilot-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubepilot-cover.svg",
+      "id": 962,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "KubePilot CoPilot Pilot AutoPilot for Kubernetes"
+    },
+    {
+      "url": "/img/kubepilot-three-modes.svg",
+      "id": 963,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "KubePilot three-mode incident loop"
+    },
+    {
+      "url": "/img/kubepilot-dashboard-overview.svg",
+      "id": 964,
+      "is_cover": false,
+      "width": 1200,
+      "height": 675,
+      "alt": "KubePilot Pilot dashboard overview"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em><strong>KubePilot</strong> is the open-source Kubernetes cockpit from the TenthMatrix engineering team — three modes that take SRE, DevOps, and platform teams from noisy cluster signals to a safe fix. Product home: <a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>. Deep install, safety model, and feature map in the <a href=\"/en/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">long article</a>.</em></p>\n\n<p><img src=\"/img/kubepilot-cover.svg\" alt=\"KubePilot — CoPilot, Pilot, AutoPilot for Kubernetes\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfeff;border-left:4px solid #326ce5;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Stop juggling kubectl tabs, Lens windows, and chatbots mid-incident. <strong>CoPilot</strong> diagnoses in plain English (local LLM via Ollama), <strong>Pilot</strong> verifies like an SRE browser, and <strong>AutoPilot</strong> remediates only behind dry-run, confidence floors, cooldowns, and a kill switch. Open source — star <a href=\"https://github.com/bwalia/kubepilot\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/kubepilot</a>.\n</div>\n\n<h2>Watch: Troubleshooting Kubernetes with AI</h2>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/CsiJWpfncqA\" title=\"KubePilot — Troubleshooting Kubernetes using AI — Balinder Walia\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Full talk on YouTube: <a href=\"https://youtu.be/CsiJWpfncqA\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/CsiJWpfncqA</a> · site: <a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a></p>\n\n<h2>Three modes. One faster incident loop.</h2>\n<p><img src=\"/img/kubepilot-three-modes.svg\" alt=\"KubePilot CoPilot Pilot AutoPilot incident loop\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<ul>\n  <li><strong>CoPilot (AI):</strong> ask what is broken; one-click AI Analyze; RCA with evidence and confidence; CrashLoop / OOM / ImagePull / node-pressure anomalies; Copy Prompt for your preferred model.</li>\n  <li><strong>Pilot (SRE):</strong> Lens-style read-only browse — workloads, logs, YAML, topology (Ingress → Pod), CPU/mem/disk gauges, LAN/WAN/tunnel node IPs, port-forward, multi-cluster kubeconfig switch.</li>\n  <li><strong>AutoPilot (fixer):</strong> off / dry-run / active; namespace blocklists; action allow-lists; hourly caps; decision ledger; CR-code escalate; pause kill switch.</li>\n</ul>\n\n<p><img src=\"/img/kubepilot-dashboard-overview.svg\" alt=\"KubePilot Pilot dashboard overview\" width=\"1200\" height=\"675\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;border:1px solid #e2e8f0;\" /></p>\n\n<h2>Why TenthMatrix built it</h2>\n<p>Platform and SRE teams do not fail for lack of dashboards — they fail for <em>context switching</em> under pressure. KubePilot collapses diagnose → verify → remediate into one open-source cockpit, with local-LLM defaults so cluster telemetry does not need to leave your network. It ships a web UI, Go CLI/server, MCP server for agents, and a native iOS companion.</p>\n\n<h2>Up in minutes</h2>\n<pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">\ngit clone https://github.com/bwalia/kubepilot.git\ncd kubepilot\nmake dashboard-install &amp;&amp; make dashboard &amp;&amp; make build\nKUBEPILOT_KUBECONFIG=\"$HOME/.kube/config\" ./dist/kubepilot serve --dashboard-port=8383\n# Dashboard: http://localhost:8383  ·  MCP: :9090\n</pre>\n<p>Also: Helm (<code>charts/kubepilot</code> / <code>helm repo add kubepilot https://bwalia.github.io/kubepilot</code>), Docker (<code>ghcr.io/kubepilot/kubepilot</code>), and iOS under <code>ios/</code>. Details on <a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>.</p>\n\n<div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Hashtags.</strong> #Kubernetes #SRE #DevOps #PlatformEngineering #AIOps #OpenSource #KubePilot\n</div>\n\n<h2>Read the long version</h2>\n<p>Install paths, AutoPilot safety rails, runbooks, MCP, iOS, and a production checklist: <a href=\"/en/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot technical article</a>. Built by <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "aiops",
+      "id": 213
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    }
+  ],
+  "created_at": "2026-08-12T12:00:00Z",
+  "updated_at": "2026-08-12T12:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

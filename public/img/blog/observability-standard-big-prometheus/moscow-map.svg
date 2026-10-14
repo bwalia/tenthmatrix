@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="MoSCoW map of observability tools">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 24px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .h { fill: #ffffff; font: 700 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .p { fill: #0f172a; font: 600 12px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 11px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="44">MoSCoW for a Kubernetes-native observability standard</text>
+  <text class="sub" x="48" y="70">Must / Should / Could / Won&#x2019;t  pick deliberately, then enforce</text>
+
+  <rect x="48" y="100" width="540" height="280" rx="12" fill="#065f46"/>
+  <text class="h" x="72" y="135">MUST HAVE</text>
+  <text class="p" x="72" y="170" fill="#ecfdf5">OpenTelemetry SDK + collector contract</text>
+  <text class="p" x="72" y="195" fill="#ecfdf5">Prometheus metrics (or PromQL store)</text>
+  <text class="p" x="72" y="220" fill="#ecfdf5">Grafana (or equivalent) shared dashboards</text>
+  <text class="p" x="72" y="245" fill="#ecfdf5">Alertmanager + on-call routing</text>
+  <text class="p" x="72" y="270" fill="#ecfdf5">Central log pipeline (Loki / ELK / vendor)</text>
+  <text class="p" x="72" y="295" fill="#ecfdf5">Distributed tracing backend (Tempo/Jaeger)</text>
+  <text class="p" x="72" y="320" fill="#ecfdf5">Retention + access policy (security/audit)</text>
+  <text class="p" x="72" y="345" fill="#ecfdf5">SLO dashboards for critical services</text>
+
+  <rect x="612" y="100" width="540" height="280" rx="12" fill="#1d4ed8"/>
+  <text class="h" x="636" y="135">SHOULD HAVE</text>
+  <text class="p" x="636" y="170" fill="#eff6ff">Global long-term metrics (Thanos/Mimir/VM)</text>
+  <text class="p" x="636" y="195" fill="#eff6ff">Recording rules + cardinality budgets</text>
+  <text class="p" x="636" y="220" fill="#eff6ff">Synthetic checks / blackbox probes</text>
+  <text class="p" x="636" y="245" fill="#eff6ff">Error tracking (Sentry-class)</text>
+  <text class="p" x="636" y="270" fill="#eff6ff">Continuous profiling (Pyroscope)</text>
+  <text class="p" x="636" y="295" fill="#eff6ff">Cost/usage metering for telemetry</text>
+  <text class="p" x="636" y="320" fill="#eff6ff">LLM/agent spans (Langfuse-class) if AI</text>
+  <text class="p" x="636" y="345" fill="#eff6ff">Multi-cluster Prometheus Operator</text>
+
+  <rect x="48" y="400" width="540" height="280" rx="12" fill="#b45309"/>
+  <text class="h" x="72" y="435">COULD HAVE</text>
+  <text class="p" x="72" y="470" fill="#fffbeb">Full SaaS APM (Datadog/New Relic/Dynatrace)</text>
+  <text class="p" x="72" y="495" fill="#fffbeb">Chronosphere / hyperscale M3 path</text>
+  <text class="p" x="72" y="520" fill="#fffbeb">eBPF auto-instrumentation platforms</text>
+  <text class="p" x="72" y="545" fill="#fffbeb">Session replay / RUM products</text>
+  <text class="p" x="72" y="570" fill="#fffbeb">Advanced AIOps anomaly products</text>
+  <text class="p" x="72" y="595" fill="#fffbeb">Second dashboard tool for niche teams</text>
+  <text class="p" x="72" y="620" fill="#fffbeb">Custom ClickHouse analytics lake</text>
+
+  <rect x="612" y="400" width="540" height="280" rx="12" fill="#7f1d1d"/>
+  <text class="h" x="636" y="435">WON&#x2019;T HAVE (as the standard)</text>
+  <text class="p" x="636" y="470" fill="#fff1f2">Per-team unique APM with no export</text>
+  <text class="p" x="636" y="495" fill="#fff1f2">Metrics only in chat screenshots</text>
+  <text class="p" x="636" y="520" fill="#fff1f2">Unlimited high-cardinality labels</text>
+  <text class="p" x="636" y="545" fill="#fff1f2">Secrets or PII in free-text logs</text>
+  <text class="p" x="636" y="570" fill="#fff1f2">Optional monitoring for prod services</text>
+  <text class="p" x="636" y="595" fill="#fff1f2">Three competing truth sources for SLOs</text>
+  <text class="p" x="636" y="620" fill="#fff1f2">Buy Big Prometheus before you need it</text>
+</svg>

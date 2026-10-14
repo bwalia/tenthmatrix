@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Running NVIDIA OpenShell on Mac Studio with Apple GPU accelerated local inference">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d0b21"/>
+      <stop offset="1" stop-color="#221d4c"/>
+    </linearGradient>
+    <style>
+      .h { fill: #fff; font: 800 24px system-ui, sans-serif; }
+      .p { fill: rgba(255,255,255,0.85); font: 500 14px system-ui, sans-serif; }
+      .card { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.2); stroke-width: 1.5; }
+      .accent { fill: #76b900; }
+      .ws { fill: #ff004e; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)" rx="16"/>
+  <text class="h" x="48" y="52">Mac Studio: OpenShell gateway + Apple GPU inference</text>
+  <text class="p" x="48" y="82">OpenShell runs on macOS (Docker or VM driver). Heavy models use the Mac Studio GPU on the host - not inside an NVIDIA passthrough sandbox.</text>
+  <!-- Mac -->
+  <rect class="card" x="48" y="120" width="340" height="520" rx="20"/>
+  <rect x="78" y="150" width="280" height="180" rx="12" fill="rgba(255,255,255,0.08)"/>
+  <text fill="#fff" font="700 18px system-ui" x="98" y="190">Mac Studio (M-series)</text>
+  <text class="p" x="98" y="220">Apple Silicon unified memory</text>
+  <text class="p" x="98" y="248">Ollama / MLX / vLLM on host</text>
+  <rect x="98" y="270" width="240" height="44" rx="10" fill="rgba(118,185,0,0.2)" stroke="#76b900"/>
+  <text fill="#a3e635" font="700 13px system-ui" x="118" y="298">Apple GPU · local models</text>
+  <rect x="78" y="360" width="280" height="120" rx="12" fill="rgba(255,0,78,0.12)" stroke="#ff004e"/>
+  <text fill="#fff" font="700 15px system-ui" x="98" y="395">openshell-gateway</text>
+  <text class="p" x="98" y="422">VM driver (Hypervisor.framework)</text>
+  <text class="p" x="98" y="448">or Docker Desktop driver</text>
+  <!-- Arrow -->
+  <path d="M400 380 L480 380" stroke="#76b900" stroke-width="3" marker-end="url(#a)"/>
+  <defs><marker id="a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#76b900"/></marker></defs>
+  <!-- Sandboxes -->
+  <rect class="card" x="500" y="120" width="320" height="240" rx="20"/>
+  <text fill="#fff" font="700 17px system-ui" x="530" y="165">Agent sandboxes</text>
+  <text class="p" x="530" y="195">Policy-bound workloads</text>
+  <text class="p" x="530" y="223">No raw secrets in the agent</text>
+  <text class="p" x="530" y="251">openshell sandbox create ...</text>
+  <rect x="530" y="280" width="260" height="56" rx="10" fill="rgba(56,189,248,0.15)" stroke="#38bdf8"/>
+  <text fill="#7dd3fc" font="600 12px monospace" x="545" y="312">inference.local → host:8000</text>
+  <!-- Inference route -->
+  <rect class="card" x="500" y="400" width="650" height="240" rx="20"/>
+  <text fill="#fff" font="700 17px system-ui" x="530" y="445">Configure once on the gateway</text>
+  <text fill="#cbd5e1" font="500 13px monospace" x="530" y="485">openshell inference set --provider local-vllm --model &lt;handle&gt;</text>
+  <text class="p" x="530" y="525">Sandboxes call the same local endpoint; the Mac Studio GPU serves tokens outside the sandbox boundary.</text>
+  <text class="p" x="530" y="555">Works for dev teams, regulated data, and air-gapped agent pilots.</text>
+  <rect x="530" y="580" width="420" height="44" rx="10" fill="rgba(118,185,0,0.15)" stroke="#76b900"/>
+  <text fill="#a3e635" font="700 13px system-ui" x="550" y="608">Same pattern on Linux + NVIDIA with --gpu when you need GPU inside the sandbox</text>
+</svg>

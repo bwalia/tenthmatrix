@@ -1,0 +1,37 @@
+# prod — https://www.tenthmatrix.com + apex (lead form → https://api.tenthmatrix.com)
+env: prod
+
+replicaCount: 2
+
+appConfig:
+  SITE_URL: "https://www.tenthmatrix.com"
+  WEBSITE_NAMESPACE: "tenthmatrix"
+  WEBSITE_CATEGORY: ""
+  CMS_CONTENT_MODE: "overlay"
+  # Prod OpsAPI runs on cloud003 (wslproxy rule opsapi-prod-cloud003), not in
+  # the k3s1 prod namespace, so use the public edge rather than the in-cluster name.
+  OPSAPI_URL: "https://api.tenthmatrix.com/"
+  CMS_REVALIDATE_SECONDS: "3600"
+  ENGAGEMENT_STORE_DIR: "/tmp/engagement"
+  # Only prod is indexable.
+  ROBOTS_DISALLOW_ALL: "false"
+  # With >1 replica, set REDIS_URL (in Vault) so revalidateTag busts every pod.
+
+ingress:
+  enabled: true
+  className: "traefik-edge"
+  hosts:
+    - host: www.tenthmatrix.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+    - host: tenthmatrix.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

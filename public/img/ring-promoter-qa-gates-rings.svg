@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="Ring Promoter QA gates across int test acc prod rings">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #16a34a; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ring { fill: #ecfdf5; stroke: #22c55e; stroke-width: 2; }
+      .ring-acc { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+      .ring-prod { fill: #dcfce7; stroke: #15803d; stroke-width: 2.5; }
+      .auto { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
+      .human { fill: #ffedd5; stroke: #c2410c; stroke-width: 2; }
+      .health { fill: #fef9c3; stroke: #a16207; stroke-width: 1.5; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .xs { fill: #475569; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#m); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .legend { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="640"/>
+  <text class="tag" x="40" y="36">FIGURE — QA GATES IN PROMOTION</text>
+  <text class="title" x="40" y="68">Auto-promote early rings · human gate before prod</text>
+  <text class="cap" x="40" y="94">Health + version verification on every hop. Optional auto-promote per ring. Keep acc��→prod gated.</text>
+
+  <!-- Rings -->
+  <rect class="ring" x="50" y="170" width="170" height="130" rx="10"/>
+  <text class="h" x="110" y="220">int</text>
+  <text class="s" x="70" y="248">Integration</text>
+  <text class="xs" x="70" y="272">Seed new builds</text>
+
+  <rect class="auto" x="235" y="195" width="100" height="80" rx="8"/>
+  <text class="xs" x="248" y="225">AUTO</text>
+  <text class="xs" x="245" y="245">promote ��→</text>
+  <text class="xs" x="245" y="262">health ��→</text>
+
+  <rect class="ring" x="350" y="170" width="170" height="130" rx="10"/>
+  <text class="h" x="405" y="220">test</text>
+  <text class="s" x="370" y="248">Automated QA</text>
+  <text class="xs" x="370" y="272">Evals · smoke</text>
+
+  <rect class="auto" x="535" y="195" width="100" height="80" rx="8"/>
+  <text class="xs" x="548" y="225">AUTO</text>
+  <text class="xs" x="545" y="245">promote ��→</text>
+  <text class="xs" x="545" y="262">version ��→</text>
+
+  <rect class="ring-acc" x="650" y="170" width="170" height="130" rx="10"/>
+  <text class="h" x="710" y="220">acc</text>
+  <text class="s" x="670" y="248">Acceptance</text>
+  <text class="xs" x="670" y="272">Staging gate</text>
+
+  <rect class="human" x="835" y="185" width="120" height="100" rx="8"/>
+  <text class="h" x="858" y="220">HUMAN</text>
+  <text class="xs" x="850" y="242">QA / owner</text>
+  <text class="xs" x="850" y="260">approve hop</text>
+  <text class="xs" x="850" y="278">health ��→</text>
+
+  <rect class="ring-prod" x="980" y="170" width="170" height="130" rx="10"/>
+  <text class="h" x="1035" y="220">prod</text>
+  <text class="s" x="1000" y="248">Production</text>
+  <text class="xs" x="1000" y="272">Customers</text>
+
+  <path class="ln" d="M220 235 H235"/>
+  <path class="ln" d="M335 235 H350"/>
+  <path class="ln" d="M520 235 H535"/>
+  <path class="ln" d="M635 235 H650"/>
+  <path class="ln" d="M820 235 H835"/>
+  <path class="ln" d="M955 235 H980"/>
+
+  <!-- Legend / callouts -->
+  <rect x="50" y="350" width="1100" height="220" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text class="legend" x="70" y="385">Where gates sit</text>
+  <text class="s" x="70" y="415">• Every hop: live health check (source before promote; target after deploy) + optional version-verified health</text>
+  <text class="s" x="70" y="442">• Auto-promote (optional, per ring): healthy landing continues to the next ring in the same locked operation</text>
+  <text class="s" x="70" y="469">• Typical policy: auto on int/test · human gate on acc before prod — never YOLO auto-promote into production</text>
+  <text class="s" x="70" y="496">• Failed health / version mismatch ��→ automatic rollback to previous version + full audit history</text>
+  <text class="s" x="70" y="523">• AI platforms: model, agent, and gateway apps share the same gate language — mixed deployers, one protocol</text>
+  <text class="s" x="70" y="550">• Config sketch: rings[].auto_promote + health_version_field / health_version_header on each ring mapping</text>
+
+  <text class="foot" x="40" y="610">ringpromoter.com  ·  github.com/bwalia/ring-promoter  ·  workstation.co.uk</text>
+</svg>

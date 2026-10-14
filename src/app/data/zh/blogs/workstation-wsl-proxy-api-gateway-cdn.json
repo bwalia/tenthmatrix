@@ -1,0 +1,73 @@
+{
+  "uuid": "blog-wsl-proxy-001",
+  "internal_id": 963,
+  "slug": "workstation-wsl-proxy-api-gateway-cdn",
+  "title": "TenthMatrix WSL 代理：API 网关、CDN 和代理边缘",
+  "sub_title": "TenthMatrix 团队提供完整的 API 网关和 CDN — 实时规则、WAF、多 POP，以及正在进行的代理网关和 MCP 网关",
+  "excerpt": "TenthMatrix WSL 代理 (WSLProxy) 是一个完整的 API 网关和 CDN 边缘：实时路由、WAF、缓存、多 POP DNS、MCP — 代理网关和 MCP 网关正在进行中。",
+  "meta_title": "TenthMatrix WSL 代理 — API 网关和 CDN | TenthMatrix",
+  "meta_description": "TenthMatrix WSL 代理：OpenResty API 网关和 CDN，具有实时规则、WAF、多 POP DNS、MCP 工具以及代理网关/MCP 网关集成正在进行中。",
+  "meta_keywords": "TenthMatrix WSL 代理、WSLProxy、API 网关、CDN、OpenResty、WAF、MCP 网关、代理网关、边缘缓存、反向代理、TenthMatrix",
+  "cover_image": "/img/wsl-proxy-cover.svg",
+  "images": [
+    {
+      "url": "/img/wsl-proxy-cover.svg",
+      "id": 963,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "TenthMatrix WSL Proxy API Gateway and CDN"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix WSL 代理</strong>(WSLProxy) 是 TenthMatrix 的开放式 API 网关和 CDN 边缘控制平面 - 实时路由、WAF、缓存、多 POP DNS 和用于代理的 MCP。产品页面：<a href=\"/zh/wsl-proxy\">/wsl-proxy</a>。深入探讨：<a href=\"/zh/articles/workstation-wsl-proxy-api-gateway-cdn\">长文</a>。</em></p><p><img src=\"/img/wsl-proxy-cover.svg\" alt=\"TenthMatrix WSL Proxy — API Gateway and CDN\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Watch: TenthMatrix WSL Proxy intro</h2>\n<p><a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg\" alt=\"TenthMatrix WSL Proxy — product intro\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p>\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\">\n  <iframe src=\"https://www.youtube.com/embed/7NJulclG5sQ\" title=\"TenthMatrix WSL Proxy intro\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p style=\"font-size:0.9rem;color:#64748b;\">Watch: <a href=\"https://youtu.be/7NJulclG5sQ\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/7NJulclG5sQ</a> · Product: <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a></p><div style=\"background:#fff7ed;border-left:4px solid #c45c26;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>底线。</strong>停止将边缘视为静态 nginx.conf。 TenthMatrix WSL 代理评估来自 JSON/MCP 配置的每个请求的规则 - 代理、重定向、WAF、缓存、金丝雀 - 并且仅在侦听/SSL 块更改时重新加载 nginx。站点：<a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>· 仓库：<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>。</div><h2>它是什么</h2><p>WSLProxy 是 OpenResty 上的动态 API 网关和反向代理。操作员通过管理 UI、REST API、MCP 工具或<code>wslproxy-cli</code>管理虚拟主机、规则、WAF、缓存、流量分配和边缘 POP。它是为多 POP 边缘、GitOps 式配置和 AI 代理而构建的 - 与生产模式中的tenthmatrix.com 流量相同的堆栈。</p><h2>完整的 API 网关 + CDN</h2><ul><li><strong>路由：</strong>路径/IP/国家/JWT/cookie 匹配 → 代理、重定向、HTML、CAPTCHA。</li><li><strong>流量：</strong>加权、RR、金丝雀、粘性、最少连接；提升和回滚后端。</li><li><strong>WAF：</strong>策略包、异常评分、监控/阻止、事件 API。</li><li><strong>CDN 缓存：</strong>边缘静态缓存、可选 Docker blob 缓存、Varnish 挂钩。</li><li><strong>POP + DNS：</strong>声明边缘；具有护栏的 Cloudflare A 记录配置。</li><li><strong>控制平面：</strong>React Admin、Swagger、MCP（克劳德/光标）、GHCR 上的 CLI 映像。</li></ul><h2>代理网关和MCP 网关（路线图）</h2><p>TenthMatrix 将同样的优势延伸到代理时代：</p><ul><li><strong>MCP 网关（正在进行中）：</strong>管理外部 MCP 服务器的前门 — 身份验证桥接、工具允许/拒绝、<code>tools/call</code>审核、每个工具速率限制。</li><li><strong>代理网关（正在进行中）：通过 TenthMatrix WSL 代理边缘的多代理流量的</strong>策略和可观察性。</li><li><strong>MCP 管理（现已推出）：</strong>通过 MCP 工具从 Claude/Cursor 驱动 WSLProxy 自己的管理界面。</li></ul><h2>从哪里开始</h2><ol><li>打开<a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>和<a href=\"https://wslproxy.org/swagger/\" target=\"_blank\" rel=\"noopener noreferrer\">Swagger API</a>。</li><li>克隆<a href=\"https://github.com/bwalia/wslproxy\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslproxy</a>并为 k3s 运行 Compose 或 Helm。</li><li>阅读<a href=\"/zh/articles/workstation-wsl-proxy-api-gateway-cdn\">技术文章</a>或<a href=\"/zh/wsl-proxy\">产品页面</a>。</li></ol><p>由<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>发布。</p><p style=\"margin-top:1.5rem;\"><div style=\"background:#f8fafc;border:1px solid #cbd5e1;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Related reading.</strong> <a href=\"/zh/docs/blogs/wslproxy-waf-web-application-firewall\">WSL Proxy WAF blog</a> · <a href=\"/zh/articles/wslproxy-waf-web-application-firewall\">Explainable edge WAF article</a> · <a href=\"https://youtu.be/r10XSonA5JE\" target=\"_blank\" rel=\"noopener noreferrer\">WAF tour video</a> · <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">wslproxy.org</a>\n</div>\n\n<p style=\"margin-top:1.5rem;\"><strong>Product site:</strong> <a href=\"https://wslproxy.org\" target=\"_blank\" rel=\"noopener noreferrer\">https://wslproxy.org</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-15T10:00:00Z",
+  "updated_at": "2026-08-15T10:00:00Z",
+  "published_date": "2026-08-15",
+  "status": true
+}

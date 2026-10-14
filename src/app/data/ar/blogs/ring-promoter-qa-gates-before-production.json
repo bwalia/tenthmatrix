@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter — بوابات ضمان الجودة قبل الإنتاج",
+  "sub_title": "لا تقم بالترقية التلقائية إلى المنتج: حيث يوجد ضمان الجودة والبوابات البشرية في int → test → ac → prod، بالإضافة إلى الترويج التلقائي مقابل القفزات المسورة",
+  "excerpt": "بوابات Ring Promoter QA: الترويج التلقائي للحلقات المبكرة، والاحتفاظ ببوابة بشرية قبل الحث، والتعامل مع فحوصات الصحة بالإضافة إلى الإصدار كبوابات جودة من الدرجة الأولى.",
+  "meta_title": "Ring Promoter — بوابات ضمان الجودة قبل الإنتاج | TenthMatrix",
+  "meta_description": "لا تقم بالترقية التلقائية إلى المنتج. بوابات Ring Promoter QA: حلقات مبكرة للترويج التلقائي، وبوابة بشرية قبل الإنتاج، والتحقق من الصحة والإصدار، والتراجع.",
+  "meta_keywords": "Ring Promoter، بوابات ضمان الجودة، بوابات الجودة، الترويج التلقائي، بوابة الإنتاج، CI/CD، GitOps، Kubernetes، الترويج للبوابات الصحية، TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\">شاهد<h2>: بوابات ضمان الجودة قبل الإنتاج</h2><p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>فيديو<p style=\"font-size:0.9rem;color:#64748b;\">:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>· المنتج:<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p><p class=\"lead\"><em><strong>Ring Promoter</strong>ينقل الإصدارات من خلال الحلقات المرتبة<code>int → test → acc → prod</code>. سؤال العمل ليس \"هل يمكننا الترويج تلقائيًا؟\" - إنه<strong>حيث ينتمي ضمان الجودة والبوابات البشرية إلى</strong>، خاصة قبل الإنتاج. المنتج:<a href=\"/ar/ring-promoter\">/مروج الحلقة</a>. الغوص العميق: مقال فني طويل عن<a href=\"/ar/articles/ring-promoter-qa-gates-before-production\"></a>. نظرة عامة على الرفيق:<a href=\"/ar/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter الحديث CI/CD</a>.</em></p><p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>خلاصة القول.</strong>تعزيز الحلقات المبكرة تلقائيًا عند اجتياز اختبارات الصحة والإصدار. احتفظ ببوابة<strong>البشرية/QA أثناء القفز إلى المنتج</strong>. لا تقم بالترويج التلقائي مباشرة إلى الإنتاج، فكل إصدار يجب أن يكسب العملاء.</div><h2>ماذا تعني بوابات ضمان الجودة في Ring Promoter</h2><p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>\"البوابة\" هي أي شيء يمكن أن يوقف قفزة الترويج:</p><ul><li><strong>البوابات الصحية</strong>— يجب أن يكون المصدر سليمًا قبل الترويج؛ يجب أن يظل الهدف سليمًا بعد النشر (أو التراجع التلقائي).</li><li><strong>بوابات الإصدار</strong>- اختيارية: يجب أن تبلغ نقطة النهاية عن الإصدار الدقيق الذي تم نشره للتو (وهو أمر بالغ الأهمية للوكلاء والعربات الجانبية التي تعمل بالذكاء الاصطناعي).</li><li><strong>بوابات Human / QA</strong>- لا يوجد ترويج تلقائي على تلك الحلقة؛ يوافق المالك أو ضمان الجودة على الخطوة التالية (نموذجية لـ<code>acc → prod</code>).</li></ul><h2>الترويج التلقائي مقابل القفزات المسورة</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\">وضع<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th>إيجابيات<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">سلبيات<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">/ متى يجب تجنب</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>الترويج التلقائي (الحلقات المبكرة)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ردود فعل أسرع؛ يظل CI باللون الأخضر دون انتظار النقرة؛ تستمر نفس العملية المقفلة فصاعدا.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">يضخم البناء السيئ إذا كانت الصحة ضعيفة. لا تقم أبدًا بالتمكين بشكل أعمى في همز.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>بوابة ضمان الجودة/الإنسان (خاصة قبل المنتج)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">تسجيل الخروج للأعمال، وتغيير النوافذ، والامتثال، والنظرة الأخيرة على القبول.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">يضيف زمن الوصول؛ يحتاج إلى مالك واضح حتى لا تتوقف الإصدارات.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>الصحة + بوابات الإصدار (دائمًا)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">يوقف \"الإصدار الأخضر لكن الخاطئ\"؛ أزواج مع التراجع التلقائي.</td>يتطلب<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">نقاط نهاية صحية صادقة تكشف الإصدار.</td></tr></tbody></table><h2>متى يتم الدخول إلى</h2><ul><li><strong>قم بالدخول إلى prod</strong>للتطبيقات التي تواجه العملاء أو التغيير المنظم أو الأنظمة الأساسية المشتركة التي تعتمد عليها العديد من الفرق.</li><li><strong>تعزيز تلقائي int→test→acc</strong>عندما تكون التقييمات والدخان وصحة الإصدار التي تم التحقق منها قوية.</li><li><strong>تشديد البوابات</strong>لمكدسات الذكاء الاصطناعي (النماذج والوكلاء والبوابات) حيث لا يزال بإمكان الثنائي القديم الإجابة على<code>200 OK</code>.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">سياسة<strong>التي نوصي بها.</strong>الترويج التلقائي على<code>int</code>/<code>test</code>عندما يكون بصحة جيدة؛ احتفظ بـ<code>acc</code>مغلقًا بواسطة الإنسان قبل<code>prod</code>. التحقق من الصحة والإصدار في كل قفزة. التراجع عن الشيكات الفاشلة - لا يوجد \"ترويج جزئي\" صامت.</div><h2>إلى أين تذهب بعد ذلك</h2><ol><li>شاهد الفيديو أعلاه —<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>.</li><li>اقرأ المقالة الفنية<a href=\"/ar/articles/ring-promoter-qa-gates-before-production\"></a>(التكوين، API، التراجع، آثار فريق الذكاء الاصطناعي).</li><li>افتح<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>أو صفحة المنتج TenthMatrix<a href=\"/ar/ring-promoter\"></a>.</li><li>ستار<a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a>.</li></ol><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">علامات التصنيف<strong>.</strong>#RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation</div><p>تم النشر بواسطة<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p><p style=\"margin-top:1.5rem;\"><strong>موقع المنتج:</strong><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

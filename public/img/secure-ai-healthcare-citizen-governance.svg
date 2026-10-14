@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Citizen health services with protected data and dynamic AI answers">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 26px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #047857; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cit { fill: #ecfeff; stroke: #0891b2; stroke-width: 2; }
+      .dyn { fill: #f0fdf4; stroke: #16a34a; stroke-width: 2; }
+      .prot { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+      .gov { fill: #f1f5f9; stroke: #475569; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Citizen health: dynamic answers, protected data</text>
+  <text class="sub" x="48" y="78">National and regional programmes can inform citizens in real time — without widening PHI access</text>
+
+  <rect class="cit" x="48" y="130" width="260" height="160" rx="10"/>
+  <text class="lbl" x="68" y="175">Citizens / patients</text>
+  <text class="sm" x="68" y="210">Appointments · billing</text>
+  <text class="sm" x="68" y="238">Guidance · triage intake</text>
+  <text class="sm" x="68" y="266">Multichannel access</text>
+
+  <path class="arrow" d="M320 210 H370"/>
+
+  <rect class="dyn" x="380" y="130" width="300" height="160" rx="10"/>
+  <text class="lbl" x="400" y="175">Dynamic AI layer</text>
+  <text class="sm" x="400" y="210">Spontaneous answers</text>
+  <text class="sm" x="400" y="238">Purpose-bound context</text>
+  <text class="sm" x="400" y="266">Approved public + private feeds</text>
+
+  <path class="arrow" d="M690 210 H740"/>
+
+  <rect class="prot" x="750" y="130" width="400" height="160" rx="10"/>
+  <text class="lbl" x="770" y="175">Protection layer</text>
+  <text class="sm" x="770" y="210">Minimise · tokenise · segregate</text>
+  <text class="sm" x="770" y="238">HIPAA / GDPR / PCI controls</text>
+  <text class="sm" x="770" y="266">No open browse of health records</text>
+
+  <rect class="gov" x="48" y="340" width="350" height="300" rx="12"/>
+  <text class="lbl" x="72" y="385">Governance</text>
+  <text class="sm" x="72" y="425">" BAA / AOC as baseline</text>
+  <text class="sm" x="72" y="455">" Role-based tool scopes</text>
+  <text class="sm" x="72" y="485">" Human approval for high risk</text>
+  <text class="sm" x="72" y="515">" Retention and residency rules</text>
+  <text class="sm" x="72" y="545">" Vendor + agent inventories</text>
+  <text class="ok" x="72" y="590">Trust before scale</text>
+
+  <rect class="gov" x="430" y="340" width="350" height="300" rx="12"/>
+  <text class="lbl" x="454" y="385">Population health use</text>
+  <text class="sm" x="454" y="425">" Aggregated dashboards</text>
+  <text class="sm" x="454" y="455">" De-identified analytics</text>
+  <text class="sm" x="454" y="485">" Campaign guidance to citizens</text>
+  <text class="sm" x="454" y="515">" Surge / capacity messaging</text>
+  <text class="sm" x="454" y="545">" Separate from chart access</text>
+  <text class="ok" x="454" y="590">Inform without oversharing</text>
+
+  <rect class="gov" x="810" y="340" width="340" height="300" rx="12"/>
+  <text class="lbl" x="834" y="385">Workstation practice</text>
+  <text class="sm" x="834" y="425">" MCP OAuth + Vault leases</text>
+  <text class="sm" x="834" y="455">" WSL Proxy at the edge</text>
+  <text class="sm" x="834" y="485">" Ring Promoter promotion</text>
+  <text class="sm" x="834" y="515">" Action audit without PHI dumps</text>
+  <text class="sm" x="834" y="545">" Agent Building playbooks</text>
+  <text class="ok" x="834" y="590">Widen safe outcomes</text>
+</svg>

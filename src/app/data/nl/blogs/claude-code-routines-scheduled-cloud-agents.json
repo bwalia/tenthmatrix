@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: geplande cloudagents, sub-routines en co-routines",
+  "sub_title": "Voer Claude Code uit volgens een schema, via een API-aanroep of bij GitHub-events, zonder laptop en zonder server. De handleiding in vijf minuten.",
+  "excerpt": "Claude Code Routines voeren opgeslagen agenttaken uit in de cloud van Anthropic: volgens een schema, via de API of bij GitHub-events. Hoe ze werken, hoe u er een instelt en hoe u ze koppelt.",
+  "meta_title": "Claude Code Routines: geplande cloudagents uitgelegd | TenthMatrix",
+  "meta_description": "Claude Code Routines uitgelegd: schema-, API- en GitHub-triggers, setup, promptontwerp, sub-routines met subagents, co-routine-pipelines, beveiliging en limieten.",
+  "meta_keywords": "Claude Code Routines, geplande AI-agents, Claude Code-planning, /schedule, cloudagents, GitHub-trigger, API-trigger, subagents, sub-routines, co-routines, Anthropic, AI-automatisering, DevOps-automatisering",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code heeft u niet meer nodig achter het toetsenbord. <strong>Routines</strong> voeren opgeslagen agenttaken uit in de cloud van Anthropic: volgens een schema, via een API-aanroep of wanneer er iets gebeurt op GitHub. Hier leest u wat het zijn, hoe u er een instelt en welke twee patronen wij sub-routines en co-routines noemen. Voor de volledige handleiding leest u het <a href=\"/nl/articles/claude-code-routines-scheduled-cloud-agents\">uitgebreide artikel</a>.</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: geplande cloudagents, sub-routines en co-routines\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Kort gezegd.</strong> Een routine is een Claude Code-taak die u één keer configureert (prompt, repositories, cloudomgeving, connectors) en daarna automatisch laat starten. Hij draait als volledig autonome sessie in de cloud, dus uw laptop kan dicht blijven. Routines zijn sinds 14 april 2026 beschikbaar als research preview op de abonnementen Pro, Max, Team en Enterprise.\n</div>\n\n<h2>Drie manieren om een routine te starten</h2>\n<ul>\n  <li><strong>Schema:</strong> elk uur, dagelijks, op werkdagen, wekelijks of eenmalig op een vast tijdstip, ingevoerd in uw eigen tijdzone. Een eigen cron-expressie is mogelijk via <code>/schedule update</code>, met een minimuminterval van één uur.</li>\n  <li><strong>API:</strong> een eigen HTTPS-endpoint per routine met een eigen bearer-token. Uw alertingtool of deploymentpipeline stuurt er een POST naartoe, eventueel met contexttekst. Die tekst komt binnen gemarkeerd als niet-vertrouwd, zodat een uitgelekt token de instructies van de routine niet kan herschrijven.</li>\n  <li><strong>GitHub:</strong> pull request- of release-events, gefilterd op branch, label, auteur, draftstatus of merge-status.</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"Anatomie van een routine-run: triggers, opgeslagen routine, cloudsessie en resultaten\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>In twee minuten ingesteld</h2>\n<ol>\n  <li>Open <code>claude.ai/code/routines</code> en kies <strong>New routine</strong>, of typ <code>/schedule</code> in de Claude Code CLI.</li>\n  <li>Schrijf een prompt die op zichzelf staat: scope, toegestane acties, waar de uitvoer naartoe moet en wat er moet gebeuren als er niets te doen is.</li>\n  <li>Kies repositories en een omgeving. Verwijder connectors die de taak niet nodig heeft, want standaard zijn ze allemaal inbegrepen.</li>\n  <li>Voeg een trigger toe, kies <strong>Run now</strong> om te testen en lees daarna het transcript. Een groene badge betekent alleen dat de sessie is uitgevoerd, niet dat de taak is geslaagd.</li>\n</ol>\n\n<h2>Sub-routines: één run, veel helpers</h2>\n<p>Dit is onze naam voor een patroon, geen functie van Anthropic. De prompt van de routine orkestreert en draagt elke stap over aan een <strong>subagent</strong> (<code>.claude/agents/</code>) of een <strong>skill</strong> die in de repository is vastgelegd. Elke helper krijgt een eigen contextvenster en alleen de tools die hij nodig heeft. Zo blijven lange onbewaakte runs gefocust, goedkoper en veiliger.</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"Sub-routines: een orkestrerende prompt die taken delegeert aan subagents en skills\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Co-routines: routines die werk aan elkaar overdragen</h2>\n<p>Routines kunnen elkaar niet rechtstreeks aanroepen, maar ze kunnen wel samenwerken via duurzame artefacten. Een voorbeeld: een nachtelijke routine opent een draft-PR, een door GitHub getriggerde routine reviewt die, een mens voert de merge uit, een routine die op de merge reageert werkt de documentatie bij, en uw deploymentpipeline roept een verificatieroutine aan. Gebruik filters zodat geen enkele routine afgaat op zijn eigen output, en houd een menselijke merge-poort in de keten.</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"Co-routines: vier routines die samenwerken via GitHub-events, labels en API-aanroepen\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Limieten die u moet kennen</h2>\n<ul>\n  <li>Bij de lancering was het dagelijkse maximum aantal runs 5 op Pro, 15 op Max en 25 op Team en Enterprise, bovenop het normale abonnementsgebruik. Eenmalige runs tellen niet mee.</li>\n  <li>Routines handelen als <strong>u</strong>. Commits, PR's en Slack-berichten dragen uw identiteit. Claude pusht alleen naar <code>claude/</code>-branches tenzij anders opgedragen, en nooit naar beschermde branches.</li>\n  <li>Hebt u polling per minuut of lokale bestanden nodig? Gebruik dan <code>/loop</code> of geplande taken in Desktop.</li>\n</ul>\n\n<p><strong>Lees verder:</strong> de <a href=\"/nl/articles/claude-code-routines-scheduled-cloud-agents\">complete handleiding</a> behandelt de beveiliging van API-payloads, prompttemplates, voorbeelden van subagents, vergelijkingen met GitHub Actions, n8n en Trigger.dev, en een governance-checklist. Bronnen: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">aankondiging van Anthropic</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code-documentatie</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

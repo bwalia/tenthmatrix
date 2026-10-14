@@ -1,0 +1,109 @@
+{
+  "uuid": "blog-polyglot-benchmarks-001",
+  "internal_id": 946,
+  "slug": "polyglot-benchmarks-right-tool-right-application",
+  "title": "پولی گلوٹ بینچ مارکس: صحیح کام کے لیے صحیح ٹول کا انتخاب",
+  "sub_title": "پولی گلوٹ بینچ مارک کس طرح آپ کو ہر ایپلیکیشن کے لیے صحیح اسٹیک منتخب کرنے میں مدد کرتے ہیں — ان سب پر حکمرانی کے لیے ایک زبان نہیں۔",
+  "excerpt": "ڈیفالٹ اسٹیک تعصب بند کریں۔ پولی گلوٹ بینچ مارکس njs, Lua, Python, Go, Rust, Bun, Java, اور Kotlin کا ایک ہی کام کے بوجھ پر موازنہ کرتا ہے — فن تعمیر کے فیصلوں کے لیے ری پروڈیکیبل ہارنس + لائیو ڈیش بورڈ۔",
+  "meta_title": "پولی گلوٹ بینچ مارکس: کام کے لیے صحیح ٹول",
+  "meta_description": "اسی HTTP ٹیسٹوں پر njs, Lua, Python, Go, Rust, Bun, Java, Kotlin کا موازنہ کریں۔ اسٹیک کے فیصلوں کے لیے دوبارہ پیدا کرنے والا استعمال + لائیو ڈیش بورڈ۔",
+  "meta_keywords": "پولی گلوٹ بینچ مارکس، زبان کا موازنہ، فن تعمیر کے فیصلے، ورک فلو کی مثالیں، کارکردگی کا بینچ مارک، Rust vs Go، Java vs Kotlin، FastAPI، Bun.js، Javalin، Ktor، Lua، OpenResty، njs، NGINX",
+  "cover_image": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+  "images": [
+    {
+      "url": "/img/polyglot-benchmarks-cover.png?v=20260821jk",
+      "id": 946,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Polyglot Benchmarks — right tool, right job cover"
+    },
+    {
+      "url": "/img/polyglot-benchmarks-workflow.png?v=20260821jk",
+      "id": 947,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Polyglot benchmarks workflow from spec to ADR"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>ایک مختصر، سکیم پڑھنے کے قابل ساتھی۔ مکمل آرکیٹیکچر ڈیپ ڈائیو کے لیے — ہارنس لے آؤٹ، فیصلہ میٹرکس، اینٹی پیٹرنز، اور بینچ مارکس کو فورک کرنے کا طریقہ —<a href=\"/ur/articles/polyglot-benchmarks-right-tool-right-application\">طویل مضمون</a>پڑھیں۔</em></p><h2>آپ کے org نے 2019 میں ایک اسٹیک اٹھایا۔ آپ کے کام کا بوجھ نہیں ہوا۔</h2><p>زیادہ تر ٹیمیں اب بھی ہر نئی سروس کے لیے ایک ہی زبان کو معیاری بناتی ہیں: Node میں موجود ہر چیز، Python کی ہر چیز، جاوا کی ہر چیز، یا صرف گرین فیلڈ کے لیے Rust پر ایک بہادر شرط۔ یہ عادت قابل فہم ہے — جب اسٹیک یکساں ہوتا ہے تو بھرتی، CI ٹیمپلیٹس، اور سیکیورٹی کا جائزہ سب آسان ہو جاتا ہے۔ مسئلہ یہ ہے کہ کام کا بوجھ یکساں نہیں ہے۔ ایک API گیٹ وے، ایک رات کی ETL جاب، ایک NGINX ایج ٹرانسفارم، ایک JVM مائیکرو سرویس اسٹیٹ، اور طویل المدت کنکشن کے ساتھ چیٹ بیک اینڈ رن ٹائم کے مختلف حصوں پر زور دیتا ہے۔ ہال وے ڈیبیٹ یا سنگل مائیکرو بینچ مارک سے ایک فاتح کو چننا یہ ہے کہ آپ غلط بوجھ اٹھانے والے غلط ٹول کے ساتھ کیسے ختم ہوتے ہیں۔</p><p><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\"><strong>پولی گلوٹ بینچ مارکس</strong></a>ایک تریاق ہے: ایک تولیدی کنٹرول اور لائیو ڈیش بورڈ جو<strong>آٹھ</strong>رن ٹائمز کا<em>ایک ہی</em>HTTP ورک لوڈز پر موازنہ کرتا ہے، لہذا سیاق و سباق کے بجائے سیاق و سباق کو ملایا جا سکتا ہے۔ تعصب</p><p><img src=\"/img/polyglot-benchmarks-cover.png?v=20260821jk\" alt=\"Polyglot Benchmarks — right tool, right job cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>یہ</h2>کی پیمائش کرتا ہے۔<p>عوامی ڈیش بورڈ کا موازنہ<strong>NGINX njs</strong>,<strong>OpenResty Lua</strong>,<strong>Python (FastAPI)</strong>,<strong>Go (net/http)</strong>, </strong> , XTAG3ct7X Rust) Bun</strong>,<strong>Java (Javalin / Jetty)</strong>, اور<strong>Kotlin (Ktor / Netty)</strong>سات مصنوعی ٹیسٹوں میں جو حقیقی API اور کنارے کے نمونوں کی عکاسی کرتے ہیں: سادہ متن کی بیس لائن، JSON سیریلائزیشن، JSON سیریلائزیشن، JSON سیریلائزیشن، ایکس پی آر سیریلائزیشن معائنہ، اندرونی ذیلی درخواست + تبدیلی، اور روٹنگ منطق۔ ہر ٹیسٹ فی سیکنڈ، اوسط اور ٹیل لیٹینسی (بشمول P99)، curl سے پہلے بائٹ تک کا وقت، اور غلطی کی گنتی کی درخواستوں کی رپورٹ کرتا ہے —<code>bench.sh</code>کے مکمل ہوتے ہی لائیو نشر کیا جاتا ہے۔</p><p>Java اور Kotlin مرتب شدہ اور اسکرپٹنگ رن ٹائم کے ساتھ ساتھ بیٹھتے ہیں تاکہ JVM دکانیں یہ دیکھ سکیں کہ Javalin اور Ktor ایک جیسے راستوں پر Go, Rust, Bun, اور FastAPI کے خلاف کس طرح تجارت کرتے ہیں — ہاتھ سے لہرانے والے \"انٹرپرائز بمقابلہ گرین فیلڈ\" بیانیے کے خلاف نہیں۔ کنٹرول<a href=\"https://github.com/bwalia/workflow-examples/tree/main/benchmarks\" target=\"_blank\" rel=\"noopener noreferrer\">ورک فلو-مثالوں/بینچ مارکس</a>میں رہتا ہے: Docker کمپوز سروسز، ایک مشترکہ<code>wrk</code>پروفائل (10 سیکنڈ، 4 تھریڈز، 100 کنکشن)، اور ڈیش بورڈ کے ذریعے استعمال کیے جانے والے JSON نتائج۔ آپ اسے اپنے امیدواروں اور گرم راستوں کے لیے بنا سکتے ہیں۔</p><h2>یہ ایک فیصلے کا فریم ورک کیوں ہے، لیڈر بورڈ</h2>نہیں۔<p>پولی گلوٹ بینچ مارکس ہر وقت ایک زبان کا تاج نہیں رکھتے۔ جیتنے والے فی ٹیسٹ قطار بدلتے ہیں — بالکل وہی جو آپ مائیکرو سروسز ڈیزائن کرتے وقت چاہتے ہیں۔ ڈیش بورڈ کے فیصلے کا سیکشن مقدمات کو استعمال کرنے کے لیے نتائج کا نقشہ بناتا ہے (Lua/njs میں ایج روٹنگ، Rust/Go میں بنیادی ہم آہنگی، Java/Kotlin میں JVM سروسز، Python میں رفتار)۔ یہ تھیسس ہے:<strong>پولی گلوٹ بذریعہ ڈیزائن</strong>، آرکیٹیکچر ریویو بورڈز کے ڈیٹا کے ساتھ رائے کے بجائے۔</p><figure class=\"blog-figure\"><img src=\"/img/polyglot-benchmarks-cover-classic.png?v=20260605c\" alt=\"Polyglot Benchmarks four-step approach: define workload, run harness, compare, decide\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /><figcaption style=\"font-size:0.9rem;color:#64748b;margin-top:0.5rem;\">ایک فریم میں چار قدمی نقطہ نظر: کام کے بوجھ کی وضاحت کریں، ہارنس چلائیں، لائیو ڈیش بورڈ پر موازنہ کریں، پھر ADR کے ساتھ فیصلہ کریں۔</figcaption></figure><h2>پلیٹ فارم اور انجینئرنگ لیڈز</h2>کے لیے چھ فوائد<ul><li><strong>رائے</strong>پر ثبوت — ADRs کے ساتھ چارٹ اور تشکیل منسلک کریں۔ ناپے ہوئے رنز کے ساتھ اسٹیک بحثیں طے کریں۔</li><li><strong>کام کے بوجھ سے متعلق مخصوص فاتح</strong>— تاخیر سے متعلق حساس راستے بمقابلہ بیچ بمقابلہ ایج ٹرانسفارمز بمقابلہ JVM اسٹیٹس مختلف رہنما حاصل کرتے ہیں۔</li><li><strong>ملکیت کی کل قیمت</strong>— خام RPS کافی نہیں ہے۔ تعمیراتی وقت، تصویر کا سائز، ٹیم کی مہارت کے مطابق، اور آپریشن کے بوجھ کا وزن کریں۔</li><li><strong>Reproducible workflows</strong>— وہی ریپو، وہی کمپوز فائل، وہی wrk اسکرپٹ؛ CI میں دوبارہ چلانے کے قابل۔</li><li><strong>قانونی پولی گلوٹ مائیکرو سروسز</strong>— مختلف زبانیں فی سروس باؤنڈری بغیر شرم اور تعجب کے۔</li><li><strong>خطرے میں کمی</strong>— تنظیم کے وسیع مینڈیٹ سے پہلے رنر اپ میں پروٹو ٹائپ۔</li></ul><p><img src=\"/img/polyglot-benchmarks-workflow.png?v=20260821jk\" alt=\"Polyglot benchmarks workflow from problem spec to ADR\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><h2>فوری آغاز</h2><ol><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">لائیو ڈیش بورڈ</a>کھولیں جب رن جاری ہو (یا مقامی طور پر شروع کریں)۔</li><li>کلون<code>workflow-examples</code>,<code>cd benchmarks</code>,<code>docker compose up</code>— آٹھ زبان کی خدمات کے علاوہ ڈیش بورڈ اور بینچ رنر۔</li><li>ڈیش بورڈ والیوم پر<code>results.json</code>پڑھیں اور اپنی</em>ورک لوڈ قطاروں کو<em>کرنے کے لیے فاتحین کا نقشہ بنائیں۔</li><li>ADR لکھیں — دورانیہ، تھریڈز، کنکشنز، اور ہارڈویئر کلاس شامل کریں۔</li></ol><h2>طویل ورژن</h2>پڑھیں<p><a href=\"/ur/articles/polyglot-benchmarks-right-tool-right-application\">لمبا مضمون</a>مکمل ریپو لے آؤٹ، ایک معیار کی میز، فیصلہ میٹرکس ڈایاگرام، کیس پیٹرن فی ٹیسٹ فیملی (بشمول Java اور Kotlin)، آپ کے ARB کے ساتھ اشتراک کرنے کے لیے اینٹی پیٹرنز، حدود، اور SEO کے لیے تیار ٹکڑوں کا احاطہ کرتا ہے۔<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>کے ذریعہ شائع کردہ ;<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>پر میزبان بینچ مارک سائٹ۔</p><p>#Rust #GoLang #Bunjs #Java #Kotlin #Lua #Python #njs #FastAPI #Javalin #Ktor #OpenResty #polyglot #benchmarks</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "benchmarks",
+      "id": 964
+    },
+    {
+      "name": "polyglot",
+      "id": 965
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "golang",
+      "id": 969
+    },
+    {
+      "name": "python",
+      "id": 957
+    },
+    {
+      "name": "nodejs",
+      "id": 971
+    },
+    {
+      "name": "workflow",
+      "id": 970
+    },
+    {
+      "name": "lua",
+      "id": 1025
+    },
+    {
+      "name": "bun",
+      "id": 1026
+    },
+    {
+      "name": "njs",
+      "id": 1027
+    },
+    {
+      "name": "java",
+      "id": 1028
+    },
+    {
+      "name": "kotlin",
+      "id": 1029
+    }
+  ],
+  "created_at": "2026-05-16T09:00:00Z",
+  "updated_at": "2026-05-16T09:00:00Z",
+  "published_date": "2026-05-16",
+  "status": true
+}

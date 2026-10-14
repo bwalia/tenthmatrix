@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-wise-developer-workflow-001",
+  "internal_id": 955,
+  "slug": "wise-developer-new-project-adr-pr-gitops-review-bot",
+  "title": "Cómo trabaja un desarrollador sabio en un proyecto nuevo",
+  "sub_title": "Brainstorm, discutir, prototipar, diagramar, proponer, ADR, MR/PR, GitOps — más Review Bots que auto-comentan para que humanos revisen el riesgo",
+  "excerpt": "El camino sabio para un proyecto nuevo: brainstorm, discusión con el equipo, prototipos, diagramas, propuestas, ADR, PRs pequeños con Review Bots y GitOps para calidad de producción.",
+  "meta_title": "Cómo un desarrollador sabio trabaja un proyecto nuevo — ADR, PR, GitOps, Review Bot",
+  "meta_description": "Del brainstorming al GitOps: ADR, MR/PR, Review Bots que auto-comentan pull requests, setup FDE y Claude Architect Certification para entrega de producción.",
+  "meta_keywords": "desarrollador sabio, ADR, pull request, merge request, GitOps, Review Bot, revisión de código, FDE, Claude Architect Certification, producción",
+  "cover_image": "/img/wise-developer-workflow-cover.svg",
+  "images": [
+    {
+      "url": "/img/wise-developer-workflow-cover.svg",
+      "id": 955,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Wise developer workflow ADR PR GitOps Review Bot"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Cómo un desarrollador sabio empieza un proyecto nuevo — brainstorm, discutir, prototipar, diagramar, proponer, registrar ADR, abrir MR/PR y aterrizar cambios con GitOps — mientras Review Bots auto-comentan pull requests. Playbook completo en el <a href=\"/es/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">artículo largo</a>.</em></p>\n\n<p><img src=\"/img/wise-developer-workflow-cover.svg\" alt=\"Flujo desarrollador sabio ADR PR GitOps Review Bot\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>La versión en un párrafo.</strong> No salte directo a un PR gigante. Brainstorm solo, luego con el equipo. Prototipe las partes arriesgadas. Dibuje diagramas. Escriba una propuesta corta. Capture decisiones como ADR. Entregue MR/PR pequeños con CI verde. Promueva vía GitOps. Deje que un Review Bot redacte comentarios de primera pasada para que humanos revisen diseño y riesgo — no formato. Un FDE puede montar este sistema; Claude Architect Certification es una señal fuerte de que puede diseñarlo y defenderlo.\n</div>\n\n<h2>El camino sabio (en orden)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — objetivos, restricciones, no-objetivos, modos de fallo.</li>\n  <li><strong>Discuss</strong> — whiteboard / sync breve con compañeros antes de que el código endurezca.</li>\n  <li><strong>Prototype</strong> — spikee lo desconocido; deseche o promueva deliberadamente.</li>\n  <li><strong>Diagramas</strong> — contexto, secuencia, despliegue — suficiente para discutir.</li>\n  <li><strong>Propuesta</strong> — problema, opciones, recomendación, rollback.</li>\n  <li><strong>ADR</strong> — el «por qué elegimos X sobre Y» durable.</li>\n  <li><strong>MR / PR</strong> — diffs pequeños, checklist, ADR/ticket vinculado.</li>\n  <li><strong>GitOps</strong> — estado deseado en git; promover por merge, rollback por revert.</li>\n</ol>\n\n<h2>Review Bots: comentarios que se escriben solos</h2>\n<p>Conecte un Review Bot (Bugbot, CodeRabbit, Claude/GitHub Action custom, o su <a href=\"/es/docs/blogs/building-ai-code-review-pipeline\">pipeline de revisión de código IA</a>) para que cada PR reciba automáticamente comentarios inline sobre:</p>\n<ul>\n  <li>Olores de seguridad y secretos</li>\n  <li>Tests faltantes / patrones flaky</li>\n  <li>Riesgos de contrato API y migración</li>\n  <li>Estilo y lint que escaparon al pre-commit</li>\n</ul>\n<p>Los humanos luego se centran en ajuste arquitectónico, intención de producto y blast radius operativo. Así agiliza la vida del desarrollador sin bajar el listón de producción.</p>\n\n<h2>Quién lo monta — y por qué Claude Architect Certification</h2>\n<p>Un <strong>FDE (Forward Deployed Engineer)</strong> está bien situado para instalar las plantillas: carpeta ADR, checklist PR, Review Bot, branch protection y apps GitOps. Combine esa habilidad de entrega con <strong>Claude Architect Certification</strong> — merece perseguirse si quiere un credential que pruebe que puede diseñar sistemas agénticos/asistidos por IA, revisar críticamente código generado por IA y entrenar equipos en workflows de producción.</p>\n\n<h2>Barra de calidad de producción</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#0c1424;color:#86efac;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Gate</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #1f2a44;\">Criterios de paso</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Pre-commit</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Formato, lint, escaneo de secretos</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">CI</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Tests unitarios + de contrato verdes</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Review Bot</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Sin hallazgos de alta severidad sin resolver</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Human review</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Diseño + riesgo firmados</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">GitOps</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Promoción de env vía merge; revert probado</td></tr>\n</tbody>\n</table>\n\n<p>Lea el  <a href=\"/es/articles/wise-developer-new-project-adr-pr-gitops-review-bot\">artículo largo</a>. Publicado por <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "fde",
+      "id": 1019
+    },
+    {
+      "name": "claude",
+      "id": 1020
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    }
+  ],
+  "created_at": "2026-07-23T21:00:00Z",
+  "updated_at": "2026-07-23T21:00:00Z",
+  "published_date": "2026-07-23",
+  "status": true
+}

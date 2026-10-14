@@ -1,0 +1,69 @@
+{
+  "uuid": "blog-turbocharging-llms-001",
+  "internal_id": 966,
+  "slug": "turbocharging-llms-pagedattention-vllm-powerinfer",
+  "title": "Турбонаддув LLMs",
+  "sub_title": "PagedAttention, vLLM, Self-Debugging, PowerInfer и EG-MLA — как масштабировать агенты LLM, не тратя впустую KV-кеш GPU",
+  "excerpt": "TenthMatrix с турбонаддувом LLMs: подкачка PagedAttention для кэша KV, обслуживание vLLM, Self-Debugging для агентов, скорость токенов PowerInfer и сокращение памяти EG-MLA — с компромиссами в производстве.",
+  "meta_title": "LLMs с турбонаддувом: PagedAttention, vLLM, PowerInfer | TenthMatrix",
+  "meta_description": "Масштабируйте обслуживание LLM с помощью PagedAttention и vLLM, Self-Debugging для агентов, генерации токенов PowerInfer и сжатия KV EG-MLA — ручки и компромиссы.",
+  "meta_keywords": "LLM, PagedAttention, vLLM, KV-кэш, PowerInfer, EG-MLA, Self-Debugging, обслуживание GPU, Kubernetes, TenthMatrix",
+  "cover_image": "/img/turbocharging-llms-cover.png?v=20260830",
+  "images": [
+    {
+      "url": "/img/turbocharging-llms-cover.png?v=20260830",
+      "id": 966,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Turbocharging LLMs with PagedAttention, vLLM, PowerInfer and EG-MLA"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>о том, как усовершенствовать большие языковые модели в производстве: PagedAttention, vLLM, Self-Debugging, PowerInfer и EG-MLA — с учетом компромиссов, которые фактически проявляются на GPU. Подробное описание: длинная статья<a href=\"/ru/articles/turbocharging-llms-pagedattention-vllm-powerinfer\"></a>. Учебное пособие:<a href=\"/ru/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">Объяснение LLMs + Kubernetes</a>.</em></p><p><img src=\"/img/turbocharging-llms-cover.svg\" alt=\"Turbocharging LLMs cover\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #06b6d4;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Итог. Пропускная способность</strong>снижается при фрагментации кэша KV. Размещайте кэш как операционную систему (PagedAttention внутри vLLM), выбирайте соответствующий механизм токенов (PowerInfer на толстом потребительском GPU, vLLM на обслуживающем кластере), сокращайте внимание, когда это позволяет архитектура (EG-MLA), и ограничивайте циклы отладки агента, чтобы качество не покупало неограниченную задержку.</div>Часы<h2>: что такое LLM на самом деле</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/zjkBMFhNj_g\" title=\"Andrej Karpathy — Intro to Large Language Models\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Контекст, а не демонстрация продукта:<a href=\"https://youtu.be/zjkBMFhNj_g\" target=\"_blank\" rel=\"noopener noreferrer\">Введение в большие языковые модели</a>(Андрей Карпати). Сопряжение с нашим<a href=\"/ru/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">с простым английским руководством LLM + Kubernetes</a>.</p><h2>Проблема масштабирования</h2><p>LLMs разблокировал диалоговый искусственный интеллект и генерацию, после чего сразу же возникла проблема с обслуживанием. На каждом этапе декодирования ключи и значения добавляются в KV-кэш, который увеличивается с длиной последовательности и размером пакета. Наивные движки заранее резервируют огромные смежные плиты. Большая часть этой памяти простаивает, пока ждут другие запросы. Пропускная способность падает, хотя GPU выглядит «полным».</p><h2>PagedAttention: виртуальная память для внимания</h2><p><img src=\"/img/turbocharging-llms-pagedattention.svg\" alt=\"PagedAttention maps logical token pages to physical GPU KV blocks\" width=\"1200\" height=\"560\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>PagedAttention (Квон и др., SOSP 2023) обрабатывает KV-кеш как подкачку ОС: блоки фиксированного размера, таблица блоков на запрос, несмежные физические страницы<a href=\"https://arxiv.org/abs/2309.06180\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2309.06180]</a>. Ядро собирает блоки во время внимания. Вам по-прежнему необходимо настроить размер блока<strong></strong>, максимальную длину модели<strong></strong>и иерархию кэша<strong></strong>(GPU HBM против разгрузки CPU против кэша префиксов). Слишком маленькие блоки добавляют накладные расходы на отображение; слишком большие блоки повторно вводят отходы.</p><h2>vLLM: почти нулевые отходы при обслуживании</h2><p>vLLM — это обслуживающая система, построенная на базе PagedAttention. Он нацелен на практически нулевой уровень потерь напряжения, непрерывное дозирование и совместимую с OpenAI поверхность HTTP. В производстве следите за тремя вещами: (1)<code>gpu_memory_utilization</code>против OOM, (2) время до первого токена и токенов декодирования, (3) изменяет ли кэширование префикса/подсказки ответы для вашего набора оценок. Кэширование — это выигрыш в пропускной способности; он не свободен от эффектов корректности и задержки хвоста.</p><pre style=\"background:#0c0a09;color:#e7e5e4;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">from vllm import LLM, SamplingParams\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", gpu_memory_utilization=0.90)\nparams = SamplingParams(temperature=0.2, max_tokens=256)\nouts = llm.generate([\"Explain PagedAttention in one paragraph.\"], params)\nprint(outs[0].outputs[0].text)\n</pre><p>Это реальное использование vLLM. Вызов «Обнимающее лицо» BERT<code>forward()</code>— это<em>, а не</em>PagedAttention — не путайте логиты классификатора с страничным обслуживанием KV.</p><h2>Self-Debugging: качественные петли с ограниченной задержкой</h2><p>Self-Debugging (Чен и др.) учит модель исправлять свои собственные предсказанные программы на основе нескольких трассировок, совпадая или превосходя базовые линии, которые выдают в 10 раз больше кандидатов<a href=\"https://arxiv.org/abs/2304.05128\" target=\"_blank\" rel=\"noopener noreferrer\">[arXiv:2304.05128]</a>. Для агентов это золото — до тех пор, пока раунды обратной связи не суммируются. Ограничьте количество отладочных сообщений, протоколируйте каждый раунд и закройте проект для человека или более мелкого специалиста, когда бюджет закончится.</p><h2>Watch: контекст обслуживания и вывода</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/80-gEgwIglM\" title=\"LLM serving and inference (context video)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Контекстный доклад о быстром обслуживании LLM, а не официальная демонстрация TenthMatrix. Выполните сопряжение с бумагой vLLM и документом<a href=\"https://docs.vllm.ai/\" target=\"_blank\" rel=\"noopener noreferrer\">docs.vllm.ai</a>.</p><h2>PowerInfer: токены на одном жире GPU</h2><p>PowerInfer разделяет «горячие» и «холодные» нейроны, поэтому потребительские модели GPU и CPU могут быстро генерировать токены. Заявленные цифры:<strong>13,20 токенов/с в среднем</strong>, пик<strong>29,08 токенов/с</strong>на одном NVIDIA RTX 4090, до<strong>11,69x</strong>по сравнению с llama.cpp при сохранении точности<a href=\"https://github.com/SJTU-IPADS/PowerInfer\" target=\"_blank\" rel=\"noopener noreferrer\">[PowerInfer]</a>. В масштабе парка вам по-прежнему необходимо размещение: какие слои остаются на GPU, как вы распределяете между узлами и соответствует ли профиль местоположения<em>, подсказки</em>, моделям в газете.</p><h2>EG-MLA: уменьшите КВ, не повредив верстак</h2><p>EG-MLA (встраивание скрытого внимания нескольких головок) сообщает о сокращении кэша KV<strong>более чем на 91,6 %.</strong>по сравнению с многоголовочным вниманием с незначительным ухудшением, дополнительной экономией по сравнению с MLA (до 59,9 %) и лучшими показателями по наборам рассуждений, масштабированным по параметрам 1B.<a href=\"https://arxiv.org/abs/2509.16686\" target=\"_blank\" rel=\"noopener noreferrer\">[бумага EG-MLA]</a>. Относитесь к этому как к выбору архитектуры, а не как к вставному флагу на зависшей контрольной точке vLLM — проверьте свою оценочную систему, прежде чем отмечать график памяти.</p><p><img src=\"/img/turbocharging-llms-stack.svg\" alt=\"vLLM, PowerInfer, Self-Debugging and EG-MLA stack\" width=\"1200\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><h2>Собираем вместе</h2><p>Комбинируйте PagedAttention + vLLM для обслуживания кластера, PowerInfer, когда в качестве рабочей станции используется GPU, Self-Debugging внутри агентов кодирования с жестким лимитом округления и EG-MLA, когда вы управляете семейством моделей. Распределенное обслуживание добавляет сложности: параллелизм KV, разделение предварительного заполнения/декодирования и автоматическое масштабирование, которое не перегружает таблицы страниц. Мера. Затем напишите ADR.</p><h2>Читать далее</h2><ol><li><a href=\"/ru/articles/turbocharging-llms-pagedattention-vllm-powerinfer\">Длинная статья</a>— ручки, режимы отказа, примечания к Kubernetes.</li><li><a href=\"/ru/docs/blogs/large-language-models-explained-run-your-own-on-kubernetes\">Объяснение LLMs + запуск самостоятельно на Kubernetes</a></li><li><a href=\"/ru/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Muse Glimmer / локальные агенты</a>·<a href=\"/ru/enterprise-ai\">Корпоративная лаборатория искусственного интеллекта</a></li></ol><p>Опубликовано<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "machine-learning",
+      "id": 1006
+    },
+    {
+      "name": "gpu",
+      "id": 1009
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    }
+  ],
+  "created_at": "2026-08-30T12:00:00Z",
+  "updated_at": "2026-08-30T12:00:00Z",
+  "published_date": "2026-08-30",
+  "status": true
+}

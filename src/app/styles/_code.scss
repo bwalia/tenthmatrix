@@ -1,0 +1,174 @@
+// Code blocks: dark in both themes (--tm-code-*), Plex Mono, Prism token
+// colours from the theme. No Prism theme CSS is imported anywhere.
+@use './mixins' as *;
+
+.tm-prose pre,
+.tm-code pre,
+pre.tm-pre {
+  position: relative;
+  margin: 0 0 1.25em;
+  padding: var(--tm-space-5) var(--tm-space-5);
+  overflow-x: auto;
+  border-radius: var(--tm-radius);
+  border: 1px solid var(--tm-code-line);
+  background: var(--tm-code-bg);
+  color: var(--tm-code-text);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-color: var(--tm-code-line) transparent;
+
+  code {
+    display: block;
+    min-width: max-content;
+    padding: 0;
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    white-space: pre;
+  }
+}
+
+// Copy button injected by Prose / rendered by CodeBlock.
+.tm-code-wrap {
+  position: relative;
+  margin: 0 0 1.25em;
+
+  > pre {
+    margin: 0;
+    padding-right: 5.5rem;
+  }
+
+  &[data-lang] > pre {
+    padding-top: calc(var(--tm-space-5) + 1.4rem);
+  }
+
+  &[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: var(--tm-space-3);
+    left: var(--tm-space-5);
+    z-index: 1;
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-2xs);
+    letter-spacing: var(--tm-tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--tm-code-comment);
+    pointer-events: none;
+  }
+}
+
+.tm-copy-btn {
+  position: absolute;
+  top: var(--tm-space-2);
+  right: var(--tm-space-2);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-1);
+  min-height: 32px;
+  padding: 0 var(--tm-space-3);
+  border: 1px solid var(--tm-code-line);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-code-bg);
+  color: var(--tm-code-text);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-2xs);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    border-color var(--tm-duration-fast) var(--tm-ease-standard),
+    color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  // Bigger hit area without a bigger button.
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+
+  &:hover {
+    border-color: var(--tm-code-keyword);
+    color: var(--tm-code-keyword);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--tm-code-keyword);
+  }
+
+  &[data-copied='true'] {
+    color: var(--tm-code-keyword);
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+// Prism tokens
+.token {
+  &.comment,
+  &.prolog,
+  &.doctype,
+  &.cdata {
+    color: var(--tm-code-comment);
+    font-style: italic;
+  }
+
+  &.punctuation,
+  &.operator {
+    color: var(--tm-code-text);
+    opacity: 0.85;
+  }
+
+  &.keyword,
+  &.atrule,
+  &.important,
+  &.selector,
+  &.tag,
+  &.builtin,
+  &.rule {
+    color: var(--tm-code-keyword);
+  }
+
+  &.string,
+  &.char,
+  &.attr-value,
+  &.regex,
+  &.url,
+  &.inserted {
+    color: var(--tm-code-string);
+  }
+
+  &.number,
+  &.boolean,
+  &.constant,
+  &.symbol,
+  &.entity,
+  &.variable {
+    color: var(--tm-code-number);
+  }
+
+  &.function,
+  &.class-name,
+  &.attr-name,
+  &.property {
+    color: var(--tm-code-text);
+    font-weight: var(--tm-weight-medium);
+  }
+
+  &.deleted {
+    color: var(--tm-code-string);
+    text-decoration: line-through;
+  }
+
+  &.bold {
+    font-weight: var(--tm-weight-semibold);
+  }
+
+  &.italic {
+    font-style: italic;
+  }
+}

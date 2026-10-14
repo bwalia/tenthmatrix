@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Root token blast radius versus WSL Vault tenant isolation">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 26px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 16px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .p { fill: #334155; font: 500 13px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .warn { fill: #fff1f2; stroke: #e11d48; stroke-width: 2; }
+      .ok { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .bad { fill: #e11d48; font: 700 12px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .good { fill: #047857; font: 700 12px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Blast radius: shared root token vs per-tenant custody</text>
+  <text class="sub" x="48" y="78">What a regulator should ask when one credential can open everything</text>
+
+  <rect class="warn" x="48" y="120" width="520" height="540" rx="14"/>
+  <text class="h" x="76" y="160">Classic vault with a powerful root token</text>
+  <text class="p" x="76" y="195">One master credential can unseal and read</text>
+  <text class="p" x="76" y="218">across teams, apps, and environments.</text>
+
+  <rect class="box" x="90" y="250" width="140" height="70" rx="8"/>
+  <text class="p" x="110" y="280">Finance</text>
+  <text class="p" x="110" y="300">secrets</text>
+  <rect class="box" x="250" y="250" width="140" height="70" rx="8"/>
+  <text class="p" x="270" y="280">Payments</text>
+  <text class="p" x="270" y="300">secrets</text>
+  <rect class="box" x="410" y="250" width="120" height="70" rx="8"/>
+  <text class="p" x="430" y="280">HR / PII</text>
+  <text class="p" x="430" y="300">secrets</text>
+
+  <rect class="box" x="90" y="350" width="140" height="70" rx="8"/>
+  <text class="p" x="110" y="380">INT</text>
+  <rect class="box" x="250" y="350" width="140" height="70" rx="8"/>
+  <text class="p" x="270" y="380">TEST / ACC</text>
+  <rect class="box" x="410" y="350" width="120" height="70" rx="8"/>
+  <text class="p" x="430" y="380">PROD</text>
+
+  <rect x="160" y="460" width="280" height="56" rx="10" fill="#e11d48"/>
+  <text x="195" y="494" fill="#fff" font-size="15" font-weight="700" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif">ROOT TOKEN IN WRONG HANDS</text>
+  <text class="bad" x="120" y="560">Result: every secret becomes a breach event</text>
+  <text class="p" x="120" y="590">Audit question: who can open everything?</text>
+
+  <rect class="ok" x="620" y="120" width="532" height="540" rx="14"/>
+  <text class="h" x="648" y="160">WSL Vault: per-tenant key hierarchy</text>
+  <text class="p" x="648" y="195">Each team / app / environment tenant owns</text>
+  <text class="p" x="648" y="218">its own sealed world. Cross-tenant = not found.</text>
+
+  <rect class="box" x="660" y="260" width="200" height="90" rx="8"/>
+  <text class="p" x="680" y="295">Tenant A KEK</text>
+  <text class="p" x="680" y="320">Team A token only</text>
+  <rect class="box" x="900" y="260" width="210" height="90" rx="8"/>
+  <text class="p" x="920" y="295">Tenant B KEK</text>
+  <text class="p" x="920" y="320">Team B token only</text>
+
+  <rect class="box" x="660" y="380" width="200" height="90" rx="8"/>
+  <text class="p" x="680" y="415">Tenant ACC</text>
+  <text class="p" x="680" y="440">Staging isolation</text>
+  <rect class="box" x="900" y="380" width="210" height="90" rx="8"/>
+  <text class="p" x="920" y="415">Tenant PROD</text>
+  <text class="p" x="920" y="440">Live customer data</text>
+
+  <text class="good" x="680" y="520">Stolen Team A token cannot open Team B</text>
+  <text class="p" x="680" y="550">Cryptographic refusal — not a filter hope</text>
+  <text class="p" x="680" y="580">Audit answer: blast radius is one tenant</text>
+</svg>

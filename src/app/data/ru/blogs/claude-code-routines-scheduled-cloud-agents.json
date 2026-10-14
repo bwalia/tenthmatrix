@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: облачные агенты по расписанию, подпрограммы и сопрограммы",
+  "sub_title": "Запускайте Claude Code по расписанию, по вызову API или по событиям GitHub — без ноутбука и без сервера. Руководство на пять минут.",
+  "excerpt": "Claude Code Routines выполняют сохранённые задачи агента в облаке Anthropic по расписанию, через API или по событиям GitHub. Как они работают, как их настроить и как объединять в цепочки.",
+  "meta_title": "Claude Code Routines: облачные агенты по расписанию | TenthMatrix",
+  "meta_description": "Claude Code Routines: триггеры по расписанию, API и GitHub, настройка, промпты, подпрограммы с субагентами, конвейеры сопрограмм, безопасность и лимиты тарифов.",
+  "meta_keywords": "Claude Code Routines, ИИ-агенты по расписанию, расписание Claude Code, /schedule, облачные агенты, триггер GitHub, триггер API, субагенты, подпрограммы, сопрограммы, sub-routines, co-routines, Anthropic, автоматизация с ИИ, автоматизация DevOps",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code больше не требует вашего присутствия за клавиатурой. <strong>Routines</strong> (облачные задания по расписанию) выполняют сохранённые задачи агента в облаке Anthropic по расписанию, по вызову API или при событии в GitHub. Рассказываем, что это такое, как настроить первое задание и как работают два паттерна, которые мы называем подпрограммами (sub-routines) и сопрограммами (co-routines). Полное руководство — в <a href=\"/ru/articles/claude-code-routines-scheduled-cloud-agents\">подробной статье</a>.</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: облачные агенты по расписанию, подпрограммы и сопрограммы\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Главное.</strong> Routine — это задача Claude Code, которую вы настраиваете один раз (промпт, репозитории, облачное окружение, коннекторы) и запускаете автоматически. Она выполняется как полноценная автономная сессия в облаке, поэтому ноутбук можно не открывать. Routines находятся в статусе research preview (с 14 апреля 2026 года) и доступны на тарифах Pro, Max, Team и Enterprise.\n</div>\n\n<h2>Три способа запустить routine</h2>\n<ul>\n  <li><strong>Расписание:</strong> ежечасно, ежедневно, по будням, еженедельно или однократно в заданное время — указывается в вашем локальном часовом поясе. Собственное cron-выражение задаётся через <code>/schedule update</code>, минимальный интервал — один час.</li>\n  <li><strong>API:</strong> отдельный HTTPS-эндпоинт для каждого задания с собственным bearer-токеном. Система оповещений или конвейер развёртывания отправляет на него POST-запрос, при желании с контекстным текстом. Этот текст помечается как недоверенный, поэтому утёкший токен не позволит переписать инструкции задания.</li>\n  <li><strong>GitHub:</strong> события pull request или release с фильтрацией по ветке, метке, автору, статусу черновика или слияния.</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"Анатомия запуска routine: триггеры, сохранённое задание, облачная сессия и результаты\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Настройка за две минуты</h2>\n<ol>\n  <li>Откройте <code>claude.ai/code/routines</code> и выберите <strong>New routine</strong> или введите <code>/schedule</code> в Claude Code CLI.</li>\n  <li>Напишите самодостаточный промпт: область действия, разрешённые действия, куда выводить результат и что делать, если делать нечего.</li>\n  <li>Выберите репозитории и окружение. Уберите коннекторы, которые не нужны для задачи, — по умолчанию подключены все.</li>\n  <li>Добавьте триггер, нажмите <strong>Run now</strong> для проверки и прочитайте журнал сессии. Зелёный значок означает лишь то, что сессия отработала, а не то, что задача выполнена успешно.</li>\n</ol>\n\n<h2>Подпрограммы: один запуск, много помощников</h2>\n<p>Это наше название паттерна, а не функция Anthropic. Промпт задания выступает оркестратором и передаёт каждый шаг <strong>субагенту</strong> (<code>.claude/agents/</code>) или <strong>навыку</strong> (skill), сохранённому в репозитории. Каждый помощник получает собственное контекстное окно и только те инструменты, которые ему нужны. Благодаря этому длительные автономные запуски остаются сфокусированными, дешёвыми и безопасными.</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"Подпрограммы: промпт-оркестратор делегирует работу субагентам и навыкам\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Сопрограммы: задания, передающие работу друг другу</h2>\n<p>Routines не могут вызывать друг друга напрямую, но могут взаимодействовать через долговременные артефакты. Например, ночное задание открывает черновой PR, задание с триггером GitHub проверяет его, человек выполняет слияние, задание, срабатывающее на слияние, обновляет документацию, а конвейер развёртывания вызывает задание-верификатор. Настройте фильтры так, чтобы ни одно задание не срабатывало на собственный результат, и оставьте в цепочке ручное подтверждение слияния.</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"Сопрограммы: четыре задания взаимодействуют через события GitHub, метки и вызовы API\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Ограничения, о которых стоит знать</h2>\n<ul>\n  <li>На момент запуска дневной лимит составлял 5 запусков на Pro, 15 на Max и 25 на Team и Enterprise — сверх обычного использования подписки. Однократные запуски не учитываются.</li>\n  <li>Routines действуют <strong>от вашего имени</strong>. Коммиты, PR и сообщения в Slack подписаны вашей учётной записью. Claude отправляет изменения только в ветки <code>claude/</code>, если не указано иное, и никогда — в защищённые ветки.</li>\n  <li>Нужен опрос с интервалом в минуты или доступ к локальным файлам? Используйте <code>/loop</code> или запланированные задачи в Desktop.</li>\n</ul>\n\n<p><strong>Читайте далее:</strong> в <a href=\"/ru/articles/claude-code-routines-scheduled-cloud-agents\">полном руководстве</a> — безопасность полезной нагрузки API, шаблоны промптов, примеры субагентов, сравнение с GitHub Actions, n8n и Trigger.dev, а также чек-лист по управлению. Источники: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">анонс Anthropic</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">документация Claude Code</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

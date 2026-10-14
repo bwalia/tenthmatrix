@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="400" viewBox="0 0 960 400" role="img" aria-label="NebulaCR zero-trust auth: CI runner, OIDC provider, nebula-auth, nebula-registry token flow">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 20px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ci { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .oidc { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .auth { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .reg { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .docker { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.15); stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.75); font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .step { stroke: #ab47bc; stroke-width: 2; fill: none; }
+      .stepLabel { fill: #ce93d8; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ab47bc"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="400" fill="url(#bg)"/>
+  <rect width="960" height="400" fill="url(#grid)"/>
+
+  <text class="title" x="480" y="32" text-anchor="middle">Zero-trust token path</text>
+  <text class="subtitle" x="480" y="54" text-anchor="middle">No long-lived registry passwords. OIDC identity tokens are exchanged for short-lived signed JWTs.</text>
+
+  <g transform="translate(40,90)">
+    <rect width="160" height="100" rx="10" class="ci"/>
+    <text class="boxLabel" x="80" y="32" text-anchor="middle">CI runner</text>
+    <text class="boxText" x="80" y="56" text-anchor="middle">GitHub Actions</text>
+    <text class="boxText" x="80" y="74" text-anchor="middle">GitLab CI  /  Tekton</text>
+    <text class="boxText" x="80" y="90" text-anchor="middle">no static secret</text>
+  </g>
+
+  <g transform="translate(260,90)">
+    <rect width="160" height="100" rx="10" class="oidc"/>
+    <text class="boxLabel" x="80" y="32" text-anchor="middle">OIDC provider</text>
+    <text class="boxText" x="80" y="56" text-anchor="middle">Azure AD  /  Okta</text>
+    <text class="boxText" x="80" y="74" text-anchor="middle">Google  /  GitHub</text>
+    <text class="boxText" x="80" y="90" text-anchor="middle">signs ID token (RS256)</text>
+  </g>
+
+  <g transform="translate(480,90)">
+    <rect width="200" height="100" rx="10" class="auth"/>
+    <text class="boxLabel" x="100" y="32" text-anchor="middle">nebula-auth :5001</text>
+    <text class="boxText" x="100" y="56" text-anchor="middle">verify ID token via JWKS</text>
+    <text class="boxText" x="100" y="74" text-anchor="middle">RBAC  /  scope evaluation</text>
+    <text class="boxText" x="100" y="90" text-anchor="middle">sign access JWT (TTL 5-15 min)</text>
+  </g>
+
+  <g transform="translate(740,90)">
+    <rect width="180" height="100" rx="10" class="reg"/>
+    <text class="boxLabel" x="90" y="32" text-anchor="middle">nebula-registry :5000</text>
+    <text class="boxText" x="90" y="56" text-anchor="middle">verify JWT signature</text>
+    <text class="boxText" x="90" y="74" text-anchor="middle">enforce scope on /v2</text>
+    <text class="boxText" x="90" y="90" text-anchor="middle">push  /  pull  /  list</text>
+  </g>
+
+  <line x1="200" y1="140" x2="260" y2="140" class="step" marker-end="url(#ar)"/>
+  <text class="stepLabel" x="230" y="130" text-anchor="middle">1  ID TOKEN</text>
+
+  <line x1="420" y1="140" x2="480" y2="140" class="step" marker-end="url(#ar)"/>
+  <text class="stepLabel" x="450" y="130" text-anchor="middle">2  VERIFY</text>
+
+  <line x1="680" y1="140" x2="740" y2="140" class="step" marker-end="url(#ar)"/>
+  <text class="stepLabel" x="710" y="130" text-anchor="middle">3  ACCESS JWT</text>
+
+  <g transform="translate(40,230)">
+    <rect width="880" height="150" rx="10" class="docker"/>
+    <text class="boxLabel" x="440" y="28" text-anchor="middle">Docker / Podman login flow (human operators)</text>
+    <text class="boxText" x="40" y="56">1. Client requests /v2  -  registry returns 401 with WWW-Authenticate header pointing to nebula-auth.</text>
+    <text class="boxText" x="40" y="76">2. Client obtains bearer token from /auth/token (Basic auth or OIDC PKCE).</text>
+    <text class="boxText" x="40" y="96">3. Client retries with Authorization: Bearer ... header.</text>
+    <text class="boxText" x="40" y="116">4. nebula-registry validates the JWT against the same JWKS used by CI -  identical verification path.</text>
+    <text class="code" x="40" y="138">docker login &lt;host&gt; -u robot -p &lt;short-lived-token&gt;   /   curl -H "Authorization: Bearer $JWT" /v2/_catalog</text>
+  </g>
+</svg>

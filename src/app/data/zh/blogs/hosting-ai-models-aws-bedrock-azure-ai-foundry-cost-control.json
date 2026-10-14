@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-bedrock-azure-foundry-cost-001",
+  "excerpt": "在 AWS、Bedrock 和 Azure AI Foundry 上运行生产 AI，并提供清晰的模型选择、缓存、批处理、配额和 FinOps 模式，因此创新不会破坏云账单。",
+  "sub_title": "跨 AWS 和 Azure 的托管推理、治理和 FinOps",
+  "title": "在 AWS、Bedrock 和 Azure AI Foundry 上托管 AI 模型：可扩展的成本控制",
+  "meta_title": "AWS Bedrock 和 Azure AI Foundry |托管人工智能模型和控制成本| TenthMatrix",
+  "meta_description": "在 AWS、Bedrock 和 Microsoft Azure AI Foundry 上托管 AI 模型的实用指南：按需容量与预配置容量、提示缓存、批量推理、配额、监控和跨云成本治理。",
+  "meta_keywords": "AWS Bedrock、Azure AI Foundry、托管 LLM、推理成本、FinOps AI、提示缓存、预配置吞吐量、批量推理、代币预算、模型路由、Azure OpenAI、Amazon Bedrock 定价",
+  "images": [
+    {
+      "url": "/img/bedrock-azure-ai-foundry-cover.svg",
+      "id": 800,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>执行摘要</h2><p>企业团队越来越多地将<strong>在云中托管基础模型</strong>，而不是从头开始训练所有内容。<strong>Amazon Bedrock</strong>和<strong>Microsoft Azure AI Foundry</strong>（基于 Azure OpenAI 服务和更广泛的型号目录构建）提供托管 API、安全性和合规性构建块，但<strong>不受控制的令牌使用</strong>、<strong>错误的容量模型</strong>和<strong>缺少可观察性</strong>可以将试点变成意外发票。本文概述了如何在两个平台上部署生产工作负载，并且<strong>可以在不阻碍创新的情况下控制</strong>成本。</p><h2>为什么选择托管而不是自行管理的 GPU？</h2><p>自托管可以通过专门的平台团队赢得稳定、大容量的工作负载。对于许多组织来说，托管服务减少了无差异的繁重工作：修补、区域可用性、协商的 SLA 以及与身份和数据治理的集成。权衡是<strong>单位经济效益，您必须积极管理</strong>— 尤其是当使用量随着采用而激增时。</p><ul><li><strong>可预测的安全状况：</strong>专用连接、加密、密钥管理和审计跟踪与企业策略保持一致。</li><li><strong>更快实现价值：</strong>通过 API 交换或比较模型，而不是为每个实验重建集群。</li><li><strong>弹性规模：</strong>Burst 适用于没有长期 GPU 容量的营销活动 — 如果您将弹性与预算和提醒结合起来。</li></ul><h2>AWS Bedrock：早期</h2><p><a href='https://aws.amazon.com/bedrock/' rel='noopener noreferrer' target='_blank'>的标准化内容 Amazon Bedrock</a>在通用 API 表面后面公开了多个基础模型。成本控制从<strong>账户结构</strong>和<strong>护栏</strong>开始，而不仅仅是型号选择。</p><ul><li><strong>模型选择：</strong>将任务复杂性与模型层相匹配 — 使用更小、更快的模型进行分类、路由和提取；为真正需要的任务保留最大的多模式模型。</li><li><strong>按需与预配置吞吐量：</strong>按需适合尖峰或探索性流量。如果您有持续的每分钟令牌数要求，请评估<strong>预配置吞吐量</strong>，以稳定可预测峰值的成本 — 始终与代表性窗口上测量的使用情况进行比较。</li><li><strong>批量推理：</strong>对于离线评分、汇总积压或数据集标记，批量 API 分摊工作，并且与交互式聊天路径相比，通常会提高每个代币的价格。</li><li><strong>提示缓存和缓存重用：</strong>在平台支持缓存长系统提示或检索上下文的情况下，重用可减少重复结构的计费输入令牌。</li><li><strong>区域策略：</strong>价格和数据驻留因区域而异；在合规性允许的情况下集中工作负载，避免意外的多区域蔓延。</li><li><strong>可观察性：</strong>发出每个应用程序的<strong>请求 ID</strong>，尽可能在客户端记录令牌计数，并与 CloudWatch 和成本分配标签关联以进行退款。</li></ul><h2>Azure AI Foundry：部署和支出控制</h2><p><a href='https://azure.microsoft.com/en-us/products/ai-services/ai-foundry/' rel='noopener noreferrer' target='_blank'>Azure AI Foundry</a>将 Azure 上的模型部署、工具和治理结合在一起。您通常会与<strong>部署的型号</strong>（包括 Azure、OpenAI 兼容端点）和周边服务进行交互，以进行搜索、评估和监控。</p><ul><li><strong>部署类型：</strong>了解基于消耗的端点和预留容量选项（例如适用的预配置吞吐量单位）之间的差异。具有窄延迟目标的稳定生产流量通常受益于预留容量；突发性的内部工具可能会继续按使用量付费。</li><li><strong>速率限制和配额：</strong>设置订阅和工作区级别限制，以便一个租户无法耗尽共享容量 - 与重试策略和客户端回退配对。</li><li><strong>内容安全和过滤器：</strong>尽早阻止滥用类别，以避免对不允许的提示进行浪费推理 - 将安全过滤器视为风险和成本控制。</li><li><strong>与 Azure 监视器集成：</strong>跟踪延迟、令牌使用情况和错误率；导出到仪表板以供 FinOps 审核以及成本管理导出。</li><li><strong>专用网络：</strong>使用专用端点和托管身份来减少攻击面，同时使流量保持在可预测的路径上以确保合规性。 Azure 上的</li></ul><h2>企业代理：定价和托管位置</h2><p>对于 Microsoft 堆栈上的<strong>生产 AI 代理</strong>，从同一位置规划支出和架构：官方<strong>Microsoft Foundry</strong>定价、代理服务以及自定义 sidecar 或 API 的可选计算。</p><ul><li><a href='https://azure.microsoft.com/en-us/pricing/details/microsoft-foundry/' rel='noopener noreferrer' target='_blank'>Microsoft Foundry 定价</a>— 平台和功能计费中心（包括用于基础模型使用的<strong>Foundry 模型</strong>行）；选择区域和货币，然后交叉检查令牌和吞吐量假设。无需订阅即可探索 Foundry 体验；计费服务遵循其列出的计量表（请参阅常见问题解答页面）。</li><li><a href='https://aka.ms/AgentService_pricing' rel='noopener noreferrer' target='_blank'>Azure AI 代理服务定价</a>— 企业代理工作负载的编排和托管（重定向到当前代理服务定价详细信息页面）。</li><li><a href='https://learn.microsoft.com/azure/ai-foundry/' rel='noopener noreferrer' target='_blank'>Microsoft Foundry 文档</a>— 在一处构建、评估、部署和管理代理和应用程序。</li><li><a href='https://azure.microsoft.com/en-us/pricing/calculator/' rel='noopener noreferrer' target='_blank'>Azure 定价计算器</a>— 在广泛推出之前估算每月成本；登录查看特定计划的价格。</li><li><a href='https://azure.microsoft.com/en-us/products/container-apps/' rel='noopener noreferrer' target='_blank'>Azure 容器应用程序</a>— 用于 HTTP 的无服务器式托管或位于 Foundry API 旁边的队列驱动代理服务。</li><li><a href='https://azure.microsoft.com/en-us/products/kubernetes-service/' rel='noopener noreferrer' target='_blank'>Azure Kubernetes 服务 (AKS)</a>— 当您需要针对定制代理运行时进行集群级控制（网络策略、GPU 节点池、多租户命名空间）时。</li></ul><p><a href='https://azure.microsoft.com/en-us/pricing/details/microsoft-foundry/' rel='noopener noreferrer' target='_blank'>Microsoft Foundry 定价</a>集线器和<a href='https://aka.ms/AgentService_pricing' rel='noopener noreferrer' target='_blank'>代理服务</a>费率共同为财务和平台团队提供了企业代理路线图的可靠基准。</p><h2>跨云成本控制手册</h2><p>无论供应商如何，都适用相同的 FinOps 模式。</p><h3>1. 代币预算和所有权</h3><p>将<strong>成本中心</strong>分配给每个工作负载（客户支持机器人、内部副驾驶、批量管道），并具有每月代币或支出上限。向产品所有者展示近乎实时的使用情况；工程师优化产品测量的内容。</p><h3>2. 路由和较小模型</h3><p>插入<strong>路由器层</strong>（基于规则或轻量级分类器），将简单查询发送到较小、较便宜的模型，并仅在置信度较低时升级。这种单一模式通常可以在不影响质量的情况下实现最大程度的节省。</p><h3>3. 检索而不是巨大的提示</h3><p>更喜欢使用简洁的检索块的<strong>RAG</strong>，而不是将整个文档填充到上下文窗口中。更少的输入令牌可以直接降低成本，并且通常可以提高准确性。</p><h3>4. 缓存答案</h3><p>在应用边缘（Redis、CDN、API 网关）缓存确定性或近确定性响应，以解决常见问题解答和重复分析问题 — 不要每次都重新推断相同的提示。</p><h3>5. 批处理和非高峰工作负载</h3><p>在适用折扣或较低争用时，在<strong>批处理</strong>或非高峰窗口中安排汇总、索引和评估作业。</p><h3>6. 结构化输出</h3><p>要求 JSON 或模式约束输出，以缩短后续轮次并减少多步骤聊天循环。</p><h3>7. 连续评估</h3><p>切换模型时定期运行基准测试 - 如果更便宜的模型与您的评估集的质量相匹配，请在路由规则中提升它。</p><h2>无僵局的治理</h2><p>成本控制不仅仅是技术性的。为新的高消费端点建立<strong>轻量级批准</strong>，在架构决策记录中记录模型选择，并对团队进行及时卫生培训（冗长的成本很高）。将安全审查与成本审查保持一致，以便私有端点和日志记录在您扩展时保持不变。</p><h2>TenthMatrix 如何帮助</h2><p>TenthMatrix 帮助团队设计<strong>多云 AI 平台</strong>：Bedrock 和 Azure AI Foundry 的着陆区、身份、可观察性和安全模式，包括开发人员实际遵循的 FinOps 仪表板和治理。如需架构审查或交付支持，请联系<strong>info@tenthmatrix.com</strong>。</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "ai",
+      "id": 800
+    },
+    {
+      "name": "devops",
+      "id": 801
+    },
+    {
+      "name": "llm",
+      "id": 802
+    },
+    {
+      "name": "backend",
+      "id": 803
+    }
+  ],
+  "created_at": "2026-04-18T10:00:00Z",
+  "updated_at": "2026-04-18T10:00:00Z",
+  "status": true,
+  "slug": "hosting-ai-models-aws-bedrock-azure-ai-foundry-cost-control",
+  "internal_id": 800,
+  "published_date": "2026-04-18"
+}

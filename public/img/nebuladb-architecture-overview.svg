@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-label="NebulaDB architecture overview: clients, three protocols, core engine, storage and infrastructure">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 24px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAlt { fill: #0c1530; stroke: #2c3a78; stroke-width: 1.5; }
+      .boxAccent { fill: #1a1240; stroke: #6a3eff; stroke-width: 1.5; }
+      .boxOk { fill: #0c2b18; stroke: #2e7d32; stroke-width: 1.5; }
+      .boxWarn { fill: #3a1f08; stroke: #ef6c00; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: #bbc6ff; font: 400 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .link { stroke: rgba(255,255,255,0.35); stroke-width: 1.5; fill: none; }
+      .ctrl { stroke: #ff9560; stroke-width: 1.5; fill: none; stroke-dasharray: 5 4; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arCtrl" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ff9560"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#bg)"/>
+  <rect width="1200" height="700" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="40">NebulaDB architecture</text>
+  <text class="subtitle" x="40" y="60">Single Rust binary, 14 crates, three wire protocols, hybrid document + vector + SQL</text>
+
+  <g>
+    <rect x="40" y="80" width="1120" height="60" rx="10" class="lane"/>
+    <text class="laneTitle" x="62" y="100">CLIENT PLANE</text>
+    <g transform="translate(160,108)">
+      <rect width="140" height="24" rx="6" class="box"/>
+      <text class="boxText" x="70" y="16" text-anchor="middle">curl  /  HTTP</text>
+    </g>
+    <g transform="translate(310,108)">
+      <rect width="140" height="24" rx="6" class="box"/>
+      <text class="boxText" x="70" y="16" text-anchor="middle">gRPC client</text>
+    </g>
+    <g transform="translate(460,108)">
+      <rect width="140" height="24" rx="6" class="box"/>
+      <text class="boxText" x="70" y="16" text-anchor="middle">psql</text>
+    </g>
+    <g transform="translate(610,108)">
+      <rect width="160" height="24" rx="6" class="box"/>
+      <text class="boxText" x="80" y="16" text-anchor="middle">Showcase UI</text>
+    </g>
+    <g transform="translate(780,108)">
+      <rect width="180" height="24" rx="6" class="box"/>
+      <text class="boxText" x="90" y="16" text-anchor="middle">nebula-client SDK</text>
+    </g>
+    <g transform="translate(970,108)">
+      <rect width="170" height="24" rx="6" class="box"/>
+      <text class="boxText" x="85" y="16" text-anchor="middle">Prometheus  /  Grafana</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="160" width="1120" height="100" rx="12" class="lane"/>
+    <text class="laneTitle" x="62" y="180">PROTOCOL PLANE  /  THREE ENTRY POINTS</text>
+
+    <g transform="translate(60,196)">
+      <rect width="320" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="160" y="22" text-anchor="middle">REST + SSE</text>
+      <text class="boxText" x="160" y="40" text-anchor="middle">Axum 0.7  /  Tower middleware</text>
+      <text class="code" x="160" y="52" text-anchor="middle">nebula-server</text>
+    </g>
+    <g transform="translate(400,196)">
+      <rect width="320" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="160" y="22" text-anchor="middle">gRPC</text>
+      <text class="boxText" x="160" y="40" text-anchor="middle">Tonic 0.12  /  Prost codegen</text>
+      <text class="code" x="160" y="52" text-anchor="middle">nebula-grpc</text>
+    </g>
+    <g transform="translate(740,196)">
+      <rect width="400" height="56" rx="10" class="box"/>
+      <text class="boxLabel" x="200" y="22" text-anchor="middle">Postgres wire protocol</text>
+      <text class="boxText" x="200" y="40" text-anchor="middle">pgwire 0.25  /  psql compatible  /  SQL extensions</text>
+      <text class="code" x="200" y="52" text-anchor="middle">nebula-pgwire</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="280" width="780" height="170" rx="12" class="boxAccent"/>
+    <text class="laneTitle" x="62" y="300" fill="#c4b5fd">CORE ENGINE  /  CONTROL PATH</text>
+
+    <g transform="translate(62,316)">
+      <rect width="230" height="50" rx="8" class="box"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-index</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">bucket ops  /  doc storage</text>
+    </g>
+    <g transform="translate(302,316)">
+      <rect width="230" height="50" rx="8" class="box"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-sql</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">parser  /  planner  /  executor</text>
+    </g>
+    <g transform="translate(542,316)">
+      <rect width="230" height="50" rx="8" class="box"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-llm</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">mock  /  Ollama  /  OpenAI</text>
+    </g>
+
+    <g transform="translate(62,378)">
+      <rect width="230" height="56" rx="8" class="boxAlt"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-chunk</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">fixed 500 / sentence</text>
+      <text class="boxText" x="115" y="52" text-anchor="middle">unicode-safe</text>
+    </g>
+    <g transform="translate(302,378)">
+      <rect width="230" height="56" rx="8" class="boxAlt"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-core</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">ids  /  errors  /  roles</text>
+      <text class="boxText" x="115" y="52" text-anchor="middle">tracing spans</text>
+    </g>
+    <g transform="translate(542,378)">
+      <rect width="230" height="56" rx="8" class="boxAlt"/>
+      <text class="boxLabel" x="115" y="22" text-anchor="middle">nebula-client</text>
+      <text class="boxText" x="115" y="40" text-anchor="middle">replication SDK</text>
+      <text class="boxText" x="115" y="52" text-anchor="middle">peer pool + retries</text>
+    </g>
+  </g>
+
+  <g transform="translate(840,280)">
+    <rect width="320" height="170" rx="12" class="boxAccent"/>
+    <text class="tag" x="20" y="22" fill="#c4b5fd">CRATES</text>
+    <text class="boxText" x="20" y="46">Total Rust crates: 14</text>
+    <text class="boxText" x="20" y="66">Built as a single binary</text>
+    <text class="boxText" x="20" y="86">License: Apache-2.0</text>
+    <text class="boxText" x="20" y="110" fill="#9fb0ff">Hot reload via SIGHUP</text>
+    <text class="boxText" x="20" y="128" fill="#9fb0ff">Multi-tenant by bucket</text>
+    <text class="boxText" x="20" y="150" fill="#26c6da">Observability hooks per crate</text>
+  </g>
+
+  <g>
+    <rect x="40" y="470" width="1120" height="130" rx="12" class="lane"/>
+    <text class="laneTitle" x="62" y="490">DATA PLANE  /  STORAGE, VECTORS, CACHE</text>
+
+    <g transform="translate(62,500)">
+      <rect width="320" height="90" rx="10" class="boxWarn"/>
+      <text class="boxLabel" x="160" y="24" text-anchor="middle">Vector + Embedding</text>
+      <text class="boxText" x="160" y="42" text-anchor="middle">nebula-vector  -  HNSW (cosine / L2 / dot)</text>
+      <text class="boxText" x="160" y="58" text-anchor="middle">nebula-embed  -  pluggable embedders</text>
+      <text class="boxText" x="160" y="74" text-anchor="middle">SIMD + rayon  /  384 / 768 / 1536 dims</text>
+    </g>
+    <g transform="translate(402,500)">
+      <rect width="320" height="90" rx="10" class="boxAlt"/>
+      <text class="boxLabel" x="160" y="24" text-anchor="middle">Multi-tier cache</text>
+      <text class="boxText" x="160" y="42" text-anchor="middle">nebula-cache  -  in-process LRU (10k)</text>
+      <text class="boxText" x="160" y="58" text-anchor="middle">nebula-redis-cache  -  Redis L2</text>
+      <text class="boxText" x="160" y="74" text-anchor="middle">SHA-256 keyed  /  failure-transparent</text>
+    </g>
+    <g transform="translate(742,500)">
+      <rect width="400" height="90" rx="10" class="boxOk"/>
+      <text class="boxLabel" x="200" y="24" text-anchor="middle">Durability</text>
+      <text class="boxText" x="200" y="42" text-anchor="middle">nebula-wal  -  write-ahead log  /  CRC32  /  segment rotation</text>
+      <text class="boxText" x="200" y="58" text-anchor="middle">snapshots  /  zstd compression  /  PITR within retention</text>
+      <text class="boxText" x="200" y="74" text-anchor="middle">crash-safe on disk; readers never blocked</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="40" y="620" width="1120" height="60" rx="10" class="lane"/>
+    <text class="laneTitle" x="62" y="640">INFRASTRUCTURE PLANE</text>
+    <g transform="translate(160,650)">
+      <rect width="170" height="20" rx="4" class="box"/>
+      <text class="boxText" x="85" y="14" text-anchor="middle">Docker multi-arch</text>
+    </g>
+    <g transform="translate(340,650)">
+      <rect width="170" height="20" rx="4" class="box"/>
+      <text class="boxText" x="85" y="14" text-anchor="middle">Helm charts</text>
+    </g>
+    <g transform="translate(520,650)">
+      <rect width="190" height="20" rx="4" class="box"/>
+      <text class="boxText" x="95" y="14" text-anchor="middle">K8s operator + CRDs</text>
+    </g>
+    <g transform="translate(720,650)">
+      <rect width="200" height="20" rx="4" class="box"/>
+      <text class="boxText" x="100" y="14" text-anchor="middle">Prometheus + Grafana</text>
+    </g>
+    <g transform="translate(930,650)">
+      <rect width="180" height="20" rx="4" class="box"/>
+      <text class="boxText" x="90" y="14" text-anchor="middle">Nightly CI (124 tests)</text>
+    </g>
+  </g>
+
+  <line x1="220" y1="132" x2="220" y2="196" class="link" marker-end="url(#ar)"/>
+  <line x1="560" y1="132" x2="560" y2="196" class="link" marker-end="url(#ar)"/>
+  <line x1="900" y1="132" x2="900" y2="196" class="link" marker-end="url(#ar)"/>
+  <line x1="220" y1="252" x2="220" y2="280" class="link" marker-end="url(#ar)"/>
+  <line x1="560" y1="252" x2="560" y2="280" class="link" marker-end="url(#ar)"/>
+  <line x1="900" y1="252" x2="900" y2="280" class="ctrl" marker-end="url(#arCtrl)"/>
+  <line x1="220" y1="450" x2="220" y2="500" class="link" marker-end="url(#ar)"/>
+  <line x1="560" y1="450" x2="560" y2="500" class="link" marker-end="url(#ar)"/>
+  <line x1="900" y1="450" x2="900" y2="500" class="link" marker-end="url(#ar)"/>
+  <line x1="600" y1="590" x2="600" y2="620" class="ctrl" marker-end="url(#arCtrl)"/>
+</svg>

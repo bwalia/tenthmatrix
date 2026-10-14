@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-wise-developer-multi-agent-001",
+  "internal_id": 956,
+  "slug": "wise-developer-project-workflow-multi-agent-teams",
+  "title": "वाइज़ डेवलपर वर्कफ़्लो + मल्टी-एजेंट डेवलपमेंट टीमें",
+  "sub_title": "ब्रेनस्टॉर्म से GitOps तक, हर PR पर Review Bot, और TenthMatrix मल्टी-एजेंट आर्किटेक्चर जो बेहतरीन डेवलपमेंट टीमें बनाता है",
+  "excerpt": "एक वाइज़ डेवलपर नया प्रोजेक्ट कैसे चलाता है — ब्रेनस्टॉर्म, चर्चा, प्रोटोटाइप, डायग्राम, प्रस्ताव, ADR, PR, GitOps — प्लस Review Bot और TenthMatrix मल्टी-एजेंट टीमें।",
+  "meta_title": "वाइज़ डेवलपर वर्कफ़्लो, Review Bot और मल्टी-एजेंट टीमें | TenthMatrix",
+  "meta_description": "ADR और Review Bot के साथ ब्रेनस्टॉर्मिंग से GitOps तक, प्लस TenthMatrix मल्टी-एजेंट आर्किटेक्चर जो प्रोडक्शन डिलीवरी के लिए बेहतरीन डेवलपमेंट टीमें ऑटो-बिल्ड करता है।",
+  "meta_keywords": "वाइज़ डेवलपर, ADR, pull request, GitOps, Review Bot, मल्टी-एजेंट, OpenClaw, Jobshout, TenthMatrix, डेवलपमेंट टीमें, प्रोडक्शन ग्रेड",
+  "cover_image": "/img/jobshout-openclaw-agent-teams-cover.svg",
+  "images": [
+    {
+      "url": "/img/jobshout-openclaw-agent-teams-cover.svg",
+      "id": 956,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Jobshout OpenClaw auto-build AI agent teams for business"
+    },
+    {
+      "url": "/img/jobshout-openclaw-agent-teams.svg",
+      "id": 957,
+      "is_cover": false,
+      "width": 1600,
+      "height": 900,
+      "alt": "Jobshout OpenClaw multi-agent development team workflow"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>एक वाइज़ डेवलपर नया प्रोजेक्ट कैसे शुरू करता है — ब्रेनस्टॉर्म, चर्चा, प्रोटोटाइप, डायग्राम, प्रस्ताव, ADR, MR/PR, GitOps — हर बदलाव पर Review Bot, और बेहतरीन टीमें बनाने के लिए TenthMatrix मल्टी-एजेंट आर्किटेक्चर। पूर्ण प्लेबुक <a href=\"/hi/articles/wise-developer-project-workflow-multi-agent-teams\">लंबा आलेख</a>.</em></p>\n\n<p><img src=\"/img/jobshout-openclaw-agent-teams-cover.svg\" alt=\"Jobshout और OpenClaw बिज़नेस डिलीवरी के लिए AI एजेंट टीमें ऑटो-बिल्ड करते हैं\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#ecfdf5;border-left:4px solid #14b8a6;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>एक-पैराग्राफ संस्करण।</strong> विशाल PR पर न कूदें। ब्रेनस्टॉर्म करें, साथियों से चर्चा करें, अनजान हिस्सों का प्रोटोटाइप बनाएँ, डायग्राम बनाएँ, प्रस्ताव लिखें, ADR कैप्चर करें, फिर छोटे MR/PR शिप करें। GitOps से प्रमोट करें। <strong>Review Bot</strong> को फर्स्ट-पास कमेंट लिखने दें। <strong>TenthMatrix मल्टी-एजेंट आर्किटेक्चर</strong> से वही अनुशासन स्केल करें — Planner, Builder, Reviewer और Ops एजेंट जो आपकी Spec के इर्द-गिर्द असली डेवलपमेंट टीम बनाते हैं।\n</div>\n\n<h2>वाइज़ पथ (क्रम में)</h2>\n<ol>\n  <li><strong>Brainstorm</strong> — लक्ष्य, बाधाएँ, non-goals, failure modes।</li>\n  <li><strong>Discuss</strong> — कोड सख्त होने से पहले साथियों से छोटा sync।</li>\n  <li><strong>Prototype</strong> — जोखिम वाले हिस्सों का spike; जानबूझकर promote या फेंकें।</li>\n  <li><strong>Diagrams</strong> — कॉन्टेक्स्ट, sequence, deployment।</li>\n  <li><strong>Proposal</strong> — विकल्प, सिफारिश, rollback।</li>\n  <li><strong>ADR</strong> — टिकाऊ «हमने X क्यों चुना»।</li>\n  <li><strong>MR / PR</strong> — छोटे diffs, चेकलिस्ट, लिंक ADR।</li>\n  <li><strong>GitOps</strong> — git में desired state; merge से promote, revert से rollback।</li>\n</ol>\n\n<h2>Review Bot — पहला रिव्यूअर जो कभी नहीं सोता</h2>\n<p>Review Bot हर PR पर इनलाइन कमेंट पोस्ट करता है: सिक्योरिटी smells, गायब टेस्ट, कॉन्ट्रैक्ट ब्रेक, माइग्रेशन जोखिम। फिर इंसान डिज़ाइन और blast radius रिव्यू करते हैं — फॉर्मेटिंग नहीं। इससे टीम को निट्स पर जलाए बिना प्रोडक्शन-ग्रेड गुणवत्ता रहती है। देखें भी <a href=\"/hi/docs/blogs/building-ai-code-review-pipeline\">AI कोड रिव्यू पाइपलाइन बनाना</a>.</p>\n\n<h2>TenthMatrix मल्टी-एजेंट आर्किटेक्चर = बेहतरीन डेवलपमेंट टीमें</h2>\n<p><img src=\"/img/jobshout-openclaw-agent-teams.svg\" alt=\"Jobshout OpenClaw वर्कफ़्लो AI एजेंट टीमें ऑटो-बिल्ड करता है\" width=\"1600\" height=\"900\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n<p>TenthMatrix एजेंटिक रनटाइम पैकेज करता है (और जहाँ embodied/agent crews लागू हों वहाँ OpenClaw for Business) ताकि आप ब्रीफ के इर्द-गिर्द <strong>डेवलपमेंट टीम ऑटो-कंपोज़</strong> कर सकें:</p>\n<ul>\n  <li><strong>Planner</strong> — Spec से epics, stories, acceptance criteria</li>\n  <li><strong>Builders</strong> — AC के विरुद्ध समानांतर इम्प्लीमेंट</li>\n  <li><strong>Reviewers</strong> — Spec compliance, सिक्योरिटी, Review Bot + मानव गेट</li>\n  <li><strong>Ops</strong> — GitOps promote, SLO देखें, सुरक्षित rollback</li>\n</ul>\n<p>जोखिम भरे लिखने और go-live के लिए इंसान लूप में रहते हैं। एजेंट थ्रूपुट संभालते हैं। इसी तरह SME और एंटरप्राइज़ बार नीचे किए बिना तेज़ शिप करते हैं।</p>\n\n<p>पढ़ें  <a href=\"/hi/articles/wise-developer-project-workflow-multi-agent-teams\">लंबा आलेख</a>. प्रकाशित <a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "pull-requests",
+      "id": 1017
+    },
+    {
+      "name": "code-review",
+      "id": 1018
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "openclaw",
+      "id": 1021
+    },
+    {
+      "name": "jobshout",
+      "id": 1022
+    }
+  ],
+  "created_at": "2026-07-24T00:30:00Z",
+  "updated_at": "2026-07-24T00:30:00Z",
+  "published_date": "2026-07-24",
+  "status": true
+}

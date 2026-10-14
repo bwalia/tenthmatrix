@@ -1,0 +1,367 @@
+/*
+ * TenthMatrix theme — the ONE source of design tokens for www.tenthmatrix.com.
+ *
+ * Canonical file: design/tm-theme.css. `npm run sync:theme` copies it into the
+ * app (src/app/styles/tm-theme.css) and `npm run verify:theme` fails if the copy
+ * drifts. Never edit the copy.
+ *
+ * Direction: "Lattice" (see brand/BRAND.md). Warm paper + graphite ink in light,
+ * graphite + mint in dark. Accent is viridian, used sparingly: the tenth cell.
+ *
+ * Theme switching: <html data-theme="light|dark">, set before first paint by the
+ * blocking script in the root layout (localStorage "tm-theme" = light | dark |
+ * system; default system -> prefers-color-scheme). Any element can pin a theme
+ * for its subtree with data-theme="light|dark" (the /brand page shows both
+ * side by side); give it `background: var(--tm-bg); color: var(--tm-text)`.
+ *
+ * Fonts (next/font/google variables set on <html>):
+ *   --font-tm-display  Bricolage Grotesque  headings, display, brand moments
+ *   --font-tm-body     Instrument Sans      body copy, UI
+ *   --font-tm-mono     IBM Plex Mono        code, specs, eyebrows, data
+ *
+ * Every text pair below meets WCAG 2.2 AA; ratios are listed in brand/BRAND.md.
+ */
+
+/* ------------------------------------------------------------ constants */
+:root {
+  /* brand constants (identical in both themes) */
+  --tm-brand-ink: #12161a;
+  --tm-brand-paper: #f7f6f2;
+  --tm-brand-viridian: #0a7a57;
+  --tm-brand-mint: #3dd69e;
+  --tm-brand-graphite: #0e1113;
+  --tm-brand-amber: #f2b252;
+
+  /* night panel: surfaces that stay dark in BOTH themes (footer, terminal
+     bands, OG art). Text pairs: text 15.2:1, muted 8.9:1, subtle 6.0:1,
+     accent 10.0:1 on --tm-night-bg; all >= 4.5:1 on --tm-night-raised. */
+  --tm-night-bg: #12161a;
+  --tm-night-raised: #1b2024;
+  --tm-night-line: #2a3035;
+  --tm-night-text: #f1f2ee;
+  --tm-night-muted: #b0b7b4;
+  --tm-night-subtle: #8f9895;
+  --tm-night-accent: #3dd69e;
+  --tm-night-accent-hover: #6be3b6;
+
+  /* type families: next/font sets --font-tm-*; fallbacks keep metrics close */
+  --tm-font-display: var(--font-tm-display, "Bricolage Grotesque"), var(--font-tm-body, "Instrument Sans"),
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --tm-font-body: var(--font-tm-body, "Instrument Sans"), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --tm-font-mono: var(--font-tm-mono, "IBM Plex Mono"), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* weights */
+  --tm-weight-regular: 400;
+  --tm-weight-medium: 500;
+  --tm-weight-semibold: 600;
+  --tm-weight-bold: 700;
+  --tm-weight-display: 650;
+
+  /* fluid type scale (min at 390px, max at 1440px) */
+  --tm-text-2xs: 0.75rem; /* 12px: legal, badges (mono only) */
+  --tm-text-xs: 0.8125rem; /* 13px: captions, eyebrows */
+  --tm-text-sm: 0.9375rem; /* 15px: UI, meta */
+  --tm-text-base: clamp(1rem, 0.976rem + 0.1vw, 1.0625rem); /* 16 -> 17 body */
+  --tm-text-md: clamp(1.125rem, 1.078rem + 0.19vw, 1.25rem); /* 18 -> 20 lead */
+  --tm-text-lg: clamp(1.25rem, 1.157rem + 0.38vw, 1.5rem); /* 20 -> 24 h4 */
+  --tm-text-xl: clamp(1.5rem, 1.36rem + 0.57vw, 1.875rem); /* 24 -> 30 h3 */
+  --tm-text-2xl: clamp(1.75rem, 1.494rem + 1.05vw, 2.4375rem); /* 28 -> 39 h2 */
+  --tm-text-3xl: clamp(2.125rem, 1.707rem + 1.71vw, 3.25rem); /* 34 -> 52 h1 */
+  --tm-text-4xl: clamp(2.5rem, 1.849rem + 2.67vw, 4.25rem); /* 40 -> 68 display */
+  --tm-text-5xl: clamp(2.875rem, 1.946rem + 3.81vw, 5.375rem); /* 46 -> 86 hero */
+
+  --tm-leading-tight: 1.08; /* display */
+  --tm-leading-snug: 1.22; /* headings */
+  --tm-leading-normal: 1.6; /* body */
+  --tm-leading-relaxed: 1.72; /* long-form article */
+  --tm-tracking-display: -0.025em;
+  --tm-tracking-heading: -0.015em;
+  --tm-tracking-eyebrow: 0.08em;
+  --tm-measure: 68ch; /* article line length */
+
+  /* spacing (4px base) */
+  --tm-space-0: 0;
+  --tm-space-1: 0.25rem; /* 4 */
+  --tm-space-2: 0.5rem; /* 8 */
+  --tm-space-3: 0.75rem; /* 12 */
+  --tm-space-4: 1rem; /* 16 */
+  --tm-space-5: 1.25rem; /* 20 */
+  --tm-space-6: 1.5rem; /* 24 */
+  --tm-space-8: 2rem; /* 32 */
+  --tm-space-10: 2.5rem; /* 40 */
+  --tm-space-12: 3rem; /* 48 */
+  --tm-space-16: 4rem; /* 64 */
+  --tm-space-20: 5rem; /* 80 */
+  --tm-space-24: 6rem; /* 96 */
+  --tm-space-section: clamp(3.5rem, 2.36rem + 4.67vw, 7rem); /* 56 -> 112 between page sections */
+
+  /* radii: small and square-ish, echoing the lattice cells (rx 1 of 6) */
+  --tm-radius-xs: 3px;
+  --tm-radius-sm: 6px;
+  --tm-radius: 10px;
+  --tm-radius-lg: 16px;
+  --tm-radius-pill: 999px;
+
+  /* z-index */
+  --tm-z-base: 0;
+  --tm-z-raised: 10;
+  --tm-z-sticky: 100;
+  --tm-z-header: 200;
+  --tm-z-dropdown: 300;
+  --tm-z-overlay: 400;
+  --tm-z-modal: 500;
+  --tm-z-toast: 600;
+  --tm-z-cookie: 700;
+
+  /* motion */
+  --tm-duration-instant: 80ms;
+  --tm-duration-fast: 140ms;
+  --tm-duration: 220ms;
+  --tm-duration-slow: 360ms;
+  --tm-duration-slower: 560ms;
+  --tm-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --tm-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --tm-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --tm-ease-step: steps(4, end); /* lattice "tick" for loaders */
+
+  /* layout */
+  --tm-container: 1240px;
+  --tm-container-wide: 1440px;
+  --tm-container-narrow: 760px; /* articles, forms */
+  --tm-gutter: clamp(16px, 2.2vw + 7px, 40px); /* 16px at 390px mobile */
+  --tm-gutter-mobile: 16px;
+  --tm-grid-gap: clamp(16px, 1.5vw + 10px, 32px);
+  --tm-header-h: 64px;
+  --tm-header-h-mobile: 56px;
+  --tm-tap-target: 44px;
+  --tm-focus-width: 2px;
+  --tm-focus-offset: 2px;
+}
+
+/* ---------------------------------------------------------- light theme */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* surfaces */
+  --tm-bg: #f7f6f2; /* warm paper */
+  --tm-surface: #ffffff; /* cards, panels */
+  --tm-raised: #ffffff; /* menus, popovers (with shadow) */
+  --tm-sunken: #efede7; /* wells, inline code, table stripes */
+  --tm-inverse: #12161a; /* deliberate dark bands on light pages */
+  --tm-line: #e0ddd4; /* hairlines, dividers */
+  --tm-line-strong: #7d828a; /* input borders, 3:1 on all surfaces */
+
+  /* text */
+  --tm-text: #12161a; /* 16.8:1 on bg */
+  --tm-text-muted: #474d55; /* 7.5:1 on bg */
+  --tm-text-subtle: #5f656d; /* 5.4:1 on bg, 5.0:1 on sunken */
+  --tm-text-inverse: #f1f2ee;
+
+  /* accent (viridian) */
+  --tm-accent: #0a7a57; /* links, primary buttons: 4.9:1 on bg, 5.3:1 on white */
+  --tm-accent-hover: #086448;
+  --tm-accent-contrast: #ffffff; /* text on accent: 5.3:1 */
+  --tm-accent-soft: #e2f1ea; /* tinted wash behind accent text: 4.6:1 */
+  --tm-accent-line: #9fd2bd; /* decorative accent borders (non-text) */
+
+  /* secondary accent (amber): highlights, "new", data callouts */
+  --tm-secondary: #9a5300;
+  --tm-secondary-soft: #f8ecdb;
+
+  /* status */
+  --tm-success: #1f7a3b;
+  --tm-success-soft: #e3f2e6;
+  --tm-warn: #8a5a00;
+  --tm-warn-soft: #fbf0d6;
+  --tm-danger: #b42318;
+  --tm-danger-soft: #fbe8e5;
+  --tm-info: #245bb8;
+  --tm-info-soft: #e5edfa;
+
+  /* code: dark blocks in both themes, inline code stays light */
+  --tm-code-bg: #15191c;
+  --tm-code-text: #e6e8e3;
+  --tm-code-comment: #9aa39f;
+  --tm-code-keyword: #5fddae;
+  --tm-code-string: #f2c27a;
+  --tm-code-number: #9cc0ff;
+  --tm-code-line: #2a3035;
+  --tm-code-inline-bg: #efede7;
+  --tm-code-inline-text: #12161a;
+
+  /* interaction */
+  --tm-focus-ring-color: #0a7a57;
+  --tm-focus-ring: 0 0 0 var(--tm-focus-offset) var(--tm-bg), 0 0 0 calc(var(--tm-focus-offset) + var(--tm-focus-width)) #0a7a57;
+  --tm-selection-bg: #c4e6d7;
+  --tm-selection-text: #12161a;
+  --tm-overlay: rgb(18 22 26 / 0.48);
+
+  /* logo */
+  --tm-logo-ink: #12161a;
+  --tm-logo-accent: #0a7a57;
+
+  /* gradients (used sparingly: hero wash, OG, CTA band) */
+  --tm-gradient-wash: radial-gradient(120% 80% at 85% 0%, rgb(10 122 87 / 0.1) 0%, rgb(10 122 87 / 0) 60%);
+  --tm-gradient-accent: linear-gradient(135deg, #0a7a57 0%, #086448 100%);
+  --tm-gradient-inverse: linear-gradient(160deg, #12161a 0%, #1b2024 100%);
+  --tm-gradient-fade: linear-gradient(180deg, rgb(247 246 242 / 0) 0%, #f7f6f2 100%);
+
+  /* shadows: warm, low, short */
+  --tm-shadow-xs: 0 1px 0 rgb(18 22 26 / 0.04);
+  --tm-shadow-sm: 0 1px 2px rgb(18 22 26 / 0.06), 0 1px 1px rgb(18 22 26 / 0.04);
+  --tm-shadow: 0 4px 12px -2px rgb(18 22 26 / 0.08), 0 2px 4px rgb(18 22 26 / 0.04);
+  --tm-shadow-lg: 0 16px 40px -8px rgb(18 22 26 / 0.14), 0 4px 10px rgb(18 22 26 / 0.05);
+}
+
+/* ----------------------------------------------------------- dark theme */
+/* Designed, not inverted: graphite with a faint green cast, mint accent,
+   elevation by lightness rather than shadow, softer pure-white avoidance. */
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --tm-bg: #0e1113;
+  --tm-surface: #14181b;
+  --tm-raised: #1b2024;
+  --tm-sunken: #090b0d;
+  --tm-inverse: #f1f2ee;
+  --tm-line: #262c31;
+  --tm-line-strong: #68717a;
+
+  --tm-text: #e8eae6; /* 15.7:1 on bg */
+  --tm-text-muted: #b0b7b4; /* 9.2:1 on bg */
+  --tm-text-subtle: #8f9895; /* 6.4:1 on bg, 5.6:1 on raised */
+  --tm-text-inverse: #12161a;
+
+  --tm-accent: #3dd69e;
+  --tm-accent-hover: #6be3b6;
+  --tm-accent-contrast: #05261a;
+  --tm-accent-soft: #10281f;
+  --tm-accent-line: #1f5a43;
+
+  --tm-secondary: #f2b252;
+  --tm-secondary-soft: #2b2213;
+
+  --tm-success: #62d17e;
+  --tm-success-soft: #11261a;
+  --tm-warn: #f5c451;
+  --tm-warn-soft: #2b2410;
+  --tm-danger: #ff8e80;
+  --tm-danger-soft: #2e1715;
+  --tm-info: #8db4ff;
+  --tm-info-soft: #141e33;
+
+  --tm-code-bg: #090b0d;
+  --tm-code-text: #e6e8e3;
+  --tm-code-comment: #8f9895;
+  --tm-code-keyword: #3dd69e;
+  --tm-code-string: #f2c27a;
+  --tm-code-number: #9cc0ff;
+  --tm-code-line: #1f2428;
+  --tm-code-inline-bg: #1b2024;
+  --tm-code-inline-text: #e8eae6;
+
+  --tm-focus-ring-color: #3dd69e;
+  --tm-focus-ring: 0 0 0 var(--tm-focus-offset) var(--tm-bg), 0 0 0 calc(var(--tm-focus-offset) + var(--tm-focus-width)) #3dd69e;
+  --tm-selection-bg: #1f5a43;
+  --tm-selection-text: #f1f2ee;
+  --tm-overlay: rgb(5 7 8 / 0.64);
+
+  --tm-logo-ink: #f1f2ee;
+  --tm-logo-accent: #3dd69e;
+
+  --tm-gradient-wash: radial-gradient(120% 80% at 85% 0%, rgb(61 214 158 / 0.12) 0%, rgb(61 214 158 / 0) 60%);
+  --tm-gradient-accent: linear-gradient(135deg, #3dd69e 0%, #2bbd88 100%);
+  --tm-gradient-inverse: linear-gradient(160deg, #1b2024 0%, #232a2f 100%);
+  --tm-gradient-fade: linear-gradient(180deg, rgb(14 17 19 / 0) 0%, #0e1113 100%);
+
+  --tm-shadow-xs: 0 1px 0 rgb(0 0 0 / 0.3);
+  --tm-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --tm-shadow: 0 4px 14px -2px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.03);
+  --tm-shadow-lg: 0 18px 44px -8px rgb(0 0 0 / 0.6), inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --tm-bg: #0e1113;
+    --tm-surface: #14181b;
+    --tm-raised: #1b2024;
+    --tm-sunken: #090b0d;
+    --tm-inverse: #f1f2ee;
+    --tm-line: #262c31;
+    --tm-line-strong: #68717a;
+
+    --tm-text: #e8eae6;
+    --tm-text-muted: #b0b7b4;
+    --tm-text-subtle: #8f9895;
+    --tm-text-inverse: #12161a;
+
+    --tm-accent: #3dd69e;
+    --tm-accent-hover: #6be3b6;
+    --tm-accent-contrast: #05261a;
+    --tm-accent-soft: #10281f;
+    --tm-accent-line: #1f5a43;
+
+    --tm-secondary: #f2b252;
+    --tm-secondary-soft: #2b2213;
+
+    --tm-success: #62d17e;
+    --tm-success-soft: #11261a;
+    --tm-warn: #f5c451;
+    --tm-warn-soft: #2b2410;
+    --tm-danger: #ff8e80;
+    --tm-danger-soft: #2e1715;
+    --tm-info: #8db4ff;
+    --tm-info-soft: #141e33;
+
+    --tm-code-bg: #090b0d;
+    --tm-code-text: #e6e8e3;
+    --tm-code-comment: #8f9895;
+    --tm-code-keyword: #3dd69e;
+    --tm-code-string: #f2c27a;
+    --tm-code-number: #9cc0ff;
+    --tm-code-line: #1f2428;
+    --tm-code-inline-bg: #1b2024;
+    --tm-code-inline-text: #e8eae6;
+
+    --tm-focus-ring-color: #3dd69e;
+    --tm-focus-ring: 0 0 0 var(--tm-focus-offset) var(--tm-bg), 0 0 0 calc(var(--tm-focus-offset) + var(--tm-focus-width)) #3dd69e;
+    --tm-selection-bg: #1f5a43;
+    --tm-selection-text: #f1f2ee;
+    --tm-overlay: rgb(5 7 8 / 0.64);
+
+    --tm-logo-ink: #f1f2ee;
+    --tm-logo-accent: #3dd69e;
+
+    --tm-gradient-wash: radial-gradient(120% 80% at 85% 0%, rgb(61 214 158 / 0.12) 0%, rgb(61 214 158 / 0) 60%);
+    --tm-gradient-accent: linear-gradient(135deg, #3dd69e 0%, #2bbd88 100%);
+    --tm-gradient-inverse: linear-gradient(160deg, #1b2024 0%, #232a2f 100%);
+    --tm-gradient-fade: linear-gradient(180deg, rgb(14 17 19 / 0) 0%, #0e1113 100%);
+
+    --tm-shadow-xs: 0 1px 0 rgb(0 0 0 / 0.3);
+    --tm-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --tm-shadow: 0 4px 14px -2px rgb(0 0 0 / 0.5), inset 0 1px 0 rgb(255 255 255 / 0.03);
+    --tm-shadow-lg: 0 18px 44px -8px rgb(0 0 0 / 0.6), inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+}
+
+/* -------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --tm-duration-instant: 0ms;
+    --tm-duration-fast: 0ms;
+    --tm-duration: 0ms;
+    --tm-duration-slow: 0ms;
+    --tm-duration-slower: 0ms;
+  }
+}
+
+/* ------------------------------------------------------- base hooks */
+::selection {
+  background: var(--tm-selection-bg);
+  color: var(--tm-selection-text);
+}

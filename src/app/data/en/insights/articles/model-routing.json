@@ -1,0 +1,318 @@
+{
+  "slug": "model-routing",
+  "series": "Jev & The Next Generation of AI Automation",
+  "title": "Model routing",
+  "subtitle": "How to build and measure routers that send simple work to cheap models and hard work to expensive ones — without assuming the router helps.",
+  "published": "26 September 2026",
+  "updated": "26 September 2026",
+  "published_iso": "2026-09-26",
+  "updated_iso": "2026-09-26",
+  "reading_time": "18 min",
+  "landscape_cutoff": "26 September 2026",
+  "benchmark_version": null,
+  "hero_image": "/img/insights/model-routing.svg",
+  "hero_alt": "Model routing",
+  "meta": {
+    "title": "Model routing | TenthMatrix Insights",
+    "description": "How to build and measure routers that send simple work to cheap models and hard work to expensive ones — without assuming the router helps.",
+    "keywords": "Jev, System One, AI agents, model routing, TenthMatrix Insights, LLM",
+    "og_image": "/img/insights/model-routing.svg"
+  },
+  "takeaways": [
+    "Routing is a hypothesis: measure cost, latency, success and escalation together.",
+    "Confidence cascades can recover frontier-like accuracy at lower average cost — when evaluated carefully.",
+    "High-cardinality routing is a different problem than binary urgency."
+  ],
+  "toc": [
+    {
+      "id": "why",
+      "label": "Why this matters"
+    },
+    {
+      "id": "patterns",
+      "label": "Patterns"
+    },
+    {
+      "id": "measure",
+      "label": "What to measure"
+    },
+    {
+      "id": "evidence",
+      "label": "What the public evidence suggests"
+    },
+    {
+      "id": "method",
+      "label": "TenthMatrix methodology (Benchmark B)"
+    },
+    {
+      "id": "extended-notes",
+      "label": "Extended implementation notes"
+    },
+    {
+      "id": "conclusion",
+      "label": "Conclusion"
+    },
+    {
+      "id": "sources",
+      "label": "Sources"
+    }
+  ],
+  "body": [
+    {
+      "type": "h2",
+      "text": "Why this matters",
+      "id": "why"
+    },
+    {
+      "type": "p",
+      "text": "A single premium reasoning model is operationally simple and economically brutal. Routing promises Pareto improvement. Many routers quietly destroy quality by under-sending hard tasks or thrashing between models."
+    },
+    {
+      "type": "figure",
+      "src": "/img/insights/model-routing.svg",
+      "caption": "TenthMatrix routing map from workload to model tier.",
+      "alt": "TenthMatrix routing map from workload to model tier."
+    },
+    {
+      "type": "h2",
+      "text": "Patterns",
+      "id": "patterns"
+    },
+    {
+      "type": "ul",
+      "items": [
+        "Static rules (regex/intent enums) — cheap, brittle.",
+        "Decision-model router (Choice over tiers) — flexible, measurable.",
+        "Confidence cascade — try cheap, escalate if confidence low (AyAutomate discusses cascades recovering accuracy).",
+        "LangChain ModelRouterMiddleware-style binding for a run — see their public post."
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What to measure",
+      "id": "measure"
+    },
+    {
+      "type": "table",
+      "headers": [
+        "Metric",
+        "Why"
+      ],
+      "rows": [
+        [
+          "Task success",
+          "Did the user/job complete?"
+        ],
+        [
+          "Escalation rate",
+          "How often did we climb tiers?"
+        ],
+        [
+          "p50/p95 latency",
+          "Including network, labelled"
+        ],
+        [
+          "Cost per successful task",
+          "Not cost per call alone"
+        ],
+        [
+          "Error rate by tier",
+          "Catch under-routing"
+        ]
+      ]
+    },
+    {
+      "type": "h2",
+      "text": "What the public evidence suggests",
+      "id": "evidence"
+    },
+    {
+      "type": "p",
+      "text": "OpenRouter’s triage example shows near-tied accuracy across Jev and strong LLMs with large cost gaps on a small set. AyAutomate finds high-cardinality routing still favours a frontier baseline on accuracy, with cascades as a mitigation. TypeSafe’s own cardinality note says Jev supports up to 255 choices and may use multi-stage scoring beyond that — an architectural constraint to design for."
+    },
+    {
+      "type": "callout",
+      "label": "Do not assume",
+      "text": "Never ship a router because a blog table looked good. Replicate on your labelled tasks.",
+      "tone": "warn"
+    },
+    {
+      "type": "h2",
+      "text": "TenthMatrix methodology (Benchmark B)",
+      "id": "method"
+    },
+    {
+      "type": "p",
+      "text": "Our lab defines fixed-premium vs intelligent-routing arms on the same items, reporting success, cost, latency and escalation. Until a live measured TenthMatrix run is published, the dashboard marks methodology rows accordingly."
+    },
+    {
+      "type": "h2",
+      "text": "Extended implementation notes",
+      "id": "extended-notes"
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 1: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 2: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 3: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 4: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 5: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 6: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 7: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 8: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 9: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 10: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 11: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 12: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 13: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 14: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 15: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 16: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 17: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 18: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 19: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "p",
+      "text": "Additional engineering context for Model routing: treat every automation seam as a product surface with owners, SLOs and offline labels. When integrating decision models, log versioned model ids, criteria hashes and gate outcomes. Compare against fast LLMs and reasoning LLMs on the same items before standardising. Cite TypeSafe or LangChain when repeating their claims; cite OpenRouter, AyAutomate, LangSmith or JevBench when using their numbers; never present those numbers as TenthMatrix measurements. Connect this page to the Benchmark Lab and Model Selection Manual for next actions. Note cluster 20: prefer shadow mode, then canary, then enforce. Re-evaluate after each model alias move."
+    },
+    {
+      "type": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "type": "p",
+      "text": "Routing is an optimisation problem under quality constraints. Decision models are strong candidates for the router — not automatic winners."
+    }
+  ],
+  "related": [
+    {
+      "href": "/ai-agents",
+      "label": "AI Agents",
+      "note": ""
+    },
+    {
+      "href": "/insights/jev/benchmarks",
+      "label": "Benchmark lab",
+      "note": ""
+    },
+    {
+      "href": "/insights/ai-model-selection",
+      "label": "Model selection",
+      "note": ""
+    },
+    {
+      "href": "/jobshout",
+      "label": "Jobs",
+      "note": ""
+    },
+    {
+      "href": "/applied-ai",
+      "label": "Applied AI",
+      "note": ""
+    }
+  ],
+  "sources": [
+    {
+      "title": "TypeSafe AI — Introducing System One Models & Jev",
+      "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+      "note": "Vendor announcement."
+    },
+    {
+      "title": "LangChain — Building a Harness with Jev",
+      "url": "https://www.langchain.com/blog/building-a-harness-with-jev",
+      "note": "Harness patterns."
+    },
+    {
+      "title": "TypeSafe docs index",
+      "url": "https://docs.typesafe.ai/llms.txt",
+      "note": "Official primitives and API."
+    },
+    {
+      "title": "LangChain — Jev as agent evaluator",
+      "url": "https://www.langchain.com/blog/jev-agent-evals-langsmith",
+      "note": "Judge variance experiment."
+    },
+    {
+      "title": "OpenRouter — Jev vs LLM",
+      "url": "https://openrouter.ai/blog/tutorials/jev-vs-llm-when-to-use-each/",
+      "note": "Triage tables."
+    },
+    {
+      "title": "AyAutomate independent benchmark",
+      "url": "https://www.ayautomate.com/blog/jev-vs-llm-benchmark",
+      "note": "791 decisions."
+    },
+    {
+      "title": "JevBench RESULTS",
+      "url": "https://raw.githubusercontent.com/fstandhartinger/jevbench/main/RESULTS-v1.2.md",
+      "note": "Public harness."
+    },
+    {
+      "title": "OpenAI — Introducing the Agents API",
+      "url": "https://openai.com/index/introducing-the-agents-api/",
+      "note": "Agent platform context in the wider landscape."
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Which architecture should I use?",
+      "a": "Start with a two-tier cascade (fast decision → premium on low confidence) on a labelled set before building a four-tier router."
+    }
+  ]
+}

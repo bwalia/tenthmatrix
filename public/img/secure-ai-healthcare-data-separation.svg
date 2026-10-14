@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="Healthcare AI data separation and payment handoff">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 28px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ok { fill: #047857; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .no { fill: #9f1239; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .ai { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; }
+      .safe { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .sens { fill: #fff1f2; stroke: #e11d48; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+      .dash { stroke: #e11d48; stroke-width: 2.5; fill: none; stroke-dasharray: 6 5; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">1. Keep sensitive data away from the AI</text>
+  <text class="sub" x="48" y="78">One patient conversation — separate data paths for PHI and card details</text>
+
+  <rect class="box" x="48" y="120" width="220" height="100" rx="8"/>
+  <text class="lbl" x="68" y="160">Patient channel</text>
+  <text class="sm" x="68" y="188">Voice / chat / app</text>
+
+  <path class="arrow" d="M278 170 H330"/>
+
+  <rect class="ai" x="340" y="110" width="280" height="120" rx="8"/>
+  <text class="lbl" x="360" y="150">Healthcare AI agent</text>
+  <text class="sm" x="360" y="178">Intent · booking · status</text>
+  <text class="ok" x="360" y="208">Sees: wants to pay</text>
+
+  <path class="arrow" d="M480 240 V290"/>
+  <text class="sm" x="492" y="275">handoff</text>
+
+  <rect class="safe" x="340" y="300" width="280" height="130" rx="8"/>
+  <text class="lbl" x="360" y="340">Fixed payment workflow</text>
+  <text class="sm" x="360" y="368">DTMF keypad / locked UI</text>
+  <text class="sm" x="360" y="392">PCI-scoped processor</text>
+  <text class="ok" x="360" y="416">Returns: token / approved</text>
+
+  <path class="dash" d="M630 170 H700"/>
+  <text class="no" x="640" y="155">NO card / raw PHI</text>
+
+  <rect class="sens" x="710" y="110" width="440" height="120" rx="8"/>
+  <text class="lbl" x="730" y="150">Must not enter the model</text>
+  <text class="sm" x="730" y="178">Card PAN · CVV · full clinical notes</text>
+  <text class="sm" x="730" y="202">Unnecessary identifiers in memory</text>
+
+  <rect class="box" x="48" y="480" width="1104" height="180" rx="10"/>
+  <text class="lbl" x="72" y="520">Context is chosen on purpose</text>
+  <text class="sm" x="72" y="552">Pass only the minimum between workflows, models, tools and systems.</text>
+  <text class="sm" x="72" y="576">If the agent does not need a data element to finish the request, that element has no path into the AI.</text>
+  <text class="sm" x="72" y="608">Citizen experience stays continuous — security boundaries stay invisible on the call or chat.</text>
+  <text class="ok" x="72" y="640">Result: spontaneous help without a single pool of sensitive data</text>
+</svg>

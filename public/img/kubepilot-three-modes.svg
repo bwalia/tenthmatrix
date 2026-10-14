@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-label="KubePilot three modes incident loop">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .tag { fill: #326ce5; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .title { fill: #0f172a; font: 700 22px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .cap { fill: #475569; font: 500 13px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .box { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
+      .a { fill: #dbeafe; stroke: #326ce5; stroke-width: 2; }
+      .b { fill: #ecfdf5; stroke: #047857; stroke-width: 2; }
+      .c { fill: #fef3c7; stroke: #b45309; stroke-width: 2; }
+      .h { fill: #0f172a; font: 700 15px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .s { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .ln { stroke: #64748b; stroke-width: 2; fill: none; marker-end: url(#m); }
+      .foot { fill: #64748b; font: 500 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="640"/>
+  <text class="tag" x="40" y="36">FIGURE - KUBEPILOT INCIDENT LOOP</text>
+  <text class="title" x="40" y="68">CoPilot + Pilot + AutoPilot = faster MTTR</text>
+  <text class="cap" x="40" y="94">Open-source cockpit from kubepilot.org - built by the Workstation engineering team.</text>
+
+  <rect class="a" x="40" y="140" width="340" height="280" rx="10"/>
+  <text class="h" x="60" y="180">1. CoPilot (AI)</text>
+  <text class="s" x="60" y="215">Ask in plain English</text>
+  <text class="s" x="60" y="240">AI Analyze on problem pods</text>
+  <text class="s" x="60" y="265">RCA + evidence + confidence</text>
+  <text class="s" x="60" y="290">Anomalies: CrashLoop, OOM,</text>
+  <text class="s" x="60" y="315">ImagePull, node pressure</text>
+  <text class="s" x="60" y="350">Local LLM via Ollama</text>
+  <text class="s" x="60" y="375">Copy Prompt for your model</text>
+
+  <path class="ln" d="M390 280 H430"/>
+
+  <rect class="b" x="440" y="140" width="320" height="280" rx="10"/>
+  <text class="h" x="460" y="180">2. Pilot (SRE)</text>
+  <text class="s" x="460" y="215">Lens-style read-only browse</text>
+  <text class="s" x="460" y="240">Pods, logs, YAML, events</text>
+  <text class="s" x="460" y="265">Topology: Ingress to Pod</text>
+  <text class="s" x="460" y="290">CPU / mem / disk gauges</text>
+  <text class="s" x="460" y="315">LAN / WAN / tunnel node IPs</text>
+  <text class="s" x="460" y="350">Port-forward + multi-cluster</text>
+  <text class="s" x="460" y="375">Verify before you mutate</text>
+
+  <path class="ln" d="M770 280 H810"/>
+
+  <rect class="c" x="820" y="140" width="340" height="280" rx="10"/>
+  <text class="h" x="840" y="180">3. AutoPilot (fixer)</text>
+  <text class="s" x="840" y="215">off / dry-run / active</text>
+  <text class="s" x="840" y="240">Confidence floors</text>
+  <text class="s" x="840" y="265">Namespace blocklists</text>
+  <text class="s" x="840" y="290">Cooldowns + hourly caps</text>
+  <text class="s" x="840" y="315">Kill switch + decision ledger</text>
+  <text class="s" x="840" y="350">CR-code escalate to human</text>
+  <text class="s" x="840" y="375">Auditable self-healing</text>
+
+  <rect class="box" x="40" y="460" width="1120" height="100" rx="8"/>
+  <text class="h" x="60" y="500">Signal -&gt; diagnose -&gt; verify -&gt; remediate</text>
+  <text class="s" x="60" y="530">Web cockpit + native iOS companion + MCP server. Star: github.com/bwalia/kubepilot</text>
+
+  <text class="foot" x="40" y="610">workstation.co.uk  ·  kubepilot.org</text>
+</svg>

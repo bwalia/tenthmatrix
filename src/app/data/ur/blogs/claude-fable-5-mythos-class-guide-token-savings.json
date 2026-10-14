@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-claude-fable-5-001",
+  "internal_id": 948,
+  "slug": "claude-fable-5-mythos-class-guide-token-savings",
+  "title": "Claude Fable 5: Anthropic کے Mythos-کلاس ماڈل کے لیے مکمل گائیڈ",
+  "sub_title": "Fable 5 کیا ہے، کمیونٹی نے کیسا ردِ عمل ظاہر کیا، بہترین YouTube ڈیپ ڈائیو، اسے کب استعمال کرنا ہے بمقابلہ Opus یا Sonnet، اور ٹوکن بچانے کے عملی طریقے",
+  "excerpt": "Claude Fable 5 طویل افق ایجنٹوں کے لیے Anthropic کا Mythos کلاس فرنٹیئر ماڈل ہے۔ کمیونٹی کے رد عمل، YouTube کے جائزے، اسے کب استعمال کرنا ہے، اور ٹوکنز کو کیسے محفوظ کرنا ہے۔",
+  "meta_title": "Claude Fable 5 گائیڈ: رد عمل، یوٹیوب، ٹوکن کی بچت",
+  "meta_description": "Claude Fable 5 نے وضاحت کی: Mythos-کلاس ماڈل، کمیونٹی ری ایکشنز، YouTube کے سرفہرست جائزے، Fable بمقابلہ Opus کب استعمال کریں، اور ٹوکن سیونگ ٹپس۔",
+  "meta_keywords": "Claude Fable 5، claude-fable-5، Anthropic Fable 5، Mythos کلاس، Fable 5 ٹوکن بچت، Claude Fable 5 بمقابلہ Opus، ایجنٹی کوڈنگ، AI ایجنٹس",
+  "cover_image": "/img/claude-fable-5-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-fable-5-cover.svg",
+      "id": 948,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Fable 5 — Mythos-class AI for long-horizon agentic work"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>اینتھروپک کا Claude Fable 5 عام طور پر دستیاب پہلا Mythos کلاس ماڈل ہے — جو طویل افق کے ایجنٹی کام کے لیے بنایا گیا ہے، نہ کہ فوری بات چیت کے لیے۔ اس پوسٹ میں اس بات کا احاطہ کیا گیا ہے کہ کیا بدلا ہے، لوگ کس طرح کا رد عمل ظاہر کر رہے ہیں، کون سا یوٹیوب ڈیپ ڈائیو آپ کے وقت کے قابل ہے، اور اپنے ٹوکن بجٹ کو جلائے بغیر Fable 5 کا استعمال کیسے کریں۔ مکمل پلے بک کے لیے، پڑھیں <a href=\"/ur/articles/claude-fable-5-mythos-class-guide-token-savings\">طویل مضمون</a>.</em></p>\n<p><img alt=\"Claude Fable 5 — Mythos-class AI طویل افق کے ایجنٹی کام کے لیے\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-fable-5-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>ایک پیراگراف کا ورژن۔</strong> Claude Fable 5 (<code>claude-fable-5</code>) Anthropic کا سب سے زیادہ قابل وسیع پیمانے پر جاری کردہ ماڈل ہے — Opus 4.8 کے اوپر ایک Mythos-کلاس ٹائر، 1M-ٹوکن سیاق و سباق کی ونڈو کے ساتھ اور فی درخواست 128K آؤٹ پٹ ٹوکنز تک۔ یہ اس کام کے لیے ڈیزائن کیا گیا ہے جس میں ایک شخص کو گھنٹے، دن یا ہفتے لگتے ہیں: بڑے کوڈ بیس ریفیکٹرز، خود مختار کوڈنگ ایجنٹس، کثیر دستاویزی تجزیہ، اور طویل عرصے سے چلنے والے ورک فلو۔ اس کی لاگت $10 فی ملین ان پٹ ٹوکنز اور $50 فی ملین آؤٹ پٹ ٹوکنز ہے - تقریباً دوگنا Opus - لہذا جیتنے کی حکمت عملی یہ ہے کہ اسے مشکل مسائل کے لیے محفوظ کیا جائے اور باقی تمام چیزوں کو سونیٹ یا ہائیکو تک پہنچایا جائے۔\n</div>\n<h2>Claude Fable 5 کیا ہے؟</h2>\n<p>9 جون 2026 کو، انتھروپک کا آغاز ہوا۔ <strong>Claude Fable 5</strong> — صلاحیتوں کا عوامی سامنا کرنے والا ورژن جس کا پہلے جائزہ لیا گیا بطور <em>کلاڈ Mythos پیش نظارہ</em> پروجیکٹ گلاس ونگ کے تحت۔ Fable 5 صرف دعوت نامہ کے طور پر وہی بنیادی وزن شیئر کرتا ہے۔ <strong>کلاڈ Mythos 5</strong>، لیکن حفاظتی درجہ بندی شامل کرتا ہے جو حساس سائبرسیکیوریٹی اور حیاتیات کے سوالات کو Claude Opus 4.8 تک پہنچاتا ہے۔ اینتھروپک ان فال بیکس کو 5% سے بھی کم سیشنز میں فائر کرنے کی اطلاع دیتا ہے، یعنی زیادہ تر وقت آپ مکمل Mythos-کلاس انٹیلی جنس پر چل رہے ہوتے ہیں۔</p>\n<p>جہاں Opus 4.8 پیچیدہ ایجنٹی کوڈنگ کے لیے Anthropic کا ورک ہارس ہے، Fable 5 وہ ماڈل ہے جس تک آپ پہنچتے ہیں جب کام <em>بہت لمبا، بہت مبہم، یا بہت زیادہ قدم</em> کسی اور چیز کے لیے۔ اینتھروپک کی اپنی فریمنگ: کام جتنا لمبا اور پیچیدہ ہوگا، اتنے ہی بڑے افسانے کی سابقہ ​​ماڈلز پر برتری حاصل ہوگی۔</p>\n<h2>لانچ ہفتہ سے پانچ ٹیک ویز</h2>\n<ol>\n<li><strong>بینچ مارکس اچھل پڑے، خاص طور پر ایجنٹ کوڈنگ پر۔</strong> کمیونٹی ٹیسٹرز اور اینتھروپک کے اپنے نمبرز SWE-bench Pro, OSWorld، اور لانگ ہورائزن کوڈنگ کے کاموں پر بڑے فائدے دکھاتے ہیں - اکثر GPT-5.5 سے 15-20% آگے اور سافٹ ویئر انجینئرنگ کے کام کے بوجھ پر کلاؤڈ ماڈلز سے پہلے۔</li>\n<li><strong>یہ ایک مختلف قسم کا ماڈل ہے، تیز Opus نہیں۔</strong> Fable 5 فی موڑ زیادہ چلتا ہے، متوازی ذیلی ایجنٹوں کو زیادہ آسانی سے بھیجتا ہے، اور Opus کے لیے بہت سی ٹیموں کی تیار کردہ نسخے کی مہارتوں کے مقابلے دبلی پتلی اشارے سے فائدہ اٹھاتا ہے۔ فوری تبدیلیوں کے بغیر ڈراپ ان متبادل اکثر مایوس کن ہوتا ہے۔</li>\n<li><strong>کوشش کی سطح آپ کی لاگت کا ڈائل ہے۔</strong> API صارفین کوشش کو کم، درمیانے، اعلی، یا اضافی اعلی پر سیٹ کر سکتے ہیں۔ میڈیم Fable 5 کثرت سے Opus سے میل کھاتا ہے یا اس سے زیادہ قیمت پر - قیمت کے ایک حصے پر۔ ہر چیز کو زیادہ سے زیادہ ڈیفالٹ کرنا بجٹ کی سب سے عام غلطی ہے۔</li>\n<li><strong>گارڈریلز ایک کمیونٹی فلیش پوائنٹ بن گئے۔</strong> Opus 4.8 کے ابتدائی پوشیدہ فال بیکس نے مایوس محققین کو جو نہیں جانتے تھے کہ وہ کس ماڈل سے بات کر رہے ہیں۔ وائرڈ، دی ورج، اور ہیکر نیوز کے ردعمل کے بعد انتھروپک نے نقطہ نظر کے کچھ حصوں کو واپس لے لیا - جب آپ فرنٹیئر قیمتیں ادا کر رہے ہوتے ہیں تو شفافیت کا معاملہ ہوتا ہے۔</li>\n<li><strong>لوپس میں سوچیں، اشارے نہیں۔</strong> Fable 5 سے سب سے زیادہ فائدہ حاصل کرنے والے بلڈرز اسے ایک خود مختار کارکن کے طور پر پیش کرتے ہیں: گول اسٹیٹمنٹس، فی گھنٹہ چیک ان لوپس، پراجیکٹ ٹولز کے ساتھ انضمام جیسے Linear، اور async harnesses جو ہر subagent پر بلاک نہیں ہوتے ہیں۔</li>\n</ol>\n<h2>کمیونٹی کس طرح کا رد عمل ظاہر کر رہی ہے۔</h2>\n<p>رد عمل پیشین گوئی خطوط کے ساتھ تقسیم ہوتے ہیں — صلاحیت بمقابلہ لاگت بمقابلہ کنٹرول۔</p>\n<ul>\n<li><strong>بلڈرز مشکل کاموں سے متاثر ہوتے ہیں۔</strong> سائمن ولسن نے Fable 5 کو سست اور مہنگا قرار دیا لیکن نوٹ کیا کہ یہ مشکل مسائل کے ذریعے کام کرتا رہتا ہے جو دوسرے ماڈلز کو روکتے ہیں۔ ہیکر نیوز لانچ تھریڈز خود مختار کوڈنگ پر مرکوز ہیں اور کیا یہ \"ایجنٹ جو حقیقت میں ختم ہو جاتا ہے\" کے لیے انفلیکشن پوائنٹ ہے۔</li>\n<li><strong>مشتبہ افراد روزانہ ڈرائیور کی قیمت پر سوال کرتے ہیں۔</strong> کئی آزاد ٹیسٹرز (بشمول $200+ API خرچ کے موازنہ) نے پایا کہ Fable 5 اکثر <em>بہترین</em> ماڈل لیکن ہمیشہ نہیں <em>بہترین قدر</em> — خاص طور پر روٹین کوڈنگ پر درمیانی کوشش پر، جہاں اعلیٰ کوشش پر Opus 4.8 کافی قریب اور سستا ہے۔</li>\n<li><strong>یوٹیوب کی آواز بلند ہے۔ کام کے نشانات سگنل ہیں۔</strong> \"سب سے بڑا AI ماڈل ایور\" جیسے عنوانات مارکیٹنگ ہیں۔ اہم بات یہ ہے کہ آیا ایک جائزہ لینے والا کئی گھنٹے کے ایجنٹ کو چلاتا ہے، ناکامی کے طریقوں، ساتھ ساتھ UI کی دوبارہ تعمیر، اور دیانت دار لاگت کا حساب کتاب دکھاتا ہے — تھمب نیل کے اعلیٰ درجے کی نہیں۔</li>\n<li><strong>سبسکرپشن تک رسائی منتقل ہو گئی۔</strong> Fable 5 استعمال کے کریڈٹ کے ساتھ پرو، میکس، ٹیم، اور انٹرپرائز پلانز کے لیے رول آؤٹ ہوا۔ اینتھروپک نے مسلسل سرحدی رسائی کے لیے API-پہلی قیمتوں کا اشارہ دیا - ایک اشارہ ہے کہ بھاری سبسڈی والی فلیٹ ریٹ سبسکرپشنز Mythos-کلاس ماڈل کو غیر معینہ مدت تک نہیں لے سکتی ہیں۔</li>\n</ul>\n<h2>یوٹیوب ویڈیوز دیکھنے کے قابل ہیں۔</h2>\n<p>یہ جولائی 2026 تک سب سے زیادہ دیکھے جانے والے اور سب سے زیادہ اہم Fable 5 ویڈیوز میں سے ہیں۔ <em>اصل ٹیسٹ</em>، عنوانات نہیں۔</p>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#1a0f0a;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">ویڈیو</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">اسے کیوں دیکھتے ہیں۔</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=Pl7uo3vqp5s\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 7 منٹ میں</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">تیز لانچ کا جائزہ: بینچ مارکس، قیمتوں کا تعین، پوزیشننگ بمقابلہ Mythos پیش نظارہ۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=54Fky0JpSbw\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 ناقابل یقین ہے! (مکمل جانچ شدہ)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">وسیع تناؤ کا امتحان: کوڈنگ، 3D/WebGL، وژن، ایجنٹ ورک فلوز، حقیقی بینچ مارکس۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=RwsUnvHYmyw\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 ابھی گرا اور میں بے آواز ہوں۔</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Claude Code لوپس، گول اسٹیٹمنٹس، لکیری انضمام - عملی ایجنٹ پیٹرن۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=AW3TJDuViF8\" rel=\"noopener noreferrer\" target=\"_blank\">Fable 5 بمقابلہ Opus — اپنے کریڈٹ کو ضائع نہ کریں۔</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">ساتھ ساتھ UI کی تعمیر نو، 3D گیمز، دستاویز کا تجزیہ — ایماندار پہلے تاثرات۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=xoNGy_JDFi4\" rel=\"noopener noreferrer\" target=\"_blank\">میں نے Fable 5 کی جانچ کے لیے $200 خرچ کیے (اس کے قابل ہے؟)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">ایک ہی ایپ نے تین طریقے بنائے۔ کوشش کی سطح، قیمت کے معیار کی تجارت - FinOps کے لیے ضروری۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=VNbW4wrcfSw\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 کے ساتھ وائب کوڈنگ</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">لائیو کوڈنگ سیشن: ایک ایچ ٹی ایم ایل فائل میں ایف پی ایس، کوڈ بیس کی کارکردگی کا جائزہ — حقیقی دنیا کے وائب چیک۔</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=2XhM_8DlgnQ\" rel=\"noopener noreferrer\" target=\"_blank\">Fable 5 کو صحیح طریقے سے استعمال کرنے کا طریقہ</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">اینتھروپک کے آفیشل پرامپٹنگ گائیڈ کا واک تھرو: کوشش، سب ایجنٹس، دبلے پتلے اشارے۔</td>\n</tr>\n</tbody>\n</table>\n<h2>Fable 5 کب استعمال کریں (اور کب نہیں)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#fff7ed;\">Fable 5 تک پہنچیں۔</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f1f5f9;\">اس کے بجائے سونیٹ یا اوپس استعمال کریں۔</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ملٹی ڈے کوڈ بیس کی منتقلی یا بڑے ریفیکٹرز</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">سنگل فائل بگ فکسز اور چھوٹے PRs</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">خود مختار ایجنٹ جو آلے کے استعمال کے ساتھ گھنٹوں چلتے ہیں۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">فوری سوال و جواب اور ای میلز کا مسودہ تیار کرنا</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مبہم چشمی جہاں ماڈل کا دائرہ کار اور واضح ہونا ضروری ہے۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">اسکیما کے ساتھ اچھی طرح سے بیان کردہ نکالنا</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">کراس ریپو کوڈ کا جائزہ اور گہری ڈیبگنگ</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">لنٹنگ، فارمیٹنگ، بوائلر پلیٹ جنریشن</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">انٹرپرائز دستاویزات: مالیاتی ماڈلز، سلائیڈز، لمبی رپورٹس</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">پیمانے پر اعلی حجم کی درجہ بندی (ہائیکو استعمال کریں)</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مسائل جو آپ پہلے ہی Opus پر دو بار ناکام ہو چکے ہیں۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ذیلی سیکنڈ جوابات کے ساتھ تاخیر سے متعلق حساس چیٹ</td></tr>\n</tbody>\n</table>\n<h2>Fable 5 پر ٹوکن کیسے محفوظ کریں۔</h2>\n<p>Fable 5 کے آؤٹ پٹ ٹوکن کی لاگت اس کے ان پٹ ٹوکن سے پانچ گنا ($50 بمقابلہ $10 فی ملین) ہے۔ طویل ایجنٹ کی دوڑ پر، <strong>آؤٹ پٹ آپ کے بل پر غالب ہے۔</strong>. یہ طرز عمل کسی بھی سابقہ ​​کلاڈ ماڈل کے مقابلے میں یہاں زیادہ اہمیت رکھتے ہیں۔</p>\n<ul>\n<li><strong>کوشش کو کام سے جوڑیں۔</strong> استعمال کریں۔ <code>medium</code> معمول کے کام کے لیے؛ ریزرو <code>high</code> اور <code>xhigh</code> حقیقی مشکل مسائل کے لیے۔ بہت سی ٹیمیں ہر کال پر زیادہ سے زیادہ کوشش کرکے زیادہ ادائیگی کرتی ہیں۔</li>\n<li><strong>نسخے کے اشارے کو تراشیں۔</strong> Opus کے لیے لکھی گئی مہارتیں اکثر Fable 5 کے لیے بہت زیادہ لفظی ہوتی ہیں اور کر سکتی ہیں۔ <em>نیچا</em> معیار دبلی پتلی شروع کریں؛ جب پہلے سے طے شدہ سلوک چھوٹ جاتا ہے تب ہی رکاوٹیں شامل کریں۔</li>\n<li><strong>جواب میں استدلال کی بازگشت کے لیے اس سے کبھی نہ پوچھیں۔</strong> صارف کے نظر آنے والے متن میں \"اپنی سوچ ظاہر کرنے\" کی ہدایات حفاظتی انکار اور اوپس فال بیکس کو متحرک کر سکتی ہیں - ڈھانچہ استعمال کریں <code>thinking</code> بلاکس اور a <code>send_to_user</code> اس کے بجائے ترقی کا آلہ۔</li>\n<li><strong>پرامپٹ کیشنگ کا استعمال کریں۔</strong> Fable 5 کیشڈ پریفکسز پر اینتھروپک کے 90% ان پٹ ڈسکاؤنٹ کی حمایت کرتا ہے - ان ایجنٹوں کے لیے جو ہر موڑ پر ایک ہی سسٹم پرامپٹ اور ٹول کی تعریفیں دوبارہ بھیجتے ہیں۔</li>\n<li><strong>متوازی ذیلی ایجنٹوں کے ساتھ نمائندہ۔</strong> متوازی طور پر آزاد ذیلی کام ایک یک سنگی دھاگے کو دھڑکتے ہیں جو سیاق و سباق کو جمع کرتا ہے۔</li>\n<li><strong>میموری فائل دیں، ٹرانسکرپٹ نہیں۔</strong> مارک ڈاؤن نوٹ کے مطابق ایک سبق ہر سیشن میں چیٹ کی پوری تاریخ کو دوبارہ پیسٹ کرتا ہے۔</li>\n<li><strong>راؤٹر کو روٹ کریں۔</strong> ہائیکو کے ساتھ آنے والی درخواستوں کی درجہ بندی کریں؛ Sonnet کی طرف بڑھیں، پھر Fable 5 صرف اس صورت میں جب پیچیدگی اس کی ضمانت دیتی ہے۔</li>\n<li><strong>کیپ آؤٹ پٹ کی لمبائی۔</strong> سیٹ <code>max_tokens</code> جان بوجھ کر TLDR-پہلے خلاصے کے لیے پوچھیں: \"نتائج کے ساتھ رہنمائی؛ بعد میں معاونت کی تفصیل۔\"</li>\n</ul>\n<div style=\"background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;color:#166534;\">\n<strong>انگوٹھے کا اصول۔</strong> اگر کام ایک مختصر تبادلے میں ختم ہو جاتا ہے، تو شاید آپ کو Fable 5 کی ضرورت نہیں تھی۔ اگر اس میں ایک سینئر انجینئر کو پورا دن لگے گا اور اس میں ٹولز، فائلیں، اور ججمنٹ کالز شامل ہوں گے - یہ فیبل ٹیریٹری ہے۔\n</div>\n<h2>شروع کرنا</h2>\n<ul>\n<li><strong>Claude.ai / Claude Code:</strong> ماڈل چننے والے میں Fable 5 کو منتخب کریں یا چلائیں۔ <code>/model fable</code> Claude Code (v2.1.170+) میں۔</li>\n<li><strong>API:</strong> <code>model: \"claude-fable-5\"</code> پیغامات API، AWS Bedrock، Google Vertex، یا Microsoft Foundry پر۔</li>\n<li><strong>دستاویزات:</strong> <a href=\"https://platform.claude.com/docs/ur/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 متعارف کروا رہا ہے۔</a> اور <a href=\"https://platform.claude.com/docs/ur/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 کا اشارہ کرنا</a>.</li>\n</ul>\n<h2>لمبا ورژن پڑھیں</h2>\n<p>دی <a href=\"/ur/articles/claude-fable-5-mythos-class-guide-token-savings\">طویل مضمون</a> Mythos کلاس کی تاریخ، ایک مکمل ٹاسک میٹرکس، کوشش کی سطح کی معاشیات، گارڈریل اور فال بیک ہینڈلنگ، async ایجنٹس کے لیے استعمال کے سہاروں، کمیونٹی ری ایکشن ٹائم لائن، اور API انٹیگریشن چیک لسٹ کا احاطہ کرتا ہے۔ کی طرف سے شائع <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-fable-5",
+      "id": 972
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "prompt-engineering",
+      "id": 977
+    },
+    {
+      "name": "mythos",
+      "id": 978
+    },
+    {
+      "name": "claude-code",
+      "id": 979
+    }
+  ],
+  "created_at": "2026-07-07T09:00:00Z",
+  "updated_at": "2026-07-07T09:00:00Z",
+  "published_date": "2026-07-07",
+  "status": true
+}

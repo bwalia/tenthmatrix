@@ -1,0 +1,98 @@
+{
+  "uuid": "blog-ring-promoter-compare-adr-001",
+  "internal_id": 1034,
+  "slug": "ring-promoter-vs-argo-cd-kargo-adr",
+  "title": "Ring Promoter vs Argo CD, Kargo and CI: Which Tool Answers Which Release Question",
+  "sub_title": "Sync, build and promotion are different jobs. What Ring Promoter’s comparison says, where it is not the better choice, and why the decision belongs in an ADR",
+  "excerpt": "Argo CD syncs, CI builds, Ring Promoter promotes. A fact-checked look at the comparison, its honest limits, which tool fits, and how to record the choice as an ADR.",
+  "meta_title": "Ring Promoter vs Argo CD, Kargo and CI | TenthMatrix",
+  "meta_description": "Ring Promoter vs Argo CD, Flux, Kargo and CI: which tool answers which release question, honest limits, which fits, and why to record the choice in an ADR.",
+  "meta_keywords": "Ring Promoter, Argo CD, Kargo, Flux, Spinnaker, Octopus Deploy, Harness, environment promotion, release workflow, Architecture Decision Record, ADR, GitOps, CI/CD, TenthMatrix",
+  "cover_image": "/img/ring-promoter-compare-adr-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-compare-adr-cover.svg",
+      "id": 1040,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Which tool answers which release question: Argo CD and Flux, CI, and Ring Promoter"
+    },
+    {
+      "url": "/img/ring-promoter-compare-questions.svg",
+      "id": 1041,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "Argo CD and Flux check Git sync, CI checks the job exited 0, Ring Promoter checks the exact version is healthy and allowed"
+    },
+    {
+      "url": "/img/ring-promoter-compare-workflow.svg",
+      "id": 1042,
+      "is_cover": false,
+      "width": 1200,
+      "height": 760,
+      "alt": "Release workflow: CI seeds int, auto-promote early rings, gated hop into production, rollback on failed health"
+    },
+    {
+      "url": "/img/ring-promoter-compare-adr-lifecycle.svg",
+      "id": 1043,
+      "is_cover": false,
+      "width": 1200,
+      "height": 720,
+      "alt": "ADR lifecycle Proposed, Accepted, Superseded and the Title, Status, Context, Decision, Consequences template"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Argo CD, Flux, Kargo, Spinnaker, Octopus, Harness and your CI pipeline all appear on the same shortlist when a team says “we need better releases”. They are not interchangeable. Each one answers a different question, and picking the wrong one leaves the hardest question unanswered. This post uses Ring Promoter’s own comparison at <a href=\"https://www.ringpromoter.com/compare/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com/compare</a> to separate those questions, sets out the limits honestly, and explains why whichever choice you make should be written down as an Architecture Decision Record (ADR).</em></p>\n\n<figure>\n<img src=\"/img/ring-promoter-compare-adr-cover.svg\" alt=\"Cover: which tool answers which release question. Argo CD and Flux check the cluster matches Git, CI checks the job exited 0, Ring Promoter checks this exact version is healthy and allowed into the next ring\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" />\n</figure>\n\n<h2>Three tools, three questions</h2>\n<p>The compare page opens with a framing that is worth keeping in your head during any tooling discussion:</p>\n<ul>\n  <li><strong>Argo CD and Flux</strong> ask: <em>“Does the cluster match the manifests in Git?”</em> They provide sync, drift detection and self-heal per environment. Moving a version from staging to production is left to you: a pull request, an image updater, or another tool such as Kargo.</li>\n  <li><strong>CI pipelines</strong> (GitHub Actions, Jenkins, GitLab) ask: <em>“Did the deploy job exit 0?”</em> They are good at build and test, but they keep no record of what runs in each environment and do not roll back on their own. A green job can leave the old version answering <code>200 OK</code>.</li>\n  <li><strong>Ring Promoter</strong> asks: <em>“Is this exact version healthy here, and is it allowed into the next ring right now?”</em> Promotion is its main concept. It keeps the current version, previous version and full history per app and ring, and stops at the first failure.</li>\n</ul>\n\n<figure>\n<img src=\"/img/ring-promoter-compare-questions.svg\" alt=\"Diagram of three columns: Argo CD and Flux own sync and drift detection; CI pipelines own build and test; Ring Promoter owns ring order, gates, version checks and rollback\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" />\n<figcaption>Sync, build and promotion are separate jobs. Based on Ring Promoter’s comparison page.</figcaption>\n</figure>\n\n<p>Seen this way, most “Argo CD or Ring Promoter?” debates dissolve. If your problem is keeping clusters in line with Git, a sync engine is the answer. If your problem is deciding what is allowed into production and proving it is really running there, you need something that treats promotion as a first-class object.</p>\n\n<h2>What actually differs</h2>\n<p>The compare page lists capabilities that Ring Promoter provides out of the box. The ones that matter most in practice are:</p>\n<ol>\n  <li><strong>Version-verified health checks.</strong> Set <code>health_version_field</code> or <code>health_version_header</code> on a ring and every post-deploy health check must report the exact version just deployed. If the old pods are still answering, the check fails and the ring rolls back. The same check confirms the source ring really runs the version being promoted.</li>\n  <li><strong>Gates before anything changes.</strong> Maintenance windows, version-specific Go/No-Go sign-off, Jira change-request codes and a Grafana go/no-go are checked before any deploy. A failed gate leaves every ring untouched. Only the Grafana gate can be overridden, and only with a written reason that goes to the job log.</li>\n  <li><strong>Rollback that cannot be cut off.</strong> Operations run on a context detached from the HTTP request, so a CI runner timeout or dropped connection cannot abort a deploy or the rollback after it. Postgres advisory locks serialise operations per app across replicas.</li>\n  <li><strong>Kubernetes and VMs in one place.</strong> The deployer is chosen per app: <code>kubectl</code>, a Kubernetes Job, or dispatching an existing GitHub Actions workflow for VM apps. The compare page notes that Argo CD, Flux and Kargo deploy only to Kubernetes.</li>\n  <li><strong>Safe production defaults.</strong> A separate production password is needed to promote or seed into prod, or to enable auto-promote into it. Rollbacks are exempt so incident response is never blocked, and config cannot switch on auto-promote into prod.</li>\n  <li><strong>One <code>curl</code> for CI.</strong> A pipeline calls <code>seed</code> or <code>promote</code>; any non-2xx means the promotion failed, and <code>422</code> means it ran, failed and was rolled back.</li>\n</ol>\n<p>Kargo is the closest match. The compare page describes it as promotion on top of Argo CD: GitOps-native (it writes to Git) with traffic-level analysis through Argo Rollouts. Its verdict is straightforward: if you are fully committed to Argo CD on Kubernetes, look at Kargo; if you have a mixed estate or no GitOps stack yet, Ring Promoter needs less to run.</p>\n\n<h2>Where it is not the better choice</h2>\n<p>The compare page is explicit about current limits, and any fair evaluation should start from them:</p>\n<ul>\n  <li><strong>No SSO or per-user RBAC yet.</strong> Access is an API bearer token plus a production password. Teams that need per-user roles and audit by identity should put it behind an auth proxy for now.</li>\n  <li><strong>No traffic shifting.</strong> A ring is deployed as a whole. For canary or blue/green inside a ring, pair it with Argo Rollouts or Flagger.</li>\n  <li><strong>Not GitOps.</strong> Ring state lives in Postgres, not Git. You get a clear history per ring, but not drift detection or self-heal.</li>\n  <li><strong>Smaller ecosystem.</strong> Deployers today are kubectl, Kubernetes Jobs and GitHub Actions. Argo CD and more CI adapters are planned for V2.</li>\n</ul>\n<blockquote><p>All competitor statements here summarise Ring Promoter’s own comparison. Products change quickly, so check each claim against the vendor’s current documentation before you rely on it.</p></blockquote>\n\n<h2>Which one fits</h2>\n<p>The compare page closes with a short guide, reproduced here as a table:</p>\n<table>\n<thead>\n<tr><th scope=\"col\">Your situation</th><th scope=\"col\">Suggested fit</th></tr>\n</thead>\n<tbody>\n<tr><td>Versions must move int → prod with proof each step worked</td><td>Ring Promoter</td></tr>\n<tr><td>Some apps on Kubernetes, some on VMs with existing pipelines</td><td>Ring Promoter</td></tr>\n<tr><td>Releases need change windows, sign-off and a Jira CR</td><td>Ring Promoter (or Harness, if you are buying)</td></tr>\n<tr><td>Git must be the only source of truth for cluster state</td><td>Argo CD or Flux, with Ring Promoter for promotion</td></tr>\n<tr><td>All-in on Argo CD and want promotion as CRDs</td><td>Kargo</td></tr>\n<tr><td>Percentage-based canary traffic</td><td>Argo Rollouts or Flagger, alongside either</td></tr>\n</tbody>\n</table>\n<p>Note how often the answer is “both”. Ring Promoter is not positioned as a replacement for CI (“CI produces the version; Ring Promoter moves it”) or for a sync engine. Our earlier posts cover the promotion protocol in <a href=\"/en/docs/blogs/ring-promoter-every-release-earns-production\">Every Release Earns Production</a> and where human gates belong in <a href=\"/en/docs/blogs/ring-promoter-qa-gates-before-production\">QA Gates Before Production</a>.</p>\n\n<h2>Write the choice down: why an ADR</h2>\n<p>Release tooling decisions are expensive to reverse and easy to forget. Two years from now someone will ask why prod promotions need a password and a Jira code, or why Argo CD is installed but does not decide what reaches production. An Architecture Decision Record answers that in one page. The widely used format from Michael Nygard has five parts: <strong>Title, Status, Context, Decision, Consequences</strong>. The record lives in the repository, usually under <code>docs/adr/</code>, and is reviewed in a pull request like code.</p>\n<p>For this decision, an ADR is especially useful because the limits above are likely to change. Writing “revisit when SSO lands” into the consequences turns a vague worry into a trigger someone can act on.</p>\n\n<figure>\n<img src=\"/img/ring-promoter-compare-adr-lifecycle.svg\" alt=\"ADR lifecycle from Proposed to Accepted to Superseded, beside the five-part template: Title, Status, Context, Decision, Consequences\" width=\"1200\" height=\"720\" loading=\"lazy\" decoding=\"async\" />\n</figure>\n\n<p>A compact example:</p>\n<pre><code># ADR-001: Use Ring Promoter for environment promotion; keep Argo CD for sync\n\nStatus: Accepted (2026-10-05)\n\nContext\n  We run Kubernetes apps and VM apps deployed by GitHub Actions.\n  Argo CD keeps clusters in sync but has no promotion model.\n  Releases into acc and prod need a change window, sign-off and a Jira CR.\n\nDecision\n  We will promote versions int -&gt; test -&gt; acc -&gt; prod with Ring Promoter.\n  Argo CD continues to own cluster sync where it is already in use.\n\nConsequences\n  + One record of what runs in every ring; automatic rollback on failed health.\n  + VM apps keep their existing workflows as a deployer.\n  - No SSO or per-user RBAC: we place it behind our auth proxy.\n  - Ring state lives in Postgres, not Git: no drift detection from this tool.\n  Revisit when: SSO/RBAC ships, or an Argo CD deployer is available (V2).\n</code></pre>\n<p>The <a href=\"/en/articles/ring-promoter-vs-argo-cd-kargo-adr\">long technical article</a> goes further: the full feature matrix, head-to-heads, three release workflow designs, the failure modes this setup prevents, and three worked ADRs with a decision checklist.</p>\n\n<h2>Next steps</h2>\n<ol>\n  <li>Read the comparison at <a href=\"https://www.ringpromoter.com/compare/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com/compare</a> and check the rows that matter to you against vendor docs.</li>\n  <li>Read the <a href=\"/en/articles/ring-promoter-vs-argo-cd-kargo-adr\">technical deep dive</a> for workflow designs and full ADR examples.</li>\n  <li>See the product at <a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a> or on the TenthMatrix <a href=\"/en/ring-promoter\">Ring Promoter page</a>.</li>\n</ol>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    },
+    {
+      "name": "argocd",
+      "id": 981
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "adr",
+      "id": 1016
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-10-05T14:00:00Z",
+  "updated_at": "2026-10-05T14:00:00Z",
+  "published_date": "2026-10-05",
+  "status": true,
+  "language_code": "ru"
+}

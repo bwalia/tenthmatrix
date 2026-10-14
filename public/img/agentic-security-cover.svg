@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Agentic AI security MCP OAuth Vault">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <style>
+      .title { fill: #0f172a; font: 800 40px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sub { fill: #334155; font: 500 17px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .kicker { fill: #9f1239; font: 700 12px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2.5px; }
+      .box { fill: #ffffff; stroke: #94a3b8; stroke-width: 1.5; }
+      .a { fill: #ffe4e6; stroke: #9f1239; stroke-width: 2; }
+      .b { fill: #e0f2fe; stroke: #0369a1; stroke-width: 2; }
+      .c { fill: #ecfdf5; stroke: #047857; stroke-width: 2; }
+      .lbl { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .sm { fill: #475569; font: 500 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#m); }
+      .brand { fill: #64748b; font: 700 11px ui-sans-serif, system-ui, Segoe UI, Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="8" height="630" fill="#9f1239"/>
+  <text class="kicker" x="48" y="52">ENTERPRISE AGENT SECURITY  |  WORKSTATION.CO.UK</text>
+  <text class="title" x="48" y="108">Agentic AI Security</text>
+  <text class="sub" x="48" y="145">MCP OAuth 2.1, VPN egress, Vault leases, Claude / OpenAI / Cursor patterns</text>
+
+  <rect class="a" x="48" y="200" width="240" height="100" rx="6"/>
+  <text class="lbl" x="68" y="240">1. Identity (IdP)</text>
+  <text class="sm" x="68" y="268">SSO / OIDC / ID-JAG</text>
+
+  <path class="arrow" d="M298 250 H340"/>
+
+  <rect class="b" x="350" y="200" width="240" height="100" rx="6"/>
+  <text class="lbl" x="370" y="240">2. MCP client</text>
+  <text class="sm" x="370" y="268">Claude / Cursor / agents</text>
+
+  <path class="arrow" d="M600 250 H642"/>
+
+  <rect class="b" x="652" y="200" width="240" height="100" rx="6"/>
+  <text class="lbl" x="672" y="240">3. MCP resource</text>
+  <text class="sm" x="672" y="268">OAuth RS + PRM RFC9728</text>
+
+  <path class="arrow" d="M902 250 H944"/>
+
+  <rect class="c" x="954" y="200" width="200" height="100" rx="6"/>
+  <text class="lbl" x="974" y="240">4. Vault</text>
+  <text class="sm" x="974" y="268">lease + rotate</text>
+
+  <rect class="box" x="48" y="360" width="350" height="140" rx="6"/>
+  <text class="lbl" x="68" y="400">Auth standard</text>
+  <text class="sm" x="68" y="430">OAuth 2.1 + PKCE mandatory</text>
+  <text class="sm" x="68" y="455">Audience binding (RFC 8707)</text>
+  <text class="sm" x="68" y="480">Enterprise zero-touch EMA</text>
+
+  <rect class="box" x="425" y="360" width="350" height="140" rx="6"/>
+  <text class="lbl" x="445" y="400">Network</text>
+  <text class="sm" x="445" y="430">VPN / private MCP only</text>
+  <text class="sm" x="445" y="455">Egress allowlists for tools</text>
+  <text class="sm" x="445" y="480">No tokens in URL query</text>
+
+  <rect class="box" x="802" y="360" width="352" height="140" rx="6"/>
+  <text class="lbl" x="822" y="400">Secrets</text>
+  <text class="sm" x="822" y="430">Dynamic creds + TTL lease</text>
+  <text class="sm" x="822" y="455">Auto-rotate static roles</text>
+  <text class="sm" x="822" y="480">Revoke on agent stop</text>
+
+  <text class="brand" x="48" y="560">FOR HUMANS AND AI AGENTS - LEAST PRIVILEGE BY DEFAULT</text>
+  <text class="brand" x="48" y="590">workstation.co.uk</text>
+</svg>

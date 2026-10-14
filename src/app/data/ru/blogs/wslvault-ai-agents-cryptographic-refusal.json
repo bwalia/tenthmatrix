@@ -1,0 +1,62 @@
+{
+  "uuid": "blog-wslvault-ai-agents-001",
+  "internal_id": 979,
+  "slug": "wslvault-ai-agents-cryptographic-refusal",
+  "title": "WSLVault: Why AI Agents Need Cryptographic Secrets Isolation",
+  "sub_title": "Protect, rotate, and manage secrets for agents — plus true multi-tenancy where Team A cannot decrypt Team B",
+  "excerpt": "AI agents use secrets at machine speed across tools and tenants. WSLVault seals per tenant so a shared platform never leaks another team's plaintext.",
+  "meta_title": "WSLVault — AI Agents & Cryptographic Secrets Isolation | TenthMatrix",
+  "meta_description": "Why protecting, rotating, and managing secrets is critical for AI agents. WSLVault cryptographic refusal vs cosmetic multi-tenant filters. Video included.",
+  "meta_keywords": "WSLVault, AI agents, secrets management, multi-tenant vault, cryptographic refusal, envelope encryption, dynamic leases, MCP, open source, wslvault.org",
+  "cover_image": "/img/wslvault-ai-agents-cover.svg",
+  "images": [
+    {
+      "url": "/img/wslvault-ai-agents-cover.svg",
+      "id": 979,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "WSLVault AI agents cryptographic secrets isolation"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>AI agents do not just <strong>read</strong> secrets — they <strong>use</strong> them across tools, tenants, and long-running sessions. That is why protecting, rotating, and managing credentials is more critical for agents than for classic apps. Companion deep dive: <a href=\"/en/articles/wslvault-ai-agents-cryptographic-refusal\">long article</a> · Product: <a href=\"/en/wsl-vault\">/wsl-vault</a>.</em></p>\n\n<p><img src=\"/img/wslvault-ai-agents-cover.svg\" alt=\"WSLVault — AI agents and cryptographic secrets isolation\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.5rem 0;\">\n<iframe src=\"https://www.youtube.com/embed/O6q3_H0k2M8\" title=\"WSLVault — true multi-tenant secrets and cryptographic refusal\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe>\n</div>\n<p class=\"text-muted\" style=\"font-size:0.9rem;\"><a href=\"https://youtu.be/O6q3_H0k2M8\" target=\"_blank\" rel=\"noopener noreferrer\">Watch on YouTube</a> (~20 min) — same WSLVault recording, angled for multi-tenancy and platform architects.</p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>Bottom line.</strong> Most “multi-tenant vaults” isolate with application filters. That is not enough when Agent A and Agent B share a platform. WSLVault’s answer is <strong>cryptographic refusal</strong> — each data key belongs to exactly one tenant. Cross-tenant access returns not found, not “oops, wrong row.”\n</div>\n\n<h2>Why AI agents raise the stakes</h2>\n<ul>\n  <li><strong>Broader blast radius</strong> — one agent session can touch many APIs, databases, and SaaS tools in minutes.</li>\n  <li><strong>Longer lifetime</strong> — agents hold credentials across tool loops; static keys in env files or MCP config become durable attack surface.</li>\n  <li><strong>Shared platforms</strong> — multi-tenant agent runtimes often share hosts, stores, and observability — a filter bug or dump must not hand Team B Team A’s plaintext.</li>\n  <li><strong>Automation speed</strong> — humans pause; agents do not. Leaked or over-scoped secrets get exercised at machine speed.</li>\n</ul>\n\n<p>Protecting secrets at rest, rotating them on a schedule, and issuing <strong>short-lived leases</strong> are baseline controls for agentic systems — not optional polish.</p>\n\n<h2>What the video covers</h2>\n<ul>\n  <li>Why tenant IDs alone are cosmetic isolation</li>\n  <li>Per-tenant key hierarchy under envelope encryption</li>\n  <li>Cryptographic refusal vs filter bugs</li>\n  <li>How engines (KV, transit, PKI, leases) still work per tenant</li>\n  <li>Audit that stays tamper-evident without storing plaintext secrets</li>\n</ul>\n\n<p><img src=\"/img/wslvault-yt-b-multitenant.svg\" alt=\"Team A cannot decrypt Team B — cryptographic refusal\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p>\n\n<h2>Links</h2>\n<ul>\n  <li>Product: <a href=\"https://www.wslvault.org/\" target=\"_blank\" rel=\"noopener noreferrer\">wslvault.org</a></li>\n  <li>GitHub: <a href=\"https://github.com/bwalia/wslvault\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/wslvault</a></li>\n  <li>TenthMatrix page: <a href=\"/en/wsl-vault\">/en/wsl-vault</a></li>\n  <li>Intro article: <a href=\"/en/articles/wslvault-steal-the-server-not-the-secrets\">Steal the server. Not the secrets.</a></li>\n</ul>\n\n<p><a href=\"/en/articles/wslvault-ai-agents-cryptographic-refusal\">Read the full technical brief</a> · <a href=\"/en/wsl-vault\">Open the WSL Vault tools page</a></p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "security",
+      "id": 1021
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-24T17:30:00Z",
+  "updated_at": "2026-09-24T17:30:00Z",
+  "published_date": "2026-09-24",
+  "status": true,
+  "language_code": "ru"
+}

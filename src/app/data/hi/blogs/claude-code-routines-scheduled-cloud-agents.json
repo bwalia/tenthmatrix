@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines: शेड्यूल किए गए क्लाउड एजेंट, सब-रूटीन और को-रूटीन",
+  "sub_title": "Claude Code को शेड्यूल पर, किसी API कॉल से या GitHub इवेंट पर चलाएँ — न लैपटॉप की ज़रूरत, न सर्वर की। पाँच मिनट की गाइड।",
+  "excerpt": "Claude Code Routines सहेजे गए एजेंट टास्क को Anthropic के क्लाउड पर शेड्यूल पर, API के ज़रिए या GitHub इवेंट पर चलाते हैं। ये कैसे काम करते हैं, इन्हें कैसे सेट करें और इन्हें शृंखला में कैसे जोड़ें।",
+  "meta_title": "Claude Code Routines: शेड्यूल्ड क्लाउड एजेंट की व्याख्या | TenthMatrix",
+  "meta_description": "Claude Code Routines की व्याख्या: शेड्यूल, API और GitHub ट्रिगर, सेटअप, प्रॉम्प्ट डिज़ाइन, सबएजेंट वाले सब-रूटीन, को-रूटीन पाइपलाइन, सुरक्षा और प्लान सीमाएँ।",
+  "meta_keywords": "Claude Code Routines, शेड्यूल्ड AI एजेंट, Claude Code शेड्यूल, /schedule, क्लाउड एजेंट, GitHub ट्रिगर, API ट्रिगर, सबएजेंट, सब-रूटीन, को-रूटीन, Anthropic, AI ऑटोमेशन, DevOps ऑटोमेशन",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code को अब आपके कीबोर्ड पर मौजूद रहने की ज़रूरत नहीं है। <strong>Routines</strong> (रूटीन) सहेजे गए एजेंट टास्क को Anthropic के क्लाउड पर चलाते हैं — किसी तय शेड्यूल पर, किसी API कॉल से या GitHub पर कोई घटना होने पर। यहाँ जानिए कि ये क्या हैं, इन्हें कैसे सेट करें, और दो पैटर्न जिन्हें हम सब-रूटीन और को-रूटीन कहते हैं। पूरी गाइड के लिए <a href=\"/hi/articles/claude-code-routines-scheduled-cloud-agents\">विस्तृत लेख</a> पढ़ें।</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines: शेड्यूल किए गए क्लाउड एजेंट, सब-रूटीन और को-रूटीन\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>सार।</strong> रूटीन एक Claude Code टास्क है जिसे आप एक बार कॉन्फ़िगर करते हैं (प्रॉम्प्ट, रिपॉज़िटरी, क्लाउड एनवायरनमेंट, कनेक्टर) और जो अपने आप ट्रिगर होता है। यह क्लाउड में एक पूर्ण स्वायत्त सेशन के रूप में चलता है, इसलिए आपका लैपटॉप बंद रह सकता है। Routines (14 अप्रैल 2026 से) रिसर्च प्रीव्यू में हैं और Pro, Max, Team तथा Enterprise प्लान पर उपलब्ध हैं।\n</div>\n\n<h2>रूटीन शुरू करने के तीन तरीके</h2>\n<ul>\n  <li><strong>शेड्यूल:</strong> हर घंटे, रोज़ाना, कार्यदिवसों पर, साप्ताहिक या किसी एक तय समय पर — समय आप अपने स्थानीय टाइम ज़ोन में दर्ज करते हैं। कस्टम cron <code>/schedule update</code> के ज़रिए उपलब्ध है, और न्यूनतम अंतराल एक घंटा है।</li>\n  <li><strong>API:</strong> हर रूटीन का अपना HTTPS एंडपॉइंट और अपना bearer टोकन होता है। आपका अलर्टिंग टूल या डिप्लॉयमेंट पाइपलाइन उस पर POST करती है, चाहें तो संदर्भ टेक्स्ट के साथ। यह टेक्स्ट \"अविश्वसनीय\" लेबल के साथ पहुँचता है, इसलिए लीक हुआ टोकन रूटीन के निर्देशों को दोबारा नहीं लिख सकता।</li>\n  <li><strong>GitHub:</strong> पुल रिक्वेस्ट या रिलीज़ इवेंट, जिन्हें ब्रांच, लेबल, लेखक, ड्राफ़्ट या मर्ज स्थिति के आधार पर फ़िल्टर किया जा सकता है।</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"एक रूटीन रन की संरचना: ट्रिगर, सहेजा गया रूटीन, क्लाउड सेशन और परिणाम\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>दो मिनट में सेटअप करें</h2>\n<ol>\n  <li><code>claude.ai/code/routines</code> खोलें और <strong>New routine</strong> चुनें, या Claude Code CLI में <code>/schedule</code> टाइप करें।</li>\n  <li>एक आत्मनिर्भर प्रॉम्प्ट लिखें: दायरा, अनुमत कार्रवाइयाँ, आउटपुट कहाँ जाएगा, और करने को कुछ न हो तो क्या करना है।</li>\n  <li>रिपॉज़िटरी और एनवायरनमेंट चुनें। जिन कनेक्टरों की टास्क को ज़रूरत नहीं है उन्हें हटा दें, क्योंकि डिफ़ॉल्ट रूप से सभी शामिल होते हैं।</li>\n  <li>एक ट्रिगर जोड़ें, टेस्ट के लिए <strong>Run now</strong> चुनें, फिर ट्रांसक्रिप्ट पढ़ें। हरा बैज केवल यह बताता है कि सेशन चला, यह नहीं कि टास्क सफल हुआ।</li>\n</ol>\n\n<h2>सब-रूटीन (sub-routines): एक रन, कई सहायक</h2>\n<p>यह एक पैटर्न के लिए हमारा दिया नाम है, Anthropic का कोई फ़ीचर नहीं। रूटीन का प्रॉम्प्ट समन्वय करता है और हर चरण किसी <strong>सबएजेंट</strong> (<code>.claude/agents/</code>) या रिपॉज़िटरी में कमिट किए गए किसी <strong>स्किल</strong> को सौंप देता है। हर सहायक को अपनी अलग कॉन्टेक्स्ट विंडो और केवल ज़रूरी टूल मिलते हैं, जिससे लंबे, बिना निगरानी वाले रन केंद्रित, सस्ते और सुरक्षित रहते हैं।</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"सब-रूटीन: एक ऑर्केस्ट्रेटर प्रॉम्प्ट जो काम सबएजेंट और स्किल को सौंपता है\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>को-रूटीन (co-routines): काम आगे सौंपने वाले रूटीन</h2>\n<p>रूटीन एक-दूसरे को सीधे कॉल नहीं कर सकते, लेकिन टिकाऊ आर्टिफ़ैक्ट के ज़रिए सहयोग कर सकते हैं। उदाहरण के लिए, एक रात्रिकालीन रूटीन ड्राफ़्ट PR खोलता है, GitHub से ट्रिगर होने वाला रूटीन उसकी समीक्षा करता है, कोई इंसान उसे मर्ज करता है, मर्ज से ट्रिगर होने वाला रूटीन डॉक्यूमेंटेशन अपडेट करता है, और आपकी डिप्लॉयमेंट पाइपलाइन एक सत्यापन रूटीन को कॉल करती है। फ़िल्टर का उपयोग करें ताकि कोई रूटीन अपने ही आउटपुट पर न चल पड़े, और शृंखला में मानवीय मर्ज गेट बनाए रखें।</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"को-रूटीन: GitHub इवेंट, लेबल और API कॉल के ज़रिए सहयोग करते चार रूटीन\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>ध्यान रखने योग्य सीमाएँ</h2>\n<ul>\n  <li>लॉन्च के समय दैनिक रन की सीमा Pro पर 5, Max पर 15 और Team तथा Enterprise पर 25 थी, जो सामान्य सब्सक्रिप्शन उपयोग के अतिरिक्त है। एक-बार वाले रन इसमें नहीं गिने जाते।</li>\n  <li>रूटीन <strong>आपके</strong> रूप में काम करते हैं। कमिट, PR और Slack संदेश आपकी पहचान के साथ जाते हैं। जब तक अलग से न कहा जाए, Claude केवल <code>claude/</code> ब्रांचों पर पुश करता है, और संरक्षित ब्रांचों पर कभी नहीं।</li>\n  <li>मिनट-स्तर की पोलिंग या लोकल फ़ाइलों की ज़रूरत है? उसके बजाय <code>/loop</code> या Desktop शेड्यूल्ड टास्क का उपयोग करें।</li>\n</ul>\n\n<p><strong>आगे पढ़ें:</strong> <a href=\"/hi/articles/claude-code-routines-scheduled-cloud-agents\">संपूर्ण गाइड</a> में API पेलोड सुरक्षा, प्रॉम्प्ट टेम्पलेट, सबएजेंट के उदाहरण, GitHub Actions, n8n और Trigger.dev से तुलना, तथा एक गवर्नेंस चेकलिस्ट शामिल है। स्रोत: <a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">Anthropic की घोषणा</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code डॉक्यूमेंटेशन</a>।</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

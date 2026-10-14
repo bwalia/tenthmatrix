@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-rust-async-rayon-001",
+  "internal_id": 965,
+  "slug": "rust-async-blocking-rayon-modern-applications",
+  "title": "Rust Asynchrone blokkering, Rayon en moderne toepassingen",
+  "sub_title": "Wat ‘blokkeren’ betekent in async Rust, wanneer Rayon past bij CPU-gebonden werk, en waarom Rust sterk blijft voor APIs, edge, agents en CI/CD-platforms",
+  "excerpt": "TenthMatrix over async Rust-blokkering, Rayon voor CPU-gebonden werk, en waarom Rust past bij moderne API's, edge, agents en CI/CD - geïnspireerd door de Rayon-richtlijnen van Alice Ryhl.",
+  "meta_title": "Rust Asynchrone blokkering & Rayon voor moderne apps | TenthMatrix",
+  "meta_description": "Wat blokkeren betekent in async Rust, wanneer Rayon CPU-gebonden werk helpt, en waarom Rust sterk is voor API's, edge-, agents en CI/CD-platforms.",
+  "meta_keywords": "Rust, async Rust, Tokio, Rayon, spawn_blocking, blokkeren, CPU-gebonden, Polyglot Benchmarks, APIs, edge, agents, CI/CD, TenthMatrix",
+  "cover_image": "/img/rust-async-blocking-rayon-cover.svg",
+  "images": [
+    {
+      "url": "/img/rust-async-blocking-rayon-cover.svg",
+      "id": 965,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Rust async blocking and Rayon for modern applications"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>over waarom Rust een eersteklas keuze blijft voor moderne toepassingen - en wat 'blokkeren' werkelijk betekent als je Tokio combineert met CPU-zwaar werk. Geïnspireerd door<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Async van Alice Ryhl: wat is blokkeren?</a>(Rayon-sectie). Diepe duik:<a href=\"/nl/articles/rust-async-blocking-rayon-modern-applications\">lang artikel</a>.</em></p><p><img src=\"/img/rust-async-blocking-rayon-cover.svg\" alt=\"Rust async blocking and Rayon for modern applications\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#fff7ed;border-left:4px solid #f97316;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Kortom.</strong>In async Rust betekent 'blokkeren' dat een runtime-werknemer lang genoeg weggehouden wordt van<code>.await</code>zodat andere taken uithongeren. Verplaats duur CPU-werk uit de Tokio-pool (vaak met<strong>Rayon</strong>plus een oneshot-kanaal) en houd het asynchrone pad responsief voor API's, edge-proxy's, agenten en CI/CD-besturingsvlakken.</div><h2>Waarom Rust moderne applicatieslots blijft winnen</h2><p>-teams kiezen voor Rust wanneer ze geheugenveiligheid nodig hebben zonder GC-pauzebelasting, voorspelbare latentie onder belasting en gelijktijdigheid die het typesysteem u helpt om het goed te doen. Die combinatie komt overal voor waar TenthMatrix bouwt: API's met hoge doorvoer, edge-gateways, agentruntimes en promotiecontrolevlakken die niet kunnen bevriezen wanneer er een piek aan CPU-werk arriveert.</p><p>Het is niet “Rust voor alles.” Ons<a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">Polyglot Benchmarks</a>-dashboard en bijbehorende berichten -<a href=\"/nl/docs/blogs/polyglot-benchmarks-right-tool-right-application\">blog</a>/<a href=\"/nl/articles/polyglot-benchmarks-right-tool-right-application\">artikel</a>- vergelijken Rust met Go, Bun, JVM-stacks en scriptranden op dezelfde HTTP-workloads. Rust leidt vaak op CPU-gebonden en concurrency-zware rijen; andere looptijden winnen bij snelheids- of randtransformaties. Het punt is bewijs, en dan bijwerkingen.</p><h2>Wat “blokkeren” betekent in async Rust</h2><p>Asynchrone runtimes (Tokio en vrienden) wisselen taken uit op<code>.await</code>-punten. Als uw taak milliseconden CPU verbrandt of slaapt met<code>std::thread::sleep</code>zonder te wachten, kan de medewerker niemand anders in die thread plannen. Lokaal merk je het misschien niet (een paar cores verbergen de bug); in de productie heb je geen werknemers meer en de latentie explodeert.</p><p>Vuistregel van het ecosysteem: blijf binnen tientallen tot honderden microseconden tussen wachttijden voor latentiegevoelige services - en behandel alles wat langer duurt als werk dat ergens anders thuishoort.</p><h2>Wanneer Rayon helpt (CPU-gebonden)</h2><ul><li><strong>spawn_blocking</strong>— De blokkeerpool van Tokio: ideaal voor synchronisatie-IO (bestandssysteem, blokkeren van DB-stuurprogramma's); suboptimaal voor zware CPU omdat het kernen kan overtekenen.</li><li><strong>Rayon</strong>— een kleine threadpool van CPU-formaat voor parallelle iterators en dure berekeningen. Bridge met<code>rayon::spawn</code>+<code>tokio::sync::oneshot</code>zodat de asynchrone taak op het resultaat wacht zonder de runtime-thread te blokkeren.</li><li><strong>Speciale thread</strong>— voor forever-loops (verbindingsbeheerders, langlevende werkers) die niet permanent poolcapaciteit mogen verbruiken.</li></ul><p>Dat Rayon + oneshot-patroon is precies waar Alice Ryhl doorheen loopt in de<a href=\"https://ryhl.io/blog/async-what-is-blocking/#the-rayon-crate\" target=\"_blank\" rel=\"noopener noreferrer\">Rayon-sectie</a>- De mening van TenthMatrix is hoe die keuzes terechtkomen in meertalige landgoederen en platforms, en niet in een herdruk van de tutorial.</p><h2>Waar dit wordt weergegeven in Workstation-producten</h2><ul><li><strong>APIs en edge</strong>— houd aanvraagwerkers vrij voor IO; ventilator CPU transformeert naar Rayon wanneer een hot path dit nodig heeft.</li><li><strong>Agents</strong>— het inbedden van voorbereiding, batches evalueren en tool-side crunch mag de orkestratielus niet vertragen.</li><li><strong>CI/CD-platforms</strong>— statuscontroles en promotie-engines (zie<a href=\"/nl/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter</a>) blijven responsief terwijl het zwaardere verificatiewerk buiten de pool plaatsvindt.</li><li><strong>Kubernetes ops</strong>- copiloten voor incidenten zoals<a href=\"/nl/docs/blogs/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot</a>hebben snelle regellussen nodig, zelfs als de analyse CPU-zwaar is.</li></ul><h2>Lees volgende</h2><ol><li><a href=\"/nl/articles/rust-async-blocking-rayon-modern-applications\">Lang artikel</a>- spiekbriefje, codevormige patronen en architectuurnotities.</li><li><a href=\"https://polyglot-benchmarks.fictionally.org/\" target=\"_blank\" rel=\"noopener noreferrer\">polyglot-benchmarks.fictionally.org</a>— live Rust versus peers-bewijs.</li><li>Alice Ryhl —<a href=\"https://ryhl.io/blog/async-what-is-blocking/\" target=\"_blank\" rel=\"noopener noreferrer\">Async: Wat is blokkeren?</a></li></ol><p>Gepubliceerd door<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "rust",
+      "id": 968
+    },
+    {
+      "name": "performance",
+      "id": 967
+    },
+    {
+      "name": "architecture",
+      "id": 966
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    }
+  ],
+  "created_at": "2026-08-26T10:00:00Z",
+  "updated_at": "2026-08-26T10:00:00Z",
+  "published_date": "2026-08-26",
+  "status": true
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Ring Promoter Every release earns production">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050505"/>
+      <stop offset="0.5" stop-color="#0a1210"/>
+      <stop offset="1" stop-color="#0c1a12"/>
+    </linearGradient>
+    <radialGradient id="g1" cx="0.78" cy="0.28" r="0.55">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#g1)"/>
+  <circle cx="980" cy="180" r="110" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-dasharray="7 10" opacity="0.55"/>
+  <circle cx="980" cy="180" r="62" fill="none" stroke="#e5e5e5" stroke-width="2" opacity="0.75"/>
+  <circle cx="980" cy="180" r="12" fill="#86efac"/>
+  <text fill="#86efac" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4" x="56" y="78">RING PROMOTER  ·  RELEASE CONTROL</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="52" font-weight="800" x="56" y="160">Every release</text>
+  <text fill="#ffffff" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="52" font-weight="800" x="56" y="224">earns production</text>
+  <rect x="56" y="250" width="340" height="3" fill="#22c55e" opacity="0.9"/>
+  <text fill="#a3a3a3" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="20" font-weight="500" x="56" y="300">Health-gated hops int ��→ test ��→ acc ��→ prod.</text>
+  <text fill="#a3a3a3" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="20" font-weight="500" x="56" y="332">Auto-rollback on failure. Full history every time.</text>
+  <g font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif">
+    <rect x="56" y="400" width="100" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text fill="#86efac" font-size="18" font-weight="700" x="88" y="435">int</text>
+    <text fill="#22c55e" font-size="22" font-weight="700" x="168" y="435">��→</text>
+    <rect x="200" y="400" width="100" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text fill="#86efac" font-size="18" font-weight="700" x="226" y="435">test</text>
+    <text fill="#22c55e" font-size="22" font-weight="700" x="312" y="435">��→</text>
+    <rect x="344" y="400" width="100" height="56" rx="10" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+    <text fill="#86efac" font-size="18" font-weight="700" x="372" y="435">acc</text>
+    <text fill="#22c55e" font-size="22" font-weight="700" x="456" y="435">��→</text>
+    <rect x="488" y="400" width="110" height="56" rx="10" fill="#166534" stroke="#86efac" stroke-width="2"/>
+    <text fill="#ffffff" font-size="18" font-weight="700" x="516" y="435">prod</text>
+  </g>
+  <text fill="rgba(255,255,255,0.45)" font-family="ui-sans-serif, system-ui, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2" x="56" y="580">WORKSTATION  ·  RINGPROMOTER.COM</text>
+</svg>

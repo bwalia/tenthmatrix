@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" role="img" aria-label="NebulaCB core modules: API server, Storm, XDCR, Validator, Orchestrator, Monitor and Couchbase clusters">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 20px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .subtitle { fill: #9fb0ff; font: 500 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .lane { fill: rgba(255,255,255,0.03); stroke: rgba(255,255,255,0.10); stroke-width: 1.5; }
+      .laneTitle { fill: #cfd6ff; font: 800 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .ui { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.5; }
+      .api { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.5; }
+      .mod { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.5; }
+      .modStorm { fill: #3a1f08; stroke: #ea580c; stroke-width: 1.5; }
+      .modXdcr { fill: #0c2e36; stroke: #0891b2; stroke-width: 1.5; }
+      .modValid { fill: #0c2b18; stroke: #16a34a; stroke-width: 1.5; }
+      .modOrch { fill: #1a1240; stroke: #7c3aed; stroke-width: 1.5; }
+      .modMon { fill: #0d3a36; stroke: #0d9488; stroke-width: 1.5; }
+      .modRep { fill: #2a0a1f; stroke: #db2777; stroke-width: 1.5; }
+      .modAI { fill: #2a1505; stroke: #ca8a04; stroke-width: 1.5; }
+      .src { fill: #0f3a1c; stroke: #16a34a; stroke-width: 1.5; }
+      .tgt { fill: #0c2e36; stroke: #0891b2; stroke-width: 1.5; }
+      .boxLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .boxText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .code { fill: #ffd380; font: 600 10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .link { stroke: rgba(255,255,255,0.45); stroke-width: 1.5; fill: none; }
+      .xdcr { stroke: #4caf50; stroke-width: 2; fill: none; }
+      .footnote { fill: rgba(255,255,255,0.55); font: 400 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="rgba(255,255,255,0.55)"/>
+    </marker>
+    <marker id="arX" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#4caf50"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="640" fill="url(#bg)"/>
+  <rect width="1000" height="640" fill="url(#grid)"/>
+
+  <text class="title" x="500" y="36" text-anchor="middle">NebulaCB  /  core modules</text>
+  <text class="subtitle" x="500" y="56" text-anchor="middle">WebSocket hub + REST API in one Go binary  /  Storm, XDCR, Validator, Orchestrator, Monitor, AI, backup, failover</text>
+
+  <g transform="translate(340,78)">
+    <rect width="320" height="52" rx="10" class="ui"/>
+    <text class="boxLabel" x="160" y="22" text-anchor="middle">React dashboard (:3000)  +  CLI</text>
+    <text class="boxText" x="160" y="40" text-anchor="middle">WebSocket + REST -> server  /  Basic auth</text>
+  </g>
+
+  <line x1="500" y1="130" x2="500" y2="158" class="link" marker-end="url(#ar)"/>
+
+  <g transform="translate(280,158)">
+    <rect width="440" height="88" rx="10" class="api"/>
+    <text class="boxLabel" x="220" y="26" text-anchor="middle">NebulaCB API server</text>
+    <text class="boxText" x="220" y="46" text-anchor="middle">/api/v1/*  /  WebSocket /ws  /  Basic auth (configurable)</text>
+    <text class="boxText" x="220" y="62" text-anchor="middle">Metrics collector  /  ClientPool (Couchbase SDK + REST fallback)</text>
+    <text class="boxText" x="220" y="78" text-anchor="middle">single-process orchestration boundary</text>
+  </g>
+
+  <line x1="500" y1="246" x2="500" y2="268" class="link" marker-end="url(#ar)"/>
+
+  <text class="laneTitle" x="28" y="282">MODULES  /  ORCHESTRATED IN-PROCESS</text>
+
+  <g transform="translate(28,288)">
+    <rect width="92" height="44" rx="6" class="modStorm"/>
+    <text class="boxLabel" x="46" y="20" text-anchor="middle">Storm</text>
+    <text class="boxText" x="46" y="34" text-anchor="middle">Load gen</text>
+
+    <rect x="100" width="92" height="44" rx="6" class="modXdcr"/>
+    <text class="boxLabel" x="146" y="20" text-anchor="middle">XDCR</text>
+    <text class="boxText" x="146" y="34" text-anchor="middle">Replication</text>
+
+    <rect x="200" width="92" height="44" rx="6" class="modValid"/>
+    <text class="boxLabel" x="246" y="20" text-anchor="middle">Validator</text>
+    <text class="boxText" x="246" y="34" text-anchor="middle">Integrity</text>
+
+    <rect x="300" width="92" height="44" rx="6" class="modOrch"/>
+    <text class="boxLabel" x="346" y="20" text-anchor="middle">Orchestrator</text>
+    <text class="boxText" x="346" y="34" text-anchor="middle">Helm upgrade</text>
+
+    <rect x="400" width="92" height="44" rx="6" class="modMon"/>
+    <text class="boxLabel" x="446" y="20" text-anchor="middle">Monitor</text>
+    <text class="boxText" x="446" y="34" text-anchor="middle">2s poll</text>
+
+    <rect x="500" width="92" height="44" rx="6" class="modRep"/>
+    <text class="boxLabel" x="546" y="20" text-anchor="middle">Reporting</text>
+    <text class="boxText" x="546" y="34" text-anchor="middle">reports/</text>
+
+    <rect x="600" width="92" height="44" rx="6" class="modAI"/>
+    <text class="boxLabel" x="646" y="20" text-anchor="middle">AI</text>
+    <text class="boxText" x="646" y="34" text-anchor="middle">Analyze / RCA</text>
+
+    <rect x="700" width="108" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="754" y="20" text-anchor="middle">K8s client</text>
+    <text class="boxText" x="754" y="34" text-anchor="middle">Operator API</text>
+
+    <rect x="816" width="120" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="876" y="20" text-anchor="middle">Port-forward</text>
+    <text class="boxText" x="876" y="34" text-anchor="middle">kubectl bridge</text>
+  </g>
+
+  <g transform="translate(120,348)">
+    <rect width="100" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="50" y="20" text-anchor="middle">Backup</text>
+    <text class="boxText" x="50" y="34" text-anchor="middle">Schedule</text>
+
+    <rect x="116" width="100" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="166" y="20" text-anchor="middle">Failover</text>
+    <text class="boxText" x="166" y="34" text-anchor="middle">HA events</text>
+
+    <rect x="232" width="100" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="282" y="20" text-anchor="middle">Migration</text>
+    <text class="boxText" x="282" y="34" text-anchor="middle">Workers</text>
+
+    <rect x="348" width="100" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="398" y="20" text-anchor="middle">Regions</text>
+    <text class="boxText" x="398" y="34" text-anchor="middle">Multi-DC</text>
+
+    <rect x="464" width="100" height="44" rx="6" class="mod"/>
+    <text class="boxLabel" x="514" y="20" text-anchor="middle">Docker</text>
+    <text class="boxText" x="514" y="34" text-anchor="middle">Optional</text>
+  </g>
+
+  <g transform="translate(80,420)">
+    <rect width="360" height="100" rx="12" class="src"/>
+    <text class="boxLabel" x="180" y="28" text-anchor="middle">Couchbase source</text>
+    <text class="boxText" x="180" y="48" text-anchor="middle">SDK + REST  /  role=source  /  k8s or docker or native</text>
+    <text class="boxText" x="180" y="66" text-anchor="middle">Dynamic clusters via NEBULACB_CLUSTER_* env vars</text>
+    <text class="code" x="180" y="86" text-anchor="middle">platform=kubernetes -> auto port-forward</text>
+  </g>
+
+  <g transform="translate(560,420)">
+    <rect width="360" height="100" rx="12" class="tgt"/>
+    <text class="boxLabel" x="180" y="28" text-anchor="middle">Couchbase target</text>
+    <text class="boxText" x="180" y="48" text-anchor="middle">SDK + REST  /  role=target  /  XDCR validation path</text>
+    <text class="boxText" x="180" y="66" text-anchor="middle">kubeconfig watched for cluster discovery</text>
+    <text class="code" x="180" y="86" text-anchor="middle">Validator confirms zero data loss</text>
+  </g>
+
+  <path d="M 440 470 L 560 470" class="xdcr" marker-end="url(#arX)"/>
+  <path d="M 560 482 L 440 482" class="xdcr" marker-end="url(#arX)"/>
+  <text class="boxLabel" x="500" y="462" text-anchor="middle" fill="#66bb6a">XDCR (bidirectional)</text>
+
+  <text class="footnote" x="500" y="560" text-anchor="middle">Entry point: go run ./cmd/nebulacb/ -config config.json (defaults applied if missing)</text>
+  <text class="footnote" x="500" y="578" text-anchor="middle">github.com/balinderwalia/nebulacb  /  open-source Couchbase migration + upgrade mission control</text>
+
+  <g transform="translate(80,600)">
+    <rect width="840" height="32" rx="8" class="lane"/>
+    <text class="boxText" x="420" y="20" text-anchor="middle">Composition rule: every module emits OpenTelemetry spans, reports through the metrics collector, and is cancellable.</text>
+  </g>
+</svg>

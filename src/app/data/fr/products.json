@@ -1,0 +1,653 @@
+{
+  "header": {
+    "title": "Produits",
+    "description": "Software and productised lab offerings you can run: AI GPU workstations, agentic frameworks, Claude Code / Cowork and ChatGPT for teams — plus WSL Proxy, Ring Promoter, AI Labs, CRM, and marketing tools."
+  },
+  "agenticFrameworks": {
+    "title": "Top AI agentic frameworks & orchestration",
+    "subtitle": "LangChain / LangGraph, Apache Airflow, and enterprise workflow patterns we operationalise in AI Labs",
+    "description": "Agent frameworks alone do not make production systems. We combine graph-based agents with durable orchestration, approval gates, and observability so enterprise workflows survive real traffic.",
+    "articleHref": "/articles/enterprise-agentic-frameworks-langchain-airflow",
+    "articleLabel": "Read the enterprise agentic frameworks guide",
+    "items": [
+      {
+        "title": "LangChain & LangGraph",
+        "icon": "fas fa-project-diagram",
+        "description": "Composable LLM apps and stateful agent graphs — tool calling, human-in-the-loop interrupts, and durable checkpointing for long-horizon enterprise agents.",
+        "useCases": [
+          "RAG copilots",
+          "Multi-agent ops cells",
+          "Tool-using support agents"
+        ]
+      },
+      {
+        "title": "LangSmith & evaluation",
+        "icon": "fas fa-clipboard-check",
+        "description": "Tracing, datasets, and eval loops so agent regressions are caught before promotion through int → test → acc → prod rings.",
+        "useCases": [
+          "Prompt/version evals",
+          "Trace-driven debugging",
+          "Cost & latency budgets"
+        ]
+      },
+      {
+        "title": "Apache Airflow 3",
+        "icon": "fas fa-stream",
+        "description": "Durable DAGs for data prep, model refresh, RAG ingest, and scheduled agent jobs — Apache Airflow 3.x remains the enterprise backbone for batch and hybrid agent workflows.",
+        "useCases": [
+          "Knowledge ingest",
+          "Model refresh cadences",
+          "Compliance batch jobs"
+        ]
+      },
+      {
+        "title": "Enterprise workflow patterns",
+        "icon": "fas fa-sitemap",
+        "description": "MCP connectors, approval gates, Ring Promoter health-gated deploys, and OpenTelemetry cost control — the operational layer that makes agent demos survivable in production.",
+        "useCases": [
+          "Human approval gates",
+          "MCP tool governance",
+          "Ring-based promotion"
+        ]
+      }
+    ]
+  },
+  "codingAgents": {
+    "title": "Claude Code, Claude Cowork & ChatGPT for business teams",
+    "subtitle": "Latest coding agents and team copilots — mapped to engineering, ops, finance, and GTM workflows",
+    "description": "Anthropic’s Claude Code and Claude Cowork, plus OpenAI ChatGPT / Agents SDK models, are how business teams actually ship with AI today. We help you pick the right surface per team and run them with governance.",
+    "articleHref": "/articles/claude-code-cowork-chatgpt-business-teams",
+    "articleLabel": "Read the Claude Code / Cowork & ChatGPT teams guide",
+    "items": [
+      {
+        "title": "Claude Code",
+        "team": "Engineering & platform",
+        "icon": "fas fa-terminal",
+        "description": "Anthropic’s agentic coding product for repository-scale work: multi-file edits, tests, and long-running coding agents in the terminal or IDE — suited to platform, SRE, and product engineering squads.",
+        "capabilities": [
+          "Repo-aware coding agents",
+          "Tests and refactors at scale",
+          "Pairs with Claude models on Platform / Bedrock"
+        ]
+      },
+      {
+        "title": "Claude Cowork",
+        "team": "Ops, PMO & knowledge work",
+        "icon": "fas fa-briefcase",
+        "description": "Anthropic’s Claude Cowork product for desk-to-phone task workflows: connect data, schedule recurring work, and deliver decks, documents, or spreadsheets for human review — positioned for business teams beyond pure coding.",
+        "capabilities": [
+          "Scheduled recurring tasks",
+          "Decks, docs, spreadsheets",
+          "Cross-device task check-in"
+        ]
+      },
+      {
+        "title": "ChatGPT & OpenAI Agents",
+        "team": "GTM, support & builders",
+        "icon": "fas fa-comments",
+        "description": "ChatGPT Team / Enterprise surfaces plus OpenAI Agents SDK / Agents API for custom tool-using agents. Current model lineup includes GPT-5.6-class and GPT-6-class APIs for reasoning, realtime, and multimodal team workflows.",
+        "capabilities": [
+          "ChatGPT Team / Enterprise",
+          "Agents SDK & API",
+          "GPT-5.6 / GPT-6 class models"
+        ]
+      },
+      {
+        "title": "Team playbooks by function",
+        "team": "Cross-functional",
+        "icon": "fas fa-users",
+        "description": "We map agents to finance, legal, support, marketing, and DevOps with MCP OAuth, Vault leases, and approval gates — so copilots help without becoming shadow IT.",
+        "capabilities": [
+          "Role-based agent scopes",
+          "MCP OAuth & Vault patterns",
+          "Audit-friendly workflows"
+        ]
+      }
+    ]
+  },
+  "featured": {
+    "title": "Plateforme AI Vibe Coding",
+    "subtitle": "Créez des Apps 10x Plus Vite avec le Développement IA",
+    "prehead": "Service Vedette",
+    "description": "Transformez votre flux de développement avec AI Vibe Coding — l'approche révolutionnaire qui vous permet de créer des applications complètes en langage naturel. Propulsé par Cursor IDE, GPT-4, Claude et Gemini, notre plateforme permet aux développeurs et non-développeurs de créer des applications iOS, Android et web prêtes pour la production grâce à l'IA conversationnelle. Arrêtez d'écrire du code répétitif et commencez à décrire ce que vous voulez construire.",
+    "image": "ai-software-engineering.jpg",
+    "video": "https://www.youtube.com/embed/8AWEPx5cHWQ",
+    "deployment": {
+      "title": "Options d'Approche de Développement",
+      "options": [
+        {
+          "name": "AI Vibe Coding",
+          "icon": "fas fa-magic",
+          "description": "Créez des applications complètes en utilisant des prompts en langage naturel. Décrivez votre app en français simple et regardez l'IA générer du code prêt pour la production instantanément.",
+          "benefits": [
+            "Aucune expérience en codage requise",
+            "Développement 10x plus rapide",
+            "Du langage naturel au code",
+            "Support multi-langues",
+            "Débogage en temps réel"
+          ],
+          "ideal": "Startups, Développeurs indépendants, Fondateurs non-techniques"
+        },
+        {
+          "name": "Développement Assisté par IA",
+          "icon": "fas fa-code",
+          "description": "Améliorez vos compétences en développement existantes avec la programmation en binôme IA. Obtenez une autocomplétion intelligente, une revue de code et des suggestions de refactoring en temps réel.",
+          "benefits": [
+            "Autocomplétion intelligente",
+            "Revue de code IA",
+            "Refactoring automatisé",
+            "Détection de bugs",
+            "Application des meilleures pratiques"
+          ],
+          "ideal": "Développeurs professionnels, Équipes de développement, Agences"
+        },
+        {
+          "name": "Développement d'Apps IA Personnalisées",
+          "icon": "fas fa-mobile-alt",
+          "description": "Service complet de développement d'apps IA iOS et Android. Nos experts créent des applications mobiles personnalisées avec des capacités IA intégrées adaptées aux besoins de votre entreprise.",
+          "benefits": [
+            "Apps natives iOS & Android",
+            "Intégration IA personnalisée",
+            "Soumission App Store",
+            "Maintenance continue",
+            "Optimisation des performances"
+          ],
+          "ideal": "Entreprises, Santé, Finance, E-commerce"
+        }
+      ]
+    },
+    "aiAgents": {
+      "title": "Outils de Développement IA Que Nous Utilisons",
+      "description": "Nous exploitons les outils de codage IA les plus avancés pour fournir des résultats exceptionnels :",
+      "agents": [
+        {
+          "name": "Cursor IDE",
+          "icon": "fas fa-edit",
+          "capabilities": [
+            "Génération de code alimentée par l'IA",
+            "Conversion du langage naturel en code",
+            "Autocomplétion intelligente",
+            "Édition multi-fichiers avec IA",
+            "Compréhension et chat de la base de code"
+          ]
+        },
+        {
+          "name": "Intégration GPT-4 & Claude",
+          "icon": "fas fa-brain",
+          "capabilities": [
+            "Raisonnement de code avancé",
+            "Résolution de problèmes complexes",
+            "Revue et optimisation de code",
+            "Génération de documentation",
+            "Correction de bugs et débogage"
+          ]
+        },
+        {
+          "name": "Développement iOS (Swift/SwiftUI)",
+          "icon": "fab fa-apple",
+          "capabilities": [
+            "Interfaces SwiftUI natives",
+            "Intégration Core ML",
+            "Framework Vision pour l'IA d'image",
+            "Intégration Siri & Raccourcis",
+            "Optimisation App Store"
+          ]
+        },
+        {
+          "name": "Développement Android (Kotlin)",
+          "icon": "fab fa-android",
+          "capabilities": [
+            "UI Jetpack Compose",
+            "Intégration TensorFlow Lite",
+            "ML Kit pour l'IA sur appareil",
+            "Intégration Google Assistant",
+            "Optimisation Play Store"
+          ]
+        }
+      ]
+    },
+    "competitive": {
+      "title": "Pourquoi Choisir AI Vibe Coding ?",
+      "subtitle": "Le Futur du Développement Logiciel Est Ici",
+      "challenges": [
+        {
+          "problem": "Le Développement Traditionnel Prend des Mois",
+          "solution": "AI Vibe Coding Livre en Jours",
+          "impact": "Mise sur le marché 10x plus rapide, prototypage rapide, itérations instantanées"
+        },
+        {
+          "problem": "Embaucher des Développeurs Coûte Cher",
+          "solution": "Créez des Apps Sans Expérience en Codage",
+          "impact": "Réduction des coûts de 80%, pas de tracas de recrutement, démarrage immédiat"
+        },
+        {
+          "problem": "La Dette Technique Ralentit le Progrès",
+          "solution": "L'IA Génère du Code Propre et Maintenable",
+          "impact": "Meilleures pratiques par défaut, qualité de code constante, maintenance facile"
+        },
+        {
+          "problem": "L'Intégration IA Mobile Est Complexe",
+          "solution": "Composants IA Pré-construits & Templates",
+          "impact": "ChatGPT, Vision IA, Voice IA prêts à intégrer"
+        }
+      ]
+    },
+    "stats": [
+      {
+        "number": "10x",
+        "label": "Développement Plus Rapide",
+        "icon": "fas fa-rocket"
+      },
+      {
+        "number": "500+",
+        "label": "Apps Créées avec l'IA",
+        "icon": "fas fa-mobile-alt"
+      },
+      {
+        "number": "80%",
+        "label": "Réduction des Coûts",
+        "icon": "fas fa-dollar-sign"
+      },
+      {
+        "number": "99%",
+        "label": "Satisfaction Client",
+        "icon": "fas fa-star"
+      }
+    ],
+    "cta": {
+      "primary": "Commencez à Construire Aujourd'hui",
+      "secondary": "Réserver une Démo",
+      "tertiary": "Voir le Tutoriel Codage IA",
+      "link": "/contact-us"
+    }
+  },
+  "sections": {
+    "hardware": {
+      "title": "Matériel",
+      "description": "Stations de travail IA et packs prêts à l'emploi — assemblés, installés et configurés pour que vous exécutiez une IA privée sur des machines qui vous appartiennent.",
+      "icon": "fas fa-server"
+    },
+    "software": {
+      "title": "Logiciels",
+      "description": "Plateformes, applications et services de développement IA qui fonctionnent sur votre propre matériel, vos serveurs ou dans le cloud.",
+      "icon": "fas fa-code"
+    }
+  },
+  "content": [
+    {
+      "title": "Ring Promoter — Modern CI/CD for AI Deployments",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "ai-programming-code.jpg",
+      "link": "https://www.ringpromoter.com/",
+      "description": "The modern CI/CD control plane you cannot miss for AI-powered deployments: int → test → acc → prod rings, health-gated promotion, version-verified checks, and auto-rollback. Visit ringpromoter.com.",
+      "benefits": [
+        "Shared deployment rings",
+        "Health-gated promote",
+        "Version-verified health",
+        "Auto-rollback on failure",
+        "kubectl, GitHub Actions, k8sjob"
+      ],
+      "quality": "Production-grade history, locks, and audit trail per (app, ring)",
+      "support": "Product site ringpromoter.com · GitHub open source · TenthMatrix support",
+      "cta": "Open ringpromoter.com",
+      "external": "https://www.ringpromoter.com/"
+    },
+    {
+      "title": "AI SME Packages Catalog",
+      "category": "hardware",
+      "icon": "graph.svg",
+      "image": "ai-technology.jpg",
+      "link": "https://www.workstation.co.uk/ai-sme-packages",
+      "description": "Hardware + software combination packages for SMEs and enterprises. Generative AI workstations, Agentic AI platforms, and OpenClaw for Business — installed, configured, and tailored to your industry and workflows.",
+      "benefits": [
+        "Matched hardware + software",
+        "Installed and configured",
+        "Business-tailored GenAI",
+        "Agentic automation ready",
+        "OpenClaw pour les entreprises et les grands comptes"
+      ],
+      "quality": "UK assembly options, documented runbooks, staff onboarding workshop",
+      "support": "UK & Brussels support, optional managed updates",
+      "cta": "Browse AI Packages"
+    },
+    {
+      "title": "AI Vibe Coding avec Cursor",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "ai-software-engineering.jpg",
+      "link": "/contact-us",
+      "description": "Maîtrisez l'art du AI Vibe Coding avec Cursor IDE. Créez des applications complètes en décrivant ce que vous voulez en français simple. Notre formation et support vous aide à exploiter GPT-4, Claude et Gemini pour générer du code prêt pour la production 10x plus vite que le développement traditionnel.",
+      "benefits": [
+        "Du langage naturel au code",
+        "Édition multi-fichiers IA",
+        "Débogage intelligent",
+        "Revue de code en temps réel",
+        "Meilleures pratiques intégrées"
+      ],
+      "quality": "Instructeurs experts, projets pratiques, accès à vie aux mises à jour",
+      "support": "Mentorat 1-à-1, accès communauté, heures de bureau hebdomadaires",
+      "cta": "Commencer le Vibe Coding"
+    },
+    {
+      "title": "Développement d'Apps IA iOS",
+      "category": "software",
+      "icon": "network.svg",
+      "image": "12.jpg",
+      "link": "/contact-us",
+      "description": "Créez des applications iOS intelligentes avec des capacités IA intégrées. Des chatbots propulsés par ChatGPT aux apps de vision par ordinateur, nous vous aidons à créer des applications Swift/SwiftUI natives qui exploitent les dernières technologies IA incluant Core ML, le framework Vision et les APIs OpenAI.",
+      "benefits": [
+        "Développement SwiftUI natif",
+        "Intégration ChatGPT",
+        "Core ML & Vision IA",
+        "Intégration raccourcis Siri",
+        "Soumission App Store"
+      ],
+      "quality": "Guidelines design Apple, performances optimisées, conforme accessibilité",
+      "support": "Experts iOS, optimisation App Store, maintenance continue",
+      "cta": "Créer une App iOS"
+    },
+    {
+      "title": "Développement d'Apps IA Android",
+      "category": "software",
+      "icon": "profit.svg",
+      "image": "13.jpg",
+      "link": "/contact-us",
+      "description": "Créez des applications Android puissantes avec des fonctionnalités IA embarquées. Nous sommes spécialisés dans le développement Kotlin/Jetpack Compose avec TensorFlow Lite, ML Kit et l'intégration IA cloud. Créez des apps qui voient, entendent, comprennent et répondent intelligemment.",
+      "benefits": [
+        "UI Jetpack Compose",
+        "TensorFlow Lite IA sur appareil",
+        "Intégration ML Kit",
+        "Actions Google Assistant",
+        "Optimisation Play Store"
+      ],
+      "quality": "Material Design 3, optimisé batterie, IA hors ligne capable",
+      "support": "Experts Android, optimisation Play Store, mises à jour continues",
+      "cta": "Créer une App Android"
+    },
+    {
+      "title": "Apps IA Cross-Platform (Flutter/React Native)",
+      "category": "software",
+      "icon": "tactics.svg",
+      "image": "14.jpg",
+      "link": "/contact-us",
+      "description": "Lancez sur iOS et Android simultanément avec des applications IA cross-platform. En utilisant Flutter ou React Native, nous créons de belles apps performantes avec des capacités IA intégrées qui fonctionnent parfaitement sur tous les appareils.",
+      "benefits": [
+        "Une seule base de code, deux plateformes",
+        "Performance native",
+        "Intégration SDK IA",
+        "Développement hot reload",
+        "Solution économique"
+      ],
+      "quality": "Look & feel natif, performance optimisée, logique métier partagée",
+      "support": "Experts cross-platform, maintenance unifiée, itérations rapides",
+      "cta": "Créer une App Cross-Platform"
+    },
+    {
+      "title": "Intégration ChatGPT et LLM",
+      "category": "software",
+      "icon": "target.svg",
+      "image": "15.jpg",
+      "link": "/contact-us",
+      "description": "Ajoutez l'IA conversationnelle à vos apps mobiles avec ChatGPT, Claude et l'intégration LLM personnalisée. Nous implémentons des chatbots intelligents, des assistants IA, la génération de contenu et des interfaces en langage naturel qui enchantent les utilisateurs.",
+      "benefits": [
+        "Intégration OpenAI GPT-4",
+        "Support Claude & Gemini",
+        "Modèles personnalisés affinés",
+        "Réponses en streaming",
+        "Conversations contextuelles"
+      ],
+      "quality": "Faible latence, coûts optimisés, conforme vie privée",
+      "support": "Spécialistes LLM, ingénierie de prompts, optimisation tokens",
+      "cta": "Ajouter Chat IA"
+    },
+    {
+      "title": "Apps Vision par ordinateur",
+      "category": "software",
+      "icon": "rocket.svg",
+      "image": "16.jpg",
+      "link": "/contact-us",
+      "description": "Créez des apps qui voient et comprennent le monde. De la détection d'objets et classification d'images à l'OCR et reconnaissance faciale, nous créons des apps mobiles avec de puissantes capacités de vision par ordinateur utilisant Core ML, ML Kit et les services IA cloud.",
+      "benefits": [
+        "Détection d'objets en temps réel",
+        "Classification d'images",
+        "OCR & numérisation de documents",
+        "Détection & reconnaissance faciale",
+        "Intégration AR"
+      ],
+      "quality": "Traitement sur appareil, vie privée d'abord, haute précision",
+      "support": "Experts Vision IA, optimisation de modèles, entraînement personnalisé",
+      "cta": "Créer une App Vision"
+    },
+    {
+      "title": "Apps IA Vocale & Parole",
+      "category": "software",
+      "icon": "cloud.png",
+      "image": "17.jpg",
+      "link": "/contact-us",
+      "description": "Créez des applications vocales avec reconnaissance vocale, synthèse vocale et interfaces de commandes vocales. Créez des apps qui écoutent, comprennent et répondent naturellement en utilisant Whisper, ElevenLabs et les APIs vocales natives.",
+      "benefits": [
+        "Parole-vers-texte (Whisper)",
+        "Texte-vers-parole (ElevenLabs)",
+        "Commandes vocales",
+        "Support multi-langues",
+        "Transcription en temps réel"
+      ],
+      "quality": "Haute précision, faible latence, synthèse vocale naturelle",
+      "support": "Spécialistes IA vocale, modèles vocaux personnalisés, optimisation",
+      "cta": "Créer une App Vocale"
+    },
+    {
+      "title": "Backend & APIs Alimentés par l'IA",
+      "category": "software",
+      "icon": "graph.svg",
+      "image": "18.jpg",
+      "link": "/contact-us",
+      "description": "Alimentez vos apps IA avec une infrastructure backend évolutive. Nous créons des APIs serverless, des bases de données vectorielles et des pipelines de traitement IA qui gèrent des millions de requêtes tout en gardant les coûts bas et les performances hautes.",
+      "benefits": [
+        "Architecture serverless",
+        "Base de données vectorielle (Pinecone)",
+        "Limitation de débit API",
+        "Optimisation des coûts",
+        "Auto-scaling"
+      ],
+      "quality": "Disponibilité 99,99%, CDN global, sécurité entreprise",
+      "support": "Experts backend, monitoring, support 24/7",
+      "cta": "Créer un Backend IA"
+    },
+    {
+      "title": "Apps RAG & Base de Connaissances",
+      "category": "software",
+      "icon": "network.svg",
+      "image": "19.jpg",
+      "link": "/contact-us",
+      "description": "Créez des apps intelligentes qui peuvent rechercher et raisonner sur vos documents, bases de données et bases de connaissances. Nous implémentons des systèmes de Génération Augmentée par Récupération (RAG) qui fournissent des réponses IA précises et contextuelles.",
+      "benefits": [
+        "Q&R de documents",
+        "Recherche sémantique",
+        "Chat base de connaissances",
+        "Citations & sources",
+        "Embeddings personnalisés"
+      ],
+      "quality": "Haute précision, réduction des hallucinations, attribution des sources",
+      "support": "Spécialistes RAG, optimisation embeddings, curation des connaissances",
+      "cta": "Créer une App RAG"
+    },
+    {
+      "title": "Prototypage & MVP d'Apps IA",
+      "category": "software",
+      "icon": "tactics.svg",
+      "image": "20.jpg",
+      "link": "/contact-us",
+      "description": "Lancez votre idée d'app IA en semaines, pas en mois. Notre service de prototypage rapide utilise AI Vibe Coding pour créer des MVPs fonctionnels qui valident votre concept et attirent les investisseurs — le tout pour une fraction du coût de développement traditionnel.",
+      "benefits": [
+        "Livraison en 2-4 semaines",
+        "Prototype fonctionnel",
+        "Prêt pour tests utilisateurs",
+        "Démos prêtes pour investisseurs",
+        "Support d'itération"
+      ],
+      "quality": "Code prêt pour production, architecture évolutive, design propre",
+      "support": "Stratégie produit, intégration retours utilisateurs, support pivot",
+      "cta": "Créer un MVP"
+    },
+    {
+      "title": "Formation & Ateliers Codage IA",
+      "category": "software",
+      "icon": "profit.svg",
+      "image": "ai-technology.jpg",
+      "link": "/contact-us",
+      "description": "Formez votre équipe aux techniques de développement alimentées par l'IA. Nos ateliers couvrent Cursor IDE, l'ingénierie de prompts, la programmation en binôme IA et la création d'apps mobiles intégrées IA. Transformez vos développeurs en ingénieurs 10x.",
+      "benefits": [
+        "Formation pratique",
+        "Maîtrise Cursor IDE",
+        "Ingénierie de prompts",
+        "Meilleures pratiques IA",
+        "Certification incluse"
+      ],
+      "quality": "Instructeurs experts, projets réels, support continu",
+      "support": "Formation entreprise, programme personnalisé, coaching d'équipe",
+      "cta": "Réserver une Formation"
+    },
+    {
+      "title": "Conseil & Stratégie Apps IA",
+      "category": "software",
+      "icon": "target.svg",
+      "image": "22.jpg",
+      "link": "/contact-us",
+      "description": "Obtenez des conseils d'experts sur votre stratégie d'app IA. Nous vous aidons à identifier les opportunités, choisir les bonnes technologies IA, planifier votre feuille de route et éviter les pièges courants. Transformez votre vision IA en produit réussi.",
+      "benefits": [
+        "Évaluation technologique",
+        "Planification roadmap IA",
+        "Sélection de fournisseurs",
+        "Estimation des coûts",
+        "Atténuation des risques"
+      ],
+      "quality": "Experts de l'industrie, frameworks éprouvés, insights actionnables",
+      "support": "Conseillers stratégiques, guidance continue, briefings exécutifs",
+      "cta": "Réserver une Consultation"
+    }
+  ],
+  "customerService": {
+    "title": "Support de Classe Mondiale pour Développeurs IA",
+    "description": "Notre engagement envers votre succès inclut un support complet tout au long de votre parcours de développement IA.",
+    "features": [
+      {
+        "title": "Support Développeur 24/7",
+        "description": "Support 24 heures sur 24 par des experts en développement IA",
+        "icon": "support.svg"
+      },
+      {
+        "title": "Revue de Code & Guidance",
+        "description": "Revue experte de votre code généré par IA et meilleures pratiques",
+        "icon": "manager.svg"
+      },
+      {
+        "title": "Formation & Ateliers",
+        "description": "Formation complète au codage IA pour individus et équipes",
+        "icon": "training.svg"
+      },
+      {
+        "title": "Support App Store",
+        "description": "Guidance pour la soumission iOS App Store et Google Play",
+        "icon": "response.svg"
+      }
+    ]
+  },
+  "qualityAssurance": {
+    "title": "Standards de Qualité Développement IA",
+    "description": "Chaque app IA que nous créons répond aux plus hauts standards de qualité pour la performance, la sécurité et l'expérience utilisateur.",
+    "certifications": [
+      "Conforme aux Guidelines Apple App Store",
+      "Conforme aux Politiques Google Play Store",
+      "Conforme RGPD & Vie Privée",
+      "Standards d'Accessibilité WCAG",
+      "Meilleures Pratiques de Sécurité"
+    ],
+    "metrics": [
+      "Disponibilité App 99,9%",
+      "Notes App Store 4,8+",
+      "Temps de Réponse IA Sub-seconde",
+      "Zéro Vulnérabilités de Sécurité",
+      "Monitoring Performance Continu"
+    ]
+  },
+  "softwareProducts": {
+    "title": "Product catalog",
+    "subtitle": "Control planes, AI Labs, and applications your operators run every day",
+    "items": [
+      {
+        "title": "AI GPU hardware",
+        "description": "NVIDIA DGX Spark/Station, Mac Studio M5, and enterprise GPU boxes for AI Labs.",
+        "href": "https://www.workstation.co.uk/ai-workstations",
+        "icon": "fas fa-microchip"
+      },
+      {
+        "title": "Agentic frameworks",
+        "description": "LangChain/LangGraph, Airflow 3, and enterprise orchestration patterns.",
+        "href": "/products#agentic-frameworks",
+        "icon": "fas fa-project-diagram"
+      },
+      {
+        "title": "Claude & ChatGPT agents",
+        "description": "Claude Code, Claude Cowork, and ChatGPT for engineering and business teams.",
+        "href": "/products#coding-agents",
+        "icon": "fas fa-terminal"
+      },
+      {
+        "title": "WSL Proxy",
+        "description": "Live-config API gateway, CDN edge, and explainable WAF for AI and agent traffic.",
+        "href": "/wsl-proxy",
+        "icon": "fas fa-shield-alt"
+      },
+      {
+        "title": "Ring Promoter",
+        "description": "Health-gated promotion through int → test → acc → prod for AI-powered releases.",
+        "href": "/ring-promoter",
+        "icon": "fas fa-rocket"
+      },
+      {
+        "title": "Labs IA",
+        "description": "Productised lab shapes — workstations, clusters, private and edge AI — with TenthMatrix software in the middle.",
+        "href": "https://www.workstation.co.uk/ai-labs",
+        "icon": "fas fa-flask"
+      },
+      {
+        "title": "Agents OpenAI",
+        "description": "Agent software and orchestration patterns for business workflows and tool use.",
+        "href": "/openai-agents",
+        "icon": "fas fa-robot"
+      },
+      {
+        "title": "Agents Claude",
+        "description": "Claude Code, Cowork, subagents, and dynamic workflows for engineering and business teams.",
+        "href": "/claude-agents",
+        "icon": "fas fa-terminal"
+      },
+      {
+        "title": "Grok Bot",
+        "description": "xAI persistent AI teammates with cloud computer, skills, routines, and multi-bot coordination.",
+        "href": "/grok-bot",
+        "icon": "fas fa-robot"
+      },
+      {
+        "title": "TenthMatrix CRM (WSL CRM)",
+        "description": "TenthMatrix CRM — short name WSL CRM — with native AI agent integrations.",
+        "href": "/crm",
+        "icon": "fas fa-address-book"
+      },
+      {
+        "title": "Marketing",
+        "description": "Marketing automation and campaign tooling aligned to TenthMatrix CRM.",
+        "href": "/marketing",
+        "icon": "fas fa-bullhorn"
+      }
+    ]
+  },
+  "partnerNote": {
+    "title": "Hardware with Boston Limited",
+    "description": "For AI Labs that need enterprise accelerated systems, we partner with Boston Limited — a trusted relationship spanning more than two decades.",
+    "href": "https://www.workstation.co.uk/partners/boston",
+    "label": "Partnership details"
+  }
+}

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-label="Workstation AI Shop promotion path from int through test and acc to prod">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 22px system-ui, sans-serif; }
+      .sub { fill: #475569; font: 500 14px system-ui, sans-serif; }
+      .ring { fill: #fff; stroke: #cbd5e1; stroke-width: 2; }
+      .rn { fill: #0f172a; font: 800 18px system-ui, sans-serif; }
+      .rd { fill: #475569; font: 500 13px system-ui, sans-serif; }
+      .arr { fill: #94a3b8; font: 700 22px system-ui, sans-serif; }
+    </style>
+  </defs>
+  <rect width="1200" height="520" fill="#f8fafc" rx="16"/>
+  <text class="title" x="48" y="48">Workstation AI Shop — how a release moves</text>
+  <text class="sub" x="48" y="76">Same Ring Promoter protocol as every other app: one hop at a time, health-gated, written to history.</text>
+  <rect class="ring" x="48" y="120" width="220" height="280" rx="16"/>
+  <text class="rn" x="72" y="170">INT</text>
+  <text class="rd" x="72" y="205">int-shop&amp;</text>
+  <text class="rd" x="72" y="230">Auto-deploy on</text>
+  <text class="rd" x="72" y="252">push to main</text>
+  <text class="rd" x="72" y="290">Seed + smoke</text>
+  <text class="rd" x="72" y="312">AI agent online</text>
+  <text class="arr" x="280" y="260">-></text>
+  <rect class="ring" x="320" y="120" width="220" height="280" rx="16"/>
+  <text class="rn" x="344" y="170">TEST</text>
+  <text class="rd" x="344" y="205">Promote when INT</text>
+  <text class="rd" x="344" y="230">is healthy</text>
+  <text class="rd" x="344" y="290">Regression +</text>
+  <text class="rd" x="344" y="312">catalogue checks</text>
+  <text class="arr" x="552" y="260">-></text>
+  <rect class="ring" x="592" y="120" width="220" height="280" rx="16"/>
+  <text class="rn" x="616" y="170">ACC</text>
+  <text class="rd" x="616" y="205">Staging soak</text>
+  <text class="rd" x="616" y="230">Stakeholder sign-off</text>
+  <text class="rd" x="616" y="290">Quote / checkout</text>
+  <text class="rd" x="616" y="312">paths verified</text>
+  <text class="arr" x="824" y="260">-></text>
+  <rect x="864" y="120" width="280" height="280" rx="16" fill="#0f172a"/>
+  <text fill="#86efac" font="800 18px system-ui" x="888" y="170">PROD</text>
+  <text fill="rgba(255,255,255,0.85)" font="500 13px system-ui" x="888" y="205">shop.workstation.co.uk</text>
+  <text fill="rgba(255,255,255,0.85)" font="500 13px system-ui" x="888" y="230">Human / password gate</text>
+  <text fill="rgba(255,255,255,0.85)" font="500 13px system-ui" x="888" y="290">Live customers</text>
+  <text fill="rgba(255,255,255,0.85)" font="500 13px system-ui" x="888" y="312">GPU configs + AI agent</text>
+  <text class="sub" x="48" y="460">Orbit view shows the shop as a node on each ring — blue while deploying, green when the newest version is healthy.</text>
+</svg>

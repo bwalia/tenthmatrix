@@ -1,0 +1,122 @@
+@use './shared' as *;
+
+.wrap {
+  @include card;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tm-text-sm);
+  line-height: var(--tm-leading-normal);
+
+  th,
+  td {
+    padding: var(--tm-space-4) var(--tm-space-5);
+    text-align: start;
+    vertical-align: top;
+    border-bottom: 1px solid var(--tm-line);
+  }
+
+  thead th {
+    background: var(--tm-sunken);
+    font-family: var(--tm-font-mono);
+    font-size: var(--tm-text-xs);
+    font-weight: var(--tm-weight-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--tm-text-subtle);
+  }
+
+  tbody th {
+    font-weight: var(--tm-weight-semibold);
+    color: var(--tm-text);
+  }
+
+  td {
+    color: var(--tm-text-muted);
+  }
+
+  tbody tr:last-child th,
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tfoot td {
+    border-top: 1px solid var(--tm-line-strong);
+    border-bottom: 0;
+    font-weight: var(--tm-weight-semibold);
+    color: var(--tm-text);
+  }
+
+  td.hl {
+    color: var(--tm-text);
+    background: var(--tm-accent-soft);
+  }
+
+  thead th.hl {
+    color: var(--tm-accent);
+  }
+
+  @media (max-width: 599px) {
+    thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    tr {
+      display: block;
+      padding: var(--tm-space-4);
+      border-bottom: 1px solid var(--tm-line);
+    }
+
+    tbody tr:last-child {
+      border-bottom: 0;
+    }
+
+    th,
+    td {
+      display: block;
+      padding: var(--tm-space-1) 0;
+      border: 0;
+    }
+
+    tbody th {
+      font-size: var(--tm-text-base);
+      padding-bottom: var(--tm-space-2);
+    }
+
+    td::before {
+      content: attr(data-label);
+      display: block;
+      font-family: var(--tm-font-mono);
+      font-size: var(--tm-text-2xs);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--tm-text-subtle);
+    }
+
+    td.hl {
+      margin-block: var(--tm-space-1);
+      padding: var(--tm-space-2) var(--tm-space-3);
+      border-radius: var(--tm-radius-xs);
+    }
+
+    tfoot td {
+      border: 0;
+    }
+  }
+}
+
+.caption {
+  caption-side: bottom;
+  padding: var(--tm-space-3) var(--tm-space-5);
+  text-align: start;
+  font-size: var(--tm-text-xs);
+  color: var(--tm-text-subtle);
+  border-top: 1px solid var(--tm-line);
+}

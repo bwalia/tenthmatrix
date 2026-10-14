@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebuladns-launch-001",
+  "excerpt": "NebulaDNS é um servidor DNS autoritativo e seguro com um primeiro plano de controle API, métricas Prometheus, portas de propagação e operações nativas Kubernetes – criado para visibilidade quando os serviços e agentes de IA dependem do DNS mais do que nunca.",
+  "sub_title": "API-primeiro DNS, observabilidade e por que a era da IA ​​precisa de uma nova pilha confiável",
+  "title": "NebulaDNS: Por que o DNS oficial é uma virada de jogo na era da IA",
+  "meta_title": "NebulaDNS | Empresa confiável DNS Rust AI | TenthMatrix",
+  "meta_description": "Introdução ao NebulaDNS: DNS com autoridade de ferrugem, plano de controle API, verificação de propagação, padrões k3s e Route 53 e por que o DNS corporativo deve ser observável na era da IA.",
+  "meta_keywords": "NebulaDNS, DNS oficial, Rust DNS, Kubernetes DNS, Route 53, CoreDNS, infraestrutura de IA, métricas Prometheus DNS, TSIG, AXFR",
+  "images": [
+    {
+      "url": "/img/nebuladns-cover.svg",
+      "id": 810,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>Resumo executivo</h2><p><strong><a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'>NebulaDNS</a></strong>é um moderno servidor DNS oficial<strong>API-primeiro</strong>escrito em<strong>seguro Rust</strong>(<code>#![forbid(unsafe_code)]</code>). Ele visa as lacunas operacionais deixadas por daemons de décadas e bases de código C opacas:<strong>sem métricas</strong>,<strong>sem verdade de propagação</strong>e<strong>sem plano de controle legível por máquina</strong>. Na era<strong>AI</strong>, DNS não é “apenas infraestrutura” – é como os agentes<strong></strong>, endpoints de inferência<strong></strong>,<strong>nós GPU</strong>e serviços de vários clusters<strong></strong>se encontram sob a política. O NebulaDNS trata cada mudança de zona do<strong>como um lançamento</strong>: secundários verificados, métricas explícitas e um API para cada ação do operador - alinhado com a narrativa pública no site do projeto<a href='https://bwalia.github.io/nebuladns' rel='noopener noreferrer' target='_blank'></a>e no repositório GitHub do<a href='https://github.com/bwalia/nebuladns' rel='noopener noreferrer' target='_blank'></a>.</p><h2>Por que o DNS é mais importante quando a IA está em produção</h2><ul><li><strong>Descoberta de serviços para agentes:</strong>Nomes estáveis ​​para endpoints de ferramentas, serviços de recuperação e gateways de políticas superam IPs codificados em clusters efêmeros.</li><li><strong>Raio de explosão:</strong>Um AXFR silencioso ou incidente de desvio secundário (como as falhas de interoperabilidade do mundo real descritas no site) pode quebrar a redundância muito antes dos painéis LLM serem notados.</li><li><strong>Conformidade e evidências:</strong>O DNS de fácil auditoria com logs e métricas estruturados suporta evidências no estilo SOC2 para quem alterou qual zona e se ela se propagou.</li></ul><h2>O que torna o NebulaDNS diferente</h2><p>A página de destino posiciona o NebulaDNS substituindo pilhas frágeis por<strong>, um pequeno binário</strong>que fornece métricas<strong></strong>, um plano de controle<strong></strong>e um caminho para um operador<strong>Kubernetes</strong>— portanto, as falhas surgem em<strong>segundos</strong>, não por meio de tickets de clientes. Os destaques incluem propagação verificada<strong></strong>, impressão digital de software peer<strong></strong>, configuração com versão atômica<strong></strong>, séries SOA determinísticas<strong></strong>e<strong>Prometheus<code>/metrics</code></strong>com um orçamento de cardinalidade em tempo de compilação.</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-architecture-stack.svg' alt='NebulaDNS control plane, zone store, and DNS data plane' width='1000' height='640' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Instantâneo de integração: Route 53 e k3s</h2><p>As empresas geralmente emparelham zonas públicas<strong>AWS Route 53</strong>com camadas<strong>on-cluster ou</strong>autoritativas dedicadas. NebulaDNS se encaixa como a fonte oficial de verdade<strong></strong>para zonas que você possui de ponta a ponta, com histórias<strong>Helm</strong>,<strong>ServiceMonitor</strong>e operador<strong>/CRD</strong>no roteiro descrito no site. O diagrama abaixo esboça uma delegação<strong>+ padrão de cluster</strong>(não fiação específica do fornecedor – adapte-se à sua segmentação de rede).</p><figure class='blog-figure' style='margin:2rem 0;text-align:center'><img src='/img/nebuladns-k3s-route53-workflow.svg' alt='Route 53 delegation to NebulaDNS and k3s CoreDNS integration' width='1100' height='520' loading='lazy' decoding='async' style='max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0' /></figure><h2>Leia a seguir</h2><p>Para o catálogo completo de recursos do<strong></strong>, exemplos de métricas e notas mais profundas do k3s/Route&nbsp;53, consulte a postagem complementar<a href='/pt/docs/blogs/nebuladns-complete-features-k3s-route53-integration-guide'>NebulaDNS guia completo de recursos do</a>em TenthMatrix.</p><h2>Como o TenthMatrix pode ajudar</h2><p>TenthMatrix projeta engenharia de plataforma<strong></strong>e<strong>Padrões DNS</strong>prontos para SRE — GitOps, observabilidade e cortes seguros — para nuvem e borda. Contate<strong>info@tenthmatrix.com</strong>para análises de arquitetura ou suporte de entrega.</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 810
+    },
+    {
+      "name": "kubernetes",
+      "id": 811
+    },
+    {
+      "name": "security",
+      "id": 812
+    },
+    {
+      "name": "ai",
+      "id": 813
+    }
+  ],
+  "created_at": "2026-04-19T10:00:00Z",
+  "updated_at": "2026-04-19T10:00:00Z",
+  "status": true,
+  "slug": "nebuladns-launch-game-changer-enterprise-dns-ai-era",
+  "internal_id": 810,
+  "published_date": "2026-04-19"
+}

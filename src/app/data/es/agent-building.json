@@ -1,0 +1,69 @@
+{
+  "header": {
+    "title": "Construcción sistemática de agentes de IA con LLMs de código abierto",
+    "description": "Guía práctica para diseñar agentes fiables usando Llama, Mistral y ejecución de herramientas tipadas."
+  },
+  "sections": [
+    {
+      "title": "Arquitectura central",
+      "points": [
+        "Planificador: descompone el objetivo en pasos accionables",
+        "Ejecutor: invoca herramientas/APIs tipadas y valida salidas",
+        "Memoria: vector + almacenes clave/valor para corto/largo plazo",
+        "Supervisor: evalúa resultados, reintenta, escala"
+      ]
+    },
+    {
+      "title": "Prácticas de ingeniería",
+      "points": [
+        "Herramientas schema-first con validación estricta",
+        "Reintentos deterministas y bucles acotados",
+        "Versionado de prompts y trazabilidad de cambios",
+        "Telemetría: trazas, métricas y logs estructurados"
+      ]
+    },
+    {
+      "title": "LLMs de código abierto",
+      "points": [
+        "Llama: buen rendimiento general y tooling",
+        "Mistral/Mixtral: inferencia eficiente, buen razonamiento",
+        "Qwen: fortalezas multilingües",
+        "Hosting local: vLLM, TGI, Ollama"
+      ]
+    },
+    {
+      "title": "Evaluación y seguridad",
+      "points": [
+        "Tasa de éxito y puntuación de calidad",
+        "Análisis de errores de herramientas y recuperación",
+        "Políticas de seguridad y red-teaming",
+        "Presupuestos de coste y latencia"
+      ]
+    },
+    {
+      "title": "Checklist de despliegue",
+      "points": [
+        "Credenciales seguras y herramientas en sandbox",
+        "Límites de tasa por agente y tenant",
+        "Integración de observabilidad (OpenTelemetry)",
+        "Estrategia de rollout y pruebas canarias"
+      ]
+    }
+  ],
+  "cta": {
+    "title": "¿Necesitas producción de agentes?",
+    "description": "Ayudamos a equipos a desplegar sistemas de agentes fiables con evaluación y seguridad sólidas.",
+    "buttons": [
+      {
+        "text": "Contactar ventas",
+        "link": "/contact-us",
+        "type": "primary"
+      },
+      {
+        "text": "Leer artículos",
+        "link": "/articles",
+        "type": "outline-primary"
+      }
+    ]
+  }
+}

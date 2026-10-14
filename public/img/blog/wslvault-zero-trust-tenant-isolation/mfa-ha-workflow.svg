@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-label="WSL Vault MFA lease workflow and multi-region HA">
+  <defs>
+    <style>
+      .title { fill: #0f172a; font: 800 26px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .sub { fill: #475569; font: 500 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .h { fill: #0f172a; font: 700 14px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .p { fill: #334155; font: 500 12px ui-sans-serif, system-ui, Helvetica, Arial, sans-serif; }
+      .a { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; }
+      .b { fill: #fff7ed; stroke: #c2410c; stroke-width: 2; }
+      .c { fill: #ecfdf5; stroke: #059669; stroke-width: 2; }
+      .arrow { stroke: #64748b; stroke-width: 2.2; fill: none; marker-end: url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="720" fill="#f8fafc"/>
+  <text class="title" x="48" y="48">Operator workflow: MFA, leases, multi-region HA</text>
+  <text class="sub" x="48" y="78">Secrets stay a breeze for teams — and fail closed for attackers</text>
+
+  <rect class="a" x="48" y="120" width="200" height="110" rx="10"/>
+  <text class="h" x="68" y="160">1. Login</text>
+  <text class="p" x="68" y="190">Per-tenant token</text>
+  <text class="p" x="68" y="212">+ TOTP MFA</text>
+
+  <path class="arrow" d="M260 175 H310"/>
+
+  <rect class="a" x="320" y="120" width="200" height="110" rx="10"/>
+  <text class="h" x="340" y="160">2. Policy check</text>
+  <text class="p" x="340" y="190">Path + engine rights</text>
+  <text class="p" x="340" y="212">Identity signed, not a header</text>
+
+  <path class="arrow" d="M532 175 H582"/>
+
+  <rect class="a" x="590" y="120" width="200" height="110" rx="10"/>
+  <text class="h" x="610" y="160">3. Unwrap DEK</text>
+  <text class="p" x="610" y="190">Tenant KEK only</text>
+  <text class="p" x="610" y="212">Cross-tenant: not found</text>
+
+  <path class="arrow" d="M802 175 H852"/>
+
+  <rect class="c" x="860" y="120" width="280" height="110" rx="10"/>
+  <text class="h" x="880" y="160">4. Lease + use</text>
+  <text class="p" x="880" y="190">Short-lived credential</text>
+  <text class="p" x="880" y="212">Revoke stops it now</text>
+
+  <rect class="b" x="48" y="300" width="540" height="360" rx="14"/>
+  <text class="h" x="76" y="340">Active / active regions</text>
+  <text class="p" x="76" y="375">Region A (e.g. Manchester) and Region B</text>
+  <text class="p" x="76" y="398">(e.g. London) each run a full stack.</text>
+  <text class="p" x="76" y="430">Own database. Own services. Own hostname.</text>
+  <text class="p" x="76" y="460">Encrypted replication of sealed changes.</text>
+  <text class="p" x="76" y="490">Read the same secret in the peer region.</text>
+  <text class="p" x="76" y="520">Failover is a PoP / DNS decision —</text>
+  <text class="p" x="76" y="543">not a rebuild of the vault.</text>
+  <text class="p" x="76" y="580">Operators keep one mental model:</text>
+  <text class="p" x="76" y="603">write once, serve from either region.</text>
+
+  <rect class="c" x="620" y="300" width="520" height="360" rx="14"/>
+  <text class="h" x="648" y="340">Why this feels easy day-to-day</text>
+  <text class="p" x="648" y="375">CLI, SDKs, or console — same contract</text>
+  <text class="p" x="648" y="405">KV put/get with versioning built in</text>
+  <text class="p" x="648" y="435">Transit encrypt without exporting keys</text>
+  <text class="p" x="648" y="465">PKI short-lived certs for services</text>
+  <text class="p" x="648" y="495">Leases renew or die — no zombie keys</text>
+  <text class="p" x="648" y="525">Audit hash-chain for every action</text>
+  <text class="p" x="648" y="555">MFA on humans; workload auth for apps</text>
+  <text class="p" x="648" y="585">No secrets in Slack, git, or tickets</text>
+  <text class="p" x="648" y="615">That is how sprawl actually ends</text>
+</svg>

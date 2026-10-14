@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "title": "TenthMatrix WSL Proxy — API Gateway, CDN & WAF | TenthMatrix",
+    "description": "TenthMatrix WSL Proxy product page: how the live-config proxy works, detailed features, WAF engine v2 rules and stages, CDN cache, multi-POP DNS, and Agents/MCP Gateway roadmap. Visit wslproxy.org.",
+    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, WAF rules, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
+  },
+  "header": {
+    "title": "TenthMatrix WSL Proxy",
+    "subtitle": "API Gateway, CDN & Enterprise WAF — Product Overview",
+    "description": "TenthMatrix WSL Proxy (WSLProxy) is TenthMatrix’s complete API gateway and CDN edge control plane. It sits in front of your origins and decides per request what happens — route, secure, cache, and observe — from live JSON and MCP configs, without reloading nginx for every rule change."
+  },
+  "intro": {
+    "title": "What is TenthMatrix WSL Proxy?",
+    "body": "WSLProxy is a dynamic API gateway and reverse proxy on OpenResty. Operators manage virtual hosts, routing rules, WAF policies, cache, traffic splits, and edge POPs from an Admin UI, REST API, MCP tools, or the wslproxy-cli. Day-to-day rules take effect on the hot path; nginx reloads only when server-level listen or SSL blocks change.",
+    "links": [
+      {
+        "label": "wslproxy.org",
+        "href": "https://wslproxy.org"
+      },
+      {
+        "label": "WAF docs",
+        "href": "https://wslproxy.org/waf/"
+      },
+      {
+        "label": "Swagger API",
+        "href": "https://wslproxy.org/swagger/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/bwalia/wslproxy"
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "How the proxy works",
+    "intro": "Like a solutions playbook: match once, decide per request, then proxy or protect. The control plane never needs to restart the edge for ordinary rule changes.",
+    "flow": [
+      {
+        "title": "1. Request arrives at a POP",
+        "text": "Browsers, APIs, and agents hit a TenthMatrix WSL Proxy edge (Docker, bare-metal Ansible POP, or k3s Helm ingress). OpenResty accepts TLS and enters the Lua hot path."
+      },
+      {
+        "title": "2. Match a routing rule",
+        "text": "gateway_ack.lua loads the virtual host and evaluates live rules from disk or Redis: path, IP, country, JWT, S3, cookie, and more. Priority and specificity pick the winner — no nginx reload."
+      },
+      {
+        "title": "3. Pipeline: rate limit → WAF → respond",
+        "text": "The gateway pipeline runs rate limits, then the WAF engine (stages + signatures), then gateway_resp.lua applies the response action and balancer timeouts."
+      },
+      {
+        "title": "4. Decide the outcome",
+        "text": "Typical outcomes: 305 reverse-proxy to an upstream, 301/302 redirect, static HTML block, CAPTCHA challenge, or 403 WAF block with support ID headers."
+      },
+      {
+        "title": "5. Balance and observe",
+        "text": "For proxy responses, balancer_by_lua applies weighted, RR, canary, sticky, or least-conn. Health, metrics, and traffic stats feed ops and AI log hooks."
+      },
+      {
+        "title": "6. Operators & agents drive config",
+        "text": "Humans use Admin UI / CLI; agents use REST or MCP tools to CRUD servers, rules, and WAF binds — the same surface, GitOps-friendly pull/push."
+      }
+    ],
+    "responseCodes": [
+      {
+        "code": "305",
+        "meaning": "Reverse proxy to upstream (primary gateway path)"
+      },
+      {
+        "code": "301 / 302",
+        "meaning": "Redirect"
+      },
+      {
+        "code": "200 HTML",
+        "meaning": "Static / branded block or interstitial"
+      },
+      {
+        "code": "CAPTCHA",
+        "meaning": "Challenge before continuing"
+      },
+      {
+        "code": "403 WAF",
+        "meaning": "Blocked by WAF with X-WAF-* and X-Support-ID headers"
+      }
+    ]
+  },
+  "features": {
+    "title": "Main product features in detail",
+    "intro": "Everything you need for a governed edge: routing, security, CDN cache, multi-POP delivery, and a control plane humans and agents can both drive.",
+    "items": [
+      {
+        "title": "Dynamic routing rules",
+        "description": "Match on path, IP, country, JWT claims, S3-style keys, and cookies. Actions include reverse proxy, redirect, HTML responses, and CAPTCHA. Rules are ordered by priority with specificity tie-break so the most precise route wins without restarting nginx.",
+        "icon": "bi-signpost-split"
+      },
+      {
+        "title": "Traffic engineering",
+        "description": "Weighted, round-robin, header-based canary, cookie sticky sessions, and least-conn balancing. Promote or rollback backends from the control plane when a canary looks healthy — or pull it back in one action.",
+        "icon": "bi-shuffle"
+      },
+      {
+        "title": "Enterprise WAF engine v2",
+        "description": "Policy packs bind per domain, service, and route. Stages cover method allow-lists, filetype deny, IP/geo lists, JWT algorithm policy, JSON body profiles, brute-force velocity, and OpenAPI positive security — plus governed attack signatures and anomaly scoring. Blocking or transparent (monitor) modes.",
+        "icon": "bi-shield-lock"
+      },
+      {
+        "title": "CDN & edge cache",
+        "description": "Edge static cache, optional Docker blob cache, and Varnish hooks give you a CDN-style layer in front of origins — ideal for marketing sites, API docs, and artifact delivery alongside API gateway traffic.",
+        "icon": "bi-hdd-network"
+      },
+      {
+        "title": "SSL & HTTPS",
+        "description": "auto-ssl / Let’s Encrypt, per-domain SSL JSON, and force-HTTPS policies so each virtual host can terminate TLS correctly at the POP.",
+        "icon": "bi-lock"
+      },
+      {
+        "title": "Multi-POP + DNS",
+        "description": "Declare edge locations and provision Cloudflare A-records with safety guardrails. A common production pattern is public POP → k3s NodePort → wslproxy-ingress Helm → app pods.",
+        "icon": "bi-globe2"
+      },
+      {
+        "title": "Control plane",
+        "description": "React Admin and Next.js dashboards, Swagger REST, MCP tools for Claude/Cursor, and the wslproxy-cli image (ghcr.io/bwalia/wslproxy-cli) for pull/push/diff/verify workflows.",
+        "icon": "bi-sliders"
+      },
+      {
+        "title": "Deploy anywhere",
+        "description": "Docker Compose for labs, Ansible for bare-metal or VM POPs, and Helm ingress-controller charts for k3s / Kubernetes — one product surface across environments.",
+        "icon": "bi-box-seam"
+      },
+      {
+        "title": "Observability",
+        "description": "/health, /healthz, /ready, Prometheus /metrics, traffic stats, structured WAF security logs, and AI log analysis hooks for SRE teams.",
+        "icon": "bi-graph-up"
+      }
+    ]
+  },
+  "waf": {
+    "title": "WAF rules & enforcement",
+    "intro": "The WAF runs in the OpenResty request path (inspired by enterprise NGINX WAF patterns). It is fail-open by default so a WAF bug cannot take the site down, explainable on every block, and backward compatible with simple v1 rule lists. For a guided tour and deep dive, see the related reading below — or watch the WAF video on this page.",
+    "pipelineTitle": "Request-path pipeline",
+    "pipeline": [
+      "rewrite_by_lua: gateway_ack.lua selects the routing rule",
+      "gateway_pipeline.execute(): rate-limit → WAF → continue",
+      "waf_engine.inspect(): load policy, resolve binding, run stages, then signatures",
+      "On block: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
+    ],
+    "stagesTitle": "Stage pipeline (before signatures)",
+    "stages": [
+      {
+        "code": "VIOL_METHOD",
+        "name": "Method allow-list",
+        "detail": "Only permitted HTTP methods (e.g. GET, POST, HEAD, OPTIONS)."
+      },
+      {
+        "code": "VIOL_FILETYPE",
+        "name": "Filetype deny",
+        "detail": "Block sensitive extensions such as .env, .sql, .bak, .git, .pem."
+      },
+      {
+        "code": "VIOL_IP_DENY / VIOL_GEO",
+        "name": "IP lists & geo",
+        "detail": "Allow/deny CIDRs and deny countries via IP2Location-style DB."
+      },
+      {
+        "code": "VIOL_JWT_ALG",
+        "name": "JWT algorithm policy",
+        "detail": "Deny weak algs (none, HS256); require RS256/ES256 where needed."
+      },
+      {
+        "code": "VIOL_JSON_SIZE / DEPTH",
+        "name": "JSON body profile",
+        "detail": "Cap JSON depth and body size to stop parser abuse."
+      },
+      {
+        "code": "VIOL_BRUTE_FORCE",
+        "name": "Brute-force velocity",
+        "detail": "Per-path sliding windows (e.g. /api/login) keyed by IP."
+      },
+      {
+        "code": "VIOL_OPENAPI_*",
+        "name": "OpenAPI positive security",
+        "detail": "Allow only declared path+method surfaces (templated paths)."
+      }
+    ],
+    "signaturesTitle": "Signature rules & governance",
+    "signaturesIntro": "Each signature has a stable ID (the addressable unit), category/set, severity, match target (url, args, body, headers, cookies, UA, or all), regex or string pattern, action (block or monitor), and anomaly score.",
+    "governance": [
+      {
+        "title": "disable",
+        "text": "signatures.disable skips a rule entirely."
+      },
+      {
+        "title": "stage",
+        "text": "signatures.stage alarms only until a timestamp — safe rollout that never contributes to anomaly score while staged."
+      },
+      {
+        "title": "signature sets",
+        "text": "Toggle whole sets (e.g. SET_SQLI) between block and alarm without rewriting every rule."
+      },
+      {
+        "title": "anomaly threshold",
+        "text": "Cumulative score ≥ threshold raises VIOL_ANOMALY_SCORE even if no single signature alone would block."
+      }
+    ],
+    "bindingTitle": "Binding precedence",
+    "bindingIntro": "Most specific wins: route override → per-server waf_mode_override → policy default enforcementMode (blocking or transparent/monitor). Every finding records which binding won so logs answer “why was this blocked?”",
+    "modes": [
+      {
+        "title": "Blocking",
+        "text": "Violations return 403 with support ID and optional branded block page."
+      },
+      {
+        "title": "Transparent / monitor",
+        "text": "Violations alarm and log only — ideal for dry-run and staging."
+      }
+    ]
+  },
+  "roadmap": {
+    "title": "Agents Gateway & MCP Gateway",
+    "intro": "TenthMatrix is extending WSL Proxy into the agent era. The same edge that fronts HTTP APIs will govern how agents and Model Context Protocol (MCP) clients reach tools and backends.",
+    "items": [
+      {
+        "title": "MCP Gateway (in progress)",
+        "description": "A governed front door in front of external MCP servers — auth bridging, tool/method allow-deny lists, audit of tools/call, and per-tool rate limits. Clients never hold upstream tokens.",
+        "status": "In progress"
+      },
+      {
+        "title": "Agents Gateway (in progress)",
+        "description": "Policy, routing, and observability for multi-agent traffic — so agent fleets hit origins through the same TenthMatrix WSL Proxy edge as your APIs and CDN workloads.",
+        "status": "In progress"
+      },
+      {
+        "title": "MCP management surface (available)",
+        "description": "WSLProxy already exposes its own Admin surface as MCP tools for Claude, Cursor, and other agents — configure rules and inspect the edge without leaving your IDE.",
+        "status": "Available"
+      }
+    ]
+  },
+  "architecture": {
+    "title": "Solution architecture",
+    "intro": "Clients and agents hit a TenthMatrix WSL Proxy POP. The edge matches live rules, applies WAF and cache, then balances to origins. Operators drive everything through Admin UI, REST, MCP, or CLI.",
+    "steps": [
+      {
+        "title": "Edge POP",
+        "text": "OpenResty + Lua hot path: match rules, respond, balance backends."
+      },
+      {
+        "title": "Live config",
+        "text": "Rules, WAF, and traffic splits from disk or Redis — no nginx reload for day-to-day changes."
+      },
+      {
+        "title": "Control plane",
+        "text": "Admin UI, REST, MCP, and wslproxy-cli for humans and agents."
+      },
+      {
+        "title": "Origins",
+        "text": "APIs, k3s services, static sites, and future MCP / agent upstreams."
+      }
+    ]
+  },
+  "relatedReading": {
+    "title": "Related reading",
+    "intro": "Explainable Web Application Firewall on the same live-config edge — policies, stages, monitor or block, and support IDs on every decision.",
+    "items": [
+      {
+        "label": "WSL Proxy WAF blog",
+        "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "Explainable edge WAF article",
+        "href": "/articles/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "WAF Engine v2 blog",
+        "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+        "external": false
+      },
+      {
+        "label": "Inside WAF Engine v2",
+        "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
+        "external": false
+      },
+      {
+        "label": "WAF tour video",
+        "href": "https://youtu.be/r10XSonA5JE",
+        "external": true
+      },
+      {
+        "label": "wslproxy.org/waf",
+        "href": "https://wslproxy.org/waf/",
+        "external": true
+      }
+    ]
+  },
+  "cta": {
+    "title": "Get TenthMatrix WSL Proxy",
+    "body": "Explore the product on wslproxy.org, read the WAF deep dive on TenthMatrix, or talk to us about edge, CDN, WAF, and agent gateway deployments.",
+    "primary": {
+      "text": "Open wslproxy.org",
+      "href": "https://wslproxy.org"
+    },
+    "secondary": {
+      "text": "Read the WAF article",
+      "href": "/articles/wslproxy-waf-web-application-firewall"
+    },
+    "tertiary": {
+      "text": "Contact TenthMatrix",
+      "href": "/contact-us"
+    },
+    "quaternary": {
+      "text": "Product overview article",
+      "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
+    }
+  },
+  "externalSite": {
+    "label": "Continue on the product site",
+    "href": "https://wslproxy.org",
+    "text": "Visit wslproxy.org for demos, docs, and the latest TenthMatrix WSL Proxy releases."
+  },
+  "videos": [
+    {
+      "title": "Watch: TenthMatrix WSL Proxy intro",
+      "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
+      "watchUrl": "https://youtu.be/7NJulclG5sQ",
+      "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix WSL Proxy — product intro",
+      "caption": "Watch",
+      "productUrl": "https://wslproxy.org",
+      "productLabel": "wslproxy.org"
+    },
+    {
+      "title": "Watch: WSL Proxy WAF tour",
+      "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
+      "watchUrl": "https://youtu.be/r10XSonA5JE",
+      "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix WSL Proxy WAF tour",
+      "caption": "Watch",
+      "productUrl": "https://wslproxy.org/waf/",
+      "productLabel": "wslproxy.org/waf"
+    }
+  ]
+}

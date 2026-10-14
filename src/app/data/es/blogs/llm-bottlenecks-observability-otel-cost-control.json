@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "Descubriendo los cuellos de botella de LLM: observabilidad, OTEL y control de costos",
+  "sub_title": "Resumen empresarial: OpenTelemetry, Prometheus/Grafana, Langfuse: ventajas, desventajas, costos y métricas de uso que reducen el gasto de los agentes",
+  "excerpt": "TenthMatrix sobre cómo descubrir cuellos de botella del agente LLM con observabilidad: OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse, con claras ventajas y desventajas, niveles de costos y métricas de uso que protegen los márgenes.",
+  "meta_title": "Descubriendo cuellos de botella de LLM: OTEL, observabilidad y costo | TenthMatrix",
+  "meta_description": "Encuentre cuellos de botella del agente LLM con OpenTelemetry, Prometheus/Grafana y Langfuse. Pros, contras, costos y métricas de uso de la IA preparada para FinOps.",
+  "meta_keywords": "Cuellos de botella de LLM, OpenTelemetry, OTEL, observabilidad, Langfuse, Prometheus, Grafana, Thanos, FinOps, agentes de IA, TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>Resumen de negocios: descubra LLM y los cuellos de botella de los agentes con observabilidad (OpenTelemetry, Prometheus/Grafana/Thanos y plataformas LLM como Langfuse) para que pueda reducir costos, ajustar los SLO y enviar pruebas a los agentes. Análisis profundo: artículo técnico extenso de<a href=\"/es/articles/llm-bottlenecks-observability-otel-cost-control\">(OTEL, FinOps, presupuestos de agentes)</a>. Relacionado:<a href=\"/es/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocompresor LLMs</a>·<a href=\"/es/enterprise-ai\">Enterprise AI Lab</a>.</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Conclusión.</strong>La mayoría de los tickets de “IA lenta” no son fallas misteriosas del modelo: les falta atribución. El agente de instrumentos se ejecuta con OpenTelemetry, califica las salidas, etiqueta cada llamada con inquilino/modelo/ruta/tokens/costo y hace cumplir los presupuestos. Los equipos que hacen esto normalmente encuentran entre un 20% y un 50% de desperdicio en reintentos, modelos de gran tamaño y mensajes sin caché dentro del primer ciclo de medición.</div><h2>Por qué los cuellos de botella se esconden sin telemetría</h2><p>Los agentes LLM encadenan mensajes, herramientas, recuperación y reintentos de RAG. La latencia y el gasto se componen entre saltos. Sin intervalos y métricas no se puede saber si el cuello de botella es el modelo, el almacén de vectores, una herramienta deficiente o un bucle de autodepuración ilimitado. Luego, las partes interesadas del negocio compran en exceso las cuotas de GPU o API, mientras que la calidad del producto se mantiene estable.</p>Postura de<p>TenthMatrix para los activos de IA: trate las canalizaciones de agentes como cualquier otro servicio de producción:<strong>observabilidad primero</strong>, luego optimice el servicio (consulte<a href=\"/es/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>), luego promueva con disciplina (<a href=\"/es/ring-promoter\">Ring Promoter</a>).</p><h2>La pila de observabilidad que se amortiza sola</h2><p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>: una capa de instrumentación para seguimientos, métricas y (cuando sea útil) registros. Exportar a un coleccionista; desplegarse hacia los backends.</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>: señales doradas: tasa de solicitudes, tasa de errores, latencia, rendimiento del token, $ estimado/solicitud, utilización de GPU. Thanos (o equivalente) mantiene métricas a largo plazo para las revisiones de FinOps.</li><li><strong>LLM Plataformas de observabilidad</strong>(p. ej.<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — UI de sesión/rastreo, versiones de aviso, humanos y humanos. puntuaciones automatizadas, conjuntos de datos para regresión.</li></ul><h2>Pros y contras de este enfoque</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Dimensión</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Ventajas</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Contras / compensaciones</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Control de costes</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Gasto de atributo al inquilino, característica, modelo y paso del agente; eliminar los reintentos inútiles.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Tiempo de ingeniería para instrumentar; Costo de almacenamiento de rastros si la retención es ingenua.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Calidad</strong></td>Los conjuntos de datos y puntuaciones<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">detectan regresiones rápidas antes que los clientes.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">La puntuación automatizada puede ser ruidosa; todavía se necesitan humanos para rutas críticas.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Operaciones</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">El mismo conjunto de habilidades de OTEL/Prometheus que sus otros microservicios.</td>Las UI específicas de<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM (Langfuse, etc.) agregan otro producto para ejecutar o comprar.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Cumplimiento</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Auditoría de quién llamó a qué modelo y con qué versión de aviso.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Las políticas de retención de información/PII deben diseñarse por adelantado.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Velocidad a valor</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Primeros paneles en días si ya ejecuta Grafana.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">La atribución total de costos en gráficos de múltiples agentes lleva más tiempo.</td></tr></tbody></table><h2>Costos: lo que gastas vs lo que ahorras</h2><p><strong>Costo de instrumentación (plataforma típica de agente de tamaño mediano):</strong></p><ul><li>1 a 2 semanas de ingeniero para adoptar las convenciones de tramo de OTEL + cableado del exportador.</li><li>Collector + retención de métricas: a menudo <5–10 % del gasto mensual de LLM API/GPU una vez que se ajusta el muestreo.</li><li>Observabilidad SaaS LLM opcional: precio por evento/rastreo: presupuesto como porcentaje del gasto del modelo, no como una ocurrencia tardía.</li></ul><p><strong>Palancas de ahorro (métricas de uso que mueven la aguja):</strong></p><ul><li><strong>Tokens por tarea exitosa</strong>: no tokens por llamada sin formato. Tapar bucles de herramientas y rondas de autodepuración.</li><li><strong>Costo por tarea exitosa</strong>— modelos de ruta económicos para clasificación/ruta; reserve los modelos de frontera para pasos difíciles.</li><li><strong>Tasa de aciertos de caché</strong>: almacenamiento en caché de avisos/prefijos cuando sea seguro; medir la corrección, no sólo la latencia.</li><li><strong>Tasa de reintento y frecuencia tasa de mensajes fallidos</strong>: herramientas inestables disfrazadas de problemas de “calidad del modelo”.</li><li><strong>p95 TTFT y latencia de extremo a extremo</strong>: proteja la experiencia de usuario mientras reduce el gasto.</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Regla general.</strong>Si no puede responder “¿cuánto costó este agente la semana pasada por cliente y por paso?” no está listo para escalar el uso, está listo para sorprender a Finanzas.</div>Puntuación<h2>: manual vs automática</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Método</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Cuándo utilizar</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Nota comercial</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Puntuación manual</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Conjuntos Gold, respuestas reguladas, copia sensible a la marca.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Jueces automatizados, caros pero fundamentados.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Puntuación automática</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Regresión de alto volumen, LLM como juez, verificaciones de rúbricas.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Barato a escala; calibrar contra humanos mensualmente.</td></tr></tbody></table><h2>Guía de migración (comience poco a poco)</h2><ol><li>Instrumento<strong>Una ruta de agente de producción</strong>de extremo a extremo con OTEL + atributos de token/costo.</li><li>Envíe una placa Grafana para tasa/errores/latencia/$/éxito.</li><li>Agregue Langfuse (o equivalente) para obtener versiones rápidas y puntuaciones en esa ruta.</li><li>Aplicar límites máximos: tokens máximos, llamadas de herramientas máximas, reintentos máximos por sesión.</li><li>Expandir al siguiente agente solo después de que la primera ruta muestre un costo medido o una ganancia de latencia.</li></ol><h2>Watch: por qué la observabilidad es importante para los sistemas de IA</h2><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">Charla contextual sobre la cultura de la observabilidad, no una demostración del producto TenthMatrix. Combínelo con<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry docs</a>y el artículo técnico<a href=\"/es/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix</a>.</p><h2>Leer siguiente</h2><ol><li><a href=\"/es/articles/llm-bottlenecks-observability-otel-cost-control\">Artículo extenso</a>: esquema de extensión de OTEL, coleccionistas, fórmulas de costos, límites de agentes, notas de Langfuse/LMNR.</li><li><a href=\"/es/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">Turbocompresor LLMs</a>: cuellos de botella en el lado del servicio después de que puedas verlos.</li><li><a href=\"/es/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">Agentes locales</a>·<a href=\"/es/enterprise-ai\">Laboratorio de IA empresarial</a>·<a href=\"/es/contact-us\">Contacto TenthMatrix</a></li></ol><p>Publicado por<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>. Referencias:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}

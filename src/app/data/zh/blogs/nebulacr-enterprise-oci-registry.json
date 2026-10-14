@@ -1,0 +1,44 @@
+{
+  "uuid": "blog-nebulacr-enterprise-001",
+  "excerpt": "NebulaCR 的专业概述：带有 nebula-registry 和 nebula-auth 的 Rust OCI 注册表、针对人类和 CI 的零信任 OIDC、SCIM 生命周期、Prometheus 和 OpenTelemetry、多区域复制、直通式缓存和 Kubernetes Helm 部署 - 由上游文档/和 README 综合而成。",
+  "sub_title": "架构、零信任身份验证、可观察性和 Kubernetes 操作",
+  "title": "NebulaCR：企业 OCI 注册、可观察性和合规性不受影响",
+  "meta_title": "NebulaCR 企业容器注册表 | OCI、SSO、审核、多区域 | TenthMatrix",
+  "meta_description": "NebulaCR 深入研究：Rust 工作区（注册表：5000，身份验证：5001）、OIDC 和 SCIM、Vault-ready JWT 签名、S3/GCS/Azure 存储、HA 和多区域复制、Prometheus 指标、审计 UI 和 Helm 部署 - 基于官方项目文档。",
+  "meta_keywords": "NebulaCR、OCI 注册表、容器注册表、Rust、nebula-auth、nebula-registry、OIDC、SCIM、Kubernetes、Prometheus、零信任、直通式缓存、多区域",
+  "images": [
+    {
+      "url": "/img/nebulacr-cover.svg",
+      "id": 725,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630
+    }
+  ],
+  "content": "<div class='blog-content'><h2>执行摘要</h2><p><strong>NebulaCR</strong>是一个用 Rust 编写的开源云原生<strong>OCI 容器注册表</strong>。它将符合标准的<strong>星云注册表</strong>服务（端口 5000）与专用<strong>星云验证</strong>令牌服务（端口 5001）、用于签名密钥的可选<strong>HashiCorp Vault</strong>集成、可插拔<strong>对象存储</strong>（文件系统、S3、GCS、Azure Blob）以及一流的<strong>Kubernetes</strong>封装与 CRD，适用于租户、项目和政策。上游项目将产品定位于私密、可观察、可治理的图像分发；有关公共登陆页面，请参阅<a href=\"https://nebulacr.org/\" rel=\"noopener noreferrer\" target=\"_blank\">nebulacr.org</a>；有关源代码和版本，请参阅<a href=\"https://github.com/bwalia/nebulacr\" rel=\"noopener noreferrer\" target=\"_blank\">github.com/bwalia/nebulacr</a>。</p><h2>为什么企业采用私有 OCI 注册表</h2><p>容器映像现在是大多数云原生团队的部署单元。仅存在于安全边界内的注册表可让您强制执行<strong>数据驻留</strong>、<strong>供应链控制</strong>、<strong>细粒度 RBAC</strong>和<strong>可预测成本</strong>（特别是与上游注册表的拉通缓存结合使用时）。 NebulaCR 的目标用户是需要 Docker 兼容工作流程而又不放弃身份、可审核性或多区域弹性的操作员。</p><h2>Rust 工作区 (Cargo.toml)</h2><p>上游<code>Cargo.toml</code>声明了七个 crate 的工作区：<strong>nebula-common</strong>、<strong>nebula-auth</strong>、<strong>nebula-registry</strong>、<strong>nebula-controller</strong>、<strong>星云弹性</strong>、<strong>星云镜像</strong>和<strong>星云复制</strong>。自述文件的项目树将每个包映射到二进制文件或库 - 注册表和身份验证服务、Kubernetes 协调器、直通式缓存引擎、弹性助手和多区域复制。从源代码开始，运行<code>cargo build --workspace --release</code>和<code>cargo test --workspace</code>，然后再使用根<code>Dockerfile</code>或优化的<code>Dockerfile.scratch</code>进行容器化。</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img src=\"/img/nebulacr-workspace-crates.svg\" alt=\"NebulaCR Cargo workspace crates and repository layout\" width=\"1000\" height=\"520\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" /></figure><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img src=\"/img/nebulacr-architecture-stack.svg\" alt=\"NebulaCR logical architecture: ingress, nebula-registry and nebula-auth, object storage, Kubernetes CRDs, observability\" width=\"1200\" height=\"780\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" /></figure><h2>从项目文档中提取的架构</h2><p>除了上述三个核心二进制文件/库之外，<strong>星云控制器</strong>还可以协调租户/项目/AccessPolicy/TokenPolicy CRDs、<strong>星云镜像</strong>为上游注册表实现拉通缓存，<strong>星云弹性</strong>为复制路径提供重试和断路器，<strong>星云复制</strong>支持多区域异步或半同步模式，并具有<code>docs/architecture.md</code>中所述的故障转移功能。<strong>nebula-registry</strong>仍然基于 Axum，并根据请求执行 JWT；<strong>nebula-auth</strong>验证 OIDC 身份令牌并颁发短期注册表 JWT。每个租户/项目的存储保持分层，而后端保持可插拔。</p><h2>入口路由、运行状况检查和指标</h2><p>自述文件的 ASCII 架构显示流量拆分：<code>/v2</code>到注册表服务 (5000)，身份验证流（通常在<code>/auth</code>下）到<strong>nebula-auth</strong>(5001)，OIDC 提供商均位于两者外部。 Helm 图表公开 Prometheus 指标（示例包括<code>nebulacr_http_requests_total</code>、<code>nebulacr_http_request_duration_seconds</code>、<code>nebulacr_storage_operations_total</code>、<code>nebulacr_auth_tokens_issued_total</code>），并在<code>kubectl port-forward</code>之后将<code>curl http://localhost:5000/health</code>记录到注册表服务。</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img src=\"/img/nebulacr-ingress-metrics.svg\" alt=\"NebulaCR ingress split, service ports, example Prometheus metrics, kubectl health check\" width=\"960\" height=\"500\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" /></figure><h2>零信任身份验证和 CI 集成</h2><p>NebulaCR 强调<strong>无长期注册表密码</strong>用于自动化。 CI 系统提供来自可信发行者的 OIDC 身份令牌； nebula-auth 验证签名、应用策略并返回具有严格 TTL 默认值（通常大约五分钟）的范围 JWT。 人工操作员通过标准 OIDC 授权代码流使用 PKCE 针对 Azure AD、Okta 或 Google Workspace 等提供商进行身份验证。</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img src=\"/img/nebulacr-zero-trust-auth.svg\" alt=\"Zero-trust flow from CI runner and OIDC provider through nebula-auth to nebula-registry\" width=\"960\" height=\"400\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" /></figure><h2>CRD、拉通缓存和速率限制</h2><p>Kubernetes 运算符管理<code>Tenant</code>（配额、OIDC 绑定）、<code>Project</code>（存储库组和策略）、<code>AccessPolicy</code>(RBAC) 和<code>TokenPolicy</code>(TTL)和机器人帐户）。自述文件记录了诸如<code>docker pull &lt;host&gt;:5000/library/nginx:latest</code>、 GHCR 和 Quay 前缀之类的拉动拉动，以及将<code>docker.io</code>指向 NebulaCR 的<code>containerd</code>镜像节。速率限制适用于每个 IP 和每个使用<code>governor</code>板条箱的租户。</p><figure class=\"blog-figure\" style=\"margin:2rem 0;text-align:center\"><img src=\"/img/nebulacr-crds-observability.svg\" alt=\"NebulaCR Kubernetes CRDs, observability hooks, and pull-through examples\" width=\"920\" height=\"440\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:8px;border:1px solid #e2e8f0\" /></figure><h2>可观测性、审计和合规性</h2><p>根据<code>docs/</code>下设置的项目文档，NebulaCR 从注册表和身份验证服务公开<strong>Prometheus 指标</strong>，发出<strong>结构化 JSON 日志</strong>，并支持<strong>OpenTelemetry</strong>跟踪以进行更深入的分析。嵌入式仪表板显示 CPU、内存、磁盘、复制运行状况、存储库浏览以及针对推送、拉取和删除的过滤审计跟踪——安全审查的重要证据。<strong>SCIM 2.0</strong>配置可自动执行与身份提供商的加入-移动-离开周期，从而缩小前员工保留潜在访问权限的窗口。</p><h2>高可用性、多区域和拉通式缓存</h2><p>自述文件重点介绍了<strong>无状态服务</strong>，具有水平 Pod 自动扩展、Pod 中断预算和复制路径断路器。多区域复制被描述为具有弹性控制的异步复制，因此当区域降级时读取可以进行故障转移。拉通缓存可减少上游注册表（包括 Docker Hub、GHCR、GCR、Quay.io 和registry.k8s.io）的带宽和拉取延迟。</p><h2>入门</h2><p>对于最小的本地试用，自述文件记录了<code>docker run -p 5000:5000 bwalia/nebulacr:latest</code>、<code>docker compose up -d</code>用于注册表以及使用生成的 JWT 密钥在 5001 上进行身份验证，以及从<code>oci://ghcr.io/bwalia/charts/nebulacr</code>或 GitHub Pages 存储库安装的 Helm。多架构映像在 Docker Hub 和 GHCR 上作为<code>linux/amd64</code>和<code>linux/arm64</code>提供。生产团队将<code>deploy/helm/nebulacr</code>与入口 TLS、可选的 OIDC 和 S3、ServiceMonitor 抓取以及图表中的 NetworkPolicy 模板连接起来。</p><h2>TenthMatrix 如何帮助</h2><p>TenthMatrix 跨云和本地环境设计和实施安全平台工程模式 — 私有注册表、GitOps 升级管道、策略即代码和 SRE 可观察性。如需架构审查或交付支持，请联系<strong>info@tenthmatrix.com</strong>。</p></div>",
+  "user_id": 1,
+  "tags": [
+    {
+      "name": "devops",
+      "id": 725
+    },
+    {
+      "name": "kubernetes",
+      "id": 726
+    },
+    {
+      "name": "security",
+      "id": 727
+    },
+    {
+      "name": "backend",
+      "id": 728
+    }
+  ],
+  "created_at": "2026-04-12T14:00:00Z",
+  "updated_at": "2026-04-15T12:00:00Z",
+  "status": true,
+  "slug": "nebulacr-enterprise-oci-registry",
+  "internal_id": 725,
+  "published_date": "2026-04-12"
+}

@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-ring-promoter-qa-gates-001",
+  "internal_id": 968,
+  "slug": "ring-promoter-qa-gates-before-production",
+  "title": "Ring Promoter — উৎপাদনের আগে QA গেটস",
+  "sub_title": "প্রোড-এ অটো-প্রোমোট করবেন না: যেখানে QA এবং হিউম্যান গেট int → test → acc → prod-এ বসে, প্লাস অটো-প্রমোট বনাম গেটেড হপস",
+  "excerpt": "Ring Promoter QA গেটস: প্রারম্ভিক রিংগুলি স্বয়ংক্রিয়ভাবে প্রচার করুন, পণ্যের আগে একটি মানব গেট রাখুন এবং স্বাস্থ্য প্লাস সংস্করণ পরীক্ষাকে প্রথম-শ্রেণীর মানের গেট হিসাবে বিবেচনা করুন৷",
+  "meta_title": "Ring Promoter — উৎপাদনের আগে QA গেটস | TenthMatrix",
+  "meta_description": "পণ্যে স্বয়ংক্রিয়ভাবে প্রচার করবেন না। Ring Promoter QA গেটস: অটো-প্রমোট প্রারম্ভিক রিং, উৎপাদনের আগে মানব গেট, স্বাস্থ্য এবং সংস্করণ যাচাইকরণ, রোলব্যাক।",
+  "meta_keywords": "Ring Promoter, QA গেটস, কোয়ালিটি গেটস, অটো-প্রমোট, প্রোডাকশন গেট, CI/CD, GitOps, Kubernetes, হেলথ-গেটেড প্রোমোট, TenthMatrix",
+  "cover_image": "/img/ring-promoter-qa-gates-cover.svg",
+  "images": [
+    {
+      "url": "/img/ring-promoter-qa-gates-cover.svg",
+      "id": 968,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Ring Promoter — QA Gates Before Production"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
+      "id": 969,
+      "is_cover": false,
+      "width": 1280,
+      "height": 720,
+      "alt": "Ring Promoter QA Gates YouTube thumbnail"
+    },
+    {
+      "url": "/img/ring-promoter-qa-gates-rings.svg",
+      "id": 970,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "Ring Promoter QA gates across int test acc prod"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><h2>ঘড়ি:</h2>উৎপাদনের আগে QA গেট<p><a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\"><img src=\"/img/ring-promoter-qa-gates-youtube-thumbnail.png\" alt=\"Ring Promoter — QA Gates Before Production (YouTube)\" width=\"1280\" height=\"720\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></a></p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/Vs2Em0HPvoY\" title=\"Ring Promoter — QA Gates Before Production\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\">ভিডিও:<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>· পণ্য:<a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a></p><p class=\"lead\"><em><strong>Ring Promoter</strong>অর্ডার করা রিংগুলি<code>int → test → acc → prod</code>এর মাধ্যমে রিলিজগুলি সরায়। ব্যবসার প্রশ্নটি \"আমরা কি স্বয়ংক্রিয়ভাবে প্রচার করতে পারি?\" — এটি<strong>যেখানে QA এবং মানব গেটগুলি</strong>এর অন্তর্গত, বিশেষ করে উৎপাদনের আগে। পণ্য:<a href=\"/bn/ring-promoter\">/ring-promoter</a>। গভীর ডুব:<a href=\"/bn/articles/ring-promoter-qa-gates-before-production\">দীর্ঘ প্রযুক্তিগত নিবন্ধ</a>। সহচর ওভারভিউ:<a href=\"/bn/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments\">Ring Promoter আধুনিক CI/CD</a>।</em></p><p><img src=\"/img/ring-promoter-qa-gates-cover.svg\" alt=\"Ring Promoter — QA Gates Before Production\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>নীচের লাইন।</strong>স্বাস্থ্য এবং সংস্করণ পরীক্ষা পাস হলে প্রাথমিক রিংগুলি স্বয়ংক্রিয়ভাবে প্রচার করুন৷ একটি<strong>মানব / QA গেট রাখুন</strong>প্রোডের দিকে। সরাসরি উৎপাদনে স্বয়ংক্রিয়ভাবে প্রচার করবেন না — প্রতিটি রিলিজ এখনও গ্রাহকদের উপার্জন করা উচিত।</div><h2>Ring Promoter</h2>-এ QA গেট বলতে কী বোঝায়<p><img src=\"/img/ring-promoter-qa-gates-rings.svg\" alt=\"Ring Promoter QA gates across int test acc prod with auto and human markers\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><p>একটি \"গেট\" হল এমন কিছু যা একটি প্রচারকে থামাতে পারে:</p>৷<ul><li><strong>স্বাস্থ্য গেটগুলি</strong>— প্রচারের আগে উত্স অবশ্যই সুস্থ হতে হবে; স্থাপনার পরে লক্ষ্য অবশ্যই সুস্থ থাকতে হবে (বা স্বয়ংক্রিয়-রোলব্যাক)।</li><li><strong>সংস্করণ গেট</strong>— ঐচ্ছিক: এন্ডপয়েন্টকে অবশ্যই সঠিক সংস্করণের রিপোর্ট করতে হবে (AI sidecars এবং এজেন্টদের জন্য গুরুত্বপূর্ণ)।</li><li><strong>মানব / QA গেটস</strong>— সেই রিংটিতে কোনও স্বয়ংক্রিয় প্রচার নেই; একজন মালিক বা QA পরবর্তী হপকে অনুমোদন করে (<code>acc → prod</code>এর জন্য সাধারণ)।</li></ul><h2>অটো-প্রমোট বনাম গেটেড হপস</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">মোড</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">পেশাদার</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">অসুবিধা / কখন</th>এড়াতে হবে</tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>অটো-প্রমোট (আর্লি রিং)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">দ্রুত প্রতিক্রিয়া; CI একটি ক্লিকের জন্য অপেক্ষা না করে সবুজ থাকে; একই লক অপারেশন এগিয়ে চলতে থাকে.</td>স্বাস্থ্য দুর্বল হলে<td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">খারাপ বিল্ডগুলিকে বাড়িয়ে তোলে। পণ্যে অন্ধভাবে সক্ষম করবেন না।</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>মানব / QA গেট (বিশেষ করে প্রোডের আগে)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ব্যবসা সাইন-অফ, উইন্ডোজ পরিবর্তন, সম্মতি, গ্রহণযোগ্যতার শেষ দেখা।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">লেটেন্সি যোগ করে; একটি পরিষ্কার মালিক প্রয়োজন যাতে রিলিজ স্টল না.</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>স্বাস্থ্য + সংস্করণ গেটস (সর্বদা)</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">স্টপস \"সবুজ কিন্তু ভুল সংস্করণ\"; স্বয়ংক্রিয় রোলব্যাক সহ জোড়া।</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">-এর জন্য সৎ স্বাস্থ্যের শেষ পয়েন্ট প্রয়োজন যা সংস্করণ প্রকাশ করে।</td></tr></tbody></table><h2>কখন</h2>গেট করতে হবে<ul><li><strong>গ্রাহক-মুখী অ্যাপ, নিয়ন্ত্রিত পরিবর্তন বা শেয়ার করা প্ল্যাটফর্মের জন্য</strong>প্রোডাক্টে প্রবেশ করুন অনেক দল নির্ভর করে।</li><li><strong>অটো-প্রমোট int→পরীক্ষা→acc</strong>যখন ইভাল, স্মোক, এবং সংস্করণ-যাচাই করা স্বাস্থ্য শক্তিশালী হয়।</li><li><strong>AI স্ট্যাকের জন্য</strong>গেটগুলিকে শক্ত করুন (মডেল, এজেন্ট, গেটওয়ে) যেখানে একটি বাসি বাইনারি এখনও<code>200 OK</code>উত্তর দিতে পারে।</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>নীতি আমরা সুপারিশ করি। স্বাস্থ্যকর অবস্থায়</strong><code>int</code>/<code>test</code>-এ অটো-প্রমোট;<code>prod</code>এর আগে<code>acc</code>মানব-দ্বারযুক্ত রাখুন। প্রতিটি হপে স্বাস্থ্য এবং সংস্করণ যাচাইকরণ। ব্যর্থ চেক রোল ব্যাক - কোন নীরব \"আংশিক প্রচার\" নয়।</div><h2>পরবর্তী</h2>কোথায় যেতে হবে৷<ol><li>উপরের ভিডিওটি দেখুন —<a href=\"https://youtu.be/Vs2Em0HPvoY\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/Vs2Em0HPvoY</a>।</li><li><a href=\"/bn/articles/ring-promoter-qa-gates-before-production\">প্রযুক্তিগত নিবন্ধ</a>পড়ুন (কনফিগিং, API, রোলব্যাক, এআই-টিম প্রভাব)।</li><li><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">ringpromoter.com</a>বা TenthMatrix<a href=\"/bn/ring-promoter\">পণ্য পৃষ্ঠা</a>খুলুন।</li><li>স্টার<a href=\"https://github.com/bwalia/ring-promoter\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/ring-promoter</a>।</li></ol><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>হ্যাশট্যাগ।</strong>#RingPromoter #QAGates #CICD #DevOps #GitOps #Kubernetes #SRE #PlatformEngineering #AIOps #Workstation</div><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>দ্বারা প্রকাশিত।</p><p style=\"margin-top:1.5rem;\"><strong>পণ্যের সাইট:</strong><a href=\"https://www.ringpromoter.com/\" target=\"_blank\" rel=\"noopener noreferrer\">https://www.ringpromoter.com/</a></p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "kubernetes",
+      "id": 931
+    },
+    {
+      "name": "sre",
+      "id": 933
+    },
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "gitops",
+      "id": 982
+    }
+  ],
+  "created_at": "2026-09-10T14:00:00Z",
+  "updated_at": "2026-09-10T14:00:00Z",
+  "published_date": "2026-09-10",
+  "status": true
+}

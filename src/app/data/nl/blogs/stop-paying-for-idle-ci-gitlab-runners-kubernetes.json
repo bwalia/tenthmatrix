@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-gitlab-runners-k8s-001",
+  "internal_id": 983,
+  "slug": "stop-paying-for-idle-ci-gitlab-runners-kubernetes",
+  "title": "Stop met betalen voor inactieve CI: GitLab Runners op Kubernetes",
+  "sub_title": "Schaal CI uit voor maandagpieken, schaal dan 's nachts en in het weekend weer in — de vijfminutenhandleiding met beide walkthrough-video's. XTAG0X XPR0X",
+  "excerpt": "De meeste teams betalen voor CI alsof elke nacht nog steeds maandagochtend is. GitLab Runners op Kubernetes keren dat om: tijdelijke job-pods, schaal op onder belasting, schaal af wanneer het rustig is.",
+  "meta_title": "Stop met betalen voor inactieve CI: GitLab Runners op Kubernetes | TenthMatrix",
+  "meta_description": "GitLab Runners op Kubernetes: tijdelijke job-pods, Helm en Operator-installatiepaden, autoscaling, en hoe je stopt met betalen voor lege nachten en weekends.",
+  "meta_keywords": "GitLab Runner, Kubernetes executor, GitLab Operator, Helm, k3s, autoscaling CI, FinOps, idle CI cost, DinD, hyperscale runners, TenthMatrix",
+  "cover_image": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+  "images": [
+    {
+      "url": "/img/gitlab-runners-k8s-idle-ci-cover.svg",
+      "id": 983,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "GitLab Runners on Kubernetes — scale up by day, down at night"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em>De meeste teams betalen voor continue integratie alsof elke nacht en elk weekend nog steeds maandagochtend is.<strong>GitLab Runners op Kubernetes</strong>draaien dat model om: schaal capaciteit op wanneer pipelines arriveren, en haal het weer weg wanneer het kantoor stilvalt. Lees de<a href=\"/nl/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">technische diepte</a>voor Helm waarden, executor-instellingen en het kostenmodel.</em></p><p><img src=\"/img/gitlab-runners-k8s-idle-ci-cover.svg\" alt=\"GitLab Runners on Kubernetes — scale up by day, down at night\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfdf5;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>Het korte verhaal.</strong>Voorzie voor het piek, trek het weer in voor de dal. Ephemere job-pods herwinnen CPU, RAM en opslag wanneer de vraag daalt — vooral 's nachts en in het weekend — zodat maandag's boel niet zaterdag's rekening bepaalt.</div><h2>Kijk de video's</h2><p><strong>1. Runners &amp; pipelines</strong>— autoscaling GitLab Runner workloads op Kubernetes.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/vURXfbvWK_0\" title=\"Complete GitLab Runners and CI/CD on Kubernetes\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/vURXfbvWK_0\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/vURXfbvWK_0</a></p><p><strong>2. GitLab Server op HA Kubernetes</strong>— deploy met de Operator in enkele minuten.</p><div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/fu82hENYNEs\" title=\"Deploy GitLab in HA Kubernetes cluster using operator\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen loading=\"lazy\"></iframe></div><p style=\"font-size:0.9rem;color:#64748b;\"><a href=\"https://youtu.be/fu82hENYNEs\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/fu82hENYNEs</a>· Docs:<a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator</a></p><h2>De dure gewoonte</h2><ul><li><strong>Dag:</strong>merge requests en tests laten de vraag pieken.</li><li><strong>Nachten:</strong>activiteit daalt; vaste VM's verbranden nog steeds CPU en RAM.</li><li><strong>Weekenden:</strong>vaak bijna stil — maar schijven en nodes kunnen nog steeds worden gefactureerd.</li></ul><p>Je betaalt niet voor uitgevoerde builds. Je betaalt voor capaciteit die bestaat, ongeacht of iemand het gebruikt of niet.</p><h2>Een eenvoudiger beeld</h2><p>GitLab's<strong>Runner</strong>voert pijplijnwerk uit.<strong>Kubernetes</strong>kan die werknemers als kortstondige pods maken en ze verwijderen wanneer het werk klaar is. Bij hyperscale geldt hetzelfde idee voor knooppunten: meer wanneer de wachtrij diep is; minder — idealiter bijna geen — 's nachts en in het weekend.</p><h2>Waar enorme kostenbesparingen vandaan komen</h2><ol><li><strong>Schaal op</strong>wanneer mensen (of bots) aan het werk zijn — parallelle job-pods tot aan uw concurrentie- en clusterlimieten.</li><li><strong>Schaal hard af</strong>wanneer de vraag verdwijnt — pods verdwijnen; met cluster-autoscaling verlaten lege knooppunten de pool.</li><li><strong>Stop met het verspillen van CPU, RAM en opslag</strong>aan altijd-aan runner-fleets tijdens rustige uren.</li><li><strong>Betaal voor resultaten, niet voor meubilair</strong>— houd GitLab en een dun runnerbeheerder; laat de boerderij verdampen wanneer er niets te doen is.</li></ol><blockquote><p>Enorme besparingen komen naar voren wanneer de piek van maandag de rekening van dinsdag om drie uur 's nachts niet meer bepaalt — en wanneer de stilte van zaterdag eindelijk rustig oogt op de factuur.</p></blockquote><h2>Officiële documentatie</h2><ul><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Installeer GitLab Runner met de Helm chart</a></li><li><a href=\"https://docs.gitlab.com/runner/install/kubernetes_helm_chart_configuration/\" target=\"_blank\" rel=\"noopener noreferrer\">Configureer de Runner Helm chart</a></li><li><a href=\"https://docs.gitlab.com/runner/executors/kubernetes/\" target=\"_blank\" rel=\"noopener noreferrer\">Kubernetes executor</a></li><li><a href=\"https://docs.gitlab.com/runner/configuration/autoscale/\" target=\"_blank\" rel=\"noopener noreferrer\">Autoscaling GitLab Runner</a></li><li><a href=\"https://docs.gitlab.com/operator/installation/\" target=\"_blank\" rel=\"noopener noreferrer\">GitLab Operator-installatie</a></li></ul><p><strong>Lees verder:</strong>de<a href=\"/nl/articles/gitlab-runners-kubernetes-hyperscale-cost-optimisation\">hyperscale technisch artikel</a>behandelt Operator vs Helm tracks, concurrentie, DinD, observability en een FinOps checklist. Cursus-opbouw prompt:<code>gitlab-runners-k3s-hyperscale-course.prompt.md</code>in het TenthMatrix website-repo (vervangt de ingetrokken devops.git-link).</p><p>Gepubliceerd door<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>.</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "gitlab",
+      "id": 984
+    },
+    {
+      "name": "kubernetes",
+      "id": 933
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "cicd",
+      "id": 985
+    },
+    {
+      "name": "finops",
+      "id": 986
+    },
+    {
+      "name": "platform-engineering",
+      "id": 987
+    }
+  ],
+  "created_at": "2026-09-29T20:00:00Z",
+  "updated_at": "2026-09-29T20:00:00Z",
+  "published_date": "2026-09-29",
+  "status": true
+}

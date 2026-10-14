@@ -1,0 +1,89 @@
+{
+  "uuid": "blog-kubepilot-001",
+  "internal_id": 962,
+  "slug": "kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+  "title": "কুবপাইলট: দ্রুত Kubernetes ঘটনার জন্য কোপাইলট, পাইলট এবং অটোপাইলট",
+  "sub_title": "TenthMatrix টিম থেকে ওপেন-সোর্স ককপিট — kubepilot.org-এ এআই ডায়াগনসিস, SRE ব্রাউজ এবং পলিসি-গেটেড ফিক্স",
+  "excerpt": "KubePilot SRE, DevOps, এবং প্ল্যাটফর্ম দলগুলিকে কোলাহলপূর্ণ ক্লাস্টার সংকেত থেকে একটি নিরাপদ সমাধান — CoPilot, Pilot, এবং AutoPilot-এ যেতে সাহায্য করে৷ kubepilot.org এ ওপেন সোর্স।",
+  "meta_title": "KubePilot — Kubernetes এর জন্য AI CoPilot, Pilot & AutoPilot | TenthMatrix",
+  "meta_description": "TenthMatrix দ্বারা ওপেন-সোর্স Kubernetes ককপিট: CoPilot AI RCA, Pilot SRE ব্রাউজার, অটোপাইলট নীতি-গেটেড ফিক্স। kubepilot.org · github.com/bwalia/kubepilot",
+  "meta_keywords": "KubePilot, Kubernetes, SRE, DevOps, প্ল্যাটফর্ম ইঞ্জিনিয়ারিং, AIOps, AutoPilot, CoPilot, Ollama, MCP, ওপেন সোর্স, TenthMatrix, kubepilot.org",
+  "cover_image": "/img/kubepilot-cover.svg",
+  "images": [
+    {
+      "url": "/img/kubepilot-cover.svg",
+      "id": 962,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "KubePilot CoPilot Pilot AutoPilot for Kubernetes"
+    },
+    {
+      "url": "/img/kubepilot-three-modes.svg",
+      "id": 963,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "KubePilot three-mode incident loop"
+    },
+    {
+      "url": "/img/kubepilot-dashboard-overview.svg",
+      "id": 964,
+      "is_cover": false,
+      "width": 1200,
+      "height": 675,
+      "alt": "KubePilot Pilot dashboard overview"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>KubePilot</strong>হল TenthMatrix ইঞ্জিনিয়ারিং টিমের ওপেন সোর্স Kubernetes ককপিট — তিনটি মোড যা SRE, DevOps, এবং প্ল্যাটফর্ম দলগুলিকে শোরগোল ক্লাস্টার সংকেত থেকে নিরাপদ সমাধানে নিয়ে যায়। প্রোডাক্ট হোম:<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>।<a href=\"/bn/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">দীর্ঘ নিবন্ধ</a>-এ গভীর ইনস্টল, নিরাপত্তা মডেল এবং বৈশিষ্ট্য মানচিত্র।</em></p><p><img src=\"/img/kubepilot-cover.svg\" alt=\"KubePilot — CoPilot, Pilot, AutoPilot for Kubernetes\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #326ce5;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>নীচের লাইন।</strong>কুবেক্টল ট্যাব, লেন্স উইন্ডো, এবং চ্যাটবটগুলি মধ্য-ঘটনায় ছটফট করা বন্ধ করুন।<strong>CoPilot</strong>সাধারণ ইংরেজিতে নির্ণয় করে (Ollama এর মাধ্যমে স্থানীয় LLM),<strong>পাইলট</strong>একটি SRE ব্রাউজারের মতো যাচাই করে, এবং<strong>অটোপাইলট</strong>শুধুমাত্র ড্রাই-রান, কনফিডেন্স ফ্লোর, কুলডাউন এবং কুলডাউনের পিছনে প্রতিকার করে৷ ওপেন সোর্স — তারকা<a href=\"https://github.com/bwalia/kubepilot\" target=\"_blank\" rel=\"noopener noreferrer\">github.com/bwalia/kubepilot</a>।</div><h2>দেখুন: AI</h2>এর সাথে Kubernetes সমস্যা সমাধান করা<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/CsiJWpfncqA\" title=\"KubePilot — Troubleshooting Kubernetes using AI — Balinder Walia\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>YouTube-এ<p style=\"font-size:0.9rem;color:#64748b;\">সম্পূর্ণ আলোচনা:<a href=\"https://youtu.be/CsiJWpfncqA\" target=\"_blank\" rel=\"noopener noreferrer\">youtu.be/CsiJWpfncqA</a>· সাইট:<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a></p><h2>তিনটি মোড। একটি দ্রুত ঘটনা লুপ.</h2><p><img src=\"/img/kubepilot-three-modes.svg\" alt=\"KubePilot CoPilot Pilot AutoPilot incident loop\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>CoPilot (AI):</strong>জিজ্ঞাসা করুন কি ভাঙা হয়েছে; এক-ক্লিক এআই বিশ্লেষণ; প্রমাণ এবং আস্থা সহ RCA; CrashLoop / OOM / ImagePull / নোড-চাপ অসঙ্গতি; আপনার পছন্দের মডেলের জন্য প্রম্পট অনুলিপি করুন।</li><li><strong>পাইলট (SRE):</strong>লেন্স-শৈলী শুধুমাত্র পঠনযোগ্য ব্রাউজ — ওয়ার্কলোড, লগ, YAML, টপোলজি (ইনগ্রেস → পড), CPU/mem/ডিস্ক গেজ, LAN/WAN/টানেল নোড আইপি, পোর্ট-ফরোয়ার্ড, মাল্টি-ক্লুস্টার কনফিগারেশন।</li><li><strong>অটোপাইলট (ফিক্সার):</strong>বন্ধ / ড্রাই-রান / সক্রিয়; নামস্থান ব্লকলিস্ট; কর্মের অনুমতি-তালিকা; ঘন্টায় ক্যাপ; সিদ্ধান্ত খাতা; CR-কোড বৃদ্ধি; কিল সুইচ থামান।</li></ul><p><img src=\"/img/kubepilot-dashboard-overview.svg\" alt=\"KubePilot Pilot dashboard overview\" width=\"1200\" height=\"675\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;border:1px solid #e2e8f0;\" /></p><h2>কেন TenthMatrix এটি</h2>তৈরি করেছে<p>প্ল্যাটফর্ম এবং SRE দলগুলি ড্যাশবোর্ডের অভাবের জন্য ব্যর্থ হয় না — তারা চাপের মধ্যে<em>প্রসঙ্গ পরিবর্তন করতে ব্যর্থ হয়৷ KubePilot নির্ণয় → যাচাই → একটি ওপেন-সোর্স ককপিটে প্রতিকার করে, স্থানীয়-LLM ডিফল্ট সহ, তাই ক্লাস্টার টেলিমেট্রিকে আপনার নেটওয়ার্ক ছেড়ে যেতে হবে না। এটি একটি ওয়েব UI, Go CLI/সার্ভার, এজেন্টদের জন্য MCP সার্ভার এবং একটি নেটিভ iOS সহচর পাঠায়।</p><h2>মিনিটের মধ্যে</h2><pre style=\"background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;\">\ngit clone https://github.com/bwalia/kubepilot.git\ncd kubepilot\nmake dashboard-install &amp;&amp; make dashboard &amp;&amp; make build\nKUBEPILOT_KUBECONFIG=\"$HOME/.kube/config\" ./dist/kubepilot serve --dashboard-port=8383\n# Dashboard: http://localhost:8383  ·  MCP: :9090\n</pre><p>এছাড়াও: Helm (<code>charts/kubepilot</code>/<code>helm repo add kubepilot https://bwalia.github.io/kubepilot</code>), Docker (<code>ghcr.io/kubepilot/kubepilot</code>), এবং<code>ios/</code>এর অধীনে iOS।<a href=\"https://kubepilot.org/\" target=\"_blank\" rel=\"noopener noreferrer\">kubepilot.org</a>-এ বিশদ বিবরণ।</p><div style=\"background:#f0fdf4;border-left:4px solid #22c55e;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>হ্যাশট্যাগ।</strong>#Kubernetes #SRE #DevOps #PlatformEngineering #AIOps #OpenSource #KubePilot</div><h2>দীর্ঘ সংস্করণ</h2>পড়ুন<p>পাথ, অটোপাইলট নিরাপত্তা রেল, রানবুক, MCP, iOS, এবং একটি উত্পাদন চেকলিস্ট ইনস্টল করুন:<a href=\"/bn/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes\">KubePilot প্রযুক্তিগত নিবন্ধ</a>।<a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>দ্বারা নির্মিত।</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "kubernetes",
+      "id": 1007
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "sre",
+      "id": 211
+    },
+    {
+      "name": "aiops",
+      "id": 213
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "mcp",
+      "id": 201
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    }
+  ],
+  "created_at": "2026-08-12T12:00:00Z",
+  "updated_at": "2026-08-12T12:00:00Z",
+  "published_date": "2026-08-12",
+  "status": true
+}

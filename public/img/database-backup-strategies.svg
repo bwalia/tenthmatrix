@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Database backup strategies: full, incremental, WAL, snapshot, PITR with verified restore">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1828"/>
+      <stop offset="0.55" stop-color="#06372f"/>
+      <stop offset="1" stop-color="#0a1a2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#00bfa5" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#00bfa5" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #80cbc4; font: 700 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 60px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #4dd0e1; font: 800 26px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.92); font: 500 17px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.10); stroke: rgba(255,255,255,0.24); stroke-width: 1.5; }
+      .chipText { fill: #ffffff; font: 700 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #4dd0e1; font: 800 13px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .nodeLabel { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .nodeText { fill: rgba(255,255,255,0.75); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #80cbc4; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+    </style>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <polygon points="0 0,8 3,0 6" fill="#ffca28"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <text class="kicker" x="60" y="80">DATABASE BACKUP  /  RECOVERY  /  PITR</text>
+  <text class="title" x="60" y="156">DB Backups</text>
+  <text class="tagline" x="60" y="200">Full + incremental + WAL streaming  ->  multi-cloud</text>
+  <text class="sub" x="60" y="240">Backups that are tested. RPO measured in seconds via WAL streaming, restore verified weekly.</text>
+
+  <g>
+    <rect class="chip" x="60" y="282" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="308">01</text>
+    <text class="chipText" x="120" y="308">Daily full + diff</text>
+
+    <rect class="chip" x="60" y="336" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="362">02</text>
+    <text class="chipText" x="120" y="362">Continuous WAL push</text>
+
+    <rect class="chip" x="60" y="390" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="416">03</text>
+    <text class="chipText" x="120" y="416">Cross-cloud replication</text>
+
+    <rect class="chip" x="60" y="444" rx="20" ry="20" width="290" height="42"/>
+    <text class="num" x="80" y="470">04</text>
+    <text class="chipText" x="120" y="470">Weekly verified restore</text>
+  </g>
+
+  <g transform="translate(420,90)">
+    <rect x="0" y="0" width="720" height="450" rx="14" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.10)" stroke-width="1.5"/>
+
+    <text class="laneLabel" x="20" y="28">SOURCE PLANE  /  PRIMARY DB</text>
+    <g transform="translate(20,40)">
+      <rect width="220" height="60" rx="10" fill="#0e2540" stroke="#336791" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Primary DB (production)</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">pg / mysql / mongo / redis</text>
+      <text class="nodeText" x="110" y="50" text-anchor="middle">RPO target: less than 1 min</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="120">PIPELINE  /  TYPES + FREQUENCY</text>
+    <g transform="translate(20,132)">
+      <rect width="220" height="100" rx="10" fill="#3a1f08" stroke="#ef6c00" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Full backup</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">daily (off-peak)</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">zstd compressed</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">AES-256 encrypted</text>
+      <text class="nodeText" x="110" y="88" text-anchor="middle">checksum manifest</text>
+
+      <rect x="240" y="0" width="220" height="100" rx="10" fill="#0c2b18" stroke="#16a34a" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Incremental / diff</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">hourly</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">only changed pages</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">10-100x smaller</text>
+      <text class="nodeText" x="110" y="88" text-anchor="middle">faster restore window</text>
+
+      <rect x="480" y="0" width="220" height="100" rx="10" fill="#1a1240" stroke="#7c3aed" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">WAL / binlog stream</text>
+      <text class="nodeText" x="110" y="40" text-anchor="middle">continuous</text>
+      <text class="nodeText" x="110" y="56" text-anchor="middle">segment rotation</text>
+      <text class="nodeText" x="110" y="72" text-anchor="middle">enables PITR to second</text>
+      <text class="nodeText" x="110" y="88" text-anchor="middle">replication slot retains</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="260">STORAGE PLANE  /  MULTI-CLOUD</text>
+    <g transform="translate(20,272)">
+      <rect width="220" height="50" rx="10" fill="#3a1f08" stroke="#ea580c" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">AWS S3 (primary)</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">versioning  /  object lock</text>
+
+      <rect x="240" y="0" width="220" height="50" rx="10" fill="#0e2540" stroke="#2563eb" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">Azure Blob (mirror)</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">immutable storage</text>
+
+      <rect x="480" y="0" width="220" height="50" rx="10" fill="#0c2b18" stroke="#22c55e" stroke-width="1.5"/>
+      <text class="nodeLabel" x="110" y="22" text-anchor="middle">GCS (DR copy)</text>
+      <text class="nodeText" x="110" y="38" text-anchor="middle">bucket lock + lifecycle</text>
+    </g>
+
+    <text class="laneLabel" x="20" y="346">VERIFY PLANE  /  RESTORE PROVES BACKUPS WORK</text>
+    <g transform="translate(20,358)">
+      <rect width="340" height="60" rx="10" fill="#0c2b18" stroke="#16a34a" stroke-width="1.5"/>
+      <text class="nodeLabel" x="170" y="22" text-anchor="middle">Restore drill (weekly)</text>
+      <text class="nodeText" x="170" y="38" text-anchor="middle">restore latest to isolated env</text>
+      <text class="nodeText" x="170" y="52" text-anchor="middle">verify schema + checksums + sample rows</text>
+
+      <rect x="360" y="0" width="340" height="60" rx="10" fill="#1a0a3a" stroke="#9c27b0" stroke-width="1.5"/>
+      <text class="nodeLabel" x="170" y="22" text-anchor="middle">PITR replay (on demand)</text>
+      <text class="nodeText" x="170" y="38" text-anchor="middle">restore full + replay WAL to t=specific second</text>
+      <text class="nodeText" x="170" y="52" text-anchor="middle">RTO measured per drill - tracked SLO</text>
+    </g>
+
+    <line x1="350" y1="100" x2="350" y2="132" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#ar)"/>
+    <line x1="350" y1="232" x2="350" y2="272" stroke="#ffca28" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#ar)"/>
+  </g>
+
+  <text class="brand" x="60" y="600">WORKSTATION.CO.UK</text>
+  <text class="audience" x="1140" y="600" text-anchor="end">DBA  /  SRE  /  SECURITY</text>
+</svg>

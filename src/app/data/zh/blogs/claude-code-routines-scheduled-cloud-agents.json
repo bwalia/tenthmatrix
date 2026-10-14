@@ -1,0 +1,65 @@
+{
+  "uuid": "blog-claude-code-routines-001",
+  "internal_id": 981,
+  "slug": "claude-code-routines-scheduled-cloud-agents",
+  "title": "Claude Code Routines：定时云端智能体、子例程与协同例程",
+  "sub_title": "按计划、通过 API 调用或在 GitHub 事件发生时运行 Claude Code，无需笔记本电脑，也无需服务器。五分钟快速指南。",
+  "excerpt": "Claude Code Routines 可按计划、通过 API 或在 GitHub 事件发生时，在 Anthropic 云端运行已保存的智能体任务。本文介绍其工作原理、设置方法以及如何将它们串联起来。",
+  "meta_title": "Claude Code Routines 详解：定时云端智能体 | TenthMatrix",
+  "meta_description": "详解 Claude Code Routines：定时、API 与 GitHub 触发器，设置方法，提示词设计，基于子智能体的子例程，协同例程流水线，安全性与套餐限制。",
+  "meta_keywords": "Claude Code Routines, 定时 AI 智能体, Claude Code 定时任务, /schedule, 云端智能体, GitHub 触发器, API 触发器, 子智能体, 子例程, 协同例程, Anthropic, AI 自动化, DevOps 自动化",
+  "cover_image": "/img/claude-code-routines-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-code-routines-cover.svg",
+      "id": 981,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Code Routines: scheduled cloud agents, sub-routines and co-routines"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><em>Claude Code 不再需要你守在键盘前。<strong>Routines（例程）</strong>会按计划、通过 API 调用或在 GitHub 上发生特定事件时，在 Anthropic 的云端运行已保存的智能体任务。本文介绍它是什么、如何设置，以及我们称之为“子例程”（sub-routines）和“协同例程”（co-routines）的两种模式。完整指南请阅读这篇<a href=\"/zh/articles/claude-code-routines-scheduled-cloud-agents\">长文</a>。</em></p>\n\n<p><img src=\"/img/claude-code-routines-cover.svg\" alt=\"Claude Code Routines：定时云端智能体、子例程与协同例程\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<div style=\"background:#fff7ed;border-left:4px solid #c2410c;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>核心结论。</strong>Routine 是一项只需配置一次（提示词、代码仓库、云环境、连接器）即可自动触发的 Claude Code 任务。它在云端以完整的自主会话运行，因此你的笔记本电脑可以一直合着。Routines 目前处于研究预览阶段（自 2026 年 4 月 14 日起），面向 Pro、Max、Team 和 Enterprise 套餐开放。\n</div>\n\n<h2>启动 routine 的三种方式</h2>\n<ul>\n  <li><strong>定时：</strong>每小时、每天、每个工作日、每周或某个一次性时间点，按你的本地时区填写。可通过 <code>/schedule update</code> 使用自定义 cron，最小间隔为一小时。</li>\n  <li><strong>API：</strong>每个 routine 都有独立的 HTTPS 端点和专属 bearer 令牌。你的告警工具或部署流水线向它发送 POST 请求，并可附带上下文文本。这段文本会被标记为不可信数据，因此即使令牌泄露，也无法改写 routine 的指令。</li>\n  <li><strong>GitHub：</strong>拉取请求或发布（release）事件，可按分支、标签、作者、草稿状态或合并状态过滤。</li>\n</ul>\n\n<p><img src=\"/img/claude-code-routines-lifecycle.svg\" alt=\"一次 routine 运行的结构：触发器、已保存的 routine、云端会话与结果\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>两分钟完成设置</h2>\n<ol>\n  <li>打开 <code>claude.ai/code/routines</code> 并选择 <strong>New routine</strong>，或在 Claude Code CLI 中输入 <code>/schedule</code>。</li>\n  <li>编写一个自成一体的提示词：说明范围、允许的操作、输出目标，以及无事可做时该怎么办。</li>\n  <li>选择代码仓库和环境。移除任务用不到的连接器，因为默认会包含全部连接器。</li>\n  <li>添加触发器，选择 <strong>Run now</strong> 进行测试，然后阅读运行记录。绿色徽标只表示会话已运行，并不代表任务成功完成。</li>\n</ol>\n\n<h2>子例程：一次运行，多个助手</h2>\n<p>这是我们为一种模式起的名字，并非 Anthropic 的正式功能。由 routine 的提示词负责编排，把每个步骤交给提交在仓库中的<strong>子智能体</strong>（<code>.claude/agents/</code>）或<strong>技能（skill）</strong>。每个助手拥有独立的上下文窗口，且只获得所需的工具，从而让长时间无人值守的运行更专注、更省成本、也更安全。</p>\n<p><img src=\"/img/claude-code-routines-subroutines.svg\" alt=\"子例程：由编排提示词委派给子智能体和技能\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>协同例程：相互交接工作的 routines</h2>\n<p>Routines 之间无法直接调用，但可以通过持久化的产物协作。例如：一个夜间 routine 创建草稿 PR，一个由 GitHub 触发的 routine 对其进行评审，由人工合并，再由合并事件触发的 routine 更新文档，最后你的部署流水线调用一个验证 routine。请使用过滤条件，避免任何 routine 被自己的产出触发，并在链路中保留人工合并这道关卡。</p>\n<p><img src=\"/img/claude-code-routines-coroutines.svg\" alt=\"协同例程：四个 routine 通过 GitHub 事件、标签和 API 调用协作\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>值得了解的限制</h2>\n<ul>\n  <li>上线时的每日运行上限为：Pro 5 次，Max 15 次，Team 和 Enterprise 25 次，且在正常订阅用量之外另行计算。一次性运行不计入上限。</li>\n  <li>Routines 以<strong>你本人</strong>的身份执行操作。提交、PR 和 Slack 消息都带有你的身份。除非另有指示，Claude 只会推送到 <code>claude/</code> 分支，并且绝不会推送到受保护分支。</li>\n  <li>需要分钟级轮询或访问本地文件？请改用 <code>/loop</code> 或桌面端定时任务。</li>\n</ul>\n\n<p><strong>延伸阅读：</strong><a href=\"/zh/articles/claude-code-routines-scheduled-cloud-agents\">完整指南</a>涵盖 API 载荷安全、提示词模板、子智能体示例、与 GitHub Actions、n8n 和 Trigger.dev 的对比，以及一份治理检查清单。资料来源：<a href=\"https://claude.com/blog/introducing-routines-in-claude-code\" target=\"_blank\" rel=\"noopener noreferrer\">Anthropic 官方公告</a> · <a href=\"https://code.claude.com/docs/en/routines\" target=\"_blank\" rel=\"noopener noreferrer\">Claude Code 文档</a>。</p>\n\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-code",
+      "id": 950
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "automation",
+      "id": 955
+    },
+    {
+      "name": "devops",
+      "id": 932
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-09-25T09:00:00Z",
+  "updated_at": "2026-09-25T09:00:00Z",
+  "published_date": "2026-09-25",
+  "status": true
+}

@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-claude-fable-5-001",
+  "internal_id": 948,
+  "slug": "claude-fable-5-mythos-class-guide-token-savings",
+  "title": "Claude Fable 5: คู่มือฉบับสมบูรณ์สำหรับโมเดล Mythos-Class ของ Anthropic",
+  "sub_title": "Fable 5 คืออะไร ชุมชนมีปฏิกิริยาอย่างไร เจาะลึก YouTube ที่ดีที่สุด เมื่อใดควรใช้กับ Opus หรือ Sonnet และกลยุทธ์ประหยัดโทเค็นที่ใช้งานได้จริง",
+  "excerpt": "Claude Fable 5 เป็นโมเดลชายแดนระดับ Mythos ของ Anthropic สำหรับตัวแทนขอบฟ้าระยะไกล ปฏิกิริยาของชุมชน บทวิจารณ์บน YouTube เมื่อใดควรใช้ และวิธีบันทึกโทเค็น",
+  "meta_title": "คู่มือ Claude Fable 5: ปฏิกิริยา, YouTube, การประหยัดโทเค็น",
+  "meta_description": "อธิบาย Claude Fable 5: โมเดลคลาส Mythos, ปฏิกิริยาของชุมชน, บทวิจารณ์ยอดนิยมของ YouTube, เมื่อใดควรใช้ Fable vs Opus และเคล็ดลับในการประหยัดโทเค็น",
+  "meta_keywords": "Claude Fable 5, claude-fable-5, Anthropic Fable 5, คลาส Mythos, การประหยัดโทเค็น Fable 5, Claude Fable 5 เทียบกับ Opus, การเข้ารหัสเอเจนต์, ตัวแทน AI",
+  "cover_image": "/img/claude-fable-5-cover.svg",
+  "images": [
+    {
+      "url": "/img/claude-fable-5-cover.svg",
+      "id": 948,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Claude Fable 5 — Mythos-class AI for long-horizon agentic work"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n<p class=\"lead\"><em>Claude Fable 5 ของ Anthropic เป็นโมเดลคลาส Mythos รุ่นแรกที่มีจำหน่ายทั่วไป ซึ่งสร้างขึ้นสำหรับงานตัวแทนในขอบเขตระยะไกล ไม่ใช่การแชทด่วน โพสต์นี้ครอบคลุมถึงสิ่งที่เปลี่ยนแปลงไป ปฏิกิริยาของผู้คน การเจาะลึกเรื่องใดใน YouTube ที่คุ้มค่ากับเวลาของคุณ และวิธีใช้ Fable 5 โดยไม่เปลืองงบประมาณโทเค็นของคุณ หากต้องการ Playbook ฉบับเต็ม โปรดอ่าน <a href=\"/th/articles/claude-fable-5-mythos-class-guide-token-savings\">บทความยาว</a>.</em></p>\n<p><img alt=\"Claude Fable 5 — AI คลาส Mythos สำหรับงานตัวแทนขอบฟ้าระยะไกล\" decoding=\"async\" height=\"630\" loading=\"lazy\" src=\"/img/claude-fable-5-cover.svg\" style=\"max-width:100%;height:auto;border-radius:12px;\" width=\"1200\"/></p>\n<div style=\"background:#fff7ed;border-left:4px solid #d97706;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\">\n<strong>เวอร์ชันย่อหน้าเดียว</strong> Claude Fable 5 (<code>claude-fable-5</code>) เป็นโมเดลที่มีความสามารถมากที่สุดที่เปิดตัวอย่างกว้างขวางของ Anthropic ซึ่งเป็นระดับคลาส Mythos ที่สูงกว่า Opus 4.8 พร้อมด้วยหน้าต่างบริบทโทเค็น 1M และโทเค็นเอาต์พุตสูงสุด 128K ต่อคำขอ ได้รับการออกแบบมาสำหรับงานที่ต้องใช้เวลาเป็นชั่วโมง วัน หรือสัปดาห์: ตัวสร้างโค้ดเบสขนาดใหญ่ เอเจนต์การเขียนโค้ดอัตโนมัติ การวิเคราะห์หลายเอกสาร และเวิร์กโฟลว์ที่ใช้เวลานาน มีค่าใช้จ่าย 10 ดอลลาร์ต่อล้านอินพุตโทเค็น และ 50 ดอลลาร์ต่อล้านโทเค็นเอาท์พุต – ประมาณสองเท่าของ Opus – ดังนั้นกลยุทธ์ในการชนะคือการสงวนไว้สำหรับปัญหาหนัก ๆ และกำหนดเส้นทางทุกอย่างไปยัง Sonnet หรือ Haiku\n</div>\n<h2>Claude Fable5 คืออะไร?</h2>\n<p>เมื่อวันที่ 9 มิถุนายน พ.ศ. 2569 Anthropic ได้เปิดตัว <strong>Claude Fable5</strong> — ความสามารถเวอร์ชันที่เปิดเผยต่อสาธารณะแสดงตัวอย่างครั้งแรกในชื่อ <em>ดูตัวอย่าง คลอดด์ Mythos</em> ภายใต้โครงการกลาสวิง Fable 5 แชร์น้ำหนักพื้นฐานเดียวกันกับคำเชิญเท่านั้น <strong>คล็อด Mythos 5</strong>แต่เพิ่มตัวแยกประเภทความปลอดภัยที่กำหนดเส้นทางการสืบค้นความปลอดภัยทางไซเบอร์และชีววิทยาที่ละเอียดอ่อนไปยัง Claude Opus 4.8 Anthropic รายงานว่าทางเลือกสำรองเหล่านี้เริ่มทำงานในเวลาน้อยกว่า 5% ของเซสชัน ซึ่งหมายถึงเวลาส่วนใหญ่ที่คุณใช้งานบนระบบอัจฉริยะระดับ Mythos เต็มรูปแบบ</p>\n<p>โดยที่ Opus 4.8 เป็นตัวช่วยของ Anthropic สำหรับการเข้ารหัสเอเจนต์ที่ซับซ้อน Fable 5 เป็นโมเดลที่คุณเข้าถึงเมื่องานนั้น <em>ยาวเกินไป คลุมเครือเกินไป หรือหลายขั้นตอนเกินไป</em> เพื่อสิ่งอื่นใด กรอบความคิดของ Anthropic: ยิ่งงานยาวและซับซ้อนมากขึ้นเท่าใด Fable ก็จะยิ่งเป็นผู้นำมากกว่าโมเดลก่อนๆ</p>\n<h2>ห้าประเด็นสำคัญจากสัปดาห์เปิดตัว</h2>\n<ol>\n<li><strong>เกณฑ์มาตรฐานเพิ่มขึ้น โดยเฉพาะอย่างยิ่งในการเข้ารหัสแบบเอเจนต์</strong> ผู้ทดสอบชุมชนและตัวเลขของ Anthropic แสดงให้เห็นประโยชน์อย่างมากในงานเขียนโค้ด SWE-bench Pro, OSWorld และขอบเขตระยะไกล ซึ่งมักจะเหนือกว่า GPT-5.5 และ Claude รุ่นก่อนหน้าถึง 15–20% ในด้านปริมาณงานวิศวกรรมซอฟต์แวร์</li>\n<li><strong>มันเป็นโมเดลที่แตกต่าง ไม่ใช่ Opus ที่เร็วกว่า</strong> Fable 5 ทำงานนานขึ้นต่อเทิร์น ส่งตัวแทนย่อยแบบคู่ขนานได้สะดวกยิ่งขึ้น และรับประโยชน์จากการแจ้งเตือนที่น้อยกว่าทักษะที่กำหนดไว้ซึ่งหลายทีมสร้างขึ้นสำหรับ Opus การแทนที่แบบดรอปอินโดยไม่มีการเปลี่ยนแปลงทันทีมักจะทำให้ผิดหวัง</li>\n<li><strong>ระดับความพยายามคือการเรียกต้นทุนของคุณ</strong> ผู้ใช้ API สามารถตั้งค่าความพยายามเป็นต่ำ ปานกลาง สูง หรือสูงพิเศษได้ Medium Fable 5 จับคู่หรือเอาชนะ Opus บ่อยครั้งด้วยราคาที่สูงเป็นพิเศษ — ด้วยค่าใช้จ่ายเพียงเล็กน้อย การผิดนัดทุกอย่างให้สูงสุดถือเป็นข้อผิดพลาดด้านงบประมาณที่พบบ่อยที่สุด</li>\n<li><strong>Guardrails กลายเป็นจุดวาบไฟของชุมชน</strong> ทางเลือกที่มองไม่เห็นตั้งแต่เนิ่นๆ ของ Opus 4.8 นักวิจัยที่หงุดหงิดซึ่งไม่รู้ว่าพวกเขากำลังพูดถึงรุ่นใด Anthropic เดินกลับบางส่วนของแนวทางนี้หลังจากฟันเฟืองจาก Wired, The Verge และ Hacker News — ความโปร่งใสมีความสำคัญเมื่อคุณจ่ายในราคาที่ชายแดน</li>\n<li><strong>คิดแบบวนซ้ำ ไม่ใช่แบบแจ้ง</strong> ผู้สร้างที่ได้รับประโยชน์สูงสุดจาก Fable 5 ปฏิบัติต่อ Fable 5 ในฐานะผู้ปฏิบัติงานอิสระ: ข้อความเป้าหมาย ลูปเช็คอินรายชั่วโมง การผสานรวมกับเครื่องมือโปรเจ็กต์ เช่น Linear และชุดควบคุมอะซิงก์ที่ไม่บล็อกในแต่ละตัวแทนย่อย</li>\n</ol>\n<h2>ชุมชนมีปฏิกิริยาอย่างไร</h2>\n<p>ปฏิกิริยาแบ่งออกเป็นเส้นที่คาดเดาได้ — ความสามารถเทียบกับต้นทุนเทียบกับการควบคุม</p>\n<ul>\n<li><strong>ช่างก่อสร้างรู้สึกประทับใจกับงานหนัก</strong> Simon Willison บอกว่า Fable 5 ช้าและมีราคาแพง แต่สังเกตว่ามันยังคงทำงานผ่านปัญหายากๆ ที่ทำให้รุ่นอื่นๆ หยุดชะงัก Hacker News เปิดตัวกระทู้ที่เน้นไปที่การเขียนโค้ดอัตโนมัติ และนี่คือจุดเปลี่ยนสำหรับ \"ตัวแทนที่เสร็จสิ้นจริงหรือไม่\"</li>\n<li><strong>ผู้คลางแคลงตั้งคำถามถึงคุณค่าของตัวขับเคลื่อนรายวัน</strong> ผู้ทดสอบอิสระหลายราย (รวมถึงการเปรียบเทียบการใช้จ่าย API มูลค่า $200+) พบว่า Fable 5 มักจะเป็น <em>ดีที่สุด</em> รุ่นแต่ไม่เสมอไป <em>คุ้มค่าที่สุด</em> — โดยเฉพาะอย่างยิ่งเมื่อใช้ความพยายามปานกลางในการเขียนโค้ดตามปกติ โดยที่ Opus 4.8 ที่ใช้ความพยายามสูงนั้นใกล้เคียงพอและราคาถูกกว่า</li>\n<li><strong>โฆษณา YouTube ดังมาก การติดตามงานถือเป็นสัญญาณ</strong> ชื่ออย่าง \"โมเดล AI ที่ยิ่งใหญ่ที่สุดที่เคยมีมา\" ถือเป็นเรื่องการตลาด สิ่งสำคัญคือผู้ตรวจสอบจะแสดงการทำงานของตัวแทนหลายชั่วโมง โหมดความล้มเหลว การสร้าง UI เคียงข้างกัน และการบัญชีต้นทุนที่ซื่อสัตย์ ไม่ใช่ภาพขนาดย่อขั้นสูงสุด</li>\n<li><strong>การเข้าถึงการสมัครสมาชิกมีการเปลี่ยนแปลง</strong> Fable 5 เปิดตัวในแผน Pro, Max, Team และ Enterprise พร้อมเครดิตการใช้งาน Anthropic ส่งสัญญาณการกำหนดราคา API เป็นครั้งแรกสำหรับการเข้าถึงชายแดนอย่างยั่งยืน ซึ่งเป็นคำใบ้ว่าการสมัครสมาชิกแบบเหมาจ่ายที่ได้รับเงินสนับสนุนจำนวนมากอาจไม่สามารถให้บริการโมเดล Mythos ได้อย่างไม่มีกำหนด</li>\n</ul>\n<h2>วิดีโอ YouTube ที่น่าดู</h2>\n<p>วิดีโอเหล่านี้เป็นหนึ่งในวิดีโอ Fable 5 ที่มีผู้ชมมากที่สุดและมีสาระสำคัญมากที่สุด ณ เดือนกรกฎาคม 2026 <em>การทดสอบจริง</em>ไม่ใช่ชื่อเรื่อง</p>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr style=\"background:#1a0f0a;color:#fbbf24;\">\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">วีดีโอ</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #3d2817;\">ทำไมต้องดูมัน</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=Pl7uo3vqp5s\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 ใน 7 นาที</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">ภาพรวมการเปิดตัวอย่างรวดเร็ว: เกณฑ์มาตรฐาน ราคา ตำแหน่ง เทียบกับการแสดงตัวอย่าง Mythos</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=54Fky0JpSbw\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 เหลือเชื่อ! (ทดสอบอย่างเต็มที่)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">การทดสอบความเครียดแบบกว้างๆ: การเขียนโค้ด, 3D/WebGL, การมองเห็น, เวิร์กโฟลว์เอเจนต์, การวัดประสิทธิภาพจริง</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=RwsUnvHYmyw\" rel=\"noopener noreferrer\" target=\"_blank\">Claude Fable 5 เพิ่งทำตก และฉันก็พูดไม่ออก</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">Claude Code ลูป ข้อความเป้าหมาย การบูรณาการเชิงเส้น — รูปแบบเอเจนต์ที่ใช้งานได้จริง</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=AW3TJDuViF8\" rel=\"noopener noreferrer\" target=\"_blank\">Fable 5 กับ Opus — อย่าเสียเครดิตของคุณ</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">การสร้าง UI แบบเคียงข้างกัน เกม 3 มิติ การวิเคราะห์เอกสาร — การแสดงครั้งแรกที่ตรงไปตรงมา</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=xoNGy_JDFi4\" rel=\"noopener noreferrer\" target=\"_blank\">ฉันใช้จ่าย $200 เพื่อทดสอบ Fable 5 (คุ้มค่าไหม)</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">แอปเดียวกันสร้างขึ้นสามวิธี ระดับความพยายาม การแลกเปลี่ยนคุณภาพต้นทุน — จำเป็นสำหรับ FinOps</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=VNbW4wrcfSw\" rel=\"noopener noreferrer\" target=\"_blank\">การเข้ารหัส Vibe ด้วย Claude Fable 5</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">เซสชันการเขียนโค้ดสด: FPS ในไฟล์ HTML ไฟล์เดียว การตรวจสอบประสิทธิภาพโค้ดเบส — การตรวจสอบความรู้สึกในโลกแห่งความเป็นจริง</td>\n</tr>\n<tr>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\"><a href=\"https://www.youtube.com/watch?v=2XhM_8DlgnQ\" rel=\"noopener noreferrer\" target=\"_blank\">วิธีใช้ Fable 5 อย่างถูกวิธี</a></td>\n<td style=\"padding:8px 10px;border:1px solid #e2e8f0;\">บทสรุปของคู่มือการกระตุ้นเตือนอย่างเป็นทางการของ Anthropic: ความพยายาม ตัวแทนย่อย และการแจ้งเตือนแบบลีน</td>\n</tr>\n</tbody>\n</table>\n<h2>เมื่อใดควรใช้ Fable 5 (และเมื่อใดไม่ใช้)</h2>\n<table style=\"width:100%;border-collapse:collapse;font-size:0.92rem;margin:1rem 0;\">\n<thead>\n<tr>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#fff7ed;\">เข้าถึง Fable 5</th>\n<th style=\"padding:8px 10px;text-align:left;border:1px solid #cbd5e1;background:#f1f5f9;\">ใช้โคลงหรือบทประพันธ์แทน</th>\n</tr>\n</thead>\n<tbody>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การย้ายฐานโค้ดหลายวันหรือรีแฟคเตอร์ขนาดใหญ่</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การแก้ไขข้อบกพร่องไฟล์เดียวและ PR ขนาดเล็ก</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ตัวแทนอัตโนมัติที่ทำงานเป็นเวลาหลายชั่วโมงโดยใช้เครื่องมือ</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ถามตอบด่วนและร่างอีเมล</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ข้อกำหนดที่ไม่ชัดเจนซึ่งโมเดลต้องกำหนดขอบเขตและชี้แจง</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การแยกข้อมูลที่กำหนดไว้อย่างดีด้วยสคีมา</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การตรวจสอบโค้ดข้าม repo และการดีบักเชิงลึก</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">Linting, การจัดรูปแบบ, การสร้างต้นแบบ</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">เอกสารระดับองค์กร: โมเดลทางการเงิน สไลด์ รายงานแบบยาว</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การจำแนกประเภทปริมาณมากตามขนาด (ใช้ไฮกุ)</td></tr>\n<tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ปัญหาที่คุณล้มเหลวมาแล้วสองครั้งใน Opus</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">การแชทที่ไวต่อความหน่วงพร้อมการตอบกลับภายในไม่กี่วินาที</td></tr>\n</tbody>\n</table>\n<h2>วิธีบันทึกโทเค็นบน Fable 5</h2>\n<p>โทเค็นเอาต์พุตของ Fable 5 มีราคาห้าเท่าของโทเค็นอินพุต ($50 เทียบกับ $10 ต่อล้าน) เมื่อตัวแทนทำงานเป็นเวลานาน <strong>เอาท์พุตจะครอบงำการเรียกเก็บเงินของคุณ</strong>. แนวทางปฏิบัติเหล่านี้มีความสำคัญมากกว่าโมเดลของ Claude รุ่นก่อนๆ</p>\n<ul>\n<li><strong>จับคู่ความพยายามให้เข้ากับงาน</strong> ใช้ <code>medium</code> สำหรับงานประจำ จอง <code>high</code> และ <code>xhigh</code> สำหรับปัญหาที่ยากลำบากอย่างแท้จริง หลายทีมจ่ายเงินมากเกินไปโดยพยายามอย่างเต็มที่ในทุกการโทร</li>\n<li><strong>ตัดคำแนะนำที่กำหนด</strong> ทักษะที่เขียนขึ้นสำหรับ Opus มักจะละเอียดเกินไปสำหรับ Fable 5 และสามารถทำได้ <em>เสื่อมโทรม</em> คุณภาพ. เริ่มเอน; เพิ่มข้อจำกัดเฉพาะเมื่อพฤติกรรมเริ่มต้นพลาดไป</li>\n<li><strong>อย่าขอให้มันสะท้อนเหตุผลในการตอบสนอง</strong> คำแนะนำในการ \"แสดงความคิดของคุณ\" ในข้อความที่ผู้ใช้มองเห็นสามารถกระตุ้นให้เกิดการปฏิเสธด้านความปลอดภัยและ Opus ทางเลือก — ใช้แบบมีโครงสร้าง <code>thinking</code> บล็อกและ <code>send_to_user</code> เครื่องมือสำหรับความก้าวหน้าแทน</li>\n<li><strong>ใช้แคชพร้อมท์</strong> Fable 5 รองรับส่วนลดอินพุต 90% ของ Anthropic สำหรับคำนำหน้าแคช ซึ่งสำคัญมากสำหรับเอเจนต์ที่ส่งข้อความแจ้งของระบบและคำจำกัดความของเครื่องมือเดียวกันอีกครั้งทุกเทิร์น</li>\n<li><strong>มอบหมายตัวแทนย่อยแบบขนาน</strong> งานย่อยอิสระในแบบคู่ขนานจะเอาชนะเธรดเสาหินเดียวที่รวบรวมบริบท</li>\n<li><strong>ให้ไฟล์หน่วยความจำ ไม่ใช่สำเนา</strong> หนึ่งบทเรียนต่อบันทึก Markdown ดีกว่าการวางประวัติการแชทใหม่ทั้งหมดในแต่ละเซสชัน</li>\n<li><strong>กำหนดเส้นทางเราเตอร์</strong> จำแนกคำขอที่เข้ามาด้วยไฮกุ เลื่อนระดับเป็น Sonnet จากนั้น Fable 5 ก็ต่อเมื่อรับประกันความซับซ้อนเท่านั้น</li>\n<li><strong>ความยาวเอาท์พุตของแคป</strong> ชุด <code>max_tokens</code> โดยเจตนา ขอสรุป TLDR อันดับแรก: \"นำไปสู่ผลลัพธ์; รายละเอียดสนับสนุนในภายหลัง\"</li>\n</ul>\n<div style=\"background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;color:#166534;\">\n<strong>กฎง่ายๆ</strong> หากงานเสร็จสิ้นในการแลกเปลี่ยนระยะสั้นครั้งเดียว คุณอาจไม่จำเป็นต้องใช้ Fable 5 หากวิศวกรอาวุโสต้องใช้เวลาหนึ่งวันเต็มและเกี่ยวข้องกับเครื่องมือ ไฟล์ และคำตัดสิน นั่นก็คือขอบเขตของนิทาน\n</div>\n<h2>เริ่มต้นใช้งาน</h2>\n<ul>\n<li><strong>Claude.ai / Claude Code:</strong> เลือก Fable 5 ในตัวเลือกโมเดลหรือรัน <code>/model fable</code> ใน Claude Code (v2.1.170+)</li>\n<li><strong>API:</strong> <code>model: \"claude-fable-5\"</code> บน Messages API, AWS Bedrock, Google Vertex หรือ Microsoft Foundry</li>\n<li><strong>เอกสาร:</strong> <a href=\"https://platform.claude.com/docs/th/about-claude/models/introducing-claude-fable-5-and-claude-mythos-5\" rel=\"noopener noreferrer\" target=\"_blank\">ขอแนะนำ Claude Fable 5</a> และ <a href=\"https://platform.claude.com/docs/th/build-with-claude/prompt-engineering/prompting-claude-fable-5\" rel=\"noopener noreferrer\" target=\"_blank\">การแจ้ง Claude Fable 5</a>.</li>\n</ul>\n<h2>อ่านฉบับยาวครับ</h2>\n<p>ที่ <a href=\"/th/articles/claude-fable-5-mythos-class-guide-token-savings\">บทความยาว</a> ครอบคลุมประวัติคลาส Mythos, ตารางงานแบบเต็ม, เศรษฐศาสตร์ระดับความพยายาม, การจัดการรั้วและทางเลือกสำรอง, ควบคุมโครงสำหรับเอเจนต์อะซิงก์, ไทม์ไลน์ปฏิกิริยาของชุมชน และรายการตรวจสอบการรวม API จัดพิมพ์โดย <a href=\"https://www.tenthmatrix.com\" rel=\"noopener noreferrer\" target=\"_blank\">TenthMatrix</a>.</p>\n</div>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "claude-fable-5",
+      "id": 972
+    },
+    {
+      "name": "anthropic",
+      "id": 973
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "coding",
+      "id": 976
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "prompt-engineering",
+      "id": 977
+    },
+    {
+      "name": "mythos",
+      "id": 978
+    },
+    {
+      "name": "claude-code",
+      "id": 979
+    }
+  ],
+  "created_at": "2026-07-07T09:00:00Z",
+  "updated_at": "2026-07-07T09:00:00Z",
+  "published_date": "2026-07-07",
+  "status": true
+}

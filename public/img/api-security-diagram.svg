@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320" role="img" aria-label="API security architecture compact decision diagram: client, API, auth, DB with vendor options and SLOs">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b1d"/>
+      <stop offset="1" stop-color="#0e1638"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0 H0 V20" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { fill: #ffffff; font: 800 14px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: #9fb0ff; font: 500 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .client { fill: #101a3a; stroke: #2c3a78; stroke-width: 1.2; }
+      .api { fill: #0e1e3d; stroke: #2563eb; stroke-width: 1.2; }
+      .auth { fill: #1a103a; stroke: #7c3aed; stroke-width: 1.2; }
+      .db { fill: #0c2b18; stroke: #22c55e; stroke-width: 1.2; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .v { fill: #94a3b8; font: 600 7.5px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .tag { fill: #9fb0ff; font: 700 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.2px; }
+      .flow { stroke: #4F8EF7; stroke-width: 1.5; fill: none; }
+      .slo { fill: #fca5a5; font: 700 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 600 8px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+    </style>
+    <marker id="ar" markerWidth="6" markerHeight="6" refX="6" refY="2.5" orient="auto">
+      <polygon points="0 0,6 2.5,0 5" fill="#4F8EF7"/>
+    </marker>
+  </defs>
+
+  <rect width="600" height="320" rx="14" fill="url(#bg)"/>
+  <rect width="600" height="320" rx="14" fill="url(#grid)"/>
+
+  <text class="title" x="14" y="22">API security architecture</text>
+  <text class="sub" x="14" y="36">zero-trust hops  -  identity verified at every layer</text>
+
+  <g transform="translate(14,52)">
+    <rect width="138" height="108" rx="8" class="client"/>
+    <text class="h" x="69" y="18" text-anchor="middle">1. Client</text>
+    <text class="c" x="8" y="34">TLS 1.3 + OAuth PKCE</text>
+    <text class="c" x="8" y="46">cert pinning + CSP / SRI</text>
+    <text class="c" x="8" y="58">no secrets in code</text>
+    <text class="v" x="8" y="74">React / iOS / Android</text>
+    <text class="v" x="8" y="86">SDK rotated quarterly</text>
+    <text class="slo" x="8" y="100">SLO: error lt 0.5 percent</text>
+  </g>
+
+  <g transform="translate(158,52)">
+    <rect width="138" height="108" rx="8" class="api"/>
+    <text class="h" x="69" y="18" text-anchor="middle">2. API</text>
+    <text class="c" x="8" y="34">verify JWT + scope</text>
+    <text class="c" x="8" y="46">input validation (zod)</text>
+    <text class="c" x="8" y="58">rate limit + quota</text>
+    <text class="v" x="8" y="74">Kong / Envoy / APIM</text>
+    <text class="v" x="8" y="86">audit + OTel tracing</text>
+    <text class="slo" x="8" y="100">SLO: p99 lt 150 ms</text>
+  </g>
+
+  <g transform="translate(302,52)">
+    <rect width="138" height="108" rx="8" class="auth"/>
+    <text class="h" x="69" y="18" text-anchor="middle">3. Auth</text>
+    <text class="c" x="8" y="34">OIDC + MFA + WebAuthn</text>
+    <text class="c" x="8" y="46">RBAC + ABAC + scopes</text>
+    <text class="c" x="8" y="58">short JWT TTL + JWKS</text>
+    <text class="v" x="8" y="74">Keycloak / Auth0 / Entra</text>
+    <text class="v" x="8" y="86">rotate JWK quarterly</text>
+    <text class="slo" x="8" y="100">SLO: auth lt 100 ms</text>
+  </g>
+
+  <g transform="translate(446,52)">
+    <rect width="140" height="108" rx="8" class="db"/>
+    <text class="h" x="70" y="18" text-anchor="middle">4. DB</text>
+    <text class="c" x="8" y="34">parameterised SQL only</text>
+    <text class="c" x="8" y="46">least-priv user + RLS</text>
+    <text class="c" x="8" y="58">at-rest encrypt + audit</text>
+    <text class="v" x="8" y="74">Postgres / MySQL / Mongo</text>
+    <text class="v" x="8" y="86">PgAudit + WAL archived</text>
+    <text class="slo" x="8" y="100">SLO: 0 unauthorized</text>
+  </g>
+
+  <line x1="152" y1="106" x2="158" y2="106" class="flow" marker-end="url(#ar)"/>
+  <line x1="296" y1="106" x2="302" y2="106" class="flow" marker-end="url(#ar)"/>
+  <line x1="440" y1="106" x2="446" y2="106" class="flow" marker-end="url(#ar)"/>
+
+  <text class="tag" x="83" y="174" text-anchor="middle">VERIFY USER</text>
+  <text class="tag" x="227" y="174" text-anchor="middle">VERIFY REQUEST</text>
+  <text class="tag" x="371" y="174" text-anchor="middle">VERIFY IDENTITY</text>
+  <text class="tag" x="516" y="174" text-anchor="middle">VERIFY ROW</text>
+
+  <g transform="translate(14,190)">
+    <rect width="572" height="92" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text class="h" x="10" y="16">Decision matrix  /  control by layer</text>
+    <text class="c" x="10" y="32">Gateway: Kong (OSS) / Envoy / AWS APIM  -  lock-in vs ops</text>
+    <text class="c" x="10" y="44">IdP: Keycloak (OSS) / Auth0 / Okta / Entra ID  -  cost vs control</text>
+    <text class="c" x="10" y="56">Secrets: HashiCorp Vault / AWS Secrets / GCP Secret Mgr</text>
+    <text class="c" x="10" y="68">Service identity: mTLS (SPIRE) + JWT  -  every hop authenticated</text>
+    <text class="c" x="10" y="82">Knobs: JWT TTL = 10 min  /  refresh = 24 h  /  WAF on  /  RLS forced</text>
+
+    <text class="h" x="300" y="16">SLO + breach action</text>
+    <text class="c" x="300" y="32">5xx gt 1 percent  -  page on-call + rollback</text>
+    <text class="c" x="300" y="44">auth failure gt 2 percent  -  rotate keys + IdP probe</text>
+    <text class="c" x="300" y="56">rate-limit gt 100 / IP / s  -  WAF block + alert SOC</text>
+    <text class="c" x="300" y="68">audit gap gt 60 s  -  freeze writes + sync to SIEM</text>
+    <text class="c" x="300" y="82">cert expiry lt 7 d  -  trigger ACME renewal job</text>
+  </g>
+
+  <text class="brand" x="14" y="306">WORKSTATION.CO.UK  -  edge security for OPS + architects</text>
+</svg>

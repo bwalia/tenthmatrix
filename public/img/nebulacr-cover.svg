@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="NebulaCR enterprise OCI registry with decision matrix versus Harbor, Quay, ECR, GAR, ACR plus sizing, knobs and SLOs">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a1a"/>
+      <stop offset="0.5" stop-color="#12122a"/>
+      <stop offset="1" stop-color="#0c1e2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="1" stop-color="#818cf8"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.2" r="0.7">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <style>
+      .kicker { fill: #93c5fd; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 3px; }
+      .title { fill: #ffffff; font: 800 44px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .tagline { fill: #60a5fa; font: 800 18px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .sub { fill: rgba(255,255,255,0.88); font: 500 12px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.22); stroke-width: 1.2; }
+      .chipText { fill: #ffffff; font: 700 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .num { fill: #60a5fa; font: 800 11px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1px; }
+      .brand { fill: rgba(255,255,255,0.55); font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .audience { fill: rgba(255,255,255,0.7); font: 600 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 1.5px; }
+      .laneLabel { fill: #93c5fd; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; letter-spacing: 2px; }
+      .h { fill: #ffffff; font: 700 10px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .c { fill: rgba(255,255,255,0.85); font: 400 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .ok { fill: #4ade80; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .warn { fill: #fbbf24; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+      .bad { fill: #f87171; font: 700 9px system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+
+  <text class="kicker" x="40" y="50">OCI DISTRIBUTION  /  RUST  /  ZERO-TRUST  /  MULTI-REGION</text>
+  <text class="title" x="40" y="110">NebulaCR</text>
+  <text class="tagline" x="40" y="138">Your images. Your infrastructure. Zero compromise.</text>
+  <text class="sub" x="40" y="158">OCI-compliant registry written in Rust. OIDC-native auth, pull-through caching, signed images, K8s operator.</text>
+
+  <g transform="translate(40,180)">
+    <rect class="chip" x="0" y="0" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="20">01</text>
+    <text class="chipText" x="40" y="20">OIDC + JWT scope</text>
+
+    <rect class="chip" x="0" y="40" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="60">02</text>
+    <text class="chipText" x="40" y="60">Pull-through cache</text>
+
+    <rect class="chip" x="0" y="80" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="100">03</text>
+    <text class="chipText" x="40" y="100">Cosign / SBOM enforce</text>
+
+    <rect class="chip" x="0" y="120" rx="14" ry="14" width="200" height="32"/>
+    <text class="num" x="14" y="140">04</text>
+    <text class="chipText" x="40" y="140">Multi-region replicate</text>
+  </g>
+
+  <g transform="translate(40,360)">
+    <text class="laneLabel" x="0" y="0">SIZING / CAPACITY</text>
+    <rect x="0" y="8" width="280" height="158" rx="8" fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+    <text class="h" x="10" y="28">Throughput: 200 Mbps / pod baseline</text>
+    <text class="c" x="10" y="44">Tokio async + HTTP/2 + zero-copy mmap</text>
+    <text class="h" x="10" y="62">Pods: 3 (HA) / 6+ (busy CI)</text>
+    <text class="c" x="10" y="78">stateless; scale by ingress saturation</text>
+    <text class="h" x="10" y="96">Object storage: S3-compatible</text>
+    <text class="c" x="10" y="112">100GB - 50TB - lifecycle policy enforced</text>
+    <text class="h" x="10" y="130">Auth pod: 2 replicas, 500m CPU</text>
+    <text class="c" x="10" y="146">JWKS cached 5 min  /  pubkey rotate quarterly</text>
+    <text class="c" x="10" y="160">Cache hit ratio target: 60 percent (pull-through)</text>
+  </g>
+
+  <g transform="translate(440,180)">
+    <text class="laneLabel" x="0" y="0">DECISION MATRIX  /  REGISTRY OPTIONS</text>
+    <rect x="0" y="8" width="720" height="190" rx="8" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+
+    <text class="h" x="14" y="28">Option</text>
+    <text class="h" x="160" y="28">Host</text>
+    <text class="h" x="240" y="28">OIDC native</text>
+    <text class="h" x="330" y="28">Pull-thru</text>
+    <text class="h" x="410" y="28">Sign / SBOM</text>
+    <text class="h" x="510" y="28">Cost band</text>
+    <text class="h" x="610" y="28">Lock-in</text>
+    <line x1="14" y1="36" x2="710" y2="36" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <text class="c" x="14" y="56">NebulaCR</text>
+    <text class="ok" x="160" y="56">self-host</text>
+    <text class="ok" x="240" y="56">yes</text>
+    <text class="ok" x="330" y="56">yes</text>
+    <text class="ok" x="410" y="56">cosign + sbom</text>
+    <text class="ok" x="510" y="56">infra only</text>
+    <text class="ok" x="610" y="56">none</text>
+
+    <text class="c" x="14" y="78">Harbor (CNCF)</text>
+    <text class="ok" x="160" y="78">self-host</text>
+    <text class="warn" x="240" y="78">via OIDC plugin</text>
+    <text class="ok" x="330" y="78">yes</text>
+    <text class="ok" x="410" y="78">cosign + trivy</text>
+    <text class="ok" x="510" y="78">infra only</text>
+    <text class="ok" x="610" y="78">low</text>
+
+    <text class="c" x="14" y="100">Quay (RH)</text>
+    <text class="warn" x="160" y="100">self / cloud</text>
+    <text class="ok" x="240" y="100">yes</text>
+    <text class="ok" x="330" y="100">yes</text>
+    <text class="ok" x="410" y="100">clair + cosign</text>
+    <text class="warn" x="510" y="100">sub or infra</text>
+    <text class="warn" x="610" y="100">moderate</text>
+
+    <text class="c" x="14" y="122">AWS ECR</text>
+    <text class="bad" x="160" y="122">aws only</text>
+    <text class="warn" x="240" y="122">via IAM</text>
+    <text class="warn" x="330" y="122">via cache rules</text>
+    <text class="ok" x="410" y="122">notation + scan</text>
+    <text class="warn" x="510" y="122">usd / GB / req</text>
+    <text class="bad" x="610" y="122">high (aws)</text>
+
+    <text class="c" x="14" y="144">Google GAR</text>
+    <text class="bad" x="160" y="144">gcp only</text>
+    <text class="ok" x="240" y="144">yes (workload id)</text>
+    <text class="ok" x="330" y="144">remote repo</text>
+    <text class="ok" x="410" y="144">cosign + bin auth</text>
+    <text class="warn" x="510" y="144">usd / GB / req</text>
+    <text class="bad" x="610" y="144">high (gcp)</text>
+
+    <text class="c" x="14" y="166">Azure ACR</text>
+    <text class="bad" x="160" y="166">azure only</text>
+    <text class="ok" x="240" y="166">yes (entra id)</text>
+    <text class="ok" x="330" y="166">artifact cache</text>
+    <text class="ok" x="410" y="166">notation + defender</text>
+    <text class="warn" x="510" y="166">tier-based</text>
+    <text class="bad" x="610" y="166">high (azure)</text>
+
+    <text class="laneLabel" x="0" y="220">CONFIG KNOBS  /  CRITICAL TUNABLES</text>
+    <rect x="0" y="228" width="350" height="172" rx="8" fill="rgba(124,58,237,0.08)" stroke="rgba(124,58,237,0.4)" stroke-width="1"/>
+    <text class="h" x="10" y="246">cache.ttl_seconds = 3600</text>
+    <text class="c" x="10" y="260">balance freshness vs upstream load</text>
+    <text class="h" x="10" y="278">auth.jwt_ttl_minutes = 10</text>
+    <text class="c" x="10" y="292">short TTL  -  zero-trust; rotate via JWKS</text>
+    <text class="h" x="10" y="310">signing.required_scopes = prod</text>
+    <text class="c" x="10" y="324">block unsigned pulls on prod registries</text>
+    <text class="h" x="10" y="342">replication.lag_threshold_s = 30</text>
+    <text class="c" x="10" y="356">alert when peer behind master 30s+</text>
+    <text class="h" x="10" y="374">storage.retention_days = 90</text>
+    <text class="c" x="10" y="388">untagged manifests; gc weekly</text>
+
+    <text class="laneLabel" x="370" y="220">SLO / BREACH ACTION</text>
+    <rect x="370" y="228" width="350" height="172" rx="8" fill="rgba(220,38,38,0.08)" stroke="rgba(220,38,38,0.4)" stroke-width="1"/>
+    <text class="h" x="380" y="246">pull p99 gt 800 ms  ->  warm cache</text>
+    <text class="c" x="380" y="260">manifest probe + chunk pre-fetch</text>
+    <text class="h" x="380" y="278">push p99 gt 5 s  ->  check object store</text>
+    <text class="c" x="380" y="292">S3 latency / 5xx rate; failover region</text>
+    <text class="h" x="380" y="310">auth error rate gt 1 percent  ->  page</text>
+    <text class="c" x="380" y="324">IdP probe; bypass cache if stale</text>
+    <text class="h" x="380" y="342">replication lag gt 60 s  ->  freeze writes</text>
+    <text class="c" x="380" y="356">avoid split-brain on regional fail</text>
+    <text class="h" x="380" y="374">storage 80 percent  ->  enforce gc</text>
+    <text class="c" x="380" y="388">run garbage collect, expire untagged</text>
+  </g>
+
+  <text class="brand" x="40" y="610">WORKSTATION.CO.UK  /  github.com/balinderwalia/nebulacr</text>
+  <text class="audience" x="1160" y="610" text-anchor="end">OPS  /  ARCHITECTS  /  PLATFORM  /  SECURITY</text>
+</svg>

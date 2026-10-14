@@ -1,0 +1,81 @@
+{
+  "uuid": "blog-llm-bottlenecks-otel-001",
+  "internal_id": 967,
+  "slug": "llm-bottlenecks-observability-otel-cost-control",
+  "title": "LLM رکاوٹوں سے پردہ اٹھانا: مشاہدہ، OTEL اور لاگت کا کنٹرول",
+  "sub_title": "کاروباری مختصر: OpenTelemetry, Prometheus/Grafana, Langfuse — پیشہ، نقصانات، اخراجات، اور استعمال کے میٹرکس جو ایجنٹ کے اخراجات کو کم کرتے ہیں",
+  "excerpt": "TenthMatrix مشاہدے کے ساتھ LLM ایجنٹ کی رکاوٹوں کا پردہ فاش کرنے پر: OpenTelemetry, Prometheus/Grafana/Thanos, Langfuse — واضح فوائد/cons، لاگت کے لیورز، اور استعمال کے میٹرکس کے ساتھ جو مارجن کی حفاظت کرتے ہیں۔",
+  "meta_title": "LLM رکاوٹوں سے پردہ اٹھانا: OTEL، مشاہدہ اور لاگت | TenthMatrix",
+  "meta_description": "OpenTelemetry، Prometheus/Grafana، اور Langfuse کے ساتھ LLM ایجنٹ کی رکاوٹیں تلاش کریں۔ فائن اوپس کے لیے تیار AI کے لیے فوائد، نقصانات، اخراجات، اور استعمال کے میٹرکس۔",
+  "meta_keywords": "LLM رکاوٹیں، OpenTelemetry، OTEL، مشاہداتی، Langfuse، Prometheus، Grafana، Thanos، FinOps، AI ایجنٹس، TenthMatrix",
+  "cover_image": "/img/llm-bottlenecks-observability-cover.svg",
+  "images": [
+    {
+      "url": "/img/llm-bottlenecks-observability-cover.svg",
+      "id": 967,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Uncovering LLM bottlenecks with OpenTelemetry and cost control"
+    },
+    {
+      "url": "/img/llm-bottlenecks-otel-stack.svg",
+      "id": 968,
+      "is_cover": false,
+      "width": 1200,
+      "height": 640,
+      "alt": "LLM agent observability stack with OTEL, Prometheus, Langfuse, Grafana"
+    }
+  ],
+  "content": "<div class=\"blog-content\"><p class=\"lead\"><em><strong>TenthMatrix</strong>بزنس بریف: مشاہدے کے ساتھ LLM اور ایجنٹ کی رکاوٹوں سے پردہ اٹھائیں — OpenTelemetry, Prometheus/Grafana/Thanos، اور LLM پلیٹ فارمز جیسے Langfuse — تاکہ آپ لاگت کو کم کر سکیں، SLOs کو سخت کر سکیں، اور ثبوت کے ساتھ جہاز کے ایجنٹس۔ گہرا غوطہ:<a href=\"/ur/articles/llm-bottlenecks-observability-otel-cost-control\">طویل تکنیکی مضمون (OTEL، FinOps، ایجنٹ بجٹ)</a>۔ متعلقہ:<a href=\"/ur/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">ٹربو چارجنگ LLMs</a>·<a href=\"/ur/enterprise-ai\">Enterprise AI Lab</a>۔</em></p><p><img src=\"/img/llm-bottlenecks-observability-cover.svg\" alt=\"Uncovering LLM bottlenecks with OpenTelemetry and cost control\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p><div style=\"background:#ecfeff;border-left:4px solid #0ea5e9;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>نیچے لائن۔</strong>زیادہ تر \"سست AI\" ٹکٹیں پراسرار ماڈل کی ناکامیاں نہیں ہیں - ان میں انتساب غائب ہے۔ انسٹرومنٹ ایجنٹ OpenTelemetry کے ساتھ چلتا ہے، آؤٹ پٹ سکور کرتا ہے، ہر کال کو کرایہ دار/ماڈل/روٹ/ٹوکن/قیمت کے ساتھ ٹیگ کرتا ہے، اور بجٹ کو نافذ کرتا ہے۔ جو ٹیمیں ایسا کرتی ہیں وہ عام طور پر پہلے پیمائش کے چکر میں دوبارہ کوششوں، بڑے ماڈلز اور غیر محفوظ شدہ اشارے میں 20-50% فضلہ پاتی ہیں۔</div><h2>ٹیلی میٹری</h2>کے بغیر رکاوٹیں کیوں چھپ جاتی ہیں۔<p>LLM ایجنٹس چین پرامپٹس، ٹولز، RAG بازیافت، اور دوبارہ کوششیں۔ لیٹنسی اور اسپنڈ کمپاؤنڈ ہاپس کے پار۔ اسپین اور میٹرکس کے بغیر آپ یہ نہیں بتا سکتے کہ آیا رکاوٹ ماڈل ہے، ویکٹر سٹور، ایک فلکی ٹول، یا ایک غیر محدود سیلف ڈیبگ لوپ۔ کاروباری اسٹیک ہولڈرز پھر GPUs یا API کوٹہ سے زیادہ خریدتے ہیں جبکہ پروڈکٹ کا معیار فلیٹ رہتا ہے۔</p>AI اسٹیٹس کے لیے<p>TenthMatrix کا موقف: ایجنٹ کی پائپ لائنوں کو کسی بھی دوسری پروڈکشن سروس کی طرح برتاؤ —<strong>مشاہداتی پہلے</strong>، پھر سرونگ کو بہتر بنائیں (دیکھیں<a href=\"/ur/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">PagedAttention / vLLM</a>)، پھر نظم و ضبط کے ساتھ فروغ دیں (<a href=\"/ur/ring-promoter\">Ring PromoterXTAG3)۔</p><h2>مشاہداتی اسٹیک جو خود</h2>ادا کرتا ہے۔<p><img src=\"/img/llm-bottlenecks-otel-stack.svg\" alt=\"OpenTelemetry to Prometheus, Langfuse, Grafana, and FinOps gates\" width=\"1200\" height=\"640\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;margin:1rem 0;\" /></p><ul><li><strong>OpenTelemetry (OTEL)</strong>— نشانات، میٹرکس، اور (جہاں مفید) لاگز کے لیے ایک انسٹرومینٹیشن پرت۔ ایک کلکٹر کو برآمد کریں؛ بیک اینڈ پر فین آؤٹ کریں۔</li><li><strong>Prometheus + Grafana (+ Thanos)</strong>— سنہری اشارے: درخواست کی شرح، غلطی کی شرح، تاخیر، ٹوکن تھرو پٹ، تخمینہ $/درخواست، GPU استعمال۔ Thanos (یا مساوی) FinOps جائزوں کے لیے طویل مدتی میٹرکس رکھتا ہے۔</li><li><strong>LLM مشاہداتی پلیٹ فارمز</strong>(جیسے<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">Langfuse</a>,<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">LMNR</a>) — سیشن/ٹریس UI، ​​فوری ورژن، انسانی اور خودکار اسکورز، رجعت کے لیے ڈیٹاسیٹس۔</li></ul><h2>اس نقطہ نظر کے فوائد اور نقصانات</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#7dd3fc;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">طول و عرض</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">Pros</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">نقصانات / تجارتی بندش</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>لاگت کا کنٹرول</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">کرایہ دار، خصوصیت، ماڈل، اور ایجنٹ کے قدم کے لیے انتساب خرچ؛ فضول کوششوں کو مار ڈالو.</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">انجینئرنگ کا وقت نشانات کے لیے ذخیرہ کرنے کی قیمت اگر برقرار رکھنا سادہ ہے۔</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>کوالٹی</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">اسکورز + ڈیٹا سیٹس صارفین کے کرنے سے پہلے فوری رد عمل کو پکڑ لیتے ہیں۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">خودکار اسکورنگ شور مچا سکتی ہے۔ انسانوں کو اب بھی نازک راستوں کی ضرورت ہے۔</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>Ops</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">وہی OTEL/Prometheus مہارت جو آپ کی دیگر مائیکرو سروسز کی طرح سیٹ ہے۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">LLM مخصوص UIs (Langfuse وغیرہ) چلانے یا خریدنے کے لیے ایک اور پروڈکٹ شامل کریں۔</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>تعمیل</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">آڈٹ کس نے کس ماڈل کو کس پرامپٹ ورژن کے ساتھ بلایا۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">پرامپٹ/PII برقرار رکھنے کی پالیسیوں کو سامنے سے ڈیزائن کیا جانا چاہیے۔</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>رفتار سے قدر</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">دنوں میں پہلا ڈیش بورڈ اگر آپ پہلے ہی Grafana چلا رہے ہیں۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ملٹی ایجنٹ گرافس میں مکمل لاگت کا انتساب زیادہ وقت لیتا ہے۔</td></tr></tbody></table><h2>لاگت: آپ جو خرچ کرتے ہیں بمقابلہ آپ کیا بچاتے ہیں</h2><p><strong>انسٹرومینٹیشن لاگت (عام درمیانے سائز کا ایجنٹ پلیٹ فارم):</strong></p><ul>OTEL اسپین کنونشنز + ایکسپورٹر وائرنگ کو اپنانے کے لیے<li>1–2 انجینئر-ہفتے۔</li><li>کلکٹر + میٹرکس برقرار رکھنا: اکثر &lt;5–10% ماہانہ LLM API/GPU ایک بار نمونے لینے کے بعد خرچ ہوتا ہے۔</li><li>اختیاری SaaS LLM مشاہداتی: قیمت فی ایونٹ/ٹریس — اسے ماڈل کے اخراجات کے % کے طور پر بجٹ کریں، نہ کہ سوچنے کے بعد۔</li></ul><p><strong>بچت لیورز (استعمال میٹرکس جو سوئی کو حرکت دیتے ہیں):</strong></p><ul><li><strong>ٹوکنز فی کامیاب ٹاسک</strong>— ٹوکنز فی خام کال نہیں۔ کیپ ٹول لوپس اور سیلف ڈیبگ راؤنڈ۔</li><li><strong>لاگت فی کامیاب ٹاسک</strong>— درجہ بندی/روٹ کے لیے سستے ماڈل؛ سخت اقدامات کے لیے فرنٹیئر ماڈل محفوظ کریں۔</li><li><strong>کیش ہٹ ریٹ</strong>— پرامپٹ/پریفکس کیشنگ جہاں محفوظ ہے؛ درستگی کی پیمائش کریں، نہ صرف تاخیر۔</li><li><strong>دوبارہ کوشش کی شرح &amp; ڈیڈ لیٹر ریٹ</strong>- فلکی ٹولز کو \"ماڈل کوالٹی\" کے مسائل کے طور پر پیش کیا جاتا ہے۔</li><li><strong>p95 TTFT اور اینڈ ٹو اینڈ لیٹنسی</strong>— UX کی حفاظت کریں جب آپ خرچ کم کرتے ہیں۔</li></ul><div style=\"background:#fff7ed;border-left:4px solid #f59e0b;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;\"><strong>انگوٹھے کا اصول۔</strong>اگر آپ جواب نہیں دے سکتے ہیں کہ \"گزشتہ ہفتے اس ایجنٹ کی گاہک اور مرحلہ وار قیمت کیا تھی؟\" آپ استعمال کی پیمائش کرنے کے لیے تیار نہیں ہیں - آپ فنانس کو حیران کرنے کے لیے تیار ہیں۔</div><h2>اسکورنگ: دستی بمقابلہ خودکار</h2><table style=\"width:100%;border-collapse:collapse;font-size:0.9rem;margin:1rem 0;\"><thead><tr style=\"background:#0b1c2c;color:#86efac;\"><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">طریقہ</th><th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\"></th>کب استعمال کریں۔<th style=\"padding:8px 10px;text-align:left;border:1px solid #334155;\">کاروباری نوٹ</th></tr></thead><tbody><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>دستی اسکورنگ</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">گولڈ سیٹ، ریگولیٹڈ جوابات، برانڈ حساس کاپی۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">مہنگا لیکن خودکار ججوں کو بنیاد بناتا ہے۔</td></tr><tr><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\"><strong>خودکار اسکورنگ</strong></td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">ہائی والیوم ریگریشن، LLM-بطور جج، روبرک چیک۔</td><td style=\"padding:8px 10px;border:1px solid #cbd5e1;\">پیمانے پر سستا؛ ماہانہ انسانوں کے خلاف کیلیبریٹ کریں۔</td></tr></tbody></table><h2>مائیگریشن پلے بک (چھوٹی شروع کریں)</h2><ol><li>انسٹرومینٹ<strong>ایک</strong>پروڈکشن ایجنٹ کا راستہ OTEL + ٹوکن/قیمت کی خصوصیات کے ساتھ اینڈ ٹو اینڈ۔</li><li>شرح / غلطیوں / تاخیر / $/کامیابی کے لئے ایک Grafana بورڈ بھیجیں۔</li>اس راستے پر فوری ورژن اور اسکورز کے لیے<li>Langfuse (یا مساوی) شامل کریں۔</li><li>ہارڈ کیپس کو نافذ کریں: زیادہ سے زیادہ ٹوکن، زیادہ سے زیادہ ٹول کالز، فی سیشن زیادہ سے زیادہ دوبارہ کوششیں۔</li><li>اگلے ایجنٹ تک پھیلائیں صرف اس کے بعد جب پہلا راستہ ناپی گئی لاگت یا تاخیر سے جیت دکھائے۔</li></ol><h2>واچ: AI سسٹمز</h2>کے لیے مشاہداتی اہمیت کیوں رکھتی ہے۔<div style=\"position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:1.25rem 0;\"><iframe src=\"https://www.youtube.com/embed/rBVAmE3_MJw\" title=\"Observability for modern systems (context)\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:0;\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen loading=\"lazy\"></iframe></div>مشاہداتی ثقافت پر<p style=\"font-size:0.9rem;color:#64748b;\">سیاق و سباق کی گفتگو — TenthMatrix پروڈکٹ ڈیمو نہیں۔<a href=\"https://opentelemetry.io/docs/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry دستاویزات</a>اور<a href=\"/ur/articles/llm-bottlenecks-observability-otel-cost-control\">TenthMatrix تکنیکی مضمون</a>کے ساتھ جوڑا بنائیں۔</p><h2>اگلا</h2>پڑھیں<ol><li><a href=\"/ur/articles/llm-bottlenecks-observability-otel-cost-control\">طویل مضمون</a>— OTEL اسپین سکیما، جمع کرنے والے، لاگت کے فارمولے، ایجنٹ کیپس، Langfuse/LMNR نوٹس۔</li><li><a href=\"/ur/docs/blogs/turbocharging-llms-pagedattention-vllm-powerinfer\">ٹربو چارجنگ LLMs</a>— آپ کے دیکھنے کے بعد خدمت کرنے والی رکاوٹیں۔</li><li><a href=\"/ur/docs/blogs/muse-glimmer-ollama-local-agents-workstation-guide\">مقامی ایجنٹس</a>·<a href=\"/ur/enterprise-ai\">Enterprise AI Lab</a>·<a href=\"/ur/contact-us\">رابطہ TenthMatrix</a></li></ol><p><a href=\"https://www.tenthmatrix.com\" target=\"_blank\" rel=\"noopener noreferrer\">TenthMatrix</a>کے ذریعے شائع کیا گیا۔ حوالہ جات:<a href=\"https://github.com/langfuse/langfuse\" target=\"_blank\" rel=\"noopener noreferrer\">langfuse/langfuse</a>·<a href=\"https://github.com/lmnr-ai/lmnr\" target=\"_blank\" rel=\"noopener noreferrer\">lmnr-ai/lmnr</a>·<a href=\"https://opentelemetry.io/\" target=\"_blank\" rel=\"noopener noreferrer\">OpenTelemetry</a>۔</p></div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@tenthmatrix.com",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "ai",
+      "id": 301
+    },
+    {
+      "name": "llm",
+      "id": 206
+    },
+    {
+      "name": "mlops",
+      "id": 1008
+    },
+    {
+      "name": "observability",
+      "id": 934
+    },
+    {
+      "name": "finops",
+      "id": 958
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "opentelemetry",
+      "id": 1030
+    },
+    {
+      "name": "prometheus",
+      "id": 1031
+    }
+  ],
+  "created_at": "2026-09-04T12:00:00Z",
+  "updated_at": "2026-09-04T12:00:00Z",
+  "published_date": "2026-09-04",
+  "status": true
+}
