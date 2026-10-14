@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Vault — Secrets Encrypted Per Tenant | TenthMatrix",
-    "description": "WSLVault is an open-source, self-hosted secrets manager: AES-256-GCM envelope encryption, per-tenant key hierarchy, KV, transit, PKI, dynamic leases, MFA, multi-region HA, and tamper-evident audit. Steal the server. Not the secrets.",
-    "keywords": "WSLVault, WSL Vault, secrets manager, envelope encryption, multi-tenant vault, PKI, dynamic leases, Kubernetes secrets, open source Vault alternative, wslvault.org"
+    "title": "TenthMatrix WSL Vault — ซีเคร็ตเข้ารหัสแยกตามผู้เช่า | TenthMatrix",
+    "description": "WSLVault คือระบบจัดการซีเคร็ตแบบโอเพนซอร์สที่โฮสต์เองได้: การเข้ารหัสแบบ envelope ด้วย AES-256-GCM ลำดับชั้นกุญแจต่อผู้เช่า KV, transit, PKI, lease แบบไดนามิก, MFA, HA หลายภูมิภาค และบันทึกการตรวจสอบที่ป้องกันการแก้ไข ขโมยเซิร์ฟเวอร์ได้ แต่ขโมยซีเคร็ตไม่ได้",
+    "keywords": "WSLVault, WSL Vault, ระบบจัดการซีเคร็ต, การเข้ารหัสแบบ envelope, vault แบบหลายผู้เช่า, PKI, lease แบบไดนามิก, Kubernetes secrets, ทางเลือก Vault แบบโอเพนซอร์ส, wslvault.org"
   },
   "header": {
     "title": "TenthMatrix WSL Vault",
-    "subtitle": "Steal the server. Not the secrets.",
-    "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
+    "subtitle": "ขโมยเซิร์ฟเวอร์ได้ แต่ขโมยซีเคร็ตไม่ได้",
+    "description": "การจัดการซีเคร็ตแบบโอเพนซอร์สที่โฮสต์เองได้ สร้างบนการเข้ารหัสแบบ envelope ด้วย AES-256-GCM และลำดับชั้นกุญแจต่อผู้เช่า — แม้ดิสก์ถูกขโมย ฐานข้อมูลถูกดัมพ์ หรือโฮสต์ถูกเจาะ ผู้โจมตีก็ได้เพียง ciphertext ที่เปิดไม่ได้"
   },
   "intro": {
-    "title": "What is WSLVault?",
-    "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",
+    "title": "WSLVault คืออะไร?",
+    "body": "WSLVault คือแพลตฟอร์มซีเคร็ตที่เข้ากันได้กับ Vault สำหรับผู้ปฏิบัติงานที่ต้องการระบบหลายผู้เช่าที่เข้ารหัสขณะจัดเก็บ โดยไม่มี plaintext บนดิสก์ ใช้งานผ่านเว็บคอนโซล steel/brass, CLI, SDK ภาษา Go/Python/Rust/TypeScript หรือ MCP — พร้อมดีพลอยด้วย Helm/GitOps บน Kubernetes",
     "links": [
       {
         "label": "wslvault.org",
@@ -22,110 +22,110 @@
         "href": "https://github.com/bwalia/wslvault"
       },
       {
-        "label": "Docs",
+        "label": "เอกสาร",
         "href": "https://github.com/bwalia/wslvault/tree/main/docs"
       },
       {
-        "label": "Getting started",
+        "label": "เริ่มต้นใช้งาน",
         "href": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
       }
     ]
   },
   "videos": [
     {
-      "title": "20-minute intro — steal the server, not the secrets",
-      "caption": "Watch on YouTube",
+      "title": "แนะนำ 20 นาที — ขโมยเซิร์ฟเวอร์ได้ แต่ขโมยซีเคร็ตไม่ได้",
+      "caption": "ดูบน YouTube",
       "embedUrl": "https://www.youtube.com/embed/O6q3_H0k2M8",
       "watchUrl": "https://youtu.be/O6q3_H0k2M8",
       "thumbnail": "/img/wslvault-cover.svg",
-      "thumbnailAlt": "WSLVault intro video cover"
+      "thumbnailAlt": "ภาพปกวิดีโอแนะนำ WSLVault"
     }
   ],
   "pillars": {
-    "title": "Why the security model matters",
+    "title": "ทำไมโมเดลความปลอดภัยจึงสำคัญ",
     "items": [
       {
-        "title": "True multi-tenancy",
-        "text": "Team A cannot decrypt Team B — cryptographic refusal, not an application oops.",
+        "title": "หลายผู้เช่าอย่างแท้จริง",
+        "text": "ทีม A ถอดรหัสของทีม B ไม่ได้ — เป็นการปฏิเสธเชิงการเข้ารหัส ไม่ใช่ความผิดพลาดของแอปพลิเคชัน",
         "icon": "fas fa-users-slash"
       },
       {
-        "title": "Envelope encryption",
-        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir). Secrets sealed before they touch disk.",
+        "title": "การเข้ารหัสแบบ envelope",
+        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir) ซีเคร็ตถูกปิดผนึกก่อนแตะดิสก์",
         "icon": "fas fa-layer-group"
       },
       {
-        "title": "Engines you need",
-        "text": "Versioned KV, transit encryption, PKI, dynamic leases, identity policies, and MFA.",
+        "title": "เอนจินที่คุณต้องการ",
+        "text": "KV แบบมีเวอร์ชัน การเข้ารหัส transit, PKI, lease แบบไดนามิก นโยบายตัวตน และ MFA",
         "icon": "fas fa-cogs"
       },
       {
-        "title": "HA & audit",
-        "text": "Active/active multi-region replication and a tamper-evident, hash-chained audit trail.",
+        "title": "HA และการตรวจสอบ",
+        "text": "การทำสำเนาหลายภูมิภาคแบบ active/active และบันทึกการตรวจสอบแบบ hash-chained ที่ป้องกันการแก้ไข",
         "icon": "fas fa-shield-alt"
       }
     ]
   },
   "features": {
-    "title": "Everything a secret needs, behind one API",
+    "title": "ทุกสิ่งที่ซีเคร็ตต้องการ ภายใต้ API เดียว",
     "items": [
       {
-        "title": "Versioned KV secrets",
-        "text": "Vault-compatible KV v2: versioned reads/writes, check-and-set, soft-delete and destroy — every value sealed before storage."
+        "title": "ซีเคร็ต KV แบบมีเวอร์ชัน",
+        "text": "KV v2 ที่เข้ากันได้กับ Vault: อ่าน/เขียนแบบมีเวอร์ชัน, check-and-set, soft-delete และ destroy — ทุกค่าถูกปิดผนึกก่อนจัดเก็บ"
       },
       {
         "title": "Transit engine",
-        "text": "Encrypt, decrypt, sign and verify without plaintext keys leaving the vault. Rotate keys while old ciphertext stays readable."
+        "text": "เข้ารหัส ถอดรหัส ลงนาม และตรวจสอบได้โดยที่กุญแจ plaintext ไม่ออกจาก vault หมุนเวียนกุญแจได้ขณะที่ ciphertext เก่ายังอ่านได้"
       },
       {
-        "title": "PKI & certificates",
-        "text": "Private CA, roles, and short-lived certificates. CA private keys are envelope-encrypted, never stored in the clear."
+        "title": "PKI และใบรับรอง",
+        "text": "CA ส่วนตัว บทบาท และใบรับรองอายุสั้น กุญแจส่วนตัวของ CA ถูกเข้ารหัสแบบ envelope ไม่เคยจัดเก็บเป็น plaintext"
       },
       {
-        "title": "Dynamic leases",
-        "text": "Credentials are leases: issued, listed, renewed, and revoked for real. Revoke stops access immediately."
+        "title": "Lease แบบไดนามิก",
+        "text": "ข้อมูลรับรองคือ lease: ออก แสดงรายการ ต่ออายุ และเพิกถอนได้จริง การเพิกถอนหยุดการเข้าถึงทันที"
       },
       {
-        "title": "Identity & MFA",
-        "text": "TOTP two-factor, recovery codes, fine-grained policies on API keys and JWTs — plus SCIM, LDAP, OIDC, mTLS and workload auth."
+        "title": "ตัวตนและ MFA",
+        "text": "การยืนยันตัวตนสองปัจจัยด้วย TOTP รหัสกู้คืน นโยบายละเอียดบน API key และ JWT — พร้อม SCIM, LDAP, OIDC, mTLS และการยืนยันตัวตนของเวิร์กโหลด"
       },
       {
-        "title": "Zero plaintext at rest",
-        "text": "A database dump yields ciphertext wrapped under keys the database never sees. Steal the disk ≠ steal the secrets."
+        "title": "ไม่มี plaintext ขณะจัดเก็บ",
+        "text": "การดัมพ์ฐานข้อมูลได้เพียง ciphertext ที่ห่อด้วยกุญแจที่ฐานข้อมูลไม่เคยเห็น ขโมยดิสก์ได้ ≠ ขโมยซีเคร็ตได้"
       }
     ]
   },
   "deploy": {
-    "title": "Cloud-native and scriptable",
-    "body": "Ship with the Helm chart and Kubernetes operator, drive from GitOps, scrape with Prometheus, and reach WSLVault from your language of choice — or from an AI agent over the built-in MCP server.",
-    "ctaLabel": "Read getting started",
+    "title": "Cloud-native และเขียนสคริปต์ได้",
+    "body": "ดีพลอยด้วย Helm chart และ Kubernetes operator ขับเคลื่อนด้วย GitOps เก็บเมตริกด้วย Prometheus และเข้าถึง WSLVault จากภาษาที่คุณเลือก — หรือจากเอเจนต์ AI ผ่านเซิร์ฟเวอร์ MCP ในตัว",
+    "ctaLabel": "อ่านคู่มือเริ่มต้นใช้งาน",
     "ctaHref": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
   },
   "related": {
     "title": "อ่านต่อ",
     "items": [
       {
-        "title": "Blog: Zero-trust tenant isolation (compliance)",
+        "title": "บล็อก: การแยกผู้เช่าแบบ zero-trust (การปฏิบัติตามข้อกำหนด)",
         "href": "/docs/blogs/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Article: Zero-trust secrets, MFA & multi-region HA",
+        "title": "บทความ: ซีเคร็ตแบบ zero-trust, MFA และ HA หลายภูมิภาค",
         "href": "/articles/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Blog: AI agents & cryptographic refusal",
+        "title": "บล็อก: เอเจนต์ AI และการปฏิเสธเชิงการเข้ารหัส",
         "href": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Article: AI agents secrets isolation",
+        "title": "บทความ: การแยกซีเคร็ตสำหรับเอเจนต์ AI",
         "href": "/articles/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Blog: Steal the server. Not the secrets.",
+        "title": "บล็อก: ขโมยเซิร์ฟเวอร์ได้ แต่ขโมยซีเคร็ตไม่ได้",
         "href": "/docs/blogs/wslvault-steal-the-server-not-the-secrets"
       },
       {
-        "title": "Technical brief",
+        "title": "สรุปเชิงเทคนิค",
         "href": "/articles/wslvault-steal-the-server-not-the-secrets"
       },
       {
@@ -139,14 +139,14 @@
     ]
   },
   "cta": {
-    "title": "Stand up your own vault",
-    "description": "Clone the repo, install the Helm chart, and unseal. TenthMatrix helps operators run WSLVault with the same edge and promotion discipline as WSL Proxy and Ring Promoter.",
+    "title": "ตั้ง vault ของคุณเอง",
+    "description": "โคลนรีโพ ติดตั้ง Helm chart แล้ว unseal TenthMatrix ช่วยผู้ปฏิบัติงานดูแล WSLVault ด้วยวินัยด้าน edge และการโปรโมตแบบเดียวกับ WSL Proxy และ Ring Promoter",
     "primary": {
-      "label": "Visit wslvault.org",
+      "label": "ไปที่ wslvault.org",
       "href": "https://www.wslvault.org/"
     },
     "secondary": {
-      "label": "Contact TenthMatrix",
+      "label": "ติดต่อ TenthMatrix",
       "href": "/contact-us"
     }
   }

@@ -10,7 +10,7 @@ import MediaFigure from '../MediaFigure';
 import Workflows from '../Workflows';
 import { heroActions } from '../ActionLink';
 import { localeHref } from '../links';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 /**
  * Enterprise AI landing (ai-agents, ai-automation, ai-solutions, ai-upskilling,
@@ -18,7 +18,7 @@ import { uiStrings } from '../ui';
  * in the same order as the source page.
  */
 export default function MarketingLanding({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   const visual = h.visual?.src ? (
     <figure className={s.heroMedia}>

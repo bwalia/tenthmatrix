@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "Ring Promoter — Modern CI/CD for AI-Powered Deployments | TenthMatrix",
-    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes side by side. Health-gated promotion through int → test → acc → prod, auto-rollback, Kubernetes and VM pipelines. Visit ringpromoter.com.",
-    "keywords": "Ring Promoter, CI/CD, AI deployments, deployment rings, GitOps, Kubernetes, k3s, auto-rollback, TenthMatrix, ringpromoter.com"
+    "title": "Ring Promoter — CI/CD สมัยใหม่สำหรับการดีพลอยที่ขับเคลื่อนด้วย AI | TenthMatrix",
+    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes แสดงคู่กัน โปรโมตผ่านเกตสุขภาพตามลำดับ int → test → acc → prod ย้อนกลับอัตโนมัติ รองรับไปป์ไลน์ Kubernetes และ VM ไปที่ ringpromoter.com",
+    "keywords": "Ring Promoter, CI/CD, การดีพลอย AI, deployment rings, GitOps, Kubernetes, k3s, ย้อนกลับอัตโนมัติ, TenthMatrix, ringpromoter.com"
   },
   "header": {
     "title": "Ring Promoter",
-    "subtitle": "CI/CD Orbit + Lanes — every release earns production",
-    "description": "Ring Promoter is TenthMatrix’s production-grade promotion control plane. v1.0.2 puts Orbit (fleet view) and Lanes (APP × INT/TEST/ACC/PROD matrix) side by side while promoting versions through ordered rings — int → test → acc → prod — with live health gates, auto-rollback, and a full audit trail."
+    "subtitle": "CI/CD Orbit + Lanes — ทุกรีลีสต้องพิสูจน์ตัวเองก่อนถึง production",
+    "description": "Ring Promoter คือ control plane สำหรับการโปรโมตระดับ production ของ TenthMatrix เวอร์ชัน v1.0.2 แสดง Orbit (มุมมองทั้งฟลีต) และ Lanes (เมทริกซ์ APP × INT/TEST/ACC/PROD) คู่กัน ขณะโปรโมตเวอร์ชันผ่านวงรอบตามลำดับ — int → test → acc → prod — พร้อมเกตสุขภาพแบบเรียลไทม์ ย้อนกลับอัตโนมัติ และบันทึกการตรวจสอบครบถ้วน"
   },
   "intro": {
-    "title": "What is Ring Promoter?",
-    "body": "A small control plane that promotes application versions through shared rings. It runs as a long-lived service (typically on k3s), exposes a JSON REST API and an embedded web UI, and tracks current/previous versions and history per (application, ring). Kubernetes apps and VM/CI apps share one surface — the deployer is chosen per app.",
+    "title": "Ring Promoter คืออะไร?",
+    "body": "control plane ขนาดเล็กที่โปรโมตเวอร์ชันแอปพลิเคชันผ่านวงรอบที่ใช้ร่วมกัน ทำงานเป็นบริการระยะยาว (โดยทั่วไปบน k3s) เปิด JSON REST API และเว็บ UI ในตัว และติดตามเวอร์ชันปัจจุบัน/ก่อนหน้าและประวัติต่อ (แอปพลิเคชัน, วงรอบ) แอป Kubernetes และแอป VM/CI ใช้หน้าจอเดียวกัน — เลือก deployer ตามแต่ละแอป",
     "links": [
       {
         "label": "ringpromoter.com",
@@ -25,226 +25,226 @@
   },
   "videos": [
     {
-      "title": "Watch: CI/CD Orbit + Lanes (v1.0.2)",
+      "title": "ชม: CI/CD Orbit + Lanes (v1.0.2)",
       "embedUrl": "https://www.youtube.com/embed/hNU4sWxrDFk",
       "watchUrl": "https://youtu.be/hNU4sWxrDFk",
       "thumbnail": "/img/ring-promoter-orbit-lanes-youtube-thumbnail.png?v=20260925c",
       "thumbnailAlt": "CI/CD Orbit + Lanes — Ring Promoter v1.0.2",
-      "caption": "v1.0.2 walkthrough"
+      "caption": "แนะนำการใช้งาน v1.0.2"
     },
     {
-      "title": "Watch: Ring Promoter quick intro (5 min)",
+      "title": "ชม: แนะนำ Ring Promoter แบบรวดเร็ว (5 นาที)",
       "embedUrl": "https://www.youtube.com/embed/SjXwaTVuYhM",
       "watchUrl": "https://youtu.be/SjXwaTVuYhM",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail-v2.png?v=20260901b",
-      "thumbnailAlt": "Ring Promoter — AI-assisted promotion to production (5-minute intro)",
-      "caption": "5-minute intro"
+      "thumbnailAlt": "Ring Promoter — การโปรโมตสู่ production ด้วยความช่วยเหลือจาก AI (แนะนำ 5 นาที)",
+      "caption": "แนะนำ 5 นาที"
     },
     {
-      "title": "Watch: QA Gates Before Production",
+      "title": "ชม: เกต QA ก่อนถึง production",
       "embedUrl": "https://www.youtube.com/embed/Vs2Em0HPvoY",
       "watchUrl": "https://youtu.be/Vs2Em0HPvoY",
       "thumbnail": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
       "thumbnailAlt": "Ring Promoter — ประตู QA ก่อนการผลิต",
-      "caption": "QA gates"
+      "caption": "เกต QA"
     },
     {
-      "title": "Watch: Ring Promoter demo",
+      "title": "ชม: เดโม Ring Promoter",
       "embedUrl": "https://www.youtube.com/embed/IzhvmrwEebE",
       "watchUrl": "https://youtu.be/IzhvmrwEebE",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail.png?v=20260901",
-      "thumbnailAlt": "Ring Promoter — Every release earns production (YouTube demo)",
-      "caption": "TenthMatrix demo"
+      "thumbnailAlt": "Ring Promoter — ทุกรีลีสต้องพิสูจน์ตัวเองก่อนถึง production (เดโมบน YouTube)",
+      "caption": "เดโม TenthMatrix"
     }
   ],
   "howItWorks": {
-    "title": "How ring promotion works",
-    "intro": "Every release earns production. One hop at a time — never skip a ring — with health before promote and auto-rollback on failure.",
+    "title": "การโปรโมตแบบวงรอบทำงานอย่างไร",
+    "intro": "ทุกรีลีสต้องพิสูจน์ตัวเองก่อนถึง production ทีละขั้น — ไม่ข้ามวงรอบ — ตรวจสุขภาพก่อนโปรโมต และย้อนกลับอัตโนมัติเมื่อล้มเหลว",
     "flow": [
       {
-        "title": "1. Seed a version into int",
-        "text": "Start the pipeline by seeding a version (image tag, branch, or ref) into the Integration ring for an application."
+        "title": "1. Seed เวอร์ชันเข้าสู่ int",
+        "text": "เริ่มไปป์ไลน์ด้วยการ seed เวอร์ชัน (image tag, branch หรือ ref) เข้าสู่วงรอบ Integration ของแอปพลิเคชัน"
       },
       {
-        "title": "2. Promote one ring at a time",
-        "text": "promote {from_ring} always targets the next ring. You cannot jump int → prod. The source ring must be healthy first."
+        "title": "2. โปรโมตทีละวงรอบ",
+        "text": "promote {from_ring} จะมุ่งไปยังวงรอบถัดไปเสมอ คุณไม่สามารถข้ามจาก int → prod ได้ วงรอบต้นทางต้องมีสุขภาพดีก่อน"
       },
       {
-        "title": "3. Deploy with the right deployer",
-        "text": "KubectlDeployer (set image + rollout), GitHubActionsDeployer (workflow-dispatch for VM/CI apps), or k8sjob runner Jobs — selected per application."
+        "title": "3. ดีพลอยด้วย deployer ที่เหมาะสม",
+        "text": "KubectlDeployer (ตั้งค่า image + rollout), GitHubActionsDeployer (workflow-dispatch สำหรับแอป VM/CI) หรือ Jobs ของ k8sjob runner — เลือกตามแต่ละแอปพลิเคชัน"
       },
       {
-        "title": "4. Health-check with retries",
-        "text": "After deploy, HTTP health checks run with configurable retries. Optional version verification requires the endpoint to report the exact version just deployed."
+        "title": "4. ตรวจสุขภาพพร้อมการลองซ้ำ",
+        "text": "หลังดีพลอย การตรวจสุขภาพผ่าน HTTP จะทำงานพร้อมจำนวนการลองซ้ำที่กำหนดได้ การยืนยันเวอร์ชันแบบเลือกได้กำหนดให้เอนด์พอยต์รายงานเวอร์ชันที่เพิ่งดีพลอยอย่างตรงกัน"
       },
       {
-        "title": "5. Auto-rollback on failure",
-        "text": "If the target stays unhealthy, Ring Promoter rolls back to the previous version automatically and records the failure in history."
+        "title": "5. ย้อนกลับอัตโนมัติเมื่อล้มเหลว",
+        "text": "หากเป้าหมายยังคงไม่ปกติ Ring Promoter จะย้อนกลับไปยังเวอร์ชันก่อนหน้าโดยอัตโนมัติและบันทึกความล้มเหลวไว้ในประวัติ"
       },
       {
-        "title": "6. Optional auto-promote",
-        "text": "Flag a ring so a healthy landing continues onward in the same locked operation — e.g. auto-promote test → acc, but keep humans on the gate to prod."
+        "title": "6. โปรโมตอัตโนมัติ (เลือกได้)",
+        "text": "ตั้งค่าวงรอบให้เมื่อลงจอดอย่างมีสุขภาพดีแล้วดำเนินต่อในการทำงานที่ล็อกเดียวกัน — เช่น โปรโมตอัตโนมัติจาก test → acc แต่ให้มนุษย์คุมเกตสู่ prod"
       }
     ],
     "rings": [
       {
         "name": "int",
         "label": "Integration",
-        "role": "First landing for new builds and AI agent / API changes."
+        "role": "จุดลงจอดแรกสำหรับบิลด์ใหม่และการเปลี่ยนแปลงเอเจนต์ AI / API"
       },
       {
         "name": "test",
         "label": "Test",
-        "role": "Automated verification and soak before acceptance."
+        "role": "การตรวจสอบอัตโนมัติและการทดสอบระยะยาวก่อนการยอมรับ"
       },
       {
         "name": "acc",
         "label": "Acceptance",
-        "role": "Stakeholder / UAT gate — often the last auto-promote stop."
+        "role": "เกตสำหรับผู้มีส่วนได้ส่วนเสีย / UAT — มักเป็นจุดสุดท้ายของการโปรโมตอัตโนมัติ"
       },
       {
         "name": "prod",
         "label": "Production",
-        "role": "Live traffic — password-gated for the final ring when configured."
+        "role": "ทราฟฟิกจริง — ป้องกันด้วยรหัสผ่านสำหรับวงรอบสุดท้ายเมื่อตั้งค่าไว้"
       }
     ]
   },
   "features": {
-    "title": "Why teams pick Ring Promoter for AI-era CI/CD",
-    "intro": "AI products change fast — models, agents, MCP tools, gateways. Ring Promoter keeps promotions disciplined without freezing delivery.",
+    "title": "ทำไมทีมต่างๆ เลือก Ring Promoter สำหรับ CI/CD ยุค AI",
+    "intro": "ผลิตภัณฑ์ AI เปลี่ยนแปลงเร็ว — โมเดล เอเจนต์ เครื่องมือ MCP เกตเวย์ Ring Promoter ทำให้การโปรโมตมีวินัยโดยไม่หยุดการส่งมอบ",
     "items": [
       {
-        "title": "Ordered rings, never skip",
-        "description": "Shared pipeline int → test → acc → prod. Adding a ring is a single-place change in the ring package — apps declare where they live per ring in config, not code.",
+        "title": "วงรอบตามลำดับ ไม่มีการข้าม",
+        "description": "ไปป์ไลน์ร่วม int → test → acc → prod การเพิ่มวงรอบเป็นการแก้ไขที่จุดเดียวในแพ็กเกจ ring — แอปประกาศตำแหน่งในแต่ละวงรอบผ่าน config ไม่ใช่โค้ด",
         "icon": "bi-diagram-3"
       },
       {
-        "title": "Health-gated promotion",
-        "description": "Live health checks before and after promote. Optional health_version_field / header stops the classic false green: old pods answering 200 while the new version never rolled.",
+        "title": "การโปรโมตผ่านเกตสุขภาพ",
+        "description": "ตรวจสุขภาพแบบเรียลไทม์ทั้งก่อนและหลังโปรโมต health_version_field / header แบบเลือกได้ช่วยหยุดปัญหา false green แบบคลาสสิก: pod เก่าตอบ 200 ขณะที่เวอร์ชันใหม่ไม่เคยถูก rollout",
         "icon": "bi-heart-pulse"
       },
       {
-        "title": "Automatic rollback",
-        "description": "Failed health after retries restores the previous version. Seed, promote, and rollback are all audited — success or failure.",
+        "title": "ย้อนกลับอัตโนมัติ",
+        "description": "หากการตรวจสุขภาพล้มเหลวหลังลองซ้ำ ระบบจะคืนเวอร์ชันก่อนหน้า การ seed โปรโมต และย้อนกลับ ล้วนถูกบันทึกการตรวจสอบ — ทั้งสำเร็จและล้มเหลว",
         "icon": "bi-arrow-counterclockwise"
       },
       {
-        "title": "Kubernetes + VM/CI deployers",
-        "description": "One control plane for kubectl rollouts, GitHub Actions workflow-dispatch (e.g. WSL Proxy on VMs), and Kubernetes Job executors with live logs.",
+        "title": "Deployer สำหรับ Kubernetes + VM/CI",
+        "description": "control plane เดียวสำหรับ kubectl rollout, GitHub Actions workflow-dispatch (เช่น WSL Proxy บน VM) และ executor แบบ Kubernetes Job พร้อมล็อกแบบเรียลไทม์",
         "icon": "bi-boxes"
       },
       {
-        "title": "Safe concurrency",
-        "description": "Per-app serialization via Postgres session advisory locks across replicas. Operations detach from HTTP so LB timeouts cannot abort a rollback mid-flight.",
+        "title": "การทำงานพร้อมกันอย่างปลอดภัย",
+        "description": "จัดลำดับการทำงานต่อแอปผ่าน Postgres session advisory locks ข้ามเรพลิกา การทำงานแยกออกจาก HTTP เพื่อไม่ให้ timeout ของ LB ยกเลิกการย้อนกลับกลางคัน",
         "icon": "bi-shield-check"
       },
       {
         "title": "UI + REST API",
-        "description": "Embedded Next.js console and bearer-token REST API. Async deployment views stream progress for operators watching AI stack releases.",
+        "description": "คอนโซล Next.js ในตัวและ REST API แบบ bearer token มุมมองการดีพลอยแบบ async สตรีมความคืบหน้าให้ผู้ปฏิบัติงานที่เฝ้าดูรีลีสของ AI stack",
         "icon": "bi-window-sidebar"
       },
       {
-        "title": "Config-driven apps",
-        "description": "Add an application with YAML: namespaces, Deployments, image repos, health URLs, deployer type — no fork of Ring Promoter required.",
+        "title": "แอปที่ขับเคลื่อนด้วย config",
+        "description": "เพิ่มแอปพลิเคชันด้วย YAML: namespace, Deployment, image repo, URL ตรวจสุขภาพ, ประเภท deployer — ไม่ต้อง fork Ring Promoter",
         "icon": "bi-filetype-yml"
       },
       {
-        "title": "Built for AI platforms",
-        "description": "Promote agent services, MCP gateways, GPU inference front-doors, and TenthMatrix products through the same rings your platform team already trusts.",
+        "title": "สร้างมาเพื่อแพลตฟอร์ม AI",
+        "description": "โปรโมตบริการเอเจนต์ MCP gateway ด่านหน้าการอนุมานบน GPU และผลิตภัณฑ์ TenthMatrix ผ่านวงรอบเดียวกับที่ทีมแพลตฟอร์มของคุณไว้วางใจอยู่แล้ว",
         "icon": "bi-robot"
       }
     ]
   },
   "aiAngle": {
-    "title": "Built for AI-powered deployments",
-    "intro": "Model weights, agent runtimes, and edge gateways ship on different cadences. Ring Promoter keeps every change on the same promotion protocol.",
+    "title": "สร้างมาเพื่อการดีพลอยที่ขับเคลื่อนด้วย AI",
+    "intro": "น้ำหนักโมเดล รันไทม์เอเจนต์ และ edge gateway ออกรีลีสในจังหวะที่ต่างกัน Ring Promoter ทำให้ทุกการเปลี่ยนแปลงใช้โปรโตคอลการโปรโมตเดียวกัน",
     "points": [
-      "Promote AI agent APIs and MCP gateways through the same rings as classic services.",
-      "Version-verified health catches silent rollbacks when an old inference sidecar still answers OK.",
-      "Auto-promote early rings so research builds move fast; human gate stays on prod.",
-      "GitHub Actions deployer reuses existing AI/ML CI without rewriting pipelines.",
-      "Full history per (app, ring) for compliance reviews of what reached production."
+      "โปรโมต API ของเอเจนต์ AI และ MCP gateway ผ่านวงรอบเดียวกับบริการแบบดั้งเดิม",
+      "การตรวจสุขภาพที่ยืนยันเวอร์ชันจับการย้อนกลับแบบเงียบ เมื่อ inference sidecar ตัวเก่ายังตอบว่า OK",
+      "โปรโมตอัตโนมัติในวงรอบแรกๆ เพื่อให้บิลด์ทดลองเดินหน้าได้เร็ว ส่วนเกตมนุษย์ยังคงอยู่ที่ prod",
+      "Deployer สำหรับ GitHub Actions ใช้ CI ด้าน AI/ML ที่มีอยู่ได้เลยโดยไม่ต้องเขียนไปป์ไลน์ใหม่",
+      "ประวัติครบถ้วนต่อ (แอป, วงรอบ) สำหรับการตรวจสอบการปฏิบัติตามข้อกำหนดว่าสิ่งใดไปถึง production"
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clean interfaces: Deployer, Executor, Health Checker, Store — swap production backends without rewriting promotion rules.",
+    "title": "สถาปัตยกรรมโซลูชัน",
+    "intro": "อินเทอร์เฟซที่สะอาด: Deployer, Executor, Health Checker, Store — สลับแบ็กเอนด์ production ได้โดยไม่ต้องเขียนกฎการโปรโมตใหม่",
     "steps": [
       {
         "title": "Control plane",
-        "text": "Go service + embedded UI + REST API on k3s (or local)."
+        "text": "บริการ Go + UI ในตัว + REST API บน k3s (หรือเครื่องโลคัล)"
       },
       {
-        "title": "Rings",
-        "text": "Ordered pipeline defined once; apps map resources per ring."
+        "title": "วงรอบ",
+        "text": "ไปป์ไลน์ตามลำดับที่กำหนดครั้งเดียว แอปแมปทรัพยากรตามแต่ละวงรอบ"
       },
       {
-        "title": "Deployers",
-        "text": "kubectl, GitHub Actions, or k8sjob executors per app."
+        "title": "Deployer",
+        "text": "executor แบบ kubectl, GitHub Actions หรือ k8sjob ต่อแอป"
       },
       {
         "title": "Store",
-        "text": "Postgres (prod) or memory (dev) with history and locks."
+        "text": "Postgres (prod) หรือหน่วยความจำ (dev) พร้อมประวัติและล็อก"
       }
     ]
   },
   "cta": {
-    "title": "Get Ring Promoter",
-    "body": "Explore the product on ringpromoter.com, read the TenthMatrix deep dive, or talk to us about CI/CD for AI platforms.",
+    "title": "รับ Ring Promoter",
+    "body": "สำรวจผลิตภัณฑ์บน ringpromoter.com อ่านบทวิเคราะห์เชิงลึกของ TenthMatrix หรือคุยกับเราเรื่อง CI/CD สำหรับแพลตฟอร์ม AI",
     "primary": {
-      "text": "Open ringpromoter.com",
+      "text": "เปิด ringpromoter.com",
       "href": "https://www.ringpromoter.com/"
     },
     "secondary": {
-      "text": "Read the Orbit + Lanes brief",
+      "text": "อ่านสรุป Orbit + Lanes",
       "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "ติดต่อ TenthMatrix",
       "href": "/contact-us"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "ไปต่อที่เว็บไซต์ผลิตภัณฑ์",
     "href": "https://www.ringpromoter.com/",
-    "text": "Visit https://www.ringpromoter.com/ for demos, docs, and the latest Ring Promoter releases."
+    "text": "ไปที่ https://www.ringpromoter.com/ เพื่อดูเดโม เอกสาร และรีลีสล่าสุดของ Ring Promoter"
   },
   "related": {
     "title": "อ่านต่อ",
     "items": [
       {
-        "title": "Blog: Rings, Orbit and Lanes (v1.0.2)",
+        "title": "บล็อก: Rings, Orbit และ Lanes (v1.0.2)",
         "href": "/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "Article: Orbit and Lanes technical brief",
+        "title": "บทความ: สรุปเชิงเทคนิค Orbit และ Lanes",
         "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "QA Gates Before Production",
+        "title": "เกต QA ก่อนถึง production",
         "href": "/docs/blogs/ring-promoter-qa-gates-before-production"
       },
       {
-        "title": "Modern CI/CD for AI deployments",
+        "title": "CI/CD สมัยใหม่สำหรับการดีพลอย AI",
         "href": "/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments"
       }
     ]
   },
   "visuals": {
-    "title": "Orbit + Lanes in v1.0.2",
-    "intro": "Pause on Orbit for the fleet. Flip to Lanes when you need the environment matrix.",
+    "title": "Orbit + Lanes ใน v1.0.2",
+    "intro": "หยุดที่ Orbit เพื่อดูทั้งฟลีต สลับไปที่ Lanes เมื่อต้องการเมทริกซ์สภาพแวดล้อม",
     "items": [
       {
         "src": "/img/ring-promoter-orbit-lanes-cover.svg?v=20260925c",
-        "alt": "CI/CD Orbit + Lanes — Orbit fleet view, Lanes matrix, Rings pipeline",
-        "caption": "Cover — Orbit, Lanes and Rings with object titles",
+        "alt": "CI/CD Orbit + Lanes — มุมมองฟลีต Orbit เมทริกซ์ Lanes และไปป์ไลน์ Rings",
+        "caption": "ปก — Orbit, Lanes และ Rings พร้อมชื่อออบเจกต์",
         "width": 1200,
         "height": 630
       },
       {
         "src": "/img/ring-promoter-orbit-lanes-diagram.svg?v=20260925c",
-        "alt": "Orbit fleet view beside Lanes APP × environment matrix",
-        "caption": "Diagram — Orbit (fleet) next to Lanes (matrix)",
+        "alt": "มุมมองฟลีต Orbit ข้างเมทริกซ์ APP × สภาพแวดล้อมของ Lanes",
+        "caption": "แผนภาพ — Orbit (ฟลีต) ข้าง Lanes (เมทริกซ์)",
         "width": 1200,
         "height": 640
       }

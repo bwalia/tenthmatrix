@@ -11,13 +11,13 @@ import FaqAccordion from '@/app/components/sections/FaqAccordion';
 import VideoGrid from '@/app/components/sections/VideoGrid';
 import CheckList from '@/app/components/sections/CheckList';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 import s from '@/app/components/sections/templates/Templates.module.scss';
 
 export const dynamic = 'force-static';
 
 function Crm({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.hero || {};
   const plans = data.pricing?.plans || [];
   const yes = (v) => (v ? `✓ ${ui.included}` : `– ${ui.notIncluded}`);

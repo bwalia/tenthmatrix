@@ -1,12 +1,10 @@
-# Marketing route UI strings (proposed keys)
+# Marketing route UI strings
 
 Used by `src/app/components/sections/**` and the marketing routes under `src/app/[locale]/`.
-The English values currently live in `src/app/components/sections/ui.js` (`UI_DEFAULTS`), because these
-routes may not edit `src/messages`. A page JSON `ui` block can override any of them per locale.
-
-To localise: add a `marketing` namespace to `src/messages/en.json` with the keys below, run the i18n
-pipeline, then swap `uiStrings(data.ui)` for `getTranslations({ locale, namespace: "marketing" })`
-(one place: `ui.js`). Until then non-English locales show these labels in English.
+**Done:** the English values live in the `marketing` namespace of `src/messages/en.json` and are
+translated through the i18n pipeline (`scripts/i18n/dict/{locale}.json` → `npm run i18n:build`).
+`useUiStrings(data.ui)` in `src/app/components/sections/ui.js` reads them with
+`useTranslations('marketing')`; a page JSON `ui` block still overrides any of them per locale.
 
 | key | en |
 |---|---|

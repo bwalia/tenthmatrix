@@ -2,13 +2,13 @@ import { Hero, Section, CTA } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import FeatureRows from '@/app/components/sections/FeatureRows';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 // Renamed from Workstation's /why-workstation (migration/redirects.json).
 function WhyTenthMatrix({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const items = data.content || [];
   const [first, ...rest] = items;
   return (

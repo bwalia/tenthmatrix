@@ -11,7 +11,7 @@ import ComparisonTable from '../ComparisonTable';
 import RichText from '../RichText';
 import ActionLink, { heroActions } from '../ActionLink';
 import { localeHref, isShopLink } from '../links';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 const act = (a) => (a ? { label: a.text || a.label, href: a.href || a.link } : null);
 
@@ -22,7 +22,7 @@ const act = (a) => (a ? { label: a.text || a.label, href: a.href || a.link } : n
  * externalSite, related/relatedReading, cta{primary,secondary,tertiary,quaternary}.
  */
 export default function ProductLanding({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   const c = data.cta || {};
   const ctaActions = [c.primary, c.secondary, c.tertiary, c.quaternary].map(act).filter((a) => a && a.label && a.href && !isShopLink(a.href));

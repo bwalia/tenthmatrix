@@ -1,12 +1,12 @@
 import { Hero } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import LegalDocument from '@/app/components/sections/LegalDocument';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 function Accessibility({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const c = data.content || {};
   const sections = [c.commitment, c.features, c.standards, c.limitations].filter(Boolean);
   const contact = c.contact && {

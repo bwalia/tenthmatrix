@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "Ring Promoter — Modern CI/CD for AI-Powered Deployments | TenthMatrix",
-    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes side by side. Health-gated promotion through int → test → acc → prod, auto-rollback, Kubernetes and VM pipelines. Visit ringpromoter.com.",
-    "keywords": "Ring Promoter, CI/CD, AI deployments, deployment rings, GitOps, Kubernetes, k3s, auto-rollback, TenthMatrix, ringpromoter.com"
+    "title": "Ring Promoter — AI سے چلنے والی ڈیپلائمنٹس کے لیے جدید CI/CD | TenthMatrix",
+    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes ساتھ ساتھ۔ int → test → acc → prod تک ہیلتھ گیٹڈ پروموشن، آٹو رول بیک، Kubernetes اور VM پائپ لائنز۔ ringpromoter.com دیکھیں۔",
+    "keywords": "Ring Promoter، CI/CD، AI ڈیپلائمنٹس، ڈیپلائمنٹ رِنگز، GitOps، Kubernetes، k3s، آٹو رول بیک، TenthMatrix، ringpromoter.com"
   },
   "header": {
     "title": "Ring Promoter",
-    "subtitle": "CI/CD Orbit + Lanes — every release earns production",
-    "description": "Ring Promoter is TenthMatrix’s production-grade promotion control plane. v1.0.2 puts Orbit (fleet view) and Lanes (APP × INT/TEST/ACC/PROD matrix) side by side while promoting versions through ordered rings — int → test → acc → prod — with live health gates, auto-rollback, and a full audit trail."
+    "subtitle": "CI/CD Orbit + Lanes — ہر ریلیز اپنی اہلیت سے پروڈکشن تک پہنچتی ہے",
+    "description": "Ring Promoter، TenthMatrix کا پروڈکشن گریڈ پروموشن کنٹرول پلین ہے۔ v1.0.2 میں Orbit (فلیٹ ویو) اور Lanes (APP × INT/TEST/ACC/PROD میٹرکس) ساتھ ساتھ ہیں، جبکہ ورژنز ترتیب وار رِنگز — int → test → acc → prod — سے لائیو ہیلتھ گیٹس، آٹو رول بیک اور مکمل آڈٹ ٹریل کے ساتھ آگے بڑھتے ہیں۔"
   },
   "intro": {
-    "title": "What is Ring Promoter?",
-    "body": "A small control plane that promotes application versions through shared rings. It runs as a long-lived service (typically on k3s), exposes a JSON REST API and an embedded web UI, and tracks current/previous versions and history per (application, ring). Kubernetes apps and VM/CI apps share one surface — the deployer is chosen per app.",
+    "title": "Ring Promoter کیا ہے؟",
+    "body": "ایک چھوٹا کنٹرول پلین جو ایپلیکیشن ورژنز کو مشترکہ رِنگز سے آگے بڑھاتا ہے۔ یہ طویل مدتی سروس کے طور پر (عموماً k3s پر) چلتا ہے، JSON REST API اور ایمبیڈڈ ویب UI فراہم کرتا ہے، اور ہر (application, ring) کے لیے موجودہ/سابقہ ورژنز اور تاریخ ٹریک کرتا ہے۔ Kubernetes ایپس اور VM/CI ایپس ایک ہی سطح شیئر کرتی ہیں — ڈیپلائر ہر ایپ کے لیے منتخب کیا جاتا ہے۔",
     "links": [
       {
         "label": "ringpromoter.com",
@@ -25,226 +25,226 @@
   },
   "videos": [
     {
-      "title": "Watch: CI/CD Orbit + Lanes (v1.0.2)",
+      "title": "دیکھیں: CI/CD Orbit + Lanes (v1.0.2)",
       "embedUrl": "https://www.youtube.com/embed/hNU4sWxrDFk",
       "watchUrl": "https://youtu.be/hNU4sWxrDFk",
       "thumbnail": "/img/ring-promoter-orbit-lanes-youtube-thumbnail.png?v=20260925c",
       "thumbnailAlt": "CI/CD Orbit + Lanes — Ring Promoter v1.0.2",
-      "caption": "v1.0.2 walkthrough"
+      "caption": "v1.0.2 واک تھرو"
     },
     {
-      "title": "Watch: Ring Promoter quick intro (5 min)",
+      "title": "دیکھیں: Ring Promoter کا فوری تعارف (5 منٹ)",
       "embedUrl": "https://www.youtube.com/embed/SjXwaTVuYhM",
       "watchUrl": "https://youtu.be/SjXwaTVuYhM",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail-v2.png?v=20260901b",
-      "thumbnailAlt": "Ring Promoter — AI-assisted promotion to production (5-minute intro)",
-      "caption": "5-minute intro"
+      "thumbnailAlt": "Ring Promoter — پروڈکشن تک AI کی مدد سے پروموشن (5 منٹ کا تعارف)",
+      "caption": "5 منٹ کا تعارف"
     },
     {
-      "title": "Watch: QA Gates Before Production",
+      "title": "دیکھیں: پروڈکشن سے پہلے QA گیٹس",
       "embedUrl": "https://www.youtube.com/embed/Vs2Em0HPvoY",
       "watchUrl": "https://youtu.be/Vs2Em0HPvoY",
       "thumbnail": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
       "thumbnailAlt": "Ring Promoter - پیداوار سے پہلے QA گیٹس",
-      "caption": "QA gates"
+      "caption": "QA گیٹس"
     },
     {
-      "title": "Watch: Ring Promoter demo",
+      "title": "دیکھیں: Ring Promoter ڈیمو",
       "embedUrl": "https://www.youtube.com/embed/IzhvmrwEebE",
       "watchUrl": "https://youtu.be/IzhvmrwEebE",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail.png?v=20260901",
-      "thumbnailAlt": "Ring Promoter — Every release earns production (YouTube demo)",
-      "caption": "TenthMatrix demo"
+      "thumbnailAlt": "Ring Promoter — ہر ریلیز اپنی اہلیت سے پروڈکشن تک پہنچتی ہے (YouTube ڈیمو)",
+      "caption": "TenthMatrix ڈیمو"
     }
   ],
   "howItWorks": {
-    "title": "How ring promotion works",
-    "intro": "Every release earns production. One hop at a time — never skip a ring — with health before promote and auto-rollback on failure.",
+    "title": "رِنگ پروموشن کیسے کام کرتا ہے",
+    "intro": "ہر ریلیز اپنی اہلیت سے پروڈکشن تک پہنچتی ہے۔ ایک وقت میں ایک قدم — کوئی رِنگ کبھی نہیں چھوڑی جاتی — پروموٹ سے پہلے ہیلتھ چیک اور ناکامی پر آٹو رول بیک کے ساتھ۔",
     "flow": [
       {
-        "title": "1. Seed a version into int",
-        "text": "Start the pipeline by seeding a version (image tag, branch, or ref) into the Integration ring for an application."
+        "title": "1. int میں ایک ورژن سیڈ کریں",
+        "text": "کسی ایپلیکیشن کے لیے Integration رِنگ میں ایک ورژن (امیج ٹیگ، برانچ یا ref) سیڈ کر کے پائپ لائن شروع کریں۔"
       },
       {
-        "title": "2. Promote one ring at a time",
-        "text": "promote {from_ring} always targets the next ring. You cannot jump int → prod. The source ring must be healthy first."
+        "title": "2. ایک وقت میں ایک رِنگ پروموٹ کریں",
+        "text": "promote {from_ring} ہمیشہ اگلی رِنگ کو ہدف بناتا ہے۔ آپ براہ راست int → prod نہیں جا سکتے۔ سورس رِنگ کا پہلے صحت مند ہونا ضروری ہے۔"
       },
       {
-        "title": "3. Deploy with the right deployer",
-        "text": "KubectlDeployer (set image + rollout), GitHubActionsDeployer (workflow-dispatch for VM/CI apps), or k8sjob runner Jobs — selected per application."
+        "title": "3. درست ڈیپلائر کے ساتھ ڈیپلائے کریں",
+        "text": "KubectlDeployer (set image + rollout)، GitHubActionsDeployer (VM/CI ایپس کے لیے workflow-dispatch)، یا k8sjob runner Jobs — ہر ایپلیکیشن کے لیے منتخب۔"
       },
       {
-        "title": "4. Health-check with retries",
-        "text": "After deploy, HTTP health checks run with configurable retries. Optional version verification requires the endpoint to report the exact version just deployed."
+        "title": "4. ری ٹرائز کے ساتھ ہیلتھ چیک",
+        "text": "ڈیپلائے کے بعد، قابلِ ترتیب ری ٹرائز کے ساتھ HTTP ہیلتھ چیکس چلتے ہیں۔ اختیاری ورژن تصدیق کے لیے اینڈ پوائنٹ کو ابھی ڈیپلائے ہوا عین ورژن بتانا ہوتا ہے۔"
       },
       {
-        "title": "5. Auto-rollback on failure",
-        "text": "If the target stays unhealthy, Ring Promoter rolls back to the previous version automatically and records the failure in history."
+        "title": "5. ناکامی پر آٹو رول بیک",
+        "text": "اگر ہدف غیر صحت مند رہے تو Ring Promoter خود بخود پچھلے ورژن پر رول بیک کرتا ہے اور ناکامی کو تاریخ میں درج کرتا ہے۔"
       },
       {
-        "title": "6. Optional auto-promote",
-        "text": "Flag a ring so a healthy landing continues onward in the same locked operation — e.g. auto-promote test → acc, but keep humans on the gate to prod."
+        "title": "6. اختیاری آٹو پروموٹ",
+        "text": "کسی رِنگ کو فلیگ کریں تاکہ صحت مند لینڈنگ اسی لاکڈ آپریشن میں آگے بڑھتی رہے — مثلاً test → acc آٹو پروموٹ کریں، مگر prod کے گیٹ پر انسانوں کو رکھیں۔"
       }
     ],
     "rings": [
       {
         "name": "int",
         "label": "Integration",
-        "role": "First landing for new builds and AI agent / API changes."
+        "role": "نئے بلڈز اور AI ایجنٹ / API تبدیلیوں کا پہلا پڑاؤ۔"
       },
       {
         "name": "test",
         "label": "Test",
-        "role": "Automated verification and soak before acceptance."
+        "role": "قبولیت سے پہلے خودکار تصدیق اور سوک۔"
       },
       {
         "name": "acc",
         "label": "Acceptance",
-        "role": "Stakeholder / UAT gate — often the last auto-promote stop."
+        "role": "اسٹیک ہولڈر / UAT گیٹ — اکثر آخری آٹو پروموٹ پڑاؤ۔"
       },
       {
         "name": "prod",
         "label": "Production",
-        "role": "Live traffic — password-gated for the final ring when configured."
+        "role": "لائیو ٹریفک — کنفیگر ہونے پر آخری رِنگ پاس ورڈ سے محفوظ۔"
       }
     ]
   },
   "features": {
-    "title": "Why teams pick Ring Promoter for AI-era CI/CD",
-    "intro": "AI products change fast — models, agents, MCP tools, gateways. Ring Promoter keeps promotions disciplined without freezing delivery.",
+    "title": "AI دور کے CI/CD کے لیے ٹیمیں Ring Promoter کیوں چنتی ہیں",
+    "intro": "AI پروڈکٹس تیزی سے بدلتی ہیں — ماڈلز، ایجنٹس، MCP ٹولز، گیٹ ویز۔ Ring Promoter ڈیلیوری روکے بغیر پروموشنز کو منظم رکھتا ہے۔",
     "items": [
       {
-        "title": "Ordered rings, never skip",
-        "description": "Shared pipeline int → test → acc → prod. Adding a ring is a single-place change in the ring package — apps declare where they live per ring in config, not code.",
+        "title": "ترتیب وار رِنگز، کوئی چھلانگ نہیں",
+        "description": "مشترکہ پائپ لائن int → test → acc → prod۔ نئی رِنگ شامل کرنا ring پیکیج میں ایک ہی جگہ کی تبدیلی ہے — ایپس ہر رِنگ میں اپنی جگہ config میں بتاتی ہیں، کوڈ میں نہیں۔",
         "icon": "bi-diagram-3"
       },
       {
-        "title": "Health-gated promotion",
-        "description": "Live health checks before and after promote. Optional health_version_field / header stops the classic false green: old pods answering 200 while the new version never rolled.",
+        "title": "ہیلتھ گیٹڈ پروموشن",
+        "description": "پروموٹ سے پہلے اور بعد میں لائیو ہیلتھ چیکس۔ اختیاری health_version_field / header کلاسک جھوٹے گرین کو روکتا ہے: پرانے پوڈز 200 جواب دیتے رہتے ہیں جبکہ نیا ورژن کبھی رول ہی نہیں ہوا۔",
         "icon": "bi-heart-pulse"
       },
       {
-        "title": "Automatic rollback",
-        "description": "Failed health after retries restores the previous version. Seed, promote, and rollback are all audited — success or failure.",
+        "title": "خودکار رول بیک",
+        "description": "ری ٹرائز کے بعد ناکام ہیلتھ پچھلا ورژن بحال کر دیتی ہے۔ سیڈ، پروموٹ اور رول بیک سب آڈٹ ہوتے ہیں — کامیاب ہوں یا ناکام۔",
         "icon": "bi-arrow-counterclockwise"
       },
       {
-        "title": "Kubernetes + VM/CI deployers",
-        "description": "One control plane for kubectl rollouts, GitHub Actions workflow-dispatch (e.g. WSL Proxy on VMs), and Kubernetes Job executors with live logs.",
+        "title": "Kubernetes + VM/CI ڈیپلائرز",
+        "description": "kubectl رول آؤٹس، GitHub Actions workflow-dispatch (مثلاً VMs پر WSL Proxy)، اور لائیو لاگز والے Kubernetes Job ایگزیکیوٹرز کے لیے ایک کنٹرول پلین۔",
         "icon": "bi-boxes"
       },
       {
-        "title": "Safe concurrency",
-        "description": "Per-app serialization via Postgres session advisory locks across replicas. Operations detach from HTTP so LB timeouts cannot abort a rollback mid-flight.",
+        "title": "محفوظ ہم وقتی",
+        "description": "ریپلیکاز میں Postgres سیشن ایڈوائزری لاکس کے ذریعے فی ایپ سیریلائزیشن۔ آپریشنز HTTP سے الگ چلتے ہیں تاکہ LB ٹائم آؤٹس درمیان میں رول بیک نہ روک سکیں۔",
         "icon": "bi-shield-check"
       },
       {
         "title": "UI + REST API",
-        "description": "Embedded Next.js console and bearer-token REST API. Async deployment views stream progress for operators watching AI stack releases.",
+        "description": "ایمبیڈڈ Next.js کنسول اور بیئرر ٹوکن REST API۔ ایسنک ڈیپلائمنٹ ویوز AI اسٹیک ریلیزز دیکھنے والے آپریٹرز کے لیے پیش رفت اسٹریم کرتے ہیں۔",
         "icon": "bi-window-sidebar"
       },
       {
-        "title": "Config-driven apps",
-        "description": "Add an application with YAML: namespaces, Deployments, image repos, health URLs, deployer type — no fork of Ring Promoter required.",
+        "title": "کنفیگ پر مبنی ایپس",
+        "description": "YAML سے ایپلیکیشن شامل کریں: namespaces، Deployments، امیج ریپوز، ہیلتھ URLs، ڈیپلائر کی قسم — Ring Promoter کو فورک کرنے کی ضرورت نہیں۔",
         "icon": "bi-filetype-yml"
       },
       {
-        "title": "Built for AI platforms",
-        "description": "Promote agent services, MCP gateways, GPU inference front-doors, and TenthMatrix products through the same rings your platform team already trusts.",
+        "title": "AI پلیٹ فارمز کے لیے تیار",
+        "description": "ایجنٹ سروسز، MCP گیٹ ویز، GPU انفرنس فرنٹ ڈورز اور TenthMatrix پروڈکٹس کو انہی رِنگز سے پروموٹ کریں جن پر آپ کی پلیٹ فارم ٹیم پہلے سے بھروسہ کرتی ہے۔",
         "icon": "bi-robot"
       }
     ]
   },
   "aiAngle": {
-    "title": "Built for AI-powered deployments",
-    "intro": "Model weights, agent runtimes, and edge gateways ship on different cadences. Ring Promoter keeps every change on the same promotion protocol.",
+    "title": "AI سے چلنے والی ڈیپلائمنٹس کے لیے تیار",
+    "intro": "ماڈل ویٹس، ایجنٹ رن ٹائمز اور ایج گیٹ ویز مختلف رفتار سے شپ ہوتے ہیں۔ Ring Promoter ہر تبدیلی کو ایک ہی پروموشن پروٹوکول پر رکھتا ہے۔",
     "points": [
-      "Promote AI agent APIs and MCP gateways through the same rings as classic services.",
-      "Version-verified health catches silent rollbacks when an old inference sidecar still answers OK.",
-      "Auto-promote early rings so research builds move fast; human gate stays on prod.",
-      "GitHub Actions deployer reuses existing AI/ML CI without rewriting pipelines.",
-      "Full history per (app, ring) for compliance reviews of what reached production."
+      "AI ایجنٹ APIs اور MCP گیٹ ویز کو کلاسک سروسز والی انہی رِنگز سے پروموٹ کریں۔",
+      "ورژن کی تصدیق شدہ ہیلتھ خاموش رول بیکس پکڑتی ہے جب پرانا انفرنس سائیڈ کار اب بھی OK جواب دیتا ہے۔",
+      "ابتدائی رِنگز کو آٹو پروموٹ کریں تاکہ ریسرچ بلڈز تیزی سے آگے بڑھیں؛ prod پر انسانی گیٹ برقرار رہتا ہے۔",
+      "GitHub Actions ڈیپلائر پائپ لائنز دوبارہ لکھے بغیر موجودہ AI/ML CI کو دوبارہ استعمال کرتا ہے۔",
+      "پروڈکشن تک کیا پہنچا، اس کے تعمیلی جائزوں کے لیے ہر (app, ring) کی مکمل تاریخ۔"
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clean interfaces: Deployer, Executor, Health Checker, Store — swap production backends without rewriting promotion rules.",
+    "title": "سلوشن آرکیٹیکچر",
+    "intro": "صاف انٹرفیسز: Deployer، Executor، Health Checker، Store — پروموشن قواعد دوبارہ لکھے بغیر پروڈکشن بیک اینڈز بدلیں۔",
     "steps": [
       {
-        "title": "Control plane",
-        "text": "Go service + embedded UI + REST API on k3s (or local)."
+        "title": "کنٹرول پلین",
+        "text": "k3s (یا لوکل) پر Go سروس + ایمبیڈڈ UI + REST API۔"
       },
       {
-        "title": "Rings",
-        "text": "Ordered pipeline defined once; apps map resources per ring."
+        "title": "رِنگز",
+        "text": "ترتیب وار پائپ لائن ایک بار متعین؛ ایپس ہر رِنگ کے لیے وسائل میپ کرتی ہیں۔"
       },
       {
-        "title": "Deployers",
-        "text": "kubectl, GitHub Actions, or k8sjob executors per app."
+        "title": "ڈیپلائرز",
+        "text": "ہر ایپ کے لیے kubectl، GitHub Actions، یا k8sjob ایگزیکیوٹرز۔"
       },
       {
-        "title": "Store",
-        "text": "Postgres (prod) or memory (dev) with history and locks."
+        "title": "اسٹور",
+        "text": "تاریخ اور لاکس کے ساتھ Postgres (prod) یا میموری (dev)۔"
       }
     ]
   },
   "cta": {
-    "title": "Get Ring Promoter",
-    "body": "Explore the product on ringpromoter.com, read the TenthMatrix deep dive, or talk to us about CI/CD for AI platforms.",
+    "title": "Ring Promoter حاصل کریں",
+    "body": "ringpromoter.com پر پروڈکٹ دیکھیں، TenthMatrix کا تفصیلی جائزہ پڑھیں، یا AI پلیٹ فارمز کے لیے CI/CD کے بارے میں ہم سے بات کریں۔",
     "primary": {
-      "text": "Open ringpromoter.com",
+      "text": "ringpromoter.com کھولیں",
       "href": "https://www.ringpromoter.com/"
     },
     "secondary": {
-      "text": "Read the Orbit + Lanes brief",
+      "text": "Orbit + Lanes کا خلاصہ پڑھیں",
       "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "TenthMatrix سے رابطہ کریں",
       "href": "/contact-us"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "پروڈکٹ سائٹ پر جاری رکھیں",
     "href": "https://www.ringpromoter.com/",
-    "text": "Visit https://www.ringpromoter.com/ for demos, docs, and the latest Ring Promoter releases."
+    "text": "ڈیمو، دستاویزات اور تازہ ترین Ring Promoter ریلیزز کے لیے https://www.ringpromoter.com/ دیکھیں۔"
   },
   "related": {
     "title": "مزید پڑھیں",
     "items": [
       {
-        "title": "Blog: Rings, Orbit and Lanes (v1.0.2)",
+        "title": "بلاگ: Rings، Orbit اور Lanes (v1.0.2)",
         "href": "/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "Article: Orbit and Lanes technical brief",
+        "title": "مضمون: Orbit اور Lanes تکنیکی خلاصہ",
         "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "QA Gates Before Production",
+        "title": "پروڈکشن سے پہلے QA گیٹس",
         "href": "/docs/blogs/ring-promoter-qa-gates-before-production"
       },
       {
-        "title": "Modern CI/CD for AI deployments",
+        "title": "AI ڈیپلائمنٹس کے لیے جدید CI/CD",
         "href": "/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments"
       }
     ]
   },
   "visuals": {
-    "title": "Orbit + Lanes in v1.0.2",
-    "intro": "Pause on Orbit for the fleet. Flip to Lanes when you need the environment matrix.",
+    "title": "v1.0.2 میں Orbit + Lanes",
+    "intro": "فلیٹ کے لیے Orbit پر رکیں۔ جب انوائرنمنٹ میٹرکس چاہیے تو Lanes پر جائیں۔",
     "items": [
       {
         "src": "/img/ring-promoter-orbit-lanes-cover.svg?v=20260925c",
-        "alt": "CI/CD Orbit + Lanes — Orbit fleet view, Lanes matrix, Rings pipeline",
-        "caption": "Cover — Orbit, Lanes and Rings with object titles",
+        "alt": "CI/CD Orbit + Lanes — Orbit فلیٹ ویو، Lanes میٹرکس، Rings پائپ لائن",
+        "caption": "کور — آبجیکٹ عنوانات کے ساتھ Orbit، Lanes اور Rings",
         "width": 1200,
         "height": 630
       },
       {
         "src": "/img/ring-promoter-orbit-lanes-diagram.svg?v=20260925c",
-        "alt": "Orbit fleet view beside Lanes APP × environment matrix",
-        "caption": "Diagram — Orbit (fleet) next to Lanes (matrix)",
+        "alt": "Lanes APP × انوائرنمنٹ میٹرکس کے ساتھ Orbit فلیٹ ویو",
+        "caption": "ڈایاگرام — Orbit (فلیٹ) کے ساتھ Lanes (میٹرکس)",
         "width": 1200,
         "height": 640
       }

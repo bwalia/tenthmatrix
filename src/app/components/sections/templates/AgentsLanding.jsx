@@ -11,7 +11,7 @@ import Timeline from '../Timeline';
 import VideoGrid from '../VideoGrid';
 import { heroActions } from '../ActionLink';
 import { localeHref, isShopLink } from '../links';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 const stripColon = (t) => (t ? String(t).replace(/:\s*$/, '') : t);
 
@@ -21,7 +21,7 @@ const stripColon = (t) => (t ? String(t).replace(/:\s*$/, '') : t);
  * comparison, implementation, news, pricing, FAQ, CTA.
  */
 export default function AgentsLanding({ data, locale }) {
-  const ui = uiStrings();
+  const ui = useUiStrings();
   const pageUi = data.ui || {};
   const hero = data.hero || {};
   const header = data.header || {};

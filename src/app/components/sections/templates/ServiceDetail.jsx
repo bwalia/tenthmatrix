@@ -7,14 +7,14 @@ import CheckList from '../CheckList';
 import LinkCards from '../LinkCards';
 import ActionLink, { heroActions } from '../ActionLink';
 import { localeHref } from '../links';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 /**
  * Service detail (services/*): hero, overview, deliverables, pricing + inclusions,
  * process, related reading, CTA.
  */
 export default function ServiceDetail({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   const cta = data.cta || {};
   const media = h.image ? (

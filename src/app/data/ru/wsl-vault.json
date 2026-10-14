@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Vault — Secrets Encrypted Per Tenant | TenthMatrix",
-    "description": "WSLVault is an open-source, self-hosted secrets manager: AES-256-GCM envelope encryption, per-tenant key hierarchy, KV, transit, PKI, dynamic leases, MFA, multi-region HA, and tamper-evident audit. Steal the server. Not the secrets.",
-    "keywords": "WSLVault, WSL Vault, secrets manager, envelope encryption, multi-tenant vault, PKI, dynamic leases, Kubernetes secrets, open source Vault alternative, wslvault.org"
+    "title": "TenthMatrix WSL Vault — секреты, зашифрованные для каждого арендатора | TenthMatrix",
+    "description": "WSLVault — менеджер секретов с открытым кодом для самостоятельного размещения: конвертное шифрование AES-256-GCM, иерархия ключей для каждого арендатора, KV, transit, PKI, динамическая аренда, MFA, мультирегиональная высокая доступность и защищённый от подделки аудит. Украдите сервер. Но не секреты.",
+    "keywords": "WSLVault, WSL Vault, менеджер секретов, конвертное шифрование, мультиарендное хранилище, PKI, динамическая аренда, секреты Kubernetes, открытая альтернатива Vault, wslvault.org"
   },
   "header": {
     "title": "TenthMatrix WSL Vault",
-    "subtitle": "Steal the server. Not the secrets.",
-    "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
+    "subtitle": "Украдите сервер. Но не секреты.",
+    "description": "Управление секретами с открытым кодом и самостоятельным размещением на основе конвертного шифрования AES-256-GCM и иерархии ключей для каждого арендатора — даже украденный диск, дамп базы данных или скомпрометированный хост оставят злоумышленникам лишь шифротекст, который они не смогут открыть."
   },
   "intro": {
-    "title": "What is WSLVault?",
-    "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",
+    "title": "Что такое WSLVault?",
+    "body": "WSLVault — совместимая с Vault платформа секретов для операторов, которым нужна мультиарендность с шифрованием при хранении и без открытого текста на диске. Управляйте ею через веб-консоль steel/brass, CLI, SDK на Go/Python/Rust/TypeScript или MCP — с развёртыванием через Helm/GitOps в Kubernetes.",
     "links": [
       {
         "label": "wslvault.org",
@@ -22,110 +22,110 @@
         "href": "https://github.com/bwalia/wslvault"
       },
       {
-        "label": "Docs",
+        "label": "Документация",
         "href": "https://github.com/bwalia/wslvault/tree/main/docs"
       },
       {
-        "label": "Getting started",
+        "label": "Начало работы",
         "href": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
       }
     ]
   },
   "videos": [
     {
-      "title": "20-minute intro — steal the server, not the secrets",
-      "caption": "Watch on YouTube",
+      "title": "Введение за 20 минут — украдите сервер, но не секреты",
+      "caption": "Смотреть на YouTube",
       "embedUrl": "https://www.youtube.com/embed/O6q3_H0k2M8",
       "watchUrl": "https://youtu.be/O6q3_H0k2M8",
       "thumbnail": "/img/wslvault-cover.svg",
-      "thumbnailAlt": "WSLVault intro video cover"
+      "thumbnailAlt": "Обложка вводного видео WSLVault"
     }
   ],
   "pillars": {
-    "title": "Why the security model matters",
+    "title": "Почему важна модель безопасности",
     "items": [
       {
-        "title": "True multi-tenancy",
-        "text": "Team A cannot decrypt Team B — cryptographic refusal, not an application oops.",
+        "title": "Настоящая мультиарендность",
+        "text": "Команда A не может расшифровать данные команды B — это криптографический отказ, а не ошибка приложения.",
         "icon": "fas fa-users-slash"
       },
       {
-        "title": "Envelope encryption",
-        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir). Secrets sealed before they touch disk.",
+        "title": "Конвертное шифрование",
+        "text": "DEK → KEK арендатора → корневой KEK (KMS / HSM / Shamir). Секреты запечатываются до записи на диск.",
         "icon": "fas fa-layer-group"
       },
       {
-        "title": "Engines you need",
-        "text": "Versioned KV, transit encryption, PKI, dynamic leases, identity policies, and MFA.",
+        "title": "Нужные вам движки",
+        "text": "Версионируемый KV, шифрование transit, PKI, динамическая аренда, политики идентификации и MFA.",
         "icon": "fas fa-cogs"
       },
       {
-        "title": "HA & audit",
-        "text": "Active/active multi-region replication and a tamper-evident, hash-chained audit trail.",
+        "title": "Высокая доступность и аудит",
+        "text": "Мультирегиональная репликация active/active и защищённый от подделки журнал аудита с хеш-цепочкой.",
         "icon": "fas fa-shield-alt"
       }
     ]
   },
   "features": {
-    "title": "Everything a secret needs, behind one API",
+    "title": "Всё, что нужно секрету, за одним API",
     "items": [
       {
-        "title": "Versioned KV secrets",
-        "text": "Vault-compatible KV v2: versioned reads/writes, check-and-set, soft-delete and destroy — every value sealed before storage."
+        "title": "Версионируемые KV-секреты",
+        "text": "Совместимый с Vault KV v2: версионируемые чтение и запись, check-and-set, мягкое удаление и уничтожение — каждое значение запечатывается до сохранения."
       },
       {
-        "title": "Transit engine",
-        "text": "Encrypt, decrypt, sign and verify without plaintext keys leaving the vault. Rotate keys while old ciphertext stays readable."
+        "title": "Движок Transit",
+        "text": "Шифруйте, расшифровывайте, подписывайте и проверяйте, не выпуская ключи в открытом виде из хранилища. Ротируйте ключи, сохраняя читаемость старого шифротекста."
       },
       {
-        "title": "PKI & certificates",
-        "text": "Private CA, roles, and short-lived certificates. CA private keys are envelope-encrypted, never stored in the clear."
+        "title": "PKI и сертификаты",
+        "text": "Частный CA, роли и краткосрочные сертификаты. Закрытые ключи CA защищены конвертным шифрованием и никогда не хранятся в открытом виде."
       },
       {
-        "title": "Dynamic leases",
-        "text": "Credentials are leases: issued, listed, renewed, and revoked for real. Revoke stops access immediately."
+        "title": "Динамическая аренда",
+        "text": "Учётные данные — это аренда: они действительно выдаются, перечисляются, продлеваются и отзываются. Отзыв немедленно прекращает доступ."
       },
       {
-        "title": "Identity & MFA",
-        "text": "TOTP two-factor, recovery codes, fine-grained policies on API keys and JWTs — plus SCIM, LDAP, OIDC, mTLS and workload auth."
+        "title": "Идентификация и MFA",
+        "text": "Двухфакторная аутентификация TOTP, коды восстановления, детальные политики для API-ключей и JWT — плюс SCIM, LDAP, OIDC, mTLS и аутентификация рабочих нагрузок."
       },
       {
-        "title": "Zero plaintext at rest",
-        "text": "A database dump yields ciphertext wrapped under keys the database never sees. Steal the disk ≠ steal the secrets."
+        "title": "Ноль открытого текста при хранении",
+        "text": "Дамп базы данных даёт лишь шифротекст, обёрнутый ключами, которых база никогда не видит. Украсть диск ≠ украсть секреты."
       }
     ]
   },
   "deploy": {
-    "title": "Cloud-native and scriptable",
-    "body": "Ship with the Helm chart and Kubernetes operator, drive from GitOps, scrape with Prometheus, and reach WSLVault from your language of choice — or from an AI agent over the built-in MCP server.",
-    "ctaLabel": "Read getting started",
+    "title": "Cloud-native и скриптуемый",
+    "body": "Разворачивайте через Helm-чарт и оператор Kubernetes, управляйте через GitOps, собирайте метрики Prometheus и обращайтесь к WSLVault из любимого языка — или из ИИ-агента через встроенный MCP-сервер.",
+    "ctaLabel": "Читать руководство по началу работы",
     "ctaHref": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
   },
   "related": {
     "title": "Читать далее",
     "items": [
       {
-        "title": "Blog: Zero-trust tenant isolation (compliance)",
+        "title": "Блог: изоляция арендаторов по принципу zero trust (комплаенс)",
         "href": "/docs/blogs/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Article: Zero-trust secrets, MFA & multi-region HA",
+        "title": "Статья: секреты zero trust, MFA и мультирегиональная высокая доступность",
         "href": "/articles/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Blog: AI agents & cryptographic refusal",
+        "title": "Блог: ИИ-агенты и криптографический отказ",
         "href": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Article: AI agents secrets isolation",
+        "title": "Статья: изоляция секретов ИИ-агентов",
         "href": "/articles/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Blog: Steal the server. Not the secrets.",
+        "title": "Блог: украдите сервер, но не секреты",
         "href": "/docs/blogs/wslvault-steal-the-server-not-the-secrets"
       },
       {
-        "title": "Technical brief",
+        "title": "Технический обзор",
         "href": "/articles/wslvault-steal-the-server-not-the-secrets"
       },
       {
@@ -139,14 +139,14 @@
     ]
   },
   "cta": {
-    "title": "Stand up your own vault",
-    "description": "Clone the repo, install the Helm chart, and unseal. TenthMatrix helps operators run WSLVault with the same edge and promotion discipline as WSL Proxy and Ring Promoter.",
+    "title": "Разверните собственное хранилище",
+    "description": "Клонируйте репозиторий, установите Helm-чарт и распечатайте хранилище. TenthMatrix помогает операторам эксплуатировать WSLVault с той же дисциплиной границы и продвижения, что и WSL Proxy и Ring Promoter.",
     "primary": {
-      "label": "Visit wslvault.org",
+      "label": "Перейти на wslvault.org",
       "href": "https://www.wslvault.org/"
     },
     "secondary": {
-      "label": "Contact TenthMatrix",
+      "label": "Связаться с TenthMatrix",
       "href": "/contact-us"
     }
   }
