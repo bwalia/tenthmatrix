@@ -1,296 +1,117 @@
 {
+  "meta": {
+    "title": "关于 TenthMatrix",
+    "description": "TenthMatrix 为外包此类工作的公司构建 AI 智能体和生成式 AI 应用,以及这些智能体所依托的软件产品。"
+  },
   "header": {
-    "title": "About TenthMatrix",
-    "tagline": "Pioneering AI-Powered App Development & Vibe Coding"
+    "title": "关于 TenthMatrix",
+    "tagline": "我们为外包此类工作的公司构建 AI 智能体和生成式 AI 应用"
   },
   "content": [
     {
       "image": "/img/technology-hero.png",
-      "description": "At TenthMatrix, we're revolutionizing software development through AI Vibe Coding—the breakthrough approach that enables anyone to build production-ready applications using natural language. Our mission is to democratize app development, making it possible for entrepreneurs, businesses, and developers to bring their ideas to life 10x faster with AI-powered tools.",
-      "video": "https://www.youtube.com/embed/8AWEPx5cHWQ",
-      "section": "AI Vibe Coding Innovation"
+      "section": "我们做什么",
+      "description": "TenthMatrix 为客户设计、构建并运行 AI 智能体和生成式 AI 应用。团队把项目交给我们。我们在他们的代码仓库中交付可运行的软件,接入他们的系统,任何有风险的操作都由人来审批。"
     },
     {
       "image": "/img/servers.jpg",
-      "description": "Founded by industry veterans with decades of combined experience in mobile development, AI/ML, and enterprise software, TenthMatrix bridges the gap between imagination and implementation. We specialize in building intelligent iOS and Android applications that leverage cutting-edge AI capabilities—from ChatGPT integration to computer vision and voice AI.",
-      "video": "https://www.youtube.com/embed/R05hTsehyX0",
-      "section": "Mobile AI Excellence"
+      "section": "我们的由来",
+      "description": "TenthMatrix 从 Workstation 拆分而来,Workstation 制造 GPU 工作站和集群。Workstation 保留了硬件业务。TenthMatrix 接手了软件:智能体、它们依赖的工具以及围绕它们的应用。"
     },
     {
       "image": "/img/11.jpg",
-      "description": "Our comprehensive suite of AI development services helps teams and individuals build, deploy, and scale intelligent mobile applications. From rapid MVP prototyping with AI Vibe Coding to enterprise-grade AI app development, we provide end-to-end solutions that drive measurable business outcomes and user delight.",
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8",
-      "section": "AI App Development"
+      "section": "我们运营的产品",
+      "description": "Ring Promoter、WSL Proxy、WSL Vault、Jobshout、SysOps 24/7 以及 Nebula 系列,最初都是我们自己的智能体在生产环境中需要的东西。客户项目在合适时使用它们,不合适时使用客户现有的工具。"
     },
     {
       "image": "/img/code.jpg",
-      "description": "We believe in the transformative power of AI-assisted development. Our platform integrates seamlessly with Cursor IDE, GPT-4, Claude, and other leading AI tools, enabling developers to write code through conversation. Whether you're building your first app or scaling to millions of users, we provide the AI-powered tools and expertise to succeed.",
-      "video": "https://www.youtube.com/embed/rKDJs2TdMRA",
-      "section": "AI Development Tools"
+      "section": "我们如何写作",
+      "description": "我们公开工作背后的工程细节:架构笔记、Jev 基准测试系列,以及失败经验的复盘。如果您想了解我们会如何着手您的项目,这些文章是很好的起点。"
     }
   ],
   "expertise": [
     {
-      "title": "AI Vibe Coding",
-      "description": "Master the art of building apps through natural language with Cursor IDE, GPT-4, and Claude integration",
+      "title": "AI 智能体开发",
+      "description": "具备类型化工具、有界循环、审批关卡和评估集的智能体。",
       "image": "/img/ai-technology.jpg",
-      "video": "https://www.youtube.com/embed/v7UcVPO4y3c",
       "technologies": [
-        "Cursor IDE",
-        "GPT-4",
-        "Claude",
-        "Gemini",
-        "Copilot"
+        "Claude Agent SDK",
+        "LangGraph",
+        "MCP",
+        "OpenTelemetry"
       ]
     },
     {
-      "title": "iOS AI Development",
-      "description": "Native Swift and SwiftUI development with Core ML, Vision framework, and ChatGPT integration",
-      "image": "/img/2.jpg",
-      "video": "https://www.youtube.com/embed/R05hTsehyX0",
-      "technologies": [
-        "Swift",
-        "SwiftUI",
-        "Core ML",
-        "Vision",
-        "OpenAI"
-      ]
-    },
-    {
-      "title": "Android AI Development",
-      "description": "Kotlin and Jetpack Compose development with TensorFlow Lite, ML Kit, and LLM integration",
-      "image": "/img/3.jpg",
-      "video": "https://www.youtube.com/embed/9DjbQpbQVFo",
-      "technologies": [
-        "Kotlin",
-        "Jetpack Compose",
-        "TensorFlow Lite",
-        "ML Kit",
-        "Firebase"
-      ]
-    },
-    {
-      "title": "ChatGPT & LLM Integration",
-      "description": "Build intelligent conversational apps with GPT-4, Claude, Gemini, and custom fine-tuned models",
+      "title": "生成式 AI 应用",
+      "description": "基于您自有文档的知识助手、起草工具和 copilot。",
       "image": "/img/4.jpg",
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8",
       "technologies": [
-        "OpenAI API",
-        "Claude API",
-        "LangChain",
-        "Vector DB",
-        "RAG"
+        "RAG",
+        "向量搜索",
+        "Amazon Bedrock",
+        "Azure AI Foundry"
       ]
     },
     {
-      "title": "Computer Vision Apps",
-      "description": "Build apps that see and understand with object detection, image classification, and OCR",
+      "title": "开放权重模型托管",
+      "description": "自托管模型,适用于数据不能离开您环境的工作负载。",
+      "image": "/img/2.jpg",
+      "technologies": [
+        "vLLM",
+        "Ollama",
+        "Llama",
+        "Qwen"
+      ]
+    },
+    {
+      "title": "平台与安全",
+      "description": "面向智能体工作负载的密钥、网关和发布流水线。",
+      "image": "/img/3.jpg",
+      "technologies": [
+        "WSL Vault",
+        "WSL 代理",
+        "Ring Promoter",
+        "Kubernetes"
+      ]
+    },
+    {
+      "title": "运维",
+      "description": "上线后的监控、成本报告和事件响应。",
       "image": "/img/5.jpg",
-      "video": "https://www.youtube.com/embed/JnvNFo2_WOY",
       "technologies": [
-        "Core ML",
-        "Vision",
-        "TensorFlow",
-        "YOLO",
-        "OpenCV"
+        "SysOps 24/7",
+        "Prometheus",
+        "OpenTelemetry"
       ]
     },
     {
-      "title": "Voice AI & Speech",
-      "description": "Create voice-enabled apps with Whisper speech recognition and ElevenLabs text-to-speech",
+      "title": "Integration(集成)",
+      "description": "连接 CRM、工单系统、数据库和文件存储的连接器。",
       "image": "/img/6.jpg",
-      "video": "https://www.youtube.com/embed/3289vhOUdKA",
       "technologies": [
-        "Whisper",
-        "ElevenLabs",
-        "Speech Framework",
-        "Google Speech",
-        "Siri"
+        "REST API",
+        "Webhook",
+        "MCP 服务器",
+        "PostgreSQL"
       ]
-    }
-  ],
-  "numbers": [
-    {
-      "title": "AI Apps Built",
-      "count": "500+"
-    },
-    {
-      "title": "App Store Downloads",
-      "count": "10M+"
-    },
-    {
-      "title": "Happy Clients",
-      "count": "200+"
-    },
-    {
-      "title": "Average App Rating",
-      "count": "4.8★"
-    },
-    {
-      "title": "Development Speed",
-      "count": "10x Faster"
-    },
-    {
-      "title": "Team Members",
-      "count": "50+"
-    }
-  ],
-  "teams": [
-    {
-      "name": "Alex Chen",
-      "about": "Leading our AI Vibe Coding initiatives with expertise in Cursor IDE, GPT-4 integration, and rapid app development. Alex has helped over 100 clients build their first AI-powered apps using natural language coding.",
-      "designation": "Head of AI Development",
-      "image": "/img/ai-technology.jpg",
-      "expertise": [
-        "Cursor IDE",
-        "GPT-4",
-        "Claude",
-        "Prompt Engineering",
-        "Vibe Coding"
-      ],
-      "video": "https://www.youtube.com/embed/8AWEPx5cHWQ"
-    },
-    {
-      "name": "Sarah Williams",
-      "about": "iOS development lead specializing in Swift, SwiftUI, and Core ML integration. Sarah has shipped 50+ AI-powered iOS apps to the App Store with an average rating of 4.9 stars.",
-      "designation": "Senior iOS AI Engineer",
-      "image": "/img/12.jpg",
-      "expertise": [
-        "Swift",
-        "SwiftUI",
-        "Core ML",
-        "Vision",
-        "ARKit"
-      ],
-      "video": "https://www.youtube.com/embed/R05hTsehyX0"
-    },
-    {
-      "name": "Marcus Johnson",
-      "about": "Android development expert with deep expertise in Kotlin, Jetpack Compose, and on-device ML. Marcus builds performant AI apps that work offline using TensorFlow Lite and ML Kit.",
-      "designation": "Senior Android AI Engineer",
-      "image": "/img/13.jpg",
-      "expertise": [
-        "Kotlin",
-        "Jetpack Compose",
-        "TensorFlow Lite",
-        "ML Kit",
-        "Firebase ML"
-      ],
-      "video": "https://www.youtube.com/embed/9DjbQpbQVFo"
-    },
-    {
-      "name": "Priya Sharma",
-      "about": "LLM integration specialist with expertise in OpenAI, Anthropic, and custom model deployment. Priya has integrated ChatGPT into 100+ mobile applications with optimized latency and cost.",
-      "designation": "LLM Integration Architect",
-      "image": "/img/14.jpg",
-      "expertise": [
-        "OpenAI API",
-        "Claude",
-        "LangChain",
-        "RAG Systems",
-        "Prompt Engineering"
-      ],
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8"
-    },
-    {
-      "name": "David Park",
-      "about": "Computer vision engineer specializing in real-time object detection, image classification, and OCR for mobile apps. David has built vision AI features used by millions of users daily.",
-      "designation": "Computer Vision Engineer",
-      "image": "/img/15.jpg",
-      "expertise": [
-        "Core ML",
-        "TensorFlow",
-        "YOLO",
-        "OpenCV",
-        "Custom Models"
-      ],
-      "video": "https://www.youtube.com/embed/JnvNFo2_WOY"
-    },
-    {
-      "name": "Emma Thompson",
-      "about": "Voice AI specialist focusing on speech recognition, text-to-speech, and voice-first interfaces. Emma creates accessible, voice-enabled apps using Whisper and ElevenLabs.",
-      "designation": "Voice AI Engineer",
-      "image": "/img/16.jpg",
-      "expertise": [
-        "Whisper",
-        "ElevenLabs",
-        "Speech Recognition",
-        "Voice UI",
-        "无障碍"
-      ],
-      "video": "https://www.youtube.com/embed/3289vhOUdKA"
-    },
-    {
-      "name": "Lisa Martinez",
-      "about": "Cross-platform development lead using Flutter and React Native to build AI-powered apps for both iOS and Android from a single codebase. Lisa optimizes for performance and native feel.",
-      "designation": "Cross-Platform AI Developer",
-      "image": "/img/17.jpg",
-      "expertise": [
-        "Flutter",
-        "React Native",
-        "Dart",
-        "TypeScript",
-        "AI SDKs"
-      ],
-      "video": "https://www.youtube.com/embed/rKDJs2TdMRA"
-    },
-    {
-      "name": "James Wilson",
-      "about": "Backend and API specialist building scalable AI infrastructure with serverless architecture, vector databases, and real-time AI processing pipelines.",
-      "designation": "AI Backend Engineer",
-      "image": "/img/18.jpg",
-      "expertise": [
-        "Node.js",
-        "Python",
-        "Pinecone",
-        "Supabase",
-        "Serverless"
-      ],
-      "video": "https://www.youtube.com/embed/v7UcVPO4y3c"
-    }
-  ],
-  "achievements": [
-    {
-      "title": "App Store Success",
-      "description": "500+ AI-powered apps launched on iOS App Store and Google Play Store",
-      "icon": "trophy.svg"
-    },
-    {
-      "title": "Client Success",
-      "description": "Helped 200+ clients build their AI app vision with 10x faster development",
-      "icon": "success.svg"
-    },
-    {
-      "title": "AI Vibe Coding Pioneer",
-      "description": "Leading the revolution in natural language app development with Cursor IDE",
-      "icon": "innovation.svg"
-    },
-    {
-      "title": "Global Impact",
-      "description": "Apps built by our team have been downloaded by 10M+ users worldwide",
-      "icon": "global.svg"
     }
   ],
   "values": [
     {
-      "title": "AI-First Development",
-      "description": "We use AI tools to build better apps faster, embracing the future of software development",
-      "icon": "lightbulb.svg"
+      "title": "说清楚它不做什么",
+      "description": "每份范围说明都会列出智能体绝不能做的事,与它应该做的事并列。"
     },
     {
-      "title": "User-Centric Design",
-      "description": "Every app we build focuses on delighting users with intuitive AI-powered experiences",
-      "icon": "shield.svg"
+      "title": "风险操作由人审批",
+      "description": "智能体负责起草和准备。发送、支出和删除都要等人来确认。"
     },
     {
-      "title": "Client Success",
-      "description": "Your app's success is our success - we're committed to delivering results that matter",
-      "icon": "target.svg"
+      "title": "您的代码,您的数据",
+      "description": "从第一次提交起,工作成果就在您的代码仓库和系统中。"
     },
     {
-      "title": "Continuous Innovation",
-      "description": "Staying ahead of AI advancements to bring cutting-edge capabilities to your apps",
-      "icon": "book.svg"
+      "title": "展示过程",
+      "description": "我们公开软件的工作原理,包括出过问题的部分。"
     }
   ]
 }

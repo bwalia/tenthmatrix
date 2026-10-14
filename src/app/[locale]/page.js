@@ -1,6 +1,27 @@
 import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ArrowRight, ArrowUpRight, Bot, Boxes, AppWindow, GitBranch, Shield, KeyRound, Briefcase, Gauge, Database } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Bot,
+  AppWindow,
+  Plug,
+  GitBranch,
+  Shield,
+  KeyRound,
+  Briefcase,
+  Gauge,
+  Database,
+  UserCheck,
+  Server,
+  Lock,
+  LineChart,
+  Wrench,
+  ClipboardCheck,
+  Users,
+  Handshake,
+  ArrowLeftRight,
+} from 'lucide-react';
 import { getPostListPage } from '@/lib/cms';
 import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { loadArticles } from '@/utils/articlesLocale';
@@ -40,9 +61,28 @@ function StepGlyph({ step }) {
 }
 
 const PILLARS = [
-  { key: 'agents', icon: Bot, links: ['aiAgents', 'claudeAgents', 'agentBuilding'] },
-  { key: 'tools', icon: Boxes, links: ['wslProxy', 'wslVault', 'ringPromoter'] },
-  { key: 'applications', icon: AppWindow, links: ['jobshout', 'crm', 'generativeAi'] },
+  { key: 'agents', icon: Bot, links: ['aiAgentDev', 'aiAgents', 'claudeAgents'] },
+  { key: 'genai', icon: AppWindow, links: ['genAiDev', 'generativeAi', 'appliedAi'] },
+  { key: 'integrations', icon: Plug, links: ['softwareDevelopment', 'dataFoundations', 'devops'] },
+];
+
+// Benefits of TenthMatrix agents: each one links to the thing that proves it.
+const BENEFITS = [
+  { key: 'approval', icon: UserCheck, href: '/jobshout' },
+  { key: 'hosting', icon: Server, href: '/outsource-ai-development#engagement' },
+  { key: 'data', icon: Lock, href: '/outsource-ai-development#security-ip' },
+  { key: 'vault', icon: KeyRound, href: '/wsl-vault' },
+  { key: 'releases', icon: GitBranch, href: '/ring-promoter' },
+  { key: 'edge', icon: Shield, href: '/wsl-proxy' },
+  { key: 'observe', icon: LineChart, href: '/articles/llm-bottlenecks-observability-otel-cost-control' },
+  { key: 'production', icon: Wrench, href: '/articles' },
+];
+
+const ENGAGEMENTS = [
+  { key: 'fixed', icon: ClipboardCheck },
+  { key: 'team', icon: Users },
+  { key: 'embedded', icon: Handshake },
+  { key: 'transfer', icon: ArrowLeftRight },
 ];
 
 const PRODUCTS = [
@@ -53,8 +93,6 @@ const PRODUCTS = [
   { key: 'jev', name: 'Jev', href: '/insights/jev', icon: Gauge, status: 'research' },
   { key: 'nebula', href: '/products', icon: Database },
 ];
-
-const SERVICE_KEYS = ['modernisation', 'aiNative', 'dataFoundations', 'autonomousOps', 'devops', 'cyberSecurity'];
 
 export default async function HomePage({ params }) {
   const { locale } = await params;
@@ -82,8 +120,8 @@ export default async function HomePage({ params }) {
         title={t('home.hero.title')}
         lede={t('home.hero.lede')}
         actions={[
-          { label: t('home.hero.primary'), href: href('/contact-us'), arrow: true },
-          { label: t('home.hero.secondary'), href: '#products' },
+          { label: t('home.hero.primary'), href: href('/start-a-project'), arrow: true },
+          { label: t('home.hero.secondary'), href: '#benefits' },
         ]}
         meta={t.raw('home.hero.meta')}
         art
@@ -118,7 +156,36 @@ export default async function HomePage({ params }) {
         </Reveal>
       </Section>
 
-      <Section id="pilot" tone="surface" eyebrow={t('home.steps.eyebrow')} title={t('home.steps.title')} lede={t('home.steps.lede')}>
+      <Section
+        id="benefits"
+        tone="surface"
+        eyebrow={t('home.benefits.eyebrow')}
+        title={t('home.benefits.title')}
+        lede={t('home.benefits.lede')}
+        actions={
+          <Button href={href('/why-tenthmatrix-agents')} variant="tertiary" prefetch={false}>
+            {t('home.benefits.all')}
+          </Button>
+        }
+      >
+        <Reveal as="ul" stagger className={s.benefits}>
+          {BENEFITS.map(({ key, icon: Icon, href: proof }) => (
+            <RevealItem as="li" key={key} className={s.benefit}>
+              <span className={s.benefitIcon} aria-hidden="true">
+                <Icon size={20} strokeWidth={1.75} />
+              </span>
+              <h3 className={s.benefitTitle}>{t(`home.benefits.${key}.title`)}</h3>
+              <p className={s.benefitBody}>{t(`home.benefits.${key}.body`)}</p>
+              <Link href={href(proof)} className={s.benefitProof} prefetch={false}>
+                <span>{t(`home.benefits.${key}.proof`)}</span>
+                <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
+              </Link>
+            </RevealItem>
+          ))}
+        </Reveal>
+      </Section>
+
+      <Section id="process" eyebrow={t('home.steps.eyebrow')} title={t('home.steps.title')} lede={t('home.steps.lede')}>
         <Reveal as="ol" stagger className={s.steps}>
           {steps.map((step, i) => (
             <RevealItem as="li" key={step.title} className={s.step}>
@@ -128,6 +195,33 @@ export default async function HomePage({ params }) {
               </p>
               <h3 className={s.stepTitle}>{step.title}</h3>
               <p className={s.stepBody}>{step.body}</p>
+            </RevealItem>
+          ))}
+        </Reveal>
+      </Section>
+
+      <Section
+        id="engagement"
+        tone="sunken"
+        eyebrow={t('home.engagement.eyebrow')}
+        title={t('home.engagement.title')}
+        lede={t('home.engagement.lede')}
+        actions={
+          <Button href={href('/outsource-ai-development#engagement')} variant="tertiary" prefetch={false}>
+            {t('home.engagement.more')}
+          </Button>
+        }
+      >
+        <Reveal as="ul" stagger className={s.engagements}>
+          {ENGAGEMENTS.map(({ key, icon: Icon }) => (
+            <RevealItem as="li" key={key}>
+              <Card as="article" className={s.engagement}>
+                <span className={s.pillarIcon} aria-hidden="true">
+                  <Icon size={20} strokeWidth={1.75} />
+                </span>
+                <h3 className={s.engagementTitle}>{t(`home.engagement.${key}.title`)}</h3>
+                <p className={s.engagementBody}>{t(`home.engagement.${key}.body`)}</p>
+              </Card>
             </RevealItem>
           ))}
         </Reveal>
@@ -194,32 +288,6 @@ export default async function HomePage({ params }) {
         )}
       </Section>
 
-      <Section id="services" spacing="default">
-        <div className={s.services}>
-          <div className={s.servicesIntro}>
-            <Eyebrow>{t('home.services.eyebrow')}</Eyebrow>
-            <h2 id="services-title">{t('home.services.title')}</h2>
-            <p className="tm-lede">{t('home.services.lede')}</p>
-            <Button href={href('/services')} variant="secondary" arrow prefetch={false}>
-              {t('home.services.all')}
-            </Button>
-          </div>
-          <ul className={s.serviceList}>
-            {SERVICE_KEYS.map((k) => (
-              <li key={k}>
-                <Link href={href(navHref(k))} className={s.serviceLink} prefetch={false}>
-                  <span className={s.serviceCopy}>
-                    <span className={s.serviceLabel}>{t(`nav.items.${k}.label`)}</span>
-                    <span className={s.serviceDesc}>{t(`nav.items.${k}.desc`)}</span>
-                  </span>
-                  <ArrowRight aria-hidden="true" size={18} strokeWidth={1.75} className={s.serviceArrow} />
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Section>
-
       <section className={s.hardware} aria-labelledby="hardware-title">
         <div className={s.hardwareInner}>
           <div className={s.hardwareCopy}>
@@ -241,8 +309,8 @@ export default async function HomePage({ params }) {
         eyebrow={t('home.cta.eyebrow')}
         title={t('home.cta.title')}
         body={t('home.cta.body')}
-        primary={{ label: t('home.cta.primary'), href: href('/contact-us') }}
-        secondary={{ label: t('home.cta.secondary'), href: href('/articles') }}
+        primary={{ label: t('home.cta.primary'), href: href('/start-a-project') }}
+        secondary={{ label: t('home.cta.secondary'), href: href('/outsource-ai-development') }}
       />
     </div>
   );

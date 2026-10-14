@@ -1,26 +1,30 @@
 {
+  "meta": {
+    "title": "Цены",
+    "description": "Стартовые цены на программное обеспечение и услуги TenthMatrix. Аутсорсинговые проекты по ИИ-агентам и генеративному ИИ оцениваются после этапа исследования, пилот — по фиксированной цене."
+  },
   "header": {
-    "title": "Transparent Pricing",
-    "subtitle": "Choose the perfect plan for your business needs",
-    "description": "Flexible pricing options for businesses of all sizes. Start free, scale as you grow."
+    "title": "Цены",
+    "subtitle": "Стартовые цены, затем расчёт для вашего проекта",
+    "description": "Эти тарифы и дополнения — отправная точка для нашего ПО и услуг. Аутсорсинговые проекты по агентам и генеративному ИИ оцениваются после этапа исследования, пилот — по фиксированной цене."
   },
   "plans": [
     {
       "name": "Начальный",
       "price": "$99",
       "period": "/month",
-      "description": "Perfect for small teams and startups getting started with AI automation",
+      "description": "Для небольших команд и стартапов, которые начинают автоматизацию с ИИ",
       "featured": false,
       "features": [
-        "Up to 10 users",
-        "Basic CRM features",
-        "Email marketing (5,000 contacts)",
-        "Help desk ticketing",
-        "Standard reports",
-        "Mobile app access",
-        "Email support",
-        "5 GB storage",
-        "API access (1,000 calls/month)"
+        "До 10 пользователей",
+        "Базовые функции CRM",
+        "Email-маркетинг (5,000 контактов)",
+        "Тикеты службы поддержки",
+        "Стандартные отчёты",
+        "Доступ из мобильного приложения",
+        "Поддержка по email",
+        "5 GB хранилища",
+        "Доступ к API (1,000 вызовов/месяц)"
       ],
       "cta": "Начать бесплатный период",
       "badge": ""
@@ -29,135 +33,135 @@
       "name": "Профессиональный",
       "price": "$299",
       "period": "/month",
-      "description": "Advanced features for growing businesses ready to scale operations",
+      "description": "Расширенные функции для растущих компаний, готовых масштабироваться",
       "featured": true,
       "features": [
-        "Up to 50 users",
-        "Advanced CRM & Sales Pipeline",
-        "Marketing automation (25,000 contacts)",
-        "Live chat & AI chatbot",
-        "Custom reports & dashboards",
-        "Workflow automation",
-        "Priority support (24/7)",
-        "50 GB storage",
-        "API access (10,000 calls/month)",
-        "Integration with 500+ apps",
-        "Advanced analytics",
-        "Custom fields & modules"
+        "До 50 пользователей",
+        "Расширенный CRM и воронка продаж",
+        "Автоматизация маркетинга (25,000 контактов)",
+        "Онлайн-чат и ИИ-чат-бот",
+        "Настраиваемые отчёты и дашборды",
+        "Автоматизация рабочих процессов",
+        "Приоритетная поддержка (24/7)",
+        "50 GB хранилища",
+        "Доступ к API (10,000 вызовов/месяц)",
+        "Интеграции с уже используемыми инструментами",
+        "Расширенная аналитика",
+        "Настраиваемые поля и модули"
       ],
       "cta": "Начать",
       "badge": "Самый популярный"
     },
     {
       "name": "Корпоративный",
-      "price": "Custom",
+      "price": "Индивидуально",
       "period": "",
-      "description": "Complete solution for large organizations with complex requirements",
+      "description": "Комплексное решение для крупных организаций со сложными требованиями",
       "featured": false,
       "features": [
-        "Unlimited users",
-        "Full CRM, ERP & Business Suite",
-        "Unlimited marketing contacts",
-        "Omnichannel support",
-        "AI-powered insights & predictions",
-        "Advanced workflow automation",
-        "Dedicated success manager",
-        "Unlimited storage",
-        "Unlimited API calls",
-        "Custom integrations",
+        "Без ограничения пользователей",
+        "Полный CRM, ERP и бизнес-пакет",
+        "Неограниченные маркетинговые контакты",
+        "Омниканальная поддержка",
+        "Аналитика и прогнозы на базе ИИ",
+        "Расширенная автоматизация процессов",
+        "Персональный менеджер по успеху",
+        "Неограниченное хранилище",
+        "Неограниченные вызовы API",
+        "Индивидуальные интеграции",
         "SSO (SAML, OAuth)",
-        "White-label options",
-        "SLA guarantee (99.99%)",
-        "On-premise deployment option",
-        "Advanced security & compliance",
-        "Custom training & onboarding"
+        "Варианты white-label",
+        "SLA, согласованный в договоре",
+        "Вариант развёртывания on-premise",
+        "Расширенная безопасность и соответствие требованиям",
+        "Индивидуальное обучение и онбординг"
       ],
-      "cta": "Contact Sales",
-      "badge": "Best Value"
+      "cta": "Связаться с отделом продаж",
+      "badge": "Лучшая цена"
     }
   ],
   "addons": [
     {
-      "name": "DevOps & SRE Services",
-      "description": "Expert DevOps consulting, infrastructure management, and SRE support",
-      "price": "From $2,500/month",
+      "name": "Услуги DevOps и SRE",
+      "description": "Экспертный DevOps-консалтинг, управление инфраструктурой и поддержка SRE",
+      "price": "От $2,500/месяц",
       "features": [
-        "CI/CD pipeline setup",
-        "Kubernetes management",
-        "Infrastructure as Code",
-        "24/7 monitoring & support"
+        "Настройка конвейера CI/CD",
+        "Управление Kubernetes",
+        "Инфраструктура как код",
+        "Мониторинг и поддержка 24/7"
       ]
     },
     {
-      "name": "ELK Stack Implementation",
-      "description": "Complete Elasticsearch, Logstash, Kibana setup and management",
-      "price": "From $1,500/month",
+      "name": "Внедрение ELK Stack",
+      "description": "Полная настройка и сопровождение Elasticsearch, Logstash, Kibana",
+      "price": "От $1,500/месяц",
       "features": [
-        "Log aggregation setup",
-        "Custom dashboards",
-        "Real-time monitoring",
-        "Performance tuning"
+        "Настройка агрегации логов",
+        "Настраиваемые дашборды",
+        "Мониторинг в реальном времени",
+        "Оптимизация производительности"
       ]
     },
     {
-      "name": "Dynatrace Platform",
-      "description": "Full-stack observability with Dynatrace APM and monitoring",
-      "price": "From $3,000/month",
+      "name": "Платформа Dynatrace",
+      "description": "Наблюдаемость полного стека с Dynatrace APM и мониторингом",
+      "price": "От $3,000/месяц",
       "features": [
-        "APM implementation",
-        "Synthetic monitoring",
-        "RUM & distributed tracing",
-        "Custom DQL queries"
+        "Внедрение APM",
+        "Синтетический мониторинг",
+        "RUM и распределённая трассировка",
+        "Пользовательские запросы DQL"
       ]
     },
     {
-      "name": "AI Model Development",
-      "description": "Custom AI/ML model development and integration",
-      "price": "From $5,000/project",
+      "name": "Разработка ИИ-моделей",
+      "description": "Разработка и интеграция индивидуальных моделей AI/ML",
+      "price": "От $5,000/проект",
       "features": [
-        "LLM fine-tuning",
-        "Custom AI agents",
-        "Model training & deployment",
-        "MLOps pipeline"
+        "Дообучение LLM",
+        "Индивидуальные ИИ-агенты",
+        "Обучение и развёртывание моделей",
+        "Конвейер MLOps"
       ]
     }
   ],
   "faq": [
     {
-      "question": "Can I change my plan at any time?",
-      "answer": "Yes! You can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
+      "question": "Можно ли сменить тариф в любой момент?",
+      "answer": "Да. Вы можете повысить или понизить тариф в любой момент. Изменения вступят в силу в следующем расчётном периоде."
     },
     {
-      "question": "Is there a free trial?",
-      "answer": "Absolutely! We offer a 14-day free trial on all plans with no credit card required. You get full access to all features during the trial."
+      "question": "Есть ли бесплатный пробный период?",
+      "answer": "Да. Для всех тарифов действует бесплатный пробный период 14 дней без банковской карты. Во время пробного периода доступны все функции."
     },
     {
-      "question": "What payment methods do you accept?",
-      "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual subscriptions."
+      "question": "Какие способы оплаты вы принимаете?",
+      "answer": "Мы принимаем все основные банковские карты (Visa, MasterCard, American Express), PayPal, а для годовых подписок — банковские переводы."
     },
     {
-      "question": "Do you offer discounts for annual plans?",
-      "answer": "Yes! Save 20% when you pay annually. For Enterprise plans, we offer custom pricing based on your specific requirements."
+      "question": "Есть ли скидки на годовые тарифы?",
+      "answer": "Да. При оплате за год вы экономите 20%. Для тарифов Enterprise цена рассчитывается индивидуально под ваши требования."
     },
     {
-      "question": "What happens if I exceed my user limit?",
-      "answer": "We'll automatically upgrade your plan to accommodate additional users, or you can contact us to discuss a custom plan."
+      "question": "Что будет, если превысить лимит пользователей?",
+      "answer": "Мы автоматически повысим тариф под дополнительных пользователей, или вы можете связаться с нами и обсудить индивидуальный тариф."
     },
     {
-      "question": "Is support included in all plans?",
-      "answer": "Yes! All plans include support. Starter plans get email support, Professional plans get 24/7 priority support, and Enterprise plans get a dedicated success manager."
+      "question": "Входит ли поддержка во все тарифы?",
+      "answer": "Да. Поддержка входит во все тарифы: Starter — поддержка по email, Professional — приоритетная поддержка 24/7, Enterprise — персональный менеджер по успеху."
     }
   ],
   "enterprise": {
-    "title": "Need a Custom Solution?",
-    "description": "For large organizations with specific requirements, we offer tailored solutions with custom pricing, dedicated support, and specialized features.",
+    "title": "Нужен агент или решение на генеративном ИИ?",
+    "description": "Сначала мы определяем объём работ, затем оцениваем его как проект с фиксированным объёмом, выделенную команду по агентам, встроенных инженеров или модель build-operate-transfer.",
     "features": [
-      "Custom feature development",
-      "Dedicated infrastructure",
-      "Advanced security & compliance",
-      "SLA guarantees",
-      "On-premise deployment",
-      "Priority support & training"
+      "Разработка индивидуальных функций",
+      "Выделенная инфраструктура",
+      "Расширенная безопасность и соответствие требованиям",
+      "Гарантии SLA",
+      "Развёртывание on-premise",
+      "Приоритетная поддержка и обучение"
     ]
   }
 }

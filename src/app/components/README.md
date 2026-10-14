@@ -112,4 +112,6 @@ use on `<ul>`), `tm-page-head` / `tm-page-head__inner`, `tm-page-body`,
 switcher, cookie consent), `article/` (ArticleLayout, Prose, CodeBlock, Toc,
 ShareButtons), `blog/` (LikeButton, CommentBox, Pagination, BlogListing),
 `search/`, `contact/ContactForm`, `feedback/` (404 / error states).
-`sections/` belongs to the marketing pages.
+`sections/` belongs to the marketing pages. `sections/templates/SectionsLanding` renders a page
+JSON whose `sections[]` array sets the order (types: overview, grid, steps, checklist,
+comparison, faq, links); the outsourcing and build-service pages use it.

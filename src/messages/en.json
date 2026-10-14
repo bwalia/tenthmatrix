@@ -18,10 +18,16 @@
     "menu": "Site menu",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "cta": "Start a pilot",
+    "cta": "Start a project",
     "searchPlaceholder": "Search articles, posts and docs",
     "hardware": "Need the hardware? GPU workstations at Workstation",
     "groups": {
+      "work": {
+        "label": "Work with us",
+        "title": "Outsource your AI project",
+        "intro": "Hand us an agent or a generative AI build. You keep the code, the data and the final say.",
+        "all": "How outsourcing works"
+      },
       "agents": {
         "label": "Agents",
         "title": "AI agents",
@@ -227,12 +233,32 @@
       "search": {
         "label": "Search",
         "desc": "Find anything on the site"
+      },
+      "outsource": {
+        "label": "Outsource AI development",
+        "desc": "Engagement models, process and IP"
+      },
+      "aiAgentDev": {
+        "label": "AI agent development",
+        "desc": "Support, ops, document and coding agents"
+      },
+      "genAiDev": {
+        "label": "Generative AI development",
+        "desc": "Knowledge assistants, drafting and copilots"
+      },
+      "whyAgents": {
+        "label": "Why TenthMatrix agents",
+        "desc": "Benefits, and how to check each one"
+      },
+      "startProject": {
+        "label": "Start a project",
+        "desc": "Tell us the job. We reply within a working day."
       }
     }
   },
   "footer": {
-    "tagline": "Software that puts AI agents to work.",
-    "blurb": "We design, build and run AI agents, the tools they depend on and the applications your teams use every day.",
+    "tagline": "AI agents and generative AI applications, built for you.",
+    "blurb": "We design, build and run AI agents and generative AI applications for companies that outsource the work, plus the software products those agents run on.",
     "hardware": "Need the hardware? Visit Workstation",
     "hardwareEyebrow": "Need the hardware?",
     "hardwareTitle": "GPU workstations and clusters are built by Workstation.",
@@ -242,6 +268,7 @@
     "sitemap": "Footer",
     "legal": "Legal",
     "columns": {
+      "work": "Work with us",
       "agents": "Agents",
       "products": "Products",
       "services": "Services",
@@ -283,65 +310,133 @@
   "home": {
     "latest": "Latest writing",
     "meta": {
-      "title": "TenthMatrix: software that puts AI agents to work",
-      "description": "TenthMatrix designs, builds and runs AI agents, the tools they depend on and the applications teams use every day, and writes about the engineering behind them."
+      "title": "TenthMatrix: AI agent and generative AI development you can outsource",
+      "description": "TenthMatrix builds and runs AI agents and generative AI applications for companies that outsource the work. Code in your repository, data and keys under your control, approval gates on risky actions."
     },
     "hero": {
-      "eyebrow": "AI agents · tools · applications",
-      "title": "Software that puts AI agents to work",
-      "lede": "We design, build and run AI agents and the software they depend on: gateways, secrets, release pipelines and the applications your teams use every day. You keep the data, the keys and the final say.",
-      "primary": "Start a pilot",
-      "secondary": "See the products",
+      "eyebrow": "AI agent and generative AI development",
+      "title": "We build and run your AI agents and generative AI applications",
+      "lede": "Hand us the project. We design it, build it in your repository, connect it to your systems and run it in production, or hand it to your team. You keep the code, the data, the keys and the final say.",
+      "primary": "Start a project",
+      "secondary": "Why our agents",
       "meta": [
-        "Self-hosted or managed",
+        "Code in your repo",
         "Human approval gates",
-        "Open source where it counts"
+        "Self-hosted or managed"
       ]
     },
     "pillars": {
-      "eyebrow": "What we build",
-      "title": "Three layers, one team",
-      "lede": "Most agent projects stall between the demo and production. We build all three layers, so the handover is ours to get right.",
+      "eyebrow": "What we build for you",
+      "title": "Agents, generative AI apps and the integrations that make them useful",
+      "lede": "Most AI projects stall between the demo and production, usually on the integration and operations work. We take all of it on, so there is one team to hold to account.",
       "agents": {
-        "title": "Agents",
-        "body": "Specialist agents that read tickets, inboxes and repositories, do the work, and stop for review before anything is sent, spent or deleted."
+        "title": "Agentic software",
+        "body": "Agents that work through tickets, inboxes, CRMs and repositories, do the multi-step work and stop for review before anything is sent, spent or deleted."
       },
-      "tools": {
-        "title": "Tools",
-        "body": "The infrastructure under the agents: an API gateway with a WAF, a secrets vault per tenant, health-gated release rings and round-the-clock monitoring."
+      "genai": {
+        "title": "Generative AI applications",
+        "body": "Knowledge assistants that cite your documents, drafting tools and copilots inside the apps your teams already use, running where your data rules allow."
       },
-      "applications": {
-        "title": "Applications",
-        "body": "Finished software for the teams that use it: agent orchestration, CRM, marketing and knowledge assistants, wired into the systems you already run."
+      "integrations": {
+        "title": "Integrations with your systems",
+        "body": "APIs, MCP servers and connectors into your CRM, ERP, ticketing, databases and file stores, with secrets, logging and access control from the first release."
+      }
+    },
+    "benefits": {
+      "eyebrow": "Benefits of TenthMatrix AI agents",
+      "title": "What you get when our agents do the work",
+      "lede": "Each benefit maps to software we build and run ourselves, so you can inspect it before you sign anything.",
+      "all": "Compare with in-house and chatbot SaaS",
+      "approval": {
+        "title": "A person approves what matters",
+        "body": "Agents draft and prepare. Anything that sends, spends or deletes waits for a named person.",
+        "proof": "See Jobshout"
+      },
+      "hosting": {
+        "title": "Self-hosted or managed",
+        "body": "Run the agents in your own cloud or data centre, or have us run them. The code is the same either way.",
+        "proof": "Engagement models"
+      },
+      "data": {
+        "title": "Your data and keys stay with you",
+        "body": "Data stays in your systems and model keys stay in your secrets store. Pick the model provider, or host an open-weight model yourself.",
+        "proof": "Security and IP"
+      },
+      "vault": {
+        "title": "Secrets isolated per agent",
+        "body": "WSL Vault issues short-lived, scoped credentials, encrypted per tenant and recorded in a tamper-evident audit log.",
+        "proof": "See WSL Vault"
+      },
+      "releases": {
+        "title": "Releases gated on health",
+        "body": "Ring Promoter moves each change from int to prod only when health checks pass, and rolls back when they fail.",
+        "proof": "See Ring Promoter"
+      },
+      "edge": {
+        "title": "Security at the edge",
+        "body": "WSL Proxy puts an API gateway, WAF rules and rate limits in front of the agent and the tools it calls.",
+        "proof": "See WSL Proxy"
+      },
+      "observe": {
+        "title": "Cost and behaviour you can see",
+        "body": "A trace for every run, cost and latency per agent, and alerts when either drifts.",
+        "proof": "How we measure"
+      },
+      "production": {
+        "title": "Built by a team that runs agents",
+        "body": "Our own agents run in production on this stack. We publish how they work, including what broke.",
+        "proof": "Read the articles"
       }
     },
     "steps": {
-      "eyebrow": "How a pilot runs",
-      "title": "From one job to production in four steps",
-      "lede": "No platform to buy first. We start with a single task and prove the agent on it.",
+      "eyebrow": "How outsourcing works",
+      "title": "Discovery, pilot, build, then run or hand over",
+      "lede": "Each stage ends with something you keep, even if you stop there.",
       "items": [
         {
-          "title": "Scope",
-          "body": "We pick one job with a clear owner and a measurable outcome, and write down what the agent must never do."
+          "title": "Discovery",
+          "body": "We pick one job, the systems it touches and who checks the result, and write down what the agent must never do. You get a written scope and a fixed quote for the pilot."
+        },
+        {
+          "title": "Pilot",
+          "body": "The smallest version that does the real job on real data, behind approval gates, measured against the scope. Then a go, change or stop recommendation."
         },
         {
           "title": "Build",
-          "body": "Agents, tools and evaluations live in your repository from day one. You can read every prompt, trace and test."
+          "body": "Production code, integrations, secrets, guardrails, tests and a release path, all in your repository. You can read every prompt, trace and test."
         },
         {
-          "title": "Gate",
-          "body": "Actions that send, spend or delete wait for a person. Releases move from int to prod only when health checks pass."
-        },
-        {
-          "title": "Run",
-          "body": "We operate it with you, with monitoring, cost reports and a weekly review, until your team owns it."
+          "title": "Run or hand over",
+          "body": "We operate it with monitoring, cost reports and a regular review, or hand it to your team with runbooks and training."
         }
       ]
     },
+    "engagement": {
+      "eyebrow": "Engagement models",
+      "title": "Four ways to work with us",
+      "lede": "Choose by how clear the job is and how much you want to own at the end.",
+      "more": "Compare engagement models",
+      "fixed": {
+        "title": "Fixed-scope project",
+        "body": "One agent, application or integration, with a written scope and an agreed price for it."
+      },
+      "team": {
+        "title": "Dedicated agent team",
+        "body": "A small team working through your backlog of AI work, month by month."
+      },
+      "embedded": {
+        "title": "Embedded engineers",
+        "body": "Our engineers join your team, work in your repos and pass on what they know."
+      },
+      "transfer": {
+        "title": "Build, operate, transfer",
+        "body": "We build it, run it for an agreed period, then hand it over with runbooks and training."
+      }
+    },
     "products": {
-      "eyebrow": "Products",
-      "title": "Software we build and run",
-      "lede": "Each one started as something our own agents needed in production.",
+      "eyebrow": "Proof",
+      "title": "Software we build and run ourselves",
+      "lede": "Client agents run on the same products we use in production. Each one started as something our own agents needed.",
       "all": "All products",
       "see": "See {name}",
       "ringPromoter": {
@@ -380,12 +475,6 @@
       "blog": "The blog",
       "empty": "New writing is on its way."
     },
-    "services": {
-      "eyebrow": "Services",
-      "title": "Engineers for the parts around the agent",
-      "lede": "Agents fail on the unglamorous parts: data, deployment, security and operations. Our services teams take those on alongside your own.",
-      "all": "All services"
-    },
     "hardware": {
       "eyebrow": "Need the hardware?",
       "title": "GPU workstations and clusters live at Workstation",
@@ -393,11 +482,11 @@
       "link": "Visit Workstation"
     },
     "cta": {
-      "eyebrow": "Start a pilot",
-      "title": "Tell us the job. We'll scope the agent.",
-      "body": "Send us the task you want off your team's plate. Within one working day we reply with what an agent could do, what it shouldn't, and how we would prove it.",
-      "primary": "Start a pilot",
-      "secondary": "Read the architecture"
+      "eyebrow": "Start a project",
+      "title": "Tell us the job. We'll scope the build.",
+      "body": "Send the task, the systems it touches and who checks the result. Within one working day an engineer replies with what we would build, what it should not do and how we would prove it.",
+      "primary": "Start a project",
+      "secondary": "How outsourcing works"
     }
   },
   "articlesPage": {
@@ -494,7 +583,7 @@
   "form": {
     "name": "Full name",
     "email": "Email",
-    "phone": "Phone (optional)",
+    "phone": "Phone",
     "message": "What do you want your agents to do?",
     "submit": "Send",
     "sending": "Sending…",
@@ -507,7 +596,9 @@
     "submitError": "Sorry, something went wrong. Please try again or email us.",
     "optional": "(optional)",
     "messageHint": "The task, the systems it touches and who checks the result. Two or three sentences is plenty.",
-    "privacy": "We use your details only to reply to this enquiry."
+    "privacy": "We use your details only to reply to this enquiry.",
+    "projectType": "Project type",
+    "projectTypeAny": "Choose one"
   },
   "errors": {
     "notFoundTitle": "That page isn't here",
@@ -732,6 +823,7 @@
     "pain": "The prolonged pain",
     "solution": "How AI helps",
     "result": "Business result",
-    "whenRight": "When this is right"
+    "whenRight": "When this is right",
+    "startProject": "Start a project"
   }
 }

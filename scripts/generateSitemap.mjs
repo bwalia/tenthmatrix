@@ -18,6 +18,9 @@ const corePages = {
   'docs/blogs': { changefreq: 'daily', priority: '0.8' },
   insights: { changefreq: 'weekly', priority: '0.8' },
   'contact-us': { changefreq: 'monthly', priority: '0.7' },
+  'outsource-ai-development': { changefreq: 'monthly', priority: '0.9' },
+  'why-tenthmatrix-agents': { changefreq: 'monthly', priority: '0.8' },
+  'start-a-project': { changefreq: 'monthly', priority: '0.8' },
 };
 // Every other static route under src/app/[locale] (no [dynamic] segment).
 // noindex/utility routes are left out; legal pages get a low priority.

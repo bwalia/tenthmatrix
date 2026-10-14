@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "title": "Pourquoi les agents IA de TenthMatrix | TenthMatrix",
+    "description": "Ce que vous apportent les agents IA de TenthMatrix par rapport à un développement interne ou à un chatbot générique : validations obligatoires, données et clés sous votre contrôle, intégrations profondes et une équipe qui les exploite après le lancement.",
+    "keywords": "avantages des agents IA, agents TenthMatrix, agents IA vs chatbot, développer ou acheter des agents IA, agents IA sécurisés, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Pourquoi les agents TenthMatrix",
+    "title": "Les avantages des agents IA de TenthMatrix, et comment vérifier chacun d'eux",
+    "subtitle": "Chaque avantage présenté ici renvoie à un élément vérifiable : un produit, sa documentation, un article ou une ligne de votre contrat.",
+    "cta": [
+      {
+        "label": "Démarrer un projet",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Comparer les options",
+        "link": "#compare"
+      }
+    ],
+    "meta": [
+      "Validation humaine obligatoire",
+      "Les données et les clés restent chez vous",
+      "Auto-hébergé ou géré"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "benefits",
+      "title": "Ce que vous obtenez",
+      "columns": 2,
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "Une personne valide ce qui compte",
+          "description": "Les agents rédigent, recherchent et préparent. Tout ce qui envoie, dépense ou supprime attend la validation d'une personne désignée. Jobshout fonctionne déjà ainsi.",
+          "href": "/jobshout",
+          "linkLabel": "Voir Jobshout"
+        },
+        {
+          "icon": "server",
+          "title": "Auto-hébergé ou géré",
+          "description": "Exécutez les agents dans votre propre cloud ou datacenter, ou confiez-nous leur exploitation. Le code est le même dans les deux cas : vous pouvez changer d'avis plus tard.",
+          "href": "/outsource-ai-development#engagement",
+          "linkLabel": "Voir les modèles d'engagement"
+        },
+        {
+          "icon": "lock",
+          "title": "Vos données et vos clés restent chez vous",
+          "description": "Les données restent dans vos systèmes et les clés des modèles dans votre coffre de secrets. Vous choisissez le fournisseur de modèle, ou vous hébergez vous-même un modèle open-weight.",
+          "href": "/outsource-ai-development#security-ip",
+          "linkLabel": "Sécurité et IP"
+        },
+        {
+          "icon": "key",
+          "title": "Secrets isolés par agent",
+          "description": "WSL Vault émet des identifiants éphémères et à portée limitée, chiffrés par tenant et consignés dans un journal d'audit infalsifiable. Voler un serveur ne livre pas les clés.",
+          "href": "/wsl-vault",
+          "linkLabel": "Voir WSL Vault"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Versions conditionnées à la santé",
+          "description": "Ring Promoter fait passer chaque changement par int, test, acc et prod uniquement lorsque les contrôles de santé réussissent, et revient automatiquement en arrière en cas d'échec.",
+          "href": "/ring-promoter",
+          "linkLabel": "Voir Ring Promoter"
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Sécurité en périphérie",
+          "description": "WSL Proxy place une passerelle API, des règles WAF et des limites de débit devant l'agent et les outils qu'il appelle.",
+          "href": "/wsl-proxy",
+          "linkLabel": "Voir WSL Proxy"
+        },
+        {
+          "icon": "chart-line",
+          "title": "Des coûts et un comportement visibles",
+          "description": "Une trace pour chaque exécution, le coût et la latence par agent, et des alertes en cas de dérive. SysOps 24/7 surveille les endpoints, certificats et DNS autour.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Découvrir notre méthode de mesure"
+        },
+        {
+          "icon": "robot",
+          "title": "Conçu par une équipe qui exploite des agents",
+          "description": "Nos propres agents tournent en production sur cette même stack. Nous publions leur fonctionnement, y compris ce qui a cassé.",
+          "href": "/articles",
+          "linkLabel": "Lire les articles"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "id": "compare",
+      "title": "Équipe interne, chatbot SaaS ou TenthMatrix",
+      "intro": "Chaque option convient à quelqu'un. Voici où elles diffèrent.",
+      "highlight": "tm",
+      "columns": [
+        {
+          "key": "dimension",
+          "label": "Critère"
+        },
+        {
+          "key": "inhouse",
+          "label": "Développement interne"
+        },
+        {
+          "key": "saas",
+          "label": "Chatbot SaaS générique"
+        },
+        {
+          "key": "tm",
+          "label": "Agents TenthMatrix"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "Délai jusqu'au premier agent opérationnel",
+          "inhouse": "Commence une fois que vous avez recruté ou formé des personnes expérimentées en agents.",
+          "saas": "Rapide pour un widget de chat sur du contenu public. Plus lent dès qu'il doit agir dans vos systèmes.",
+          "tm": "Commence par un pilote cadré sur une tâche réelle, mené par une équipe qui l'a déjà fait."
+        },
+        {
+          "dimension": "Maîtrise des données",
+          "inhouse": "Contrôle total.",
+          "saas": "Votre contenu et vos conversations sont chez le fournisseur, selon ses conditions.",
+          "tm": "Contrôle total. Les données restent dans vos systèmes, et vous choisissez le fournisseur de modèle ou hébergez le modèle."
+        },
+        {
+          "dimension": "Profondeur d'intégration",
+          "inhouse": "Aussi profonde que votre équipe a le temps de la construire.",
+          "saas": "Limitée aux connecteurs et au modèle de permissions du fournisseur.",
+          "tm": "Conçue pour vos systèmes, comme le CRM, le ticketing, les bases de données et les dépôts, via des API et des serveurs MCP."
+        },
+        {
+          "dimension": "Actions et validations",
+          "inhouse": "Vous concevez et construisez vous-même le circuit de validation.",
+          "saas": "Répond surtout à des questions. Les actions dépendent de la feuille de route du fournisseur.",
+          "tm": "Validation obligatoire pour tout ce qui envoie, dépense ou supprime, dès la première version."
+        },
+        {
+          "dimension": "Modèle de sécurité",
+          "inhouse": "Ce que vous construisez, qui commence souvent par des clés API à longue durée de vie.",
+          "saas": "Une plateforme multi-tenant partagée. Vous dépendez des contrôles du fournisseur.",
+          "tm": "Des identifiants éphémères à portée limitée via WSL Vault, des contrôles en périphérie via WSL Proxy et un journal d'audit de chaque action."
+        },
+        {
+          "dimension": "Exploitation après le lancement",
+          "inhouse": "Votre équipe gère la supervision, les mises à niveau des modèles et l'astreinte.",
+          "saas": "Le fournisseur l'exploite, et vous voyez peu de choses sur les causes des pannes.",
+          "tm": "Nous l'exploitons avec des traces, des rapports de coûts et des versions conditionnées à la santé, ou nous le remettons à votre équipe avec des runbooks."
+        },
+        {
+          "dimension": "Propriété et sortie",
+          "inhouse": "Tout vous appartient.",
+          "saas": "Partir signifie tout reconstruire ailleurs.",
+          "tm": "Le code vous appartient dès le premier commit et vous pouvez le réinternaliser à tout moment."
+        },
+        {
+          "dimension": "Structure des coûts",
+          "inhouse": "Des salaires et du temps de recrutement avant toute livraison.",
+          "saas": "Un abonnement par utilisateur ou par conversation.",
+          "tm": "Un pilote chiffré, puis un prix au projet ou une équipe mensuelle, convenus par écrit."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "limits",
+      "title": "Ce que nous ne prétendons pas",
+      "items": [
+        "Nous ne promettons pas un pourcentage d'économie avant d'avoir vu votre processus. Le pilote le mesure.",
+        "Nous ne laissons pas un agent agir sans supervision sur ce que vous n'avez pas explicitement approuvé pour l'automatisation.",
+        "Nous ne conservons ni vos données ni vos clés. Tout ce que nous construisons pour vous vous appartient.",
+        "Vous n'êtes pas obligé d'utiliser nos produits. Si vous avez déjà un gestionnaire de secrets, une passerelle ou un pipeline, nous construisons dessus."
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Vérifier nos affirmations",
+      "items": [
+        {
+          "question": "Pouvons-nous vérifier ces affirmations avant de signer quoi que ce soit ?",
+          "answer": "Oui. WSL Vault, WSL Proxy, Ring Promoter et Jobshout disposent d'une documentation publique et de dépôts de code source. Nous montrerons volontiers à vos ingénieurs, lors d'un appel, comment ils s'articulent."
+        },
+        {
+          "question": "Devons-nous utiliser vos produits ?",
+          "answer": "Non. Nos produits sont une option, pas une obligation. Si vos outils existants font l'affaire, nous construisons dessus."
+        },
+        {
+          "question": "Un agent TenthMatrix est-il un produit sous licence ?",
+          "answer": "Non. C'est un logiciel que nous développons pour vous, dans votre dépôt. Lorsqu'il utilise l'un de nos produits open source, la licence de ce produit s'applique."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "À voir aussi",
+      "items": [
+        {
+          "title": "Externaliser le développement IA",
+          "href": "/outsource-ai-development",
+          "label": "Modèles d'engagement et processus"
+        },
+        {
+          "title": "Développement d'agents IA",
+          "href": "/ai-agent-development",
+          "label": "Les agents que nous développons"
+        },
+        {
+          "title": "Développement d'IA générative",
+          "href": "/generative-ai-development",
+          "label": "Assistants, rédaction et copilotes"
+        },
+        {
+          "title": "Tous les produits",
+          "href": "/products",
+          "label": "Le logiciel derrière les agents"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Découvrez ce qu'un agent pourrait faire d'une de vos tâches",
+    "description": "Décrivez-la en un paragraphe. Nous reviendrons vers vous avec une conception d'agent, les risques et la façon dont nous le prouverions.",
+    "button": "Démarrer un projet",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Comment fonctionne l'externalisation",
+      "link": "/outsource-ai-development"
+    }
+  }
+}

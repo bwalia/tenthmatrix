@@ -18,10 +18,16 @@
     "menu": "Sitemenu",
     "openMenu": "Menu openen",
     "closeMenu": "Menu sluiten",
-    "cta": "Start een pilot",
+    "cta": "Start een project",
     "searchPlaceholder": "Zoek artikelen, berichten en documentatie",
     "hardware": "Hardware nodig? GPU-workstations bij Workstation",
     "groups": {
+      "work": {
+        "label": "Werk met ons",
+        "title": "Besteed uw AI-project uit",
+        "intro": "Geef ons een agent of een generatieve-AI-project. U houdt de code, de data en het laatste woord.",
+        "all": "Hoe uitbesteden werkt"
+      },
       "agents": {
         "label": "Agents",
         "title": "AI-agents",
@@ -227,12 +233,32 @@
       "search": {
         "label": "Zoeken",
         "desc": "Vind alles op de site"
+      },
+      "outsource": {
+        "label": "AI-ontwikkeling uitbesteden",
+        "desc": "Samenwerkingsvormen, proces en IP"
+      },
+      "aiAgentDev": {
+        "label": "Ontwikkeling van AI-agents",
+        "desc": "Support-, ops-, document- en coding-agents"
+      },
+      "genAiDev": {
+        "label": "Ontwikkeling van generatieve AI",
+        "desc": "Kennisassistenten, schrijfhulp en copilots"
+      },
+      "whyAgents": {
+        "label": "Waarom TenthMatrix-agents",
+        "desc": "Voordelen, en hoe u elk ervan controleert"
+      },
+      "startProject": {
+        "label": "Start een project",
+        "desc": "Vertel ons de taak. Wij reageren binnen een werkdag."
       }
     }
   },
   "footer": {
-    "tagline": "Software die AI-agents aan het werk zet.",
-    "blurb": "Wij ontwerpen, bouwen en beheren AI-agents, de tools waarop ze draaien en de applicaties die uw teams dagelijks gebruiken.",
+    "tagline": "AI-agents en generatieve-AI-applicaties, voor u gebouwd.",
+    "blurb": "Wij ontwerpen, bouwen en beheren AI-agents en generatieve-AI-applicaties voor bedrijven die het werk uitbesteden, plus de softwareproducten waarop die agents draaien.",
     "hardware": "Hardware nodig? Bezoek Workstation",
     "hardwareEyebrow": "Hardware nodig?",
     "hardwareTitle": "GPU-workstations en -clusters worden gebouwd door Workstation.",
@@ -242,6 +268,7 @@
     "sitemap": "Footer",
     "legal": "Juridisch",
     "columns": {
+      "work": "Werk met ons",
       "agents": "Agents",
       "products": "Producten",
       "services": "Diensten",
@@ -283,65 +310,133 @@
   "home": {
     "latest": "Nieuwste artikelen",
     "meta": {
-      "title": "TenthMatrix: software die AI-agents aan het werk zet",
-      "description": "TenthMatrix ontwerpt, bouwt en beheert AI-agents, de tools waarop ze draaien en de applicaties die teams dagelijks gebruiken, en schrijft over de techniek erachter."
+      "title": "TenthMatrix: ontwikkeling van AI-agents en generatieve AI die u kunt uitbesteden",
+      "description": "TenthMatrix bouwt en beheert AI-agents en generatieve-AI-applicaties voor bedrijven die het werk uitbesteden. Code in uw repository, data en sleutels onder uw controle, goedkeuringsstappen bij risicovolle acties."
     },
     "hero": {
-      "eyebrow": "AI-agents · tools · applicaties",
-      "title": "Software die AI-agents aan het werk zet",
-      "lede": "Wij ontwerpen, bouwen en beheren AI-agents en de software waarop ze draaien: gateways, secrets, release-pipelines en de applicaties die uw teams dagelijks gebruiken. U houdt de data, de sleutels en het laatste woord.",
-      "primary": "Start een pilot",
-      "secondary": "Bekijk de producten",
+      "eyebrow": "Ontwikkeling van AI-agents en generatieve AI",
+      "title": "Wij bouwen en beheren uw AI-agents en generatieve-AI-applicaties",
+      "lede": "Geef ons het project. Wij ontwerpen het, bouwen het in uw repository, koppelen het aan uw systemen en draaien het in productie, of dragen het over aan uw team. U houdt de code, de data, de sleutels en het laatste woord.",
+      "primary": "Start een project",
+      "secondary": "Waarom onze agents",
       "meta": [
-        "Self-hosted of beheerd",
+        "Code in uw repository",
         "Menselijke goedkeuringsstappen",
-        "Open source waar het ertoe doet"
+        "Self-hosted of beheerd"
       ]
     },
     "pillars": {
-      "eyebrow": "Wat we bouwen",
-      "title": "Drie lagen, één team",
-      "lede": "De meeste agentprojecten lopen vast tussen demo en productie. Wij bouwen alle drie de lagen, dus de overdracht goed regelen is onze verantwoordelijkheid.",
+      "eyebrow": "Wat wij voor u bouwen",
+      "title": "Agents, generatieve-AI-apps en de integraties die ze bruikbaar maken",
+      "lede": "De meeste AI-projecten lopen vast tussen demo en productie, meestal op integratie en beheer. Wij nemen dat allemaal op ons, zodat er één team is dat u kunt aanspreken.",
       "agents": {
-        "title": "Agents",
-        "body": "Gespecialiseerde agents die tickets, inboxen en repositories lezen, het werk doen en stoppen voor review voordat er iets wordt verzonden, uitgegeven of verwijderd."
+        "title": "Agentic software",
+        "body": "Agents die tickets, inboxen, CRM's en repositories afwerken, het werk in meerdere stappen doen en wachten op review voordat er iets wordt verstuurd, uitgegeven of verwijderd."
       },
-      "tools": {
-        "title": "Tools",
-        "body": "De infrastructuur onder de agents: een API-gateway met WAF, een secrets-kluis per tenant, health-gated release-rings en monitoring rond de klok."
+      "genai": {
+        "title": "Generatieve AI-applicaties",
+        "body": "Kennisassistenten die uw documenten citeren, schrijfhulpen en copilots in de apps die uw teams al gebruiken, draaiend waar uw dataregels dat toestaan."
       },
-      "applications": {
-        "title": "Applicaties",
-        "body": "Kant-en-klare software voor de teams die het gebruiken: agentorkestratie, CRM, marketing en kennisassistenten, gekoppeld aan de systemen die u al gebruikt."
+      "integrations": {
+        "title": "Integraties met uw systemen",
+        "body": "API's, MCP-servers en connectors naar uw CRM, ERP, ticketing, databases en bestandsopslag, met secrets, logging en toegangscontrole vanaf de eerste release."
+      }
+    },
+    "benefits": {
+      "eyebrow": "Voordelen van TenthMatrix AI-agents",
+      "title": "Wat u krijgt als onze agents het werk doen",
+      "lede": "Elk voordeel hoort bij software die we zelf bouwen en beheren, zodat u die kunt inspecteren voordat u iets tekent.",
+      "all": "Vergelijk met in-house en chatbot-SaaS",
+      "approval": {
+        "title": "Een mens keurt goed wat ertoe doet",
+        "body": "Agents maken concepten en bereiden voor. Alles wat verstuurt, uitgeeft of verwijdert wacht op een aangewezen persoon.",
+        "proof": "Bekijk Jobshout"
+      },
+      "hosting": {
+        "title": "Self-hosted of beheerd",
+        "body": "Draai de agents in uw eigen cloud of datacenter, of laat ons ze beheren. De code is in beide gevallen dezelfde.",
+        "proof": "Samenwerkingsmodellen"
+      },
+      "data": {
+        "title": "Uw data en sleutels blijven bij u",
+        "body": "Data blijft in uw systemen en modelsleutels blijven in uw secrets store. Kies de modelaanbieder, of host zelf een open-weight model.",
+        "proof": "Beveiliging en IP"
+      },
+      "vault": {
+        "title": "Secrets geïsoleerd per agent",
+        "body": "WSL Vault geeft kortlevende, afgebakende credentials uit, versleuteld per tenant en vastgelegd in een manipulatiebestendig auditlog.",
+        "proof": "Bekijk WSL Vault"
+      },
+      "releases": {
+        "title": "Releases afhankelijk van health checks",
+        "body": "Ring Promoter brengt elke wijziging van int naar prod alleen als de health checks slagen, en draait terug als ze falen.",
+        "proof": "Bekijk Ring Promoter"
+      },
+      "edge": {
+        "title": "Beveiliging aan de rand",
+        "body": "WSL Proxy plaatst een API-gateway, WAF-regels en rate limits vóór de agent en de tools die hij aanroept.",
+        "proof": "Bekijk WSL Proxy"
+      },
+      "observe": {
+        "title": "Kosten en gedrag die u kunt zien",
+        "body": "Een trace voor elke run, kosten en latentie per agent, en alerts als een van beide afwijkt.",
+        "proof": "Hoe wij meten"
+      },
+      "production": {
+        "title": "Gebouwd door een team dat zelf agents draait",
+        "body": "Onze eigen agents draaien in productie op deze stack. We publiceren hoe ze werken, inclusief wat er misging.",
+        "proof": "Lees de artikelen"
       }
     },
     "steps": {
-      "eyebrow": "Hoe een pilot verloopt",
-      "title": "Van één taak naar productie in vier stappen",
-      "lede": "Geen platform dat u eerst moet kopen. We beginnen met één taak en bewijzen de agent daarop.",
+      "eyebrow": "Hoe uitbesteden werkt",
+      "title": "Discovery, pilot, bouw, daarna beheer of overdracht",
+      "lede": "Elke fase eindigt met iets wat u houdt, ook als u daar stopt.",
       "items": [
         {
-          "title": "Scope",
-          "body": "We kiezen één taak met een duidelijke eigenaar en een meetbaar resultaat, en leggen vast wat de agent nooit mag doen."
+          "title": "Discovery",
+          "body": "We kiezen één taak, de systemen die ze raakt en wie het resultaat controleert, en leggen vast wat de agent nooit mag doen. U krijgt een schriftelijke scope en een vaste prijs voor de pilot."
+        },
+        {
+          "title": "Pilot",
+          "body": "De kleinste versie die het echte werk doet op echte data, achter goedkeuringsstappen, gemeten tegen de scope. Daarna een advies: doorgaan, aanpassen of stoppen."
         },
         {
           "title": "Bouwen",
-          "body": "Agents, tools en evaluaties staan vanaf dag één in uw repository. U kunt elke prompt, trace en test lezen."
+          "body": "Productiecode, integraties, secrets, guardrails, tests en een releasepad, allemaal in uw repository. U kunt elke prompt, trace en test lezen."
         },
         {
-          "title": "Goedkeuring",
-          "body": "Acties die verzenden, uitgeven of verwijderen wachten op een mens. Releases gaan alleen van int naar prod als de health checks slagen."
-        },
-        {
-          "title": "Draaien",
-          "body": "We beheren het samen met u, met monitoring, kostenrapporten en een wekelijkse review, totdat uw team het overneemt."
+          "title": "Beheren of overdragen",
+          "body": "Wij beheren het met monitoring, kostenrapportages en een vaste review, of dragen het over aan uw team met runbooks en training."
         }
       ]
     },
+    "engagement": {
+      "eyebrow": "Samenwerkingsmodellen",
+      "title": "Vier manieren om met ons te werken",
+      "lede": "Kies op basis van hoe duidelijk de taak is en hoeveel u aan het eind zelf wilt bezitten.",
+      "more": "Vergelijk samenwerkingsmodellen",
+      "fixed": {
+        "title": "Project met vaste scope",
+        "body": "Eén agent, applicatie of integratie, met een schriftelijke scope en een afgesproken prijs."
+      },
+      "team": {
+        "title": "Toegewijd agentteam",
+        "body": "Een klein team dat uw backlog met AI-werk afwerkt, maand na maand."
+      },
+      "embedded": {
+        "title": "Ingebedde engineers",
+        "body": "Onze engineers sluiten aan bij uw team, werken in uw repo's en dragen hun kennis over."
+      },
+      "transfer": {
+        "title": "Bouwen, beheren, overdragen",
+        "body": "Wij bouwen het, beheren het een afgesproken periode en dragen het daarna over met runbooks en training."
+      }
+    },
     "products": {
-      "eyebrow": "Producten",
-      "title": "Software die we bouwen en beheren",
-      "lede": "Elk product begon als iets wat onze eigen agents in productie nodig hadden.",
+      "eyebrow": "Bewijs",
+      "title": "Software die we zelf bouwen en beheren",
+      "lede": "Klantagents draaien op dezelfde producten die wij in productie gebruiken. Elk product begon als iets wat onze eigen agents nodig hadden.",
       "all": "Alle producten",
       "see": "Bekijk {name}",
       "ringPromoter": {
@@ -380,12 +475,6 @@
       "blog": "De blog",
       "empty": "Nieuwe artikelen zijn onderweg."
     },
-    "services": {
-      "eyebrow": "Diensten",
-      "title": "Engineers voor alles rond de agent",
-      "lede": "Agents falen op de onopvallende onderdelen: data, deployment, beveiliging en operations. Onze serviceteams pakken die op naast uw eigen teams.",
-      "all": "Alle diensten"
-    },
     "hardware": {
       "eyebrow": "Hardware nodig?",
       "title": "GPU-workstations en -clusters vindt u bij Workstation",
@@ -393,11 +482,11 @@
       "link": "Visit Workstation"
     },
     "cta": {
-      "eyebrow": "Start een pilot",
-      "title": "Vertel ons de taak. Wij bepalen de scope van de agent.",
-      "body": "Stuur ons de taak die u van het bord van uw team wilt halen. Binnen één werkdag laten we weten wat een agent zou kunnen doen, wat niet, en hoe we dat zouden bewijzen.",
-      "primary": "Start een pilot",
-      "secondary": "Lees de architectuur"
+      "eyebrow": "Start een project",
+      "title": "Vertel ons de taak. Wij bepalen de scope van de bouw.",
+      "body": "Stuur de taak, de systemen die ze raakt en wie het resultaat controleert. Binnen een werkdag reageert een engineer met wat we zouden bouwen, wat het niet mag doen en hoe we het zouden bewijzen.",
+      "primary": "Start een project",
+      "secondary": "Hoe uitbesteden werkt"
     }
   },
   "articlesPage": {
@@ -494,7 +583,7 @@
   "form": {
     "name": "Volledige naam",
     "email": "Email",
-    "phone": "Phone (optional)",
+    "phone": "Phone",
     "message": "Wat wilt u dat uw agents doen?",
     "submit": "Verzenden",
     "sending": "Verzenden…",
@@ -507,7 +596,9 @@
     "submitError": "Sorry, er ging iets mis. Probeer het opnieuw of stuur ons een e-mail.",
     "optional": "(optioneel)",
     "messageHint": "De taak, de systemen die erbij betrokken zijn en wie het resultaat controleert. Twee of drie zinnen is genoeg.",
-    "privacy": "We gebruiken uw gegevens alleen om op deze aanvraag te reageren."
+    "privacy": "We gebruiken uw gegevens alleen om op deze aanvraag te reageren.",
+    "projectType": "Type project",
+    "projectTypeAny": "Kies er één"
   },
   "errors": {
     "notFoundTitle": "Deze pagina is er niet",
@@ -732,6 +823,7 @@
     "pain": "Het aanhoudende probleem",
     "solution": "Hoe AI helpt",
     "result": "Bedrijfsresultaat",
-    "whenRight": "Wanneer dit past"
+    "whenRight": "Wanneer dit past",
+    "startProject": "Start een project"
   }
 }

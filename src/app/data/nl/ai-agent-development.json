@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "title": "Ontwikkeling van AI-agents | TenthMatrix",
+    "description": "TenthMatrix bouwt agentic software voor klanten: support-, sales-, ops-, document- en coding-agents en multi-agent workflows, met goedkeuringsstappen, evaluatiesets en releases die pas doorgaan na health checks.",
+    "keywords": "ontwikkeling van AI-agents, agentic softwareontwikkeling, AI-agents op maat, multi-agent workflows, MCP-integratie, LangGraph, Claude Agent SDK, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Ontwikkeling van AI-agents",
+    "title": "Agents gebouwd voor uw systemen, met een mens aan het roer",
+    "subtitle": "Wij ontwerpen en bouwen agents die werk in meerdere stappen uitvoeren in uw tools. Ze lezen het ticket, verzamelen de context, stellen de wijziging op en wachten op review voordat die live gaat.",
+    "description": "Wij bouwen agents voor klanten zoals we onze eigen agents in Jobshout bouwen: tools met strikte schema's, begrensde loops, goedkeuringsstappen en een trace van elke stap.",
+    "cta": [
+      {
+        "label": "Start een project",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Waarom TenthMatrix-agents",
+        "link": "/why-tenthmatrix-agents"
+      }
+    ],
+    "meta": [
+      "Claude, OpenAI of open-weight",
+      "MCP-integraties",
+      "Goedkeuringsstappen"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "agent-types",
+      "title": "Agents die wij bouwen",
+      "intro": "Elke agent krijgt een functieomschrijving, een eigenaar en een lijst van dingen die hij niet mag doen.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "headset",
+          "title": "Support-agents",
+          "description": "Ze sorteren binnenkomende tickets, halen order- en accountgeschiedenis op, stellen antwoorden op volgens uw beleid en sturen alles wat afwijkt door naar een mens."
+        },
+        {
+          "icon": "users",
+          "title": "Sales- en CRM-agents",
+          "description": "Ze verrijken leads, werken CRM-records bij na gesprekken, stellen follow-ups op en signaleren vastgelopen deals. Niets bereikt een klant zonder goedkeuring."
+        },
+        {
+          "icon": "server",
+          "title": "Ops- en SRE-agents",
+          "description": "Ze lezen alerts, logs en dashboards, vatten het incident samen en stellen een oplossing voor. De automatisering groeit stap voor stap, alleen voor de acties die u vertrouwt.",
+          "href": "/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+          "linkLabel": "Lees het artikel over KubePilot"
+        },
+        {
+          "icon": "file-alt",
+          "title": "Agents voor documentverwerking",
+          "description": "Ze halen velden uit facturen, contracten en formulieren, controleren ze tegen uw administratie en boeken ze in het juiste systeem, met een wachtrij voor alles wat onzeker is.",
+          "href": "/articles/building-vat-return-system-claude-code-invoices-expenses",
+          "linkLabel": "Lees over de btw-aangifte"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Coding- en review-agents",
+          "description": "Ze reviewen pull requests, schrijven tests en openen wijzigingen die uw engineers mergen. De PR Reviewer van Jobshout doet dit op onze eigen repositories.",
+          "href": "/jobshout",
+          "linkLabel": "Bekijk Jobshout"
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Multi-agentworkflows",
+          "description": "Een planner verdeelt het werk over gespecialiseerde agents en een supervisor controleert het resultaat, probeert opnieuw of escaleert. Handig wanneer één taak meerdere systemen raakt."
+        }
+      ]
+    },
+    {
+      "type": "overview",
+      "id": "how-we-build",
+      "title": "Hoe wij een agent bouwen",
+      "content": "Een agent is een loop. Het model kiest een tool, de tool draait, het resultaat gaat terug naar het model. De meeste fouten komen uit de loop en niet uit het model, dus daar steken we de moeite in.\n\nTools zijn getypeerd en worden gevalideerd voordat ze draaien. Loops hebben budgetten voor stappen, tijd en kosten. Prompts krijgen versiebeheer zoals code, en elke run laat een trace achter die u kunt lezen.",
+      "points": [
+        "Planner, executor, geheugen en supervisor als losse onderdelen",
+        "Schema-first tools met strikte validatie",
+        "Deterministische retries en begrensde loops"
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "stack",
+      "title": "Techstack",
+      "intro": "Wij kiezen per project. Dit zijn de tools die onze engineers gebruiken en waarover ze schrijven in onze artikelen.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "brain",
+          "title": "Modellen",
+          "list": [
+            "Claude via de Anthropic API of Amazon Bedrock",
+            "OpenAI-modellen",
+            "Open-weight modellen: Llama, Mistral, Qwen, Kimi"
+          ]
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Agent-frameworks",
+          "list": [
+            "Claude Agent SDK en Claude Code-subagents",
+            "LangChain en LangGraph",
+            "AutoGen",
+            "Airflow 3 voor geplande pipelines"
+          ]
+        },
+        {
+          "icon": "plug",
+          "title": "Integratie",
+          "list": [
+            "MCP-servers met OAuth",
+            "REST- en webhook-connectors",
+            "Amazon Bedrock AgentCore"
+          ]
+        },
+        {
+          "icon": "server",
+          "title": "Hosting en inferentie",
+          "list": [
+            "vLLM, TGI en Ollama voor self-hosted modellen",
+            "Kubernetes en k3s",
+            "Amazon Bedrock en Azure AI Foundry"
+          ]
+        },
+        {
+          "icon": "database",
+          "title": "Geheugen en retrieval",
+          "list": [
+            "Vector search, waaronder NebulaDB",
+            "Key-value stores voor agent-state",
+            "Retrieval met bronvermelding"
+          ]
+        },
+        {
+          "icon": "chart-line",
+          "title": "Observability",
+          "list": [
+            "OpenTelemetry-traces",
+            "Prometheus-metrics",
+            "Kosten- en latentiebudgetten per agent"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "guardrails",
+      "title": "Guardrails",
+      "intro": "Grenzen horen bij het ontwerp. We leggen ze vast voordat de bouw begint.",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "Goedkeuringsstappen",
+          "description": "Acties die iets versturen, uitgeven of verwijderen wachten op een aangewezen persoon. De agent mag een concept maken. Hij voert alleen zelfstandig stappen uit die u veilig genoeg vindt om te automatiseren."
+        },
+        {
+          "icon": "key",
+          "title": "Afgebakende credentials",
+          "description": "Agents hebben nooit langlevende sleutels. WSL Vault geeft kortlevende credentials uit per agent en per taak, en logt elk gebruik."
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Controles aan de rand",
+          "description": "Verkeer naar modellen en tools kan via WSL Proxy lopen, dat WAF-regels, rate limits en een audit trail aan de rand toevoegt."
+        },
+        {
+          "icon": "sliders",
+          "title": "Allow-lists en budgetten",
+          "description": "Elke agent krijgt een expliciete lijst met tools en databronnen, plus limieten voor stappen, tijd en kosten per run."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "evaluation-deployment",
+      "title": "Evaluatie en uitrol",
+      "intro": "Een agent is klaar als hij zijn tests in productie haalt, niet als de demo werkt.",
+      "steps": [
+        {
+          "title": "Een evaluatieset opbouwen",
+          "description": "Echte voorbeelden uit uw werk, elk met het antwoord dat een goede collega zou geven. Elke wijziging wordt daartegen gescoord."
+        },
+        {
+          "title": "Tracen en meten",
+          "description": "Taaksucces, toolfouten, latentie en kosten per run, uit OpenTelemetry-traces."
+        },
+        {
+          "title": "Releasen via rings",
+          "description": "Ring Promoter brengt elke release van int naar test, acc en prod alleen als de health checks slagen, en draait terug als ze falen."
+        },
+        {
+          "title": "Bewaken in productie",
+          "description": "Monitoring, alerts en een vaste review van fouten en kosten. Elke fout wordt een nieuwe evaluatiecase."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Vragen over agentprojecten",
+      "items": [
+        {
+          "question": "Gebruikt u een framework of bouwt u vanaf nul?",
+          "answer": "Allebei. Als een framework zoals LangGraph of de Claude Agent SDK past, gebruiken we het. Is de taak eenvoudig, dan is een kleine loop met getypeerde tools makkelijker te testen en te onderhouden."
+        },
+        {
+          "question": "Kan de agent op onze eigen hardware draaien?",
+          "answer": "Ja. Wij hosten open-weight modellen met vLLM of Ollama op uw servers. Hebt u de machines nodig, dan specificeert en bouwt ons zusterbedrijf Workstation GPU-workstations en -clusters."
+        },
+        {
+          "question": "Hoe voorkomt u dat een agent iets schadelijks doet?",
+          "answer": "Hij kan alleen de tools op zijn allow-list aanroepen, met afgebakende credentials, binnen limieten voor stappen en kosten. Alles wat verstuurt, uitgeeft of verwijdert wacht op goedkeuring, en elke run wordt gelogd."
+        },
+        {
+          "question": "Van wie is de agent als het project afloopt?",
+          "answer": "Van u. De code, prompts, evaluatiesets en runbooks staan vanaf de eerste commit in uw repository."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Gerelateerd",
+      "items": [
+        {
+          "title": "AI-ontwikkeling uitbesteden",
+          "href": "/outsource-ai-development",
+          "label": "Samenwerkingsmodellen en proces"
+        },
+        {
+          "title": "AI-agents evalueren",
+          "href": "/articles/evaluation-monitoring-ai-agents",
+          "label": "Metrics, traces en veiligheid"
+        },
+        {
+          "title": "Beveiliging van agentic AI",
+          "href": "/articles/agentic-ai-security-mcp-oauth-vault",
+          "label": "MCP OAuth en vault-leases"
+        },
+        {
+          "title": "AI-werkstations",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Hardware bij Workstation"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Beschrijf één taak die u door een agent wilt laten doen",
+    "description": "Wij reageren met een agentontwerp, de risico's en hoe we het in een pilot zouden bewijzen.",
+    "button": "Start een project",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Hoe uitbesteden werkt",
+      "link": "/outsource-ai-development"
+    }
+  }
+}

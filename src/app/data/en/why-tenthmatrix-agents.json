@@ -1,0 +1,194 @@
+{
+  "meta": {
+    "title": "Why TenthMatrix AI agents | TenthMatrix",
+    "description": "What you get from TenthMatrix AI agents compared with building in-house or buying a generic chatbot: approval gates, data and keys under your control, deep integrations and a team that runs it after launch.",
+    "keywords": "benefits of AI agents, TenthMatrix agents, AI agents vs chatbot, build vs buy AI agents, secure AI agents, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Why TenthMatrix agents",
+    "title": "The benefits of TenthMatrix AI agents, and how to check each one",
+    "subtitle": "Every benefit on this page points to something you can inspect: a product, its documentation, an article or a line in your contract.",
+    "cta": [
+      { "label": "Start a project", "link": "/start-a-project" },
+      { "label": "Compare the options", "link": "#compare" }
+    ],
+    "meta": ["Human approval gates", "Data and keys stay with you", "Self-hosted or managed"]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "benefits",
+      "title": "What you get",
+      "columns": 2,
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "A person approves what matters",
+          "description": "Agents draft, research and prepare. Anything that sends, spends or deletes waits for a named person. Jobshout works this way today.",
+          "href": "/jobshout",
+          "linkLabel": "See Jobshout"
+        },
+        {
+          "icon": "server",
+          "title": "Self-hosted or managed",
+          "description": "Run the agents in your own cloud or data centre, or have us run them for you. The code is the same either way, so you can change your mind later.",
+          "href": "/outsource-ai-development#engagement",
+          "linkLabel": "See engagement models"
+        },
+        {
+          "icon": "lock",
+          "title": "Your data and keys stay with you",
+          "description": "Data stays in your systems and model keys stay in your secrets store. You pick the model provider, or host an open-weight model yourself.",
+          "href": "/outsource-ai-development#security-ip",
+          "linkLabel": "Security and IP"
+        },
+        {
+          "icon": "key",
+          "title": "Secrets isolated per agent",
+          "description": "WSL Vault issues short-lived, scoped credentials, encrypted per tenant and recorded in a tamper-evident audit log. A stolen server doesn't hand over the keys.",
+          "href": "/wsl-vault",
+          "linkLabel": "See WSL Vault"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Releases gated on health",
+          "description": "Ring Promoter moves every change through int, test, acc and prod only when health checks pass, and rolls back automatically when they fail.",
+          "href": "/ring-promoter",
+          "linkLabel": "See Ring Promoter"
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Security at the edge",
+          "description": "WSL Proxy puts an API gateway, WAF rules and rate limits in front of the agent and the tools it calls.",
+          "href": "/wsl-proxy",
+          "linkLabel": "See WSL Proxy"
+        },
+        {
+          "icon": "chart-line",
+          "title": "Cost and behaviour you can see",
+          "description": "A trace for every run, cost and latency per agent, and alerts when either drifts. SysOps 24/7 watches the endpoints, certificates and DNS around it.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Read how we measure"
+        },
+        {
+          "icon": "robot",
+          "title": "Built by a team that runs agents",
+          "description": "Our own agents run in production on this same stack. We publish how they work, including the parts that broke.",
+          "href": "/articles",
+          "linkLabel": "Read the articles"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "id": "compare",
+      "title": "In-house team, chatbot SaaS or TenthMatrix",
+      "intro": "Each option suits someone. This is where they differ.",
+      "highlight": "tm",
+      "columns": [
+        { "key": "dimension", "label": "Dimension" },
+        { "key": "inhouse", "label": "Build in-house" },
+        { "key": "saas", "label": "Generic chatbot SaaS" },
+        { "key": "tm", "label": "TenthMatrix agents" }
+      ],
+      "rows": [
+        {
+          "dimension": "Time to first working agent",
+          "inhouse": "Starts once you have hired or trained people with agent experience.",
+          "saas": "Quick for a chat widget on public content. Slower once it has to act inside your systems.",
+          "tm": "Starts with a scoped pilot on one real job, built by a team that has done it before."
+        },
+        {
+          "dimension": "Data control",
+          "inhouse": "Full control.",
+          "saas": "Your content and conversations sit with the vendor, under their terms.",
+          "tm": "Full control. Data stays in your systems, and you choose the model provider or host the model."
+        },
+        {
+          "dimension": "Integration depth",
+          "inhouse": "As deep as your team has time to build.",
+          "saas": "Limited to the vendor's connectors and permission model.",
+          "tm": "Built for your systems, such as CRM, ticketing, databases and repositories, through APIs and MCP servers."
+        },
+        {
+          "dimension": "Actions and approvals",
+          "inhouse": "You design and build the approval flow yourself.",
+          "saas": "Mostly answers questions. Actions depend on the vendor's roadmap.",
+          "tm": "Approval gates on anything that sends, spends or deletes, from the first release."
+        },
+        {
+          "dimension": "Security model",
+          "inhouse": "Whatever you build, which often starts with long-lived API keys.",
+          "saas": "A shared multi-tenant platform. You rely on the vendor's controls.",
+          "tm": "Short-lived scoped credentials from WSL Vault, edge controls from WSL Proxy, and an audit log of every action."
+        },
+        {
+          "dimension": "Operating it after launch",
+          "inhouse": "Your team owns monitoring, model upgrades and on-call.",
+          "saas": "The vendor runs it, and you see little of why it fails.",
+          "tm": "We run it with traces, cost reports and health-gated releases, or hand it to your team with runbooks."
+        },
+        {
+          "dimension": "Ownership and exit",
+          "inhouse": "You own everything.",
+          "saas": "Leaving means rebuilding somewhere else.",
+          "tm": "You own the code from the first commit and can take it in-house at any point."
+        },
+        {
+          "dimension": "Cost shape",
+          "inhouse": "Salaries and hiring time before anything ships.",
+          "saas": "A subscription per seat or per conversation.",
+          "tm": "A quoted pilot, then a project price or a monthly team, agreed in writing."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "limits",
+      "title": "What we don't claim",
+      "items": [
+        "We don't promise a percentage saving before we've seen your process. The pilot measures it.",
+        "We don't let an agent act unsupervised on anything you haven't explicitly approved for automation.",
+        "We don't keep your data or keys. Everything we build for you is yours.",
+        "You don't have to use our products. If you already have a secrets manager, gateway or pipeline, we build on it."
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Checking the claims",
+      "items": [
+        {
+          "question": "Can we check these claims before we sign anything?",
+          "answer": "Yes. WSL Vault, WSL Proxy, Ring Promoter and Jobshout have public documentation and source repositories. We're happy to walk your engineers through how they fit together on a call."
+        },
+        {
+          "question": "Do we have to use your products?",
+          "answer": "No. Our products are an option, not a requirement. If your existing tools do the job, we build on those."
+        },
+        {
+          "question": "Is a TenthMatrix agent a product we license?",
+          "answer": "No. It's software we build for you, in your repository. Where it uses one of our open-source products, that product's licence applies."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Related",
+      "items": [
+        { "title": "Outsource AI development", "href": "/outsource-ai-development", "label": "Engagement models and process" },
+        { "title": "AI agent development", "href": "/ai-agent-development", "label": "The agents we build" },
+        { "title": "Generative AI development", "href": "/generative-ai-development", "label": "Assistants, drafting and copilots" },
+        { "title": "All products", "href": "/products", "label": "The software behind the agents" }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "See what an agent could do with one of your jobs",
+    "description": "Describe it in a paragraph. We'll come back with an agent design, the risks and how we would prove it.",
+    "button": "Start a project",
+    "link": "/start-a-project",
+    "secondary": { "label": "How outsourcing works", "link": "/outsource-ai-development" }
+  }
+}

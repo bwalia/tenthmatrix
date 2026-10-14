@@ -1,26 +1,30 @@
 {
+  "meta": {
+    "title": "定价",
+    "description": "TenthMatrix 软件与服务的起步价格。外包的 AI 智能体和生成式 AI 项目在需求调研后报价,试点采用固定价格。"
+  },
   "header": {
-    "title": "Transparent Pricing",
-    "subtitle": "Choose the perfect plan for your business needs",
-    "description": "Flexible pricing options for businesses of all sizes. Start free, scale as you grow."
+    "title": "定价",
+    "subtitle": "先看起步价,再为您的项目报价",
+    "description": "这些套餐和附加项是我们软件与服务的起步价格。外包的智能体和生成式 AI 项目在需求调研后报价,试点采用固定价格。"
   },
   "plans": [
     {
       "name": "入门版",
       "price": "$99",
       "period": "/month",
-      "description": "Perfect for small teams and startups getting started with AI automation",
+      "description": "适合刚开始使用 AI 自动化的小团队和初创公司",
       "featured": false,
       "features": [
-        "Up to 10 users",
-        "Basic CRM features",
-        "Email marketing (5,000 contacts)",
-        "Help desk ticketing",
-        "Standard reports",
-        "Mobile app access",
-        "Email support",
-        "5 GB storage",
-        "API access (1,000 calls/month)"
+        "最多 10 位用户",
+        "基础 CRM 功能",
+        "邮件营销(5,000 个联系人)",
+        "服务台工单",
+        "标准报表",
+        "移动应用访问",
+        "邮件支持",
+        "5 GB 存储空间",
+        "API 访问(每月 1,000 次调用)"
       ],
       "cta": "开始免费试用",
       "badge": ""
@@ -29,135 +33,135 @@
       "name": "专业版",
       "price": "$299",
       "period": "/month",
-      "description": "Advanced features for growing businesses ready to scale operations",
+      "description": "为准备扩大运营的成长型企业提供高级功能",
       "featured": true,
       "features": [
-        "Up to 50 users",
-        "Advanced CRM & Sales Pipeline",
-        "Marketing automation (25,000 contacts)",
-        "Live chat & AI chatbot",
-        "Custom reports & dashboards",
-        "Workflow automation",
-        "Priority support (24/7)",
-        "50 GB storage",
-        "API access (10,000 calls/month)",
-        "Integration with 500+ apps",
-        "Advanced analytics",
-        "Custom fields & modules"
+        "最多 50 位用户",
+        "高级 CRM 与销售管道",
+        "营销自动化(25,000 个联系人)",
+        "在线聊天与 AI 聊天机器人",
+        "自定义报表与仪表板",
+        "工作流自动化",
+        "优先支持(24/7)",
+        "50 GB 存储空间",
+        "API 访问(每月 10,000 次调用)",
+        "与您现有工具集成",
+        "高级分析",
+        "自定义字段与模块"
       ],
       "cta": "开始使用",
       "badge": "最受欢迎"
     },
     {
       "name": "企业版",
-      "price": "Custom",
+      "price": "定制",
       "period": "",
-      "description": "Complete solution for large organizations with complex requirements",
+      "description": "为需求复杂的大型组织提供的完整方案",
       "featured": false,
       "features": [
-        "Unlimited users",
-        "Full CRM, ERP & Business Suite",
-        "Unlimited marketing contacts",
-        "Omnichannel support",
-        "AI-powered insights & predictions",
-        "Advanced workflow automation",
-        "Dedicated success manager",
-        "Unlimited storage",
-        "Unlimited API calls",
-        "Custom integrations",
-        "SSO (SAML, OAuth)",
-        "White-label options",
-        "SLA guarantee (99.99%)",
-        "On-premise deployment option",
-        "Advanced security & compliance",
-        "Custom training & onboarding"
+        "用户数不限",
+        "完整 CRM、ERP 与商务套件",
+        "营销联系人不限",
+        "全渠道支持",
+        "AI 驱动的洞察与预测",
+        "高级工作流自动化",
+        "专属客户成功经理",
+        "存储空间不限",
+        "API 调用不限",
+        "定制集成",
+        "SSO(SAML、OAuth)",
+        "白标选项",
+        "SLA 按合同约定",
+        "本地部署选项",
+        "高级安全与合规",
+        "定制培训与上手指导"
       ],
-      "cta": "Contact Sales",
-      "badge": "Best Value"
+      "cta": "联系销售",
+      "badge": "最超值"
     }
   ],
   "addons": [
     {
-      "name": "DevOps & SRE Services",
-      "description": "Expert DevOps consulting, infrastructure management, and SRE support",
-      "price": "From $2,500/month",
+      "name": "DevOps 与 SRE 服务",
+      "description": "专业 DevOps 咨询、基础设施管理与 SRE 支持",
+      "price": "$2,500/月起",
       "features": [
-        "CI/CD pipeline setup",
-        "Kubernetes management",
-        "Infrastructure as Code",
-        "24/7 monitoring & support"
+        "CI/CD 流水线搭建",
+        "Kubernetes 管理",
+        "基础设施即代码",
+        "24/7 监控与支持"
       ]
     },
     {
-      "name": "ELK Stack Implementation",
-      "description": "Complete Elasticsearch, Logstash, Kibana setup and management",
-      "price": "From $1,500/month",
+      "name": "ELK Stack 实施",
+      "description": "完整的 Elasticsearch、Logstash、Kibana 搭建与管理",
+      "price": "$1,500/月起",
       "features": [
-        "Log aggregation setup",
-        "Custom dashboards",
-        "Real-time monitoring",
-        "Performance tuning"
+        "日志聚合搭建",
+        "自定义仪表板",
+        "实时监控",
+        "性能调优"
       ]
     },
     {
-      "name": "Dynatrace Platform",
-      "description": "Full-stack observability with Dynatrace APM and monitoring",
-      "price": "From $3,000/month",
+      "name": "Dynatrace 平台",
+      "description": "借助 Dynatrace APM 与监控实现全栈可观测性",
+      "price": "$3,000/月起",
       "features": [
-        "APM implementation",
-        "Synthetic monitoring",
-        "RUM & distributed tracing",
-        "Custom DQL queries"
+        "APM 实施",
+        "合成监控",
+        "RUM 与分布式追踪",
+        "自定义 DQL 查询"
       ]
     },
     {
-      "name": "AI Model Development",
-      "description": "Custom AI/ML model development and integration",
-      "price": "From $5,000/project",
+      "name": "AI 模型开发",
+      "description": "定制 AI/ML 模型开发与集成",
+      "price": "$5,000/项目起",
       "features": [
-        "LLM fine-tuning",
-        "Custom AI agents",
-        "Model training & deployment",
-        "MLOps pipeline"
+        "LLM 微调",
+        "定制 AI 智能体",
+        "模型训练与部署",
+        "MLOps 流水线"
       ]
     }
   ],
   "faq": [
     {
-      "question": "Can I change my plan at any time?",
-      "answer": "Yes! You can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
+      "question": "我可以随时更改套餐吗?",
+      "answer": "可以。您可以随时升级或降级套餐,变更将在下一个计费周期生效。"
     },
     {
-      "question": "Is there a free trial?",
-      "answer": "Absolutely! We offer a 14-day free trial on all plans with no credit card required. You get full access to all features during the trial."
+      "question": "有免费试用吗?",
+      "answer": "有。所有套餐均提供 14 天免费试用,无需信用卡。试用期间可使用全部功能。"
     },
     {
-      "question": "What payment methods do you accept?",
-      "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual subscriptions."
+      "question": "你们接受哪些付款方式?",
+      "answer": "我们接受所有主流信用卡(Visa、MasterCard、American Express)、PayPal,年度订阅还可使用银行转账。"
     },
     {
-      "question": "Do you offer discounts for annual plans?",
-      "answer": "Yes! Save 20% when you pay annually. For Enterprise plans, we offer custom pricing based on your specific requirements."
+      "question": "年度套餐有折扣吗?",
+      "answer": "有。按年付款可节省 20%。企业版套餐根据您的具体需求定制价格。"
     },
     {
-      "question": "What happens if I exceed my user limit?",
-      "answer": "We'll automatically upgrade your plan to accommodate additional users, or you can contact us to discuss a custom plan."
+      "question": "如果超出用户数上限会怎样?",
+      "answer": "我们会自动升级您的套餐以容纳新增用户,您也可以联系我们商讨定制套餐。"
     },
     {
-      "question": "Is support included in all plans?",
-      "answer": "Yes! All plans include support. Starter plans get email support, Professional plans get 24/7 priority support, and Enterprise plans get a dedicated success manager."
+      "question": "所有套餐都包含支持吗?",
+      "answer": "是的。所有套餐都包含支持:Starter 套餐提供邮件支持,Professional 套餐提供 24/7 优先支持,Enterprise 套餐配备专属客户成功经理。"
     }
   ],
   "enterprise": {
-    "title": "Need a Custom Solution?",
-    "description": "For large organizations with specific requirements, we offer tailored solutions with custom pricing, dedicated support, and specialized features.",
+    "title": "需要构建智能体或生成式 AI?",
+    "description": "我们先界定工作范围,再按固定范围项目、专属智能体团队、嵌入式工程师或建设-运营-移交(BOT)模式报价。",
     "features": [
-      "Custom feature development",
-      "Dedicated infrastructure",
-      "Advanced security & compliance",
-      "SLA guarantees",
-      "On-premise deployment",
-      "Priority support & training"
+      "定制功能开发",
+      "专属基础设施",
+      "高级安全与合规",
+      "SLA 保障",
+      "本地部署",
+      "优先支持与培训"
     ]
   }
 }

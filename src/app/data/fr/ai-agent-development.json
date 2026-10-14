@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "title": "Services de développement d'agents IA | TenthMatrix",
+    "description": "TenthMatrix développe des logiciels agentiques pour ses clients : agents de support, de vente, d'exploitation, de traitement documentaire et de code, et workflows multi-agents, avec validation humaine, jeux d'évaluation et versions conditionnées aux contrôles de santé.",
+    "keywords": "développement d'agents IA, développement de logiciels agentiques, agents IA sur mesure, workflows multi-agents, intégration MCP, LangGraph, Claude Agent SDK, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Développement d'agents IA",
+    "title": "Des agents conçus pour vos systèmes, sous la responsabilité d'une personne",
+    "subtitle": "Nous concevons et développons des agents qui effectuent un travail en plusieurs étapes dans vos outils. Ils lisent le ticket, rassemblent le contexte, rédigent la modification et s'arrêtent pour validation avant la mise en production.",
+    "description": "Nous construisons les agents de nos clients comme les nôtres dans Jobshout : outils aux schémas stricts, boucles bornées, validation humaine et trace de chaque étape.",
+    "cta": [
+      {
+        "label": "Démarrer un projet",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Pourquoi les agents TenthMatrix",
+        "link": "/why-tenthmatrix-agents"
+      }
+    ],
+    "meta": [
+      "Claude, OpenAI ou modèles open-weight",
+      "Intégrations MCP",
+      "Validation humaine"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "agent-types",
+      "title": "Les agents que nous construisons",
+      "intro": "Chacun reçoit une fiche de poste, un responsable et une liste de ce qu'il n'a pas le droit de faire.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "headset",
+          "title": "Agents de support",
+          "description": "Ils trient les tickets entrants, récupèrent l'historique des commandes et du compte, rédigent des réponses fondées sur vos politiques et transmettent tout cas inhabituel à une personne."
+        },
+        {
+          "icon": "users",
+          "title": "Agents commerciaux et CRM",
+          "description": "Ils enrichissent les leads, mettent à jour le CRM après les appels, rédigent les relances et signalent les affaires au point mort. Rien n'atteint un client sans validation."
+        },
+        {
+          "icon": "server",
+          "title": "Agents d'exploitation et SRE",
+          "description": "Ils lisent les alertes, les logs et les tableaux de bord, résument l'incident et proposent un correctif. L'automatisation progresse étape par étape, uniquement pour les actions auxquelles vous faites confiance.",
+          "href": "/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+          "linkLabel": "Lire l'article sur KubePilot"
+        },
+        {
+          "icon": "file-alt",
+          "title": "Agents de traitement documentaire",
+          "description": "Ils extraient les champs des factures, contrats et formulaires, les vérifient par rapport à vos données et les envoient au bon système, avec une file d'attente pour tout ce qui est incertain.",
+          "href": "/articles/building-vat-return-system-claude-code-invoices-expenses",
+          "linkLabel": "Lire le cas de déclaration de TVA"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Agents de code et de revue",
+          "description": "Ils relisent les pull requests, écrivent des tests et ouvrent des modifications que vos ingénieurs fusionnent. Le PR Reviewer de Jobshout le fait sur nos propres dépôts.",
+          "href": "/jobshout",
+          "linkLabel": "Voir Jobshout"
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Workflows multi-agents",
+          "description": "Un planificateur confie le travail à des agents spécialisés et un superviseur vérifie le résultat, relance ou escalade. Utile lorsqu'une tâche traverse plusieurs systèmes."
+        }
+      ]
+    },
+    {
+      "type": "overview",
+      "id": "how-we-build",
+      "title": "Comment nous construisons un agent",
+      "content": "Un agent est une boucle. Le modèle choisit un outil, l'outil s'exécute, le résultat revient au modèle. La plupart des défaillances viennent de la boucle plutôt que du modèle, c'est donc là que nous concentrons nos efforts.\n\nLes outils sont typés et validés avant exécution. Les boucles ont des budgets d'étapes, de temps et de coût. Les prompts sont versionnés comme du code, et chaque exécution laisse une trace lisible.",
+      "points": [
+        "Planificateur, exécuteur, mémoire et superviseur en composants distincts",
+        "Outils pilotés par schéma avec validation stricte",
+        "Relances déterministes et boucles bornées"
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "stack",
+      "title": "Stack technique",
+      "intro": "Nous choisissons selon le projet. Voici les outils que nos ingénieurs utilisent et sur lesquels ils écrivent dans nos articles.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "brain",
+          "title": "Modèles",
+          "list": [
+            "Claude via l'API Anthropic ou Amazon Bedrock",
+            "Modèles OpenAI",
+            "Modèles open-weight : Llama, Mistral, Qwen, Kimi"
+          ]
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Frameworks d'agents",
+          "list": [
+            "Claude Agent SDK et sous-agents Claude Code",
+            "LangChain et LangGraph",
+            "AutoGen",
+            "Airflow 3 pour les pipelines planifiés"
+          ]
+        },
+        {
+          "icon": "plug",
+          "title": "Intégration",
+          "list": [
+            "Serveurs MCP avec OAuth",
+            "Connecteurs REST et webhook",
+            "Amazon Bedrock AgentCore"
+          ]
+        },
+        {
+          "icon": "server",
+          "title": "Hébergement et inférence",
+          "list": [
+            "vLLM, TGI et Ollama pour les modèles auto-hébergés",
+            "Kubernetes et k3s",
+            "Amazon Bedrock et Azure AI Foundry"
+          ]
+        },
+        {
+          "icon": "database",
+          "title": "Mémoire et recherche",
+          "list": [
+            "Recherche vectorielle, dont NebulaDB",
+            "Stockages clé-valeur pour l'état des agents",
+            "Recherche avec citation des sources"
+          ]
+        },
+        {
+          "icon": "chart-line",
+          "title": "Observabilité",
+          "list": [
+            "Traces OpenTelemetry",
+            "Métriques Prometheus",
+            "Budgets de coût et de latence par agent"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "guardrails",
+      "title": "Garde-fous",
+      "intro": "Les limites font partie de la conception. Nous les mettons par écrit avant le début du développement.",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "Validation humaine",
+          "description": "Les actions qui envoient, dépensent ou suppriment attendent une personne désignée. L'agent peut rédiger. Il n'agit seul que pour les étapes que vous avez jugées sûres à automatiser."
+        },
+        {
+          "icon": "key",
+          "title": "Identifiants à portée limitée",
+          "description": "Les agents ne détiennent jamais de clés à longue durée de vie. WSL Vault délivre des identifiants à courte durée de vie par agent et par tâche, et journalise chaque utilisation."
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Contrôles en périphérie",
+          "description": "Le trafic vers les modèles et les outils peut passer par WSL Proxy, qui ajoute des règles WAF, des limites de débit et une piste d'audit en périphérie."
+        },
+        {
+          "icon": "sliders",
+          "title": "Listes d'autorisation et budgets",
+          "description": "Chaque agent reçoit une liste explicite d'outils et de sources de données, ainsi que des limites d'étapes, de temps et de coût pour chaque exécution."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "evaluation-deployment",
+      "title": "Évaluation et déploiement",
+      "intro": "Un agent est terminé lorsqu'il réussit ses tests en production, pas lorsque la démo fonctionne.",
+      "steps": [
+        {
+          "title": "Constituer un jeu d'évaluation",
+          "description": "Des exemples réels tirés de votre activité, chacun avec la réponse qu'un bon collègue donnerait. Chaque modification est évaluée par rapport à ce jeu."
+        },
+        {
+          "title": "Tracer et mesurer",
+          "description": "Réussite des tâches, erreurs d'outils, latence et coût par exécution, issus des traces OpenTelemetry."
+        },
+        {
+          "title": "Livrer par anneaux",
+          "description": "Ring Promoter fait passer chaque version de int à test, acc puis prod uniquement lorsque les contrôles de santé sont concluants, et effectue un rollback en cas d'échec."
+        },
+        {
+          "title": "Le surveiller en production",
+          "description": "Supervision, alertes et revue régulière des échecs et des coûts. Chaque échec devient un nouveau cas d'évaluation."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Questions sur les projets d'agents",
+      "items": [
+        {
+          "question": "Utilisez-vous un framework ou partez-vous de zéro ?",
+          "answer": "Les deux. Si un framework comme LangGraph ou le Claude Agent SDK convient, nous l'utilisons. Si la tâche est simple, une petite boucle avec des outils typés est plus facile à tester et à maintenir."
+        },
+        {
+          "question": "L'agent peut-il tourner sur notre propre matériel ?",
+          "answer": "Oui. Nous hébergeons des modèles open-weight avec vLLM ou Ollama sur vos serveurs. Si vous avez besoin des machines, notre société sœur Workstation spécifie et assemble des stations de travail et des clusters GPU."
+        },
+        {
+          "question": "Comment empêchez-vous un agent de causer des dommages ?",
+          "answer": "Il ne peut appeler que les outils de sa liste d'autorisation, avec des identifiants à portée limitée, dans des limites d'étapes et de coût. Tout ce qui envoie, dépense ou supprime attend une validation, et chaque exécution est journalisée."
+        },
+        {
+          "question": "À qui appartient l'agent à la fin du projet ?",
+          "answer": "À vous. Le code, les prompts, les jeux d'évaluation et les runbooks sont dans votre dépôt dès le premier commit."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "À voir aussi",
+      "items": [
+        {
+          "title": "Externaliser le développement IA",
+          "href": "/outsource-ai-development",
+          "label": "Modèles d'engagement et processus"
+        },
+        {
+          "title": "Évaluer les agents IA",
+          "href": "/articles/evaluation-monitoring-ai-agents",
+          "label": "Métriques, traces et sécurité"
+        },
+        {
+          "title": "Sécurité de l'IA agentique",
+          "href": "/articles/agentic-ai-security-mcp-oauth-vault",
+          "label": "OAuth MCP et baux du coffre-fort"
+        },
+        {
+          "title": "Stations de travail IA",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Matériel chez Workstation"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Décrivez une tâche que vous voulez confier à un agent",
+    "description": "Nous vous répondrons avec une conception de l'agent, les risques et la manière dont nous le validerions lors d'un pilote.",
+    "button": "Démarrer un projet",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Comment fonctionne l'externalisation",
+      "link": "/outsource-ai-development"
+    }
+  }
+}

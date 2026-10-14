@@ -167,7 +167,7 @@ export default function MobileNav({ locale, open, onClose }) {
             </div>
 
             <div className={s.bottom}>
-              <Link href={href('/contact-us')} className={s.cta} onClick={onClose}>
+              <Link href={href('/start-a-project')} className={s.cta} onClick={onClose}>
                 {t('cta')}
               </Link>
               <div className={s.prefs}>
