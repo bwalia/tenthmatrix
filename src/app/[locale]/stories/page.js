@@ -2,12 +2,12 @@ import { Hero, Section, CTA } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import Testimonials from '@/app/components/sections/Testimonials';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 function Stories({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   return (
     <>
       <Hero eyebrow={ui.ourCustomers} title={data.header?.title} lede={ui.storiesLede} art />

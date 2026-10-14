@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "Ring Promoter — Modern CI/CD for AI-Powered Deployments | TenthMatrix",
-    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes side by side. Health-gated promotion through int → test → acc → prod, auto-rollback, Kubernetes and VM pipelines. Visit ringpromoter.com.",
-    "keywords": "Ring Promoter, CI/CD, AI deployments, deployment rings, GitOps, Kubernetes, k3s, auto-rollback, TenthMatrix, ringpromoter.com"
+    "title": "Ring Promoter — 面向 AI 驱动部署的现代 CI/CD | TenthMatrix",
+    "description": "Ring Promoter v1.0.2:CI/CD Orbit + Lanes 并排呈现。按 int → test → acc → prod 进行健康门控推进,自动回滚,支持 Kubernetes 与虚拟机流水线。访问 ringpromoter.com。",
+    "keywords": "Ring Promoter, CI/CD, AI 部署, 部署环, GitOps, Kubernetes, k3s, 自动回滚, TenthMatrix, ringpromoter.com"
   },
   "header": {
     "title": "Ring Promoter",
-    "subtitle": "CI/CD Orbit + Lanes — every release earns production",
-    "description": "Ring Promoter is TenthMatrix’s production-grade promotion control plane. v1.0.2 puts Orbit (fleet view) and Lanes (APP × INT/TEST/ACC/PROD matrix) side by side while promoting versions through ordered rings — int → test → acc → prod — with live health gates, auto-rollback, and a full audit trail."
+    "subtitle": "CI/CD Orbit + Lanes — 每次发布都要凭实力进入生产",
+    "description": "Ring Promoter 是 TenthMatrix 的生产级发布推进控制平面。v1.0.2 将 Orbit(集群视图)与 Lanes(APP × INT/TEST/ACC/PROD 矩阵)并排展示,同时按顺序将版本推进各环——int → test → acc → prod——并提供实时健康门控、自动回滚和完整审计记录。"
   },
   "intro": {
-    "title": "What is Ring Promoter?",
-    "body": "A small control plane that promotes application versions through shared rings. It runs as a long-lived service (typically on k3s), exposes a JSON REST API and an embedded web UI, and tracks current/previous versions and history per (application, ring). Kubernetes apps and VM/CI apps share one surface — the deployer is chosen per app.",
+    "title": "什么是 Ring Promoter?",
+    "body": "一个轻量级控制平面,将应用版本推进到共享环中。它以常驻服务形式运行(通常在 k3s 上),提供 JSON REST API 和内嵌 Web UI,并按(应用,环)跟踪当前/上一版本及历史。Kubernetes 应用与 VM/CI 应用共用同一界面——部署器按应用选择。",
     "links": [
       {
         "label": "ringpromoter.com",
@@ -25,226 +25,226 @@
   },
   "videos": [
     {
-      "title": "Watch: CI/CD Orbit + Lanes (v1.0.2)",
+      "title": "观看:CI/CD Orbit + Lanes(v1.0.2)",
       "embedUrl": "https://www.youtube.com/embed/hNU4sWxrDFk",
       "watchUrl": "https://youtu.be/hNU4sWxrDFk",
       "thumbnail": "/img/ring-promoter-orbit-lanes-youtube-thumbnail.png?v=20260925c",
       "thumbnailAlt": "CI/CD Orbit + Lanes — Ring Promoter v1.0.2",
-      "caption": "v1.0.2 walkthrough"
+      "caption": "v1.0.2 操作讲解"
     },
     {
-      "title": "Watch: Ring Promoter quick intro (5 min)",
+      "title": "观看:Ring Promoter 快速介绍(5 分钟)",
       "embedUrl": "https://www.youtube.com/embed/SjXwaTVuYhM",
       "watchUrl": "https://youtu.be/SjXwaTVuYhM",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail-v2.png?v=20260901b",
-      "thumbnailAlt": "Ring Promoter — AI-assisted promotion to production (5-minute intro)",
-      "caption": "5-minute intro"
+      "thumbnailAlt": "Ring Promoter — AI 辅助推进至生产(5 分钟介绍)",
+      "caption": "5 分钟介绍"
     },
     {
-      "title": "Watch: QA Gates Before Production",
+      "title": "观看:上线前的 QA 关卡",
       "embedUrl": "https://www.youtube.com/embed/Vs2Em0HPvoY",
       "watchUrl": "https://youtu.be/Vs2Em0HPvoY",
       "thumbnail": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
       "thumbnailAlt": "Ring Promoter — 生产前的 QA 门",
-      "caption": "QA gates"
+      "caption": "QA 关卡"
     },
     {
-      "title": "Watch: Ring Promoter demo",
+      "title": "观看:Ring Promoter 演示",
       "embedUrl": "https://www.youtube.com/embed/IzhvmrwEebE",
       "watchUrl": "https://youtu.be/IzhvmrwEebE",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail.png?v=20260901",
-      "thumbnailAlt": "Ring Promoter — Every release earns production (YouTube demo)",
-      "caption": "TenthMatrix demo"
+      "thumbnailAlt": "Ring Promoter — 每次发布都要凭实力进入生产(YouTube 演示)",
+      "caption": "TenthMatrix 演示"
     }
   ],
   "howItWorks": {
-    "title": "How ring promotion works",
-    "intro": "Every release earns production. One hop at a time — never skip a ring — with health before promote and auto-rollback on failure.",
+    "title": "环式推进如何运作",
+    "intro": "每次发布都要凭实力进入生产。一次只推进一环——绝不跳环——推进前检查健康状况,失败时自动回滚。",
     "flow": [
       {
-        "title": "1. Seed a version into int",
-        "text": "Start the pipeline by seeding a version (image tag, branch, or ref) into the Integration ring for an application."
+        "title": "1. 将版本注入 int",
+        "text": "为某个应用将版本(镜像标签、分支或 ref)注入 Integration 环,即可启动流水线。"
       },
       {
-        "title": "2. Promote one ring at a time",
-        "text": "promote {from_ring} always targets the next ring. You cannot jump int → prod. The source ring must be healthy first."
+        "title": "2. 一次推进一环",
+        "text": "promote {from_ring} 始终指向下一环。不能从 int 直接跳到 prod。源环必须先处于健康状态。"
       },
       {
-        "title": "3. Deploy with the right deployer",
-        "text": "KubectlDeployer (set image + rollout), GitHubActionsDeployer (workflow-dispatch for VM/CI apps), or k8sjob runner Jobs — selected per application."
+        "title": "3. 使用合适的部署器部署",
+        "text": "KubectlDeployer(设置镜像 + rollout)、GitHubActionsDeployer(为 VM/CI 应用触发 workflow-dispatch)或 k8sjob runner Jobs——按应用选择。"
       },
       {
-        "title": "4. Health-check with retries",
-        "text": "After deploy, HTTP health checks run with configurable retries. Optional version verification requires the endpoint to report the exact version just deployed."
+        "title": "4. 带重试的健康检查",
+        "text": "部署后,HTTP 健康检查按可配置的重试次数运行。可选的版本校验要求端点报告的版本与刚部署的完全一致。"
       },
       {
-        "title": "5. Auto-rollback on failure",
-        "text": "If the target stays unhealthy, Ring Promoter rolls back to the previous version automatically and records the failure in history."
+        "title": "5. 失败自动回滚",
+        "text": "若目标持续不健康,Ring Promoter 会自动回滚到上一版本,并在历史中记录此次失败。"
       },
       {
-        "title": "6. Optional auto-promote",
-        "text": "Flag a ring so a healthy landing continues onward in the same locked operation — e.g. auto-promote test → acc, but keep humans on the gate to prod."
+        "title": "6. 可选自动推进",
+        "text": "为某个环设置标记,使健康落地后在同一锁定操作中继续推进——例如 test → acc 自动推进,但通往 prod 的关卡仍由人工把关。"
       }
     ],
     "rings": [
       {
         "name": "int",
-        "label": "Integration",
-        "role": "First landing for new builds and AI agent / API changes."
+        "label": "Integration(集成)",
+        "role": "新构建及 AI 智能体 / API 变更的首个落脚点。"
       },
       {
         "name": "test",
-        "label": "Test",
-        "role": "Automated verification and soak before acceptance."
+        "label": "Test(测试)",
+        "role": "验收前的自动化验证与浸泡测试。"
       },
       {
         "name": "acc",
-        "label": "Acceptance",
-        "role": "Stakeholder / UAT gate — often the last auto-promote stop."
+        "label": "Acceptance(验收)",
+        "role": "干系人 / UAT 关卡——通常是自动推进的最后一站。"
       },
       {
         "name": "prod",
-        "label": "Production",
-        "role": "Live traffic — password-gated for the final ring when configured."
+        "label": "Production(生产)",
+        "role": "真实流量——配置后最终环需密码才能推进。"
       }
     ]
   },
   "features": {
-    "title": "Why teams pick Ring Promoter for AI-era CI/CD",
-    "intro": "AI products change fast — models, agents, MCP tools, gateways. Ring Promoter keeps promotions disciplined without freezing delivery.",
+    "title": "为何团队在 AI 时代选择 Ring Promoter 做 CI/CD",
+    "intro": "AI 产品变化很快——模型、智能体、MCP 工具、网关。Ring Promoter 让推进井然有序,又不会冻结交付。",
     "items": [
       {
-        "title": "Ordered rings, never skip",
-        "description": "Shared pipeline int → test → acc → prod. Adding a ring is a single-place change in the ring package — apps declare where they live per ring in config, not code.",
+        "title": "有序环,绝不跳过",
+        "description": "共享流水线 int → test → acc → prod。新增一个环只需在 ring 包中改一处——应用在配置中而非代码中声明各环的位置。",
         "icon": "bi-diagram-3"
       },
       {
-        "title": "Health-gated promotion",
-        "description": "Live health checks before and after promote. Optional health_version_field / header stops the classic false green: old pods answering 200 while the new version never rolled.",
+        "title": "健康门控推进",
+        "description": "推进前后均进行实时健康检查。可选的 health_version_field / header 可杜绝典型的假绿:旧 Pod 返回 200,而新版本根本没有上线。",
         "icon": "bi-heart-pulse"
       },
       {
-        "title": "Automatic rollback",
-        "description": "Failed health after retries restores the previous version. Seed, promote, and rollback are all audited — success or failure.",
+        "title": "自动回滚",
+        "description": "重试后健康检查仍失败,则恢复上一版本。注入、推进和回滚全部留有审计记录——无论成败。",
         "icon": "bi-arrow-counterclockwise"
       },
       {
-        "title": "Kubernetes + VM/CI deployers",
-        "description": "One control plane for kubectl rollouts, GitHub Actions workflow-dispatch (e.g. WSL Proxy on VMs), and Kubernetes Job executors with live logs.",
+        "title": "Kubernetes + VM/CI 部署器",
+        "description": "一个控制平面同时管理 kubectl rollout、GitHub Actions workflow-dispatch(如虚拟机上的 WSL Proxy)以及带实时日志的 Kubernetes Job 执行器。",
         "icon": "bi-boxes"
       },
       {
-        "title": "Safe concurrency",
-        "description": "Per-app serialization via Postgres session advisory locks across replicas. Operations detach from HTTP so LB timeouts cannot abort a rollback mid-flight.",
+        "title": "安全并发",
+        "description": "通过 Postgres 会话级咨询锁在多副本间按应用串行执行。操作与 HTTP 解耦,负载均衡超时不会中断进行中的回滚。",
         "icon": "bi-shield-check"
       },
       {
         "title": "UI + REST API",
-        "description": "Embedded Next.js console and bearer-token REST API. Async deployment views stream progress for operators watching AI stack releases.",
+        "description": "内嵌 Next.js 控制台和 Bearer 令牌 REST API。异步部署视图为关注 AI 技术栈发布的运维人员实时推送进度。",
         "icon": "bi-window-sidebar"
       },
       {
-        "title": "Config-driven apps",
-        "description": "Add an application with YAML: namespaces, Deployments, image repos, health URLs, deployer type — no fork of Ring Promoter required.",
+        "title": "配置驱动的应用",
+        "description": "用 YAML 添加应用:命名空间、Deployment、镜像仓库、健康检查 URL、部署器类型——无需 fork Ring Promoter。",
         "icon": "bi-filetype-yml"
       },
       {
-        "title": "Built for AI platforms",
-        "description": "Promote agent services, MCP gateways, GPU inference front-doors, and TenthMatrix products through the same rings your platform team already trusts.",
+        "title": "专为 AI 平台打造",
+        "description": "通过平台团队早已信赖的同一套环,推进智能体服务、MCP 网关、GPU 推理入口以及 TenthMatrix 产品。",
         "icon": "bi-robot"
       }
     ]
   },
   "aiAngle": {
-    "title": "Built for AI-powered deployments",
-    "intro": "Model weights, agent runtimes, and edge gateways ship on different cadences. Ring Promoter keeps every change on the same promotion protocol.",
+    "title": "专为 AI 驱动的部署打造",
+    "intro": "模型权重、智能体运行时和边缘网关的发布节奏各不相同。Ring Promoter 让每项变更都遵循同一推进协议。",
     "points": [
-      "Promote AI agent APIs and MCP gateways through the same rings as classic services.",
-      "Version-verified health catches silent rollbacks when an old inference sidecar still answers OK.",
-      "Auto-promote early rings so research builds move fast; human gate stays on prod.",
-      "GitHub Actions deployer reuses existing AI/ML CI without rewriting pipelines.",
-      "Full history per (app, ring) for compliance reviews of what reached production."
+      "让 AI 智能体 API 和 MCP 网关与传统服务走同一套环。",
+      "带版本校验的健康检查,可识别旧推理 sidecar 仍返回 OK 的静默回滚。",
+      "早期环自动推进,让研究构建快速前进;prod 仍保留人工关卡。",
+      "GitHub Actions 部署器复用现有 AI/ML CI,无需重写流水线。",
+      "按(应用,环)保存完整历史,便于合规审查哪些内容进入了生产。"
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clean interfaces: Deployer, Executor, Health Checker, Store — swap production backends without rewriting promotion rules.",
+    "title": "解决方案架构",
+    "intro": "清晰的接口:Deployer、Executor、Health Checker、Store——无需重写推进规则即可替换生产后端。",
     "steps": [
       {
-        "title": "Control plane",
-        "text": "Go service + embedded UI + REST API on k3s (or local)."
+        "title": "控制平面",
+        "text": "Go 服务 + 内嵌 UI + REST API,运行于 k3s(或本地)。"
       },
       {
-        "title": "Rings",
-        "text": "Ordered pipeline defined once; apps map resources per ring."
+        "title": "环",
+        "text": "有序流水线只需定义一次;应用按环映射资源。"
       },
       {
-        "title": "Deployers",
-        "text": "kubectl, GitHub Actions, or k8sjob executors per app."
+        "title": "部署器",
+        "text": "每个应用可选 kubectl、GitHub Actions 或 k8sjob 执行器。"
       },
       {
-        "title": "Store",
-        "text": "Postgres (prod) or memory (dev) with history and locks."
+        "title": "存储",
+        "text": "Postgres(生产)或内存(开发),支持历史记录与锁。"
       }
     ]
   },
   "cta": {
-    "title": "Get Ring Promoter",
-    "body": "Explore the product on ringpromoter.com, read the TenthMatrix deep dive, or talk to us about CI/CD for AI platforms.",
+    "title": "获取 Ring Promoter",
+    "body": "在 ringpromoter.com 了解产品,阅读 TenthMatrix 深度解析,或与我们探讨 AI 平台的 CI/CD。",
     "primary": {
-      "text": "Open ringpromoter.com",
+      "text": "打开 ringpromoter.com",
       "href": "https://www.ringpromoter.com/"
     },
     "secondary": {
-      "text": "Read the Orbit + Lanes brief",
+      "text": "阅读 Orbit + Lanes 简报",
       "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "联系 TenthMatrix",
       "href": "/contact-us"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "前往产品网站了解更多",
     "href": "https://www.ringpromoter.com/",
-    "text": "Visit https://www.ringpromoter.com/ for demos, docs, and the latest Ring Promoter releases."
+    "text": "访问 https://www.ringpromoter.com/ 获取演示、文档及 Ring Promoter 最新版本。"
   },
   "related": {
     "title": "阅读更多",
     "items": [
       {
-        "title": "Blog: Rings, Orbit and Lanes (v1.0.2)",
+        "title": "博客:Rings、Orbit 与 Lanes(v1.0.2)",
         "href": "/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "Article: Orbit and Lanes technical brief",
+        "title": "文章:Orbit 与 Lanes 技术简报",
         "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "QA Gates Before Production",
+        "title": "上线前的 QA 关卡",
         "href": "/docs/blogs/ring-promoter-qa-gates-before-production"
       },
       {
-        "title": "Modern CI/CD for AI deployments",
+        "title": "面向 AI 部署的现代 CI/CD",
         "href": "/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments"
       }
     ]
   },
   "visuals": {
-    "title": "Orbit + Lanes in v1.0.2",
-    "intro": "Pause on Orbit for the fleet. Flip to Lanes when you need the environment matrix.",
+    "title": "v1.0.2 中的 Orbit + Lanes",
+    "intro": "停在 Orbit 查看整个集群;需要环境矩阵时切换到 Lanes。",
     "items": [
       {
         "src": "/img/ring-promoter-orbit-lanes-cover.svg?v=20260925c",
-        "alt": "CI/CD Orbit + Lanes — Orbit fleet view, Lanes matrix, Rings pipeline",
-        "caption": "Cover — Orbit, Lanes and Rings with object titles",
+        "alt": "CI/CD Orbit + Lanes — Orbit 集群视图、Lanes 矩阵、Rings 流水线",
+        "caption": "封面 — 带对象标题的 Orbit、Lanes 与 Rings",
         "width": 1200,
         "height": 630
       },
       {
         "src": "/img/ring-promoter-orbit-lanes-diagram.svg?v=20260925c",
-        "alt": "Orbit fleet view beside Lanes APP × environment matrix",
-        "caption": "Diagram — Orbit (fleet) next to Lanes (matrix)",
+        "alt": "Orbit 集群视图与 Lanes APP × 环境矩阵并排",
+        "caption": "示意图 — Orbit(集群)与 Lanes(矩阵)并排",
         "width": 1200,
         "height": 640
       }

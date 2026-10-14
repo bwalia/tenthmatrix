@@ -6,13 +6,13 @@ import Steps from '@/app/components/sections/Steps';
 import ComparisonTable from '@/app/components/sections/ComparisonTable';
 import { heroActions } from '@/app/components/sections/ActionLink';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 import s from '@/app/components/sections/templates/Templates.module.scss';
 
 export const dynamic = 'force-static';
 
 function EnterpriseAi({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.hero || {};
   const cta = data.cta || {};
   const b = data.budget;

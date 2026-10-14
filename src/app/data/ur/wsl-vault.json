@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Vault — Secrets Encrypted Per Tenant | TenthMatrix",
-    "description": "WSLVault is an open-source, self-hosted secrets manager: AES-256-GCM envelope encryption, per-tenant key hierarchy, KV, transit, PKI, dynamic leases, MFA, multi-region HA, and tamper-evident audit. Steal the server. Not the secrets.",
-    "keywords": "WSLVault, WSL Vault, secrets manager, envelope encryption, multi-tenant vault, PKI, dynamic leases, Kubernetes secrets, open source Vault alternative, wslvault.org"
+    "title": "TenthMatrix WSL Vault — ہر ٹیننٹ کے لیے انکرپٹڈ سیکرٹس | TenthMatrix",
+    "description": "WSLVault ایک اوپن سورس، سیلف ہوسٹڈ سیکرٹس مینیجر ہے: AES-256-GCM انویلپ انکرپشن، فی ٹیننٹ کی ہائرارکی، KV، transit، PKI، ڈائنامک لیزز، MFA، ملٹی ریجن HA اور چھیڑ چھاڑ ظاہر کرنے والا آڈٹ۔ سرور چرائیں۔ سیکرٹس نہیں۔",
+    "keywords": "WSLVault، WSL Vault، سیکرٹس مینیجر، انویلپ انکرپشن، ملٹی ٹیننٹ والٹ، PKI، ڈائنامک لیزز، Kubernetes سیکرٹس، اوپن سورس Vault متبادل، wslvault.org"
   },
   "header": {
     "title": "TenthMatrix WSL Vault",
-    "subtitle": "Steal the server. Not the secrets.",
-    "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
+    "subtitle": "سرور چرائیں۔ سیکرٹس نہیں۔",
+    "description": "AES-256-GCM انویلپ انکرپشن اور فی ٹیننٹ کی ہائرارکی پر بنا اوپن سورس، سیلف ہوسٹڈ سیکرٹس مینجمنٹ — تاکہ چوری شدہ ڈسک، ڈیٹا بیس ڈمپ یا متاثرہ ہوسٹ بھی حملہ آوروں کو صرف ایسا سائفر ٹیکسٹ دے جسے وہ کھول نہ سکیں۔"
   },
   "intro": {
-    "title": "What is WSLVault?",
-    "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",
+    "title": "WSLVault کیا ہے؟",
+    "body": "WSLVault ایک Vault سے مطابقت رکھنے والا سیکرٹس پلیٹ فارم ہے ان آپریٹرز کے لیے جو ڈسک پر پلین ٹیکسٹ کے بغیر encrypted-at-rest ملٹی ٹیننسی چاہتے ہیں۔ اسے steel/brass ویب کنسول، CLI، Go/Python/Rust/TypeScript SDKs یا MCP سے چلائیں — Kubernetes پر Helm/GitOps ڈیپلائے کے ساتھ۔",
     "links": [
       {
         "label": "wslvault.org",
@@ -22,110 +22,110 @@
         "href": "https://github.com/bwalia/wslvault"
       },
       {
-        "label": "Docs",
+        "label": "دستاویزات",
         "href": "https://github.com/bwalia/wslvault/tree/main/docs"
       },
       {
-        "label": "Getting started",
+        "label": "آغاز کریں",
         "href": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
       }
     ]
   },
   "videos": [
     {
-      "title": "20-minute intro — steal the server, not the secrets",
-      "caption": "Watch on YouTube",
+      "title": "20 منٹ کا تعارف — سرور چرائیں، سیکرٹس نہیں",
+      "caption": "YouTube پر دیکھیں",
       "embedUrl": "https://www.youtube.com/embed/O6q3_H0k2M8",
       "watchUrl": "https://youtu.be/O6q3_H0k2M8",
       "thumbnail": "/img/wslvault-cover.svg",
-      "thumbnailAlt": "WSLVault intro video cover"
+      "thumbnailAlt": "WSLVault تعارفی ویڈیو کور"
     }
   ],
   "pillars": {
-    "title": "Why the security model matters",
+    "title": "سیکیورٹی ماڈل کیوں اہم ہے",
     "items": [
       {
-        "title": "True multi-tenancy",
-        "text": "Team A cannot decrypt Team B — cryptographic refusal, not an application oops.",
+        "title": "حقیقی ملٹی ٹیننسی",
+        "text": "ٹیم A، ٹیم B کو ڈکرپٹ نہیں کر سکتی — یہ کرپٹوگرافک انکار ہے، کوئی ایپلیکیشن غلطی نہیں۔",
         "icon": "fas fa-users-slash"
       },
       {
-        "title": "Envelope encryption",
-        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir). Secrets sealed before they touch disk.",
+        "title": "انویلپ انکرپشن",
+        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir)۔ ڈسک کو چھونے سے پہلے سیکرٹس سیل ہو جاتے ہیں۔",
         "icon": "fas fa-layer-group"
       },
       {
-        "title": "Engines you need",
-        "text": "Versioned KV, transit encryption, PKI, dynamic leases, identity policies, and MFA.",
+        "title": "آپ کو درکار انجنز",
+        "text": "ورژن شدہ KV، transit انکرپشن، PKI، ڈائنامک لیزز، شناختی پالیسیاں اور MFA۔",
         "icon": "fas fa-cogs"
       },
       {
-        "title": "HA & audit",
-        "text": "Active/active multi-region replication and a tamper-evident, hash-chained audit trail.",
+        "title": "HA اور آڈٹ",
+        "text": "Active/active ملٹی ریجن ریپلیکیشن اور چھیڑ چھاڑ ظاہر کرنے والا، ہیش چینڈ آڈٹ ٹریل۔",
         "icon": "fas fa-shield-alt"
       }
     ]
   },
   "features": {
-    "title": "Everything a secret needs, behind one API",
+    "title": "ایک سیکرٹ کو جو کچھ چاہیے، سب ایک API کے پیچھے",
     "items": [
       {
-        "title": "Versioned KV secrets",
-        "text": "Vault-compatible KV v2: versioned reads/writes, check-and-set, soft-delete and destroy — every value sealed before storage."
+        "title": "ورژن شدہ KV سیکرٹس",
+        "text": "Vault سے مطابقت رکھنے والا KV v2: ورژن شدہ reads/writes، check-and-set، soft-delete اور destroy — ہر قدر اسٹوریج سے پہلے سیل۔"
       },
       {
-        "title": "Transit engine",
-        "text": "Encrypt, decrypt, sign and verify without plaintext keys leaving the vault. Rotate keys while old ciphertext stays readable."
+        "title": "Transit انجن",
+        "text": "پلین ٹیکسٹ کیز کو والٹ سے باہر نکالے بغیر انکرپٹ، ڈکرپٹ، سائن اور ویریفائی کریں۔ کیز روٹیٹ کریں جبکہ پرانا سائفر ٹیکسٹ پڑھنے کے قابل رہتا ہے۔"
       },
       {
-        "title": "PKI & certificates",
-        "text": "Private CA, roles, and short-lived certificates. CA private keys are envelope-encrypted, never stored in the clear."
+        "title": "PKI اور سرٹیفکیٹس",
+        "text": "پرائیویٹ CA، رولز اور قلیل مدتی سرٹیفکیٹس۔ CA کی پرائیویٹ کیز انویلپ انکرپٹڈ ہوتی ہیں، کبھی کھلی حالت میں اسٹور نہیں ہوتیں۔"
       },
       {
-        "title": "Dynamic leases",
-        "text": "Credentials are leases: issued, listed, renewed, and revoked for real. Revoke stops access immediately."
+        "title": "ڈائنامک لیزز",
+        "text": "کریڈینشلز لیزز ہیں: حقیقی طور پر جاری، فہرست بند، تجدید اور منسوخ کیے جاتے ہیں۔ منسوخی پر رسائی فوراً بند۔"
       },
       {
-        "title": "Identity & MFA",
-        "text": "TOTP two-factor, recovery codes, fine-grained policies on API keys and JWTs — plus SCIM, LDAP, OIDC, mTLS and workload auth."
+        "title": "شناخت اور MFA",
+        "text": "TOTP ٹو فیکٹر، ریکوری کوڈز، API کیز اور JWTs پر باریک پالیسیاں — ساتھ ہی SCIM، LDAP، OIDC، mTLS اور ورک لوڈ auth۔"
       },
       {
-        "title": "Zero plaintext at rest",
-        "text": "A database dump yields ciphertext wrapped under keys the database never sees. Steal the disk ≠ steal the secrets."
+        "title": "اسٹوریج میں صفر پلین ٹیکسٹ",
+        "text": "ڈیٹا بیس ڈمپ سے صرف ایسی کیز میں لپٹا سائفر ٹیکسٹ ملتا ہے جنہیں ڈیٹا بیس کبھی نہیں دیکھتا۔ ڈسک چرانا ≠ سیکرٹس چرانا۔"
       }
     ]
   },
   "deploy": {
-    "title": "Cloud-native and scriptable",
-    "body": "Ship with the Helm chart and Kubernetes operator, drive from GitOps, scrape with Prometheus, and reach WSLVault from your language of choice — or from an AI agent over the built-in MCP server.",
-    "ctaLabel": "Read getting started",
+    "title": "کلاؤڈ نیٹو اور اسکرپٹ ایبل",
+    "body": "Helm چارٹ اور Kubernetes آپریٹر کے ساتھ شپ کریں، GitOps سے چلائیں، Prometheus سے اسکریپ کریں، اور اپنی پسند کی زبان سے WSLVault تک پہنچیں — یا بلٹ اِن MCP سرور کے ذریعے کسی AI ایجنٹ سے۔",
+    "ctaLabel": "آغاز کی گائیڈ پڑھیں",
     "ctaHref": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
   },
   "related": {
     "title": "مزید پڑھیں",
     "items": [
       {
-        "title": "Blog: Zero-trust tenant isolation (compliance)",
+        "title": "بلاگ: زیرو ٹرسٹ ٹیننٹ آئسولیشن (تعمیل)",
         "href": "/docs/blogs/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Article: Zero-trust secrets, MFA & multi-region HA",
+        "title": "مضمون: زیرو ٹرسٹ سیکرٹس، MFA اور ملٹی ریجن HA",
         "href": "/articles/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Blog: AI agents & cryptographic refusal",
+        "title": "بلاگ: AI ایجنٹس اور کرپٹوگرافک انکار",
         "href": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Article: AI agents secrets isolation",
+        "title": "مضمون: AI ایجنٹس سیکرٹس آئسولیشن",
         "href": "/articles/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Blog: Steal the server. Not the secrets.",
+        "title": "بلاگ: سرور چرائیں۔ سیکرٹس نہیں۔",
         "href": "/docs/blogs/wslvault-steal-the-server-not-the-secrets"
       },
       {
-        "title": "Technical brief",
+        "title": "تکنیکی خلاصہ",
         "href": "/articles/wslvault-steal-the-server-not-the-secrets"
       },
       {
@@ -139,14 +139,14 @@
     ]
   },
   "cta": {
-    "title": "Stand up your own vault",
-    "description": "Clone the repo, install the Helm chart, and unseal. TenthMatrix helps operators run WSLVault with the same edge and promotion discipline as WSL Proxy and Ring Promoter.",
+    "title": "اپنا والٹ خود چلائیں",
+    "description": "ریپو کلون کریں، Helm چارٹ انسٹال کریں اور ان سیل کریں۔ TenthMatrix آپریٹرز کو WSLVault کو WSL Proxy اور Ring Promoter جیسے ہی ایج اور پروموشن نظم و ضبط کے ساتھ چلانے میں مدد کرتا ہے۔",
     "primary": {
-      "label": "Visit wslvault.org",
+      "label": "wslvault.org دیکھیں",
       "href": "https://www.wslvault.org/"
     },
     "secondary": {
-      "label": "Contact TenthMatrix",
+      "label": "TenthMatrix سے رابطہ کریں",
       "href": "/contact-us"
     }
   }

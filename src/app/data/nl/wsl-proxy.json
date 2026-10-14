@@ -1,24 +1,24 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API Gateway, CDN & WAF | TenthMatrix",
-    "description": "TenthMatrix WSL Proxy product page: how the live-config proxy works, detailed features, WAF engine v2 rules and stages, CDN cache, multi-POP DNS, and Agents/MCP Gateway roadmap. Visit wslproxy.org.",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, WAF rules, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
+    "title": "TenthMatrix WSL Proxy — API-gateway, CDN en WAF | TenthMatrix",
+    "description": "Productpagina van TenthMatrix WSL Proxy: hoe de live-config-proxy werkt, gedetailleerde functies, regels en stages van WAF-engine v2, CDN-cache, multi-POP DNS en de Agents/MCP Gateway-roadmap. Bezoek wslproxy.org.",
+    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API-gateway, CDN, WAF-regels, OpenResty, edge-cache, MCP-gateway, Agents Gateway, reverse proxy, wslproxy.org"
   },
   "header": {
     "title": "TenthMatrix WSL Proxy",
-    "subtitle": "API Gateway, CDN & Enterprise WAF — Product Overview",
-    "description": "TenthMatrix WSL Proxy (WSLProxy) is TenthMatrix’s complete API gateway and CDN edge control plane. It sits in front of your origins and decides per request what happens — route, secure, cache, and observe — from live JSON and MCP configs, without reloading nginx for every rule change."
+    "subtitle": "API-gateway, CDN en enterprise-WAF — Productoverzicht",
+    "description": "TenthMatrix WSL Proxy (WSLProxy) is het complete API-gateway- en CDN-edge-controlplane van TenthMatrix. Het staat voor uw origins en bepaalt per request wat er gebeurt — routeren, beveiligen, cachen en observeren — op basis van live JSON- en MCP-configuraties, zonder nginx bij elke regelwijziging te herladen."
   },
   "intro": {
-    "title": "What is TenthMatrix WSL Proxy?",
-    "body": "WSLProxy is a dynamic API gateway and reverse proxy on OpenResty. Operators manage virtual hosts, routing rules, WAF policies, cache, traffic splits, and edge POPs from an Admin UI, REST API, MCP tools, or the wslproxy-cli. Day-to-day rules take effect on the hot path; nginx reloads only when server-level listen or SSL blocks change.",
+    "title": "Wat is TenthMatrix WSL Proxy?",
+    "body": "WSLProxy is een dynamische API-gateway en reverse proxy op OpenResty. Operators beheren virtual hosts, routeringsregels, WAF-policies, cache, traffic splits en edge-POP's via een Admin UI, REST API, MCP-tools of de wslproxy-cli. Dagelijkse regels worden direct op het hot path actief; nginx herlaadt alleen als listen- of SSL-blokken op serverniveau veranderen.",
     "links": [
       {
         "label": "wslproxy.org",
         "href": "https://wslproxy.org"
       },
       {
-        "label": "WAF docs",
+        "label": "WAF-documentatie",
         "href": "https://wslproxy.org/waf/"
       },
       {
@@ -32,38 +32,38 @@
     ]
   },
   "howItWorks": {
-    "title": "How the proxy works",
-    "intro": "Like a solutions playbook: match once, decide per request, then proxy or protect. The control plane never needs to restart the edge for ordinary rule changes.",
+    "title": "Hoe de proxy werkt",
+    "intro": "Als een oplossingsplaybook: één keer matchen, per request beslissen, dan proxyen of beschermen. Het controlplane hoeft de edge nooit te herstarten voor gewone regelwijzigingen.",
     "flow": [
       {
-        "title": "1. Request arrives at a POP",
-        "text": "Browsers, APIs, and agents hit a TenthMatrix WSL Proxy edge (Docker, bare-metal Ansible POP, or k3s Helm ingress). OpenResty accepts TLS and enters the Lua hot path."
+        "title": "1. Request komt aan bij een POP",
+        "text": "Browsers, API's en agents bereiken een TenthMatrix WSL Proxy-edge (Docker, bare-metal Ansible-POP of k3s Helm-ingress). OpenResty accepteert TLS en gaat het Lua-hot path in."
       },
       {
-        "title": "2. Match a routing rule",
-        "text": "gateway_ack.lua loads the virtual host and evaluates live rules from disk or Redis: path, IP, country, JWT, S3, cookie, and more. Priority and specificity pick the winner — no nginx reload."
+        "title": "2. Matchen met een routeringsregel",
+        "text": "gateway_ack.lua laadt de virtual host en evalueert live regels vanaf schijf of Redis: pad, IP, land, JWT, S3, cookie en meer. Prioriteit en specificiteit bepalen de winnaar — zonder nginx-reload."
       },
       {
-        "title": "3. Pipeline: rate limit → WAF → respond",
-        "text": "The gateway pipeline runs rate limits, then the WAF engine (stages + signatures), then gateway_resp.lua applies the response action and balancer timeouts."
+        "title": "3. Pipeline: rate limit → WAF → respons",
+        "text": "De gatewaypipeline voert rate limits uit, dan de WAF-engine (stages + signatures), waarna gateway_resp.lua de responsactie en balancer-timeouts toepast."
       },
       {
-        "title": "4. Decide the outcome",
-        "text": "Typical outcomes: 305 reverse-proxy to an upstream, 301/302 redirect, static HTML block, CAPTCHA challenge, or 403 WAF block with support ID headers."
+        "title": "4. De uitkomst bepalen",
+        "text": "Typische uitkomsten: 305 reverse proxy naar een upstream, 301/302-redirect, statisch HTML-blok, CAPTCHA-challenge of 403 WAF-blokkade met support-ID-headers."
       },
       {
-        "title": "5. Balance and observe",
-        "text": "For proxy responses, balancer_by_lua applies weighted, RR, canary, sticky, or least-conn. Health, metrics, and traffic stats feed ops and AI log hooks."
+        "title": "5. Balanceren en observeren",
+        "text": "Voor proxyresponses past balancer_by_lua weighted, RR, canary, sticky of least-conn toe. Health, metrics en verkeersstatistieken voeden ops en AI-loghooks."
       },
       {
-        "title": "6. Operators & agents drive config",
-        "text": "Humans use Admin UI / CLI; agents use REST or MCP tools to CRUD servers, rules, and WAF binds — the same surface, GitOps-friendly pull/push."
+        "title": "6. Operators en agents sturen de config",
+        "text": "Mensen gebruiken de Admin UI / CLI; agents gebruiken REST- of MCP-tools voor CRUD op servers, regels en WAF-binds — dezelfde interface, GitOps-vriendelijk pull/push."
       }
     ],
     "responseCodes": [
       {
         "code": "305",
-        "meaning": "Reverse proxy to upstream (primary gateway path)"
+        "meaning": "Reverse proxy naar upstream (primair gatewaypad)"
       },
       {
         "code": "301 / 302",
@@ -71,60 +71,60 @@
       },
       {
         "code": "200 HTML",
-        "meaning": "Static / branded block or interstitial"
+        "meaning": "Statisch / gebrand blok of tussenpagina"
       },
       {
         "code": "CAPTCHA",
-        "meaning": "Challenge before continuing"
+        "meaning": "Challenge vóór doorgaan"
       },
       {
         "code": "403 WAF",
-        "meaning": "Blocked by WAF with X-WAF-* and X-Support-ID headers"
+        "meaning": "Geblokkeerd door WAF met X-WAF-*- en X-Support-ID-headers"
       }
     ]
   },
   "features": {
-    "title": "Main product features in detail",
-    "intro": "Everything you need for a governed edge: routing, security, CDN cache, multi-POP delivery, and a control plane humans and agents can both drive.",
+    "title": "Belangrijkste productfuncties in detail",
+    "intro": "Alles voor een beheerste edge: routering, beveiliging, CDN-cache, multi-POP-levering en een controlplane dat zowel mensen als agents kunnen bedienen.",
     "items": [
       {
-        "title": "Dynamic routing rules",
-        "description": "Match on path, IP, country, JWT claims, S3-style keys, and cookies. Actions include reverse proxy, redirect, HTML responses, and CAPTCHA. Rules are ordered by priority with specificity tie-break so the most precise route wins without restarting nginx.",
+        "title": "Dynamische routeringsregels",
+        "description": "Match op pad, IP, land, JWT-claims, S3-achtige keys en cookies. Acties zijn onder meer reverse proxy, redirect, HTML-responses en CAPTCHA. Regels worden op prioriteit gesorteerd met specificiteit als tiebreaker, zodat de meest precieze route wint zonder nginx te herstarten.",
         "icon": "bi-signpost-split"
       },
       {
         "title": "Traffic engineering",
-        "description": "Weighted, round-robin, header-based canary, cookie sticky sessions, and least-conn balancing. Promote or rollback backends from the control plane when a canary looks healthy — or pull it back in one action.",
+        "description": "Weighted, round-robin, header-based canary, sticky sessions via cookie en least-conn-balancing. Promoot of rol backends terug vanuit het controlplane wanneer een canary er healthy uitziet — of trek hem in één actie terug.",
         "icon": "bi-shuffle"
       },
       {
-        "title": "Enterprise WAF engine v2",
-        "description": "Policy packs bind per domain, service, and route. Stages cover method allow-lists, filetype deny, IP/geo lists, JWT algorithm policy, JSON body profiles, brute-force velocity, and OpenAPI positive security — plus governed attack signatures and anomaly scoring. Blocking or transparent (monitor) modes.",
+        "title": "Enterprise WAF-engine v2",
+        "description": "Policypacks worden per domein, service en route gekoppeld. Stages omvatten method-allowlists, filetype-deny, IP-/geolijsten, JWT-algoritmebeleid, JSON-bodyprofielen, brute-force-velocity en OpenAPI positive security — plus beheerde aanvalssignatures en anomaly scoring. Blocking- of transparent-modus (monitor).",
         "icon": "bi-shield-lock"
       },
       {
-        "title": "CDN & edge cache",
-        "description": "Edge static cache, optional Docker blob cache, and Varnish hooks give you a CDN-style layer in front of origins — ideal for marketing sites, API docs, and artifact delivery alongside API gateway traffic.",
+        "title": "CDN en edge-cache",
+        "description": "Statische edge-cache, optionele Docker-blobcache en Varnish-hooks geven u een CDN-achtige laag voor uw origins — ideaal voor marketingsites, API-documentatie en artefactlevering naast API-gatewayverkeer.",
         "icon": "bi-hdd-network"
       },
       {
-        "title": "SSL & HTTPS",
-        "description": "auto-ssl / Let’s Encrypt, per-domain SSL JSON, and force-HTTPS policies so each virtual host can terminate TLS correctly at the POP.",
+        "title": "SSL en HTTPS",
+        "description": "auto-ssl / Let’s Encrypt, SSL-JSON per domein en force-HTTPS-beleid, zodat elke virtual host TLS correct op de POP termineert.",
         "icon": "bi-lock"
       },
       {
         "title": "Multi-POP + DNS",
-        "description": "Declare edge locations and provision Cloudflare A-records with safety guardrails. A common production pattern is public POP → k3s NodePort → wslproxy-ingress Helm → app pods.",
+        "description": "Declareer edgelocaties en richt Cloudflare A-records in met veiligheidsgrenzen. Een gangbaar productiepatroon is publieke POP → k3s NodePort → wslproxy-ingress Helm → app-pods.",
         "icon": "bi-globe2"
       },
       {
-        "title": "Control plane",
-        "description": "React Admin and Next.js dashboards, Swagger REST, MCP tools for Claude/Cursor, and the wslproxy-cli image (ghcr.io/bwalia/wslproxy-cli) for pull/push/diff/verify workflows.",
+        "title": "Controlplane",
+        "description": "React Admin- en Next.js-dashboards, Swagger REST, MCP-tools voor Claude/Cursor en de wslproxy-cli-image (ghcr.io/bwalia/wslproxy-cli) voor pull/push/diff/verify-workflows.",
         "icon": "bi-sliders"
       },
       {
-        "title": "Deploy anywhere",
-        "description": "Docker Compose for labs, Ansible for bare-metal or VM POPs, and Helm ingress-controller charts for k3s / Kubernetes — one product surface across environments.",
+        "title": "Overal deployen",
+        "description": "Docker Compose voor labs, Ansible voor bare-metal- of VM-POP's en Helm ingress-controller-charts voor k3s / Kubernetes — één productinterface in alle omgevingen.",
         "icon": "bi-box-seam"
       },
       {
@@ -135,155 +135,155 @@
     ]
   },
   "waf": {
-    "title": "WAF rules & enforcement",
-    "intro": "The WAF runs in the OpenResty request path (inspired by enterprise NGINX WAF patterns). It is fail-open by default so a WAF bug cannot take the site down, explainable on every block, and backward compatible with simple v1 rule lists. For a guided tour and deep dive, see the related reading below — or watch the WAF video on this page.",
-    "pipelineTitle": "Request-path pipeline",
+    "title": "WAF-regels en handhaving",
+    "intro": "De WAF draait in het OpenResty-requestpad (geïnspireerd op enterprise NGINX WAF-patronen). Standaard is hij fail-open, zodat een WAF-bug de site niet kan platleggen, uitlegbaar bij elke blokkade en backwards compatible met eenvoudige v1-regellijsten. Zie de gerelateerde artikelen hieronder voor een rondleiding en deep dive — of bekijk de WAF-video op deze pagina.",
+    "pipelineTitle": "Pipeline in het requestpad",
     "pipeline": [
-      "rewrite_by_lua: gateway_ack.lua selects the routing rule",
-      "gateway_pipeline.execute(): rate-limit → WAF → continue",
-      "waf_engine.inspect(): load policy, resolve binding, run stages, then signatures",
-      "On block: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
+      "rewrite_by_lua: gateway_ack.lua selecteert de routeringsregel",
+      "gateway_pipeline.execute(): rate limit → WAF → doorgaan",
+      "waf_engine.inspect(): laadt policy, bepaalt binding, voert stages uit en daarna signatures",
+      "Bij blokkade: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
     ],
-    "stagesTitle": "Stage pipeline (before signatures)",
+    "stagesTitle": "Stagepipeline (vóór signatures)",
     "stages": [
       {
         "code": "VIOL_METHOD",
-        "name": "Method allow-list",
-        "detail": "Only permitted HTTP methods (e.g. GET, POST, HEAD, OPTIONS)."
+        "name": "Method-allowlist",
+        "detail": "Alleen toegestane HTTP-methoden (bijv. GET, POST, HEAD, OPTIONS)."
       },
       {
         "code": "VIOL_FILETYPE",
-        "name": "Filetype deny",
-        "detail": "Block sensitive extensions such as .env, .sql, .bak, .git, .pem."
+        "name": "Filetype-deny",
+        "detail": "Blokkeer gevoelige extensies zoals .env, .sql, .bak, .git, .pem."
       },
       {
         "code": "VIOL_IP_DENY / VIOL_GEO",
-        "name": "IP lists & geo",
-        "detail": "Allow/deny CIDRs and deny countries via IP2Location-style DB."
+        "name": "IP-lijsten en geo",
+        "detail": "Sta CIDR's toe/weiger ze en weiger landen via een IP2Location-achtige DB."
       },
       {
         "code": "VIOL_JWT_ALG",
-        "name": "JWT algorithm policy",
-        "detail": "Deny weak algs (none, HS256); require RS256/ES256 where needed."
+        "name": "JWT-algoritmebeleid",
+        "detail": "Weiger zwakke algoritmen (none, HS256); vereis RS256/ES256 waar nodig."
       },
       {
         "code": "VIOL_JSON_SIZE / DEPTH",
-        "name": "JSON body profile",
-        "detail": "Cap JSON depth and body size to stop parser abuse."
+        "name": "JSON-bodyprofiel",
+        "detail": "Begrens JSON-diepte en bodygrootte om parsermisbruik te stoppen."
       },
       {
         "code": "VIOL_BRUTE_FORCE",
-        "name": "Brute-force velocity",
-        "detail": "Per-path sliding windows (e.g. /api/login) keyed by IP."
+        "name": "Brute-force-velocity",
+        "detail": "Sliding windows per pad (bijv. /api/login) per IP."
       },
       {
         "code": "VIOL_OPENAPI_*",
         "name": "OpenAPI positive security",
-        "detail": "Allow only declared path+method surfaces (templated paths)."
+        "detail": "Sta alleen gedeclareerde pad+methode-combinaties toe (getemplatete paden)."
       }
     ],
-    "signaturesTitle": "Signature rules & governance",
-    "signaturesIntro": "Each signature has a stable ID (the addressable unit), category/set, severity, match target (url, args, body, headers, cookies, UA, or all), regex or string pattern, action (block or monitor), and anomaly score.",
+    "signaturesTitle": "Signatureregels en governance",
+    "signaturesIntro": "Elke signature heeft een stabiele ID (de adresseerbare eenheid), categorie/set, severity, matchdoel (url, args, body, headers, cookies, UA of all), regex- of stringpatroon, actie (block of monitor) en anomaly score.",
     "governance": [
       {
         "title": "disable",
-        "text": "signatures.disable skips a rule entirely."
+        "text": "signatures.disable slaat een regel volledig over."
       },
       {
         "title": "stage",
-        "text": "signatures.stage alarms only until a timestamp — safe rollout that never contributes to anomaly score while staged."
+        "text": "signatures.stage geeft alleen alarmen tot een tijdstip — een veilige uitrol die tijdens staging nooit bijdraagt aan de anomaly score."
       },
       {
-        "title": "signature sets",
-        "text": "Toggle whole sets (e.g. SET_SQLI) between block and alarm without rewriting every rule."
+        "title": "signature-sets",
+        "text": "Schakel hele sets (bijv. SET_SQLI) tussen block en alarm zonder elke regel te herschrijven."
       },
       {
-        "title": "anomaly threshold",
-        "text": "Cumulative score ≥ threshold raises VIOL_ANOMALY_SCORE even if no single signature alone would block."
+        "title": "anomaly-drempel",
+        "text": "Een cumulatieve score ≥ drempel triggert VIOL_ANOMALY_SCORE, ook als geen enkele signature op zichzelf zou blokkeren."
       }
     ],
-    "bindingTitle": "Binding precedence",
-    "bindingIntro": "Most specific wins: route override → per-server waf_mode_override → policy default enforcementMode (blocking or transparent/monitor). Every finding records which binding won so logs answer “why was this blocked?”",
+    "bindingTitle": "Bindingvoorrang",
+    "bindingIntro": "De meest specifieke wint: route-override → waf_mode_override per server → standaard enforcementMode van de policy (blocking of transparent/monitor). Elke bevinding legt vast welke binding won, zodat logs antwoord geven op “waarom is dit geblokkeerd?”",
     "modes": [
       {
         "title": "Blocking",
-        "text": "Violations return 403 with support ID and optional branded block page."
+        "text": "Overtredingen geven 403 terug met support-ID en optionele gebrande blokpagina."
       },
       {
         "title": "Transparent / monitor",
-        "text": "Violations alarm and log only — ideal for dry-run and staging."
+        "text": "Overtredingen geven alleen alarm en worden gelogd — ideaal voor dry-runs en staging."
       }
     ]
   },
   "roadmap": {
-    "title": "Agents Gateway & MCP Gateway",
-    "intro": "TenthMatrix is extending WSL Proxy into the agent era. The same edge that fronts HTTP APIs will govern how agents and Model Context Protocol (MCP) clients reach tools and backends.",
+    "title": "Agents Gateway en MCP Gateway",
+    "intro": "TenthMatrix breidt WSL Proxy uit naar het agenttijdperk. Dezelfde edge die HTTP-API's afschermt, bepaalt straks hoe agents en Model Context Protocol (MCP)-clients tools en backends bereiken.",
     "items": [
       {
-        "title": "MCP Gateway (in progress)",
-        "description": "A governed front door in front of external MCP servers — auth bridging, tool/method allow-deny lists, audit of tools/call, and per-tool rate limits. Clients never hold upstream tokens.",
+        "title": "MCP Gateway (in ontwikkeling)",
+        "description": "Een beheerde voordeur voor externe MCP-servers — auth-bridging, allow/deny-lijsten voor tools/methoden, audit van tools/call en rate limits per tool. Clients hebben nooit upstream-tokens in handen.",
         "status": "In progress"
       },
       {
-        "title": "Agents Gateway (in progress)",
-        "description": "Policy, routing, and observability for multi-agent traffic — so agent fleets hit origins through the same TenthMatrix WSL Proxy edge as your APIs and CDN workloads.",
+        "title": "Agents Gateway (in ontwikkeling)",
+        "description": "Policy, routering en observability voor multi-agentverkeer — zodat agentvloten origins bereiken via dezelfde TenthMatrix WSL Proxy-edge als uw API's en CDN-workloads.",
         "status": "In progress"
       },
       {
-        "title": "MCP management surface (available)",
-        "description": "WSLProxy already exposes its own Admin surface as MCP tools for Claude, Cursor, and other agents — configure rules and inspect the edge without leaving your IDE.",
+        "title": "MCP-beheerinterface (beschikbaar)",
+        "description": "WSLProxy biedt zijn eigen Admin-interface al aan als MCP-tools voor Claude, Cursor en andere agents — configureer regels en inspecteer de edge zonder uw IDE te verlaten.",
         "status": "Available"
       }
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clients and agents hit a TenthMatrix WSL Proxy POP. The edge matches live rules, applies WAF and cache, then balances to origins. Operators drive everything through Admin UI, REST, MCP, or CLI.",
+    "title": "Oplossingsarchitectuur",
+    "intro": "Clients en agents bereiken een TenthMatrix WSL Proxy-POP. De edge matcht live regels, past WAF en cache toe en balanceert naar origins. Operators sturen alles via Admin UI, REST, MCP of CLI.",
     "steps": [
       {
-        "title": "Edge POP",
-        "text": "OpenResty + Lua hot path: match rules, respond, balance backends."
+        "title": "Edge-POP",
+        "text": "OpenResty + Lua hot path: regels matchen, antwoorden, backends balanceren."
       },
       {
         "title": "Live config",
-        "text": "Rules, WAF, and traffic splits from disk or Redis — no nginx reload for day-to-day changes."
+        "text": "Regels, WAF en traffic splits vanaf schijf of Redis — geen nginx-reload voor dagelijkse wijzigingen."
       },
       {
-        "title": "Control plane",
-        "text": "Admin UI, REST, MCP, and wslproxy-cli for humans and agents."
+        "title": "Controlplane",
+        "text": "Admin UI, REST, MCP en wslproxy-cli voor mensen en agents."
       },
       {
         "title": "Origins",
-        "text": "APIs, k3s services, static sites, and future MCP / agent upstreams."
+        "text": "API's, k3s-services, statische sites en toekomstige MCP-/agent-upstreams."
       }
     ]
   },
   "relatedReading": {
-    "title": "Related reading",
-    "intro": "Explainable Web Application Firewall on the same live-config edge — policies, stages, monitor or block, and support IDs on every decision.",
+    "title": "Gerelateerde artikelen",
+    "intro": "Uitlegbare Web Application Firewall op dezelfde live-config-edge — policies, stages, monitor of block, en support-ID's bij elke beslissing.",
     "items": [
       {
-        "label": "WSL Proxy WAF blog",
+        "label": "WSL Proxy WAF-blog",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
       {
-        "label": "Explainable edge WAF article",
+        "label": "Artikel over uitlegbare edge-WAF",
         "href": "/articles/wslproxy-waf-web-application-firewall",
         "external": false
       },
       {
-        "label": "WAF Engine v2 blog",
+        "label": "WAF Engine v2-blog",
         "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
         "external": false
       },
       {
-        "label": "Inside WAF Engine v2",
+        "label": "Binnen in WAF Engine v2",
         "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
         "external": false
       },
       {
-        "label": "WAF tour video",
+        "label": "WAF-tourvideo",
         "href": "https://youtu.be/r10XSonA5JE",
         "external": true
       },
@@ -295,47 +295,47 @@
     ]
   },
   "cta": {
-    "title": "Get TenthMatrix WSL Proxy",
-    "body": "Explore the product on wslproxy.org, read the WAF deep dive on TenthMatrix, or talk to us about edge, CDN, WAF, and agent gateway deployments.",
+    "title": "TenthMatrix WSL Proxy downloaden",
+    "body": "Ontdek het product op wslproxy.org, lees de WAF-deep-dive op TenthMatrix of praat met ons over edge-, CDN-, WAF- en agentgateway-deployments.",
     "primary": {
       "text": "Open wslproxy.org",
       "href": "https://wslproxy.org"
     },
     "secondary": {
-      "text": "Read the WAF article",
+      "text": "Lees het WAF-artikel",
       "href": "/articles/wslproxy-waf-web-application-firewall"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "Contact met TenthMatrix",
       "href": "/contact-us"
     },
     "quaternary": {
-      "text": "Product overview article",
+      "text": "Artikel met productoverzicht",
       "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "Verder op de productsite",
     "href": "https://wslproxy.org",
-    "text": "Visit wslproxy.org for demos, docs, and the latest TenthMatrix WSL Proxy releases."
+    "text": "Bezoek wslproxy.org voor demo's, documentatie en de nieuwste TenthMatrix WSL Proxy-releases."
   },
   "videos": [
     {
-      "title": "Watch: TenthMatrix WSL Proxy intro",
+      "title": "Bekijk: introductie TenthMatrix WSL Proxy",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — product intro",
+      "thumbnailAlt": "TenthMatrix WSL Proxy — productintroductie",
       "caption": "Bekijken",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "Watch: WSL Proxy WAF tour",
+      "title": "Bekijk: WSL Proxy WAF-tour",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy WAF tour",
+      "thumbnailAlt": "TenthMatrix WSL Proxy WAF-tour",
       "caption": "Bekijken",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

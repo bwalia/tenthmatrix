@@ -2,14 +2,14 @@ import { Hero, Section, CTA } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import VideoGrid from '@/app/components/sections/VideoGrid';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 function VideoGallery({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const c = data.content || {};
   return (
     <>

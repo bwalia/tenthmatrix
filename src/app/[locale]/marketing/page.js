@@ -5,12 +5,12 @@ import StatsBand from '@/app/components/sections/StatsBand';
 import LogoWall from '@/app/components/sections/LogoWall';
 import Testimonials from '@/app/components/sections/Testimonials';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 function Marketing({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   const cta = data.cta || {};
   const actions = [

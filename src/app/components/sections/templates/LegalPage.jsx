@@ -1,6 +1,6 @@
 import { Hero } from '@/app/components';
 import LegalDocument from '../LegalDocument';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 /**
  * Policy pages with { header{title,subtitle,lastUpdated,effectiveDate}, introduction,
@@ -8,7 +8,7 @@ import { uiStrings } from '../ui';
  * security, data deletion).
  */
 export default function LegalPage({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   const meta = [
     h.lastUpdated && `${ui.lastUpdated}: ${h.lastUpdated}`,

@@ -2,12 +2,12 @@ import { Hero, CTA } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import LegalDocument from '@/app/components/sections/LegalDocument';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 function Refund({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const c = data.content || {};
   return (
     <>

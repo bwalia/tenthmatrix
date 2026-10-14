@@ -3,7 +3,7 @@ import { createRoute } from '@/app/components/sections/createRoute';
 import FeatureGrid from '@/app/components/sections/FeatureGrid';
 import LogoWall from '@/app/components/sections/LogoWall';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 import s from '@/app/components/sections/templates/Templates.module.scss';
 
 export const dynamic = 'force-static';
@@ -12,7 +12,7 @@ export const dynamic = 'force-static';
 const isHardware = (p) => /hardware|gpu|workstation/i.test(`${p.category || ''}`) || /partners\/boston/.test(p.detailPage || '');
 
 function Partners({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const ai = (data.aiPartners || []).filter((p) => !isHardware(p));
   const tech = (data.content || []).filter((p) => !isHardware(p));
   return (

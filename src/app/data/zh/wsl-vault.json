@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Vault — Secrets Encrypted Per Tenant | TenthMatrix",
-    "description": "WSLVault is an open-source, self-hosted secrets manager: AES-256-GCM envelope encryption, per-tenant key hierarchy, KV, transit, PKI, dynamic leases, MFA, multi-region HA, and tamper-evident audit. Steal the server. Not the secrets.",
-    "keywords": "WSLVault, WSL Vault, secrets manager, envelope encryption, multi-tenant vault, PKI, dynamic leases, Kubernetes secrets, open source Vault alternative, wslvault.org"
+    "title": "TenthMatrix WSL Vault — 按租户加密的密钥 | TenthMatrix",
+    "description": "WSLVault 是一款开源、可自托管的密钥管理器:AES-256-GCM 信封加密、按租户的密钥层级、KV、transit、PKI、动态租约、MFA、多区域高可用以及防篡改审计。偷得走服务器,偷不走密钥。",
+    "keywords": "WSLVault, WSL Vault, 密钥管理器, 信封加密, 多租户保险库, PKI, 动态租约, Kubernetes 密钥, 开源 Vault 替代方案, wslvault.org"
   },
   "header": {
     "title": "TenthMatrix WSL Vault",
-    "subtitle": "Steal the server. Not the secrets.",
-    "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
+    "subtitle": "偷得走服务器,偷不走密钥。",
+    "description": "基于 AES-256-GCM 信封加密和按租户密钥层级构建的开源自托管密钥管理——即便磁盘被盗、数据库被导出或主机被攻破,攻击者拿到的也只是无法解开的密文。"
   },
   "intro": {
-    "title": "What is WSLVault?",
-    "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",
+    "title": "什么是 WSLVault?",
+    "body": "WSLVault 是兼容 Vault 的密钥平台,面向希望实现静态加密多租户、磁盘上不留明文的运维人员。可通过 steel/brass Web 控制台、CLI、Go/Python/Rust/TypeScript SDK 或 MCP 操作——并支持在 Kubernetes 上以 Helm/GitOps 部署。",
     "links": [
       {
         "label": "wslvault.org",
@@ -22,110 +22,110 @@
         "href": "https://github.com/bwalia/wslvault"
       },
       {
-        "label": "Docs",
+        "label": "文档",
         "href": "https://github.com/bwalia/wslvault/tree/main/docs"
       },
       {
-        "label": "Getting started",
+        "label": "快速入门",
         "href": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
       }
     ]
   },
   "videos": [
     {
-      "title": "20-minute intro — steal the server, not the secrets",
-      "caption": "Watch on YouTube",
+      "title": "20 分钟介绍 — 偷得走服务器,偷不走密钥",
+      "caption": "在 YouTube 上观看",
       "embedUrl": "https://www.youtube.com/embed/O6q3_H0k2M8",
       "watchUrl": "https://youtu.be/O6q3_H0k2M8",
       "thumbnail": "/img/wslvault-cover.svg",
-      "thumbnailAlt": "WSLVault intro video cover"
+      "thumbnailAlt": "WSLVault 介绍视频封面"
     }
   ],
   "pillars": {
-    "title": "Why the security model matters",
+    "title": "为何安全模型至关重要",
     "items": [
       {
-        "title": "True multi-tenancy",
-        "text": "Team A cannot decrypt Team B — cryptographic refusal, not an application oops.",
+        "title": "真正的多租户",
+        "text": "A 团队无法解密 B 团队的数据——这是密码学层面的拒绝,而非应用层的疏漏。",
         "icon": "fas fa-users-slash"
       },
       {
-        "title": "Envelope encryption",
-        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir). Secrets sealed before they touch disk.",
+        "title": "信封加密",
+        "text": "DEK → 租户 KEK → 根 KEK(KMS / HSM / Shamir)。密钥在写入磁盘前即已封装。",
         "icon": "fas fa-layer-group"
       },
       {
-        "title": "Engines you need",
-        "text": "Versioned KV, transit encryption, PKI, dynamic leases, identity policies, and MFA.",
+        "title": "您需要的引擎",
+        "text": "版本化 KV、transit 加密、PKI、动态租约、身份策略和 MFA。",
         "icon": "fas fa-cogs"
       },
       {
-        "title": "HA & audit",
-        "text": "Active/active multi-region replication and a tamper-evident, hash-chained audit trail.",
+        "title": "高可用与审计",
+        "text": "双活多区域复制,以及防篡改的哈希链审计记录。",
         "icon": "fas fa-shield-alt"
       }
     ]
   },
   "features": {
-    "title": "Everything a secret needs, behind one API",
+    "title": "密钥所需的一切,尽在一个 API",
     "items": [
       {
-        "title": "Versioned KV secrets",
-        "text": "Vault-compatible KV v2: versioned reads/writes, check-and-set, soft-delete and destroy — every value sealed before storage."
+        "title": "版本化 KV 密钥",
+        "text": "兼容 Vault 的 KV v2:版本化读写、check-and-set、软删除与彻底销毁——每个值在存储前都已封装。"
       },
       {
-        "title": "Transit engine",
-        "text": "Encrypt, decrypt, sign and verify without plaintext keys leaving the vault. Rotate keys while old ciphertext stays readable."
+        "title": "Transit 引擎",
+        "text": "加密、解密、签名和验证,明文密钥永不离开保险库。轮换密钥时,旧密文仍可读取。"
       },
       {
-        "title": "PKI & certificates",
-        "text": "Private CA, roles, and short-lived certificates. CA private keys are envelope-encrypted, never stored in the clear."
+        "title": "PKI 与证书",
+        "text": "私有 CA、角色和短期证书。CA 私钥经信封加密,绝不以明文存储。"
       },
       {
-        "title": "Dynamic leases",
-        "text": "Credentials are leases: issued, listed, renewed, and revoked for real. Revoke stops access immediately."
+        "title": "动态租约",
+        "text": "凭据即租约:可真正签发、列出、续期和吊销。吊销后访问立即终止。"
       },
       {
-        "title": "Identity & MFA",
-        "text": "TOTP two-factor, recovery codes, fine-grained policies on API keys and JWTs — plus SCIM, LDAP, OIDC, mTLS and workload auth."
+        "title": "身份与 MFA",
+        "text": "TOTP 双因素认证、恢复码、针对 API 密钥和 JWT 的细粒度策略——另支持 SCIM、LDAP、OIDC、mTLS 和工作负载认证。"
       },
       {
-        "title": "Zero plaintext at rest",
-        "text": "A database dump yields ciphertext wrapped under keys the database never sees. Steal the disk ≠ steal the secrets."
+        "title": "静态零明文",
+        "text": "导出数据库得到的只是由数据库从未见过的密钥封装的密文。偷走磁盘 ≠ 偷走密钥。"
       }
     ]
   },
   "deploy": {
-    "title": "Cloud-native and scriptable",
-    "body": "Ship with the Helm chart and Kubernetes operator, drive from GitOps, scrape with Prometheus, and reach WSLVault from your language of choice — or from an AI agent over the built-in MCP server.",
-    "ctaLabel": "Read getting started",
+    "title": "云原生且可脚本化",
+    "body": "使用 Helm chart 和 Kubernetes operator 交付,以 GitOps 驱动,用 Prometheus 采集指标,并可通过您选择的语言访问 WSLVault——或由 AI 智能体经内置 MCP 服务器访问。",
+    "ctaLabel": "阅读快速入门",
     "ctaHref": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
   },
   "related": {
     "title": "阅读更多",
     "items": [
       {
-        "title": "Blog: Zero-trust tenant isolation (compliance)",
+        "title": "博客:零信任租户隔离(合规)",
         "href": "/docs/blogs/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Article: Zero-trust secrets, MFA & multi-region HA",
+        "title": "文章:零信任密钥、MFA 与多区域高可用",
         "href": "/articles/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Blog: AI agents & cryptographic refusal",
+        "title": "博客:AI 智能体与密码学拒绝",
         "href": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Article: AI agents secrets isolation",
+        "title": "文章:AI 智能体的密钥隔离",
         "href": "/articles/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Blog: Steal the server. Not the secrets.",
+        "title": "博客:偷得走服务器,偷不走密钥",
         "href": "/docs/blogs/wslvault-steal-the-server-not-the-secrets"
       },
       {
-        "title": "Technical brief",
+        "title": "技术简报",
         "href": "/articles/wslvault-steal-the-server-not-the-secrets"
       },
       {
@@ -139,14 +139,14 @@
     ]
   },
   "cta": {
-    "title": "Stand up your own vault",
-    "description": "Clone the repo, install the Helm chart, and unseal. TenthMatrix helps operators run WSLVault with the same edge and promotion discipline as WSL Proxy and Ring Promoter.",
+    "title": "搭建您自己的保险库",
+    "description": "克隆仓库、安装 Helm chart,然后解封。TenthMatrix 帮助运维人员以与 WSL Proxy 和 Ring Promoter 相同的边缘与推进规范运行 WSLVault。",
     "primary": {
-      "label": "Visit wslvault.org",
+      "label": "访问 wslvault.org",
       "href": "https://www.wslvault.org/"
     },
     "secondary": {
-      "label": "Contact TenthMatrix",
+      "label": "联系 TenthMatrix",
       "href": "/contact-us"
     }
   }

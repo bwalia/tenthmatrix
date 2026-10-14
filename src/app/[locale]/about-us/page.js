@@ -4,12 +4,12 @@ import FeatureRows from '@/app/components/sections/FeatureRows';
 import FeatureGrid from '@/app/components/sections/FeatureGrid';
 import StatsBand from '@/app/components/sections/StatsBand';
 import { localeHref } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 
 export const dynamic = 'force-static';
 
 function AboutUs({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const h = data.header || {};
   return (
     <>

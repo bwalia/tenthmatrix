@@ -5,11 +5,11 @@ import FeatureGrid from '../FeatureGrid';
 import CheckList from '../CheckList';
 import { heroActions } from '../ActionLink';
 import { localeHref } from '../links';
-import { uiStrings } from '../ui';
+import { useUiStrings } from '../ui';
 
 /** events/*: { hero, content{ eventDetails, topics[], highlights[], cta } } */
 export default function EventPage({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const c = data.content || {};
   const d = c.eventDetails || {};
   const cta = c.cta;

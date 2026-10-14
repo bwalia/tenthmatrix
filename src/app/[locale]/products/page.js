@@ -7,7 +7,7 @@ import CheckList from '@/app/components/sections/CheckList';
 import VideoGrid from '@/app/components/sections/VideoGrid';
 import ActionLink from '@/app/components/sections/ActionLink';
 import { localeHref, WORKSTATION_URL } from '@/app/components/sections/links';
-import { uiStrings } from '@/app/components/sections/ui';
+import { useUiStrings } from '@/app/components/sections/ui';
 import s from '@/app/components/sections/templates/Templates.module.scss';
 
 export const dynamic = 'force-static';
@@ -18,7 +18,7 @@ const isHardwareItem = (it) =>
 // Software half of the Workstation products page: hardwareProducts and
 // hardware catalogue cards are dropped, replaced by one link to Workstation.
 function Products({ data, locale }) {
-  const ui = uiStrings(data.ui);
+  const ui = useUiStrings(data.ui);
   const f = data.featured;
   const software = data.content?.filter((c) => !isHardwareItem(c)) || [];
   const softwareProducts = data.softwareProducts?.items?.filter((i) => !isHardwareItem(i)) || [];

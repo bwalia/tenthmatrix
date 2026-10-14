@@ -1,24 +1,24 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API Gateway, CDN & WAF | TenthMatrix",
-    "description": "TenthMatrix WSL Proxy product page: how the live-config proxy works, detailed features, WAF engine v2 rules and stages, CDN cache, multi-POP DNS, and Agents/MCP Gateway roadmap. Visit wslproxy.org.",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, WAF rules, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
+    "title": "TenthMatrix WSL Proxy — API Gateway, CDN และ WAF | TenthMatrix",
+    "description": "หน้าผลิตภัณฑ์ TenthMatrix WSL Proxy: พร็อกซีแบบ live-config ทำงานอย่างไร ฟีเจอร์โดยละเอียด กฎและสเตจของ WAF engine v2 แคช CDN, DNS แบบหลาย POP และแผนงาน Agents/MCP Gateway ไปที่ wslproxy.org",
+    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, กฎ WAF, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
   },
   "header": {
     "title": "TenthMatrix WSL Proxy",
-    "subtitle": "API Gateway, CDN & Enterprise WAF — Product Overview",
-    "description": "TenthMatrix WSL Proxy (WSLProxy) is TenthMatrix’s complete API gateway and CDN edge control plane. It sits in front of your origins and decides per request what happens — route, secure, cache, and observe — from live JSON and MCP configs, without reloading nginx for every rule change."
+    "subtitle": "API Gateway, CDN และ Enterprise WAF — ภาพรวมผลิตภัณฑ์",
+    "description": "TenthMatrix WSL Proxy (WSLProxy) คือ API gateway และ CDN edge control plane ที่ครบถ้วนของ TenthMatrix อยู่หน้า origin ของคุณและตัดสินใจในแต่ละคำขอว่าจะเกิดอะไรขึ้น — กำหนดเส้นทาง ปกป้อง แคช และสังเกตการณ์ — จาก config แบบ JSON และ MCP ที่ทำงานแบบเรียลไทม์ โดยไม่ต้อง reload nginx ทุกครั้งที่เปลี่ยนกฎ"
   },
   "intro": {
-    "title": "What is TenthMatrix WSL Proxy?",
-    "body": "WSLProxy is a dynamic API gateway and reverse proxy on OpenResty. Operators manage virtual hosts, routing rules, WAF policies, cache, traffic splits, and edge POPs from an Admin UI, REST API, MCP tools, or the wslproxy-cli. Day-to-day rules take effect on the hot path; nginx reloads only when server-level listen or SSL blocks change.",
+    "title": "TenthMatrix WSL Proxy คืออะไร?",
+    "body": "WSLProxy คือ API gateway และ reverse proxy แบบไดนามิกบน OpenResty ผู้ปฏิบัติงานจัดการ virtual host กฎการกำหนดเส้นทาง นโยบาย WAF แคช การแบ่งทราฟฟิก และ edge POP ได้จาก Admin UI, REST API, เครื่องมือ MCP หรือ wslproxy-cli กฎในการใช้งานประจำวันมีผลบน hot path ทันที nginx จะ reload เฉพาะเมื่อบล็อก listen หรือ SSL ระดับเซิร์ฟเวอร์เปลี่ยน",
     "links": [
       {
         "label": "wslproxy.org",
         "href": "https://wslproxy.org"
       },
       {
-        "label": "WAF docs",
+        "label": "เอกสาร WAF",
         "href": "https://wslproxy.org/waf/"
       },
       {
@@ -32,38 +32,38 @@
     ]
   },
   "howItWorks": {
-    "title": "How the proxy works",
-    "intro": "Like a solutions playbook: match once, decide per request, then proxy or protect. The control plane never needs to restart the edge for ordinary rule changes.",
+    "title": "พร็อกซีทำงานอย่างไร",
+    "intro": "เหมือนคู่มือโซลูชัน: จับคู่ครั้งเดียว ตัดสินใจต่อคำขอ แล้วพร็อกซีหรือปกป้อง control plane ไม่จำเป็นต้องรีสตาร์ต edge สำหรับการเปลี่ยนกฎทั่วไป",
     "flow": [
       {
-        "title": "1. Request arrives at a POP",
-        "text": "Browsers, APIs, and agents hit a TenthMatrix WSL Proxy edge (Docker, bare-metal Ansible POP, or k3s Helm ingress). OpenResty accepts TLS and enters the Lua hot path."
+        "title": "1. คำขอมาถึง POP",
+        "text": "เบราว์เซอร์ API และเอเจนต์เข้าถึง edge ของ TenthMatrix WSL Proxy (Docker, POP แบบ bare-metal ด้วย Ansible หรือ k3s Helm ingress) OpenResty รับ TLS และเข้าสู่ Lua hot path"
       },
       {
-        "title": "2. Match a routing rule",
-        "text": "gateway_ack.lua loads the virtual host and evaluates live rules from disk or Redis: path, IP, country, JWT, S3, cookie, and more. Priority and specificity pick the winner — no nginx reload."
+        "title": "2. จับคู่กฎการกำหนดเส้นทาง",
+        "text": "gateway_ack.lua โหลด virtual host และประเมินกฎแบบเรียลไทม์จากดิสก์หรือ Redis: path, IP, ประเทศ, JWT, S3, cookie และอื่นๆ ลำดับความสำคัญและความเฉพาะเจาะจงเป็นตัวเลือกผู้ชนะ — ไม่ต้อง reload nginx"
       },
       {
-        "title": "3. Pipeline: rate limit → WAF → respond",
-        "text": "The gateway pipeline runs rate limits, then the WAF engine (stages + signatures), then gateway_resp.lua applies the response action and balancer timeouts."
+        "title": "3. ไปป์ไลน์: rate limit → WAF → ตอบกลับ",
+        "text": "ไปป์ไลน์ของเกตเวย์รัน rate limit จากนั้น WAF engine (สเตจ + signature) แล้ว gateway_resp.lua จะใช้ response action และ timeout ของ balancer"
       },
       {
-        "title": "4. Decide the outcome",
-        "text": "Typical outcomes: 305 reverse-proxy to an upstream, 301/302 redirect, static HTML block, CAPTCHA challenge, or 403 WAF block with support ID headers."
+        "title": "4. ตัดสินผลลัพธ์",
+        "text": "ผลลัพธ์ทั่วไป: 305 reverse-proxy ไปยัง upstream, 301/302 redirect, บล็อกด้วย HTML แบบสแตติก, CAPTCHA challenge หรือ 403 WAF block พร้อมเฮดเดอร์ support ID"
       },
       {
-        "title": "5. Balance and observe",
-        "text": "For proxy responses, balancer_by_lua applies weighted, RR, canary, sticky, or least-conn. Health, metrics, and traffic stats feed ops and AI log hooks."
+        "title": "5. กระจายโหลดและสังเกตการณ์",
+        "text": "สำหรับการตอบกลับแบบพร็อกซี balancer_by_lua ใช้ weighted, RR, canary, sticky หรือ least-conn ข้อมูลสุขภาพ เมตริก และสถิติทราฟฟิกส่งต่อให้ทีมปฏิบัติการและ AI log hook"
       },
       {
-        "title": "6. Operators & agents drive config",
-        "text": "Humans use Admin UI / CLI; agents use REST or MCP tools to CRUD servers, rules, and WAF binds — the same surface, GitOps-friendly pull/push."
+        "title": "6. ผู้ปฏิบัติงานและเอเจนต์ขับเคลื่อน config",
+        "text": "มนุษย์ใช้ Admin UI / CLI ส่วนเอเจนต์ใช้ REST หรือเครื่องมือ MCP เพื่อ CRUD เซิร์ฟเวอร์ กฎ และการผูก WAF — หน้าจอเดียวกัน รองรับ pull/push แบบ GitOps"
       }
     ],
     "responseCodes": [
       {
         "code": "305",
-        "meaning": "Reverse proxy to upstream (primary gateway path)"
+        "meaning": "Reverse proxy ไปยัง upstream (เส้นทางหลักของเกตเวย์)"
       },
       {
         "code": "301 / 302",
@@ -71,219 +71,219 @@
       },
       {
         "code": "200 HTML",
-        "meaning": "Static / branded block or interstitial"
+        "meaning": "บล็อกแบบสแตติก / ติดแบรนด์ หรือหน้าคั่น"
       },
       {
         "code": "CAPTCHA",
-        "meaning": "Challenge before continuing"
+        "meaning": "Challenge ก่อนดำเนินการต่อ"
       },
       {
         "code": "403 WAF",
-        "meaning": "Blocked by WAF with X-WAF-* and X-Support-ID headers"
+        "meaning": "ถูกบล็อกโดย WAF พร้อมเฮดเดอร์ X-WAF-* และ X-Support-ID"
       }
     ]
   },
   "features": {
-    "title": "Main product features in detail",
-    "intro": "Everything you need for a governed edge: routing, security, CDN cache, multi-POP delivery, and a control plane humans and agents can both drive.",
+    "title": "รายละเอียดฟีเจอร์หลักของผลิตภัณฑ์",
+    "intro": "ทุกสิ่งที่คุณต้องการสำหรับ edge ที่มีการกำกับดูแล: การกำหนดเส้นทาง ความปลอดภัย แคช CDN การส่งมอบแบบหลาย POP และ control plane ที่ทั้งมนุษย์และเอเจนต์ใช้งานได้",
     "items": [
       {
-        "title": "Dynamic routing rules",
-        "description": "Match on path, IP, country, JWT claims, S3-style keys, and cookies. Actions include reverse proxy, redirect, HTML responses, and CAPTCHA. Rules are ordered by priority with specificity tie-break so the most precise route wins without restarting nginx.",
+        "title": "กฎการกำหนดเส้นทางแบบไดนามิก",
+        "description": "จับคู่ด้วย path, IP, ประเทศ, JWT claim, คีย์แบบ S3 และ cookie การกระทำได้แก่ reverse proxy, redirect, การตอบกลับด้วย HTML และ CAPTCHA กฎเรียงตามลำดับความสำคัญ โดยใช้ความเฉพาะเจาะจงตัดสินเมื่อเท่ากัน เส้นทางที่แม่นยำที่สุดจึงชนะโดยไม่ต้องรีสตาร์ต nginx",
         "icon": "bi-signpost-split"
       },
       {
-        "title": "Traffic engineering",
-        "description": "Weighted, round-robin, header-based canary, cookie sticky sessions, and least-conn balancing. Promote or rollback backends from the control plane when a canary looks healthy — or pull it back in one action.",
+        "title": "วิศวกรรมทราฟฟิก",
+        "description": "การกระจายโหลดแบบ weighted, round-robin, canary ตามเฮดเดอร์, sticky session ด้วย cookie และ least-conn โปรโมตหรือย้อนกลับแบ็กเอนด์จาก control plane เมื่อ canary ดูมีสุขภาพดี — หรือถอนกลับได้ในการกระทำเดียว",
         "icon": "bi-shuffle"
       },
       {
         "title": "Enterprise WAF engine v2",
-        "description": "Policy packs bind per domain, service, and route. Stages cover method allow-lists, filetype deny, IP/geo lists, JWT algorithm policy, JSON body profiles, brute-force velocity, and OpenAPI positive security — plus governed attack signatures and anomaly scoring. Blocking or transparent (monitor) modes.",
+        "description": "ชุดนโยบายผูกตามโดเมน บริการ และเส้นทาง สเตจครอบคลุม method allow-list, การปฏิเสธประเภทไฟล์, รายการ IP/ภูมิศาสตร์, นโยบายอัลกอริทึม JWT, โปรไฟล์ JSON body, ความเร็ว brute-force และ OpenAPI positive security — พร้อม attack signature ที่มีการกำกับดูแลและการให้คะแนนความผิดปกติ มีโหมดบล็อกหรือโหมดโปร่งใส (มอนิเตอร์)",
         "icon": "bi-shield-lock"
       },
       {
-        "title": "CDN & edge cache",
-        "description": "Edge static cache, optional Docker blob cache, and Varnish hooks give you a CDN-style layer in front of origins — ideal for marketing sites, API docs, and artifact delivery alongside API gateway traffic.",
+        "title": "CDN และ edge cache",
+        "description": "แคชสแตติกที่ edge, Docker blob cache แบบเลือกได้ และ Varnish hook ให้ชั้นแบบ CDN หน้า origin — เหมาะสำหรับเว็บไซต์การตลาด เอกสาร API และการส่งมอบ artifact ควบคู่กับทราฟฟิก API gateway",
         "icon": "bi-hdd-network"
       },
       {
-        "title": "SSL & HTTPS",
-        "description": "auto-ssl / Let’s Encrypt, per-domain SSL JSON, and force-HTTPS policies so each virtual host can terminate TLS correctly at the POP.",
+        "title": "SSL และ HTTPS",
+        "description": "auto-ssl / Let’s Encrypt, SSL JSON ต่อโดเมน และนโยบายบังคับ HTTPS เพื่อให้แต่ละ virtual host ยุติ TLS ได้อย่างถูกต้องที่ POP",
         "icon": "bi-lock"
       },
       {
-        "title": "Multi-POP + DNS",
-        "description": "Declare edge locations and provision Cloudflare A-records with safety guardrails. A common production pattern is public POP → k3s NodePort → wslproxy-ingress Helm → app pods.",
+        "title": "หลาย POP + DNS",
+        "description": "ประกาศตำแหน่ง edge และสร้าง A-record บน Cloudflare พร้อมราวกันความปลอดภัย รูปแบบ production ที่พบบ่อยคือ POP สาธารณะ → k3s NodePort → wslproxy-ingress Helm → app pod",
         "icon": "bi-globe2"
       },
       {
         "title": "Control plane",
-        "description": "React Admin and Next.js dashboards, Swagger REST, MCP tools for Claude/Cursor, and the wslproxy-cli image (ghcr.io/bwalia/wslproxy-cli) for pull/push/diff/verify workflows.",
+        "description": "แดชบอร์ด React Admin และ Next.js, Swagger REST, เครื่องมือ MCP สำหรับ Claude/Cursor และอิมเมจ wslproxy-cli (ghcr.io/bwalia/wslproxy-cli) สำหรับเวิร์กโฟลว์ pull/push/diff/verify",
         "icon": "bi-sliders"
       },
       {
-        "title": "Deploy anywhere",
-        "description": "Docker Compose for labs, Ansible for bare-metal or VM POPs, and Helm ingress-controller charts for k3s / Kubernetes — one product surface across environments.",
+        "title": "ดีพลอยได้ทุกที่",
+        "description": "Docker Compose สำหรับแล็บ, Ansible สำหรับ POP แบบ bare-metal หรือ VM และชาร์ต Helm ingress-controller สำหรับ k3s / Kubernetes — ผลิตภัณฑ์เดียวในทุกสภาพแวดล้อม",
         "icon": "bi-box-seam"
       },
       {
-        "title": "Observability",
+        "title": "การสังเกตการณ์",
         "description": "/health, /healthz, /ready, Prometheus /metrics, traffic stats, structured WAF security logs, and AI log analysis hooks for SRE teams.",
         "icon": "bi-graph-up"
       }
     ]
   },
   "waf": {
-    "title": "WAF rules & enforcement",
-    "intro": "The WAF runs in the OpenResty request path (inspired by enterprise NGINX WAF patterns). It is fail-open by default so a WAF bug cannot take the site down, explainable on every block, and backward compatible with simple v1 rule lists. For a guided tour and deep dive, see the related reading below — or watch the WAF video on this page.",
-    "pipelineTitle": "Request-path pipeline",
+    "title": "กฎ WAF และการบังคับใช้",
+    "intro": "WAF ทำงานในเส้นทางคำขอของ OpenResty (ได้แรงบันดาลใจจากรูปแบบ NGINX WAF ระดับองค์กร) ค่าเริ่มต้นเป็น fail-open เพื่อไม่ให้บั๊กของ WAF ทำให้เว็บไซต์ล่ม อธิบายเหตุผลได้ทุกครั้งที่บล็อก และเข้ากันได้ย้อนหลังกับรายการกฎแบบ v1 ที่เรียบง่าย สำหรับทัวร์แนะนำและเนื้อหาเชิงลึก ดูบทความที่เกี่ยวข้องด้านล่าง — หรือชมวิดีโอ WAF ในหน้านี้",
+    "pipelineTitle": "ไปป์ไลน์ในเส้นทางคำขอ",
     "pipeline": [
-      "rewrite_by_lua: gateway_ack.lua selects the routing rule",
-      "gateway_pipeline.execute(): rate-limit → WAF → continue",
-      "waf_engine.inspect(): load policy, resolve binding, run stages, then signatures",
-      "On block: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
+      "rewrite_by_lua: gateway_ack.lua เลือกกฎการกำหนดเส้นทาง",
+      "gateway_pipeline.execute(): rate-limit → WAF → ดำเนินการต่อ",
+      "waf_engine.inspect(): โหลดนโยบาย หาการผูก รันสเตจ แล้วตามด้วย signature",
+      "เมื่อบล็อก: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
     ],
-    "stagesTitle": "Stage pipeline (before signatures)",
+    "stagesTitle": "ไปป์ไลน์สเตจ (ก่อน signature)",
     "stages": [
       {
         "code": "VIOL_METHOD",
         "name": "Method allow-list",
-        "detail": "Only permitted HTTP methods (e.g. GET, POST, HEAD, OPTIONS)."
+        "detail": "เฉพาะ HTTP method ที่อนุญาต (เช่น GET, POST, HEAD, OPTIONS)"
       },
       {
         "code": "VIOL_FILETYPE",
-        "name": "Filetype deny",
-        "detail": "Block sensitive extensions such as .env, .sql, .bak, .git, .pem."
+        "name": "ปฏิเสธประเภทไฟล์",
+        "detail": "บล็อกนามสกุลที่ละเอียดอ่อน เช่น .env, .sql, .bak, .git, .pem"
       },
       {
         "code": "VIOL_IP_DENY / VIOL_GEO",
-        "name": "IP lists & geo",
-        "detail": "Allow/deny CIDRs and deny countries via IP2Location-style DB."
+        "name": "รายการ IP และภูมิศาสตร์",
+        "detail": "อนุญาต/ปฏิเสธ CIDR และปฏิเสธประเทศผ่านฐานข้อมูลแบบ IP2Location"
       },
       {
         "code": "VIOL_JWT_ALG",
-        "name": "JWT algorithm policy",
-        "detail": "Deny weak algs (none, HS256); require RS256/ES256 where needed."
+        "name": "นโยบายอัลกอริทึม JWT",
+        "detail": "ปฏิเสธอัลกอริทึมที่อ่อนแอ (none, HS256) บังคับใช้ RS256/ES256 เมื่อจำเป็น"
       },
       {
         "code": "VIOL_JSON_SIZE / DEPTH",
-        "name": "JSON body profile",
-        "detail": "Cap JSON depth and body size to stop parser abuse."
+        "name": "โปรไฟล์ JSON body",
+        "detail": "จำกัดความลึกของ JSON และขนาด body เพื่อหยุดการโจมตี parser"
       },
       {
         "code": "VIOL_BRUTE_FORCE",
-        "name": "Brute-force velocity",
-        "detail": "Per-path sliding windows (e.g. /api/login) keyed by IP."
+        "name": "ความเร็ว brute-force",
+        "detail": "หน้าต่างเลื่อนต่อ path (เช่น /api/login) โดยใช้ IP เป็นคีย์"
       },
       {
         "code": "VIOL_OPENAPI_*",
         "name": "OpenAPI positive security",
-        "detail": "Allow only declared path+method surfaces (templated paths)."
+        "detail": "อนุญาตเฉพาะ path+method ที่ประกาศไว้ (รองรับ path แบบเทมเพลต)"
       }
     ],
-    "signaturesTitle": "Signature rules & governance",
-    "signaturesIntro": "Each signature has a stable ID (the addressable unit), category/set, severity, match target (url, args, body, headers, cookies, UA, or all), regex or string pattern, action (block or monitor), and anomaly score.",
+    "signaturesTitle": "กฎ signature และการกำกับดูแล",
+    "signaturesIntro": "แต่ละ signature มี ID คงที่ (หน่วยที่อ้างถึงได้) หมวดหมู่/ชุด ระดับความรุนแรง เป้าหมายที่จับคู่ (url, args, body, headers, cookies, UA หรือทั้งหมด) รูปแบบ regex หรือสตริง การกระทำ (block หรือ monitor) และคะแนนความผิดปกติ",
     "governance": [
       {
         "title": "disable",
-        "text": "signatures.disable skips a rule entirely."
+        "text": "signatures.disable ข้ามกฎทั้งหมด"
       },
       {
         "title": "stage",
-        "text": "signatures.stage alarms only until a timestamp — safe rollout that never contributes to anomaly score while staged."
+        "text": "signatures.stage แจ้งเตือนเท่านั้นจนถึงเวลาที่กำหนด — การปล่อยใช้งานอย่างปลอดภัยที่ไม่ส่งผลต่อคะแนนความผิดปกติขณะอยู่ในสถานะ staged"
       },
       {
-        "title": "signature sets",
-        "text": "Toggle whole sets (e.g. SET_SQLI) between block and alarm without rewriting every rule."
+        "title": "ชุด signature",
+        "text": "สลับทั้งชุด (เช่น SET_SQLI) ระหว่าง block และ alarm โดยไม่ต้องเขียนทุกกฎใหม่"
       },
       {
-        "title": "anomaly threshold",
-        "text": "Cumulative score ≥ threshold raises VIOL_ANOMALY_SCORE even if no single signature alone would block."
+        "title": "เกณฑ์ความผิดปกติ",
+        "text": "คะแนนสะสม ≥ เกณฑ์จะทำให้เกิด VIOL_ANOMALY_SCORE แม้ไม่มี signature ใดเพียงตัวเดียวที่จะบล็อก"
       }
     ],
-    "bindingTitle": "Binding precedence",
-    "bindingIntro": "Most specific wins: route override → per-server waf_mode_override → policy default enforcementMode (blocking or transparent/monitor). Every finding records which binding won so logs answer “why was this blocked?”",
+    "bindingTitle": "ลำดับความสำคัญของการผูก",
+    "bindingIntro": "เฉพาะเจาะจงที่สุดชนะ: route override → waf_mode_override ต่อเซิร์ฟเวอร์ → enforcementMode ค่าเริ่มต้นของนโยบาย (blocking หรือ transparent/monitor) ทุกผลการตรวจพบจะบันทึกว่าการผูกใดชนะ ล็อกจึงตอบได้ว่า “ทำไมถึงถูกบล็อก?”",
     "modes": [
       {
         "title": "Blocking",
-        "text": "Violations return 403 with support ID and optional branded block page."
+        "text": "การละเมิดจะได้รับ 403 พร้อม support ID และหน้าบล็อกแบบติดแบรนด์ (เลือกได้)"
       },
       {
         "title": "Transparent / monitor",
-        "text": "Violations alarm and log only — ideal for dry-run and staging."
+        "text": "การละเมิดจะแจ้งเตือนและบันทึกล็อกเท่านั้น — เหมาะสำหรับ dry-run และ staging"
       }
     ]
   },
   "roadmap": {
-    "title": "Agents Gateway & MCP Gateway",
-    "intro": "TenthMatrix is extending WSL Proxy into the agent era. The same edge that fronts HTTP APIs will govern how agents and Model Context Protocol (MCP) clients reach tools and backends.",
+    "title": "Agents Gateway และ MCP Gateway",
+    "intro": "TenthMatrix กำลังขยาย WSL Proxy เข้าสู่ยุคของเอเจนต์ edge เดียวกันที่อยู่หน้า HTTP API จะกำกับดูแลวิธีที่เอเจนต์และไคลเอนต์ Model Context Protocol (MCP) เข้าถึงเครื่องมือและแบ็กเอนด์",
     "items": [
       {
-        "title": "MCP Gateway (in progress)",
-        "description": "A governed front door in front of external MCP servers — auth bridging, tool/method allow-deny lists, audit of tools/call, and per-tool rate limits. Clients never hold upstream tokens.",
+        "title": "MCP Gateway (กำลังพัฒนา)",
+        "description": "ประตูหน้าที่มีการกำกับดูแลสำหรับเซิร์ฟเวอร์ MCP ภายนอก — การเชื่อมการยืนยันตัวตน รายการอนุญาต/ปฏิเสธเครื่องมือ/เมธอด การตรวจสอบ tools/call และ rate limit ต่อเครื่องมือ ไคลเอนต์ไม่ต้องถือโทเค็นของ upstream เลย",
         "status": "In progress"
       },
       {
-        "title": "Agents Gateway (in progress)",
-        "description": "Policy, routing, and observability for multi-agent traffic — so agent fleets hit origins through the same TenthMatrix WSL Proxy edge as your APIs and CDN workloads.",
+        "title": "Agents Gateway (กำลังพัฒนา)",
+        "description": "นโยบาย การกำหนดเส้นทาง และการสังเกตการณ์สำหรับทราฟฟิกแบบหลายเอเจนต์ — เพื่อให้ฟลีตเอเจนต์เข้าถึง origin ผ่าน edge ของ TenthMatrix WSL Proxy เดียวกับ API และเวิร์กโหลด CDN ของคุณ",
         "status": "In progress"
       },
       {
-        "title": "MCP management surface (available)",
-        "description": "WSLProxy already exposes its own Admin surface as MCP tools for Claude, Cursor, and other agents — configure rules and inspect the edge without leaving your IDE.",
+        "title": "หน้าจัดการ MCP (พร้อมใช้งาน)",
+        "description": "WSLProxy เปิดหน้า Admin ของตัวเองเป็นเครื่องมือ MCP สำหรับ Claude, Cursor และเอเจนต์อื่นๆ อยู่แล้ว — ตั้งค่ากฎและตรวจสอบ edge ได้โดยไม่ต้องออกจาก IDE",
         "status": "Available"
       }
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clients and agents hit a TenthMatrix WSL Proxy POP. The edge matches live rules, applies WAF and cache, then balances to origins. Operators drive everything through Admin UI, REST, MCP, or CLI.",
+    "title": "สถาปัตยกรรมโซลูชัน",
+    "intro": "ไคลเอนต์และเอเจนต์เข้าถึง POP ของ TenthMatrix WSL Proxy edge จะจับคู่กฎแบบเรียลไทม์ ใช้ WAF และแคช แล้วกระจายโหลดไปยัง origin ผู้ปฏิบัติงานควบคุมทุกอย่างผ่าน Admin UI, REST, MCP หรือ CLI",
     "steps": [
       {
         "title": "Edge POP",
-        "text": "OpenResty + Lua hot path: match rules, respond, balance backends."
+        "text": "OpenResty + Lua hot path: จับคู่กฎ ตอบกลับ กระจายโหลดไปยังแบ็กเอนด์"
       },
       {
         "title": "Live config",
-        "text": "Rules, WAF, and traffic splits from disk or Redis — no nginx reload for day-to-day changes."
+        "text": "กฎ WAF และการแบ่งทราฟฟิกจากดิสก์หรือ Redis — ไม่ต้อง reload nginx สำหรับการเปลี่ยนแปลงประจำวัน"
       },
       {
         "title": "Control plane",
-        "text": "Admin UI, REST, MCP, and wslproxy-cli for humans and agents."
+        "text": "Admin UI, REST, MCP และ wslproxy-cli สำหรับมนุษย์และเอเจนต์"
       },
       {
-        "title": "Origins",
-        "text": "APIs, k3s services, static sites, and future MCP / agent upstreams."
+        "title": "Origin",
+        "text": "API, บริการ k3s, เว็บไซต์สแตติก และ upstream สำหรับ MCP / เอเจนต์ในอนาคต"
       }
     ]
   },
   "relatedReading": {
-    "title": "Related reading",
-    "intro": "Explainable Web Application Firewall on the same live-config edge — policies, stages, monitor or block, and support IDs on every decision.",
+    "title": "บทความที่เกี่ยวข้อง",
+    "intro": "Web Application Firewall ที่อธิบายเหตุผลได้บน edge แบบ live-config เดียวกัน — นโยบาย สเตจ มอนิเตอร์หรือบล็อก และ support ID ในทุกการตัดสินใจ",
     "items": [
       {
-        "label": "WSL Proxy WAF blog",
+        "label": "บล็อก WSL Proxy WAF",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
       {
-        "label": "Explainable edge WAF article",
+        "label": "บทความ edge WAF ที่อธิบายได้",
         "href": "/articles/wslproxy-waf-web-application-firewall",
         "external": false
       },
       {
-        "label": "WAF Engine v2 blog",
+        "label": "บล็อก WAF Engine v2",
         "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
         "external": false
       },
       {
-        "label": "Inside WAF Engine v2",
+        "label": "เจาะลึก WAF Engine v2",
         "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
         "external": false
       },
       {
-        "label": "WAF tour video",
+        "label": "วิดีโอทัวร์ WAF",
         "href": "https://youtu.be/r10XSonA5JE",
         "external": true
       },
@@ -295,47 +295,47 @@
     ]
   },
   "cta": {
-    "title": "Get TenthMatrix WSL Proxy",
-    "body": "Explore the product on wslproxy.org, read the WAF deep dive on TenthMatrix, or talk to us about edge, CDN, WAF, and agent gateway deployments.",
+    "title": "รับ TenthMatrix WSL Proxy",
+    "body": "สำรวจผลิตภัณฑ์บน wslproxy.org อ่านเนื้อหาเชิงลึกเรื่อง WAF บน TenthMatrix หรือคุยกับเราเรื่องการดีพลอย edge, CDN, WAF และ agent gateway",
     "primary": {
-      "text": "Open wslproxy.org",
+      "text": "เปิด wslproxy.org",
       "href": "https://wslproxy.org"
     },
     "secondary": {
-      "text": "Read the WAF article",
+      "text": "อ่านบทความ WAF",
       "href": "/articles/wslproxy-waf-web-application-firewall"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "ติดต่อ TenthMatrix",
       "href": "/contact-us"
     },
     "quaternary": {
-      "text": "Product overview article",
+      "text": "บทความภาพรวมผลิตภัณฑ์",
       "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "ไปต่อที่เว็บไซต์ผลิตภัณฑ์",
     "href": "https://wslproxy.org",
-    "text": "Visit wslproxy.org for demos, docs, and the latest TenthMatrix WSL Proxy releases."
+    "text": "ไปที่ wslproxy.org เพื่อดูเดโม เอกสาร และรีลีสล่าสุดของ TenthMatrix WSL Proxy"
   },
   "videos": [
     {
-      "title": "Watch: TenthMatrix WSL Proxy intro",
+      "title": "ชม: แนะนำ TenthMatrix WSL Proxy",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — product intro",
+      "thumbnailAlt": "TenthMatrix WSL Proxy — แนะนำผลิตภัณฑ์",
       "caption": "รับชม",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "Watch: WSL Proxy WAF tour",
+      "title": "ชม: ทัวร์ WSL Proxy WAF",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy WAF tour",
+      "thumbnailAlt": "ทัวร์ TenthMatrix WSL Proxy WAF",
       "caption": "รับชม",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

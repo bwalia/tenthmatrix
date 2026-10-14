@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Vault — Secrets Encrypted Per Tenant | TenthMatrix",
-    "description": "WSLVault is an open-source, self-hosted secrets manager: AES-256-GCM envelope encryption, per-tenant key hierarchy, KV, transit, PKI, dynamic leases, MFA, multi-region HA, and tamper-evident audit. Steal the server. Not the secrets.",
-    "keywords": "WSLVault, WSL Vault, secrets manager, envelope encryption, multi-tenant vault, PKI, dynamic leases, Kubernetes secrets, open source Vault alternative, wslvault.org"
+    "title": "TenthMatrix WSL Vault — أسرار مشفّرة لكل مستأجر | TenthMatrix",
+    "description": "WSLVault مدير أسرار مفتوح المصدر ذاتي الاستضافة: تشفير مغلّف AES-256-GCM، وتسلسل مفاتيح لكل مستأجر، وKV، وtransit، وPKI، وتأجير ديناميكي، وMFA، وتوافر عالٍ متعدد المناطق، وتدقيق يكشف العبث. اسرق الخادم، لا الأسرار.",
+    "keywords": "WSLVault، WSL Vault، مدير الأسرار، التشفير المغلّف، خزنة متعددة المستأجرين، PKI، التأجير الديناميكي، أسرار Kubernetes، بديل Vault مفتوح المصدر، wslvault.org"
   },
   "header": {
     "title": "TenthMatrix WSL Vault",
-    "subtitle": "Steal the server. Not the secrets.",
-    "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
+    "subtitle": "اسرق الخادم، لا الأسرار.",
+    "description": "إدارة أسرار مفتوحة المصدر ذاتية الاستضافة مبنية على تشفير مغلّف AES-256-GCM وتسلسل مفاتيح لكل مستأجر — فحتى القرص المسروق أو تفريغ قاعدة البيانات أو المضيف المخترق لا يترك للمهاجمين سوى نص مشفّر لا يمكنهم فتحه."
   },
   "intro": {
-    "title": "What is WSLVault?",
-    "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",
+    "title": "ما هو WSLVault؟",
+    "body": "WSLVault منصة أسرار متوافقة مع Vault للمشغّلين الذين يريدون تعددية مستأجرين مشفّرة أثناء التخزين دون نص صريح على القرص. أدِره من وحدة تحكم الويب steel/brass أو CLI أو حزم SDK بلغات Go/Python/Rust/TypeScript أو MCP — مع نشر Helm/GitOps على Kubernetes.",
     "links": [
       {
         "label": "wslvault.org",
@@ -22,110 +22,110 @@
         "href": "https://github.com/bwalia/wslvault"
       },
       {
-        "label": "Docs",
+        "label": "الوثائق",
         "href": "https://github.com/bwalia/wslvault/tree/main/docs"
       },
       {
-        "label": "Getting started",
+        "label": "البدء",
         "href": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
       }
     ]
   },
   "videos": [
     {
-      "title": "20-minute intro — steal the server, not the secrets",
-      "caption": "Watch on YouTube",
+      "title": "مقدمة في 20 دقيقة — اسرق الخادم، لا الأسرار",
+      "caption": "شاهد على YouTube",
       "embedUrl": "https://www.youtube.com/embed/O6q3_H0k2M8",
       "watchUrl": "https://youtu.be/O6q3_H0k2M8",
       "thumbnail": "/img/wslvault-cover.svg",
-      "thumbnailAlt": "WSLVault intro video cover"
+      "thumbnailAlt": "غلاف فيديو مقدمة WSLVault"
     }
   ],
   "pillars": {
-    "title": "Why the security model matters",
+    "title": "لماذا يهم نموذج الأمان",
     "items": [
       {
-        "title": "True multi-tenancy",
-        "text": "Team A cannot decrypt Team B — cryptographic refusal, not an application oops.",
+        "title": "تعددية مستأجرين حقيقية",
+        "text": "لا يستطيع الفريق A فك تشفير بيانات الفريق B — رفض تشفيري، لا خطأ في التطبيق.",
         "icon": "fas fa-users-slash"
       },
       {
-        "title": "Envelope encryption",
-        "text": "DEK → tenant KEK → root KEK (KMS / HSM / Shamir). Secrets sealed before they touch disk.",
+        "title": "التشفير المغلّف",
+        "text": "DEK ← KEK المستأجر ← KEK الجذر (KMS / HSM / Shamir). تُختم الأسرار قبل أن تلمس القرص.",
         "icon": "fas fa-layer-group"
       },
       {
-        "title": "Engines you need",
-        "text": "Versioned KV, transit encryption, PKI, dynamic leases, identity policies, and MFA.",
+        "title": "المحركات التي تحتاجها",
+        "text": "KV بإصدارات، وتشفير transit، وPKI، وتأجير ديناميكي، وسياسات هوية، وMFA.",
         "icon": "fas fa-cogs"
       },
       {
-        "title": "HA & audit",
-        "text": "Active/active multi-region replication and a tamper-evident, hash-chained audit trail.",
+        "title": "التوافر العالي والتدقيق",
+        "text": "نسخ متماثل نشط/نشط متعدد المناطق وسجل تدقيق مسلسل بالتجزئة يكشف العبث.",
         "icon": "fas fa-shield-alt"
       }
     ]
   },
   "features": {
-    "title": "Everything a secret needs, behind one API",
+    "title": "كل ما يحتاجه السر، خلف API واحدة",
     "items": [
       {
-        "title": "Versioned KV secrets",
-        "text": "Vault-compatible KV v2: versioned reads/writes, check-and-set, soft-delete and destroy — every value sealed before storage."
+        "title": "أسرار KV بإصدارات",
+        "text": "KV v2 متوافق مع Vault: قراءة وكتابة بإصدارات، وcheck-and-set، وحذف مؤقت وإتلاف — كل قيمة مختومة قبل التخزين."
       },
       {
-        "title": "Transit engine",
-        "text": "Encrypt, decrypt, sign and verify without plaintext keys leaving the vault. Rotate keys while old ciphertext stays readable."
+        "title": "محرك Transit",
+        "text": "شفّر وفك التشفير ووقّع وتحقق دون أن تغادر المفاتيح الصريحة الخزنة. دوّر المفاتيح مع بقاء النصوص المشفّرة القديمة مقروءة."
       },
       {
-        "title": "PKI & certificates",
-        "text": "Private CA, roles, and short-lived certificates. CA private keys are envelope-encrypted, never stored in the clear."
+        "title": "PKI والشهادات",
+        "text": "سلطة شهادات خاصة وأدوار وشهادات قصيرة العمر. المفاتيح الخاصة لسلطة الشهادات مشفّرة تشفيرًا مغلّفًا ولا تُخزَّن بنص صريح أبدًا."
       },
       {
-        "title": "Dynamic leases",
-        "text": "Credentials are leases: issued, listed, renewed, and revoked for real. Revoke stops access immediately."
+        "title": "التأجير الديناميكي",
+        "text": "بيانات الاعتماد عقود تأجير: تُصدَر وتُدرَج وتُجدَّد وتُلغى فعليًا. الإلغاء يوقف الوصول فورًا."
       },
       {
-        "title": "Identity & MFA",
-        "text": "TOTP two-factor, recovery codes, fine-grained policies on API keys and JWTs — plus SCIM, LDAP, OIDC, mTLS and workload auth."
+        "title": "الهوية وMFA",
+        "text": "مصادقة ثنائية TOTP، ورموز استرداد، وسياسات دقيقة على مفاتيح API وJWT — إضافة إلى SCIM وLDAP وOIDC وmTLS ومصادقة أحمال العمل."
       },
       {
-        "title": "Zero plaintext at rest",
-        "text": "A database dump yields ciphertext wrapped under keys the database never sees. Steal the disk ≠ steal the secrets."
+        "title": "لا نص صريح أثناء التخزين",
+        "text": "لا ينتج تفريغ قاعدة البيانات سوى نص مشفّر مغلّف بمفاتيح لا تراها قاعدة البيانات أبدًا. سرقة القرص ≠ سرقة الأسرار."
       }
     ]
   },
   "deploy": {
-    "title": "Cloud-native and scriptable",
-    "body": "Ship with the Helm chart and Kubernetes operator, drive from GitOps, scrape with Prometheus, and reach WSLVault from your language of choice — or from an AI agent over the built-in MCP server.",
-    "ctaLabel": "Read getting started",
+    "title": "سحابي أصيل وقابل للبرمجة",
+    "body": "انشر باستخدام مخطط Helm ومشغّل Kubernetes، وأدِره عبر GitOps، واجمع المقاييس بـ Prometheus، وصِل إلى WSLVault من لغتك المفضلة — أو من وكيل ذكاء اصطناعي عبر خادم MCP المدمج.",
+    "ctaLabel": "اقرأ دليل البدء",
     "ctaHref": "https://github.com/bwalia/wslvault/blob/main/docs/GETTING-STARTED.md"
   },
   "related": {
     "title": "اقرأ المزيد",
     "items": [
       {
-        "title": "Blog: Zero-trust tenant isolation (compliance)",
+        "title": "المدونة: عزل المستأجرين بنهج انعدام الثقة (الامتثال)",
         "href": "/docs/blogs/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Article: Zero-trust secrets, MFA & multi-region HA",
+        "title": "مقالة: أسرار بنهج انعدام الثقة وMFA وتوافر عالٍ متعدد المناطق",
         "href": "/articles/wslvault-zero-trust-tenant-isolation"
       },
       {
-        "title": "Blog: AI agents & cryptographic refusal",
+        "title": "المدونة: وكلاء الذكاء الاصطناعي والرفض التشفيري",
         "href": "/docs/blogs/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Article: AI agents secrets isolation",
+        "title": "مقالة: عزل أسرار وكلاء الذكاء الاصطناعي",
         "href": "/articles/wslvault-ai-agents-cryptographic-refusal"
       },
       {
-        "title": "Blog: Steal the server. Not the secrets.",
+        "title": "المدونة: اسرق الخادم، لا الأسرار",
         "href": "/docs/blogs/wslvault-steal-the-server-not-the-secrets"
       },
       {
-        "title": "Technical brief",
+        "title": "موجز تقني",
         "href": "/articles/wslvault-steal-the-server-not-the-secrets"
       },
       {
@@ -139,14 +139,14 @@
     ]
   },
   "cta": {
-    "title": "Stand up your own vault",
-    "description": "Clone the repo, install the Helm chart, and unseal. TenthMatrix helps operators run WSLVault with the same edge and promotion discipline as WSL Proxy and Ring Promoter.",
+    "title": "أنشئ خزنتك الخاصة",
+    "description": "استنسخ المستودع، وثبّت مخطط Helm، ثم افتح الختم. تساعد TenthMatrix المشغّلين على تشغيل WSLVault بانضباط الحافة والترقية نفسه المتبع في WSL Proxy وRing Promoter.",
     "primary": {
-      "label": "Visit wslvault.org",
+      "label": "زر wslvault.org",
       "href": "https://www.wslvault.org/"
     },
     "secondary": {
-      "label": "Contact TenthMatrix",
+      "label": "تواصل مع TenthMatrix",
       "href": "/contact-us"
     }
   }

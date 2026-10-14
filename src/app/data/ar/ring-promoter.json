@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "Ring Promoter — Modern CI/CD for AI-Powered Deployments | TenthMatrix",
-    "description": "Ring Promoter v1.0.2: CI/CD Orbit + Lanes side by side. Health-gated promotion through int → test → acc → prod, auto-rollback, Kubernetes and VM pipelines. Visit ringpromoter.com.",
-    "keywords": "Ring Promoter, CI/CD, AI deployments, deployment rings, GitOps, Kubernetes, k3s, auto-rollback, TenthMatrix, ringpromoter.com"
+    "title": "Ring Promoter — CI/CD حديث لعمليات النشر المدعومة بالذكاء الاصطناعي | TenthMatrix",
+    "description": "Ring Promoter v1.0.2: عرض CI/CD Orbit + Lanes جنبًا إلى جنب. ترقية محكومة بفحوص السلامة عبر int → test → acc → prod، وتراجع تلقائي، ومسارات Kubernetes والأجهزة الافتراضية. زر ringpromoter.com.",
+    "keywords": "Ring Promoter، CI/CD، نشر الذكاء الاصطناعي، حلقات النشر، GitOps، Kubernetes، k3s، التراجع التلقائي، TenthMatrix، ringpromoter.com"
   },
   "header": {
     "title": "Ring Promoter",
-    "subtitle": "CI/CD Orbit + Lanes — every release earns production",
-    "description": "Ring Promoter is TenthMatrix’s production-grade promotion control plane. v1.0.2 puts Orbit (fleet view) and Lanes (APP × INT/TEST/ACC/PROD matrix) side by side while promoting versions through ordered rings — int → test → acc → prod — with live health gates, auto-rollback, and a full audit trail."
+    "subtitle": "CI/CD Orbit + Lanes — كل إصدار يستحق الوصول إلى الإنتاج",
+    "description": "Ring Promoter هو مستوى التحكم في الترقية بمستوى الإنتاج من TenthMatrix. يضع الإصدار v1.0.2 عرض Orbit (رؤية الأسطول) وLanes (مصفوفة APP × INT/TEST/ACC/PROD) جنبًا إلى جنب أثناء ترقية الإصدارات عبر حلقات مرتبة — int → test → acc → prod — مع بوابات سلامة حيّة وتراجع تلقائي وسجل تدقيق كامل."
   },
   "intro": {
-    "title": "What is Ring Promoter?",
-    "body": "A small control plane that promotes application versions through shared rings. It runs as a long-lived service (typically on k3s), exposes a JSON REST API and an embedded web UI, and tracks current/previous versions and history per (application, ring). Kubernetes apps and VM/CI apps share one surface — the deployer is chosen per app.",
+    "title": "ما هو Ring Promoter؟",
+    "body": "مستوى تحكم صغير يرقّي إصدارات التطبيقات عبر حلقات مشتركة. يعمل كخدمة طويلة الأمد (عادةً على k3s)، ويوفّر JSON REST API وواجهة ويب مدمجة، ويتتبع الإصدارات الحالية والسابقة والسجل لكل (تطبيق، حلقة). تتشارك تطبيقات Kubernetes وتطبيقات VM/CI واجهة واحدة — ويُختار أداة النشر لكل تطبيق.",
     "links": [
       {
         "label": "ringpromoter.com",
@@ -25,226 +25,226 @@
   },
   "videos": [
     {
-      "title": "Watch: CI/CD Orbit + Lanes (v1.0.2)",
+      "title": "شاهد: CI/CD Orbit + Lanes (v1.0.2)",
       "embedUrl": "https://www.youtube.com/embed/hNU4sWxrDFk",
       "watchUrl": "https://youtu.be/hNU4sWxrDFk",
       "thumbnail": "/img/ring-promoter-orbit-lanes-youtube-thumbnail.png?v=20260925c",
       "thumbnailAlt": "CI/CD Orbit + Lanes — Ring Promoter v1.0.2",
-      "caption": "v1.0.2 walkthrough"
+      "caption": "جولة في v1.0.2"
     },
     {
-      "title": "Watch: Ring Promoter quick intro (5 min)",
+      "title": "شاهد: مقدمة سريعة إلى Ring Promoter (5 دقائق)",
       "embedUrl": "https://www.youtube.com/embed/SjXwaTVuYhM",
       "watchUrl": "https://youtu.be/SjXwaTVuYhM",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail-v2.png?v=20260901b",
-      "thumbnailAlt": "Ring Promoter — AI-assisted promotion to production (5-minute intro)",
-      "caption": "5-minute intro"
+      "thumbnailAlt": "Ring Promoter — ترقية إلى الإنتاج بمساعدة الذكاء الاصطناعي (مقدمة في 5 دقائق)",
+      "caption": "مقدمة في 5 دقائق"
     },
     {
-      "title": "Watch: QA Gates Before Production",
+      "title": "شاهد: بوابات QA قبل الإنتاج",
       "embedUrl": "https://www.youtube.com/embed/Vs2Em0HPvoY",
       "watchUrl": "https://youtu.be/Vs2Em0HPvoY",
       "thumbnail": "/img/ring-promoter-qa-gates-youtube-thumbnail.png",
       "thumbnailAlt": "Ring Promoter — بوابات ضمان الجودة قبل الإنتاج",
-      "caption": "QA gates"
+      "caption": "بوابات QA"
     },
     {
-      "title": "Watch: Ring Promoter demo",
+      "title": "شاهد: عرض Ring Promoter التوضيحي",
       "embedUrl": "https://www.youtube.com/embed/IzhvmrwEebE",
       "watchUrl": "https://youtu.be/IzhvmrwEebE",
       "thumbnail": "/img/ring-promoter-youtube-thumbnail.png?v=20260901",
-      "thumbnailAlt": "Ring Promoter — Every release earns production (YouTube demo)",
-      "caption": "TenthMatrix demo"
+      "thumbnailAlt": "Ring Promoter — كل إصدار يستحق الوصول إلى الإنتاج (عرض على YouTube)",
+      "caption": "عرض TenthMatrix التوضيحي"
     }
   ],
   "howItWorks": {
-    "title": "How ring promotion works",
-    "intro": "Every release earns production. One hop at a time — never skip a ring — with health before promote and auto-rollback on failure.",
+    "title": "كيف تعمل الترقية عبر الحلقات",
+    "intro": "كل إصدار يستحق الوصول إلى الإنتاج. قفزة واحدة في كل مرة — دون تخطي أي حلقة — مع فحص السلامة قبل الترقية والتراجع التلقائي عند الفشل.",
     "flow": [
       {
-        "title": "1. Seed a version into int",
-        "text": "Start the pipeline by seeding a version (image tag, branch, or ref) into the Integration ring for an application."
+        "title": "1. أدخِل إصدارًا في int",
+        "text": "ابدأ المسار بإدخال إصدار (وسم صورة أو فرع أو مرجع) في حلقة Integration لتطبيق ما."
       },
       {
-        "title": "2. Promote one ring at a time",
-        "text": "promote {from_ring} always targets the next ring. You cannot jump int → prod. The source ring must be healthy first."
+        "title": "2. رقِّ حلقة واحدة في كل مرة",
+        "text": "يستهدف promote {from_ring} دائمًا الحلقة التالية. لا يمكنك القفز من int → prod. يجب أن تكون الحلقة المصدر سليمة أولًا."
       },
       {
-        "title": "3. Deploy with the right deployer",
-        "text": "KubectlDeployer (set image + rollout), GitHubActionsDeployer (workflow-dispatch for VM/CI apps), or k8sjob runner Jobs — selected per application."
+        "title": "3. انشر باستخدام أداة النشر المناسبة",
+        "text": "KubectlDeployer (تعيين الصورة + rollout)، أو GitHubActionsDeployer (workflow-dispatch لتطبيقات VM/CI)، أو Jobs من k8sjob runner — يُختار لكل تطبيق."
       },
       {
-        "title": "4. Health-check with retries",
-        "text": "After deploy, HTTP health checks run with configurable retries. Optional version verification requires the endpoint to report the exact version just deployed."
+        "title": "4. فحص السلامة مع إعادة المحاولة",
+        "text": "بعد النشر، تعمل فحوص السلامة عبر HTTP مع عدد قابل للضبط من إعادة المحاولات. ويتطلب التحقق الاختياري من الإصدار أن تُبلغ نقطة النهاية عن الإصدار المنشور للتو بدقة."
       },
       {
-        "title": "5. Auto-rollback on failure",
-        "text": "If the target stays unhealthy, Ring Promoter rolls back to the previous version automatically and records the failure in history."
+        "title": "5. تراجع تلقائي عند الفشل",
+        "text": "إذا ظل الهدف غير سليم، يتراجع Ring Promoter تلقائيًا إلى الإصدار السابق ويسجّل الفشل في السجل."
       },
       {
-        "title": "6. Optional auto-promote",
-        "text": "Flag a ring so a healthy landing continues onward in the same locked operation — e.g. auto-promote test → acc, but keep humans on the gate to prod."
+        "title": "6. ترقية تلقائية اختيارية",
+        "text": "ضع علامة على حلقة ليواصل الهبوط السليم التقدّم ضمن العملية المقفلة نفسها — مثل الترقية التلقائية test → acc، مع إبقاء البشر على بوابة prod."
       }
     ],
     "rings": [
       {
         "name": "int",
-        "label": "Integration",
-        "role": "First landing for new builds and AI agent / API changes."
+        "label": "Integration (التكامل)",
+        "role": "المحطة الأولى للإصدارات الجديدة وتغييرات وكلاء الذكاء الاصطناعي / API."
       },
       {
         "name": "test",
-        "label": "Test",
-        "role": "Automated verification and soak before acceptance."
+        "label": "Test (الاختبار)",
+        "role": "تحقق آلي واختبار تحمّل قبل القبول."
       },
       {
         "name": "acc",
-        "label": "Acceptance",
-        "role": "Stakeholder / UAT gate — often the last auto-promote stop."
+        "label": "Acceptance (القبول)",
+        "role": "بوابة أصحاب المصلحة / UAT — غالبًا آخر محطة للترقية التلقائية."
       },
       {
         "name": "prod",
-        "label": "Production",
-        "role": "Live traffic — password-gated for the final ring when configured."
+        "label": "Production (الإنتاج)",
+        "role": "حركة مرور حيّة — محمية بكلمة مرور للحلقة الأخيرة عند ضبط ذلك."
       }
     ]
   },
   "features": {
-    "title": "Why teams pick Ring Promoter for AI-era CI/CD",
-    "intro": "AI products change fast — models, agents, MCP tools, gateways. Ring Promoter keeps promotions disciplined without freezing delivery.",
+    "title": "لماذا تختار الفرق Ring Promoter لـ CI/CD في عصر الذكاء الاصطناعي",
+    "intro": "تتغير منتجات الذكاء الاصطناعي بسرعة — النماذج والوكلاء وأدوات MCP والبوابات. يحافظ Ring Promoter على انضباط الترقيات دون تجميد التسليم.",
     "items": [
       {
-        "title": "Ordered rings, never skip",
-        "description": "Shared pipeline int → test → acc → prod. Adding a ring is a single-place change in the ring package — apps declare where they live per ring in config, not code.",
+        "title": "حلقات مرتبة، دون تخطٍّ",
+        "description": "مسار مشترك int → test → acc → prod. إضافة حلقة تغيير في مكان واحد داخل حزمة ring — تعلن التطبيقات موقعها في كل حلقة عبر الإعدادات لا الشيفرة.",
         "icon": "bi-diagram-3"
       },
       {
-        "title": "Health-gated promotion",
-        "description": "Live health checks before and after promote. Optional health_version_field / header stops the classic false green: old pods answering 200 while the new version never rolled.",
+        "title": "ترقية محكومة بفحوص السلامة",
+        "description": "فحوص سلامة حيّة قبل الترقية وبعدها. يمنع health_version_field / header الاختياري حالة الأخضر الزائف الكلاسيكية: حاويات قديمة تجيب بـ 200 بينما لم يُنشر الإصدار الجديد قط.",
         "icon": "bi-heart-pulse"
       },
       {
-        "title": "Automatic rollback",
-        "description": "Failed health after retries restores the previous version. Seed, promote, and rollback are all audited — success or failure.",
+        "title": "تراجع تلقائي",
+        "description": "يؤدي فشل السلامة بعد إعادة المحاولات إلى استعادة الإصدار السابق. الإدخال والترقية والتراجع كلها مدقَّقة — نجاحًا أو فشلًا.",
         "icon": "bi-arrow-counterclockwise"
       },
       {
-        "title": "Kubernetes + VM/CI deployers",
-        "description": "One control plane for kubectl rollouts, GitHub Actions workflow-dispatch (e.g. WSL Proxy on VMs), and Kubernetes Job executors with live logs.",
+        "title": "أدوات نشر Kubernetes وVM/CI",
+        "description": "مستوى تحكم واحد لعمليات kubectl rollout وGitHub Actions workflow-dispatch (مثل WSL Proxy على الأجهزة الافتراضية) ومنفّذي Kubernetes Job مع سجلات حيّة.",
         "icon": "bi-boxes"
       },
       {
-        "title": "Safe concurrency",
-        "description": "Per-app serialization via Postgres session advisory locks across replicas. Operations detach from HTTP so LB timeouts cannot abort a rollback mid-flight.",
+        "title": "تزامن آمن",
+        "description": "تسلسل لكل تطبيق عبر أقفال Postgres الاستشارية على مستوى الجلسة عبر النسخ المتماثلة. تنفصل العمليات عن HTTP حتى لا تُجهض مهلات موازن التحميل تراجعًا قيد التنفيذ.",
         "icon": "bi-shield-check"
       },
       {
-        "title": "UI + REST API",
-        "description": "Embedded Next.js console and bearer-token REST API. Async deployment views stream progress for operators watching AI stack releases.",
+        "title": "واجهة المستخدم + REST API",
+        "description": "وحدة تحكم Next.js مدمجة وREST API برمز bearer. تبث طرق عرض النشر غير المتزامنة التقدم للمشغّلين الذين يتابعون إصدارات منظومة الذكاء الاصطناعي.",
         "icon": "bi-window-sidebar"
       },
       {
-        "title": "Config-driven apps",
-        "description": "Add an application with YAML: namespaces, Deployments, image repos, health URLs, deployer type — no fork of Ring Promoter required.",
+        "title": "تطبيقات تُدار بالإعدادات",
+        "description": "أضف تطبيقًا عبر YAML: مساحات الأسماء وDeployments ومستودعات الصور وعناوين URL للسلامة ونوع أداة النشر — دون الحاجة إلى نسخ Ring Promoter.",
         "icon": "bi-filetype-yml"
       },
       {
-        "title": "Built for AI platforms",
-        "description": "Promote agent services, MCP gateways, GPU inference front-doors, and TenthMatrix products through the same rings your platform team already trusts.",
+        "title": "مصمَّم لمنصات الذكاء الاصطناعي",
+        "description": "رقِّ خدمات الوكلاء وبوابات MCP وواجهات استدلال GPU ومنتجات TenthMatrix عبر الحلقات نفسها التي يثق بها فريق منصتك بالفعل.",
         "icon": "bi-robot"
       }
     ]
   },
   "aiAngle": {
-    "title": "Built for AI-powered deployments",
-    "intro": "Model weights, agent runtimes, and edge gateways ship on different cadences. Ring Promoter keeps every change on the same promotion protocol.",
+    "title": "مصمَّم لعمليات النشر المدعومة بالذكاء الاصطناعي",
+    "intro": "تُطلق أوزان النماذج وبيئات تشغيل الوكلاء وبوابات الحافة بإيقاعات مختلفة. يُبقي Ring Promoter كل تغيير على بروتوكول الترقية نفسه.",
     "points": [
-      "Promote AI agent APIs and MCP gateways through the same rings as classic services.",
-      "Version-verified health catches silent rollbacks when an old inference sidecar still answers OK.",
-      "Auto-promote early rings so research builds move fast; human gate stays on prod.",
-      "GitHub Actions deployer reuses existing AI/ML CI without rewriting pipelines.",
-      "Full history per (app, ring) for compliance reviews of what reached production."
+      "رقِّ واجهات API لوكلاء الذكاء الاصطناعي وبوابات MCP عبر الحلقات نفسها التي تمر بها الخدمات التقليدية.",
+      "تكتشف فحوص السلامة المتحقَّق منها بالإصدار حالات التراجع الصامتة عندما تظل حاوية استدلال جانبية قديمة تجيب بـ OK.",
+      "رقِّ الحلقات المبكرة تلقائيًا لتتحرك إصدارات البحث بسرعة؛ وتبقى البوابة البشرية على prod.",
+      "تعيد أداة نشر GitHub Actions استخدام CI الحالي للذكاء الاصطناعي/التعلم الآلي دون إعادة كتابة المسارات.",
+      "سجل كامل لكل (تطبيق، حلقة) لمراجعات الامتثال حول ما وصل إلى الإنتاج."
     ]
   },
   "architecture": {
-    "title": "Solution architecture",
-    "intro": "Clean interfaces: Deployer, Executor, Health Checker, Store — swap production backends without rewriting promotion rules.",
+    "title": "بنية الحل",
+    "intro": "واجهات نظيفة: Deployer وExecutor وHealth Checker وStore — بدّل الواجهات الخلفية للإنتاج دون إعادة كتابة قواعد الترقية.",
     "steps": [
       {
-        "title": "Control plane",
-        "text": "Go service + embedded UI + REST API on k3s (or local)."
+        "title": "مستوى التحكم",
+        "text": "خدمة Go + واجهة مدمجة + REST API على k3s (أو محليًا)."
       },
       {
-        "title": "Rings",
-        "text": "Ordered pipeline defined once; apps map resources per ring."
+        "title": "الحلقات",
+        "text": "مسار مرتب يُعرَّف مرة واحدة؛ وتربط التطبيقات الموارد لكل حلقة."
       },
       {
-        "title": "Deployers",
-        "text": "kubectl, GitHub Actions, or k8sjob executors per app."
+        "title": "أدوات النشر",
+        "text": "منفّذو kubectl أو GitHub Actions أو k8sjob لكل تطبيق."
       },
       {
-        "title": "Store",
-        "text": "Postgres (prod) or memory (dev) with history and locks."
+        "title": "المخزن",
+        "text": "Postgres (للإنتاج) أو الذاكرة (للتطوير) مع السجل والأقفال."
       }
     ]
   },
   "cta": {
-    "title": "Get Ring Promoter",
-    "body": "Explore the product on ringpromoter.com, read the TenthMatrix deep dive, or talk to us about CI/CD for AI platforms.",
+    "title": "احصل على Ring Promoter",
+    "body": "استكشف المنتج على ringpromoter.com، أو اقرأ التحليل المعمّق من TenthMatrix، أو تحدّث إلينا عن CI/CD لمنصات الذكاء الاصطناعي.",
     "primary": {
-      "text": "Open ringpromoter.com",
+      "text": "افتح ringpromoter.com",
       "href": "https://www.ringpromoter.com/"
     },
     "secondary": {
-      "text": "Read the Orbit + Lanes brief",
+      "text": "اقرأ موجز Orbit + Lanes",
       "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
     },
     "tertiary": {
-      "text": "Contact TenthMatrix",
+      "text": "تواصل مع TenthMatrix",
       "href": "/contact-us"
     }
   },
   "externalSite": {
-    "label": "Continue on the product site",
+    "label": "تابع على موقع المنتج",
     "href": "https://www.ringpromoter.com/",
-    "text": "Visit https://www.ringpromoter.com/ for demos, docs, and the latest Ring Promoter releases."
+    "text": "زر https://www.ringpromoter.com/ للعروض التوضيحية والوثائق وأحدث إصدارات Ring Promoter."
   },
   "related": {
     "title": "اقرأ المزيد",
     "items": [
       {
-        "title": "Blog: Rings, Orbit and Lanes (v1.0.2)",
+        "title": "المدونة: Rings وOrbit وLanes (v1.0.2)",
         "href": "/docs/blogs/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "Article: Orbit and Lanes technical brief",
+        "title": "مقالة: موجز تقني عن Orbit وLanes",
         "href": "/articles/ring-promoter-rings-orbit-lanes-v1-0-2"
       },
       {
-        "title": "QA Gates Before Production",
+        "title": "بوابات QA قبل الإنتاج",
         "href": "/docs/blogs/ring-promoter-qa-gates-before-production"
       },
       {
-        "title": "Modern CI/CD for AI deployments",
+        "title": "CI/CD حديث لنشر الذكاء الاصطناعي",
         "href": "/docs/blogs/ring-promoter-modern-cicd-ai-powered-deployments"
       }
     ]
   },
   "visuals": {
-    "title": "Orbit + Lanes in v1.0.2",
-    "intro": "Pause on Orbit for the fleet. Flip to Lanes when you need the environment matrix.",
+    "title": "Orbit + Lanes في v1.0.2",
+    "intro": "توقف عند Orbit لرؤية الأسطول. وانتقل إلى Lanes عندما تحتاج إلى مصفوفة البيئات.",
     "items": [
       {
         "src": "/img/ring-promoter-orbit-lanes-cover.svg?v=20260925c",
-        "alt": "CI/CD Orbit + Lanes — Orbit fleet view, Lanes matrix, Rings pipeline",
-        "caption": "Cover — Orbit, Lanes and Rings with object titles",
+        "alt": "CI/CD Orbit + Lanes — عرض الأسطول Orbit ومصفوفة Lanes ومسار Rings",
+        "caption": "الغلاف — Orbit وLanes وRings مع عناوين العناصر",
         "width": 1200,
         "height": 630
       },
       {
         "src": "/img/ring-promoter-orbit-lanes-diagram.svg?v=20260925c",
-        "alt": "Orbit fleet view beside Lanes APP × environment matrix",
-        "caption": "Diagram — Orbit (fleet) next to Lanes (matrix)",
+        "alt": "عرض الأسطول Orbit بجانب مصفوفة APP × البيئة في Lanes",
+        "caption": "مخطط — Orbit (الأسطول) بجانب Lanes (المصفوفة)",
         "width": 1200,
         "height": 640
       }
