@@ -7,6 +7,7 @@ import { isSample } from '@/utils/text';
 import { articleCard, articleDate } from '@/lib/contentView';
 import JsonLd from '@/app/components/seo/JsonLd';
 import ArticleLayout from '@/app/components/article/ArticleLayout';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }) {
     keywords: a.meta_keywords || undefined,
     openGraph: { title, description, type: 'article' },
     twitter: { card: 'summary_large_image', title, description },
-    alternates: { canonical: `/${locale}/articles/${slug}` },
+    alternates: seoAlternates(`/articles/${slug}`, locale, { selfCanonical: `/${locale}/articles/${slug}` }),
     robots: isSample(slug) ? { index: false, follow: true } : undefined,
   };
 }

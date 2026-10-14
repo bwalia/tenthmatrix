@@ -3,10 +3,18 @@
  * Every page carries Organization + WebSite (from the [locale] layout);
  * blog posts add BlogPosting, articles Article, insights TechArticle, and all
  * detail pages a BreadcrumbList.
+ *
+ * Detail pages still copied from Workstation point mainEntityOfPage / url at
+ * the Workstation original (src/lib/seoCanonical.js), matching their canonical.
  */
+import { workstationCanonical } from '@/lib/seoCanonical';
+
 export const BASE_URL = (process.env.SITE_URL || 'https://www.tenthmatrix.com').replace(/\/$/, '');
 // TODO(brand): point at the final raster logo once public/brand/ lands.
 const LOGO_URL = `${BASE_URL}/brand/icon-512.png`;
+
+/** Canonical page URL for JSON-LD: Workstation's for copied pages, else ours. */
+const pageUrl = (route, locale) => workstationCanonical(route, locale) || `${BASE_URL}/${locale}${route}`;
 
 const abs = (p) => (!p ? undefined : /^https?:\/\//.test(p) ? p : `${BASE_URL}${p.startsWith('/') ? '' : '/'}${p}`);
 
@@ -70,7 +78,8 @@ export function blogPostingSchema(blog, locale) {
     datePublished: blog.published_date || blog.created_at || undefined,
     dateModified: blog.updated_at || blog.published_date || undefined,
     inLanguage: locale,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}/${locale}/docs/blogs/${blog.slug}` },
+    url: pageUrl(`/docs/blogs/${blog.slug}`, locale),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl(`/docs/blogs/${blog.slug}`, locale) },
     keywords: (blog.tags || []).map((t) => t.name).filter(Boolean).join(', '),
   };
 }
@@ -90,7 +99,8 @@ export function articleSchema(article, locale) {
     publisher: publisher(),
     datePublished,
     inLanguage: locale,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}/${locale}/articles/${article.code}` },
+    url: pageUrl(`/articles/${article.code}`, locale),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl(`/articles/${article.code}`, locale) },
     articleSection: article.industry || '',
     keywords: article.meta_keywords || '',
   };
@@ -108,7 +118,8 @@ export function insightSchema(insight, locale) {
     datePublished: insight.published_iso || undefined,
     dateModified: insight.updated_iso || insight.published_iso || undefined,
     inLanguage: locale,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `${BASE_URL}/${locale}/insights/${insight.slug}` },
+    url: pageUrl(`/insights/${insight.slug}`, locale),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl(`/insights/${insight.slug}`, locale) },
   };
 }
 

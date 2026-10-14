@@ -51,6 +51,9 @@ npm run cms:import     # import committed blogs into the CMS — DRY RUN unless 
 5. **`verify:i18n`** — no locale-less page-data reads, every `t('key')` exists in
    `en.json`, catalogs have identical keys, generated locale files match English +
    the dict, and dict entries keep HTML tags / `{placeholders}` / URLs / emails / `**`.
+6. **`verify:canonical`** — `src/lib/seoCanonical.json` matches the manifest, every
+   manifest blog/article/insight canonicalises to Workstation, no rewritten/new
+   page does, and `public/sitemap.xml` lists none of the canonicalised URLs.
 
 ## Architecture
 
@@ -108,6 +111,24 @@ Same model as Workstation, namespace **`tenthmatrix`**:
   TODO move to OpsAPI). Rate-limited, honeypot on comments.
 
 ### SEO
+- **Cross-domain canonicals (protects www.workstation.co.uk).** Content copied
+  and rebranded from Workstation is still published there at the same paths.
+  Every TenthMatrix page that is still a copy declares
+  `<link rel="canonical" href="https://www.workstation.co.uk/{locale}/…">`, has no
+  hreflang (hreflang only counts on canonical URLs), keeps `index,follow`, points
+  JSON-LD `url`/`mainEntityOfPage` at Workstation, and is left out of the sitemap.
+  Source of truth: `src/lib/seoCanonical.json`, generated from
+  `migration/manifest.json` by `npm run seo:canonical`
+  (`scripts/migration/build-seo-canonical.mjs`); read it through
+  `src/lib/seoCanonical.js` (`seoAlternates`, `workstationCanonical`).
+  `pageMetadata`/`createRoute` apply it automatically; hand-written
+  `generateMetadata` must use `seoAlternates(route, locale, …)`.
+  **Rule:** when a copied page is substantially rewritten, add its route to
+  `SELF_CANONICAL` (marketing routes) or `SELF_CANONICAL_CONTENT`
+  (blog/article/insight paths) in the build script, re-run `npm run seo:canonical`
+  and `npm run sitemap`, and commit — it becomes self-canonical and returns to
+  the sitemap. New routes and CMS-only posts (not in the manifest) are
+  self-canonical by default; never key the list on "everything".
 - `scripts/generateSitemap.mjs` → `public/sitemap.xml` (static routes + every
   blog/article/insight × 13 locales). Add a route there when you build it.
 - `src/app/robots.js` — `ROBOTS_DISALLOW_ALL=true` on int/test/acc (Helm).

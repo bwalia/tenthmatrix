@@ -8,6 +8,7 @@ import JsonLd from '@/app/components/seo/JsonLd';
 import ArticleLayout from '@/app/components/article/ArticleLayout';
 import InsightBody from '@/app/components/insights/InsightBody';
 import { Takeaways, InsightFooter } from '@/app/components/insights/InsightExtras';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -31,8 +32,8 @@ export async function generateMetadata({ params }) {
       publishedTime: data.published_iso,
       modifiedTime: data.updated_iso,
     },
-    // Aliases canonicalise to the primary slug.
-    alternates: { canonical: `/${locale}/insights/${data.slug}` },
+    // Copied insights canonicalise to Workstation; otherwise aliases → primary slug.
+    alternates: seoAlternates(`/insights/${slug}`, locale, { selfCanonical: `/${locale}/insights/${data.slug}` }),
     robots: isSample(slug) ? { index: false, follow: true } : undefined,
   };
 }

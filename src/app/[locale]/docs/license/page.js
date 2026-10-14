@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import DocsShell from '@/app/components/docs/DocsShell';
 import { slugify } from '@/lib/articleHtml';
 import { loadDocsData } from '../docsData';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -9,7 +10,7 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   const data = await loadDocsData('license.json', locale);
   const tm = await getTranslations({ locale });
-  return { title: data?.title || tm('docs.sections.license.title'), description: tm('docs.sections.license.body'), alternates: { canonical: `/${locale}/docs/license` } };
+  return { title: data?.title || tm('docs.sections.license.title'), description: tm('docs.sections.license.body'), alternates: seoAlternates('/docs/license', locale, { selfCanonical: `/${locale}/docs/license` }) };
 }
 
 export default async function LicensePage({ params }) {

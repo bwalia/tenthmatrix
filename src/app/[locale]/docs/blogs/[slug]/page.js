@@ -7,6 +7,7 @@ import { isSample } from '@/utils/text';
 import { blogAuthor, blogCard, blogCover, blogTagLinks } from '@/lib/contentView';
 import JsonLd from '@/app/components/seo/JsonLd';
 import ArticleLayout from '@/app/components/article/ArticleLayout';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 // ISR: served from cache, refreshed hourly, busted on demand via /api/revalidate.
 export const revalidate = 3600;
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }) {
     // The co-located opengraph-image.js supplies og:image / twitter:image.
     openGraph: { title, description, type: 'article', publishedTime: blog.published_date || undefined },
     twitter: { card: 'summary_large_image', title, description },
-    alternates: { canonical: `/${locale}/docs/blogs/${slug}` },
+    alternates: seoAlternates(`/docs/blogs/${slug}`, locale, { selfCanonical: `/${locale}/docs/blogs/${slug}` }),
     robots: isSample(slug) ? { index: false, follow: true } : undefined,
   };
 }

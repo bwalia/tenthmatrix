@@ -5,6 +5,7 @@ import { TagPill } from '@/app/components';
 import { slugify } from '@/lib/articleHtml';
 import { loadDocsData } from '../docsData';
 import s from '../docs.module.scss';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   const tm = await getTranslations({ locale });
   const data = await loadDocsData('faqs.json', locale);
-  return { title: data?.header?.title || tm('docs.sections.faqs.title'), description: data?.header?.subtitle || tm('docs.sections.faqs.body'), alternates: { canonical: `/${locale}/docs/faqs` } };
+  return { title: data?.header?.title || tm('docs.sections.faqs.title'), description: data?.header?.subtitle || tm('docs.sections.faqs.body'), alternates: seoAlternates('/docs/faqs', locale, { selfCanonical: `/${locale}/docs/faqs` }) };
 }
 
 export default async function FaqsPage({ params }) {
