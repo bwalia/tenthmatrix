@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import DocsShell from '@/app/components/docs/DocsShell';
 import { Button } from '@/app/components';
 import s from '../docs.module.scss';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -32,7 +33,7 @@ function readSpec() {
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const tm = await getTranslations({ locale });
-  return { title: tm('docs.sections.apis.title'), description: tm('docs.sections.apis.body'), alternates: { canonical: `/${locale}/docs/apis` } };
+  return { title: tm('docs.sections.apis.title'), description: tm('docs.sections.apis.body'), alternates: seoAlternates('/docs/apis', locale, { selfCanonical: `/${locale}/docs/apis` }) };
 }
 
 export default async function ApisPage({ params }) {

@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { loadLocaleData } from '@/utils/loadLocaleData';
 import { Hero, Section, Breadcrumbs } from '@/app/components';
 import s from './benchmarks.module.scss';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }) {
   return {
     title: { absolute: data?.meta?.title || 'Jev Benchmark Lab | TenthMatrix' },
     description: data?.meta?.description,
-    alternates: { canonical: `/${locale}/insights/jev/benchmarks` },
+    alternates: seoAlternates('/insights/jev/benchmarks', locale, { selfCanonical: `/${locale}/insights/jev/benchmarks` }),
   };
 }
 

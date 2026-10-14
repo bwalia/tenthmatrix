@@ -4,6 +4,10 @@
  * Static routes × 13 locales, then every committed blog, article, insight and
  * blog pagination page. Fixture slugs (`__sample__`) are skipped. Routes are
  * added here as they are built — never list a URL that 404s.
+ *
+ * Pages still copied from www.workstation.co.uk (src/lib/seoCanonical.json,
+ * generated from migration/manifest.json) canonicalise to Workstation and are
+ * left out in every locale — a sitemap must only list canonical URLs.
  */
 import fs from 'fs';
 import path from 'path';
@@ -11,6 +15,9 @@ import path from 'path';
 const BASE_URL = (process.env.SITE_URL || 'https://www.tenthmatrix.com').replace(/\/$/, '');
 const LOCALES = ['en', 'es', 'fr', 'nl', 'hi', 'th', 'zh', 'ar', 'bn', 'pt', 'ru', 'ur', 'pa'];
 const isSample = (slug = '') => /^__.*__$/.test(String(slug));
+const canonicalisedAway = new Set(
+  Object.keys(JSON.parse(fs.readFileSync(path.join(process.cwd(), 'src/lib/seoCanonical.json'), 'utf-8')).entries)
+);
 
 const corePages = {
   '': { changefreq: 'daily', priority: '1.0' },
@@ -57,7 +64,12 @@ const listJson = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) =
 function generateSitemap() {
   const today = new Date().toISOString().split('T')[0];
   const urls = [];
+  let skipped = 0;
   const push = (p, changefreq, priority, lastmod = today) => {
+    if (canonicalisedAway.has(`/${p}`)) {
+      skipped += LOCALES.length;
+      return;
+    }
     for (const locale of LOCALES) {
       urls.push({ loc: `${BASE_URL}/${locale}${p ? `/${p}` : ''}`, lastmod, changefreq, priority });
     }
@@ -104,7 +116,7 @@ ${urls
 
   const outPath = path.join(process.cwd(), 'public/sitemap.xml');
   fs.writeFileSync(outPath, xml);
-  console.log(`🗺️  Generated ${path.relative(process.cwd(), outPath)} with ${urls.length} URLs.`);
+  console.log(`🗺️  Generated ${path.relative(process.cwd(), outPath)} with ${urls.length} URLs (${skipped} Workstation-canonical URLs excluded).`);
 }
 
 generateSitemap();

@@ -1,6 +1,7 @@
 // Shared data loading + metadata for the marketing/product routes.
 import { loadLocaleData } from '@/utils/loadLocaleData';
 import { locales } from '@/utils/getMessages';
+import { workstationCanonical } from '@/lib/seoCanonical';
 
 export const SITE_URL = 'https://www.tenthmatrix.com';
 
@@ -42,16 +43,18 @@ export function pageMetadata({ locale, route, data, title, description }) {
       data?.hero?.description ||
       data?.hero?.subtitle
   );
-  const canonical = `${SITE_URL}/${locale}${route}`;
+  // Pages still copied from Workstation canonicalise there, without hreflang
+  // (src/lib/seoCanonical.js); everything else is self-canonical.
+  const ws = workstationCanonical(route, locale);
+  const canonical = ws || `${SITE_URL}/${locale}${route}`;
   const branded = /tenthmatrix/i.test(t);
   return {
     title: branded ? { absolute: t } : t,
     description: d,
     keywords: data?.meta?.keywords || undefined,
-    alternates: {
-      canonical,
-      languages: Object.fromEntries(locales.map((l) => [l, `${SITE_URL}/${l}${route}`])),
-    },
+    alternates: ws
+      ? { canonical }
+      : { canonical, languages: Object.fromEntries(locales.map((l) => [l, `${SITE_URL}/${l}${route}`])) },
     openGraph: {
       type: 'website',
       siteName: 'TenthMatrix',

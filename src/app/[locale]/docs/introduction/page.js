@@ -3,6 +3,7 @@ import DocsShell from '@/app/components/docs/DocsShell';
 import { Card, TagPill } from '@/app/components';
 import { loadDocsData } from '../docsData';
 import s from '../docs.module.scss';
+import { seoAlternates } from '@/lib/seoCanonical';
 
 export const dynamic = 'force-static';
 
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }) {
   const { locale } = await params;
   const data = await loadDocsData('introduction.json', locale);
   const tm = await getTranslations({ locale });
-  return { title: data?.header?.title || tm('docs.sections.introduction.title'), description: tm('docs.sections.introduction.body'), alternates: { canonical: `/${locale}/docs/introduction` } };
+  return { title: data?.header?.title || tm('docs.sections.introduction.title'), description: tm('docs.sections.introduction.body'), alternates: seoAlternates('/docs/introduction', locale, { selfCanonical: `/${locale}/docs/introduction` }) };
 }
 
 // Renders introduction.json: header, video, capability cards, the four prose
