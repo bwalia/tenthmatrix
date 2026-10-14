@@ -287,3 +287,16 @@ textarea.tm-input {
   font-weight: var(--tm-weight-semibold);
   color: var(--tm-text);
 }
+
+// RTL (ar, ur): mirror directional lucide icons. Uses the `scale` property, not
+// `transform`, so component hover nudges (transform: translateX) still compose —
+// and flip direction with the icon.
+[dir='rtl'] {
+  .lucide-arrow-right,
+  .lucide-arrow-left,
+  .lucide-arrow-up-right,
+  .lucide-chevron-right,
+  .lucide-chevron-left {
+    scale: -1 1;
+  }
+}

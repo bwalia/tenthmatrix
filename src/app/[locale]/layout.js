@@ -6,6 +6,7 @@ import SiteHeader from '../components/layout/SiteHeader';
 import SiteFooter from '../components/layout/SiteFooter';
 import CookieConsent from '../components/layout/CookieConsent';
 import JsonLd from '../components/seo/JsonLd';
+import Document from '../Document';
 import { organizationSchema, websiteSchema } from '../utils/schemaMarkup';
 
 // Same model as Workstation: every locale is prerendered; routes that need
@@ -35,17 +36,19 @@ export default async function LocaleLayout({ children, params }) {
   const t = await getTranslations({ locale, namespace: 'nav' });
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <a className="tm-skip-link" href="#main">
-        {t('skipToContent')}
-      </a>
-      <SiteHeader locale={locale} />
-      <main id="main" className="tm-main" tabIndex={-1}>
-        {children}
-      </main>
-      <SiteFooter locale={locale} />
-      <CookieConsent locale={locale} />
-      <JsonLd data={[organizationSchema(), websiteSchema(locale)]} />
-    </NextIntlClientProvider>
+    <Document lang={locale}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <a className="tm-skip-link" href="#main">
+          {t('skipToContent')}
+        </a>
+        <SiteHeader locale={locale} />
+        <main id="main" className="tm-main" tabIndex={-1}>
+          {children}
+        </main>
+        <SiteFooter locale={locale} />
+        <CookieConsent locale={locale} />
+        <JsonLd data={[organizationSchema(), websiteSchema(locale)]} />
+      </NextIntlClientProvider>
+    </Document>
   );
 }
