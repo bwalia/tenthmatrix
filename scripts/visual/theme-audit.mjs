@@ -11,6 +11,7 @@
  *   --themes=light,dark            themes to run (also: system)
  *   --widths=1440,390              viewport widths
  *   --full                         full-page screenshots (default: first two screens)
+ *   --slices                       with --full, also save the page in screen-sized slices (…--s0.png, --s1 …) for review
  *   --no-axe                       skip the contrast scan
  *   --lenient-contrast             report contrast violations without failing
  *   --menus                        also capture the open mega-menu (1440) and mobile drawer (390)
@@ -45,11 +46,10 @@ function defaultRoutes() {
   const article = articles.find((a) => a?.code && !/^__/.test(a.code)) || articles[0];
   if (article?.code) routes.splice(2, 0, `/en/articles/${article.code}`);
   const page1 = readJson('src/app/data/pages/page-1.json');
-  const blogs = page1?.blogs || page1?.data || [];
+  const blogs = Array.isArray(page1) ? page1 : page1?.blogs || page1?.data || [];
   const blog = (Array.isArray(blogs) ? blogs : []).find((b) => b?.slug && !/^__/.test(b.slug)) || blogs[0];
   if (blog?.slug) routes.splice(4, 0, `/en/docs/blogs/${blog.slug}`);
-  const insights = readJson('src/app/data/en/insights/index.json');
-  void insights;
+  routes.push('/en/insights/what-is-jev');
   routes.push('/ar');
   return routes;
 }
@@ -104,13 +104,19 @@ for (const route of targets) for (const theme of themes) for (const width of wid
 async function settle(page) {
   await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
   await page.evaluate(() => document.fonts && document.fonts.ready);
-  // Walk the page so whileInView reveals fire, then return to the top.
+  // Wait for hydration (Next sets no flag, so wait for the header's client
+  // handlers: the theme toggle gets its aria-label from React state), then
+  // walk the page so whileInView reveals fire, and return to the top.
+  await page.waitForFunction(() => !!document.querySelector('.tm-theme-toggle[aria-label]'), null, { timeout: 30000 }).catch(() => {});
+  await page.waitForTimeout(300);
   await page.evaluate(async () => {
-    const step = Math.max(300, Math.floor(window.innerHeight * 0.8));
+    const step = Math.max(300, Math.floor(window.innerHeight * 0.6));
     for (let y = 0; y < document.documentElement.scrollHeight; y += step) {
       window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 50));
+      await new Promise((r) => setTimeout(r, 120));
     }
+    window.scrollTo(0, document.documentElement.scrollHeight);
+    await new Promise((r) => setTimeout(r, 200));
     window.scrollTo(0, 0);
   });
   await page.waitForTimeout(700);
@@ -185,6 +191,13 @@ async function runJob({ route, theme, width }) {
     const file = path.join(outDir, `${slug(route)}--${theme}--${width}.png`);
     if (fullPage) {
       await page.screenshot({ path: file, fullPage: true });
+      if (flag('slices')) {
+        const total = await page.evaluate(() => document.documentElement.scrollHeight);
+        const sliceH = width < 600 ? 1400 : 1600;
+        for (let i = 0, y = 0; y < total && i < 12; i++, y += sliceH) {
+          await page.screenshot({ path: file.replace(/\.png$/, `--s${i}.png`), fullPage: true, clip: { x: 0, y, width, height: Math.min(sliceH, total - y) } });
+        }
+      }
     } else {
       await page.setViewportSize({ width, height: height * 2 });
       await page.waitForTimeout(150);

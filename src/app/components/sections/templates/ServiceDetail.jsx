@@ -19,7 +19,6 @@ export default function ServiceDetail({ data, locale }) {
   const cta = data.cta || {};
   const media = h.image ? (
     <figure className={s.heroMedia}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={h.image} alt={h.imageAlt || ''} width={1200} height={800} fetchPriority="high" />
     </figure>
   ) : (

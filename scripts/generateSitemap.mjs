@@ -12,12 +12,33 @@ const BASE_URL = (process.env.SITE_URL || 'https://www.tenthmatrix.com').replace
 const LOCALES = ['en', 'es', 'fr', 'nl', 'hi', 'th', 'zh', 'ar', 'bn', 'pt', 'ru', 'ur', 'pa'];
 const isSample = (slug = '') => /^__.*__$/.test(String(slug));
 
+const corePages = {
+  '': { changefreq: 'daily', priority: '1.0' },
+  articles: { changefreq: 'weekly', priority: '0.8' },
+  'docs/blogs': { changefreq: 'daily', priority: '0.8' },
+  insights: { changefreq: 'weekly', priority: '0.8' },
+  'contact-us': { changefreq: 'monthly', priority: '0.7' },
+};
+// Every other static route under src/app/[locale] (no [dynamic] segment).
+// noindex/utility routes are left out; legal pages get a low priority.
+const EXCLUDE = new Set(['brand', 'search', 'terms-of-service/privacy-policy']);
+const LEGAL = /^(privacy-policy|cookie-policy|terms-of-service|refund-policy|accessibility-statement|data-deletion|sitemap-page)$/;
+function discoverRoutes(dir, base = '') {
+  const out = [];
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (!e.isDirectory() || e.name.startsWith('[') || e.name.startsWith('(') || e.name.startsWith('_')) continue;
+    const rel = base ? `${base}/${e.name}` : e.name;
+    if (fs.existsSync(path.join(dir, e.name, 'page.js'))) out.push(rel);
+    out.push(...discoverRoutes(path.join(dir, e.name), rel));
+  }
+  return out;
+}
 const staticPages = [
-  { path: '', changefreq: 'daily', priority: '1.0' },
-  { path: 'articles', changefreq: 'weekly', priority: '0.8' },
-  { path: 'docs/blogs', changefreq: 'daily', priority: '0.8' },
-  { path: 'insights', changefreq: 'weekly', priority: '0.8' },
-  { path: 'contact-us', changefreq: 'monthly', priority: '0.7' },
+  ...Object.entries(corePages).map(([p, meta]) => ({ path: p, ...meta })),
+  ...discoverRoutes(path.join(process.cwd(), 'src/app/[locale]'))
+    .filter((p) => !(p in corePages) && !EXCLUDE.has(p))
+    .sort()
+    .map((p) => (LEGAL.test(p) ? { path: p, changefreq: 'yearly', priority: '0.3' } : { path: p, changefreq: 'monthly', priority: '0.7' })),
 ];
 
 const data = (...p) => path.join(process.cwd(), 'src/app/data', ...p);

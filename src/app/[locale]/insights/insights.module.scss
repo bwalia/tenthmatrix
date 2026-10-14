@@ -1,0 +1,83 @@
+@use '../../styles/mixins' as *;
+
+.series {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--tm-line);
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--tm-space-10);
+  }
+}
+
+.seriesLink {
+  display: flex;
+  gap: var(--tm-space-5);
+  padding: var(--tm-space-5) var(--tm-space-2);
+  border-bottom: 1px solid var(--tm-line);
+  color: var(--tm-text);
+  text-decoration: none;
+  transition: background-color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &:hover {
+    background: var(--tm-surface);
+    color: var(--tm-text);
+  }
+
+  &:hover .seriesTitle {
+    color: var(--tm-accent);
+  }
+}
+
+.num {
+  flex: none;
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-sm);
+  color: var(--tm-accent);
+  padding-top: 0.15em;
+}
+
+.seriesCopy {
+  display: grid;
+  gap: var(--tm-space-1);
+}
+
+.seriesTitle {
+  font-family: var(--tm-font-display);
+  font-size: var(--tm-text-lg);
+  font-weight: var(--tm-weight-semibold);
+  line-height: var(--tm-leading-snug);
+  transition: color var(--tm-duration-fast) var(--tm-ease-standard);
+}
+
+.seriesSummary {
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+}
+
+.labCard {
+  height: 100%;
+  gap: var(--tm-space-3);
+}
+
+.labTitle {
+  font-size: var(--tm-text-lg);
+}
+
+.labSummary {
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+}
+
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

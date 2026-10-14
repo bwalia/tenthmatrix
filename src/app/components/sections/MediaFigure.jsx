@@ -5,7 +5,6 @@ export default function MediaFigure({ media, priority = false, framed = true }) 
   if (!media?.src) return null;
   return (
     <figure className={`${styles.figure} ${framed ? styles.framed : ''}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={media.src}
         alt={media.alt || ''}

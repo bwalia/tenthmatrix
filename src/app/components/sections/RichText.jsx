@@ -3,9 +3,15 @@
 // rendered as HTML. Plain strings render as text.
 const HAS_TAG = /<\/?[a-z][^>]*>/i;
 
+const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
 export default function RichText({ text, as: Tag = 'p', className }) {
   if (text == null || text === '') return null;
-  const s = String(text);
+  let s = String(text);
+  // Light markdown: **bold** (some legal JSON uses it).
+  if (/\*\*[^*]+\*\*/.test(s)) {
+    s = (HAS_TAG.test(s) ? s : esc(s)).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  }
   if (HAS_TAG.test(s)) {
     return <Tag className={className} dangerouslySetInnerHTML={{ __html: s }} />;
   }

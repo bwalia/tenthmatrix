@@ -5,7 +5,7 @@ Brand: "Lattice" (`brand/BRAND.md`). Styling is SCSS modules + `--tm-*` tokens
 passed as components (`icon={Bot}`), never as strings.
 
 ```js
-import { Hero, Section, Button, Card, ProductCard, ArticleCard, CTA, FeatureGrid, Eyebrow, TagPill, Breadcrumbs, Reveal } from '@/app/components';
+import { Hero, Section, Button, Card, ProductCard, ArticleCard, CTA, FeatureGrid, Eyebrow, TagPill, Breadcrumbs, Reveal, RevealItem } from '@/app/components';
 ```
 
 All primitives are server-safe (no hooks) except `Reveal` (client). Every
@@ -96,7 +96,8 @@ Decorative SVG from the logo grid. `cols`, `rows`, `at` ([col,row] of the
 
 ### `Reveal` (client)
 Scroll-in "step" motion; static under reduced motion. `<Reveal>` for one
-block, `<Reveal as="ul" stagger>` + `<Reveal.Item as="li">` for lists.
+block, `<Reveal as="ul" stagger>` + `<RevealItem as="li">` for lists (named export;
+server components can't dot into a client module).
 
 ## Utility classes (globals.scss)
 

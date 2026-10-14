@@ -7,7 +7,7 @@ export default function CheckList({ items, columns = 1, variant = 'check' }) {
   const list = (items || []).filter(Boolean);
   if (!list.length) return null;
   return (
-    <ul className={`${styles.list} ${columns === 2 ? styles.two : ''} ${styles[variant] || ''}`}>
+    <ul className={`${styles.list} ${columns === 2 ? styles.two : ''}`}>
       {list.map((it, i) => (
         <li key={i}>
           {variant === 'check' ? (

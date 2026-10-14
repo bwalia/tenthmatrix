@@ -10,7 +10,7 @@ export default function Steps({ steps, layout = 'row', headingLevel = 3 }) {
   if (!list.length) return null;
   const H = `h${headingLevel}`;
   return (
-    <ol className={`${styles.steps} ${styles[layout] || ''}`}>
+    <ol className={`${styles.steps} ${styles[layout] || ''}`} style={{ '--steps-cols': list.length <= 4 ? list.length : list.length % 4 === 0 ? 4 : 3 }}>
       {list.map((s, i) => {
         if (typeof s === 'string') s = { title: s };
         const sub = s.items || s.tasks || s.steps;

@@ -32,7 +32,7 @@ export default function SiteHeader({ locale }) {
   const [scrolled, setScrolled] = useState(false);
   const headerRef = useRef(null);
   const timer = useRef(null);
-  const openedAt = useRef(0);
+  const justHovered = useRef(null); // key opened by hover in the last 400ms
   const triggers = useRef({});
   const menuBtn = useRef(null);
 
@@ -40,10 +40,7 @@ export default function SiteHeader({ locale }) {
   const clearTimer = () => clearTimeout(timer.current);
   const show = useCallback((key) => {
     clearTimeout(timer.current);
-    setOpen((cur) => {
-      if (cur !== key) openedAt.current = Date.now();
-      return key;
-    });
+    setOpen(key);
   }, []);
   const close = useCallback((focusKey) => {
     clearTimeout(timer.current);
@@ -87,7 +84,7 @@ export default function SiteHeader({ locale }) {
 
   const onTriggerClick = (key) => {
     // A hover-open immediately followed by a click shouldn't slam it shut.
-    if (open === key && Date.now() - openedAt.current > 400) close();
+    if (open === key && justHovered.current !== key) close();
     else show(key);
   };
 
@@ -102,7 +99,15 @@ export default function SiteHeader({ locale }) {
   const onPointerEnter = (e, key) => {
     if (e.pointerType !== 'mouse') return;
     clearTimer();
-    timer.current = setTimeout(() => show(key), open ? 0 : HOVER_OPEN_MS);
+    timer.current = setTimeout(() => {
+      if (open !== key) {
+        justHovered.current = key;
+        setTimeout(() => {
+          if (justHovered.current === key) justHovered.current = null;
+        }, 400);
+      }
+      show(key);
+    }, open ? 0 : HOVER_OPEN_MS);
   };
 
   const onNavPointerLeave = (e) => {

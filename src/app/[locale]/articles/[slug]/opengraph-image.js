@@ -14,5 +14,5 @@ export default async function Image({ params }) {
   const { slug, locale } = await params;
   const articles = await loadArticles(locale);
   const a = (articles?.data?.content || []).find((x) => x.code === slug);
-  return renderOgImage({ title: a?.title || 'TenthMatrix article', eyebrow: 'TenthMatrix · Article' });
+  return renderOgImage({ title: a?.title || 'TenthMatrix article', eyebrow: 'Technical article' });
 }

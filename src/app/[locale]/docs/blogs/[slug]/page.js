@@ -1,14 +1,12 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { getPostDetail } from '@/lib/cms';
+import { getPostDetail, getPostListPage } from '@/lib/cms';
+import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { blogPostingSchema, breadcrumbSchema } from '@/app/utils/schemaMarkup';
-import { readTime, isSample } from '@/utils/text';
+import { isSample } from '@/utils/text';
+import { blogAuthor, blogCard, blogCover, blogTagLinks } from '@/lib/contentView';
 import JsonLd from '@/app/components/seo/JsonLd';
-import TagList from '@/app/components/blog/TagList';
-import Prose from '@/app/components/blog/Prose';
-import LikeButton from '@/app/components/blog/LikeButton';
-import CommentBox from '@/app/components/blog/CommentBox';
+import ArticleLayout from '@/app/components/article/ArticleLayout';
 
 // ISR: served from cache, refreshed hourly, busted on demand via /api/revalidate.
 export const revalidate = 3600;
@@ -44,37 +42,36 @@ export default async function BlogDetailPage({ params }) {
   if (!blog) notFound();
   const t = await getTranslations({ locale });
 
-  const when = new Date(blog.published_date || blog.updated_at || '');
-  const validDate = !Number.isNaN(when.getTime());
+  const tags = blogTagLinks(blog.tags, locale);
+  const { blogs: recent } = await getPostListPage({ page: 1 });
+  const related = localizeBlogMetaList(recent, locale)
+    .filter((b) => b.slug !== slug)
+    .slice(0, 3)
+    .map((b) => blogCard(b, locale, t));
 
   return (
-    <article className="tm-container tm-article">
-      <nav aria-label={t('common.breadcrumb')} className="tm-breadcrumb">
-        <Link href={`/${locale}`}>{t('common.home')}</Link> / <Link href={`/${locale}/docs/blogs`}>{t('blog.title')}</Link>
-      </nav>
-      <header className="tm-article__head">
-        <h1>{blog.title}</h1>
-        {blog.sub_title ? <p className="tm-lede">{blog.sub_title}</p> : null}
-        <p className="tm-article__meta">
-          {blog.user?.name ? <span>{blog.user.name}</span> : null}
-          {validDate ? (
-            <>
-              {' · '}
-              <time dateTime={when.toISOString()}>
-                {new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(when)}
-              </time>
-            </>
-          ) : null}
-          {' · '}
-          {t('common.minRead', { minutes: blog.reading_minutes || readTime(blog.content) })}
-        </p>
-        <TagList tags={blog.tags} locale={locale} label={t('blog.tags')} />
-      </header>
-      <Prose html={blog.content} />
-      <footer className="tm-article__foot">
-        <LikeButton slug={slug} />
-      </footer>
-      <CommentBox slug={slug} />
+    <>
+      <ArticleLayout
+        locale={locale}
+        path={`/${locale}/docs/blogs/${slug}`}
+        breadcrumbs={[
+          { label: t('common.home'), href: `/${locale}` },
+          { label: t('blog.title'), href: `/${locale}/docs/blogs` },
+          { label: blog.title },
+        ]}
+        eyebrow={t('kinds.blog')}
+        tags={tags}
+        title={blog.title}
+        lede={blog.sub_title && blog.sub_title !== blog.title ? blog.sub_title : null}
+        author={blogAuthor(blog.user)}
+        date={blog.published_date || blog.created_at}
+        updated={blog.updated_at}
+        readingMinutes={blog.reading_minutes}
+        image={blogCover(blog)}
+        html={blog.content}
+        engagement={{ slug }}
+        related={{ title: t('article.morePosts'), items: related }}
+      />
       <JsonLd
         data={[
           blogPostingSchema(blog, locale),
@@ -85,6 +82,6 @@ export default async function BlogDetailPage({ params }) {
           ]),
         ]}
       />
-    </article>
+    </>
   );
 }

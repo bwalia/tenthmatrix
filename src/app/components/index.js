@@ -14,4 +14,4 @@ export { default as Breadcrumbs } from './ui/Breadcrumbs';
 export { default as LatticeArt } from './ui/LatticeArt';
 export { default as FeatureGrid } from './ui/FeatureGrid';
 export { default as cx } from './ui/cx';
-export { default as Reveal } from './motion/Reveal';
+export { default as Reveal, RevealItem } from './motion/Reveal';

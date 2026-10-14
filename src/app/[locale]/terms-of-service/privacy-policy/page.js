@@ -5,7 +5,7 @@ export const dynamic = 'force-static';
 
 const route = createRoute({
   file: 'privacy-policy.json',
-  route: '/terms-of-service/privacy-policy',
+  route: '/privacy-policy', // duplicate of /privacy-policy: canonical points there,
   Template: LegalPage,
 });
 

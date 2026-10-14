@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { MessageSquare } from 'lucide-react';
+import s from './Engagement.module.scss';
 
 /** GET/POST /api/blogs/{slug}/comment. `website` is a honeypot field. */
 export default function CommentBox({ slug }) {
   const t = useTranslations('blog');
+  const locale = useLocale();
   const [comments, setComments] = useState([]);
   const [form, setForm] = useState({ name: '', comment: '', website: '' });
   const [status, setStatus] = useState('idle');
@@ -36,25 +39,41 @@ export default function CommentBox({ slug }) {
     }
   };
 
+  const fmt = (iso) => {
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime()) ? '' : new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric' }).format(d);
+  };
+
   return (
-    <section className="tm-comments" aria-labelledby="tm-comments-title">
-      <h2 id="tm-comments-title">{t('comments')}</h2>
+    <section className={`tm-comments ${s.comments}`} aria-labelledby="tm-comments-title">
+      <h2 id="tm-comments-title" className={s.title}>
+        <MessageSquare aria-hidden="true" size={20} strokeWidth={1.75} />
+        {t('comments')}
+        {comments.length ? <span className={s.badge}>{comments.length}</span> : null}
+      </h2>
       {comments.length ? (
-        <ol className="tm-comments__list">
+        <ol className={s.list}>
           {comments.map((c) => (
-            <li key={c.id}>
-              <p className="tm-comments__meta">
-                <strong>{c.name}</strong> · <time dateTime={c.created_at}>{c.created_at.slice(0, 10)}</time>
+            <li key={c.id} className={s.comment}>
+              <p className={s.meta}>
+                <strong>{c.name}</strong>
+                {c.created_at ? <time dateTime={c.created_at}>{fmt(c.created_at)}</time> : null}
               </p>
-              <p>{c.comment}</p>
+              <p className={s.body}>{c.comment}</p>
             </li>
           ))}
         </ol>
-      ) : null}
-      <form className="tm-form" onSubmit={submit}>
-        <label>
-          {t('commentName')}
+      ) : (
+        <p className={s.empty}>{t('noComments')}</p>
+      )}
+      <form className={s.form} onSubmit={submit}>
+        <div>
+          <label className="tm-label" htmlFor="tm-comment-name">
+            {t('commentName')}
+          </label>
           <input
+            id="tm-comment-name"
+            className="tm-input"
             name="name"
             required
             maxLength={80}
@@ -62,10 +81,14 @@ export default function CommentBox({ slug }) {
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
-        </label>
-        <label>
-          {t('commentBody')}
+        </div>
+        <div>
+          <label className="tm-label" htmlFor="tm-comment-body">
+            {t('commentBody')}
+          </label>
           <textarea
+            id="tm-comment-body"
+            className="tm-input"
             name="comment"
             required
             maxLength={2000}
@@ -73,23 +96,26 @@ export default function CommentBox({ slug }) {
             value={form.comment}
             onChange={(e) => setForm({ ...form, comment: e.target.value })}
           />
-        </label>
-        <label className="tm-visually-hidden" aria-hidden="true">
-          Website
+        </div>
+        <div className="tm-visually-hidden" aria-hidden="true">
+          <label htmlFor="tm-comment-website">Website</label>
           <input
+            id="tm-comment-website"
             name="website"
             tabIndex={-1}
             autoComplete="off"
             value={form.website}
             onChange={(e) => setForm({ ...form, website: e.target.value })}
           />
-        </label>
-        <button type="submit" className="tm-button tm-tap" disabled={status === 'sending'}>
-          {t('commentSubmit')}
-        </button>
-        <p role="status" aria-live="polite">
-          {status === 'done' ? t('commentThanks') : status === 'error' ? t('commentError') : ''}
-        </p>
+        </div>
+        <div className={s.formFoot}>
+          <button type="submit" className={s.submit} disabled={status === 'sending'}>
+            {status === 'sending' ? t('commentSending') : t('commentSubmit')}
+          </button>
+          <p role="status" aria-live="polite" className={status === 'error' ? s.error : s.ok}>
+            {status === 'done' ? t('commentThanks') : status === 'error' ? t('commentError') : ''}
+          </p>
+        </div>
       </form>
     </section>
   );

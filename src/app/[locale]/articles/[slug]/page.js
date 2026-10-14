@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { loadArticles } from '@/utils/articlesLocale';
 import { articleSchema, breadcrumbSchema } from '@/app/utils/schemaMarkup';
 import { catToTagSlug } from '@/app/utils/blogTags';
-import { readTime, isSample } from '@/utils/text';
+import { isSample } from '@/utils/text';
+import { articleCard, articleDate } from '@/lib/contentView';
 import JsonLd from '@/app/components/seo/JsonLd';
-import Prose from '@/app/components/blog/Prose';
+import ArticleLayout from '@/app/components/article/ArticleLayout';
 
 export const dynamic = 'force-static';
 
@@ -46,53 +46,36 @@ export default async function ArticlePage({ params }) {
   const { article: a, content } = await getArticle(slug, locale);
   if (!a) notFound();
 
-  const date = a.publish_date ? new Date(Number(a.publish_date) * 1000) : null;
-  const related = content.filter((x) => x.industry === a.industry && x.code !== a.code).slice(0, 3);
+  const sameIndustry = content.filter((x) => x.code !== a.code && a.industry && x.industry === a.industry);
+  const related = (sameIndustry.length >= 3 ? sameIndustry : [...sameIndustry, ...content.filter((x) => x.code !== a.code && !sameIndustry.includes(x))])
+    .slice(0, 3)
+    .map((x) => articleCard(x, locale, t));
+  const tags = (a.cats || [])
+    .filter((c) => c?.cat_name)
+    .map((c) => {
+      const tag = catToTagSlug(c.cat_name);
+      return { label: c.cat_name, href: tag ? `/${locale}/docs/blogs/tag/${tag}` : undefined };
+    });
 
   return (
-    <article className="tm-container tm-article">
-      <nav aria-label={t('common.breadcrumb')} className="tm-breadcrumb">
-        <Link href={`/${locale}`}>{t('common.home')}</Link> /{' '}
-        <Link href={`/${locale}/articles`}>{t('articlesPage.title')}</Link>
-      </nav>
-      <header className="tm-article__head">
-        {a.cats?.length ? (
-          <ul className="tm-tags">
-            {a.cats.map((c) => {
-              const tag = catToTagSlug(c.cat_name);
-              return (
-                <li key={c.cat_name}>
-                  {tag ? <Link href={`/${locale}/docs/blogs/tag/${tag}`}>{c.cat_name}</Link> : c.cat_name}
-                </li>
-              );
-            })}
-          </ul>
-        ) : null}
-        <h1>{a.title}</h1>
-        {a.sub_title ? <p className="tm-lede">{a.sub_title}</p> : null}
-        <p className="tm-article__meta">
-          {date ? (
-            <time dateTime={date.toISOString()}>
-              {new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(date)}
-            </time>
-          ) : null}
-          {' · '}
-          {t('common.minRead', { minutes: readTime(a.content) })}
-        </p>
-      </header>
-      <Prose html={a.content} />
-      {related.length ? (
-        <aside className="tm-related">
-          <h2>{t('nav.articles')}</h2>
-          <ul>
-            {related.map((r) => (
-              <li key={r.code}>
-                <Link href={`/${locale}/articles/${r.code}`}>{r.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      ) : null}
+    <>
+      <ArticleLayout
+        locale={locale}
+        path={`/${locale}/articles/${slug}`}
+        breadcrumbs={[
+          { label: t('common.home'), href: `/${locale}` },
+          { label: t('articlesPage.title'), href: `/${locale}/articles` },
+          { label: a.title },
+        ]}
+        eyebrow={t('kinds.article')}
+        tags={tags}
+        title={a.title}
+        lede={a.sub_title}
+        date={articleDate(a)}
+        image={a.image}
+        html={a.content}
+        related={{ title: t('article.moreArticles'), items: related }}
+      />
       <JsonLd
         data={[
           articleSchema(a, locale),
@@ -103,6 +86,6 @@ export default async function ArticlePage({ params }) {
           ]),
         ]}
       />
-    </article>
+    </>
   );
 }

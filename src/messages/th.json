@@ -276,20 +276,140 @@
     "next": "ถัดไป",
     "page": "Page {page} of {total}",
     "breadcrumb": "Breadcrumb",
-    "pagination": "Pagination"
+    "pagination": "Pagination",
+    "pageLabel": "Page",
+    "goToPage": "Go to page {page}"
   },
   "home": {
-    "latest": "Latest writing"
+    "latest": "Latest writing",
+    "meta": {
+      "title": "TenthMatrix: software that puts AI agents to work",
+      "description": "TenthMatrix designs, builds and runs AI agents, the tools they depend on and the applications teams use every day, and writes about the engineering behind them."
+    },
+    "hero": {
+      "eyebrow": "AI agents · tools · applications",
+      "title": "Software that puts AI agents to work",
+      "lede": "We design, build and run AI agents and the software they depend on: gateways, secrets, release pipelines and the applications your teams use every day. You keep the data, the keys and the final say.",
+      "primary": "Start a pilot",
+      "secondary": "See the products",
+      "meta": [
+        "Self-hosted or managed",
+        "Human approval gates",
+        "Open source where it counts"
+      ]
+    },
+    "pillars": {
+      "eyebrow": "What we build",
+      "title": "Three layers, one team",
+      "lede": "Most agent projects stall between the demo and production. We build all three layers, so the handover is ours to get right.",
+      "agents": {
+        "title": "Agents",
+        "body": "Specialist agents that read tickets, inboxes and repositories, do the work, and stop for review before anything is sent, spent or deleted."
+      },
+      "tools": {
+        "title": "เครื่องมือ",
+        "body": "The infrastructure under the agents: an API gateway with a WAF, a secrets vault per tenant, health-gated release rings and round-the-clock monitoring."
+      },
+      "applications": {
+        "title": "Applications",
+        "body": "Finished software for the teams that use it: agent orchestration, CRM, marketing and knowledge assistants, wired into the systems you already run."
+      }
+    },
+    "steps": {
+      "eyebrow": "How a pilot runs",
+      "title": "From one job to production in four steps",
+      "lede": "No platform to buy first. We start with a single task and prove the agent on it.",
+      "items": [
+        {
+          "title": "Scope",
+          "body": "We pick one job with a clear owner and a measurable outcome, and write down what the agent must never do."
+        },
+        {
+          "title": "Build",
+          "body": "Agents, tools and evaluations live in your repository from day one. You can read every prompt, trace and test."
+        },
+        {
+          "title": "Gate",
+          "body": "Actions that send, spend or delete wait for a person. Releases move from int to prod only when health checks pass."
+        },
+        {
+          "title": "Run",
+          "body": "We operate it with you, with monitoring, cost reports and a weekly review, until your team owns it."
+        }
+      ]
+    },
+    "products": {
+      "eyebrow": "ผลิตภัณฑ์",
+      "title": "Software we build and run",
+      "lede": "Each one started as something our own agents needed in production.",
+      "all": "All products",
+      "see": "See {name}",
+      "ringPromoter": {
+        "tagline": "CI/CD control plane",
+        "description": "Promotes every release through int, test, acc and prod rings. Health gates decide, and failed checks roll back on their own."
+      },
+      "wslProxy": {
+        "tagline": "API gateway · CDN · WAF",
+        "description": "Sits in front of your origins with live configuration, an edge cache and WAF rules. An MCP gateway for agents is on the roadmap."
+      },
+      "wslVault": {
+        "tagline": "Secrets manager",
+        "description": "Envelope encryption with a key hierarchy per tenant, dynamic leases and a tamper-evident audit log. Steal the server, not the secrets."
+      },
+      "jobshout": {
+        "tagline": "Agent orchestration",
+        "description": "Specialist agents that work in Gmail, GitHub and live sites, stream every step and stop for your approval before anything goes out."
+      },
+      "jev": {
+        "tagline": "Decision-layer research",
+        "description": "Our independent series and benchmark lab on fast decision models, agent harnesses, routing and the cost of inference."
+      },
+      "nebula": {
+        "name": "Nebula family",
+        "tagline": "NebulaDB · NebulaDNS · NebulaCR · NebulaCB",
+        "description": "Rust infrastructure for agent workloads, from NebulaDB, a database with vector search and streaming RAG, to NebulaDNS, authoritative DNS with Prometheus metrics."
+      },
+      "openSource": "Open source",
+      "research": "Research"
+    },
+    "latestSection": {
+      "eyebrow": "Writing",
+      "title": "Latest from the team",
+      "lede": "Engineering notes, long-form technical articles and the Jev insights series.",
+      "articles": "All articles",
+      "blog": "The blog",
+      "empty": "New writing is on its way."
+    },
+    "services": {
+      "eyebrow": "บริการ",
+      "title": "Engineers for the parts around the agent",
+      "lede": "Agents fail on the unglamorous parts: data, deployment, security and operations. Our services teams take those on alongside your own.",
+      "all": "All services"
+    },
+    "hardware": {
+      "eyebrow": "Need the hardware?",
+      "title": "GPU workstations and clusters live at Workstation",
+      "body": "Our sister company sizes, builds and supports the machines that run private models. Tell them what you want to run and they will spec it.",
+      "link": "Visit Workstation"
+    },
+    "cta": {
+      "eyebrow": "Start a pilot",
+      "title": "Tell us the job. We'll scope the agent.",
+      "body": "Send us the task you want off your team's plate. Within one working day we reply with what an agent could do, what it shouldn't, and how we would prove it.",
+      "primary": "Start a pilot",
+      "secondary": "Read the architecture"
+    }
   },
   "articlesPage": {
     "eyebrow": "บทความ",
     "title": "Technical articles",
     "subtitle": "Long-form engineering articles on agents, models and the software around them.",
-    "empty": "No articles yet."
+    "empty": "No articles yet.",
+    "count": "{count, plural, one {# article} other {# articles}}"
   },
   "blog": {
     "title": "บล็อก",
-    "subtitle": "Notes from the team building TenthMatrix.",
+    "subtitle": "Notes from the team building TenthMatrix: what we shipped, what broke and what we changed.",
     "tags": "Topics",
     "postsTaggedWith": "Posts tagged {tag}",
     "noPostsYet": "ยังไม่มีบทความ",
@@ -301,25 +421,75 @@
     "commentBody": "Comment",
     "commentSubmit": "Post comment",
     "commentThanks": "Thanks, your comment has been posted.",
-    "commentError": "Sorry, your comment could not be posted."
+    "commentError": "Sorry, your comment could not be posted.",
+    "topic": "Topic",
+    "allPosts": "All posts",
+    "allTopics": "All topics",
+    "topicsTitle": "Blog topics",
+    "topicsLede": "Every topic we have written about, with the number of posts in each.",
+    "pageTitle": "Blog, page {page}",
+    "noComments": "No comments yet. Start the conversation.",
+    "commentSending": "Posting…"
   },
   "insightsPage": {
     "takeaways": "Key takeaways",
-    "contents": "Contents"
+    "contents": "Contents",
+    "more": "More insights",
+    "faqs": "Questions",
+    "sources": "Sources",
+    "related": "Related on TenthMatrix",
+    "seriesEyebrow": "The Jev series",
+    "allTitle": "All insights",
+    "allLede": "Every article in the publication, newest first.",
+    "empty": "No insights published yet.",
+    "cutoff": "Landscape as of {date}",
+    "updated": "Updated {date}",
+    "labTitle": "Benchmark lab",
+    "methodology": "Methodology",
+    "samples": "Samples: {samples}",
+    "system": "System",
+    "source": "Source",
+    "sourceKinds": {
+      "independent": "Independent",
+      "vendor_reported": "Vendor reported",
+      "workstation_methodology": "Methodology demo",
+      "workstation_measured": "Measured by TenthMatrix"
+    }
   },
   "searchPage": {
     "eyebrow": "ค้นหา",
     "title": "Search TenthMatrix",
-    "subtitle": "Find articles, blog posts and insights.",
+    "subtitle": "Find technical articles, blog posts and insights.",
     "label": "Search query",
-    "placeholder": "Search articles and posts",
+    "placeholder": "Search articles, posts and insights",
     "submit": "ค้นหา",
     "searching": "Searching…",
     "results": "{count} results for “{query}”",
-    "noResults": "No results for “{query}”."
+    "noResults": "No results for “{query}”.",
+    "popular": "Popular searches",
+    "suggestions": [
+      "AI agents",
+      "MCP",
+      "Kubernetes",
+      "WSL Vault",
+      "Ring Promoter",
+      "observability"
+    ],
+    "tryHint": "Try a shorter or broader term, or",
+    "browseArticles": "browse all articles."
   },
   "contact": {
-    "title": "Contact us"
+    "title": "Contact us",
+    "eyebrow": "ติดต่อ",
+    "response": "We reply within one working day.",
+    "nda": "Happy to sign your NDA before we talk detail.",
+    "nextTitle": "What happens next",
+    "steps": [
+      "An engineer, not a salesperson, reads your message.",
+      "We reply with questions or a 30-minute call slot.",
+      "You get a written scope: what the agent will do, what it won't, and how we'll measure it."
+    ],
+    "formTitle": "Tell us about the job"
   },
   "form": {
     "name": "Full name",
@@ -334,14 +504,21 @@
     "phoneInvalid": "Phone numbers can contain digits, spaces and + ( ) - only.",
     "messageRequired": "Please tell us a little about your project.",
     "submitSuccess": "Thanks, we have your message and will reply within one working day.",
-    "submitError": "Sorry, something went wrong. Please try again or email us."
+    "submitError": "Sorry, something went wrong. Please try again or email us.",
+    "optional": "(optional)",
+    "messageHint": "The task, the systems it touches and who checks the result. Two or three sentences is plenty.",
+    "privacy": "We use your details only to reply to this enquiry."
   },
   "errors": {
-    "notFoundTitle": "Page not found",
-    "notFoundBody": "The page you are looking for does not exist or has moved.",
-    "goHome": "กลับสู่หน้าแรก",
-    "somethingWrong": "Something went wrong",
-    "tryAgain": "ลองอีกครั้ง"
+    "notFoundTitle": "That page isn't here",
+    "notFoundBody": "It may have moved when TenthMatrix split from Workstation, or the link is mistyped. Search for it, or start from the articles.",
+    "goHome": "Go to the home page",
+    "somethingWrong": "That page didn't load",
+    "tryAgain": "ลองอีกครั้ง",
+    "notFoundEyebrow": "Page not found",
+    "browseArticles": "Browse articles",
+    "errorEyebrow": "Error",
+    "errorBody": "Something failed on our side. Try again, or go back to the articles."
   },
   "theme": {
     "toggle": "Colour theme: {current}. Switch to {next}.",
@@ -371,5 +548,83 @@
     "policy": "Cookie policy",
     "accept": "Accept all",
     "essential": "Essential only"
+  },
+  "kinds": {
+    "blog": "บล็อก",
+    "article": "Article",
+    "insight": "Insight"
+  },
+  "article": {
+    "contents": "On this page",
+    "updated": "Updated",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied",
+    "shareOn": "Share on {network}",
+    "shareByEmail": "Share by email",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyCode": "Copy code to clipboard",
+    "morePosts": "More from the blog",
+    "moreArticles": "More technical articles"
+  },
+  "docs": {
+    "eyebrow": "เอกสารประกอบ",
+    "title": "เอกสารประกอบ",
+    "lede": "Guides, API reference, answers to common questions and the licence terms for TenthMatrix software.",
+    "overview": "Overview",
+    "sectionsLabel": "Docs sections",
+    "empty": "This page has no content yet.",
+    "faqCategories": "FAQ categories",
+    "apisEmpty": "The public API reference is being prepared. Tell us what you want to integrate and we'll send the relevant endpoints.",
+    "apisContact": "Ask about the API",
+    "articlesTitle": "Technical articles",
+    "articlesBody": "Long-form write-ups with architecture diagrams, code and the trade-offs behind each decision.",
+    "articlesCta": "Read the articles",
+    "sections": {
+      "introduction": {
+        "title": "Introduction",
+        "body": "What TenthMatrix builds and how the pieces fit together.",
+        "cta": "Start here"
+      },
+      "apis": {
+        "title": "API reference",
+        "body": "Endpoints, request shapes and responses for the TenthMatrix APIs.",
+        "cta": "View the APIs"
+      },
+      "faqs": {
+        "title": "คำถามที่พบบ่อย",
+        "body": "Short answers on agents, tooling, security and operations.",
+        "cta": "Read the FAQs"
+      },
+      "blog": {
+        "title": "บล็อก",
+        "body": "Notes from the team: releases, incidents and what we learned.",
+        "cta": "Read the blog"
+      },
+      "license": {
+        "title": "Licence",
+        "body": "The terms that apply when you use TenthMatrix software.",
+        "cta": "Read the licence"
+      }
+    }
+  },
+  "brandPage": {
+    "eyebrow": "Brand · Lattice",
+    "title": "The Lattice system",
+    "lede": "Logo, colour, type and components for TenthMatrix, shown in both themes. This page is the design review surface and is not indexed.",
+    "light": "Light theme",
+    "dark": "Dark theme",
+    "logoTitle": "Logo",
+    "logoLede": "Nine cells and one more: the grid is the model, the tenth cell is the agent. The mark stays crisp at 16 px.",
+    "paletteTitle": "Colour",
+    "paletteLede": "Ink on paper, one signal. Ratios are WCAG 2.2 contrast against the theme background (text and controls) or the theme text colour (surfaces).",
+    "contrastNote": "Text needs 4.5:1, control borders 3:1. Hairlines are decorative.",
+    "typeTitle": "Type",
+    "typeLede": "Bricolage Grotesque for display, Instrument Sans for body and UI, IBM Plex Mono for code, data and eyebrows.",
+    "componentsTitle": "Components",
+    "componentsLede": "Buttons, pills, cards, form controls, code and article typography, side by side in light and dark.",
+    "iconsTitle": "Icons",
+    "iconsLede": "One set, one stroke weight, accent only for the active item."
   }
 }

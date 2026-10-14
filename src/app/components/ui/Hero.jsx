@@ -32,7 +32,7 @@ export default function Hero({ variant = 'page', eyebrow, title, lede, actions, 
             <div className={s.actions}>
               {Array.isArray(actions)
                 ? actions.map((a, i) => (
-                    <Button key={a.href || i} href={a.href} variant={a.variant || (i === 0 ? 'primary' : 'secondary')} size={variant === 'home' ? 'lg' : 'md'} arrow={a.arrow}>
+                    <Button key={`${i}-${a.href}`} href={a.href} variant={a.variant || (i === 0 ? 'primary' : 'secondary')} size={variant === 'home' ? 'lg' : 'md'} arrow={a.arrow}>
                       {a.label}
                     </Button>
                   ))

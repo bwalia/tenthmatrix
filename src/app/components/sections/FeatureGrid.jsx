@@ -20,6 +20,7 @@ export default function FeatureGrid({
   headingLevel = 3,
   listLabel,
   metricLabels,
+  showImages = false,
 }) {
   const list = withoutShop(items);
   if (!list.length) return null;
@@ -37,7 +38,16 @@ export default function FeatureGrid({
         const linkLabel = item.linkLabel || item.cta;
         const iconName = item.icon;
         return (
-          <li key={`${title}-${idx}`} className={styles.item}>
+          <li key={`${title}-${idx}`} className={`${styles.item} ${showImages && item.image ? styles.withImage : ''}`}>
+            {showImages && item.image && (
+               
+              <img
+                src={/^(https?:)?\/\//.test(item.image) || item.image.startsWith('/') ? item.image : `/img/${item.image}`}
+                alt=""
+                loading="lazy"
+                className={styles.image}
+              />
+            )}
             {variant === 'numbered' ? (
               <span className={styles.num} aria-hidden="true">
                 {String(idx + 1).padStart(2, '0')}
@@ -52,7 +62,17 @@ export default function FeatureGrid({
               )
             )}
             {badge && <p className={styles.badge}>{badge}</p>}
-            {title && <H className={styles.title}>{title}</H>}
+            {title && (
+              <H className={styles.title}>
+                {href && !linkLabel ? (
+                  <a {...linkProps(href, locale)} className={styles.titleLink}>
+                    {title}
+                  </a>
+                ) : (
+                  title
+                )}
+              </H>
+            )}
             {body && <RichText text={body} className={styles.body} />}
             {Array.isArray(bullets) && bullets.length > 0 && (
               <>
@@ -77,12 +97,15 @@ export default function FeatureGrid({
                 ))}
               </dl>
             )}
-            {href && (
+            {href && linkLabel && (
               <a {...linkProps(href, locale)} className={styles.more}>
-                {linkLabel || title}
+                {linkLabel}
                 <ArrowRight size={16} strokeWidth={2} aria-hidden="true" />
-                {!linkLabel ? null : <span className="tm-visually-hidden">: {title}</span>}
+                <span className="tm-visually-hidden">: {title}</span>
               </a>
+            )}
+            {href && !linkLabel && (
+              <ArrowRight size={18} strokeWidth={1.75} aria-hidden="true" className={styles.cornerArrow} />
             )}
           </li>
         );

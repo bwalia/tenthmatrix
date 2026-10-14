@@ -1,9 +1,13 @@
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { loadInsight, insightSlugMap } from '@/utils/loadInsight';
+import { loadInsight, insightSlugMap, listInsights } from '@/utils/loadInsight';
 import { insightSchema, breadcrumbSchema } from '@/app/utils/schemaMarkup';
 import { isSample } from '@/utils/text';
+import { insightCard } from '@/lib/contentView';
 import JsonLd from '@/app/components/seo/JsonLd';
+import ArticleLayout from '@/app/components/article/ArticleLayout';
+import InsightBody from '@/app/components/insights/InsightBody';
+import { Takeaways, InsightFooter } from '@/app/components/insights/InsightExtras';
 
 export const dynamic = 'force-static';
 
@@ -33,72 +37,51 @@ export async function generateMetadata({ params }) {
   };
 }
 
-/** Typed body blocks: h2, h3, p, ul, ol, code, quote. Unknown types are skipped. */
-function Block({ block }) {
-  switch (block.type) {
-    case 'h2':
-      return <h2 id={block.id}>{block.text}</h2>;
-    case 'h3':
-      return <h3 id={block.id}>{block.text}</h3>;
-    case 'p':
-      return <p>{block.text}</p>;
-    case 'ul':
-      return <ul>{(block.items || []).map((x, i) => <li key={i}>{x}</li>)}</ul>;
-    case 'ol':
-      return <ol>{(block.items || []).map((x, i) => <li key={i}>{x}</li>)}</ol>;
-    case 'code':
-      return (
-        <pre>
-          <code className={block.lang ? `language-${block.lang}` : undefined}>{block.text}</code>
-        </pre>
-      );
-    case 'quote':
-      return <blockquote>{block.text}</blockquote>;
-    default:
-      return null;
-  }
-}
-
 export default async function InsightPage({ params }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const data = await loadInsight(slug, locale);
   if (!data) notFound();
-  const t = await getTranslations({ locale, namespace: 'insightsPage' });
+  const t = await getTranslations({ locale });
+
+  // Outline: the file's toc, else every h2/h3 block with an id.
+  const headings = (data.toc || []).filter((x) => x?.id).map((x) => ({ id: x.id, text: x.label, level: 2 }));
+  const fallback = (data.body || []).filter((b) => (b.type === 'h2' || b.type === 'h3') && b.id).map((b) => ({ id: b.id, text: b.text, level: b.type === 'h3' ? 3 : 2 }));
+  const all = await listInsights(locale);
+  const more = all.filter((x) => x.slug !== data.slug).slice(0, 3).map((x) => insightCard(x, locale, t));
 
   return (
-    <article className="tm-container tm-article">
-      <header className="tm-article__head">
-        {data.series ? <p className="tm-eyebrow">{data.series}</p> : null}
-        <h1>{data.title}</h1>
-        {data.subtitle ? <p className="tm-lede">{data.subtitle}</p> : null}
-        <p className="tm-article__meta">
-          {data.published_iso ? <time dateTime={data.published_iso}>{data.published}</time> : null}
-          {data.reading_time ? ` · ${data.reading_time}` : null}
-        </p>
-      </header>
-      {data.takeaways?.length ? (
-        <section className="tm-takeaways" aria-labelledby="tm-takeaways">
-          <h2 id="tm-takeaways">{t('takeaways')}</h2>
-          <ul>{data.takeaways.map((x, i) => <li key={i}>{x}</li>)}</ul>
-        </section>
-      ) : null}
-      {data.toc?.length ? (
-        <nav className="tm-toc" aria-label={t('contents')}>
-          <ol>
-            {data.toc.map((x) => (
-              <li key={x.id}>
-                <a href={`#${x.id}`}>{x.label}</a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
-      <div className="tm-prose">
-        {(data.body || []).map((b, i) => (
-          <Block key={i} block={b} />
-        ))}
-      </div>
+    <>
+      <ArticleLayout
+        locale={locale}
+        path={`/${locale}/insights/${data.slug}`}
+        breadcrumbs={[
+          { label: t('common.home'), href: `/${locale}` },
+          { label: t('nav.items.insights.label'), href: `/${locale}/insights` },
+          { label: data.title },
+        ]}
+        eyebrow={data.series || t('kinds.insight')}
+        title={data.title}
+        lede={data.subtitle}
+        date={data.published_iso}
+        updated={data.updated_iso}
+        readingLabel={data.reading_time}
+        image={data.hero_image}
+        headings={headings.length ? headings : fallback}
+        before={<Takeaways title={t('insightsPage.takeaways')} items={data.takeaways} />}
+        after={
+          <InsightFooter
+            locale={locale}
+            labels={{ faqs: t('insightsPage.faqs'), sources: t('insightsPage.sources'), related: t('insightsPage.related') }}
+            sources={data.sources}
+            faqs={data.faqs}
+            related={data.related}
+          />
+        }
+        related={{ title: t('insightsPage.more'), items: more }}
+      >
+        <InsightBody blocks={data.body} />
+      </ArticleLayout>
       <JsonLd
         data={[
           insightSchema(data, locale),
@@ -109,6 +92,6 @@ export default async function InsightPage({ params }) {
           ]),
         ]}
       />
-    </article>
+    </>
   );
 }

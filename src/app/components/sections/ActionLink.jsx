@@ -1,4 +1,5 @@
 import { Button } from '@/app/components';
+import styles from './ActionLink.module.scss';
 import { localeHref, isExternal, isShopLink } from './links';
 
 /**
@@ -15,6 +16,7 @@ export default function ActionLink({ href, locale, variant = 'primary', size = '
       variant={variant}
       size={size}
       block={block}
+      className={styles.wrap}
       arrow={arrow ?? (ext ? 'external' : variant === 'primary' ? true : undefined)}
       {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >

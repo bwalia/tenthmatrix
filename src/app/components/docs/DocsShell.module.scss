@@ -1,0 +1,84 @@
+@use '../../styles/mixins' as *;
+
+.layout {
+  @include container;
+  display: grid;
+  gap: var(--tm-space-8);
+  padding-block: clamp(1.5rem, 1rem + 2vw, 3rem) var(--tm-space-section);
+
+  @include up($bp-lg) {
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: var(--tm-space-16);
+  }
+}
+
+.side {
+  min-width: 0;
+
+  ul {
+    display: flex;
+    gap: var(--tm-space-1);
+    margin: 0;
+    padding: 0 0 var(--tm-space-2);
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    @include up($bp-lg) {
+      flex-direction: column;
+      position: sticky;
+      top: calc(var(--tm-header-h) + var(--tm-space-8));
+      overflow: visible;
+    }
+  }
+}
+
+.sideTitle {
+  @include eyebrow;
+  display: none;
+  margin-bottom: var(--tm-space-3);
+
+  @include up($bp-lg) {
+    display: block;
+  }
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-3);
+  min-height: var(--tm-tap-target);
+  padding: 0 var(--tm-space-3);
+  border-radius: var(--tm-radius-sm);
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+
+  svg {
+    color: var(--tm-text-subtle);
+  }
+
+  &:hover {
+    background: var(--tm-sunken);
+    color: var(--tm-text);
+  }
+
+  &[aria-current='page'] {
+    background: var(--tm-accent-soft);
+    color: var(--tm-accent);
+
+    svg {
+      color: var(--tm-accent);
+    }
+  }
+
+  @include up($bp-lg) {
+    display: flex;
+  }
+}
+
+.content {
+  min-width: 0;
+}

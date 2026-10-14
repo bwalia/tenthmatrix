@@ -75,6 +75,10 @@ export default function RootLayout({ children }) {
       <head>
         {/* Blocking on purpose: must run before the first paint to avoid a theme flash. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* Without JS, scroll reveals (Reveal.jsx) never fire: show their server-rendered hidden state. */}
+        <noscript>
+          <style>{'[style*="opacity:0"]{opacity:1!important;transform:none!important}'}</style>
+        </noscript>
       </head>
       <body>{children}</body>
     </html>

@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import SearchClient from '@/app/components/search/SearchClient';
+import { Eyebrow } from '@/app/components';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -20,15 +21,19 @@ export default async function SearchPage({ params }) {
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'searchPage' });
   return (
-    <div className="tm-container tm-search-page">
-      <header className="tm-listing__head">
-        <p className="tm-eyebrow">{t('eyebrow')}</p>
-        <h1>{t('title')}</h1>
-        <p className="tm-lede">{t('subtitle')}</p>
+    <>
+      <header className="tm-page-head">
+        <div className="tm-page-head__inner">
+          <Eyebrow>{t('eyebrow')}</Eyebrow>
+          <h1>{t('title')}</h1>
+          <p className="tm-lede">{t('subtitle')}</p>
+        </div>
       </header>
-      <Suspense fallback={null}>
-        <SearchClient locale={locale} />
-      </Suspense>
-    </div>
+      <div className="tm-page-body">
+        <Suspense fallback={null}>
+          <SearchClient locale={locale} suggestions={t.raw('suggestions')} />
+        </Suspense>
+      </div>
+    </>
   );
 }

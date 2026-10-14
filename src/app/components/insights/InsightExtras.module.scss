@@ -1,0 +1,135 @@
+@use '../../styles/mixins' as *;
+
+.takeaways {
+  max-width: var(--tm-measure);
+  padding: var(--tm-space-5) var(--tm-space-6);
+  border: 1px solid var(--tm-accent-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-accent-soft);
+
+  ul {
+    display: grid;
+    gap: var(--tm-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    position: relative;
+    padding-left: var(--tm-space-6);
+    line-height: 1.55;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+      background: var(--tm-accent);
+    }
+  }
+}
+
+.boxTitle {
+  @include eyebrow;
+  margin-bottom: var(--tm-space-4);
+  color: var(--tm-accent);
+}
+
+.footer {
+  display: grid;
+  gap: var(--tm-space-10);
+  max-width: var(--tm-measure);
+}
+
+.block {
+  display: grid;
+  gap: var(--tm-space-4);
+}
+
+.blockTitle {
+  font-size: var(--tm-text-xl);
+}
+
+.faqs {
+  display: grid;
+  gap: var(--tm-space-2);
+}
+
+.faq {
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+
+  summary {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    padding: var(--tm-space-3) var(--tm-space-5);
+    cursor: pointer;
+    font-weight: var(--tm-weight-semibold);
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+
+  p {
+    padding: 0 var(--tm-space-5) var(--tm-space-5);
+    color: var(--tm-text-muted);
+  }
+}
+
+.sources {
+  display: grid;
+  gap: var(--tm-space-3);
+  margin: 0;
+  padding-left: 1.3em;
+  font-size: var(--tm-text-sm);
+
+  li::marker {
+    font-family: var(--tm-font-mono);
+    color: var(--tm-text-subtle);
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+  }
+}
+
+.note {
+  display: block;
+  color: var(--tm-text-subtle);
+  font-size: var(--tm-text-xs);
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 var(--tm-space-4);
+    border: 1px solid var(--tm-line-strong);
+    border-radius: var(--tm-radius-pill);
+    color: var(--tm-text);
+    font-size: var(--tm-text-sm);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--tm-accent);
+      color: var(--tm-accent);
+    }
+  }
+}

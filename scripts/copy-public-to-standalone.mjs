@@ -25,3 +25,12 @@ if (!fs.existsSync(pubSrc)) {
 fs.mkdirSync(standalone, { recursive: true });
 fs.cpSync(pubSrc, pubDst, { recursive: true });
 console.log("copy-public-to-standalone: copied public/ -> .next/standalone/public/");
+
+// Same for the hashed client assets (JS/CSS/fonts). Dockerfile.prod copies
+// .next/static itself; this keeps a local `node .next/standalone/server.js` working.
+const staticSrc = path.join(root, ".next", "static");
+const staticDst = path.join(standalone, ".next", "static");
+if (fs.existsSync(staticSrc)) {
+  fs.cpSync(staticSrc, staticDst, { recursive: true });
+  console.log("copy-public-to-standalone: copied .next/static -> .next/standalone/.next/static/");
+}
