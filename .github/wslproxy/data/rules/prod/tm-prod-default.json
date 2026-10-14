@@ -1,11 +1,16 @@
 {
   "id": "tm-prod-default",
   "name": "tm-prod-default",
-  "profile_id": "prod",
   "priority": 1,
+  "profile_id": "prod",
   "rules_tags": [
-    "tenthmatrix-website",
+    "tenthmatrix",
     "prod"
+  ],
+  "servers": [
+    "host:int.tenthmatrix.com",
+    "host:test.tenthmatrix.com",
+    "host:acc.tenthmatrix.com"
   ],
   "match": {
     "rules": {
@@ -16,23 +21,16 @@
       "code": 305,
       "redirect_uri": "193.237.176.232:8888",
       "strip_path": false,
+      "routing": {
+        "mode": "least_conn"
+      },
       "backends": [
         {
           "address": "193.237.176.232:8888",
           "weight": 100,
-          "label": "k3s ingress entry for *.tenthmatrix.com (same backend as the Workstation hosts); Traefik routes by Host header to the per-env tm-frontend Service"
+          "label": "k3s1 Traefik ingress; routes by Host header to the per-env tm-frontend (tenthmatrix-website)"
         }
-      ],
-      "routing": {
-        "mode": "least_conn"
-      }
+      ]
     }
-  },
-  "servers": [
-    "host:int.tenthmatrix.com",
-    "host:test.tenthmatrix.com",
-    "host:acc.tenthmatrix.com",
-    "host:www.tenthmatrix.com",
-    "host:tenthmatrix.com"
-  ]
+  }
 }

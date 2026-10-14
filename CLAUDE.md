@@ -185,14 +185,35 @@ Path: `POST /api/v2/public/leads/tenthmatrix`. Other hosts fall back to
 asserts the table.
 
 ### Deployment
-- `Dockerfile.prod` — one standalone image (`tm-frontend`) for all envs.
-- `.github/workflows/build-and-deploy.yaml` — verify + image build, Cloudflare
-  CNAMEs (grey cloud → `lon1.pop0.uk`), wslproxy vhost registration, then
-  `deploy-k3s.yaml`: int on push, test/acc/prod by dispatch. No S3 export.
-- `devops/helm-charts/tm-chart/` — Service/Deployment `tm-frontend`, ingress
-  class `traefik-edge`, hosts per `values-{int,test,acc,prod}.yaml`.
-- `.github/wslproxy/data/` — rule `tm-prod-default` (backend
-  `193.237.176.232:8888`) and one `host:<domain>.json` per site host. The
+Prod (`www.tenthmatrix.com` + apex) is a **static export on S3**, like
+Workstation's prod; int/test/acc run the standalone image on k3s.
+
+- **Prod → S3:** `scripts/deploy-s3.sh` runs `npm run verify`, then
+  `scripts/build-static.mjs` (sets `TM_STATIC_EXPORT=1` → `output: 'export'`,
+  `trailingSlash`; moves `src/app/api`, `src/proxy.js` and `src/app/robots.js`
+  aside for the build and always restores them; writes the prod `robots.txt`
+  and a `/` → `/en/` redirect page into `out/`), checks one `<h1>` per page and
+  syncs `out/` to bucket **`tenthmatrix-website`** (eu-west-2, website hosting,
+  public read; assets cached, HTML `no-cache`). No versioned copies in the
+  bucket (they'd be public duplicates). The `deploy-s3` job runs it on every
+  push to `main` with secrets `TM_AWS_ACCESS_KEY_ID`/`TM_AWS_SECRET_ACCESS_KEY`
+  (IAM user `tm-website-deploy`, write access to this bucket only).
+- **What the export can't do:** no API routes, so likes/comments are hidden,
+  search uses the prebuilt Fuse index, CMS posts appear only at build time
+  (rebuild to publish), and the contact form posts straight to OpsAPI from the
+  browser (`api.tenthmatrix.com`). Dynamic blog routes enumerate their params
+  from committed JSON only when exporting (`src/lib/staticSlugs.js`); on k3s
+  they stay on-demand ISR.
+- **OG images** are prerendered (`dynamic = 'force-static'` + locale params).
+  The brand fonts are Latin-only, so non-Latin titles fall back to the English
+  title (`renderOgImage({ fallbackTitle })`).
+- **int/test/acc → k3s:** `Dockerfile.prod` builds one standalone image
+  (`tm-frontend`); `deploy-k3s.yaml` deploys int on push, test/acc by dispatch.
+  `devops/helm-charts/tm-chart/` (`values-prod.yaml` is unused while prod is on S3).
+- **Edge:** Cloudflare CNAMEs (grey cloud → `lon1.pop0.uk`). wslproxy rules in
+  `.github/wslproxy/data/`: `tm-website-s3-proxy` (www + apex →
+  `http://tenthmatrix-website.s3-website.eu-west-2.amazonaws.com`) and
+  `tm-prod-default` (int/test/acc → k3s ingress `193.237.176.232:8888`). The
   `api.tenthmatrix.com` vhosts are managed outside this repo.
 - Never run a deploy, push, or `--apply` a CMS import / Vault seed without the
   owner's explicit go-ahead.

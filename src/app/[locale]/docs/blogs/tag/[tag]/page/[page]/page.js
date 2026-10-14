@@ -4,11 +4,13 @@ import { prettifyTag } from '@/app/utils/blogTags';
 import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { getPostListPage, getBlogTags } from '@/lib/cms';
 import BlogListing from '@/app/components/blog/BlogListing';
+import { STATIC_EXPORT, exportTagPageParams } from '@/lib/staticSlugs';
 
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  return [];
+  // [] on k3s (on-demand ISR); every slug for the S3 static export.
+  return STATIC_EXPORT ? exportTagPageParams() : [];
 }
 
 export async function generateMetadata({ params }) {

@@ -271,29 +271,54 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  # ── Stage 4: PROD (manual; protect the `prod` GitHub environment) ─────
-  deploy-prod:
-    name: "🚀 PROD → K3S"
-    needs: [resolve-tag]
+  # ── PROD: static export → S3 (tenthmatrix-website) ───────────────────
+  # www.tenthmatrix.com + apex are served by wslproxy (rule
+  # tm-website-s3-proxy) from the bucket's website endpoint, like Workstation's
+  # prod. Runs on every push to main (and on dispatch with TARGET_ENV=prod);
+  # independent of the Docker image, which only int/test/acc use.
+  deploy-s3:
+    name: "🚀 PROD → S3 (tenthmatrix-website)"
+    runs-on: [self-hosted, Linux, int]
+    environment: prod
     if: >-
-      always() &&
-      needs.resolve-tag.result == 'success' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
-      github.event.inputs.TARGET_ENV == 'prod'
-    uses: ./.github/workflows/deploy-k3s.yaml
-    with:
-      environment: prod
-      namespace: prod
-      release_name: tm-prod
-      values_file: values-prod.yaml
-      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
-      smoke_test_port: "8183"
-      runner_labels: '["self-hosted","Linux","int"]'
-    secrets:
-      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
-      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' &&
+       github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+       github.event.inputs.TARGET_ENV == 'prod')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Ensure AWS CLI
+        run: |
+          if ! command -v aws >/dev/null 2>&1; then
+            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+            unzip -q awscliv2.zip && sudo ./aws/install --update && rm -rf awscliv2.zip aws/
+          fi
+          aws --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export and sync to S3
+        run: bash scripts/deploy-s3.sh
+        env:
+          SITE_URL: https://www.tenthmatrix.com
+          NEXT_PUBLIC_OPSAPI_URL: https://api.tenthmatrix.com
+          AWS_ACCESS_KEY_ID: ${{ secrets.TM_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TM_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-west-2
+
+      - name: Smoke test www.tenthmatrix.com
+        run: |
+          for p in /en/ /en/start-a-project/ /robots.txt /sitemap.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "https://www.tenthmatrix.com$p")
+            echo "$code $p"; [ "$code" = 200 ] || exit 1
+          done
 
   # ── Cut the release tag LAST (only after the image is pushed) ─────────
   auto-tag:
