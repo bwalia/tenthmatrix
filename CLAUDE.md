@@ -212,7 +212,8 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   `devops/helm-charts/tm-chart/` (`values-prod.yaml` is unused while prod is on S3).
 - **Edge:** Cloudflare CNAMEs (grey cloud → `lon1.pop0.uk`). wslproxy rules in
   `.github/wslproxy/data/`: `tm-website-s3-proxy` (www + apex →
-  `http://tenthmatrix-website.s3-website.eu-west-2.amazonaws.com`) and
+  `http://tenthmatrix-website.s3-website.eu-west-2.amazonaws.com`; plain HTTP
+  and HTTPS both answer 200, edge cache 3600 s — same as www.workstation.co.uk) and
   `tm-prod-default` (int/test/acc → k3s ingress `193.237.176.232:8888`). The
   `api.tenthmatrix.com` vhosts are managed outside this repo.
 - Never run a deploy, push, or `--apply` a CMS import / Vault seed without the

@@ -4,7 +4,7 @@
       "listen": "80"
     }
   ],
-  "cache_enabled": false,
+  "cache_enabled": true,
   "access_log": "logs/www.tenthmatrix.com.access.log",
   "error_log": "logs/www.tenthmatrix.com.error.log",
   "ssl_enabled": true,
@@ -15,7 +15,7 @@
   "match_cases": {},
   "ssl_email": "admin@tenthmatrix.com",
   "ssl_auto_renew": true,
-  "ssl_force_https": true,
+  "ssl_force_https": false,
   "ssl_staging": false,
   "config_status": true,
   "server_name": "www.tenthmatrix.com",
@@ -23,5 +23,11 @@
   "profile_id": "prod",
   "rules": "tm-website-s3-proxy",
   "dns_record_type": "CNAME",
-  "dns_cname_target": "lon1.pop0.uk"
+  "dns_cname_target": "lon1.pop0.uk",
+  "cache_ttl": "3600",
+  "cache_bypass_auth": false,
+  "rate_limit_enabled": false,
+  "varnish_enabled": false,
+  "waf_enabled": false,
+  "proxy_pass": "http://localhost"
 }
