@@ -71,7 +71,9 @@ function generateSitemap() {
       return;
     }
     for (const locale of LOCALES) {
-      urls.push({ loc: `${BASE_URL}/${locale}${p ? `/${p}` : ''}`, lastmod, changefreq, priority });
+      // Trailing slash: prod is the S3 static export (trailingSlash: true), where
+      // /path answers 302 → /path/. List the URL that answers 200 directly.
+      urls.push({ loc: `${BASE_URL}/${locale}${p ? `/${p}` : ''}/`, lastmod, changefreq, priority });
     }
   };
 

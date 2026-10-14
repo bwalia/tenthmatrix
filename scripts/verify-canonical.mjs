@@ -82,7 +82,9 @@ if (!fs.existsSync(sitemapFile)) {
   let hits = 0;
   for (const loc of locs) {
     const m = loc.match(/^https?:\/\/[^/]+\/([a-z]{2})(\/.*)?$/);
-    if (m && LOCALES.includes(m[1]) && entries[m[2] || '/']) {
+    // Sitemap URLs carry a trailing slash (S3 export); entries are keyed without.
+    const p = (m?.[2] || '/').replace(/(.)\/$/, '$1');
+    if (m && LOCALES.includes(m[1]) && entries[p]) {
       if (hits++ < 10) fail(`sitemap lists canonicalised URL ${loc}`);
     }
   }
