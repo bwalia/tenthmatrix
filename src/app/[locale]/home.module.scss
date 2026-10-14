@@ -166,86 +166,111 @@
   gap: var(--tm-space-4);
 }
 
-// ----------------------------------------------------------- services
-.services {
+// ----------------------------------------------------------- benefits
+// A ruled grid: hairlines between cells, like the lattice, not floating cards.
+.benefits {
   display: grid;
-  gap: var(--tm-space-10);
-
-  @include up($bp-lg) {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: var(--tm-space-16);
-    align-items: start;
-  }
-}
-
-.servicesIntro {
-  display: grid;
-  gap: var(--tm-space-5);
-  justify-items: start;
-
-  @include up($bp-lg) {
-    position: sticky;
-    top: calc(var(--tm-header-h) + var(--tm-space-8));
-  }
-}
-
-.serviceList {
   margin: 0;
   padding: 0;
   list-style: none;
   border-top: 1px solid var(--tm-line);
-}
+  border-inline-start: 1px solid var(--tm-line);
 
-.serviceLink {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--tm-space-4);
-  padding: var(--tm-space-5) var(--tm-space-2);
-  border-bottom: 1px solid var(--tm-line);
-  color: var(--tm-text);
-  text-decoration: none;
-  transition: background-color var(--tm-duration-fast) var(--tm-ease-standard);
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-  &:hover {
-    background: var(--tm-surface);
-    color: var(--tm-text);
-
-    .serviceArrow {
-      color: var(--tm-accent);
-      transform: translateX(4px);
-    }
-
-    .serviceLabel {
-      color: var(--tm-accent);
-    }
+  @include up($bp-lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.serviceCopy {
-  display: grid;
-  gap: 2px;
+.benefit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tm-space-3);
+  min-width: 0;
+  padding: var(--tm-space-6);
+  border-bottom: 1px solid var(--tm-line);
+  border-inline-end: 1px solid var(--tm-line);
 }
 
-.serviceLabel {
-  font-family: var(--tm-font-display);
+.benefitIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: var(--tm-space-1);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-accent-soft);
+  color: var(--tm-accent);
+}
+
+.benefitTitle {
   font-size: var(--tm-text-lg);
-  font-weight: var(--tm-weight-semibold);
-  letter-spacing: var(--tm-tracking-heading);
-  transition: color var(--tm-duration-fast) var(--tm-ease-standard);
 }
 
-.serviceDesc {
+.benefitBody {
+  flex: 1;
   color: var(--tm-text-muted);
   font-size: var(--tm-text-sm);
+  line-height: 1.65;
 }
 
-.serviceArrow {
-  flex: none;
-  color: var(--tm-text-subtle);
-  transition:
-    transform var(--tm-duration-fast) var(--tm-ease-out),
-    color var(--tm-duration-fast) var(--tm-ease-standard);
+.benefitProof {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-2);
+  align-self: flex-start;
+  min-height: var(--tm-tap-target);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-medium);
+  text-decoration: none;
+
+  svg {
+    flex: none;
+    transition: transform var(--tm-duration-fast) var(--tm-ease-out);
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+// --------------------------------------------------------- engagement
+.engagements {
+  display: grid;
+  gap: var(--tm-grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up($bp-sm) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  > li {
+    min-width: 0;
+  }
+}
+
+.engagement {
+  height: 100%;
+  gap: var(--tm-space-3);
+}
+
+.engagementTitle {
+  font-size: var(--tm-text-lg);
+}
+
+.engagementBody {
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+  line-height: 1.65;
 }
 
 // ----------------------------------------------------------- hardware

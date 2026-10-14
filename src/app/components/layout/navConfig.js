@@ -46,12 +46,26 @@ import {
   Video,
   Search,
   Rocket,
+  Handshake,
+  BadgeCheck,
+  Send,
 } from 'lucide-react';
 
 export const HARDWARE_URL = 'https://www.workstation.co.uk/ai-workstations';
 
 /** Mega-menu groups, in header order. `overview` is the group's landing link. */
 export const NAV_GROUPS = [
+  {
+    key: 'work',
+    overview: '/outsource-ai-development',
+    items: [
+      { key: 'outsource', href: '/outsource-ai-development', icon: Handshake },
+      { key: 'aiAgentDev', href: '/ai-agent-development', icon: Bot },
+      { key: 'genAiDev', href: '/generative-ai-development', icon: Sparkles },
+      { key: 'whyAgents', href: '/why-tenthmatrix-agents', icon: BadgeCheck },
+      { key: 'startProject', href: '/start-a-project', icon: Send },
+    ],
+  },
   {
     key: 'agents',
     overview: '/ai-agents',
@@ -134,6 +148,7 @@ export const NAV_GROUPS = [
 
 /** Footer columns: group key → item keys/hrefs (labels from nav.items / footer.links). */
 export const FOOTER_COLUMNS = [
+  { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'startProject'] },
   { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
   { key: 'products', items: ['ringPromoter', 'wslProxy', 'wslVault', 'jobshout', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },

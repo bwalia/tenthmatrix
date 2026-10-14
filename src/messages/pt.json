@@ -18,10 +18,16 @@
     "menu": "Menu do site",
     "openMenu": "Abrir menu",
     "closeMenu": "Fechar menu",
-    "cta": "Iniciar um piloto",
+    "cta": "Iniciar um projeto",
     "searchPlaceholder": "Pesquisar artigos, posts e documentação",
     "hardware": "Precisa de hardware? Estações de trabalho com GPU na Workstation",
     "groups": {
+      "work": {
+        "label": "Trabalhe conosco",
+        "title": "Terceirize seu projeto de IA",
+        "intro": "Entregue-nos um agente ou um projeto de IA generativa. Você mantém o código, os dados e a palavra final.",
+        "all": "Como funciona a terceirização"
+      },
       "agents": {
         "label": "Agentes",
         "title": "Agentes de IA",
@@ -227,12 +233,32 @@
       "search": {
         "label": "Buscar",
         "desc": "Encontre qualquer coisa no site"
+      },
+      "outsource": {
+        "label": "Terceirizar desenvolvimento de IA",
+        "desc": "Modelos de contratação, processo e propriedade intelectual"
+      },
+      "aiAgentDev": {
+        "label": "Desenvolvimento de agentes de IA",
+        "desc": "Agentes de suporte, operações, documentos e código"
+      },
+      "genAiDev": {
+        "label": "Desenvolvimento de IA generativa",
+        "desc": "Assistentes de conhecimento, redação e copilotos"
+      },
+      "whyAgents": {
+        "label": "Por que os agentes TenthMatrix",
+        "desc": "Benefícios e como verificar cada um"
+      },
+      "startProject": {
+        "label": "Iniciar um projeto",
+        "desc": "Conte-nos a tarefa. Respondemos em um dia útil."
       }
     }
   },
   "footer": {
-    "tagline": "Software que coloca agentes de IA para trabalhar.",
-    "blurb": "Projetamos, construímos e operamos agentes de IA, as ferramentas de que dependem e as aplicações que suas equipes usam todos os dias.",
+    "tagline": "Agentes de IA e aplicações de IA generativa, criados para você.",
+    "blurb": "Projetamos, construímos e operamos agentes de IA e aplicações de IA generativa para empresas que terceirizam o trabalho, além dos produtos de software em que esses agentes rodam.",
     "hardware": "Precisa de hardware? Visite a Workstation",
     "hardwareEyebrow": "Precisa de hardware?",
     "hardwareTitle": "Estações de trabalho e clusters com GPU são montados pela Workstation.",
@@ -242,6 +268,7 @@
     "sitemap": "Rodapé",
     "legal": "Jurídico",
     "columns": {
+      "work": "Trabalhe conosco",
       "agents": "Agentes",
       "products": "Produtos",
       "services": "Serviços",
@@ -283,65 +310,133 @@
   "home": {
     "latest": "Publicações recentes",
     "meta": {
-      "title": "TenthMatrix: software que coloca agentes de IA para trabalhar",
-      "description": "A TenthMatrix projeta, constrói e opera agentes de IA, as ferramentas de que dependem e as aplicações que as equipes usam todos os dias, e escreve sobre a engenharia por trás deles."
+      "title": "TenthMatrix: desenvolvimento de agentes de IA e IA generativa para terceirizar",
+      "description": "A TenthMatrix constrói e opera agentes de IA e aplicações de IA generativa para empresas que terceirizam o trabalho. Código no seu repositório, dados e chaves sob seu controle, aprovação humana nas ações de risco."
     },
     "hero": {
-      "eyebrow": "Agentes de IA · ferramentas · aplicações",
-      "title": "Software que coloca agentes de IA para trabalhar",
-      "lede": "Projetamos, construímos e operamos agentes de IA e o software de que dependem: gateways, segredos, pipelines de release e as aplicações que suas equipes usam todos os dias. Você mantém os dados, as chaves e a palavra final.",
-      "primary": "Iniciar um piloto",
-      "secondary": "Ver os produtos",
+      "eyebrow": "Desenvolvimento de agentes de IA e IA generativa",
+      "title": "Construímos e operamos seus agentes de IA e aplicações de IA generativa",
+      "lede": "Entregue-nos o projeto. Nós o projetamos, construímos no seu repositório, conectamos aos seus sistemas e operamos em produção, ou o repassamos à sua equipe. Você mantém o código, os dados, as chaves e a palavra final.",
+      "primary": "Iniciar um projeto",
+      "secondary": "Por que nossos agentes",
       "meta": [
-        "Auto-hospedado ou gerenciado",
+        "Código no seu repositório",
         "Aprovação humana obrigatória",
-        "Código aberto onde importa"
+        "Auto-hospedado ou gerenciado"
       ]
     },
     "pillars": {
-      "eyebrow": "O que construímos",
-      "title": "Três camadas, uma equipe",
-      "lede": "A maioria dos projetos de agentes trava entre a demo e a produção. Construímos as três camadas, então acertar a transição é responsabilidade nossa.",
+      "eyebrow": "O que construímos para você",
+      "title": "Agentes, aplicações de IA generativa e as integrações que as tornam úteis",
+      "lede": "A maioria dos projetos de IA trava entre a demo e a produção, geralmente na integração e na operação. Assumimos tudo isso, para que haja uma única equipe responsável.",
       "agents": {
-        "title": "Agentes",
-        "body": "Agentes especializados que leem tickets, caixas de entrada e repositórios, fazem o trabalho e param para revisão antes que algo seja enviado, gasto ou excluído."
+        "title": "Software agêntico",
+        "body": "Agentes que trabalham com tickets, caixas de entrada, CRMs e repositórios, fazem o trabalho de várias etapas e param para revisão antes de enviar, gastar ou excluir qualquer coisa."
       },
-      "tools": {
-        "title": "Ferramentas",
-        "body": "A infraestrutura sob os agentes: um API gateway com WAF, um cofre de segredos por tenant, anéis de release condicionados à saúde e monitoramento 24 horas."
+      "genai": {
+        "title": "Aplicações de IA generativa",
+        "body": "Assistentes de conhecimento que citam seus documentos, ferramentas de redação e copilotos dentro dos aplicativos que suas equipes já usam, rodando onde suas regras de dados permitem."
       },
-      "applications": {
-        "title": "Aplicações",
-        "body": "Software pronto para as equipes que o usam: orquestração de agentes, CRM, marketing e assistentes de conhecimento, integrados aos sistemas que você já usa."
+      "integrations": {
+        "title": "Integrações com seus sistemas",
+        "body": "APIs, servidores MCP e conectores para seu CRM, ERP, sistema de tickets, bancos de dados e armazenamento de arquivos, com segredos, logs e controle de acesso desde o primeiro release."
+      }
+    },
+    "benefits": {
+      "eyebrow": "Benefícios dos agentes de IA da TenthMatrix",
+      "title": "O que você ganha quando nossos agentes fazem o trabalho",
+      "lede": "Cada benefício corresponde a um software que construímos e operamos nós mesmos, para que você possa inspecioná-lo antes de assinar qualquer coisa.",
+      "all": "Comparar com equipe interna e chatbots SaaS",
+      "approval": {
+        "title": "Uma pessoa aprova o que importa",
+        "body": "Os agentes redigem e preparam. Tudo o que envia, gasta ou exclui aguarda uma pessoa designada.",
+        "proof": "Ver Jobshout"
+      },
+      "hosting": {
+        "title": "Auto-hospedado ou gerenciado",
+        "body": "Rode os agentes na sua própria nuvem ou data center, ou deixe que nós os operemos. O código é o mesmo nos dois casos.",
+        "proof": "Modelos de contratação"
+      },
+      "data": {
+        "title": "Seus dados e chaves ficam com você",
+        "body": "Os dados ficam nos seus sistemas e as chaves dos modelos no seu cofre de segredos. Escolha o provedor de modelos ou hospede você mesmo um modelo aberto.",
+        "proof": "Segurança e IP"
+      },
+      "vault": {
+        "title": "Segredos isolados por agente",
+        "body": "O WSL Vault emite credenciais de curta duração e escopo limitado, criptografadas por tenant e registradas em um log de auditoria à prova de adulteração.",
+        "proof": "Ver o WSL Vault"
+      },
+      "releases": {
+        "title": "Releases condicionados à saúde",
+        "body": "O Ring Promoter move cada alteração de int para prod somente quando as verificações de saúde passam, e faz rollback quando falham.",
+        "proof": "Ver Ring Promoter"
+      },
+      "edge": {
+        "title": "Segurança na borda",
+        "body": "O WSL Proxy coloca um gateway de API, regras de WAF e limites de taxa na frente do agente e das ferramentas que ele chama.",
+        "proof": "Ver WSL Proxy"
+      },
+      "observe": {
+        "title": "Custo e comportamento visíveis",
+        "body": "Um rastro para cada execução, custo e latência por agente, e alertas quando algum deles se desvia.",
+        "proof": "Como medimos"
+      },
+      "production": {
+        "title": "Criado por uma equipe que opera agentes",
+        "body": "Nossos próprios agentes rodam em produção nesta stack. Publicamos como eles funcionam, incluindo o que deu errado.",
+        "proof": "Ler os artigos"
       }
     },
     "steps": {
-      "eyebrow": "Como funciona um piloto",
-      "title": "De uma tarefa à produção em quatro etapas",
-      "lede": "Sem plataforma para comprar antes. Começamos com uma única tarefa e provamos o agente nela.",
+      "eyebrow": "Como funciona a terceirização",
+      "title": "Descoberta, piloto, construção e depois operação ou transferência",
+      "lede": "Cada etapa termina com algo que você mantém, mesmo que pare por ali.",
       "items": [
         {
-          "title": "Escopo",
-          "body": "Escolhemos uma tarefa com um responsável claro e um resultado mensurável, e registramos o que o agente nunca deve fazer."
+          "title": "Descoberta",
+          "body": "Escolhemos uma tarefa, os sistemas que ela envolve e quem verifica o resultado, e registramos por escrito o que o agente nunca deve fazer. Você recebe um escopo por escrito e um orçamento fechado para o piloto."
+        },
+        {
+          "title": "Piloto",
+          "body": "A menor versão que faz o trabalho real com dados reais, com aprovação humana, medida em relação ao escopo. Depois, uma recomendação de seguir, mudar ou parar."
         },
         {
           "title": "Construção",
-          "body": "Agentes, ferramentas e avaliações ficam no seu repositório desde o primeiro dia. Você pode ler cada prompt, trace e teste."
+          "body": "Código de produção, integrações, segredos, salvaguardas, testes e um caminho de release, tudo no seu repositório. Você pode ler cada prompt, rastro e teste."
         },
         {
-          "title": "Controle",
-          "body": "Ações que enviam, gastam ou excluem aguardam uma pessoa. Releases passam de int para prod somente quando as verificações de saúde passam."
-        },
-        {
-          "title": "Operação",
-          "body": "Operamos com você, com monitoramento, relatórios de custos e uma revisão semanal, até que sua equipe assuma."
+          "title": "Operar ou transferir",
+          "body": "Nós o operamos com monitoramento, relatórios de custo e uma revisão regular, ou o repassamos à sua equipe com runbooks e treinamento."
         }
       ]
     },
+    "engagement": {
+      "eyebrow": "Modelos de contratação",
+      "title": "Quatro formas de trabalhar conosco",
+      "lede": "Escolha conforme a clareza da tarefa e quanto você quer ter sob seu controle no final.",
+      "more": "Comparar modelos de contratação",
+      "fixed": {
+        "title": "Projeto de escopo fechado",
+        "body": "Um agente, aplicação ou integração, com escopo por escrito e preço acordado."
+      },
+      "team": {
+        "title": "Equipe de agentes dedicada",
+        "body": "Uma equipe pequena que avança no seu backlog de trabalho de IA, mês a mês."
+      },
+      "embedded": {
+        "title": "Engenheiros alocados",
+        "body": "Nossos engenheiros se juntam à sua equipe, trabalham nos seus repositórios e repassam o que sabem."
+      },
+      "transfer": {
+        "title": "Construir, operar, transferir",
+        "body": "Nós o construímos, operamos por um período acordado e depois o transferimos com runbooks e treinamento."
+      }
+    },
     "products": {
-      "eyebrow": "Produtos",
-      "title": "Software que construímos e operamos",
-      "lede": "Cada um nasceu de algo que nossos próprios agentes precisavam em produção.",
+      "eyebrow": "Provas",
+      "title": "Software que construímos e operamos nós mesmos",
+      "lede": "Os agentes dos clientes rodam nos mesmos produtos que usamos em produção. Cada um começou como algo de que nossos próprios agentes precisavam.",
       "all": "Todos os produtos",
       "see": "Ver {name}",
       "ringPromoter": {
@@ -380,12 +475,6 @@
       "blog": "O blog",
       "empty": "Novas publicações em breve."
     },
-    "services": {
-      "eyebrow": "Serviços",
-      "title": "Engenheiros para tudo ao redor do agente",
-      "lede": "Agentes falham nas partes menos glamorosas: dados, implantação, segurança e operações. Nossas equipes de serviços cuidam delas junto com as suas.",
-      "all": "Todos os serviços"
-    },
     "hardware": {
       "eyebrow": "Precisa de hardware?",
       "title": "Estações de trabalho e clusters com GPU ficam na Workstation",
@@ -393,11 +482,11 @@
       "link": "Visit Workstation"
     },
     "cta": {
-      "eyebrow": "Iniciar um piloto",
-      "title": "Conte a tarefa. Nós definimos o agente.",
-      "body": "Envie a tarefa que você quer tirar das mãos da sua equipe. Em um dia útil respondemos com o que um agente poderia fazer, o que não deveria e como provaríamos isso.",
-      "primary": "Iniciar um piloto",
-      "secondary": "Ler a arquitetura"
+      "eyebrow": "Iniciar um projeto",
+      "title": "Conte-nos a tarefa. Definiremos o escopo da construção.",
+      "body": "Envie a tarefa, os sistemas que ela envolve e quem verifica o resultado. Em um dia útil, um engenheiro responde com o que construiríamos, o que não deveria fazer e como comprovaríamos.",
+      "primary": "Iniciar um projeto",
+      "secondary": "Como funciona a terceirização"
     }
   },
   "articlesPage": {
@@ -494,7 +583,7 @@
   "form": {
     "name": "Nome completo",
     "email": "Email",
-    "phone": "Phone (optional)",
+    "phone": "Phone",
     "message": "O que você quer que seus agentes façam?",
     "submit": "Enviar",
     "sending": "Enviando…",
@@ -507,7 +596,9 @@
     "submitError": "Desculpe, algo deu errado. Tente novamente ou envie um e-mail.",
     "optional": "(opcional)",
     "messageHint": "A tarefa, os sistemas envolvidos e quem verifica o resultado. Duas ou três frases bastam.",
-    "privacy": "Usamos seus dados apenas para responder a esta solicitação."
+    "privacy": "Usamos seus dados apenas para responder a esta solicitação.",
+    "projectType": "Tipo de projeto",
+    "projectTypeAny": "Escolha uma opção"
   },
   "errors": {
     "notFoundTitle": "Esta página não está aqui",
@@ -732,6 +823,7 @@
     "pain": "O problema persistente",
     "solution": "Como a IA ajuda",
     "result": "Resultado de negócio",
-    "whenRight": "Quando faz sentido"
+    "whenRight": "Quando faz sentido",
+    "startProject": "Iniciar um projeto"
   }
 }

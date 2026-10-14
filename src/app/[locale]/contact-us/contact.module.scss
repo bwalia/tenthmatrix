@@ -112,3 +112,22 @@
   margin-bottom: var(--tm-space-6);
   font-size: var(--tm-text-xl);
 }
+
+// start-a-project reuses this layout
+.note {
+  margin: var(--tm-space-3) 0 0;
+  color: var(--tm-text-muted);
+}
+
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-2);
+  min-height: var(--tm-tap-target);
+  margin-top: var(--tm-space-2);
+  font-weight: var(--tm-weight-medium);
+
+  svg {
+    flex: none;
+  }
+}

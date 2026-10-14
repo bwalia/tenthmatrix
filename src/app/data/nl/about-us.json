@@ -1,296 +1,117 @@
 {
+  "meta": {
+    "title": "Over TenthMatrix",
+    "description": "TenthMatrix bouwt AI-agents en generatieve AI-applicaties voor bedrijven die dit werk uitbesteden, en de softwareproducten waarop die agents draaien."
+  },
   "header": {
     "title": "Over TenthMatrix",
-    "tagline": "Pionier in AI Vibe Coding en mobiele AI-app ontwikkeling"
+    "tagline": "Wij bouwen AI-agents en generatieve AI-applicaties voor bedrijven die dit werk uitbesteden"
   },
   "content": [
     {
       "image": "/img/technology-hero.png",
-      "description": "Bij TenthMatrix revolutioneren we softwareontwikkeling door AI Vibe Coding — de revolutionaire aanpak waarmee je complete applicaties kunt bouwen met natuurlijke taal. Aangedreven door Cursor IDE, GPT-4, Claude en Gemini, stellen we zowel developers als niet-developers in staat om productie-klare iOS, Android en web apps te maken.",
-      "video": "https://www.youtube.com/embed/8AWEPx5cHWQ",
-      "section": "AI Vibe Coding Innovatie"
+      "section": "Wat we doen",
+      "description": "TenthMatrix ontwerpt, bouwt en beheert AI-agents en generatieve AI-applicaties voor klanten. Teams dragen het project aan ons over. Wij leveren werkende software in hun repository, gekoppeld aan hun systemen, met een mens die alles wat riskant is goedkeurt."
     },
     {
       "image": "/img/servers.jpg",
-      "description": "Opgericht door industrie-experts met jaren ervaring in mobiele AI-ontwikkeling, overbrugt TenthMatrix de kloof tussen traditionele app-ontwikkeling en AI-aangedreven codering. We zijn gespecialiseerd in het bouwen van intelligente mobiele apps met ChatGPT, Computer Vision, Voice AI en aangepaste LLM-integraties.",
-      "video": "https://www.youtube.com/embed/R05hTsehyX0",
-      "section": "iOS en Android AI Ontwikkeling"
+      "section": "Waar we vandaan komen",
+      "description": "TenthMatrix is afgesplitst van Workstation, dat GPU-werkstations en clusters bouwt. Workstation hield de hardware. TenthMatrix nam de software: de agents, de tools waarvan ze afhankelijk zijn en de applicaties eromheen."
     },
     {
       "image": "/img/11.jpg",
-      "description": "Ons uitgebreide AI-ontwikkelingsplatform helpt teams om 10x sneller apps te bouwen, ontwikkelingskosten met 80% te verlagen en te lanceren in weken in plaats van maanden. Van idee-validatie tot App Store-indiening, we bieden end-to-end oplossingen.",
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8",
-      "section": "Snelle App Ontwikkeling"
+      "section": "Producten die we beheren",
+      "description": "Ring Promoter, WSL Proxy, WSL Vault, Jobshout, SysOps 24/7 en de Nebula-familie zijn ontstaan als dingen die onze eigen agents in productie nodig hadden. Klantprojecten gebruiken ze waar ze passen, en de bestaande tools van de klant waar dat niet zo is."
     },
     {
       "image": "/img/code.jpg",
-      "description": "We geloven in de kracht van AI-aangedreven ontwikkeling en code van hoge kwaliteit. Ons platform integreert naadloos met je bestaande workflows, biedt realtime AI-assistentie, code reviews en optimalisaties die de ontwikkeltijd met 90% verkorten terwijl de codekwaliteit verbetert.",
-      "video": "https://www.youtube.com/embed/rKDJs2TdMRA",
-      "section": "AI Coding Assistent"
+      "section": "Hoe we schrijven",
+      "description": "We publiceren de engineering achter het werk: architectuurnotities, de Jev-benchmarkreeks en verslagen van wat misging. Wilt u weten hoe we uw project zouden aanpakken, dan zijn de artikelen een goed beginpunt."
     }
   ],
   "expertise": [
     {
-      "title": "AI Vibe Coding",
-      "description": "Bouw complete applicaties met natuurlijke taal prompts via Cursor IDE, GPT-4 en Claude",
+      "title": "Ontwikkeling van AI-agents",
+      "description": "Agents met getypeerde tools, begrensde loops, goedkeuringsstappen en evaluatiesets.",
       "image": "/img/ai-technology.jpg",
-      "video": "https://www.youtube.com/embed/v7UcVPO4y3c",
       "technologies": [
-        "Cursor IDE",
-        "GPT-4",
-        "Claude",
-        "Gemini",
-        "Copilot"
+        "Claude Agent SDK",
+        "LangGraph",
+        "MCP",
+        "OpenTelemetry"
       ]
     },
     {
-      "title": "iOS AI App Ontwikkeling",
-      "description": "Native Swift/SwiftUI applicaties met ChatGPT, Core ML en Vision Framework",
-      "image": "/img/2.jpg",
-      "video": "https://www.youtube.com/embed/R05hTsehyX0",
-      "technologies": [
-        "Swift",
-        "SwiftUI",
-        "Core ML",
-        "ChatGPT",
-        "ChatGPT"
-      ]
-    },
-    {
-      "title": "Android AI App Ontwikkeling",
-      "description": "Kotlin/Jetpack Compose apps met TensorFlow Lite, ML Kit en OpenAI integratie",
-      "image": "/img/3.jpg",
-      "video": "https://www.youtube.com/embed/9DjbQpbQVFo",
-      "technologies": [
-        "Kotlin",
-        "Jetpack Compose",
-        "TensorFlow Lite",
-        "ML Kit",
-        "Firebase"
-      ]
-    },
-    {
-      "title": "ChatGPT en LLM Integratie",
-      "description": "Intelligente chatbots, AI-assistenten en natural language interfaces in mobiele apps",
+      "title": "Generatieve AI-applicaties",
+      "description": "Kennisassistenten, schrijftools en copilots gebaseerd op uw eigen documenten.",
       "image": "/img/4.jpg",
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8",
       "technologies": [
-        "OpenAI API",
-        "Claude API",
-        "LangChain",
-        "Vector DB",
-        "RAG"
+        "RAG",
+        "Vector search",
+        "Amazon Bedrock",
+        "Azure AI Foundry"
       ]
     },
     {
-      "title": "Computer Vision Apps",
-      "description": "Mobiele apps met objectdetectie, beeldclassificatie, OCR en AR-ervaringen",
+      "title": "Hosting van open-weight-modellen",
+      "description": "Zelfgehoste modellen voor workloads waarvan de data uw omgeving niet mag verlaten.",
+      "image": "/img/2.jpg",
+      "technologies": [
+        "vLLM",
+        "Ollama",
+        "Llama",
+        "Qwen"
+      ]
+    },
+    {
+      "title": "Platform en beveiliging",
+      "description": "Secrets, gateways en release-pipelines voor agent-workloads.",
+      "image": "/img/3.jpg",
+      "technologies": [
+        "WSL Vault",
+        "WSL Proxy",
+        "Ring Promoter",
+        "Kubernetes"
+      ]
+    },
+    {
+      "title": "Beheer",
+      "description": "Monitoring, kostenrapportage en incidentrespons zodra het live is.",
       "image": "/img/5.jpg",
-      "video": "https://www.youtube.com/embed/JnvNFo2_WOY",
       "technologies": [
-        "Core ML",
-        "ChatGPT",
-        "TensorFlow",
-        "YOLO",
-        "OpenCV"
+        "SysOps 24/7",
+        "Prometheus",
+        "OpenTelemetry"
       ]
     },
     {
-      "title": "Voice AI Apps",
-      "description": "Spraakgestuurde applicaties met spraakherkenning, tekst-naar-spraak en stemcommando's",
+      "title": "Integratie",
+      "description": "Connectoren naar CRM's, ticketsystemen, databases en bestandsopslag.",
       "image": "/img/6.jpg",
-      "video": "https://www.youtube.com/embed/3289vhOUdKA",
       "technologies": [
-        "Whisper",
-        "ElevenLabs",
-        "Speech Framework",
-        "Google Speech",
-        "Siri"
+        "REST API's",
+        "Webhooks",
+        "MCP-servers",
+        "PostgreSQL"
       ]
-    }
-  ],
-  "numbers": [
-    {
-      "title": "Apps gebouwd met AI",
-      "count": "500+"
-    },
-    {
-      "title": "Tijdsbesparing ontwikkeling",
-      "count": "10M+"
-    },
-    {
-      "title": "Tevreden klanten",
-      "count": "200+"
-    },
-    {
-      "title": "App Store rating",
-      "count": "4.8★"
-    },
-    {
-      "title": "Kostenbesparing",
-      "count": "10x Faster"
-    },
-    {
-      "title": "AI-experts",
-      "count": "50+"
-    }
-  ],
-  "teams": [
-    {
-      "name": "Jan de Vries",
-      "about": "Leidt onze AI Vibe Coding initiatieven met expertise in Cursor IDE, prompt engineering en AI-ondersteunde ontwikkeling. Jan heeft teams geholpen 100+ apps te bouwen met AI.",
-      "designation": "Hoofd AI Coding",
-      "image": "/img/ai-technology.jpg",
-      "expertise": [
-        "Cursor IDE",
-        "GPT-4",
-        "Claude",
-        "Prompt Engineering",
-        "AI Development"
-      ],
-      "video": "https://www.youtube.com/embed/8AWEPx5cHWQ"
-    },
-    {
-      "name": "Lisa van den Berg",
-      "about": "iOS AI Development specialist, expert in het bouwen van native Swift apps met ChatGPT integratie, Core ML en Vision framework. Lisa heeft 50+ AI-aangedreven iOS apps gelanceerd in de App Store.",
-      "designation": "iOS AI Lead",
-      "image": "/img/12.jpg",
-      "expertise": [
-        "Swift",
-        "SwiftUI",
-        "Core ML",
-        "ChatGPT",
-        "Vision AI"
-      ],
-      "video": "https://www.youtube.com/embed/R05hTsehyX0"
-    },
-    {
-      "name": "Pieter Bakker",
-      "about": "Android AI Development expert, gespecialiseerd in Kotlin apps met TensorFlow Lite, ML Kit en LLM integraties. Pieter heeft 60+ Android AI apps geleverd.",
-      "designation": "Android AI Lead",
-      "image": "/img/13.jpg",
-      "expertise": [
-        "Kotlin",
-        "Jetpack Compose",
-        "TensorFlow Lite",
-        "ML Kit",
-        "Firebase ML"
-      ],
-      "video": "https://www.youtube.com/embed/9DjbQpbQVFo"
-    },
-    {
-      "name": "Emma Jansen",
-      "about": "LLM Integratie specialist, expert in het implementeren van ChatGPT, Claude en aangepaste AI-modellen in mobiele apps. Emma leidt onze RAG-systemen en AI-chatbots.",
-      "designation": "LLM Integratie Lead",
-      "image": "/img/14.jpg",
-      "expertise": [
-        "OpenAI API",
-        "Claude",
-        "LangChain",
-        "RAG Systems",
-        "Prompt Engineering"
-      ],
-      "video": "https://www.youtube.com/embed/VQo9e_vlzj8"
-    },
-    {
-      "name": "David Park",
-      "about": "Computer vision engineer specializing in real-time object detection, image classification, and OCR for mobile apps. David has built vision AI features used by millions of users daily.",
-      "designation": "Computer Vision Engineer",
-      "image": "/img/15.jpg",
-      "expertise": [
-        "Core ML",
-        "TensorFlow",
-        "YOLO",
-        "OpenCV",
-        "Custom Models"
-      ],
-      "video": "https://www.youtube.com/embed/JnvNFo2_WOY"
-    },
-    {
-      "name": "Emma Thompson",
-      "about": "Voice AI specialist focusing on speech recognition, text-to-speech, and voice-first interfaces. Emma creates accessible, voice-enabled apps using Whisper and ElevenLabs.",
-      "designation": "Voice AI Engineer",
-      "image": "/img/16.jpg",
-      "expertise": [
-        "Whisper",
-        "ElevenLabs",
-        "Speech Recognition",
-        "Voice UI",
-        "Toegankelijkheid"
-      ],
-      "video": "https://www.youtube.com/embed/3289vhOUdKA"
-    },
-    {
-      "name": "Lisa Martinez",
-      "about": "Cross-platform development lead using Flutter and React Native to build AI-powered apps for both iOS and Android from a single codebase. Lisa optimizes for performance and native feel.",
-      "designation": "Cross-Platform AI Developer",
-      "image": "/img/17.jpg",
-      "expertise": [
-        "Flutter",
-        "React Native",
-        "Dart",
-        "TypeScript",
-        "AI SDKs"
-      ],
-      "video": "https://www.youtube.com/embed/rKDJs2TdMRA"
-    },
-    {
-      "name": "James Wilson",
-      "about": "Backend and API specialist building scalable AI infrastructure with serverless architecture, vector databases, and real-time AI processing pipelines.",
-      "designation": "AI Backend Engineer",
-      "image": "/img/18.jpg",
-      "expertise": [
-        "Node.js",
-        "Python",
-        "Pinecone",
-        "Supabase",
-        "Serverless"
-      ],
-      "video": "https://www.youtube.com/embed/v7UcVPO4y3c"
-    }
-  ],
-  "achievements": [
-    {
-      "title": "Industrie erkenning",
-      "description": "Bekroond als beste AI-ontwikkelingsplatform en beste mobiele AI-oplossing",
-      "icon": "trophy.svg"
-    },
-    {
-      "title": "Klantsucces",
-      "description": "200+ klanten geholpen bij het bouwen van AI-aangedreven apps met 80% besparing",
-      "icon": "success.svg"
-    },
-    {
-      "title": "Innovatie leiderschap",
-      "description": "Pionier in AI Vibe Coding met 500+ apps gebouwd met AI",
-      "icon": "innovation.svg"
-    },
-    {
-      "title": "Wereldwijde impact",
-      "description": "Klanten bedienen in 15+ landen met 24/7 support en expertise",
-      "icon": "global.svg"
     }
   ],
   "values": [
     {
-      "title": "AI-First Innovatie",
-      "description": "We verleggen voortdurend de grenzen van AI-aangedreven ontwikkeling",
-      "icon": "lightbulb.svg"
+      "title": "Zeggen wat het niet doet",
+      "description": "Elke scope noemt wat de agent nooit mag doen, naast wat hij wel moet doen."
     },
     {
-      "title": "Kwaliteitscode",
-      "description": "AI-gegenereerde code die schoon, onderhoudbaar en productie-klaar is",
-      "icon": "shield.svg"
+      "title": "Mensen keuren riskante acties goed",
+      "description": "Agents schrijven en bereiden voor. Versturen, uitgeven en verwijderen wachten op een mens."
     },
     {
-      "title": "Klantsucces",
-      "description": "Jouw succes is ons succes — we zijn toegewijd aan meetbare resultaten",
-      "icon": "target.svg"
+      "title": "Uw code, uw data",
+      "description": "Het werk staat vanaf de eerste commit in uw repository en uw systemen."
     },
     {
-      "title": "Continu leren",
-      "description": "Up-to-date blijven met de nieuwste AI-tools en technieken",
-      "icon": "book.svg"
+      "title": "Laten zien hoe het werkt",
+      "description": "We publiceren hoe onze software werkt, inclusief de onderdelen die stukgingen."
     }
   ]
 }

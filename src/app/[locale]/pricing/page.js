@@ -35,7 +35,7 @@ function Pricing({ data, locale }) {
           eyebrow={ui.enterprise}
           title={data.enterprise.title}
           body={data.enterprise.description}
-          primary={{ label: ui.contactSales, href: localeHref('/contact-us', locale) }}
+          primary={{ label: ui.startProject, href: localeHref('/start-a-project', locale) }}
           secondary={{ label: ui.bookNow, href: localeHref('/book-online', locale) }}
         >
           {data.enterprise.features?.length > 0 && (

@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "Desenvolvimento de aplicações de IA generativa | TenthMatrix",
+    "description": "A TenthMatrix constrói aplicações de IA generativa para clientes: assistentes de conhecimento com RAG, geração de documentos, copilotos dentro de aplicativos existentes e modelos open-weight auto-hospedados, com avaliação e controle de custos.",
+    "keywords": "desenvolvimento de IA generativa, desenvolvimento de aplicações GenAI, desenvolvimento RAG, assistente de conhecimento, desenvolvimento de copiloto de IA, hospedagem de modelos open-weight, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Desenvolvimento de IA generativa",
+    "title": "Aplicações de IA generativa integradas à forma como suas equipes trabalham",
+    "subtitle": "Construímos assistentes de conhecimento, ferramentas de redação e copilotos que respondem a partir dos seus próprios documentos e rodam onde suas regras de dados exigem.",
+    "description": "Quer primeiro uma explicação simples sobre IA generativa? Nossa visão geral mostra para que ela serve. Esta página trata do que construímos para você e como.",
+    "cta": [
+      {
+        "label": "Iniciar um projeto",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Visão geral da IA generativa",
+        "link": "/generative-ai"
+      }
+    ],
+    "meta": [
+      "Respostas citam fontes",
+      "Nuvem ou auto-hospedado",
+      "Custo acompanhado por requisição"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "what-we-build",
+      "title": "O que construímos",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "book",
+          "title": "Assistentes de conhecimento com RAG",
+          "description": "Respostas a partir das suas políticas, manuais, tickets e wikis, com um link para a fonte de cada afirmação. O acesso segue as permissões que você já tem."
+        },
+        {
+          "icon": "edit",
+          "title": "Geração de conteúdo e documentos",
+          "description": "Propostas, relatórios, contratos e textos de produto redigidos a partir dos seus modelos e dados, e encaminhados para revisão humana antes que algo seja enviado."
+        },
+        {
+          "icon": "window-sidebar",
+          "title": "Copilotos dentro de aplicativos existentes",
+          "description": "Um painel de assistente no seu CRM, helpdesk ou ferramenta interna que redige, resume e pesquisa informações, para que ninguém precise trocar de aplicativo."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Compreensão de documentos",
+          "description": "Classificação, extração e resumos de documentos recebidos, com índices de confiança e uma fila de revisão para tudo o que for incerto."
+        },
+        {
+          "icon": "server",
+          "title": "Fine-tuning e hospedagem open-weight",
+          "description": "Quando um modelo via API custa caro demais, ou os dados não podem sair do seu ambiente, fazemos fine-tuning e hospedamos modelos open-weight com vLLM ou Ollama na sua infraestrutura."
+        },
+        {
+          "icon": "tachometer-alt",
+          "title": "Avaliação e controle de custos",
+          "description": "Conjuntos de teste para a qualidade das respostas, traces do OpenTelemetry para latência e custo, além de roteamento e cache para manter a fatura previsível."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "rag",
+      "title": "Como um assistente de conhecimento é montado",
+      "intro": "A maior parte da qualidade das respostas vem da recuperação. O modelo importa menos do que se imagina.",
+      "steps": [
+        {
+          "title": "Ingestão",
+          "description": "Conectar as fontes, dividir os documentos de forma sensata e manter metadados como responsável, data e direitos de acesso."
+        },
+        {
+          "title": "Recuperação",
+          "description": "Busca híbrida sobre um índice vetorial como o NebulaDB, filtrada pelo que o usuário tem permissão para ver."
+        },
+        {
+          "title": "Resposta",
+          "description": "O modelo responde apenas com o que foi recuperado e cita a fonte. Se nada relevante voltar, ele diz isso."
+        },
+        {
+          "title": "Medição",
+          "description": "Um conjunto de teste com perguntas reais e respostas acordadas, avaliado a cada mudança, além do feedback de quem usa."
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "controls",
+      "title": "Dados, qualidade e custo",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "cloud",
+          "title": "Onde roda",
+          "description": "API de modelos, Amazon Bedrock ou Azure AI Foundry, ou modelos open-weight nos seus próprios servidores. Você decide por caso de uso."
+        },
+        {
+          "icon": "key",
+          "title": "Chaves e segredos",
+          "description": "As chaves de API ficam no seu cofre de segredos e chegam à aplicação pelo WSL Vault, não por arquivos de configuração."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Qualidade que você pode verificar",
+          "description": "As respostas citam suas fontes, e os resultados do conjunto de teste ficam no seu repositório para qualquer pessoa executar de novo."
+        },
+        {
+          "icon": "coins",
+          "title": "Custo previsível",
+          "description": "Acompanhamento de custo por requisição, cache e roteamento de requisições simples para modelos menores. Nosso artigo sobre observabilidade e controle de custos de LLM mostra o método.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Ler o artigo"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Perguntas sobre projetos de IA generativa",
+      "items": [
+        {
+          "question": "Já usamos ChatGPT ou Copilot. Por que construir algo?",
+          "answer": "Assistentes genéricos não conhecem seus documentos, permissões nem processos. Uma aplicação construída sob medida responde a partir das suas fontes, respeita os direitos de acesso, registra o que fez e fica dentro das ferramentas que suas equipes já usam."
+        },
+        {
+          "question": "Para onde vão nossos documentos?",
+          "answer": "Para onde suas regras de dados permitirem. Escolhemos provedores e configurações compatíveis com elas, ou hospedamos um modelo open-weight para que os documentos nunca saiam do seu ambiente."
+        },
+        {
+          "question": "Vocês podem adicionar IA generativa ao nosso produto atual?",
+          "answer": "Sim. Construímos o recurso dentro da sua base de código, atrás da sua autenticação, com testes e documentação, para que seus engenheiros possam mantê-lo."
+        },
+        {
+          "question": "Como vocês sabem que as respostas estão certas?",
+          "answer": "Antes da construção, combinamos com você um conjunto de teste com perguntas reais e respostas corretas, e avaliamos cada mudança com base nele. Respostas que não podem ser fundamentadas em uma fonte são recusadas."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Relacionado",
+      "items": [
+        {
+          "title": "Visão geral da IA generativa",
+          "href": "/generative-ai",
+          "label": "Para que serve"
+        },
+        {
+          "title": "Desenvolvimento de agentes de IA",
+          "href": "/ai-agent-development",
+          "label": "Quando a tarefa exige ações"
+        },
+        {
+          "title": "Terceirizar desenvolvimento de IA",
+          "href": "/outsource-ai-development",
+          "label": "Modelos de contratação e processo"
+        },
+        {
+          "title": "Estações de trabalho de IA",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Hardware na Workstation"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Escolha um caso de uso e definiremos o escopo",
+    "description": "Redação, respostas sobre seu conhecimento ou um copiloto em um aplicativo existente. Diga-nos qual e quais documentos estão envolvidos.",
+    "button": "Iniciar um projeto",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Por que os agentes TenthMatrix",
+      "link": "/why-tenthmatrix-agents"
+    }
+  }
+}

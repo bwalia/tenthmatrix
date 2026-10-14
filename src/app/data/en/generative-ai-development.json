@@ -1,0 +1,154 @@
+{
+  "meta": {
+    "title": "Generative AI application development | TenthMatrix",
+    "description": "TenthMatrix builds generative AI applications for clients: RAG knowledge assistants, document generation, copilots inside existing apps and self-hosted open-weight models, with evaluation and cost control.",
+    "keywords": "generative AI development, GenAI application development, RAG development, knowledge assistant, AI copilot development, open-weight model hosting, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Generative AI development",
+    "title": "Generative AI applications, built into the way your teams work",
+    "subtitle": "We build knowledge assistants, drafting tools and copilots that answer from your own documents and run where your data rules say they must.",
+    "description": "Want the plain-language case for generative AI first? Our generative AI overview covers what it is good for. This page covers what we build for you and how.",
+    "cta": [
+      { "label": "Start a project", "link": "/start-a-project" },
+      { "label": "Generative AI overview", "link": "/generative-ai" }
+    ],
+    "meta": ["Answers cite sources", "Cloud or self-hosted", "Cost tracked per request"]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "what-we-build",
+      "title": "What we build",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "book",
+          "title": "RAG knowledge assistants",
+          "description": "Answers from your policies, manuals, tickets and wikis, with a link to the source behind every claim. Access follows the permissions you already have."
+        },
+        {
+          "icon": "edit",
+          "title": "Content and document generation",
+          "description": "Proposals, reports, contracts and product copy drafted from your templates and data, then routed for human review before anything goes out."
+        },
+        {
+          "icon": "window-sidebar",
+          "title": "Copilots inside existing apps",
+          "description": "An assistant panel in your CRM, helpdesk or internal tool that drafts, summarises and looks things up, so people don't have to switch apps."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Document understanding",
+          "description": "Classification, extraction and summaries for incoming documents, with confidence scores and a review queue for anything uncertain."
+        },
+        {
+          "icon": "server",
+          "title": "Fine-tuning and open-weight hosting",
+          "description": "When an API model costs too much, or the data can't leave your estate, we fine-tune and host open-weight models with vLLM or Ollama on your infrastructure."
+        },
+        {
+          "icon": "tachometer-alt",
+          "title": "Evaluation and cost control",
+          "description": "Test sets for answer quality, OpenTelemetry traces for latency and cost, plus routing and caching to keep the bill predictable."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "rag",
+      "title": "How a knowledge assistant is put together",
+      "intro": "Most of the answer quality comes from retrieval. The model matters less than people expect.",
+      "steps": [
+        {
+          "title": "Ingest",
+          "description": "Connect the sources, split documents sensibly and keep metadata such as owner, date and access rights."
+        },
+        {
+          "title": "Retrieve",
+          "description": "Hybrid search over a vector index such as NebulaDB, filtered by what the user is allowed to see."
+        },
+        {
+          "title": "Answer",
+          "description": "The model answers only from what was retrieved and cites it. If nothing relevant comes back, it says so."
+        },
+        {
+          "title": "Measure",
+          "description": "A test set of real questions with agreed answers, scored on every change, plus feedback from the people using it."
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "controls",
+      "title": "Data, quality and cost",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "cloud",
+          "title": "Where it runs",
+          "description": "Model APIs, Amazon Bedrock or Azure AI Foundry, or open-weight models on your own servers. You decide per use case."
+        },
+        {
+          "icon": "key",
+          "title": "Keys and secrets",
+          "description": "API keys stay in your secrets store and reach the application through WSL Vault, not through config files."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Quality you can check",
+          "description": "Answers cite their sources, and the test-set results live in your repository for anyone to rerun."
+        },
+        {
+          "icon": "coins",
+          "title": "Cost you can predict",
+          "description": "Per-request cost tracking, caching, and routing simple requests to smaller models. Our article on LLM observability and cost control shows the method.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Read the article"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Questions about generative AI projects",
+      "items": [
+        {
+          "question": "We already use ChatGPT or Copilot. Why build something?",
+          "answer": "General assistants don't know your documents, permissions or processes. A built application answers from your sources, respects access rights, logs what it did and sits inside the tools your teams already use."
+        },
+        {
+          "question": "Where do our documents go?",
+          "answer": "Where your data rules allow. We pick providers and settings that match them, or host an open-weight model so the documents never leave your estate."
+        },
+        {
+          "question": "Can you add generative AI to our existing product?",
+          "answer": "Yes. We build the feature inside your codebase, behind your authentication, with tests and docs, so your engineers can maintain it."
+        },
+        {
+          "question": "How do you know the answers are right?",
+          "answer": "We agree a test set of real questions and correct answers with you before the build, and score every change against it. Answers that can't be grounded in a source are refused."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Related",
+      "items": [
+        { "title": "Generative AI overview", "href": "/generative-ai", "label": "What it is good for" },
+        { "title": "AI agent development", "href": "/ai-agent-development", "label": "When the job needs actions" },
+        { "title": "Outsource AI development", "href": "/outsource-ai-development", "label": "Engagement models and process" },
+        { "title": "AI workstations", "href": "https://www.workstation.co.uk/ai-workstations", "label": "Hardware at Workstation" }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Pick one use case and we'll scope it",
+    "description": "Drafting, knowledge answers or a copilot in an existing app. Tell us which one, and the documents involved.",
+    "button": "Start a project",
+    "link": "/start-a-project",
+    "secondary": { "label": "Why TenthMatrix agents", "link": "/why-tenthmatrix-agents" }
+  }
+}

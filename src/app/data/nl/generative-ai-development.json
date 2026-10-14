@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "Ontwikkeling van generatieve AI-applicaties | TenthMatrix",
+    "description": "TenthMatrix bouwt generatieve AI-applicaties voor klanten: RAG-kennisassistenten, documentgeneratie, copilots in bestaande apps en zelf gehoste open-weight modellen, met evaluatie en kostenbeheersing.",
+    "keywords": "ontwikkeling generatieve AI, ontwikkeling GenAI-applicaties, RAG-ontwikkeling, kennisassistent, ontwikkeling AI-copilot, hosting open-weight modellen, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Ontwikkeling van generatieve AI",
+    "title": "Generatieve AI-applicaties, ingebouwd in de manier waarop uw teams werken",
+    "subtitle": "Wij bouwen kennisassistenten, schrijftools en copilots die antwoorden vanuit uw eigen documenten en draaien waar uw dataregels dat voorschrijven.",
+    "description": "Wilt u eerst in gewone taal weten wat generatieve AI kan? Ons overzicht van generatieve AI legt uit waar het goed voor is. Deze pagina gaat over wat wij voor u bouwen en hoe.",
+    "cta": [
+      {
+        "label": "Start een project",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Overzicht generatieve AI",
+        "link": "/generative-ai"
+      }
+    ],
+    "meta": [
+      "Antwoorden met bronvermelding",
+      "Cloud of zelf gehost",
+      "Kosten per verzoek gevolgd"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "what-we-build",
+      "title": "Wat we bouwen",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "book",
+          "title": "RAG-kennisassistenten",
+          "description": "Antwoorden uit uw beleid, handleidingen, tickets en wiki's, met een link naar de bron achter elke bewering. Toegang volgt de rechten die u al hebt."
+        },
+        {
+          "icon": "edit",
+          "title": "Content- en documentgeneratie",
+          "description": "Offertes, rapporten, contracten en productteksten opgesteld uit uw sjablonen en data, en vervolgens doorgezet voor menselijke review voordat er iets de deur uitgaat."
+        },
+        {
+          "icon": "window-sidebar",
+          "title": "Copilots in bestaande apps",
+          "description": "Een assistentpaneel in uw CRM, helpdesk of interne tool dat concepten schrijft, samenvat en dingen opzoekt, zodat mensen niet van app hoeven te wisselen."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Documentbegrip",
+          "description": "Classificatie, extractie en samenvattingen van binnenkomende documenten, met betrouwbaarheidsscores en een reviewwachtrij voor alles wat onzeker is."
+        },
+        {
+          "icon": "server",
+          "title": "Fine-tuning en open-weight hosting",
+          "description": "Als een API-model te duur is, of de data uw omgeving niet mag verlaten, fine-tunen en hosten wij open-weight modellen met vLLM of Ollama op uw infrastructuur."
+        },
+        {
+          "icon": "tachometer-alt",
+          "title": "Evaluatie en kostenbeheersing",
+          "description": "Testsets voor antwoordkwaliteit, OpenTelemetry-traces voor latency en kosten, plus routering en caching om de rekening voorspelbaar te houden."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "rag",
+      "title": "Hoe een kennisassistent in elkaar zit",
+      "intro": "De meeste antwoordkwaliteit komt uit het ophalen van informatie. Het model doet er minder toe dan mensen verwachten.",
+      "steps": [
+        {
+          "title": "Inlezen",
+          "description": "Bronnen koppelen, documenten zinvol opknippen en metadata bewaren zoals eigenaar, datum en toegangsrechten."
+        },
+        {
+          "title": "Ophalen",
+          "description": "Hybride zoekopdrachten over een vectorindex zoals NebulaDB, gefilterd op wat de gebruiker mag zien."
+        },
+        {
+          "title": "Antwoorden",
+          "description": "Het model antwoordt alleen op basis van wat is opgehaald en verwijst ernaar. Als er niets relevants terugkomt, zegt het dat."
+        },
+        {
+          "title": "Meten",
+          "description": "Een testset van echte vragen met afgesproken antwoorden, bij elke wijziging gescoord, plus feedback van de mensen die het gebruiken."
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "controls",
+      "title": "Data, kwaliteit en kosten",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "cloud",
+          "title": "Waar het draait",
+          "description": "Model-API's, Amazon Bedrock of Azure AI Foundry, of open-weight modellen op uw eigen servers. U beslist per use case."
+        },
+        {
+          "icon": "key",
+          "title": "Sleutels en secrets",
+          "description": "API-sleutels blijven in uw secrets-opslag en bereiken de applicatie via WSL Vault, niet via configuratiebestanden."
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "Kwaliteit die u kunt controleren",
+          "description": "Antwoorden vermelden hun bronnen, en de resultaten van de testset staan in uw repository zodat iedereen ze opnieuw kan draaien."
+        },
+        {
+          "icon": "coins",
+          "title": "Voorspelbare kosten",
+          "description": "Kosten per verzoek bijhouden, caching en eenvoudige verzoeken naar kleinere modellen routeren. Ons artikel over LLM-observability en kostenbeheersing laat de methode zien.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Lees het artikel"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Vragen over generatieve AI-projecten",
+      "items": [
+        {
+          "question": "We gebruiken al ChatGPT of Copilot. Waarom iets bouwen?",
+          "answer": "Algemene assistenten kennen uw documenten, rechten en processen niet. Een gebouwde applicatie antwoordt vanuit uw bronnen, respecteert toegangsrechten, logt wat ze deed en zit in de tools die uw teams al gebruiken."
+        },
+        {
+          "question": "Waar gaan onze documenten naartoe?",
+          "answer": "Waar uw dataregels dat toestaan. Wij kiezen providers en instellingen die daarbij passen, of hosten een open-weight model zodat de documenten uw omgeving nooit verlaten."
+        },
+        {
+          "question": "Kunt u generatieve AI toevoegen aan ons bestaande product?",
+          "answer": "Ja. Wij bouwen de functie in uw codebase, achter uw authenticatie, met tests en documentatie, zodat uw engineers die kunnen onderhouden."
+        },
+        {
+          "question": "Hoe weet u dat de antwoorden kloppen?",
+          "answer": "Vóór de bouw spreken we met u een testset af van echte vragen en juiste antwoorden, en scoren we elke wijziging daartegen. Antwoorden die niet op een bron te baseren zijn, worden geweigerd."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Gerelateerd",
+      "items": [
+        {
+          "title": "Overzicht generatieve AI",
+          "href": "/generative-ai",
+          "label": "Waar het goed voor is"
+        },
+        {
+          "title": "Ontwikkeling van AI-agents",
+          "href": "/ai-agent-development",
+          "label": "Als de taak acties vraagt"
+        },
+        {
+          "title": "AI-ontwikkeling uitbesteden",
+          "href": "/outsource-ai-development",
+          "label": "Samenwerkingsmodellen en proces"
+        },
+        {
+          "title": "AI-werkstations",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Hardware bij Workstation"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Kies één use case en wij bakenen die af",
+    "description": "Concepten, kennisvragen of een copilot in een bestaande app. Vertel ons welke, en om welke documenten het gaat.",
+    "button": "Start een project",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Waarom TenthMatrix-agents",
+      "link": "/why-tenthmatrix-agents"
+    }
+  }
+}

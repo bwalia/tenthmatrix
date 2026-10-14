@@ -16,8 +16,8 @@ const HOVER_OPEN_MS = 110;
 const HOVER_CLOSE_MS = 220;
 
 /**
- * Sticky header: logo, mega-menu (Agents · Tools · Applications · Products ·
- * Services · Resources), search, theme toggle, contact, and the mobile drawer
+ * Sticky header: logo, mega-menu (Work with us · Agents · Tools · Applications ·
+ * Products · Services · Resources), search, theme toggle, contact, and the mobile drawer
  * trigger. Mega-menu = disclosure pattern: each trigger is a button with
  * aria-expanded/aria-controls; its panel follows it in the DOM so Tab moves
  * straight into the open panel. Opens on click, Enter/Space/ArrowDown, or
@@ -213,7 +213,7 @@ export default function SiteHeader({ locale }) {
             <Search aria-hidden="true" size={20} strokeWidth={1.75} />
           </Link>
           <ThemeToggle />
-          <Link href={href('/contact-us')} className={s.contact} prefetch={false}>
+          <Link href={href('/start-a-project')} className={s.contact} prefetch={false}>
             {t('cta')}
           </Link>
           <button

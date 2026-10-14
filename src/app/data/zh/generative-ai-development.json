@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "生成式 AI 应用开发 | TenthMatrix",
+    "description": "TenthMatrix 为客户构建生成式 AI 应用:RAG 知识助手、文档生成、嵌入现有应用的 Copilot 助手以及自托管的开放权重模型,并配有评估与成本控制。",
+    "keywords": "生成式 AI 开发, GenAI 应用开发, RAG 开发, 知识助手, AI Copilot 开发, 开放权重模型托管, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "生成式 AI 开发",
+    "title": "融入团队工作方式的生成式 AI 应用",
+    "subtitle": "我们构建知识助手、起草工具和 Copilot 助手,它们基于您自己的文档作答,并运行在您的数据规则所要求的位置。",
+    "description": "想先用通俗语言了解生成式 AI?我们的生成式 AI 概览介绍了它适合做什么。本页介绍我们为您构建什么以及如何构建。",
+    "cta": [
+      {
+        "label": "启动项目",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "生成式 AI 概览",
+        "link": "/generative-ai"
+      }
+    ],
+    "meta": [
+      "回答注明出处",
+      "云端或自托管",
+      "按请求追踪成本"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "what-we-build",
+      "title": "我们构建什么",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "book",
+          "title": "RAG 知识助手",
+          "description": "基于您的政策、手册、工单和 Wiki 作答,每条结论都附有来源链接。访问权限沿用您现有的权限设置。"
+        },
+        {
+          "icon": "edit",
+          "title": "内容与文档生成",
+          "description": "根据您的模板和数据起草提案、报告、合同和产品文案,然后在发出前转交人工审核。"
+        },
+        {
+          "icon": "window-sidebar",
+          "title": "嵌入现有应用的 Copilot 助手",
+          "description": "在您的 CRM、服务台或内部工具中加入助手面板,负责起草、摘要和查询,用户无需切换应用。"
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "文档理解",
+          "description": "对传入文档进行分类、信息提取和摘要,附带置信度评分,并为不确定的内容设置审核队列。"
+        },
+        {
+          "icon": "server",
+          "title": "微调与开放权重模型托管",
+          "description": "当 API 模型成本过高,或数据不能离开您的环境时,我们会在您的基础设施上用 vLLM 或 Ollama 微调并托管开放权重模型。"
+        },
+        {
+          "icon": "tachometer-alt",
+          "title": "评估与成本控制",
+          "description": "用测试集衡量回答质量,用 OpenTelemetry 追踪延迟和成本,再加上路由和缓存,让账单可预测。"
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "rag",
+      "title": "知识助手是如何搭建的",
+      "intro": "回答质量主要取决于检索。模型的作用比人们预想的要小。",
+      "steps": [
+        {
+          "title": "导入",
+          "description": "连接数据源,合理切分文档,并保留所有者、日期和访问权限等元数据。"
+        },
+        {
+          "title": "检索",
+          "description": "在 NebulaDB 等向量索引上进行混合搜索,并按用户有权查看的内容过滤。"
+        },
+        {
+          "title": "作答",
+          "description": "模型只根据检索到的内容作答并注明出处。如果没有找到相关内容,它会直接说明。"
+        },
+        {
+          "title": "衡量",
+          "description": "由真实问题和约定答案组成的测试集,每次变更都会评分,同时收集使用者的反馈。"
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "controls",
+      "title": "数据、质量与成本",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "cloud",
+          "title": "运行位置",
+          "description": "模型 API、Amazon Bedrock 或 Azure AI Foundry,或在您自己服务器上运行的开放权重模型。按用例由您决定。"
+        },
+        {
+          "icon": "key",
+          "title": "密钥与凭据",
+          "description": "API 密钥保存在您的密钥库中,通过 WSL Vault 而不是配置文件传递给应用。"
+        },
+        {
+          "icon": "clipboard-check",
+          "title": "可核查的质量",
+          "description": "回答注明出处,测试集结果保存在您的代码仓库中,任何人都可以重新运行。"
+        },
+        {
+          "icon": "coins",
+          "title": "可预测的成本",
+          "description": "按请求追踪成本、使用缓存,并将简单请求路由到更小的模型。我们关于 LLM 可观测性与成本控制的文章介绍了具体方法。",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "阅读文章"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "关于生成式 AI 项目的问题",
+      "items": [
+        {
+          "question": "我们已经在用 ChatGPT 或 Copilot,为什么还要自建?",
+          "answer": "通用助手不了解您的文档、权限或流程。定制构建的应用基于您的数据源作答,遵守访问权限,记录所做的操作,并嵌入团队已在使用的工具中。"
+        },
+        {
+          "question": "我们的文档会去哪里?",
+          "answer": "只去您的数据规则允许的地方。我们会选择符合规则的服务商和配置,或托管开放权重模型,让文档始终不离开您的环境。"
+        },
+        {
+          "question": "你们能在我们现有的产品中加入生成式 AI 吗?",
+          "answer": "可以。我们在您的代码库中、在您的身份认证之后构建该功能,并附带测试和文档,方便您的工程师维护。"
+        },
+        {
+          "question": "你们如何确认回答是正确的?",
+          "answer": "在开发前,我们与您约定一套由真实问题和正确答案组成的测试集,并用它为每次变更评分。无法以来源为依据的回答会被拒绝。"
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "相关内容",
+      "items": [
+        {
+          "title": "生成式 AI 概览",
+          "href": "/generative-ai",
+          "label": "适合做什么"
+        },
+        {
+          "title": "AI 智能体开发",
+          "href": "/ai-agent-development",
+          "label": "当任务需要执行操作时"
+        },
+        {
+          "title": "AI 开发外包",
+          "href": "/outsource-ai-development",
+          "label": "合作模式与流程"
+        },
+        {
+          "title": "AI 工作站",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Workstation 的硬件"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "选一个用例,我们来界定范围",
+    "description": "起草、知识问答,或在现有应用中加入 Copilot 助手。告诉我们是哪一种,以及涉及哪些文档。",
+    "button": "启动项目",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "为什么选择 TenthMatrix 智能体",
+      "link": "/why-tenthmatrix-agents"
+    }
+  }
+}

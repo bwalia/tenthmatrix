@@ -1,26 +1,30 @@
 {
+  "meta": {
+    "title": "Preços",
+    "description": "Preços iniciais dos softwares e serviços da TenthMatrix. Projetos terceirizados de agentes de IA e IA generativa são orçados após a fase de descoberta, com preço fixo para o piloto."
+  },
   "header": {
-    "title": "Transparent Pricing",
-    "subtitle": "Choose the perfect plan for your business needs",
-    "description": "Flexible pricing options for businesses of all sizes. Start free, scale as you grow."
+    "title": "Preços",
+    "subtitle": "Preços iniciais e, depois, um orçamento para o seu projeto",
+    "description": "Estes planos e complementos são pontos de partida para nossos softwares e serviços. Projetos terceirizados de agentes e IA generativa são orçados após a fase de descoberta, com preço fixo para o piloto."
   },
   "plans": [
     {
       "name": "Inicial",
       "price": "$99",
       "period": "/month",
-      "description": "Perfect for small teams and startups getting started with AI automation",
+      "description": "Para equipes pequenas e startups que estão começando com automação por IA",
       "featured": false,
       "features": [
-        "Up to 10 users",
-        "Basic CRM features",
-        "Email marketing (5,000 contacts)",
-        "Help desk ticketing",
-        "Standard reports",
-        "Mobile app access",
-        "Email support",
-        "5 GB storage",
-        "API access (1,000 calls/month)"
+        "Até 10 usuários",
+        "Recursos básicos de CRM",
+        "E-mail marketing (5.000 contatos)",
+        "Tickets de suporte",
+        "Relatórios padrão",
+        "Acesso pelo app móvel",
+        "Suporte por e-mail",
+        "5 GB de armazenamento",
+        "Acesso à API (1.000 chamadas/mês)"
       ],
       "cta": "Iniciar teste gratuito",
       "badge": ""
@@ -29,135 +33,135 @@
       "name": "Profissional",
       "price": "$299",
       "period": "/month",
-      "description": "Advanced features for growing businesses ready to scale operations",
+      "description": "Recursos avançados para empresas em crescimento prontas para escalar suas operações",
       "featured": true,
       "features": [
-        "Up to 50 users",
-        "Advanced CRM & Sales Pipeline",
-        "Marketing automation (25,000 contacts)",
-        "Live chat & AI chatbot",
-        "Custom reports & dashboards",
-        "Workflow automation",
-        "Priority support (24/7)",
-        "50 GB storage",
-        "API access (10,000 calls/month)",
-        "Integration with 500+ apps",
-        "Advanced analytics",
-        "Custom fields & modules"
+        "Até 50 usuários",
+        "CRM avançado e pipeline de vendas",
+        "Automação de marketing (25.000 contatos)",
+        "Chat ao vivo e chatbot com IA",
+        "Relatórios e dashboards personalizados",
+        "Automação de fluxos de trabalho",
+        "Suporte prioritário (24/7)",
+        "50 GB de armazenamento",
+        "Acesso à API (10.000 chamadas/mês)",
+        "Integrações com as ferramentas que você já usa",
+        "Análises avançadas",
+        "Campos e módulos personalizados"
       ],
       "cta": "Começar",
       "badge": "Mais popular"
     },
     {
       "name": "Corporativo",
-      "price": "Custom",
+      "price": "Personalizado",
       "period": "",
-      "description": "Complete solution for large organizations with complex requirements",
+      "description": "Solução completa para grandes organizações com requisitos complexos",
       "featured": false,
       "features": [
-        "Unlimited users",
-        "Full CRM, ERP & Business Suite",
-        "Unlimited marketing contacts",
-        "Omnichannel support",
-        "AI-powered insights & predictions",
-        "Advanced workflow automation",
-        "Dedicated success manager",
-        "Unlimited storage",
-        "Unlimited API calls",
-        "Custom integrations",
+        "Usuários ilimitados",
+        "Suíte completa de CRM, ERP e negócios",
+        "Contatos de marketing ilimitados",
+        "Suporte omnicanal",
+        "Insights e previsões com IA",
+        "Automação avançada de fluxos de trabalho",
+        "Gerente de sucesso dedicado",
+        "Armazenamento ilimitado",
+        "Chamadas de API ilimitadas",
+        "Integrações personalizadas",
         "SSO (SAML, OAuth)",
-        "White-label options",
-        "SLA guarantee (99.99%)",
-        "On-premise deployment option",
-        "Advanced security & compliance",
-        "Custom training & onboarding"
+        "Opções white-label",
+        "SLA acordado no seu contrato",
+        "Opção de implantação on-premise",
+        "Segurança e conformidade avançadas",
+        "Treinamento e onboarding personalizados"
       ],
-      "cta": "Contact Sales",
-      "badge": "Best Value"
+      "cta": "Falar com vendas",
+      "badge": "Melhor custo-benefício"
     }
   ],
   "addons": [
     {
-      "name": "DevOps & SRE Services",
-      "description": "Expert DevOps consulting, infrastructure management, and SRE support",
-      "price": "From $2,500/month",
+      "name": "Serviços de DevOps e SRE",
+      "description": "Consultoria especializada em DevOps, gestão de infraestrutura e suporte SRE",
+      "price": "A partir de $2,500/mês",
       "features": [
-        "CI/CD pipeline setup",
-        "Kubernetes management",
-        "Infrastructure as Code",
-        "24/7 monitoring & support"
+        "Configuração de pipelines CI/CD",
+        "Gestão de Kubernetes",
+        "Infraestrutura como código",
+        "Monitoramento e suporte 24/7"
       ]
     },
     {
-      "name": "ELK Stack Implementation",
-      "description": "Complete Elasticsearch, Logstash, Kibana setup and management",
-      "price": "From $1,500/month",
+      "name": "Implementação do ELK Stack",
+      "description": "Configuração e gestão completas de Elasticsearch, Logstash e Kibana",
+      "price": "A partir de $1,500/mês",
       "features": [
-        "Log aggregation setup",
-        "Custom dashboards",
-        "Real-time monitoring",
-        "Performance tuning"
+        "Configuração de agregação de logs",
+        "Dashboards personalizados",
+        "Monitoramento em tempo real",
+        "Otimização de desempenho"
       ]
     },
     {
-      "name": "Dynatrace Platform",
-      "description": "Full-stack observability with Dynatrace APM and monitoring",
-      "price": "From $3,000/month",
+      "name": "Plataforma Dynatrace",
+      "description": "Observabilidade full-stack com Dynatrace APM e monitoramento",
+      "price": "A partir de $3,000/mês",
       "features": [
-        "APM implementation",
-        "Synthetic monitoring",
-        "RUM & distributed tracing",
-        "Custom DQL queries"
+        "Implementação de APM",
+        "Monitoramento sintético",
+        "RUM e rastreamento distribuído",
+        "Consultas DQL personalizadas"
       ]
     },
     {
-      "name": "AI Model Development",
-      "description": "Custom AI/ML model development and integration",
-      "price": "From $5,000/project",
+      "name": "Desenvolvimento de modelos de IA",
+      "description": "Desenvolvimento e integração de modelos de IA/ML personalizados",
+      "price": "A partir de $5,000/projeto",
       "features": [
-        "LLM fine-tuning",
-        "Custom AI agents",
-        "Model training & deployment",
-        "MLOps pipeline"
+        "Fine-tuning de LLM",
+        "Agentes de IA personalizados",
+        "Treinamento e implantação de modelos",
+        "Pipeline de MLOps"
       ]
     }
   ],
   "faq": [
     {
-      "question": "Can I change my plan at any time?",
-      "answer": "Yes! You can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle."
+      "question": "Posso mudar de plano a qualquer momento?",
+      "answer": "Sim. Você pode fazer upgrade ou downgrade do plano a qualquer momento. As mudanças serão aplicadas no próximo ciclo de faturamento."
     },
     {
-      "question": "Is there a free trial?",
-      "answer": "Absolutely! We offer a 14-day free trial on all plans with no credit card required. You get full access to all features during the trial."
+      "question": "Existe um teste gratuito?",
+      "answer": "Sim. Oferecemos um teste gratuito de 14 dias em todos os planos, sem cartão de crédito. Durante o teste, você tem acesso completo a todos os recursos."
     },
     {
-      "question": "What payment methods do you accept?",
-      "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, and bank transfers for annual subscriptions."
+      "question": "Quais formas de pagamento vocês aceitam?",
+      "answer": "Aceitamos os principais cartões de crédito (Visa, MasterCard, American Express), PayPal e transferências bancárias para assinaturas anuais."
     },
     {
-      "question": "Do you offer discounts for annual plans?",
-      "answer": "Yes! Save 20% when you pay annually. For Enterprise plans, we offer custom pricing based on your specific requirements."
+      "question": "Vocês oferecem descontos nos planos anuais?",
+      "answer": "Sim. Economize 20% pagando anualmente. Para os planos Enterprise, oferecemos preços personalizados conforme seus requisitos."
     },
     {
-      "question": "What happens if I exceed my user limit?",
-      "answer": "We'll automatically upgrade your plan to accommodate additional users, or you can contact us to discuss a custom plan."
+      "question": "O que acontece se eu exceder meu limite de usuários?",
+      "answer": "Faremos o upgrade automático do seu plano para acomodar os usuários adicionais, ou você pode entrar em contato para discutir um plano personalizado."
     },
     {
-      "question": "Is support included in all plans?",
-      "answer": "Yes! All plans include support. Starter plans get email support, Professional plans get 24/7 priority support, and Enterprise plans get a dedicated success manager."
+      "question": "O suporte está incluído em todos os planos?",
+      "answer": "Sim. Todos os planos incluem suporte. Os planos Starter têm suporte por e-mail, os Professional têm suporte prioritário 24/7 e os Enterprise têm um gerente de sucesso dedicado."
     }
   ],
   "enterprise": {
-    "title": "Need a Custom Solution?",
-    "description": "For large organizations with specific requirements, we offer tailored solutions with custom pricing, dedicated support, and specialized features.",
+    "title": "Precisa desenvolver um agente ou uma solução de IA generativa?",
+    "description": "Primeiro definimos o escopo e depois orçamos como projeto de escopo fechado, equipe dedicada de agentes, engenheiros alocados ou build-operate-transfer.",
     "features": [
-      "Custom feature development",
-      "Dedicated infrastructure",
-      "Advanced security & compliance",
-      "SLA guarantees",
-      "On-premise deployment",
-      "Priority support & training"
+      "Desenvolvimento de recursos personalizados",
+      "Infraestrutura dedicada",
+      "Segurança e conformidade avançadas",
+      "Garantias de SLA",
+      "Implantação on-premise",
+      "Suporte prioritário e treinamento"
     ]
   }
 }

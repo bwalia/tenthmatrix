@@ -58,7 +58,7 @@ function AboutUs({ data, locale }) {
         id="cta"
         title={ui.aboutCtaTitle}
         body={ui.aboutCtaBody}
-        primary={{ label: ui.contactSales, href: localeHref('/contact-us', locale) }}
+        primary={{ label: ui.startProject, href: localeHref('/start-a-project', locale) }}
         secondary={{ label: ui.whyLink, href: localeHref('/why-tenthmatrix', locale) }}
       />
     </>

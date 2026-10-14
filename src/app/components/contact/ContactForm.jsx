@@ -15,7 +15,7 @@ import s from './ContactForm.module.scss';
    environment and Next inlines NEXT_PUBLIC_* at build time. See
    src/utils/opsapiEnv.mjs and `npm run verify:opsapi`. */
 
-const EMPTY = { name: '', email: '', phone: '', comments: '', website: '' };
+const EMPTY = { name: '', email: '', phone: '', projectType: '', comments: '', website: '' };
 const PHONE_ALLOWED = /^[0-9+()\-.\s]*$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -26,7 +26,19 @@ const splitName = (fullName) => {
   return { first_name: parts[0] || '', last_name: parts.length > 1 ? parts.slice(1).join(' ') : undefined };
 };
 
-export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form' }) {
+/**
+ * Lead form. Optional `projectTypes` (string[]) adds a project-type select;
+ * the choice is prefixed to `comments` so the OpsAPI lead schema is unchanged.
+ * `projectTypeLabel` / `messageLabel` / `messageHint` override the default copy.
+ */
+export default function ContactForm({
+  apiUrl,
+  source = 'tenthmatrix_contact_form',
+  projectTypes,
+  projectTypeLabel,
+  messageLabel,
+  messageHint,
+}) {
   const t = useTranslations('form');
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -62,7 +74,7 @@ export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form
           ...splitName(form.name),
           email: form.email.trim(),
           phone: form.phone.trim() || undefined,
-          comments: form.comments.trim(),
+          comments: form.projectType ? `[${form.projectType}]\n${form.comments.trim()}` : form.comments.trim(),
           source,
           channel: 'web',
           landing_page_url: window.location.href,
@@ -132,7 +144,23 @@ export default function ContactForm({ apiUrl, source = 'tenthmatrix_contact_form
       {field('name', t('name'), { autoComplete: 'name' })}
       {field('email', t('email'), { type: 'email', autoComplete: 'email' })}
       {field('phone', t('phone'), { type: 'tel', autoComplete: 'tel', optional: true, wide: true })}
-      {field('comments', t('message'), { multiline: true, wide: true, hint: t('messageHint') })}
+      {projectTypes?.length ? (
+        <div className={`${s.field} ${s.wide}`}>
+          <label className="tm-label" htmlFor="tm-projectType">
+            {projectTypeLabel || t('projectType')}
+            <span className={s.optional}> {t('optional')}</span>
+          </label>
+          <select id="tm-projectType" className="tm-input" name="projectType" value={form.projectType} onChange={set('projectType')}>
+            <option value="">{t('projectTypeAny')}</option>
+            {projectTypes.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+        </div>
+      ) : null}
+      {field('comments', messageLabel || t('message'), { multiline: true, wide: true, hint: messageHint || t('messageHint') })}
       <div className="tm-visually-hidden" aria-hidden="true">
         <label htmlFor="tm-website">Website</label>
         <input id="tm-website" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />

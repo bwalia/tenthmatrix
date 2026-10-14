@@ -27,6 +27,10 @@
 
   @include up($bp-lg) {
     height: var(--tm-header-h);
+    gap: var(--tm-space-3);
+  }
+
+  @include up($bp-xl) {
     gap: var(--tm-space-6);
   }
 }
@@ -86,8 +90,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
+  flex: none;
   min-height: var(--tm-tap-target);
-  padding: 0 0.7rem;
+  padding: 0 0.45rem;
   border: 0;
   border-radius: var(--tm-radius-sm);
   background: transparent;
@@ -111,8 +116,8 @@
     &::after {
       content: '';
       position: absolute;
-      left: 0.7rem;
-      right: 1.9rem;
+      left: 0.5rem;
+      right: 1.7rem;
       bottom: 4px;
       height: 2px;
       border-radius: 1px;
@@ -126,6 +131,7 @@
 }
 
 .chev {
+  flex: none;
   color: var(--tm-text-subtle);
   transition: transform var(--tm-duration) var(--tm-ease-standard);
 
@@ -359,5 +365,12 @@
 
   @include up($bp-xl) {
     display: inline-flex;
+  }
+}
+
+// Seven menu groups: tighter triggers between lg and xl so the row fits at 1080px.
+@include up($bp-xl) {
+  .trigger {
+    padding: 0 0.7rem;
   }
 }

@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "title": "AI 智能体开发服务 | TenthMatrix",
+    "description": "TenthMatrix 为客户构建智能体软件:客服、销售、运维、文档和编码智能体以及多智能体工作流,配备审批关卡、评估集和健康门控发布。",
+    "keywords": "AI 智能体开发, 智能体软件开发, 定制 AI 智能体, 多智能体工作流, MCP 集成, LangGraph, Claude Agent SDK, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "AI 智能体开发",
+    "title": "为您的系统打造的智能体,由人来掌控",
+    "subtitle": "我们设计并构建在您的工具中完成多步骤工作的智能体。它们读取工单、收集上下文、起草变更,并在上线前停下来等待审核。",
+    "description": "我们为客户构建智能体的方式,与在 Jobshout 中构建自己的智能体相同:严格模式的工具、有界循环、审批关卡,以及每一步的追踪记录。",
+    "cta": [
+      {
+        "label": "启动项目",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "为什么选择 TenthMatrix 智能体",
+        "link": "/why-tenthmatrix-agents"
+      }
+    ],
+    "meta": [
+      "Claude、OpenAI 或开放权重模型",
+      "MCP 集成",
+      "审批关卡"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "agent-types",
+      "title": "我们构建的智能体",
+      "intro": "每个智能体都有岗位说明、负责人,以及一份禁止事项清单。",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "headset",
+          "title": "客服智能体",
+          "description": "分拣新工单,调取订单和账户历史,依据您的政策起草回复,并将任何异常情况转给人工处理。"
+        },
+        {
+          "icon": "users",
+          "title": "销售与 CRM 智能体",
+          "description": "丰富潜在客户信息,通话后更新 CRM 记录,起草跟进邮件并标记停滞的交易。未经审批,任何内容都不会发给客户。"
+        },
+        {
+          "icon": "server",
+          "title": "运维与 SRE 智能体",
+          "description": "读取告警、日志和仪表板,总结事故并提出修复方案。自动化逐步扩展,仅限于您信任的操作。",
+          "href": "/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+          "linkLabel": "阅读 KubePilot 文章"
+        },
+        {
+          "icon": "file-alt",
+          "title": "文档处理智能体",
+          "description": "从发票、合同和表单中提取字段,与您的记录核对后写入正确的系统,不确定的条目进入人工队列。",
+          "href": "/articles/building-vat-return-system-claude-code-invoices-expenses",
+          "linkLabel": "阅读增值税申报项目案例"
+        },
+        {
+          "icon": "code-branch",
+          "title": "编码与审查智能体",
+          "description": "审查拉取请求、编写测试,并提交变更供您的工程师合并。Jobshout 的 PR Reviewer 就在我们自己的代码仓库中做这项工作。",
+          "href": "/jobshout",
+          "linkLabel": "查看 Jobshout"
+        },
+        {
+          "icon": "project-diagram",
+          "title": "多智能体工作流",
+          "description": "规划器把工作分派给专业智能体,监督器检查结果、重试或升级处理。适用于一项工作横跨多个系统的场景。"
+        }
+      ]
+    },
+    {
+      "type": "overview",
+      "id": "how-we-build",
+      "title": "我们如何构建智能体",
+      "content": "智能体就是一个循环。模型选择工具,工具运行,结果返回给模型。大多数故障来自循环而非模型,所以我们把精力花在这里。\n\n工具带类型定义,运行前先经过校验。循环有步数、时间和成本预算。提示词像代码一样做版本管理,每次运行都留下可读的追踪记录。",
+      "points": [
+        "规划器、执行器、记忆和监督器各自独立",
+        "模式优先的工具,严格校验",
+        "确定性重试与有界循环"
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "stack",
+      "title": "技术栈",
+      "intro": "我们按项目选择。以下是我们的工程师在使用、并在文章中写到的工具。",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "brain",
+          "title": "模型",
+          "list": [
+            "通过 Anthropic API 或 Amazon Bedrock 使用 Claude",
+            "OpenAI 模型",
+            "开放权重模型:Llama、Mistral、Qwen、Kimi"
+          ]
+        },
+        {
+          "icon": "project-diagram",
+          "title": "智能体框架",
+          "list": [
+            "Claude Agent SDK 与 Claude Code 子智能体",
+            "LangChain 与 LangGraph",
+            "AutoGen",
+            "Airflow 3 用于定时流水线"
+          ]
+        },
+        {
+          "icon": "plug",
+          "title": "Integration(集成)",
+          "list": [
+            "带 OAuth 的 MCP 服务器",
+            "REST 与 webhook 连接器",
+            "Amazon Bedrock AgentCore"
+          ]
+        },
+        {
+          "icon": "server",
+          "title": "托管与推理",
+          "list": [
+            "vLLM、TGI 和 Ollama 用于自托管模型",
+            "Kubernetes 与 k3s",
+            "Amazon Bedrock 与 Azure AI Foundry"
+          ]
+        },
+        {
+          "icon": "database",
+          "title": "记忆与检索",
+          "list": [
+            "向量搜索,包括 NebulaDB",
+            "用于智能体状态的键值存储",
+            "附带来源引用的检索"
+          ]
+        },
+        {
+          "icon": "chart-line",
+          "title": "可观测性",
+          "list": [
+            "OpenTelemetry 追踪",
+            "Prometheus 指标",
+            "每个智能体的成本与延迟预算"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "guardrails",
+      "title": "护栏",
+      "intro": "限制是设计的一部分。我们在开工前就把它们写下来。",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "审批关卡",
+          "description": "凡是发送、花钱或删除的操作,都会暂停等待指定人员。智能体可以起草,只有您认定可安全自动化的步骤,它才会自行执行。"
+        },
+        {
+          "icon": "key",
+          "title": "限定范围的凭据",
+          "description": "智能体从不持有长期密钥。WSL Vault 按智能体、按任务签发短期凭据,并记录每一次使用。"
+        },
+        {
+          "icon": "shield-alt",
+          "title": "边缘控制",
+          "description": "模型和工具流量可以经过 WSL Proxy,它在边缘添加 WAF 规则、限流和审计记录。"
+        },
+        {
+          "icon": "sliders",
+          "title": "允许清单与预算",
+          "description": "每个智能体都有一份明确的工具和数据源清单,以及每次运行的步数、时间和成本上限。"
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "evaluation-deployment",
+      "title": "评估与部署",
+      "intro": "智能体通过生产环境中的测试才算完成,而不是演示能跑就算。",
+      "steps": [
+        {
+          "title": "建立评估集",
+          "description": "来自您实际工作的真实样例,每条都附有一位好同事会给出的答案。每次变更都以它为基准打分。"
+        },
+        {
+          "title": "追踪与度量",
+          "description": "任务成功率、工具错误、延迟和每次运行的成本,均取自 OpenTelemetry 追踪。"
+        },
+        {
+          "title": "按环发布",
+          "description": "Ring Promoter 仅在健康检查通过时,才把每次发布从 int 推进到 test、acc 和 prod,检查失败时自动回滚。"
+        },
+        {
+          "title": "在生产环境中持续观察",
+          "description": "监控、告警,并定期复盘故障和成本。每一次故障都会成为新的评估用例。"
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "关于智能体项目的问题",
+      "items": [
+        {
+          "question": "你们使用框架还是从零构建?",
+          "answer": "两者都有。如果 LangGraph 或 Claude Agent SDK 这样的框架合适,我们就用。如果任务简单,带类型化工具的小循环更容易测试和维护。"
+        },
+        {
+          "question": "智能体能在我们自己的硬件上运行吗?",
+          "answer": "可以。我们用 vLLM 或 Ollama 在您的服务器上托管开放权重模型。如果您需要机器,我们的姊妹公司 Workstation 负责规划并构建 GPU 工作站和集群。"
+        },
+        {
+          "question": "你们如何防止智能体做出有害的事?",
+          "answer": "它只能调用允许清单中的工具,使用限定范围的凭据,并受步数和成本上限约束。任何发送、花钱或删除的操作都要等待审批,每次运行都有日志。"
+        },
+        {
+          "question": "项目结束后智能体归谁所有?",
+          "answer": "归您所有。代码、提示词、评估集和运维手册从第一次提交起就在您的代码仓库中。"
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "相关内容",
+      "items": [
+        {
+          "title": "AI 开发外包",
+          "href": "/outsource-ai-development",
+          "label": "合作模式与流程"
+        },
+        {
+          "title": "评估 AI 智能体",
+          "href": "/articles/evaluation-monitoring-ai-agents",
+          "label": "指标、追踪与安全"
+        },
+        {
+          "title": "智能体 AI 安全",
+          "href": "/articles/agentic-ai-security-mcp-oauth-vault",
+          "label": "MCP OAuth 与 vault 租约"
+        },
+        {
+          "title": "AI 工作站",
+          "href": "https://www.workstation.co.uk/ai-workstations",
+          "label": "Workstation 的硬件"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "描述一项您希望智能体完成的工作",
+    "description": "我们会回复一份智能体设计、相关风险,以及我们将如何在试点中验证它。",
+    "button": "启动项目",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "外包如何运作",
+      "link": "/outsource-ai-development"
+    }
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "meta": {
+    "title": "AI agent development services | TenthMatrix",
+    "description": "TenthMatrix builds agentic software for clients: support, sales, ops, document and coding agents and multi-agent workflows, with approval gates, evaluation sets and health-gated releases.",
+    "keywords": "AI agent development, agentic software development, custom AI agents, multi-agent workflows, MCP integration, LangGraph, Claude Agent SDK, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "AI agent development",
+    "title": "Agents built for your systems, with a person in charge",
+    "subtitle": "We design and build agents that do multi-step work in your tools. They read the ticket, gather the context, draft the change and stop for review before it ships.",
+    "description": "We build client agents the way we build our own in Jobshout: tools with strict schemas, bounded loops, approval gates and a trace of every step.",
+    "cta": [
+      { "label": "Start a project", "link": "/start-a-project" },
+      { "label": "Why TenthMatrix agents", "link": "/why-tenthmatrix-agents" }
+    ],
+    "meta": ["Claude, OpenAI or open-weight", "MCP integrations", "Approval gates"]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "agent-types",
+      "title": "Agents we build",
+      "intro": "Each one gets a job description, an owner and a list of things it isn't allowed to do.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "headset",
+          "title": "Support agents",
+          "description": "Triage incoming tickets, pull order and account history, draft replies grounded in your policies, and route anything unusual to a person."
+        },
+        {
+          "icon": "users",
+          "title": "Sales and CRM agents",
+          "description": "Enrich leads, update CRM records after calls, draft follow-ups and flag stalled deals. Nothing reaches a customer without approval."
+        },
+        {
+          "icon": "server",
+          "title": "Ops and SRE agents",
+          "description": "Read alerts, logs and dashboards, summarise the incident and propose a fix. Automation grows step by step, only for the actions you trust.",
+          "href": "/articles/kubepilot-ai-copilot-pilot-autopilot-kubernetes",
+          "linkLabel": "Read the KubePilot write-up"
+        },
+        {
+          "icon": "file-alt",
+          "title": "Document processing agents",
+          "description": "Extract fields from invoices, contracts and forms, check them against your records and post them to the right system, with a queue for anything uncertain.",
+          "href": "/articles/building-vat-return-system-claude-code-invoices-expenses",
+          "linkLabel": "Read the VAT return build"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Coding and review agents",
+          "description": "Review pull requests, write tests and open changes for your engineers to merge. Jobshout's PR Reviewer does this on our own repositories.",
+          "href": "/jobshout",
+          "linkLabel": "See Jobshout"
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Multi-agent workflows",
+          "description": "A planner hands work to specialist agents and a supervisor checks the result, retries or escalates. Useful when one job crosses several systems."
+        }
+      ]
+    },
+    {
+      "type": "overview",
+      "id": "how-we-build",
+      "title": "How we build an agent",
+      "content": "An agent is a loop. The model picks a tool, the tool runs, the result goes back to the model. Most failures come from the loop rather than the model, so that is where we spend the effort.\n\nTools are typed and validated before they run. Loops have step, time and cost budgets. Prompts are versioned like code, and every run leaves a trace you can read.",
+      "points": [
+        "Planner, executor, memory and supervisor as separate parts",
+        "Schema-first tools with strict validation",
+        "Deterministic retries and bounded loops"
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "stack",
+      "title": "Tech stack",
+      "intro": "We choose per project. These are the tools our engineers use and write about in our articles.",
+      "columns": 3,
+      "items": [
+        {
+          "icon": "brain",
+          "title": "Models",
+          "list": ["Claude via the Anthropic API or Amazon Bedrock", "OpenAI models", "Open-weight models: Llama, Mistral, Qwen, Kimi"]
+        },
+        {
+          "icon": "project-diagram",
+          "title": "Agent frameworks",
+          "list": ["Claude Agent SDK and Claude Code subagents", "LangChain and LangGraph", "AutoGen", "Airflow 3 for scheduled pipelines"]
+        },
+        {
+          "icon": "plug",
+          "title": "Integration",
+          "list": ["MCP servers with OAuth", "REST and webhook connectors", "Amazon Bedrock AgentCore"]
+        },
+        {
+          "icon": "server",
+          "title": "Hosting and inference",
+          "list": ["vLLM, TGI and Ollama for self-hosted models", "Kubernetes and k3s", "Amazon Bedrock and Azure AI Foundry"]
+        },
+        {
+          "icon": "database",
+          "title": "Memory and retrieval",
+          "list": ["Vector search, including NebulaDB", "Key-value stores for agent state", "Retrieval with source citations"]
+        },
+        {
+          "icon": "chart-line",
+          "title": "Observability",
+          "list": ["OpenTelemetry traces", "Prometheus metrics", "Cost and latency budgets per agent"]
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "guardrails",
+      "title": "Guardrails",
+      "intro": "Limits are part of the design. We write them down before the build starts.",
+      "columns": 2,
+      "variant": "plain",
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "Approval gates",
+          "description": "Actions that send, spend or delete pause for a named person. The agent can draft. It only ships on its own for steps you have decided are safe to automate."
+        },
+        {
+          "icon": "key",
+          "title": "Scoped credentials",
+          "description": "Agents never hold long-lived keys. WSL Vault issues short-lived credentials per agent and per task, and logs every use."
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Edge controls",
+          "description": "Model and tool traffic can pass through WSL Proxy, which adds WAF rules, rate limits and an audit trail at the edge."
+        },
+        {
+          "icon": "sliders",
+          "title": "Allow-lists and budgets",
+          "description": "Each agent gets an explicit list of tools and data sources, plus step, time and cost limits for every run."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "evaluation-deployment",
+      "title": "Evaluation and deployment",
+      "intro": "An agent is finished when it passes its tests in production, not when the demo works.",
+      "steps": [
+        {
+          "title": "Build an evaluation set",
+          "description": "Real examples from your work, each with the answer a good colleague would give. Every change is scored against it."
+        },
+        {
+          "title": "Trace and measure",
+          "description": "Task success, tool errors, latency and cost per run, taken from OpenTelemetry traces."
+        },
+        {
+          "title": "Release through rings",
+          "description": "Ring Promoter moves each release from int to test, acc and prod only when health checks pass, and rolls back when they fail."
+        },
+        {
+          "title": "Watch it in production",
+          "description": "Monitoring, alerts and a regular review of failures and cost. Each failure becomes a new evaluation case."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Questions about agent projects",
+      "items": [
+        {
+          "question": "Do you use a framework or build from scratch?",
+          "answer": "Both. If a framework such as LangGraph or the Claude Agent SDK fits, we use it. If the job is simple, a small loop with typed tools is easier to test and maintain."
+        },
+        {
+          "question": "Can the agent run on our own hardware?",
+          "answer": "Yes. We host open-weight models with vLLM or Ollama on your servers. If you need the machines, our sister company Workstation specifies and builds GPU workstations and clusters."
+        },
+        {
+          "question": "How do you stop an agent doing something harmful?",
+          "answer": "It can only call the tools on its allow-list, with scoped credentials, inside step and cost limits. Anything that sends, spends or deletes waits for approval, and every run is logged."
+        },
+        {
+          "question": "Who owns the agent when the project ends?",
+          "answer": "You do. The code, prompts, evaluation sets and runbooks are in your repository from the first commit."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Related",
+      "items": [
+        { "title": "Outsource AI development", "href": "/outsource-ai-development", "label": "Engagement models and process" },
+        { "title": "Evaluating AI agents", "href": "/articles/evaluation-monitoring-ai-agents", "label": "Metrics, traces and safety" },
+        { "title": "Agentic AI security", "href": "/articles/agentic-ai-security-mcp-oauth-vault", "label": "MCP OAuth and vault leases" },
+        { "title": "AI workstations", "href": "https://www.workstation.co.uk/ai-workstations", "label": "Hardware at Workstation" }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Describe one job you want an agent to do",
+    "description": "We'll reply with an agent design, the risks, and how we would prove it in a pilot.",
+    "button": "Start a project",
+    "link": "/start-a-project",
+    "secondary": { "label": "How outsourcing works", "link": "/outsource-ai-development" }
+  }
+}

@@ -151,7 +151,11 @@
   gap: var(--tm-space-8) var(--tm-space-6);
 
   @include up($bp-md) {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include up($bp-xl) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
 

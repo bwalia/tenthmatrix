@@ -17,7 +17,7 @@ function WhyTenthMatrix({ data, locale }) {
         eyebrow={data.header?.title}
         title={first?.title || data.header?.title}
         lede={first?.description}
-        actions={first?.cta ? [{ label: first.cta, href: localeHref(first.link || '/contact-us', locale) }] : undefined}
+        actions={first?.cta ? [{ label: first.cta, href: localeHref(first.link || '/start-a-project', locale) }] : undefined}
         art
       />
       <Section id="reasons">
@@ -27,7 +27,7 @@ function WhyTenthMatrix({ data, locale }) {
         id="cta"
         title={ui.whyCtaTitle}
         body={ui.whyCtaBody}
-        primary={{ label: ui.contactSales, href: localeHref('/contact-us', locale) }}
+        primary={{ label: ui.startProject, href: localeHref('/start-a-project', locale) }}
         secondary={{ label: ui.bookNow, href: localeHref('/book-online', locale) }}
       />
     </>

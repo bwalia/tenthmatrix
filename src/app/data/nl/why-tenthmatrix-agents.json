@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "title": "Waarom AI-agents van TenthMatrix | TenthMatrix",
+    "description": "Wat u krijgt met AI-agents van TenthMatrix in vergelijking met zelf bouwen of een generieke chatbot kopen: goedkeuringsstappen, data en sleutels onder uw beheer, diepe integraties en een team dat het na de lancering beheert.",
+    "keywords": "voordelen van AI-agents, TenthMatrix-agents, AI-agents vs chatbot, AI-agents bouwen of kopen, veilige AI-agents, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "Waarom TenthMatrix-agents",
+    "title": "De voordelen van AI-agents van TenthMatrix, en hoe u elk ervan controleert",
+    "subtitle": "Elk voordeel op deze pagina verwijst naar iets dat u kunt controleren: een product, de documentatie ervan, een artikel of een regel in uw contract.",
+    "cta": [
+      {
+        "label": "Start een project",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "Vergelijk de opties",
+        "link": "#compare"
+      }
+    ],
+    "meta": [
+      "Menselijke goedkeuringsstappen",
+      "Data en sleutels blijven bij u",
+      "Self-hosted of beheerd"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "benefits",
+      "title": "Wat u krijgt",
+      "columns": 2,
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "Een mens keurt goed wat ertoe doet",
+          "description": "Agents stellen op, onderzoeken en bereiden voor. Alles wat verstuurt, geld uitgeeft of verwijdert, wacht op een aangewezen persoon. Jobshout werkt vandaag al zo.",
+          "href": "/jobshout",
+          "linkLabel": "Bekijk Jobshout"
+        },
+        {
+          "icon": "server",
+          "title": "Self-hosted of beheerd",
+          "description": "Draai de agents in uw eigen cloud of datacenter, of laat ons ze voor u draaien. De code is in beide gevallen dezelfde, dus u kunt later nog van gedachten veranderen.",
+          "href": "/outsource-ai-development#engagement",
+          "linkLabel": "Bekijk samenwerkingsmodellen"
+        },
+        {
+          "icon": "lock",
+          "title": "Uw data en sleutels blijven bij u",
+          "description": "Data blijft in uw systemen en modelsleutels blijven in uw secrets-opslag. U kiest de modelprovider, of host zelf een open-weight model.",
+          "href": "/outsource-ai-development#security-ip",
+          "linkLabel": "Beveiliging en IP"
+        },
+        {
+          "icon": "key",
+          "title": "Secrets geïsoleerd per agent",
+          "description": "WSL Vault geeft kortlevende, afgebakende credentials uit, versleuteld per tenant en vastgelegd in een fraudebestendig auditlog. Een gestolen server levert de sleutels niet op.",
+          "href": "/wsl-vault",
+          "linkLabel": "Bekijk WSL Vault"
+        },
+        {
+          "icon": "code-branch",
+          "title": "Releases afhankelijk van health checks",
+          "description": "Ring Promoter brengt elke wijziging alleen door int, test, acc en prod als de health checks slagen, en draait automatisch terug als ze falen.",
+          "href": "/ring-promoter",
+          "linkLabel": "Bekijk Ring Promoter"
+        },
+        {
+          "icon": "shield-alt",
+          "title": "Beveiliging aan de rand",
+          "description": "WSL Proxy plaatst een API-gateway, WAF-regels en rate limits vóór de agent en de tools die hij aanroept.",
+          "href": "/wsl-proxy",
+          "linkLabel": "Bekijk WSL Proxy"
+        },
+        {
+          "icon": "chart-line",
+          "title": "Kosten en gedrag die u kunt zien",
+          "description": "Een trace voor elke run, kosten en latency per agent, en alerts wanneer een van beide afwijkt. SysOps 24/7 bewaakt de endpoints, certificaten en DNS eromheen.",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "Lees hoe we meten"
+        },
+        {
+          "icon": "robot",
+          "title": "Gebouwd door een team dat zelf agents draait",
+          "description": "Onze eigen agents draaien in productie op dezelfde stack. We publiceren hoe ze werken, inclusief de onderdelen die stukgingen.",
+          "href": "/articles",
+          "linkLabel": "Lees de artikelen"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "id": "compare",
+      "title": "Intern team, chatbot-SaaS of TenthMatrix",
+      "intro": "Elke optie past bij iemand. Hier zit het verschil.",
+      "highlight": "tm",
+      "columns": [
+        {
+          "key": "dimension",
+          "label": "Dimensie"
+        },
+        {
+          "key": "inhouse",
+          "label": "Zelf bouwen"
+        },
+        {
+          "key": "saas",
+          "label": "Generieke chatbot-SaaS"
+        },
+        {
+          "key": "tm",
+          "label": "TenthMatrix-agents"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "Tijd tot de eerste werkende agent",
+          "inhouse": "Begint zodra u mensen met agent-ervaring hebt aangenomen of opgeleid.",
+          "saas": "Snel voor een chatwidget op publieke content. Trager zodra hij binnen uw systemen moet handelen.",
+          "tm": "Begint met een afgebakende pilot op één echte taak, gebouwd door een team dat dit eerder heeft gedaan."
+        },
+        {
+          "dimension": "Controle over data",
+          "inhouse": "Volledige controle.",
+          "saas": "Uw content en gesprekken staan bij de leverancier, onder diens voorwaarden.",
+          "tm": "Volledige controle. Data blijft in uw systemen en u kiest de modelprovider of host het model zelf."
+        },
+        {
+          "dimension": "Integratiediepte",
+          "inhouse": "Zo diep als uw team tijd heeft om te bouwen.",
+          "saas": "Beperkt tot de connectors en het rechtenmodel van de leverancier.",
+          "tm": "Gebouwd voor uw systemen, zoals CRM, ticketing, databases en repositories, via API's en MCP-servers."
+        },
+        {
+          "dimension": "Acties en goedkeuringen",
+          "inhouse": "U ontwerpt en bouwt de goedkeuringsflow zelf.",
+          "saas": "Beantwoordt vooral vragen. Acties hangen af van de roadmap van de leverancier.",
+          "tm": "Goedkeuringsstappen voor alles wat verstuurt, geld uitgeeft of verwijdert, vanaf de eerste release."
+        },
+        {
+          "dimension": "Beveiligingsmodel",
+          "inhouse": "Wat u zelf bouwt, en dat begint vaak met langlevende API-sleutels.",
+          "saas": "Een gedeeld multi-tenant platform. U vertrouwt op de controles van de leverancier.",
+          "tm": "Kortlevende, afgebakende credentials uit WSL Vault, randbeveiliging via WSL Proxy en een auditlog van elke actie."
+        },
+        {
+          "dimension": "Beheer na de lancering",
+          "inhouse": "Uw team is verantwoordelijk voor monitoring, modelupgrades en on-call.",
+          "saas": "De leverancier beheert het, en u ziet weinig van waarom het misgaat.",
+          "tm": "Wij beheren het met traces, kostenrapporten en releases die afhangen van health checks, of dragen het over aan uw team met runbooks."
+        },
+        {
+          "dimension": "Eigendom en exit",
+          "inhouse": "Alles is van u.",
+          "saas": "Vertrekken betekent ergens anders opnieuw bouwen.",
+          "tm": "De code is van u vanaf de eerste commit en u kunt het op elk moment intern overnemen."
+        },
+        {
+          "dimension": "Kostenstructuur",
+          "inhouse": "Salarissen en wervingstijd voordat er iets live gaat.",
+          "saas": "Een abonnement per gebruiker of per gesprek.",
+          "tm": "Een geoffreerde pilot, daarna een projectprijs of een maandelijks team, schriftelijk vastgelegd."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "limits",
+      "title": "Wat we niet beweren",
+      "items": [
+        "We beloven geen besparingspercentage voordat we uw proces hebben gezien. De pilot meet het.",
+        "We laten een agent niet zonder toezicht handelen bij iets wat u niet expliciet voor automatisering hebt goedgekeurd.",
+        "We bewaren uw data en sleutels niet. Alles wat we voor u bouwen, is van u.",
+        "U hoeft onze producten niet te gebruiken. Hebt u al een secrets manager, gateway of pipeline, dan bouwen we daarop voort."
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "De claims controleren",
+      "items": [
+        {
+          "question": "Kunnen we deze claims controleren voordat we iets tekenen?",
+          "answer": "Ja. WSL Vault, WSL Proxy, Ring Promoter en Jobshout hebben publieke documentatie en broncode-repositories. We lopen graag in een gesprek met uw engineers door hoe ze samenwerken."
+        },
+        {
+          "question": "Moeten we uw producten gebruiken?",
+          "answer": "Nee. Onze producten zijn een optie, geen vereiste. Als uw bestaande tools volstaan, bouwen we daarop voort."
+        },
+        {
+          "question": "Is een TenthMatrix-agent een product waarvoor we een licentie nemen?",
+          "answer": "Nee. Het is software die we voor u bouwen, in uw repository. Waar het een van onze open-sourceproducten gebruikt, geldt de licentie van dat product."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "Gerelateerd",
+      "items": [
+        {
+          "title": "AI-ontwikkeling uitbesteden",
+          "href": "/outsource-ai-development",
+          "label": "Samenwerkingsmodellen en proces"
+        },
+        {
+          "title": "Ontwikkeling van AI-agents",
+          "href": "/ai-agent-development",
+          "label": "De agents die we bouwen"
+        },
+        {
+          "title": "Ontwikkeling van generatieve AI",
+          "href": "/generative-ai-development",
+          "label": "Assistenten, schrijfhulp en copilots"
+        },
+        {
+          "title": "Alle producten",
+          "href": "/products",
+          "label": "De software achter de agents"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Zie wat een agent met een van uw taken zou kunnen doen",
+    "description": "Beschrijf het in een alinea. We komen terug met een agentontwerp, de risico's en hoe we het zouden bewijzen.",
+    "button": "Start een project",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Hoe uitbesteden werkt",
+      "link": "/outsource-ai-development"
+    }
+  }
+}

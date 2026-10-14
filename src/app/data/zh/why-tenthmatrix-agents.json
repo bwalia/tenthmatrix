@@ -1,0 +1,235 @@
+{
+  "meta": {
+    "title": "为什么选择 TenthMatrix AI 智能体 | TenthMatrix",
+    "description": "与自建或购买通用聊天机器人相比,TenthMatrix AI 智能体能为您带来:审批关卡、由您掌控的数据和密钥、深度集成,以及上线后持续运维的团队。",
+    "keywords": "AI 智能体的优势, TenthMatrix 智能体, AI 智能体与聊天机器人对比, 自建还是购买 AI 智能体, 安全的 AI 智能体, TenthMatrix"
+  },
+  "header": {
+    "eyebrow": "为什么选择 TenthMatrix 智能体",
+    "title": "TenthMatrix AI 智能体的优势,以及如何逐一验证",
+    "subtitle": "本页列出的每项优势都对应您可以核查的内容:一个产品、它的文档、一篇文章,或您合同中的一条条款。",
+    "cta": [
+      {
+        "label": "启动项目",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "比较各个选项",
+        "link": "#compare"
+      }
+    ],
+    "meta": [
+      "人工审批关卡",
+      "数据和密钥留在您手中",
+      "自托管或托管服务"
+    ]
+  },
+  "sections": [
+    {
+      "type": "grid",
+      "id": "benefits",
+      "title": "您将获得什么",
+      "columns": 2,
+      "items": [
+        {
+          "icon": "user-check",
+          "title": "重要操作由人来审批",
+          "description": "智能体负责起草、调研和准备。任何发送、花费或删除操作都要等待指定人员审批。Jobshout 目前就是这样运作的。",
+          "href": "/jobshout",
+          "linkLabel": "查看 Jobshout"
+        },
+        {
+          "icon": "server",
+          "title": "自托管或托管服务",
+          "description": "智能体可以运行在您自己的云或数据中心,也可以交给我们运行。两种方式代码相同,因此您日后可以随时改变主意。",
+          "href": "/outsource-ai-development#engagement",
+          "linkLabel": "查看合作模式"
+        },
+        {
+          "icon": "lock",
+          "title": "您的数据和密钥留在您手中",
+          "description": "数据留在您的系统中,模型密钥保存在您的密钥存储中。您可以自选模型提供商,也可以自行托管开放权重模型。",
+          "href": "/outsource-ai-development#security-ip",
+          "linkLabel": "安全与知识产权"
+        },
+        {
+          "icon": "key",
+          "title": "按智能体隔离密钥",
+          "description": "WSL Vault 签发短期、限定范围的凭据,按租户加密,并记录在防篡改的审计日志中。服务器被盗,也拿不到密钥。",
+          "href": "/wsl-vault",
+          "linkLabel": "了解 WSL Vault"
+        },
+        {
+          "icon": "code-branch",
+          "title": "健康门控发布",
+          "description": "Ring Promoter 仅在健康检查通过时才将每次变更依次推进到 int、test、acc 和 prod,检查失败时自动回滚。",
+          "href": "/ring-promoter",
+          "linkLabel": "查看 Ring Promoter"
+        },
+        {
+          "icon": "shield-alt",
+          "title": "边缘安全",
+          "description": "WSL Proxy 在智能体及其调用的工具前部署 API 网关、WAF 规则和速率限制。",
+          "href": "/wsl-proxy",
+          "linkLabel": "查看 WSL Proxy"
+        },
+        {
+          "icon": "chart-line",
+          "title": "可见的成本与行为",
+          "description": "每次运行都有追踪记录,按智能体统计成本和延迟,任一指标偏移时发出告警。SysOps 24/7 监控周边的端点、证书和 DNS。",
+          "href": "/articles/llm-bottlenecks-observability-otel-cost-control",
+          "linkLabel": "了解我们如何衡量"
+        },
+        {
+          "icon": "robot",
+          "title": "由运行智能体的团队打造",
+          "description": "我们自己的智能体就在同一技术栈上投入生产运行。我们公开它们的工作方式,包括出过故障的部分。",
+          "href": "/articles",
+          "linkLabel": "阅读文章"
+        }
+      ]
+    },
+    {
+      "type": "comparison",
+      "id": "compare",
+      "title": "自建团队、聊天机器人 SaaS 还是 TenthMatrix",
+      "intro": "每种选项都有适合的场景。以下是它们的区别。",
+      "highlight": "tm",
+      "columns": [
+        {
+          "key": "dimension",
+          "label": "维度"
+        },
+        {
+          "key": "inhouse",
+          "label": "自建"
+        },
+        {
+          "key": "saas",
+          "label": "通用聊天机器人 SaaS"
+        },
+        {
+          "key": "tm",
+          "label": "TenthMatrix 智能体"
+        }
+      ],
+      "rows": [
+        {
+          "dimension": "首个可用智能体的上线时间",
+          "inhouse": "要等您招聘或培养出有智能体经验的人员后才能开始。",
+          "saas": "基于公开内容的聊天组件上线很快。一旦需要在您的系统内执行操作,就会变慢。",
+          "tm": "从一项真实工作的限定范围试点开始,由有经验的团队构建。"
+        },
+        {
+          "dimension": "数据控制",
+          "inhouse": "完全掌控。",
+          "saas": "您的内容和对话存放在供应商处,受其条款约束。",
+          "tm": "完全掌控。数据留在您的系统中,您可以选择模型提供商或自行托管模型。"
+        },
+        {
+          "dimension": "集成深度",
+          "inhouse": "取决于您的团队有多少时间去构建。",
+          "saas": "受限于供应商的连接器和权限模型。",
+          "tm": "专为您的系统构建,例如 CRM、工单系统、数据库和代码仓库,通过 API 和 MCP 服务器连接。"
+        },
+        {
+          "dimension": "操作与审批",
+          "inhouse": "审批流程需要您自己设计和构建。",
+          "saas": "主要用于回答问题。能否执行操作取决于供应商的路线图。",
+          "tm": "从首次发布起,任何发送、花费或删除操作都设有审批关卡。"
+        },
+        {
+          "dimension": "安全模型",
+          "inhouse": "取决于您构建的方案,通常从长期有效的 API 密钥开始。",
+          "saas": "共享的多租户平台。您依赖供应商的安全控制。",
+          "tm": "WSL Vault 提供短期、限定范围的凭据,WSL Proxy 提供边缘控制,每个操作都记录在审计日志中。"
+        },
+        {
+          "dimension": "上线后的运维",
+          "inhouse": "监控、模型升级和值班都由您的团队负责。",
+          "saas": "由供应商运行,您几乎看不到失败的原因。",
+          "tm": "我们通过追踪、成本报告和健康门控发布来运行它,或连同运行手册一起移交给您的团队。"
+        },
+        {
+          "dimension": "所有权与退出",
+          "inhouse": "一切归您所有。",
+          "saas": "离开就意味着在别处重建。",
+          "tm": "从第一次提交起代码就归您所有,随时可以收回自行维护。"
+        },
+        {
+          "dimension": "成本结构",
+          "inhouse": "在交付任何成果之前,先要付出薪资和招聘时间。",
+          "saas": "按席位或按对话订阅收费。",
+          "tm": "先是一个报价明确的试点,然后是项目报价或按月计费的团队,均以书面形式约定。"
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "limits",
+      "title": "我们不做的承诺",
+      "items": [
+        "在看到您的流程之前,我们不承诺节省的百分比。试点会衡量实际效果。",
+        "对于您未明确批准自动化的任何事项,我们不会让智能体在无人监督的情况下执行。",
+        "我们不保留您的数据或密钥。我们为您构建的一切都归您所有。",
+        "您不必使用我们的产品。如果您已有密钥管理器、网关或流水线,我们就在其基础上构建。"
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "核实这些说法",
+      "items": [
+        {
+          "question": "签约前我们能核实这些说法吗?",
+          "answer": "可以。WSL Vault、WSL Proxy、Ring Promoter 和 Jobshout 都有公开的文档和源代码仓库。我们很乐意通过电话向您的工程师讲解它们如何协同工作。"
+        },
+        {
+          "question": "我们必须使用你们的产品吗?",
+          "answer": "不必。我们的产品是可选项,而非必需。如果您现有的工具能胜任,我们就在其基础上构建。"
+        },
+        {
+          "question": "TenthMatrix 智能体是需要我们购买许可的产品吗?",
+          "answer": "不是。它是我们在您的代码仓库中为您构建的软件。若其中使用了我们的某个开源产品,则适用该产品的许可证。"
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "related",
+      "title": "相关内容",
+      "items": [
+        {
+          "title": "AI 开发外包",
+          "href": "/outsource-ai-development",
+          "label": "合作模式与流程"
+        },
+        {
+          "title": "AI 智能体开发",
+          "href": "/ai-agent-development",
+          "label": "我们构建的智能体"
+        },
+        {
+          "title": "生成式 AI 开发",
+          "href": "/generative-ai-development",
+          "label": "助手、起草与副驾驶"
+        },
+        {
+          "title": "全部产品",
+          "href": "/products",
+          "label": "智能体背后的软件"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "看看智能体能为您的某项工作做什么",
+    "description": "用一段话描述它。我们会给出智能体设计、风险,以及我们将如何验证效果。",
+    "button": "启动项目",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "外包如何运作",
+      "link": "/outsource-ai-development"
+    }
+  }
+}
