@@ -3,12 +3,14 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { localizeBlogMetaList } from '@/utils/loadBlog';
 import { getPostListPage, getBlogTags } from '@/lib/cms';
 import BlogListing from '@/app/components/blog/BlogListing';
+import { STATIC_EXPORT, exportPageParams } from '@/lib/staticSlugs';
 
 export const revalidate = 3600;
 
 // On-demand ISR (as Workstation's K3S build): pages render on first request.
 export async function generateStaticParams() {
-  return [];
+  // [] on k3s (on-demand ISR); every slug for the S3 static export.
+  return STATIC_EXPORT ? exportPageParams() : [];
 }
 
 export async function generateMetadata({ params }) {

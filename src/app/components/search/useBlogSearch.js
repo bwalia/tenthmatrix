@@ -24,6 +24,11 @@ export default function useBlogSearch(query, { minChars = 2 } = {}) {
     let cancelled = false;
     const timer = setTimeout(async () => {
       let results = null;
+      // The S3 static export has no /api; go straight to the prebuilt index.
+      if (process.env.NEXT_PUBLIC_STATIC_EXPORT === '1') {
+        if (!cancelled) setSettled({ q, results });
+        return;
+      }
       try {
         const res = await fetch(`/api/blog-search?q=${encodeURIComponent(q)}`);
         if (res.ok) {

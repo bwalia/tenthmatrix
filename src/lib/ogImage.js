@@ -33,9 +33,17 @@ function titleSize(len) {
   return 66;
 }
 
-export function renderOgImage({ title = 'TenthMatrix', eyebrow = 'TenthMatrix' } = {}) {
+// The bundled brand fonts cover Latin only; Satori can't shape scripts like
+// Arabic or Devanagari through a fallback font (and errors out), so those
+// cards use the English title instead. The page itself stays translated.
+const LATIN = /^[\u0000-\u024F\u1E00-\u1EFF\u2000-\u206F\u20A0-\u20CF\u2100-\u214F]*$/;
+export const isLatin = (s) => LATIN.test(String(s));
+
+export function renderOgImage({ title = 'TenthMatrix', eyebrow = 'TenthMatrix', fallbackTitle = 'TenthMatrix' } = {}) {
   const a = loadAssets();
-  const safeTitle = String(title).replace(/\s+/g, ' ').trim().slice(0, 140);
+  const usable = isLatin(title) ? title : isLatin(fallbackTitle) ? fallbackTitle : 'TenthMatrix';
+  const safeTitle = String(usable).replace(/\s+/g, ' ').trim().slice(0, 140);
+  if (!isLatin(eyebrow)) eyebrow = 'TenthMatrix';
   return new ImageResponse(
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', background: '#0e1113' }}>

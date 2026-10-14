@@ -8,6 +8,7 @@ import { blogAuthor, blogCard, blogCover, blogTagLinks } from '@/lib/contentView
 import JsonLd from '@/app/components/seo/JsonLd';
 import ArticleLayout from '@/app/components/article/ArticleLayout';
 import { seoAlternates } from '@/lib/seoCanonical';
+import { STATIC_EXPORT, exportBlogSlugs } from '@/lib/staticSlugs';
 
 // ISR: served from cache, refreshed hourly, busted on demand via /api/revalidate.
 export const revalidate = 3600;
@@ -15,7 +16,8 @@ export const revalidate = 3600;
 // On-demand ISR: don't prerender every post at build; unknown slugs (e.g. new
 // CMS posts) render on first request, then cache.
 export async function generateStaticParams() {
-  return [];
+  // [] on k3s (on-demand ISR); every slug for the S3 static export.
+  return STATIC_EXPORT ? exportBlogSlugs() : [];
 }
 
 export async function generateMetadata({ params }) {
@@ -70,7 +72,8 @@ export default async function BlogDetailPage({ params }) {
         readingMinutes={blog.reading_minutes}
         image={blogCover(blog)}
         html={blog.content}
-        engagement={{ slug }}
+        // Likes/comments need the API routes, which the S3 static export doesn't have.
+        engagement={STATIC_EXPORT ? null : { slug }}
         related={{ title: t('article.morePosts'), items: related }}
       />
       <JsonLd
