@@ -18,6 +18,7 @@
  *   test.tenthmatrix.com  (+ test-www)  ->  https://test-api.tenthmatrix.com
  *   acc.tenthmatrix.com   (+ acc-www)   ->  https://acc-api.tenthmatrix.com
  *   www.tenthmatrix.com   + apex        ->  https://api.tenthmatrix.com
+ *   www.tenthmatrix.co.uk + apex        ->  https://api.tenthmatrix.com (alias of prod)
  *
  * Anything that is not a recognised tenthmatrix.com environment host
  * (localhost, a preview build) falls back to NEXT_PUBLIC_OPSAPI_URL and then
@@ -27,6 +28,9 @@
 export const PROD_OPSAPI_URL = 'https://api.tenthmatrix.com';
 
 export const SITE_DOMAIN = 'tenthmatrix.com';
+
+/* Extra domains that serve the same prod site (apex + www only, no envs). */
+export const ALIAS_DOMAINS = ['tenthmatrix.co.uk'];
 
 /* Non-prod environments that have their own API host. `prod` is deliberately
    absent: its host has no prefix, so it is the default below. */
@@ -47,8 +51,9 @@ export const opsapiUrlForHost = (hostname) => {
     const host = String(hostname || '').toLowerCase().split(':')[0];
     if (!host) return null;
 
-    // The apex serves production.
+    // The apex serves production, as do the alias domains' apex + www.
     if (host === SITE_DOMAIN) return PROD_OPSAPI_URL;
+    if (ALIAS_DOMAINS.some((d) => host === d || host === `www.${d}`)) return PROD_OPSAPI_URL;
     if (!host.endsWith(`.${SITE_DOMAIN}`)) return null;
 
     /* Each env may publish a `-www` alias next to the bare host
