@@ -26,11 +26,15 @@ const cases = [
   ["tenthmatrix.com", "https://api.tenthmatrix.com"],
   ["WWW.TenthMatrix.com", "https://api.tenthmatrix.com"],
   ["www.tenthmatrix.com:443", "https://api.tenthmatrix.com"],
+  ["tenthmatrix.co.uk", "https://api.tenthmatrix.com"],
+  ["www.tenthmatrix.co.uk", "https://api.tenthmatrix.com"],
   // Workstation's hosts are NOT ours — they must not resolve here.
   ["www.workstation.co.uk", null],
   ["int.workstation.co.uk", null],
   // Look-alike domains must not match.
   ["eviltenthmatrix.com", null],
+  ["int.tenthmatrix.co.uk", null],
+  ["tenthmatrix.co.uk.evil.io", null],
   ["tenthmatrix.com.evil.io", null],
   // Not an environment host -> caller falls back to config.
   ["localhost", null],

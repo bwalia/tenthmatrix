@@ -216,6 +216,11 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   and HTTPS both answer 200, edge cache 3600 s — same as www.workstation.co.uk) and
   `tm-prod-default` (int/test/acc → k3s ingress `193.237.176.232:8888`). The
   `api.tenthmatrix.com` vhosts are managed outside this repo.
+- **tenthmatrix.co.uk** (apex + www) is an alias of prod: same wslproxy rule
+  `tm-website-s3-proxy` → same bucket, same vhost settings as the .com hosts
+  (Cloudflare CNAME → `lon1.pop0.uk`, created via cp DNS provisioning). Pages
+  keep their `https://www.tenthmatrix.com/…` canonicals, so the alias doesn't
+  compete in search. The contact form resolves it to `api.tenthmatrix.com`.
 - Never run a deploy, push, or `--apply` a CMS import / Vault seed without the
   owner's explicit go-ahead.
 
