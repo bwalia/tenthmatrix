@@ -28,6 +28,7 @@ import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { mapCmsPost } from "../src/lib/cmsMap.mjs";
+import { fetchCmsPosts } from "./lib/cmsSource.mjs";
 
 dotenv.config({ path: [".env.local", ".env"], quiet: true });
 
@@ -44,10 +45,8 @@ const BRAND = "TenthMatrix";
 export const isSample = (slug = "") => /^__.*__$/.test(String(slug));
 
 const CMS_NAMESPACE = process.env.WEBSITE_NAMESPACE || "";
-const CMS_CATEGORY = process.env.WEBSITE_CATEGORY || "";
 const USE_CMS = !!CMS_NAMESPACE;
 const OPSAPI = process.env.OPSAPI_URL ? process.env.OPSAPI_URL.replace(/\/?$/, "/") : "";
-const CMS_BASE = OPSAPI ? `${OPSAPI}api/v2/public/cms/${encodeURIComponent(CMS_NAMESPACE)}` : null;
 const LEGACY_URL = OPSAPI ? `${OPSAPI}api/v2/all-documents` : null;
 const FETCH_TIMEOUT_MS = Number(process.env.CMS_FETCH_TIMEOUT_MS || 15000);
 
@@ -261,36 +260,6 @@ async function getJson(url, init = {}) {
   return res.json();
 }
 
-/** Published CMS posts for the namespace (list → full post per slug), mapped. */
-async function fetchCmsPosts() {
-  const summaries = [];
-  for (let page = 1, totalPages = 1; page <= totalPages; page++) {
-    const qs = new URLSearchParams({ page: String(page), perPage: "50" });
-    if (CMS_CATEGORY) qs.set("category", CMS_CATEGORY);
-    const body = await getJson(`${CMS_BASE}/posts?${qs}`);
-    for (const p of Array.isArray(body?.data) ? body.data : []) summaries.push(p);
-    totalPages = body?.meta?.totalPages || 1;
-  }
-
-  // The list omits content_html; a single failing post is skipped, not fatal.
-  const posts = [];
-  for (const s of summaries) {
-    if (!s?.slug) continue;
-    try {
-      const body = await getJson(`${CMS_BASE}/posts/${encodeURIComponent(s.slug)}`);
-      const mapped = mapCmsPost(body?.data);
-      if (mapped) posts.push(mapped);
-    } catch (e) {
-      console.warn(`⚠️  CMS post ${s.slug} skipped: ${e.message}`);
-    }
-  }
-  console.log(
-    `📚 Fetched ${posts.length} CMS post(s) for namespace "${CMS_NAMESPACE}"` +
-      (CMS_CATEGORY ? ` (category "${CMS_CATEGORY}")` : "") + "."
-  );
-  return posts;
-}
-
 /** Legacy source: the /all-documents feed (JWT-auth). */
 async function fetchLegacyDocuments() {
   const token = jwt.sign({ sub: "static-site-fetcher", role: "admin" }, process.env.JWT_SECRET_KEY, {
@@ -298,6 +267,31 @@ async function fetchLegacyDocuments() {
   });
   const body = await getJson(LEGACY_URL, { headers: { Authorization: `Bearer ${token}` } });
   return Array.isArray(body?.data) ? body.data : [];
+}
+
+/**
+ * A CMS post that reuses the slug of a post copied from Workstation keeps that
+ * post's cross-domain canonical (src/lib/seoCanonical.json) and stays out of
+ * the sitemap. Warn so new posts get new slugs; rewritten ones belong in
+ * SELF_CANONICAL_CONTENT (scripts/migration/build-seo-canonical.mjs).
+ */
+export function canonicalCollisions(posts) {
+  let entries = {};
+  try {
+    entries = JSON.parse(fs.readFileSync(path.join(ROOT, "src/lib/seoCanonical.json"), "utf8")).entries || {};
+  } catch {
+    return [];
+  }
+  return posts.map((p) => p?.slug).filter((slug) => slug && entries[`/docs/blogs/${slug}`]);
+}
+
+function warnCanonicalCollisions(posts) {
+  for (const slug of canonicalCollisions(posts)) {
+    console.warn(
+      `⚠️  CMS post "${slug}" reuses a Workstation-copied slug: it keeps the canonical to ` +
+        `workstation.co.uk and is left out of the sitemap. Give new posts a new slug.`
+    );
+  }
 }
 
 async function refreshFromApi() {
@@ -315,6 +309,7 @@ async function refreshFromApi() {
       console.warn("⚠️  API returned no posts — keeping committed blog JSON.");
       return;
     }
+    warnCanonicalCollisions(posts);
     ensureDir(BLOG_DIR);
     let written = 0;
     for (const post of posts) {

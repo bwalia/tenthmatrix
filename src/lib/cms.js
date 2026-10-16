@@ -26,7 +26,11 @@ const CAT = process.env.WEBSITE_CATEGORY || '';
 const BASE = process.env.OPSAPI_URL
   ? `${process.env.OPSAPI_URL}api/v2/public/cms/${encodeURIComponent(NS)}`
   : null;
-export const CMS_ENABLED = !!(NS && BASE);
+// The S3 static export (TM_STATIC_EXPORT=1) reads disk only: prebuild's
+// fetchBlogs has already written the CMS posts on top of the committed JSON
+// and rebuilt pages/ and tags/ from that set. Fetching again per page could
+// list a post published mid-build that has no exported page.
+export const CMS_ENABLED = !!(NS && BASE) && process.env.TM_STATIC_EXPORT !== '1';
 /** `overlay` (default) = git base + CMS on top. `prefer` = legacy either/or. */
 export const CMS_CONTENT_MODE = (process.env.CMS_CONTENT_MODE || 'overlay').toLowerCase();
 const OVERLAY = CMS_CONTENT_MODE !== 'prefer';

@@ -1,0 +1,87 @@
+name: "Content refresh (OpsAPI CMS → S3)"
+
+# Prod is a static export, so blog posts published in the OpsAPI `tenthmatrix`
+# CMS namespace only reach www.tenthmatrix.com when the site is rebuilt.
+#
+#   schedule           every 15 min: fingerprint the published posts
+#                      (scripts/cms-fingerprint.mjs, no npm ci) and rebuild only
+#                      if that content isn't already live. OpsAPI down → skip.
+#   workflow_dispatch  "Run workflow" = publish now (rebuild even if unchanged
+#                      unless `force` is unticked).
+#
+# The rebuild is the same reusable job as a code deploy (deploy-s3.yaml), which
+# saves the fingerprint it shipped. A code push therefore also counts as
+# "content live", and the next check doesn't rebuild again.
+# Later, once k3s is up: OpsAPI webhook → signed receiver → this dispatch.
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        type: boolean
+        description: "Rebuild even if the CMS content is unchanged"
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tm-content-refresh
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: "🔎 CMS content changed?"
+    runs-on: [self-hosted, Linux, int]
+    outputs:
+      rebuild: ${{ steps.decide.outputs.rebuild }}
+    env:
+      OPSAPI_URL: https://api.tenthmatrix.com/
+      WEBSITE_NAMESPACE: tenthmatrix
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/cms-fingerprint.mjs
+            scripts/lib/cmsSource.mjs
+            src/lib/cmsMap.mjs
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Fingerprint CMS content
+        id: fp
+        run: echo "hash=$(node scripts/cms-fingerprint.mjs)" >> "$GITHUB_OUTPUT"
+
+      - name: Already live?
+        id: live
+        if: steps.fp.outputs.hash != ''
+        uses: actions/cache/restore@v4
+        with:
+          path: .cms-fingerprint
+          key: tm-cms-${{ steps.fp.outputs.hash }}
+          lookup-only: true
+
+      - name: Decide
+        id: decide
+        env:
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && inputs.force }}
+          HASH: ${{ steps.fp.outputs.hash }}
+          HIT: ${{ steps.live.outputs.cache-hit }}
+        run: |
+          if [ "$FORCE" = "true" ]; then r=true; why="manual refresh"
+          elif [ -z "$HASH" ]; then r=false; why="CMS unreachable — keeping the live site"
+          elif [ "$HIT" = "true" ]; then r=false; why="content already live"
+          else r=true; why="CMS content changed"; fi
+          echo "rebuild=$r" >> "$GITHUB_OUTPUT"
+          echo "rebuild=$r ($why)" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    name: "Rebuild"
+    needs: check
+    if: needs.check.outputs.rebuild == 'true'
+    uses: ./.github/workflows/deploy-s3.yaml
+    secrets: inherit

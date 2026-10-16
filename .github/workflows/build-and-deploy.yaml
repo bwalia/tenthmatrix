@@ -1,12 +1,12 @@
 name: "Build and Deploy TenthMatrix Website"
 
 # Adapted from Workstation's build-and-deploy.yaml:
-#   - no S3 static export (prod runs on k3s like every other env)
-#   - no shop jobs
+#   - prod = static export → S3 (deploy-s3.yaml, also run by content-refresh.yaml)
+#   - int/test/acc on k3s; no shop jobs
 #   - image tm-frontend, chart devops/helm-charts/tm-chart, releases tm-<env>
 # Flow: compute-version → build (npm verify + docker) → dns → wslproxy →
-#       deploy-int (auto on push) → test / acc / prod (manual dispatch).
-# Nothing here runs until the repo is pushed and the secrets below exist.
+#       deploy-int (auto on push) → test / acc (manual dispatch);
+#       deploy-s3 (prod) on every push.
 
 on:
   push:
@@ -275,50 +275,16 @@ jobs:
   # www.tenthmatrix.com + apex are served by wslproxy (rule
   # tm-website-s3-proxy) from the bucket's website endpoint, like Workstation's
   # prod. Runs on every push to main (and on dispatch with TARGET_ENV=prod);
-  # independent of the Docker image, which only int/test/acc use.
+  # independent of the Docker image, which only int/test/acc use. The job lives
+  # in deploy-s3.yaml, shared with content-refresh.yaml (OpsAPI CMS posts).
   deploy-s3:
-    name: "🚀 PROD → S3 (tenthmatrix-website)"
-    runs-on: [self-hosted, Linux, int]
-    environment: prod
     if: >-
       github.event_name == 'push' ||
       (github.event_name == 'workflow_dispatch' &&
        github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
        github.event.inputs.TARGET_ENV == 'prod')
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-          cache: 'npm'
-
-      - name: Ensure AWS CLI
-        run: |
-          if ! command -v aws >/dev/null 2>&1; then
-            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
-            unzip -q awscliv2.zip && sudo ./aws/install --update && rm -rf awscliv2.zip aws/
-          fi
-          aws --version
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build static export and sync to S3
-        run: bash scripts/deploy-s3.sh
-        env:
-          SITE_URL: https://www.tenthmatrix.com
-          NEXT_PUBLIC_OPSAPI_URL: https://api.tenthmatrix.com
-          AWS_ACCESS_KEY_ID: ${{ secrets.TM_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.TM_AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-west-2
-
-      - name: Smoke test www.tenthmatrix.com
-        run: |
-          for p in /en/ /en/start-a-project/ /robots.txt /sitemap.xml; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "https://www.tenthmatrix.com$p")
-            echo "$code $p"; [ "$code" = 200 ] || exit 1
-          done
+    uses: ./.github/workflows/deploy-s3.yaml
+    secrets: inherit
 
   # ── Cut the release tag LAST (only after the image is pushed) ─────────
   auto-tag:
