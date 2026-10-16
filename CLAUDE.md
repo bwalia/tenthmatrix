@@ -201,7 +201,21 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
 - **What the export can't do:** no API routes, so likes/comments are hidden,
   search uses the prebuilt Fuse index, CMS posts appear only at build time
   (rebuild to publish), and the contact form posts straight to OpsAPI from the
-  browser (`api.tenthmatrix.com`). Dynamic blog routes enumerate their params
+  browser (`api.tenthmatrix.com`).
+- **OpsAPI blog posts on top of the static site.** The S3 job lives in
+  `.github/workflows/deploy-s3.yaml` (reusable). It sets `OPSAPI_URL=https://api.tenthmatrix.com/`
+  and `WEBSITE_NAMESPACE=tenthmatrix`, so prebuild's `fetchBlogs.mjs` writes
+  the namespace's published posts on top of the committed `blogs/` JSON (same
+  slug → CMS wins) and rebuilds pages/tags/search/sitemap from that set. If
+  OpsAPI is down, the committed set ships. With `TM_STATIC_EXPORT=1`,
+  `src/lib/cms.js` reads disk only (no per-page CMS fetch), so listings and
+  exported pages always agree. `.github/workflows/content-refresh.yaml` runs
+  every 15 min: `scripts/cms-fingerprint.mjs` (no npm deps, shares
+  `scripts/lib/cmsSource.mjs` with fetchBlogs) hashes the published posts and
+  the job rebuilds only if that hash isn't already live (an Actions cache key
+  `tm-cms-<hash>` saved by every successful S3 deploy). "Run workflow" on it
+  = publish now. A CMS post reusing a Workstation-copied slug keeps the
+  Workstation canonical; fetchBlogs warns, so give new posts new slugs. Dynamic blog routes enumerate their params
   from committed JSON only when exporting (`src/lib/staticSlugs.js`); on k3s
   they stay on-demand ISR.
 - **OG images** are prerendered (`dynamic = 'force-static'` + locale params).

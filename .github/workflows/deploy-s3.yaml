@@ -1,0 +1,84 @@
+name: "PROD → S3 (reusable)"
+
+# The one prod deploy: static export → S3 bucket tenthmatrix-website.
+# www.tenthmatrix.com + apex (and tenthmatrix.co.uk) are served by wslproxy
+# (rule tm-website-s3-proxy) from the bucket's website endpoint.
+#
+# Called by build-and-deploy.yaml (code: every push to main, or dispatch with
+# TARGET_ENV=prod) and content-refresh.yaml (OpsAPI CMS posts changed, or a
+# manual refresh). Prebuild pulls the published posts of the `tenthmatrix`
+# CMS namespace on top of the committed blog JSON (scripts/fetchBlogs.mjs);
+# if OpsAPI is down the committed set ships unchanged.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: "🚀 PROD → S3 (tenthmatrix-website)"
+    runs-on: [self-hosted, Linux, int]
+    environment: prod
+    # One S3 sync at a time across both callers. Never cancel a running sync
+    # (it would leave the bucket half-updated); a newer pending run replacing an
+    # older pending one is fine — both build main with the latest content.
+    concurrency:
+      group: tm-s3-deploy
+      cancel-in-progress: false
+    env:
+      SITE_URL: https://www.tenthmatrix.com
+      NEXT_PUBLIC_OPSAPI_URL: https://api.tenthmatrix.com
+      # Public CMS read (no key): GET {OPSAPI_URL}api/v2/public/cms/tenthmatrix/posts
+      OPSAPI_URL: https://api.tenthmatrix.com/
+      WEBSITE_NAMESPACE: tenthmatrix
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Ensure AWS CLI
+        run: |
+          if ! command -v aws >/dev/null 2>&1; then
+            curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
+            unzip -q awscliv2.zip && sudo ./aws/install --update && rm -rf awscliv2.zip aws/
+          fi
+          aws --version
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Taken BEFORE the build: a post published mid-build changes the hash, so
+      # the next scheduled check still picks it up.
+      - name: Fingerprint CMS content
+        id: fp
+        run: echo "hash=$(node scripts/cms-fingerprint.mjs)" >> "$GITHUB_OUTPUT"
+
+      - name: Build static export and sync to S3
+        run: bash scripts/deploy-s3.sh
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TM_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TM_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-west-2
+
+      - name: Smoke test www.tenthmatrix.com
+        run: |
+          for p in /en/ /en/docs/blogs/ /en/start-a-project/ /robots.txt /sitemap.xml; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "https://www.tenthmatrix.com$p")
+            echo "$code $p"; [ "$code" = 200 ] || exit 1
+          done
+
+      # Records "this CMS content is live" for content-refresh.yaml, which looks
+      # the key up and skips the rebuild on a hit.
+      - name: Record deployed CMS fingerprint
+        if: steps.fp.outputs.hash != ''
+        run: mkdir -p .cms-fingerprint && echo "${{ steps.fp.outputs.hash }}" > .cms-fingerprint/hash
+      - uses: actions/cache/save@v4
+        if: steps.fp.outputs.hash != ''
+        continue-on-error: true # key already saved by an earlier deploy of the same content
+        with:
+          path: .cms-fingerprint
+          key: tm-cms-${{ steps.fp.outputs.hash }}
