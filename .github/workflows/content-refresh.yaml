@@ -40,13 +40,10 @@ jobs:
       OPSAPI_URL: https://api.tenthmatrix.com/
       WEBSITE_NAMESPACE: tenthmatrix
     steps:
+      # Full (shallow) checkout on purpose: a sparse checkout here leaves the
+      # runner's shared checkout folder sparse, and the next full checkout by a
+      # deploy job comes up missing files (package-lock.json).
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            scripts/cms-fingerprint.mjs
-            scripts/lib/cmsSource.mjs
-            src/lib/cmsMap.mjs
-          sparse-checkout-cone-mode: false
 
       - uses: actions/setup-node@v4
         with:
