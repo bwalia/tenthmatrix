@@ -91,6 +91,12 @@ jobs:
     outputs:
       image_tag: ${{ steps.tag.outputs.tag }}
     steps:
+      # Self-hosted runners reuse one checkout folder per repo across every
+      # workflow. Start from an empty folder so state left by another job (a
+      # sparse checkout once left package-lock.json missing) can't leak in.
+      - name: Clean workspace
+        run: find "$GITHUB_WORKSPACE" -mindepth 1 -delete
+
       - uses: actions/checkout@v4
 
       - name: Generate image tag
@@ -100,8 +106,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          # No cache: 'npm' — on runner 2.338 setup-node's lockfile lookup fails
-          # ("Dependencies lock file is not found") although the file is there.
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
