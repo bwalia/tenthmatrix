@@ -3,9 +3,10 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import {
   ArrowRight,
   ArrowUpRight,
-  Bot,
-  AppWindow,
-  Plug,
+  TrendingUp,
+  Megaphone,
+  Workflow,
+  Check,
   GitBranch,
   Shield,
   KeyRound,
@@ -61,9 +62,9 @@ function StepGlyph({ step }) {
 }
 
 const PILLARS = [
-  { key: 'agents', icon: Bot, links: ['aiAgentDev', 'aiAgents', 'claudeAgents'] },
-  { key: 'genai', icon: AppWindow, links: ['genAiDev', 'generativeAi', 'appliedAi'] },
-  { key: 'integrations', icon: Plug, links: ['softwareDevelopment', 'dataFoundations', 'devops'] },
+  { key: 'sales', icon: TrendingUp, links: ['crm', 'aiAgents', 'aiAgentDev'] },
+  { key: 'marketing', icon: Megaphone, links: ['marketing', 'generativeAi', 'claudeAgents'] },
+  { key: 'backoffice', icon: Workflow, links: ['aiAutomation', 'jobshout', 'dataFoundations'] },
 ];
 
 // Benefits of TenthMatrix agents: each one links to the thing that proves it.
@@ -121,11 +122,34 @@ export default async function HomePage({ params }) {
         lede={t('home.hero.lede')}
         actions={[
           { label: t('home.hero.primary'), href: href('/start-a-project'), arrow: true },
-          { label: t('home.hero.secondary'), href: '#benefits' },
+          { label: t('home.hero.secondary'), href: '#why-10x' },
         ]}
         meta={t.raw('home.hero.meta')}
         art
       />
+
+      <section id="why-10x" className={s.name} aria-labelledby="why-10x-title">
+        <div className={s.nameInner}>
+          <p className={s.nameFigure} aria-hidden="true">
+            10<span>×</span>
+          </p>
+          <div className={s.nameCopy}>
+            <Eyebrow>{t('home.name.eyebrow')}</Eyebrow>
+            <h2 id="why-10x-title" className={s.nameTitle}>
+              {t('home.name.title')}
+            </h2>
+            <p className={s.nameBody}>{t('home.name.body')}</p>
+            <ul className={s.namePoints}>
+              {t.raw('home.name.points').map((point) => (
+                <li key={point}>
+                  <Check aria-hidden="true" size={18} strokeWidth={2} />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
       <Section id="build" eyebrow={t('home.pillars.eyebrow')} title={t('home.pillars.title')} lede={t('home.pillars.lede')}>
         <Reveal as="ul" stagger className={s.pillars}>
