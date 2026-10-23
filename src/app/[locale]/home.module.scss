@@ -330,3 +330,72 @@
     color: var(--tm-text);
   }
 }
+
+// --------------------------------------------------- name (why 10x)
+.name {
+  border-bottom: 1px solid var(--tm-line);
+  background: var(--tm-surface);
+}
+
+.nameInner {
+  @include container;
+  display: grid;
+  gap: var(--tm-space-6);
+  padding-block: var(--tm-space-12);
+
+  @include up($bp-md) {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--tm-space-12);
+  }
+}
+
+.nameFigure {
+  margin: 0;
+  font-family: var(--tm-font-display);
+  font-weight: var(--tm-weight-display);
+  font-size: clamp(4.5rem, 14vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--tm-text);
+
+  span {
+    color: var(--tm-accent);
+  }
+}
+
+.nameCopy {
+  display: grid;
+  gap: var(--tm-space-3);
+}
+
+.nameTitle {
+  font-size: var(--tm-text-3xl);
+}
+
+.nameBody {
+  color: var(--tm-text-muted);
+  max-width: 62ch;
+}
+
+.namePoints {
+  display: grid;
+  gap: var(--tm-space-2);
+  margin: var(--tm-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-medium);
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--tm-space-2);
+  }
+
+  svg {
+    flex: none;
+    margin-top: 2px;
+    color: var(--tm-accent);
+  }
+}
