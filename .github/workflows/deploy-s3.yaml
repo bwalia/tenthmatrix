@@ -38,7 +38,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
+          # No cache: 'npm' — on runner 2.338 setup-node's lockfile lookup fails
+          # ("Dependencies lock file is not found") although the file is there.
 
       - name: Ensure AWS CLI
         run: |
