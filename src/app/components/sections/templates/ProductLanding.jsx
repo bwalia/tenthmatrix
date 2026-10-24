@@ -16,7 +16,7 @@ import { useUiStrings } from '../ui';
 const act = (a) => (a ? { label: a.text || a.label, href: a.href || a.link } : null);
 
 /**
- * Our software products (ring-promoter, wsl-proxy, wsl-vault, jobshout, sysops247).
+ * Our software products (ring-promoter, proxy10x, wsl-vault, jobshout, sysops247).
  * Shared shape: header, intro{links}, videos, pillars, steps, howItWorks, features,
  * agents, waf, aiAngle, roadmap, architecture, visuals, screenshot, deploy,
  * externalSite, related/relatedReading, cta{primary,secondary,tertiary,quaternary}.

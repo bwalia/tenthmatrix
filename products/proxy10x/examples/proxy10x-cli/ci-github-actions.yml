@@ -1,0 +1,58 @@
+# Example: use the published proxy10x-cli image in a GitHub Actions job.
+# Image: ghcr.io/bwalia/proxy10x-cli:latest
+#
+# Required secrets/vars:
+#   PROXY10X_BASE_URL  — e.g. https://lon1.pop0.uk
+#   PROXY10X_TOKEN     — admin JWT (or login with PROXY10X_EMAIL + PROXY10X_PASSWORD)
+
+name: Proxy10x config check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  check-nginx:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/bwalia/proxy10x-cli:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        PROXY10X_BASE_URL: ${{ vars.PROXY10X_BASE_URL }}
+        PROXY10X_TOKEN: ${{ secrets.PROXY10X_TOKEN }}
+        PROXY10X_ASSUME_YES: '1'
+    steps:
+      - name: Health + nginx check
+        run: |
+          proxy10x-cli status health -o json
+          proxy10x-cli check nginx -o json
+
+  pull-push-dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull → jq tweak → dry-run push
+        run: |
+          docker run --rm \
+            -e PROXY10X_BASE_URL \
+            -e PROXY10X_TOKEN \
+            -e PROXY10X_ASSUME_YES=1 \
+            -v "$PWD/cfg:/work/cfg" \
+            --entrypoint bash \
+            ghcr.io/bwalia/proxy10x-cli:latest \
+            -lc '
+              set -euo pipefail
+              proxy10x-cli pull -d /work/cfg --resources rules -o json
+              # example mutate (noop if no files)
+              shopt -s nullglob
+              for f in /work/cfg/rules/*/*.json; do
+                jq "." "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+              done
+              proxy10x-cli push -d /work/cfg --resources rules --dry-run -o json
+            '
+        env:
+          PROXY10X_BASE_URL: ${{ vars.PROXY10X_BASE_URL }}
+          PROXY10X_TOKEN: ${{ secrets.PROXY10X_TOKEN }}

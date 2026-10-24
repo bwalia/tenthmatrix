@@ -1,0 +1,17 @@
+# Grafana dashboard provisioning — Proxy10x
+# Drop into /etc/grafana/provisioning/dashboards/
+apiVersion: 1
+
+providers:
+  - name: Proxy10x
+    orgId: 1
+    folder: Proxy10x
+    folderUid: proxy10x
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      # Mount the JSON dashboards here (see README for compose/helm mounts).
+      path: /var/lib/grafana/dashboards/proxy10x
+      foldersFromFilesStructure: false

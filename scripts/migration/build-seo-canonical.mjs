@@ -65,6 +65,13 @@ export const SELF_CANONICAL = new Set([
   '/sitemap-page',
 ]);
 
+/**
+ * Copied marketing routes TenthMatrix serves under a new path (Workstation path →
+ * TenthMatrix path). The new path keeps the Workstation canonical until it is
+ * rewritten enough to join SELF_CANONICAL; the old path only redirects.
+ */
+export const RENAMED_ROUTES = { '/wsl-proxy': '/proxy10x' };
+
 /** Blog / article / insight paths (no locale) rewritten enough to be ours. */
 export const SELF_CANONICAL_CONTENT = new Set([]);
 
@@ -129,8 +136,9 @@ export function buildCanonicalMap() {
     if (!['tenthmatrix', 'both'].includes(r.dest)) continue;
     if (!r.path.startsWith('/') || r.path.includes('[') || r.path.startsWith('/api/')) continue;
     if (r.path.startsWith('/insights')) continue; // handled above
-    if (!pageExists(r.path)) continue;
-    add(r.path, r.path, 'page');
+    const tmPath = RENAMED_ROUTES[r.path] || r.path;
+    if (!pageExists(tmPath)) continue;
+    add(tmPath, r.path, 'page');
   }
 
   const sorted = Object.fromEntries(Object.entries(entries).sort(([a], [b]) => a.localeCompare(b)));

@@ -1,0 +1,133 @@
+#!/bin/bash
+
+set -x
+
+# Set PATH to include OpenResty and luarocks binaries
+export PATH="/usr/local/openresty/luajit/bin:/usr/local/openresty/bin:/usr/local/bin:$PATH"
+
+# OPM package management
+opm remove pintsized/lua-resty-http || true
+opm remove ledgetech/lua-resty-http || true
+
+opm get olegabr/lua-resty-ip2location || true
+opm get ip2location/ip2location-resty || true
+opm get bungle/lua-resty-session || true
+opm get bungle/lua-resty-template || true
+opm get thibaultcha/lua-resty-mlcache || true
+opm get 3scale/lua-resty-env || true
+
+# Install nginx-lua-prometheus for Prometheus metrics
+cd /tmp && \
+    rm -rf nginx-lua-prometheus && \
+    git clone https://github.com/knyar/nginx-lua-prometheus.git && \
+    cp /tmp/nginx-lua-prometheus/prometheus.lua /usr/local/openresty/lualib/ && \
+    cp /tmp/nginx-lua-prometheus/prometheus_keys.lua /usr/local/openresty/lualib/ && \
+    cp /tmp/nginx-lua-prometheus/prometheus_resty_counter.lua /usr/local/openresty/lualib/ && \
+    rm -rf /tmp/nginx-lua-prometheus
+
+# Install lua-resty-upstream-healthcheck for active health checks on upstreams
+cd /tmp && \
+    rm -rf lua-resty-upstream-healthcheck && \
+    git clone https://github.com/openresty/lua-resty-upstream-healthcheck.git && \
+    mkdir -p /usr/local/openresty/lualib/resty/upstream && \
+    cp /tmp/lua-resty-upstream-healthcheck/lib/resty/upstream/healthcheck.lua /usr/local/openresty/lualib/resty/upstream/ && \
+    rm -rf /tmp/lua-resty-upstream-healthcheck
+
+mkdir -p /data/nginx/cache
+chown -R www-data:root /data/nginx/cache
+chmod -R 775 /data/nginx/cache
+
+mkdir -p /var/log/nginx/
+chown -R www-data:root /var/log/nginx/
+chmod -R 775 /var/log/nginx/
+
+mkdir -p /opt/nginx/data/ \
+    && chmod -R 777 /opt/nginx/data/ \
+    && chown -R www-data:root /opt/nginx/data/
+
+mkdir -p /opt/nginx/data/rules/prod/ \
+    && chmod -R 777 /opt/nginx/data/rules/prod/ \
+    && chown -R www-data:root /opt/nginx/data/rules/prod/
+
+mkdir -p /opt/nginx/data/rules/acc/ \
+    && chmod -R 777 /opt/nginx/data/rules/acc/ \
+    && chown -R www-data:root /opt/nginx/data/rules/acc/
+
+mkdir -p /opt/nginx/data/rules/test/ \
+    && chmod -R 777 /opt/nginx/data/rules/test/ \
+    && chown -R www-data:root /opt/nginx/data/rules/test/
+
+mkdir -p /opt/nginx/data/rules/int/ \
+    && chmod -R 777 /opt/nginx/data/rules/int/ \
+    && chown -R www-data:root /opt/nginx/data/rules/int/
+
+mkdir -p /opt/nginx/data/servers/prod/ \
+    && chmod -R 777 /opt/nginx/data/servers/prod/ \
+    && chown -R www-data:root /opt/nginx/servers/rules/prod/
+
+mkdir -p /opt/nginx/data/servers/acc/ \
+    && chmod -R 777 /opt/nginx/data/servers/acc/ \
+    && chown -R www-data:root /opt/nginx/data/servers/acc/
+
+mkdir -p /opt/nginx/data/servers/test/ \
+    && chmod -R 777 /opt/nginx/data/servers/test/ \
+    && chown -R www-data:root /opt/nginx/data/servers/test/
+
+mkdir -p /opt/nginx/data/servers/int/ \
+    && chmod -R 777 /opt/nginx/data/servers/int/ \
+    && chown -R www-data:root /opt/nginx/data/servers/int/
+
+# Create upstreams directories for all environments
+mkdir -p /opt/nginx/data/upstreams/prod/ \
+    && chmod -R 777 /opt/nginx/data/upstreams/prod/ \
+    && chown -R www-data:root /opt/nginx/data/upstreams/prod/ \
+    && touch /opt/nginx/data/upstreams/prod/upstreams.conf
+
+mkdir -p /opt/nginx/data/upstreams/acc/ \
+    && chmod -R 777 /opt/nginx/data/upstreams/acc/ \
+    && chown -R www-data:root /opt/nginx/data/upstreams/acc/ \
+    && touch /opt/nginx/data/upstreams/acc/upstreams.conf
+
+mkdir -p /opt/nginx/data/upstreams/test/ \
+    && chmod -R 777 /opt/nginx/data/upstreams/test/ \
+    && chown -R www-data:root /opt/nginx/data/upstreams/test/ \
+    && touch /opt/nginx/data/upstreams/test/upstreams.conf
+
+mkdir -p /opt/nginx/data/upstreams/int/ \
+    && chmod -R 777 /opt/nginx/data/upstreams/int/ \
+    && chown -R www-data:root /opt/nginx/data/upstreams/int/ \
+    && touch /opt/nginx/data/upstreams/int/upstreams.conf
+
+mkdir -p /etc/resty-auto-ssl
+chown -R www-data:root /etc/resty-auto-ssl/
+chmod -R 775 /etc/resty-auto-ssl
+
+mkdir -p /etc/ssl/
+chown -R www-data:root /etc/ssl/
+chmod -R 775 /etc/ssl
+
+openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
+  -subj '/CN=sni-support-required-for-valid-ssl' \
+  -keyout /etc/ssl/resty-auto-ssl-fallback.key \
+  -out /etc/ssl/resty-auto-ssl-fallback.crt
+
+# mc - MinIO Client is used to backup nginx openresty configuration to S3
+# Classic /client/mc/… URLs return 410; AIStor path is current.
+wget -q https://dl.min.io/aistor/mc/release/linux-amd64/mc -O /usr/local/bin/mc \
+    --tries=3 --timeout=30 && \
+    chmod +x /usr/local/bin/mc
+
+mc --version
+
+# IP2Location LITE DB — canonical destination + source URL come from
+# the ansible role defaults (ip2location_db_path,
+# ip2location_download_url).  `install` does fetch + chmod + chown +
+# create-parent-dir in a single atomic step, so an interrupted run
+# never leaves a partial file at the target path.
+cd /tmp/ && wget -q --tries=3 --timeout=60 --waitretry=10 "{{ ip2location_download_url }}" -O /tmp/IP2LOCATION-LITE-DB11.IPV6.BIN
+install -D -m 0775 -o www-data -g root /tmp/IP2LOCATION-LITE-DB11.IPV6.BIN "{{ ip2location_db_path }}"
+# Keep /tmp path as a symlink. Older settings.json / Vault / hardcoded
+# Lua still open /tmp/IP2LOCATION-...; ansible used to delete the file
+# after install, which blanked Geographic Traffic on lon1.
+rm -f /tmp/IP2LOCATION-LITE-DB11.IPV6.BIN
+ln -sfn "{{ ip2location_db_path }}" /tmp/IP2LOCATION-LITE-DB11.IPV6.BIN

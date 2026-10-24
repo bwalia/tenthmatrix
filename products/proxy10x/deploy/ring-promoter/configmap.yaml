@@ -1,0 +1,164 @@
+# proxy10x Ring Promoter instance — app registry.
+#
+# THE source of truth for the proxy10x-k3s1 deploy script. Edit it here; a
+# merge to main applies it and restarts the pod (deploy-ring-promoter.yml).
+# There is no other copy: the old snippet (k3s1.yaml) drifted from the
+# workstation instance's ConfigMap for a week, and every seed ran a stale
+# `helm --wait` that timed out.
+#
+# Instance: https://rp.proxy10x.com  (namespace proxy10x-ring-promoter)
+# Seeded by: .github/workflows/deploy-control-plane-k3s1.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ring-promoter-config
+  namespace: proxy10x-ring-promoter
+data:
+  config.yaml: |
+    listen_addr: ":8080"
+    deployer: log         # global default; proxy10x-k3s1 overrides to k8sjob
+    health: http          # real HTTP health checks against each ring's health_url
+    database:
+      driver: postgres    # DSN comes from RP_DB_DSN (Secret)
+    retry:
+      count: 3
+      delay: 5s
+    operation_timeout: 60m
+    apps:
+      - name: proxy10x-k3s1
+        display_name: "Proxy10x Control Plane"
+        location: { lat: 51.5074, lng: -0.1278, city: London, region: GB }
+        deployer: k8sjob
+        k8sjob:
+          namespace: ring-exec
+          image: docker.io/dtzar/helm-kubectl:3.15.4
+          service_account: ring-deploy-job
+          # Node path reaches WSLVault UI/API; CNI overlay is flaky on some nodes.
+          host_network: true
+          env_from_secrets: [proxy10x-vault]
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              env="${RP_TARGET_ENV}"
+              ver="${RP_VERSION}"
+              if [ "${env}" = "prod" ]; then
+                ns="proxy10x-system"
+                release="proxy10x-ingress"
+                fullname="proxy10x-ingress"
+                class="proxy10x"
+                extra=""
+                control_plane=1
+              else
+                ns="proxy10x-${env}"
+                release="proxy10x-ingress-${env}"
+                fullname="proxy10x-ingress-${env}"
+                class="proxy10x-${env}"
+                extra="--set openresty.autoscaling.enabled=false --set openresty.replicas=1 --set controller.replicas=1 --set openresty.podDisruptionBudget.enabled=false --set openresty.service.type=ClusterIP"
+                control_plane=0
+              fi
+              rm -rf /src
+              git clone https://github.com/bwalia/tenthmatrix /src
+              cd /src
+              # Resolve RP_VERSION (full SHA, short SHA or git tag) to the
+              # commit, then derive the image tag from THAT. Images are only
+              # published as sha-<7>; using a short SHA or a tag verbatim
+              # (5077414a, v1.0.117) pointed helm at tags that do not exist,
+              # and int sat in ImagePullBackOff from 2026-09-15. A ref that
+              # does not resolve is an error, not a silent default-branch
+              # deploy.
+              if ! git checkout -q "${ver}"; then
+                echo "RP_VERSION '${ver}' is not a commit or tag in bwalia/proxy10x" >&2
+                exit 1
+              fi
+              sha="$(git rev-parse HEAD)"
+              tag="sha-$(printf '%s' "${sha}" | cut -c1-7)"
+              echo "deploy proxy10x-ingress ${tag} (${ver} -> ${sha}) -> ns ${ns} class ${class} (ring ${RP_RING})"
+              # Fail before touching the cluster if CI never built this commit.
+              hub_tag() {
+                code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+                  "https://hub.docker.com/v2/namespaces/bwalia/repositories/$1/tags/${tag}" || true)"
+                if [ "${code}" != "200" ]; then
+                  echo "image bwalia/$1:${tag} not found on Docker Hub (HTTP ${code}); build it via deploy-control-plane-k3s1.yml first" >&2
+                  exit 1
+                fi
+              }
+              hub_tag proxy10x
+              if [ "${control_plane}" = "1" ]; then
+                hub_tag proxy10x-admin-next
+              fi
+              kubectl apply -f ingress-controller/deploy/crds/
+              # IngressClass.spec.controller is immutable. If a prior install left
+              # the wrong controller (e.g. traefik.io/…), delete so helm can recreate.
+              want_ctrl="proxy10x.io/ingress-controller"
+              have_ctrl="$(kubectl get ingressclass "${class}" -o jsonpath='{.spec.controller}' 2>/dev/null || true)"
+              if [ -n "${have_ctrl}" ] && [ "${have_ctrl}" != "${want_ctrl}" ]; then
+                echo "IngressClass ${class} controller='${have_ctrl}' != '${want_ctrl}' — deleting for recreate"
+                kubectl delete ingressclass "${class}" --ignore-not-found
+              fi
+              if [ "${control_plane}" = "1" ]; then
+                if [ -z "${VAULT_TOKEN:-}" ] || [ -z "${VAULT_ADDR:-}" ]; then
+                  echo "VAULT_ADDR/VAULT_TOKEN missing — create secret ring-exec/proxy10x-vault" >&2
+                  exit 1
+                fi
+                export VAULT_ADDR VAULT_TOKEN
+                export PROXY10X_VAULT_ENV=prod
+                chmod +x scripts/k3s1-bootstrap-control-plane.sh
+                ./scripts/k3s1-bootstrap-control-plane.sh
+                # Pin OpenResty + controller to cloud003 (CF → 77.68.126.63).
+                # Overlay also enables controlPlane Ingress/NodePort 32080 + Next.js dashboard.
+                extra="${extra} -f ./ingress-controller/deploy/helm/values-control-plane-cloud003.yaml"
+                extra="${extra} --set openresty.settings.existingSecret=proxy10x-settings --set openresty.pgsql.existingSecret=proxy10x-pgsql"
+                extra="${extra} --set openresty.controlPlane.dashboard.enabled=true"
+                extra="${extra} --set openresty.controlPlane.dashboard.image.tag=${tag}"
+                extra="${extra} --set openresty.controlPlane.dashboard.image.pullPolicy=Always"
+              fi
+              # No --create-namespace: ring-deploy-job has no cluster-scoped
+              # namespace rights. Namespaces come from k3s1-rbac.yaml.
+              # Control-plane image is bwalia/proxy10x (openresty). Do not pin
+              # controller.image.tag — that image is not rebuilt on every main merge.
+              # shellcheck disable=SC2086
+              # Do not --wait on LoadBalancer readiness: ServiceLB EXTERNAL-IP can
+              # stay empty while NodePort 32080 + traefik-edge already serve cp.pop0.uk.
+              helm upgrade --install "${release}" ./ingress-controller/deploy/helm \
+                --namespace "${ns}" \
+                --set fullnameOverride="${fullname}" \
+                --set ingressClass.name="${class}" \
+                --set ingressClass.isDefaultClass=false \
+                --set openresty.image.tag="${tag}" \
+                --set openresty.image.pullPolicy=Always \
+                ${extra} \
+                --timeout 10m \
+                --wait=false
+              # Apply Traefik path split BEFORE waiting on rollouts — RP's sync
+              # seed often 504s at the gateway while the Job is still running, and
+              # skipping this left cp.pop0.uk stuck on the legacy Vite SPA.
+              if [ "${control_plane}" = "1" ]; then
+                kubectl apply -f deploy/k3s1/proxy10x-cp-traefik-ingress.yaml
+              fi
+              # Still wait for OpenResty pods so seed reports a useful failure.
+              kubectl -n "${ns}" rollout status "deploy/${fullname}-openresty" --timeout=5m
+              kubectl -n "${ns}" rollout status "deploy/${fullname}-controller" --timeout=3m || true
+              if [ "${control_plane}" = "1" ]; then
+                kubectl -n "${ns}" rollout status "deploy/${fullname}-dashboard" --timeout=5m
+                echo "control-plane pinned to cloud003; UI NodePort 32080 + Next.js dashboard on 77.68.126.63"
+              fi
+              echo "proxy10x-ingress ${tag} live in ${ns}"
+          resources: { cpu_request: 100m, memory_limit: 512Mi }
+          timeout: 25m
+          retries: 0
+          ttl_after_finished: 1h
+        # Test links: the code each ring runs (RP_VERSION is a SHA, short SHA or
+        # tag, and /commit/ resolves all three), plus prod's control plane UI.
+        # int/test/acc have no public host, so they get only the code link.
+        links:
+          - { label: "Code at this version", url: "https://github.com/bwalia/tenthmatrix/commit/{version}", kind: release }
+        rings:
+          int:  { target_env: int,  health_url: "http://proxy10x-ingress-int-openresty.proxy10x-int.svc.cluster.local:8080/healthz" }
+          test: { target_env: test, health_url: "http://proxy10x-ingress-test-openresty.proxy10x-test.svc.cluster.local:8080/healthz" }
+          acc:  { target_env: acc,  health_url: "http://proxy10x-ingress-acc-openresty.proxy10x-acc.svc.cluster.local:8080/healthz" }
+          # prod via the public host, not Service DNS: the prod OpenResty pods are
+          # pinned to cloud003 (an edge node) and the CNI overlay from other nodes
+          # to the edge nodes does not carry traffic (same reason workstation-opsapi
+          # uses public URLs on the workstation instance).
+          prod: { target_env: prod, health_url: "https://cp.pop0.uk/healthz", links: [ { label: "Control plane", url: "https://cp.pop0.uk/" } ] }

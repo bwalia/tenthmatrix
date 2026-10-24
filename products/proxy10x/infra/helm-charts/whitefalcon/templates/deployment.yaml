@@ -1,0 +1,129 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-{{ .Values.app.target_env }}
+  labels:
+    {{- include "proxy10x.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "proxy10x.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "proxy10x.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+        - name: {{ .Values.app.name }}-cm-{{ .Values.app.target_env }}-vol
+          # Populate the volume with config map data
+          configMap:
+            # `name` here must match the name 
+            # specified in the ConfigMap's YAML 
+            name: {{ .Values.app.name }}-cm-{{ .Values.app.target_env }}
+        - name: {{ .Values.app.name }}-vol-{{ .Values.app.target_env }}
+          secret:
+            secretName: "{{ .Values.app.name }}-secret-{{ .Values.app.target_env }}"
+            items:
+            - key: env_file
+              path: .env
+        - name: {{ .Values.app.name }}-vol2-{{ .Values.app.target_env }}
+          secret:
+            secretName: "{{ .Values.app.name }}-settings-{{ .Values.app.target_env }}"
+            items:
+            - key: settings_sec_env_file
+              path: settings.json
+        - name: {{ .Values.app.name }}-{{ .Values.app.target_env }}-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.app.name }}-{{ .Values.app.target_env }}-pvc
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "proxy10x.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "stat -c %a /tmp && ls -la /tmp && cp /tmp/configmap/bootstrap-openresty.sh /usr/local/bin/bootstrap-openresty.sh && chmod +x /usr/local/bin/bootstrap-openresty.sh && bash /usr/local/bin/bootstrap-openresty.sh"]
+          volumeMounts:
+            - name: {{ .Values.app.name }}-cm-{{ .Values.app.target_env }}-vol
+              mountPath: /tmp/configmap
+            - name: {{ .Values.app.name }}-vol-{{ .Values.app.target_env }}
+              mountPath: /tmp/secrets
+            - name: {{ .Values.app.name }}-vol2-{{ .Values.app.target_env }}
+              mountPath: /tmp/settings
+            - name: {{ .Values.app.name }}-{{ .Values.app.target_env }}-vol
+              mountPath: /opt/nginx/ 
+          env:
+          - name: DNS_RESOLVER
+            value: "{{ .Values.app.dns_resolver }}"
+          - name: REDIS_HOST
+            value: "{{ .Values.app.redis_host }}"            
+          - name: APP_NAME
+            value: "{{ .Values.app.name }}"  
+          - name: VERSION
+            value: "{{ .Values.app.version }}"  
+          - name: STACK
+            value: "Lua 5.1"  
+          - name: API_URL
+            value: "{{ .Values.app.api_url }}"  
+          - name: VITE_APP_VERSION
+            value: "{{ .Values.app.version }}"  
+          - name: VITE_APP_BUILD_NUMBER
+            value: "{{ .Values.app.build_number }}"  
+          - name: VITE_DEPLOYMENT_TIME
+            value: "{{ now | date "20060102150405" }}"
+          - name: NGINX_CONFIG_DIR
+            value: "/opt/nginx/"
+          - name: JWT_SECURITY_PASSPHRASE
+            value: "{{ .Values.app.jwt_security_passphrase }}"
+          - name: PRIMARY_DNS_RESOLVER
+            value: "{{ .Values.app.primary_dns_resolver }}"
+          - name: SECONDARY_DNS_RESOLVER
+            value: "{{ .Values.app.secondary_dns_resolver }}"
+          - name: DNS_RESOLVER_PORT
+            value: "{{ .Values.app.dns_resolver_port }}"
+          - name: FRONT_URL
+            value: "{{ .Values.app.front_url }}"
+
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

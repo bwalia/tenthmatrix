@@ -11,6 +11,10 @@ name: "Build and Deploy TenthMatrix Website"
 on:
   push:
     branches: [main]
+    # Products (products/*) build and ship on their own; a commit that only
+    # touches them must not rebuild and redeploy the website.
+    paths-ignore:
+      - 'products/**'
 
   workflow_dispatch:
     inputs:

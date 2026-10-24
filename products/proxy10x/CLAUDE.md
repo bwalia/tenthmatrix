@@ -1,0 +1,493 @@
+# Proxy10x — Claude Developer Guide
+
+This document captures the architecture, conventions, and gotchas of the Proxy10x codebase so future Claude sessions can be productive without re-exploring from scratch.
+
+---
+
+## 1. What Is This Product?
+
+**Proxy10x** is a dynamic API gateway / reverse proxy built on OpenResty (nginx + Lua). It lets operators manage servers (virtual hosts) and rules (routing decisions) via a React admin UI. Changes to rules take effect **without reloading OpenResty** — rules are evaluated at request time from JSON files on disk (or Redis). Only server-level nginx config changes require a reload, triggered via a file flag checked by cron.
+
+**Primary use case:** a user adds a server (domain), adds rules (path match → backend), and optionally SSL, WAF, caching, rate limiting, Varnish, traffic splitting. Incoming requests are routed dynamically.
+
+---
+
+## 2. High-Level Architecture
+
+```
+Client
+  ↓ HTTPS:443 / HTTP:80
+┌─────────────────────────────────────────────────────────────┐
+│ OpenResty (proxy10x)                                         │
+│ - auto-ssl (Let's Encrypt)                                   │
+│ - rewrite_by_lua → gateway_ack.lua  (load & match rules)     │
+│ - access_by_lua  → gateway_resp.lua (select backend, vars)   │
+│ - balancer_by_lua → set_current_peer + set_timeouts          │
+│ - proxy_pass → $proxy_host_scheme://$upstream_server         │
+└──────────────────────────────┬───────────────────────────────┘
+                               ↓
+                    (optional k3s ingress controller
+                     = second OpenResty layer, see §10)
+                               ↓
+                         Origin backend
+```
+
+Admin plane is a separate server block (port 8069 prod / 8080 dev / 8099 next.js). It exposes `/api/*` (CRUD) handled by `api/api.lua`, plus `/health`, `/ready`, `/metrics`, `/swagger`, `/mcp`.
+
+---
+
+## 3. Top-Level Directory Map
+
+| Path | Purpose |
+|------|---------|
+| `api/` | All Lua code (request pipeline, REST API, helpers). **Hot-reloaded per request.** |
+| `api/mcp/` | MCP (Model Context Protocol) server for AI agents |
+| `api/api_gw/` | **Kong-class API gateway package** — CORS, correlation, IVT, edge auth, rate-limit profiles, audit. Per-server `api_gw` JSON, no reload. See `docs/api-gateway.md`. |
+| `data/` | JSON data stores (servers, rules, upstreams, waf_policies, ssl, profiles, audit, versions, change_requests). Per-environment subdirs: `dev/int/test/acc/prod/`. |
+| `data/settings.json` | **Global config** — storage type, super_user, env_profile, redis/pgsql, captcha, waf, mcp, env_vars |
+| `openresty-admin-next/` | Next.js 16 admin dashboard (Tailwind, SWR) — sole admin UI. |
+| `nginx-dev.conf.tmpl` | **Docker** nginx template |
+| `nginx-base.d/`, `nginx-conf.d/` | Base/shared nginx includes |
+| `infra/ansible/` | Ansible playbooks + roles for bare-metal/VM deploy |
+| `infra/ansible/roles/proxy10x/templates/nginx.conf.j2` | **Production** nginx template |
+| `ingress-controller/` | Separate k8s helm chart for k3s-based deploys (see §10) |
+| `Dockerfile`, `docker-compose-*.yml`, `start.sh` | Docker dev/build |
+| `.github/workflows/` | CI/CD: `deploy-proxy10x-delivery-pipeline.yml` is the main pipeline |
+| `QA/`, `proxy10x-cache-tests/` | Cypress + Go tests |
+
+---
+
+## 4. The `api/` Lua Modules
+
+### Request pipeline (order matters)
+
+| File | Phase | Role |
+|------|-------|------|
+| `init.lua` | `init_by_lua_file` | Load settings, init auto_ssl, set `ssl_domains` shared dict, init session store |
+| `ssl_init.lua` | `init_worker_by_lua` | Reconcile SSL domains from disk/redis |
+| `healthcheck_init.lua` | `init_worker_by_lua` | Start active upstream health checks from `data/upstreams/{env}/healthcheck.lua` |
+| `gateway_ack.lua` | `rewrite_by_lua_file` | Load server config → load candidate rules → evaluate → select winner → run pipeline (rate limit, WAF) → stash `selectedRule` in `ngx.ctx.gateway` |
+| `gateway_resp.lua` | `access_by_lua_file` | Handle status codes (200/301/302/305/306/403), DNS-resolve backend, Varnish interception, set `$proxy_host`, `$proxy_port`, `$proxy_host_scheme`, per-server timeouts via `ngx.ctx.proxy_timeouts` |
+| `balancer_by_lua_block` (in nginx.conf) | `balancer` | `balancer.set_current_peer(host, port)` + `balancer.set_timeouts(ct, st, rt)` |
+| `log_handler.lua` | `log_by_lua_block` | Record traffic stats, backend metrics, Prometheus |
+
+### Supporting modules
+
+| File | Role |
+|------|------|
+| `rule_loader.lua` | Load server JSON (`host:{hostname}.json`), parse rules list + match_cases, decode schema v1/v2 S3 keys |
+| `rule_matcher.lua` | Evaluate a rule: path match (with specificity score), IP match, country match (IP2Location), JWT/S3/cookie auth |
+| `rule_selector.lua` | Deterministic tie-breaking: priority > path_specificity > condition_count > rule_id |
+| `rule_auth.lua` | JWT validation, S3 signing, cookie key-value checks. Arms `ngx.ctx.s3_signed` so the response filter knows it signed |
+| `s3_error_filter.lua` | `header_filter`/`body_filter`. Replaces an S3-signed 4xx/5xx body before it reaches the client — S3 quotes the access key id inside its error XML. Wired into all four gateway blocks across both nginx templates |
+| `gateway_pipeline.lua` | Orchestrates api_gw → legacy rate limiting (shared dict `p10x_cache`) → WAF delegation → transforms |
+| `api_gw/` | Staged access pipeline (`real_ip` → `correlation` → `cors` → `ivt` → `request_security` → `auth` → `rate_limit`), plus `header_filter`/`log` hooks. Opt-in per server via `api_gw.enabled`; tenant-prefixed keys in shared dict `p10x_api_gw`. |
+| `traffic_router.lua` | Multi-backend selection (weighted / round-robin / header-based canary / cookie-sticky / least-conn). Passive health (3 consecutive 5xx → mark unhealthy 30s) + active (10s timer). Records per-backend stats. |
+| `dns_access.lua` | Consul SRV lookup (200ms timeout); fallback to standard resolver is in `gateway_resp.lua` |
+| `varnish_manager.lua` | Per-server Varnish config (redis or disk). If enabled, route to `127.0.0.1:6081` |
+| `cache_manager.lua` / `cache_handler.lua` | Static content caching (shared dict `p10x_cache`) + Docker blob disk cache |
+| `waf_engine.lua` / `waf_default_rules.lua` / `security_rules.lua` | WAF with OWASP-style rules, block/monitor modes, body inspection |
+| `ssl_manager.lua` | Per-domain SSL config (disk/redis). `ssl_domains` shared dict gates `auto_ssl`'s `allow_domain` callback |
+| `traffic_stats.lua` / `prometheus_metrics.lua` | Traffic stats (hourly buckets in `traffic_stats` shared dict) + Prometheus |
+| `audit_logger.lua` | NDJSON audit trail in `data/audit/YYYY-MM/DD.json` |
+| `version_manager.lua` / `cr_manager.lua` | Version history (draft → pending → live → archived) + 4-eyes change request approval |
+| `helpers.lua` | `settings()`, `GetPayloads()`, `setDataToFile()`, `getDataFromFile()`, `testNginxConfig()` (runs `sudo openresty -t`), `isIpAddress()`, `hashPassword()` |
+| `errors.lua` | Standardized error responses |
+| `captcha.lua` | Turnstile/reCAPTCHA challenge (status code 306) + HMAC-signed cookie |
+| `traffic_router.lua` start_health_checks() | Only runs on worker 0 |
+| `mcp/` | MCP server exposing resources (servers, rules, policies, metrics) and optional write-tools (bind_waf_policy, reload_config, update_traffic_split) |
+
+### `api/api.lua` — the CRUD REST API
+
+Main dispatcher at the bottom of the file (~line 5483):
+```lua
+path_name = ngx.var.uri:match("^/api/(.*)$")
+if method == GET  then handle_get_request(ngx.req.get_uri_args(), path_name)
+if method == POST then ngx.req.read_body(); handle_post_request(ngx.req.get_post_args(), path_name)
+if method == PUT  then ...
+if method == DELETE then ...
+```
+
+Resources (each has list/get/create/update/delete): **servers, rules, secrets, instances, upstreams, users, profiles, waf_rules, waf_policies, waf_events, bookmarks, sessions, change-requests, versions, audit, settings**.
+
+Special endpoints: `/api/waf_rules/apply` (add/remove many WAF rules on one policy), `/api/user/login`, `/api/cache/*`, `/api/varnish/*`, `/api/traffic/*`, `/api/ai/analyze`, `/api/logs/{access,errors}`, `/api/topology/graph`, `/api/openresty_status`, `/api/push-data`, `/api/mcp/*`.
+
+The core persister is `CreateUpdateRecord(json_val, uuid, key_name, folder_name, method)`. It:
+1. Strips empty values, base64-encodes sensitive fields (secrets, JWT key, server `.config`, `varnish_vcl_config`)
+2. Persists via `Repo.save` (`api/repo/` + `api/storage/` drivers). `storage_type: disk` writes JSON files; `redis` and `pgsql` dual-write to the remote store **and** on-disk JSON. Disk JSON remains the request-path source of truth (`rule_loader.lua` still reads files).
+3. For servers: also writes compiled conf to `data/servers/{env}/conf/{server_name}.conf`
+4. If `config_status: true`, copies conf to `/opt/nginx/conf.d/{server_name}.conf`, runs `openresty -t`, creates reboot flag file
+
+**Storage layer:** `api/storage/{driver,disk_driver,redis_driver,pgsql_driver,dual_writer}.lua` plus `api/repo/{servers,rules,secrets,generic}.lua`. PostgreSQL uses typed tables + `raw_json` (see `infra/pgsql/migrations/`). Apply with `scripts/pg-migrate.sh`; import existing disk JSON with `scripts/pg-import-from-disk.sh`. Do not auto-migrate on boot. `pgsql_storage.lua` remains a Redis-hash facade over `config_store` for leftover callers.
+
+---
+
+## 5. Data Model
+
+### Server JSON / YAML (`data/servers/{env}/host:{hostname}.{json,yaml,yml}`)
+
+Same schema in JSON or YAML. Request path tries `.json` then `.yaml` then `.yml`
+(`api/config_io.lua` + vendored `api/tinyyaml.lua`). Admin API writes **`.json` only**
+and removes YAML siblings for that id. See `examples/config-yaml/`.
+
+Key fields (not exhaustive):
+- **Identity:** `id` (= `host:{server_name}`), `server_name`, `proxy_server_name`, `profile_id`
+- **Nginx config:** `config` (base64 of nginx server block), `config_status` (bool — governs whether conf is active in `/opt/nginx/conf.d/`)
+- **Listeners:** `listens: [{listen: "80"|"443 ssl"}]`
+- **SSL:** `ssl_enabled`, `ssl_email`, `ssl_auto_renew`, `ssl_force_https`, `ssl_staging`
+- **Cache:** `cache_enabled`, `cache_ttl`, `cached_extensions`, `cached_mime_types`, `cache_bypass_cookie`, `cache_docker_blobs*`
+- **Varnish:** `varnish_enabled`, `varnish_config`, `varnish_vcl_config`, `varnish_snippets`
+- **Rules linkage:** `rules` (single rule id or array), `match_cases: [{statement: rule_id, condition: "and"|"or"}]`
+- **Headers:** `custom_headers` (upstream), `custom_response_headers` (client)
+- **Proxy timeouts:** `proxy_timeouts: {connect_timeout, send_timeout, read_timeout}` — in seconds, applied by balancer
+- **Rate limiting:** `rate_limit_enabled`, `rate_limit: {requests_per_second, burst}`
+- **WAF:** `waf_enabled`, `waf_policy_id`, `waf_mode_override` ("block"|"monitor")
+- **API gateway:** `api_gw` — nested policy object (`enabled`, `modules`, `real_ip`, `request_security`, `cors`, `ivt`, `auth`, `rate_limit`, `audit`, `routes`). Opt-in; absent = previous behaviour. Schema: `docs/api-gw.schema.json`, guide: `docs/api-gateway.md`.
+
+### Rule JSON / YAML (`data/rules/{env}/{uuid}.{json,yaml,yml}`)
+
+```json
+{
+  "id": "uuid", "name": "...", "priority": 100, "profile_id": "prod",
+  "match": {
+    "rules": {
+      "path": "/api", "path_key": "starts_with|ends_with|equals",
+      "country": "US,UK", "country_key": "equals|not_equals",
+      "client_ip": "1.2.3.0/24", "client_ip_key": "equals|not_equals",
+      "jwt_token_validation_value": "...", "jwt_token_validation_key": "BASE64",
+      "amazon_s3_access_key": "AKIA...", "amazon_s3_secret_key": "..."
+    },
+    "response": {
+      "code": 305,
+      "redirect_uri": "http://backend:8080",
+      "message": "BASE64_HTML",
+      "backends": [{"address": "...", "weight": 70, "label": "..."}],
+      "routing": {"mode": "least_conn|round_robin|header|cookie"},
+      "auto_redirect_https": false,
+      "strip_path": false
+    }
+  },
+  "_schema_version": 2
+}
+```
+
+### Rule status codes
+
+| Code | Meaning | gateway_resp.lua behavior |
+|------|---------|---------------------------|
+| 200 | Custom HTML block | `ngx.say(Base64.decode(message))` |
+| 301 | Moved Permanently | `ngx.redirect(redirect_uri, 301)` |
+| 302 | Found | `ngx.redirect(redirect_uri, 302)` |
+| **305** | **Proxy pass** | Normal flow — DNS resolve, set vars, proxy to backend |
+| 306 | CAPTCHA | Verify cookie; if missing, serve challenge page; on success, treat as 305 |
+| 403 | Forbidden | Same as 200 but with 403 status |
+
+### Directory layout
+
+```
+/opt/nginx/data/
+├── settings.json
+├── servers/{env}/host:{hostname}.json
+├── servers/{env}/conf/{server_name}.conf   # compiled from JSON.config
+├── rules/{env}/{uuid}.json
+├── upstreams/{env}/upstreams.conf          # generated nginx upstream blocks
+├── upstreams/{env}/healthcheck.lua         # active health check config
+├── upstreams/{env}/{uuid}.json
+├── ssl/{domain}.json
+├── ssl-certs/letsencrypt/...               # auto-ssl storage
+├── waf_policies/{env}/{id}.json
+├── waf_rules/{env}/{id}.json
+├── varnish/{domain}.json
+├── cache/{domain}.json
+├── secrets/{env}/{id}.json
+├── instances/{env}/{id}.json
+├── profiles/{id}.json
+├── audit/YYYY-MM/DD.json                   # NDJSON
+├── change_requests/CR-{id}.json
+└── versions/{servers|rules}/{env}/{name}/{meta.json, v1.json, v2.json, ...}
+```
+
+---
+
+## 6. Dynamic Reload Mechanism
+
+1. User saves server with `config_status: true` via admin UI.
+2. `api.lua:CreateUpdateRecord` writes JSON, writes `.conf` to `/opt/nginx/conf.d/`, runs `openresty -t`.
+3. If syntax OK → calls `Conf.CreateNginxFlag(reboot_file_path)` which touches `/tmp/nginx/nginx-reboot-required`.
+4. A cron job (templated at `infra/ansible/roles/proxy10x/templates/nginx_restart_if_required.sh.j2`) polls this flag and runs `systemctl restart openresty`, then removes the flag.
+5. **Rules do not require reload** — they're loaded per-request by `rule_loader.lua` from disk/redis and evaluated live.
+6. **`api_gw` policy does not require reload either** — it is normalised per request from the same server JSON. The only reload-requiring part is the `lua_shared_dict p10x_api_gw 20m;` line, which is already in both templates.
+
+**Important:** the main nginx.conf includes `/opt/nginx/conf.d/*.conf` for per-tenant server blocks, and `/opt/nginx/data/upstreams/*/upstreams.conf` for dynamic upstreams.
+
+---
+
+## 7. Key Ports
+
+### Docker dev (`nginx-dev.conf.tmpl`)
+- `80 / 443` — main proxy (rewrite → gateway_ack, access → gateway_resp)
+- `8080` — admin API + dashboard
+- `8090` — Vite dev server for legacy react-admin
+- `8099` — Next.js admin (proxy to port 7619)
+- `8999` — internal auto-ssl hook server
+- `/var/run/nginx/nginx.sock` — internal test server
+
+### Production (`infra/ansible/.../nginx.conf.j2`)
+- `80 / 443` — main proxy
+- `{nginx_default_server_backend_port}` (default 8099/9069) — admin API + health
+- `{nginx_nextjs_dashboard_port}` — Next.js admin
+- `9443` — TCP stream load balancer for k3s API (prod-only, `nginx-base.d/nginx_tcp_streams.conf`)
+
+### Host 85.190.106.189 (prod — pop0, ssh user `administrator`)
+- `curl http://127.0.0.1:8099/health` returns 200 when healthy
+- The Ansible template's admin server listens on 8099 (NOT 8080) — use this for health checks.
+
+---
+
+## 8. Deployment Topology
+
+Three completely independent deploy mechanisms — they don't share configuration:
+
+### A. Docker (local dev)
+- `docker-compose-local.yml` starts proxy10x, redis, postgres, openresty-admin-next
+- `./dev.sh` is the orchestrator (`start.sh`). Accepts `-n` (skip git), `-w` (admin watch), `-a` (auto), `--stash`, `--pull`, JWT arg.
+- Hot-reload: `api/` and `html/` bind-mounted. React admin requires rebuild.
+
+### B. Ansible (bare metal / VM — this is how **prod on 85.190.106.189** is deployed)
+- **pop0 mirrors lon1:** `proxy10x-edge-sync.timer` on pop0 pulls lon1's servers/rules/waf_policies JSON every 5 min through a restricted forced-command key (`infra/edge-sync/`). `settings.json` is copied once, not synced.
+- Playbook: `infra/ansible/proxy10x-ops.yml`
+- Role: `infra/ansible/roles/proxy10x/`
+- Task files (orchestrated by `tasks/main.yml`):
+  - `os_setup_debian.yml` — system deps
+  - `openresty_build.yml` — compile OpenResty 1.29.2.1 from source
+  - `nginx_config.yml` — templates `nginx.conf.j2` → `/usr/local/openresty/nginx/conf/nginx.conf`, syncs `nginx-conf.d/`
+  - `deploy_app.yml` — rsync `api/` → `/usr/local/openresty/nginx/html/api/`
+  - `deploy_data.yml` — rsync `data/` → `/opt/nginx/data/`
+  - `deploy_admin_ui.yml` — yarn build react-admin on target
+  - `deploy_nextjs_admin_ui.yml` — npm build + systemd service for Next.js
+  - `finalize.yml` — restart openresty, verify
+- **Deploy tags** drive which steps run: `nginx, code, servers, dashboard, dashboard-next, os_deps, build` (or no tag = full).
+
+### C. k3s Helm chart (`ingress-controller/deploy/helm/`)
+- This is a **separate deployment** of proxy10x inside a k3s cluster, acting as a Kubernetes ingress controller.
+- The existing deployment lives in namespace `proxy10x-system`, release `proxy10x-ingress`.
+- Chart files:
+  - `Chart.yaml` — name: `proxy10x-ingress-controller`
+  - `values.yaml` — replicas, images, resources, HPA config
+  - `templates/openresty-configmap.yaml` — loads `files/nginx.conf` into ConfigMap
+  - `templates/openresty-deployment.yaml` — the proxy pods
+  - `templates/controller-deployment.yaml` — controller pods (leader-elected)
+  - `templates/ingressclass.yaml` — `ingressClassName: proxy10x`
+  - `templates/openresty-{service,hpa,pdb}.yaml`, `tls-secret.yaml`, `rbac.yaml`, `servicemonitor.yaml`
+- The helm chart's `files/nginx.conf` is what gets deployed into the ConfigMap. `ingress-controller/deploy/openresty/nginx.conf` is kept in sync but not directly used by helm.
+- Helm on k3s1 is Ring Promoter app `proxy10x-k3s1` on this repo's **own** Ring Promoter instance, `https://rp.proxy10x.com` (namespace `proxy10x-ring-promoter`, manifests in `deploy/ring-promoter/`, deployed by `deploy-ring-promoter.yml`). A `k8sjob` in `ring-exec` runs `helm upgrade --install`. `deploy/ring-promoter/configmap.yaml` is the **only** copy of that deploy script. It used to live on the shared `rp.workstation.co.uk` instance, whose config (in bwalia/ring-promoter) drifted from ours and made every seed from Sep 18 to Sep 24 time out. One-time setup: `scripts/ring-promoter-bootstrap.sh`. Manual equivalent: `helm upgrade proxy10x-ingress ingress-controller/deploy/helm/ -n proxy10x-system`.
+
+---
+
+## 9. CI/CD
+
+Main pipeline: `.github/workflows/deploy-proxy10x-delivery-pipeline.yml`
+
+**Promotion chain:** Build & Validate → Int (192.168.1.193) → Smoke Test Int → Test (192.168.1.140) → Prod lon1 (lon1.pop0.uk). pop0 (85.190.106.189) is dispatch-only. pop1 (18.133.126.242) retired.
+(The `acc` tier on 187.77.179.206 and the OLD pop0 edge on 187.124.112.155 were decommissioned; pop0 was rebuilt 2026-08-28 on a new VPS, 85.190.106.189 (ssh user `administrator`), wired in as dispatch-only Stage 5c; the delivery pipeline goes test → prod directly. The old lon1 host 72.62.211.28 is a k3s worker only since 2026-08-27 — the lon1 edge lives on lon1.pop0.uk, which reaches the k3s demo apps via NodePorts 30081-30085 on 72.62.211.28.)
+
+**Inputs:** `DEPLOY_BRANCH`, `TARGET_ENV`, `TARGET_HOST`, `DEPLOY_MODE` (code/nginx/servers/dashboard/dashboard-next/os_deps/build/full).
+
+**Gotcha (fixed):** the `if` conditions on `deploy-test`, `deploy-prod-pop0`, `deploy-prod-lon1` must include `always() && !failure() && !cancelled() &&` — otherwise a skipped intermediate stage causes downstream stages to skip even when their `TARGET_HOST` matches. This is now in place.
+
+Reusable workflow: `deploy-environment.yml` (per-environment deploy). Supports `connection_mode: local|ssh|ssh_key`, `secrets_mode: github_secret|runner_file`, `health_check_mode: local|ssh|external`.
+
+---
+
+## 10. The k3s Ingress Controller Layer
+
+Many production requests flow through **two** proxy10x layers:
+
+```
+Client → proxy10x on lon1.pop0.uk / 85.190.106.189 (Ansible deploy)
+       → k3s NodePort 32100 on 193.237.176.232
+       → proxy10x-ingress-controller pod in k3s (Helm deploy)
+       → FastAPI / Lapis / other app pods
+```
+
+The k3s ingress controller is configured by `Ingress` resources (e.g. `diytaxreturn-fastapi` helm chart sets `ingressClassName: proxy10x`). Timeouts, buffer sizes, and other nginx params for this layer live in `ingress-controller/deploy/helm/files/nginx.conf` and are deployed by `helm upgrade`.
+
+**Important lesson:** increasing timeouts only on the outer layer doesn't help if the k3s ingress has lower timeouts. Check both layers.
+
+---
+
+## 11. Settings.json & Storage
+
+`data/settings.json` has these top-level keys:
+- `storage_type`: `"disk"` | `"redis"` | `"pgsql"` — controls whether `CreateUpdateRecord` uses Redis
+- `env_profile`: default profile if request doesn't specify (e.g., `"prod"`, `"int"`)
+- `super_user`: `{username, email, password}` for `/api/user/login` (password is `Helper.hashPassword`-hashed)
+- `nginx.reboot_file_path`: where to touch to trigger reload (default `/tmp/nginx/nginx-reboot-required`)
+- `nginx.tenant_conf_path`: where active server confs live (default `/opt/nginx/conf.d`)
+- `nginx.default.{no_rule, no_server, conf_mismatch}`: base64 HTML served when gateway has nothing to do
+- `pgsql.*`, `redis_host`, `redis_port`: remote storage connection
+- `captcha`: `{provider: "turnstile"|"recaptcha", site_key, secret_key, theme, cookie_ttl}`
+- `waf`: `{enabled, default_policy, body_inspection, max_body_size}`
+- `mcp`: `{enabled, mode: "read-only"|"write", api_key, tools_enabled, rate_limit}`
+- `env_vars`: propagated to OpenResty via `env` directive (JWT_SECURITY_PASSPHRASE, REDIS_HOST, NGINX_CONFIG_DIR, etc.)
+- `ip2location_path`: path to IP2Location binary DB for country matching
+
+---
+
+## 12. Authentication
+
+- Admin API requires JWT via `Authorization: Bearer {token}` header
+- Login: `POST /api/user/login` validates against `settings.super_user`; returns token from `Helper.generateToken()`
+- JWT signing key: `settings.env_vars.JWT_SECURITY_PASSPHRASE` (also exposed as `VITE_JWT_SECURITY_PASSPHRASE` to the frontend at build time)
+- Session storage: `resty.session` backed by Redis
+- `users.lua` and `sessions.lua` return hardcoded mock data — not production user management
+
+---
+
+## 13. Frontend: Next.js Admin (`openresty-admin-next/`)
+
+The sole admin UI is Next.js 16 (Tailwind, SWR). Deployed via Ansible `deploy_nextjs_admin_ui.yml`, Docker Compose service `openresty-admin-next`, and (on k3s1 control plane) the Helm dashboard Deployment. Legacy Vite/react-admin (`openresty-admin/`) has been removed.
+
+## 14. Development Workflow
+
+```bash
+./dev.sh                    # interactive: prompts for JWT, git stash/pull, starts containers
+./dev.sh -n -j SECRET       # skip git, pass JWT
+./dev.sh -w                 # watch mode for react-admin (auto-rebuild)
+./dev.sh --stop             # stop services
+./dev.sh --reload           # reload nginx config inside container
+./dev.sh --status           # docker ps
+```
+
+Local URLs:
+- Admin dashboard: http://localhost:8280
+- Next.js admin: http://localhost:7619
+- API: http://localhost:8280/api
+- Swagger: http://localhost:8280/swagger/
+- Demo origin: http://localhost:3009
+- Redis: localhost:6479, Postgres: localhost:5436
+
+---
+
+## 15. Gotchas & Lessons Learned
+
+### Things we discovered in real incidents:
+
+1. **`client_body_buffer_size 0`** on admin server block silently truncates large request bodies to ~90 bytes → worker enters CPU-bound infinite loop on malformed JSON parse. Admin API blocks now use `10m` in both templates, so records up to 10 MB (server records with large nginx configs) stay in memory. Larger bodies spool to a temp file; `api.lua`'s dispatcher skips `get_post_args()` for those (it refuses spooled bodies with `request body in temp file not supported`) and `Helper.GetPayloads` reads the file. The dashboard proxy allows 16mb (`proxyClientMaxBodySize` in `next.config.ts`).
+
+2. **Only 1 `worker_processes`** in production means any stuck worker = full outage. Consider increasing.
+
+3. **`io.popen("sudo openresty -t")`** in `helpers.lua:testNginxConfig` blocks the entire worker. Only runs when `config_status: true`, but still a foot-gun.
+
+4. **Default nginx `proxy_read_timeout` is 60s.** The main proxy `location /` does NOT set explicit timeouts; falls back to default. Fixed: per-server `proxy_timeouts` field drives `balancer.set_timeouts()` in the balancer_by_lua_block. See `api/gateway_resp.lua:287-299` and the balancer blocks in both nginx templates.
+
+5. **Two-layer timeout:** fixing timeouts on the outer proxy10x doesn't help if k3s ingress has lower. Raise both. `ingress-controller/deploy/helm/files/nginx.conf` now has `proxy_{connect,send,read}_timeout 300s`.
+
+6. **k3s ingress helm chart** — promote via Ring Promoter app `proxy10x-k3s1` (k8sjob on k3s1) or `helm upgrade proxy10x-ingress ingress-controller/deploy/helm/ -n proxy10x-system`. Changes to `ingress-controller/deploy/helm/files/nginx.conf` only go live after that helm upgrade.
+
+7. **Missing `/var/cache/nginx/docker_blobs` parent** in Docker image → nginx won't start (proxy_cache_path directive fails). Dockerfile creates it explicitly.
+
+8. **GitHub Actions `needs` + `if` interaction:** skipped dependencies cause downstream skip unless `if:` includes `always() && !failure() && !cancelled()`. Applied to all conditional deploy stages.
+
+9. **PageHeader `icon` prop** in openresty-admin-next expects a component reference (`icon={ScrollText}`), NOT JSX (`icon={<ScrollText/>}`). Only one page got this wrong — fixed.
+
+10. **`ngx.req.get_post_args()`** is used for JSON bodies. The content-type is `application/json` so the entire body becomes a single key with value `true`; `Helper.GetPayloads()` then runs `Cjson.decode(k)` on the key. If the body is truncated (see #1), this hangs or errors.
+
+11. **Schema v1 vs v2 for rules:** v1 had multi-layer base64-encoded S3 keys; v2 stores plaintext. `rule_loader.normalize_s3_keys()` auto-detects via `rule_data._schema_version`. New rules should be saved as v2.
+
+12. **DTAP IP override** in `rule_matcher.lua`: for hostnames containing `localhost|dev|int|test`, injects fake IPs by country for testing geo-blocking. Production hostnames are not affected.
+
+13. **Traffic router "fail-open":** if all backends are unhealthy, it uses them anyway rather than returning 502. Prevents total outage from health-check false-positives.
+
+14. **`config_status: true` is required** for a server's generated nginx config to actually be active in `/opt/nginx/conf.d/`. Rules work even without config_status.
+
+15. **JSON bodies must not be rebuilt from `ngx.req.get_post_args()`** (2026-08-10 diytaxreturn outage): form parsing splits the body at the first literal `=` and `GetPayloads`' `k .. v` re-concatenation silently deleted it, stripping base64 padding from rule fields (`jwt_token_validation_key: "L2luZGV4Lmh0bWw=" → "L2luZGV4Lmh0bWw"`) for any plain-JSON client (curl, the diy-tax-return-uk `proxy10x-register-domains` import workflow). The shipped `base64.lua` then crashed on the unpadded value on every request → recurring 500s that "came back" after every rules re-import. Fixed: `GetPayloads` now prefers the raw body (`ngx.req.get_body_data`/`get_body_file`), and request-path decodes use the `Base64DecodeSafe` global (init.lua: re-pad + pcall, self-heals unpadded input). The react-admin `=` escaping (frontend gotcha 2) is a workaround for the old behavior — still harmless, no longer required.
+
+16. **Rules for diytaxreturn (and other app domains) are owned by the app repo** (`diy-tax-return-uk/.github/proxy10x/data/{rules,servers}/<env>/`), pushed via `/api/projects/import` which preserves committed rule ids. The canonical rule id for a domain is whatever the app repo's **origin/main** says — check `git show origin/main:...`, not a possibly-stale local checkout (in the 2026-08-10 incident the local clone still had superseded id `5c63f6fa-…` while origin/main had moved to `93893825-…`). Re-creating a rule in the admin UI mints a NEW uuid and repoints servers to it, forking live from git. Fix drift by re-running the app repo's `proxy10x-register-domains` workflow (git wins), not by minting new rules.
+
+17. **The gateway republished its own AWS key, and AWS kept deleting it** (2026-09-21). Two channels, one credential, one self-sustaining loop:
+    - **The 403 body.** Rules using `amazon_s3_signed_header_validation` proxy to `s3.<region>.amazonaws.com`. S3's error XML contains `<AWSAccessKeyId>AKIA…</AWSAccessKeyId>`, and nothing rewrote it, so `www.diytaxreturn.co.uk` served the key to anyone who asked. AWS's exposed-key scanner reads public HTTP.
+    - **The DR restore.** `scripts/dr-sync-s3-backup-to-data.sh` redacted `*.json`, but the prod host leaves editor droppings beside each rule (`<uuid>.json.<pid>.<date>~`). Those don't match `*.json`, so they were rsync'd in unredacted and committed to this **public** repo in `e4bae60f`.
+
+    The loop: rotate the key → the next nightly `Sync Prod Data to S3` succeeds → the DR restore commits the *new* key → AWS deletes it → every S3 workflow fails with `InvalidClientTokenId` (surfaced as the opaque `The security token included in the request is invalid.`). Exactly one green run per rotation, on 2026-09-02.
+
+    Fixed: `api/s3_error_filter.lua` (body never passes through on a signed 4xx/5xx), junk excluded from both the S3 sync and the DR restore, redaction widened to every file, and a secret scan that fails the DR run. **Rotating without closing both channels buys about a day** — see `docs/runbooks/s3-credential-rotation.md`.
+
+18. **`aws-actions/configure-aws-credentials` validates credentials itself** via `sts:GetCallerIdentity` and aborts the job before any later step. That is why the purpose-built `.github/actions/aws-s3-preflight` — which has the diagnosis and the runbook — never got to run. All four S3 workflows now pass `skip-credential-validation: true` so the preflight is what judges.
+
+19. **`set -euo pipefail` + `find` over a missing directory kills a script silently.** `find a b c -name '*.json' 2>/dev/null | while …` returns `find`'s non-zero status through `pipefail`, and `2>/dev/null` hides why. In `dr-sync-s3-backup-to-data.sh` this would have aborted the run before the JSON validation *and* the new secret scan whenever an optional tree (`pops/`) was absent from the backup. Build the path list from directories that exist.
+
+20. **`lua_code_cache` is on in the dev container**, so §4's "hot-reloaded per request" is not true for `api/` in practice — editing a module has no effect until `openresty -s reload`. Worth knowing when a change appears to do nothing.
+
+21. **`helm --wait` can never succeed for the k3s1 control plane.** `proxy10x-ingress-openresty` is a LoadBalancer whose EXTERNAL-IP stays `<pending>` (Traefik already holds 80/443 on the nodes), so `--wait` times out after applying everything. The release is marked failed, the seed job exits non-zero, and the GitHub seed step shows HTTP 504. The deploy script uses `--wait=false` plus explicit `rollout status`. If `helm history proxy10x-ingress -n proxy10x-system` shows a run of `failed … context deadline exceeded`, check that the script Ring Promoter *runs* (`kubectl -n ring-exec get job <id> -o yaml`) matches `deploy/ring-promoter/configmap.yaml`.
+
+22. **Delivery-pipeline deploys push the repo's `data/` over the edge.** Every `deploy-proxy10x-delivery-pipeline.yml` run, in every `DEPLOY_MODE` except `permissions` (so `dashboard-next` too), ends with `deploy-environment.yml` → `infra/ansible/deploy-configs.yml`. That step copies `data/servers/<env>` + `data/rules/<env>` from this repo onto the target. On 2026-09-24 a `dashboard-next` deploy to pop0 replaced 134 of the rule/server files just copied from lon1 with the repo's older copies. pop0 recovers within 5 minutes because it mirrors lon1 (`infra/edge-sync/`). **lon1 is now exempt:** `deploy-environment.yml` input `push_repo_data` defaults to `auto`, which skips the push when `host_ip` is `lon1.pop0.uk` / `195.20.255.201`, because lon1's live config is the source of truth. `always` or `never` override it; to push repo data to lon1 on purpose, use `deploy-proxy10x-virtual-servers.yml`.
+
+23. **cjson turns an empty `[]` into `{}` on any read-modify-write.** A plain `cjson.decode` gives an empty Lua table, which re-encodes as `{}`; `repo/codec.lua` also rebuilt every table on save and dropped metatables. Every backend rewrite of a WAF policy changed `ipLists.deny: []` to `{}`. Fixed on both sides: request bodies (`Helper.GetPayloads`) and storage reads (`ConfigIO.decode(..., { preserve_arrays = true })` in `disk_driver`) decode with a private cjson instance that keeps `cjson.array_mt` (`ConfigIO.decode_json_arrays`), and the codec copies keep the source metatable. Records saved before this keep their `{}` until next saved (198 prod servers have `match_cases: {}`); Lua consumers treat both the same. `rule_loader` still uses the plain decoder, since it only reads. Build new list fields in responses with `setmetatable({}, cjson.array_mt)`.
+
+24. **Bulk DELETE takes a body, and ids/env reach file paths.** `DELETE /api/<servers|rules|waf_rules|waf_policies|secrets|instances>` with `{ids: {ids: [...], envProfile}}` (or a path id) runs through `runDelete` in `api.lua`, which answers `{data: {deleted, failed:[{id, error}]}}` (207 when some failed, 400 for no ids or >500) and writes one audit entry. `storage/driver.lua` `valid_id`/`valid_env` reject `/`, `\`, NUL and non-`[%w_-]` envs: before them, `{"ids":["../../settings"]}` deleted `data/settings.json`.
+
+25. **Rule secrets go through `secret://`, never inline** (2026-09-27). The ollama JWT key sat base64-encoded in `data/rules/prod/16ff5129-….json` in this **public** repo from 2026-08-27, and in diy-tax-return-uk since July. Base64 is not encryption. It was rotated. Rules now carry `jwt_token_validation_key: "secret://<id>#jwt_key"`; `secret_resolver.lua` resolves it per request from `data/secrets/<env>/<id>.json` (AES-256-GCM, created via `POST /api/secrets`), decrypted with `env_vars.SECRETS_ENCRYPTION_KEY`. The encrypted blob is safe to commit. The key must be in `infra/secrets/<env>/settings.sops.json`, because `code`/`servers` deploys rewrite `settings.json` from SOPS. An edge whose `api/` predates `secret_resolver.lua`, or which lacks the key, refuses every request to that rule (403).
+
+### Conventions
+
+- **Lua modules** return a table `_M`. Public functions on `_M`; file-scoped locals outside.
+- **Error handling:** fail-open is the norm (log, continue) for request-path features. Fail-closed only for auth/WAF block.
+- **JSON decode/encode:** `Cjson = require("cjson")` is loaded as a global in `init.lua`. Use `Cjson.decode`/`Cjson.encode`. `cjson.safe` where failure must not throw.
+- **Base64:** `Base64 = require "base64"` global. Used for server `config`, VCL, rule `message`, secrets.
+- **Paths:** `configPath = os.getenv("NGINX_CONFIG_DIR") or "/opt/nginx/"` — always trailing-slash.
+
+---
+
+## 16. Common Troubleshooting Playbook
+
+| Symptom | First check |
+|---------|-------------|
+| Worker stuck at 100% CPU, health returns 000 | `ps -o pid,stat nginx` — if `R`, Lua infinite loop. Kill worker, investigate recent change. See #1 + #2 above. |
+| 504 Gateway Timeout at exactly 60s | Outer proxy timeout default. Set `proxy_timeouts` on server; also check k3s ingress layer. |
+| 502 Bad Gateway | Upstream unreachable, DNS failed, or balancer peer setup failed (nginx error log: `balancer.set_current_peer failed`). |
+| Save server hangs the whole server | See #1 — likely truncated body. Check `/usr/local/openresty/nginx/client_body_temp/` for small files. |
+| SSL cert not issued | Check `data/ssl/{domain}.json` has `ssl_enabled: true`; `ssl_domains` shared dict has the domain; DNS points to this server; port 80 ACME reachable. |
+| Rule doesn't match | Check rule's `priority`, `path_key`, and that server's `rules` or `match_cases` includes it. Use `/api/traffic/debug` to inspect matching state. |
+| Config changes don't take effect | `config_status: true`? `openresty -t` passes? `/tmp/nginx/nginx-reboot-required` being picked up by cron? |
+| k3s ingress config out of date | `helm upgrade proxy10x-ingress ingress-controller/deploy/helm/ -n proxy10x-system` |
+| S3 workflows fail: `The security token included in the request is invalid.` | The access key id was **deleted**, not denied. Something published it. `docs/runbooks/s3-credential-rotation.md` — close the channel before rotating. |
+| A tenant site returns S3 XML errors to the public | Expected to be scrubbed by `api/s3_error_filter.lua`; if `AKIA` appears in the body the edge has not picked up the change — redeploy `api/` + the nginx template and reload. |
+
+### Useful commands on production host
+
+```bash
+# Health
+curl -sf -o /dev/null -w '%{http_code}' http://127.0.0.1:8099/health
+
+# Current worker states
+ps aux | grep 'nginx: worker' | grep -v grep
+
+# Recent non-OCSP errors
+tail -50 /usr/local/openresty/nginx/logs/error.log | grep -v 'ocsp stapling'
+
+# Test config without reloading
+/usr/local/openresty/bin/openresty -t
+
+# Graceful reload (HUP to master)
+systemctl reload openresty
+
+# Hard restart
+systemctl restart openresty
+
+# Find a specific server's config
+cat /opt/nginx/data/servers/prod/host:{hostname}.json | python3 -m json.tool
+```
+
+---
+
+## 17. Where Things Are Likely To Break
+
+- **`worker_processes 1`** in production — single worker is an SPoF
+- **Blocking `io.popen` in helpers.lua** — called on every `config_status: true` save
+- **`ngx.req.get_post_args()` path** for JSON — fragile when bodies are large + buffered
+- **k3s ingress nginx.conf** is maintained manually and drifts from `files/nginx.conf`
+- **Cron-based nginx reload** rather than immediate — there's a delay between save and activation
+- **Two templates to keep in sync:** `nginx-dev.conf.tmpl` (docker) and `infra/ansible/.../nginx.conf.j2` (prod). Changes must be made in both.
+- **Single JWT signing key in settings.json** — rotating it logs everyone out
+- **`settings.json` contains secrets** — do NOT commit real values. `.env` files similarly.

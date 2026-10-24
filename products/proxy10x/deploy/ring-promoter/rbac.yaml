@@ -1,0 +1,44 @@
+# Control-plane identity for the proxy10x Ring Promoter instance.
+#
+# The k8sjob deployer shells out to kubectl to create/watch/delete deploy Jobs
+# in ring-exec and read their pod logs. The Jobs themselves run as
+# ring-exec/ring-deploy-job, whose helm-deploy rights into proxy10x-* live in
+# k3s1-rbac.yaml.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ring-promoter
+  namespace: proxy10x-ring-promoter
+  labels:
+    app.kubernetes.io/part-of: proxy10x
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: proxy10x-ring-promoter-jobexec
+  namespace: ring-exec
+  labels:
+    app.kubernetes.io/part-of: proxy10x
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["create", "get", "list", "watch", "delete"]
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: proxy10x-ring-promoter-jobexec
+  namespace: ring-exec
+  labels:
+    app.kubernetes.io/part-of: proxy10x
+subjects:
+  - kind: ServiceAccount
+    name: ring-promoter
+    namespace: proxy10x-ring-promoter
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: proxy10x-ring-promoter-jobexec

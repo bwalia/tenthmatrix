@@ -1,0 +1,157 @@
+name: Export POP config (artifact tree)
+
+# Legacy/optional: materialize infra/configuration/pops/<pop>/ from CP or repo.
+# Prefer **Sync POP config from CP** (cp-sync-pop-to-git.yml) which writes
+# data/servers|rules via Go and merges a PR — that is the SoT mirror path.
+#
+# See infra/configuration/README.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      pop_id:
+        description: "POP id (matches data/pops/<id>.json and server.pop_ids)"
+        required: true
+        type: choice
+        default: lon1
+        options:
+          - lon1
+          - pop0
+      env_profile:
+        description: "Environment profile on CP / in data/"
+        required: true
+        type: choice
+        default: prod
+        options:
+          - prod
+          - int
+          - test
+      source:
+        description: "api = GET cp.pop0.uk/api/configuration/export; repo = filter git data/"
+        required: true
+        type: choice
+        default: api
+        options:
+          - api
+          - repo
+      cp_url:
+        description: "Control plane base URL (api mode)"
+        required: false
+        default: "https://cp.pop0.uk"
+        type: string
+      dry_run:
+        description: "Materialize only; do not commit"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: export-pop-${{ inputs.pop_id }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  export:
+    name: "Export ${{ inputs.pop_id }} (${{ inputs.source }})"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve CP API token
+        id: token
+        if: ${{ inputs.source == 'api' }}
+        env:
+          CP_API_USER: ${{ secrets.CP_API_USER }}
+          CP_API_PASSWD: ${{ secrets.CP_API_PASSWD }}
+          CP_API_TOKEN: ${{ secrets.CP_API_TOKEN }}
+          CP_URL: ${{ inputs.cp_url }}
+        run: |
+          set -euo pipefail
+          CP_URL="${CP_URL%/}"
+          if [ -n "${CP_API_USER}" ] && [ -n "${CP_API_PASSWD}" ]; then
+            body="$(jq -n --arg e "$CP_API_USER" --arg p "$CP_API_PASSWD" '{email:$e,password:$p}')"
+            resp="$(mktemp)"
+            code="$(curl -sS -o "$resp" -w '%{http_code}' --connect-timeout 15 --max-time 45 \
+              -X POST "${CP_URL}/api/user/login" \
+              -H 'Content-Type: application/json' \
+              -d "$body")"
+            echo "POST ${CP_URL}/api/user/login → HTTP ${code}"
+            if [ "$code" != "200" ]; then
+              echo "::error::CP login failed HTTP ${code}: $(head -c 400 "$resp")"
+              exit 1
+            fi
+            tok="$(jq -r '
+              (.data.accessToken // .accessToken // .data.token // .token // empty)
+              | if type == "string" and length > 0 then . else empty end
+            ' "$resp")"
+            if [ -z "$tok" ] || [ "$tok" = "null" ]; then
+              echo "::error::Login 200 but no accessToken"
+              exit 1
+            fi
+            echo "::add-mask::${tok}"
+            {
+              echo "token<<EOF"
+              printf '%s\n' "$tok"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            echo "Minted JWT via CP_API_USER"
+            exit 0
+          fi
+          if [ -n "${CP_API_TOKEN}" ]; then
+            echo "::add-mask::${CP_API_TOKEN}"
+            echo "token=${CP_API_TOKEN}" >> "$GITHUB_OUTPUT"
+            echo "Using secrets.CP_API_TOKEN"
+            exit 0
+          fi
+          echo "::error::Need secrets.CP_API_USER+CP_API_PASSWD (preferred) or CP_API_TOKEN for source=api"
+          exit 1
+
+      - name: Materialize POP tree
+        env:
+          CP_URL: ${{ inputs.cp_url }}
+          CP_TOKEN: ${{ steps.token.outputs.token }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/materialize-pop-export.sh
+          if [ "${{ inputs.source }}" = "api" ] && [ -z "${CP_TOKEN}" ]; then
+            echo "::error::CP token missing after Resolve step"
+            exit 1
+          fi
+          ./scripts/materialize-pop-export.sh \
+            "${{ inputs.source }}" \
+            "${{ inputs.pop_id }}" \
+            "${{ inputs.env_profile }}"
+
+      - name: Show manifest
+        run: jq . "infra/configuration/pops/${{ inputs.pop_id }}/manifest.json"
+
+      - name: Commit and push
+        if: ${{ inputs.dry_run != true && inputs.dry_run != 'true' }}
+        run: |
+          set -euo pipefail
+          POP="${{ inputs.pop_id }}"
+          git config user.name "proxy10x-pop-export[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "infra/configuration/pops/${POP}"
+          if git diff --staged --quiet; then
+            echo "No changes for ${POP}"
+            exit 0
+          fi
+          EXPORT_ID="$(jq -r .export_id "infra/configuration/pops/${POP}/manifest.json")"
+          HASH="$(jq -r .content_sha256 "infra/configuration/pops/${POP}/manifest.json" | cut -c1-12)"
+          git commit -m "config(${POP}): export ${EXPORT_ID} (${HASH})"
+          git push origin HEAD:main
+
+      - name: Dry-run notice
+        if: ${{ inputs.dry_run == true || inputs.dry_run == 'true' }}
+        run: echo "::notice::dry_run — tree written locally in the job workspace only; not committed"

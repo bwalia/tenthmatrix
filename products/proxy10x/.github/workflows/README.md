@@ -1,0 +1,380 @@
+# Proxy10x CI/CD Pipelines
+
+## Overview
+
+Proxy10x uses two deployment pipelines and a shared reusable workflow:
+
+| Pipeline | File | Branch | Environments | Purpose |
+|----------|------|--------|-------------|---------|
+| **Delivery** | `deploy-proxy10x-delivery-pipeline.yml` | `release` | int → test → prod (lon1 + pop1) | Production releases |
+| **Promotion** | `deploy-proxy10x-promotion-pipeline.yml` | `main` | int → test | CI/CD for config/server changes |
+| **Control plane (k3s1)** | `deploy-control-plane-k3s1.yml` | `main` | k3s1 `proxy10x-system` / cp.pop0.uk | Build image + seed `proxy10x-k3s1` on [rp.workstation.co.uk](https://rp.workstation.co.uk/) |
+| **Reusable** | `deploy-environment.yml` | — | (called by both pipelines) | Parameterized per-environment deploy logic |
+
+> The `acc` tier on 187.77.179.206 was decommissioned. Both pipelines now go test → prod (delivery) or stop at test (promotion).
+
+> `deploy-diytaxreturn-configs.yml` was retired on 2026-09-01. It targeted the
+> decommissioned 187.77.179.206 and an `[openresty_diytaxreturn]` inventory group
+> that no commit ever added, so all 12 of its runs failed — while firing on every
+> merge that touched `data/servers/**` or `data/rules/**`. diytaxreturn config is
+> owned by the app repo (`diy-tax-return-uk/.github/proxy10x/data/`) and imported
+> through `/api/projects/import`.
+
+---
+
+## Pipeline Flow Diagrams
+
+### Delivery Pipeline Flow
+![Delivery Pipeline](diagrams/delivery-pipeline.svg)
+
+### Promotion Pipeline Flow
+![Promotion Pipeline](diagrams/promotion-pipeline.svg)
+
+---
+
+## Delivery Pipeline (`deploy-proxy10x-delivery-pipeline.yml`)
+
+Full production release pipeline with fail-fast behavior and Slack notifications at every gate. Code promotes through **int → test → prod (lon1 + pop1)** — each environment must pass before the next deploys.
+
+### Triggers
+
+| Trigger | Branches | Behavior |
+|---------|----------|----------|
+| Push | `release` | Runs full pipeline: int → test → prod (lon1 + pop1) |
+| Manual (`workflow_dispatch`) | any | Choose target host, environment, and deploy mode |
+
+### Deploy Modes
+
+Selected via `DEPLOY_MODE` dropdown (default: **`code`** for manual dispatch).
+Push to `build`/`release` still defaults to `full` when no input is set.
+
+| Mode | `DEPLOY_MODE` | What runs |
+|------|---------------|-----------|
+| **Code deploy** (manual default) | `code` | Lua API, HTML, settings, nginx conf, restart |
+| **Nginx config** | `nginx` | Nginx conf dirs, tenants, cron, systemd, PAM, SSL, restart |
+| **Virtual servers** | `servers` | Server/rule data configs, settings, SSL, tenant configs, restart |
+| **Dashboard** | `dashboard` | React admin UI build + deploy, restart |
+| **OS dependencies** | `os_deps` | apt/zypper/yum package updates |
+| **Build OpenResty** | `build` | OS deps + **prebuilt** OpenResty image pull/rsync + luarocks + CDN deps (`openresty_install_mode=source` to compile on-host) |
+| **Full deploy** | `full` | Everything (OpenResty via prebuilt image by default) |
+
+#### Faster OpenResty installs (prebuilt image)
+
+Bare-metal `build` / auto-install no longer compiles OpenResty from source by
+default. Ansible pulls `docker.io/bwalia/proxy10x-openresty:<version>` (Buildx
++ GHA cache via `.github/workflows/build-openresty-prebuilt.yml`) and rsyncs
+`/usr/local/openresty` to the target. See [`infra/openresty-prebuilt/README.md`](../infra/openresty-prebuilt/README.md).
+
+- Prefer **`DEPLOY_MODE=code`** for Lua / api_gw / HTML changes.
+- Use **`build`** or **`full`** when the OpenResty version or rocks change (after
+  the prebuilt image workflow has published the matching tag).
+- Escape hatch: `--extra-vars openresty_install_mode=source`.
+
+Next.js admin builds on the deploy runner use `actions/setup-node` npm cache
+and `actions/cache` for `.next` outputs.
+
+### Pipeline Stages
+
+```
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │                         PUSH TO release                             │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 1: Build & Validate                        [ubuntu-latest]   │
+ │  - Validate all JSON configs (servers, rules, WAF rules, policies)  │
+ │  - Validate Jinja2 templates (Ansible roles)                        │
+ │  ✗ Failure → Slack alert → pipeline stops                           │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 2: Deploy Int                    [self-hosted, local]        │
+ │  Uses deploy-environment.yml (connection_mode: local)               │
+ │  ✗ Failure → Slack alert → pipeline stops                           │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 3: Smoke Test Int                          [self-hosted]     │
+ │  - Go health check tests (QA/01_healthcheck_test.go)                │
+ │  - API endpoint verification (/health, /api/*)                      │
+ │  ✗ Failure → Slack alert → pipeline stops before test               │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 4: Deploy Test                   [self-hosted, SSH]          │
+ │  Uses deploy-environment.yml (connection_mode: ssh)                 │
+ │  ✗ Failure → Slack alert → pipeline stops before production         │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 5a: Deploy Prod lon1             [self-hosted, SSH+key]      │
+ │  Uses deploy-environment.yml (connection_mode: ssh_key)             │
+ │  ✓ Success → Slack: "deployed to production (lon1)"                 │
+ │  ✗ Failure → Slack alert + manual rollback                          │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  STAGE 5b: Deploy Prod lon1             [self-hosted, SSH+key]      │
+ │  Uses deploy-environment.yml (connection_mode: ssh_key)             │
+ │  ✓ Success → Slack: "deployed to LON1"                              │
+ │  ✗ Failure → Slack alert + manual rollback                          │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  PIPELINE SUMMARY (always runs)                   [ubuntu-latest]   │
+ │  Reports pass/fail for all stages. Exits with error if any failed.  │
+ └──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Promotion Pipeline (`deploy-proxy10x-promotion-pipeline.yml`)
+
+Lightweight CI/CD pipeline for deploying config and server changes from `main` through non-production environments. No full builds, no production deployments.
+
+### Triggers
+
+| Trigger | Branches | Behavior |
+|---------|----------|----------|
+| Push | `main` | Validates and deploys through int → test |
+| Pull Request | `feature/*`, `bugfix/*`, `hotfix/*`, `release/*`, `main` | Validates and deploys through int → test |
+| Manual (`workflow_dispatch`) | — | Choose deploy mode (`nginx` or `servers`) and how far to promote |
+
+### Deploy Modes
+
+Limited to config-only changes:
+
+| Mode | `DEPLOY_MODE` | What runs |
+|------|---------------|-----------|
+| **Nginx config** (default: `servers`) | `nginx` | Nginx conf dirs, tenants, cron, systemd, PAM, SSL, restart |
+| **Virtual servers** | `servers` | Server/rule data configs, settings, SSL, tenant configs, restart |
+
+### Pipeline Stages
+
+```
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  PUSH TO main / PR / manual dispatch                                │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  Validate: JSON configs on main branch            [ubuntu-latest]   │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  Deploy Int (192.168.1.193)                       [self-hosted]     │
+ │  Always runs                                                        │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  Smoke Test Int                                   [self-hosted]     │
+ │  Go health checks + endpoint verification                           │
+ └──────────────────────────┬───────────────────────────────────────────┘
+                            │ pass
+                            ▼
+ ┌──────────────────────────────────────────────────────────────────────┐
+ │  Deploy Test (192.168.1.140)                      [self-hosted]     │
+ │  Runs if TARGET_ENV is test                                         │
+ └──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Reusable Deploy Workflow (`deploy-environment.yml`)
+
+Shared parameterized workflow called by both pipelines via `workflow_call`. Handles all per-environment deployment logic with conditional steps.
+
+### Key Parameters
+
+| Parameter | Values | Description |
+|-----------|--------|-------------|
+| `connection_mode` | `local`, `ssh`, `ssh_key` | How to connect to the target host |
+| `secrets_mode` | `github_secret`, `runner_file` | Where settings/env files come from |
+| `health_check_mode` | `local`, `ssh`, `external` | How to verify the health endpoint |
+| `deploy_mode` | `code`, `nginx`, `servers`, `dashboard`, `os_deps`, `build`, `full` | Maps to Ansible tags |
+
+### Environment Configuration
+
+| Environment | Host IP | SSH User | `connection_mode` | `secrets_mode` | `health_check_mode` | Health Endpoint |
+|-------------|---------|----------|--------------------|----------------|---------------------|-----------------|
+| int | 192.168.1.193 | (local) | `local` | `sops` | `local` | `http://127.0.0.1:8099/healthz` |
+| test | 192.168.1.140 | bwalia | `ssh` | `vault_or_sops` | `ssh` | `http://127.0.0.1:8099/healthz` |
+| acc | 192.168.1.47 | bwalia | `ssh_key` | `vault_or_sops` | `ssh` | `http://127.0.0.1:8099/healthz` |
+| prod / prod-lon1 / prod-pop0 | **both** lon1.pop0.uk **and** 85.190.106.189 (lon2) | root / administrator | `ssh_key` | `vault_or_sops` | `external` | `https://lon1.pop0.uk/healthz` + `https://lon2.pop0.uk/healthz` |
+
+> **Why :8099 on the LAN hosts:** all three of int, test and acc failed their
+> health gate on `:8080` with HTTP 000 — a failed TCP connect — while
+> `openresty -t` passed and the service was `active`. The int and test fixes
+> attribute this to k3s CNI hostPort DNAT blackholing the port; that cause is
+> documented there but has not been verified on acc. The Next.js admin block
+> on `nginx_nextjs_dashboard_port` (8099) serves the same `/healthz` and is
+> reachable, so all three point at it.
+>
+> If `:8080` really is blackholed rather than merely unbound, then the **admin
+> API itself** is unreachable on these hosts, not just the health path. int
+> handled that by moving it to `:8090`
+> (`nginx_default_server_backend_port` in its host_vars); test and acc still
+> have it on `:8080`. Worth checking on the box — the Next.js dashboard's
+> `PROXY10X_API_URL` points at that port.
+
+> **pop1 retired:** `18.133.126.242` / `pop1.diytaxreturn.co.uk` is gone.
+>
+> **Production dual-POP:** Ring Promoter / `deploy-single-environment.yml` with
+> `ENV=prod`, `prod-lon1`, or `prod-pop0` always deploys **lon1 + lon2 (pop0)**
+> in parallel. UI: `https://lon1.pop0.uk` and `https://lon2.pop0.uk`.
+
+### Steps (conditional per environment)
+
+1. Checkout code
+2. Install Ansible
+3. Decode secrets from GitHub Secret **or** validate from runner file
+4. Setup SSH + test connectivity (remote only)
+5. Docker prune (optional)
+6. Run Ansible playbook with `DEPLOY_MODE` → Ansible tags
+7. Deploy server/rule configs via `deploy-configs.yml`
+8. Post-deploy health gate (nginx -t, systemctl, health endpoint)
+9. Slack notifications (failure always, success optional)
+
+---
+
+## Ansible Deploy Modes (Tags)
+
+The `DEPLOY_MODE` value maps to Ansible tags that control which tasks run:
+
+| Tag | Tasks included |
+|-----|---------------|
+| `code` | Lua API, HTML, settings, nginx conf, permissions, restart |
+| `nginx` | Nginx conf dirs, tenants, cron, systemd, PAM, SSL, varnish, restart |
+| `servers` | Server/rule data configs, settings, SSL, tenant configs, restart |
+| `dashboard` | React admin UI sync, npm/yarn build, nginx conf, restart |
+| `os_deps` | OS package updates (apt/zypper/dnf) |
+| `build` | `os_deps` + OpenResty **prebuilt image** install (or source if `openresty_install_mode=source`) + luarocks + CDN deps |
+| `full` | No tag filter — all tasks run |
+| `always` | Auto-detect OpenResty, load vars, user setup (runs in every mode); auto-installs OpenResty via prebuilt when missing/wrong version |
+
+---
+
+## Secrets
+
+| Secret | Used by | Description |
+|--------|---------|-------------|
+| `DOT_PROXY10X_SETTINGS_INT` | Int deploy | Base64-encoded settings.json for int |
+| `DOT_PROXY10X_ENV_CREDS_INT` | Int deploy | Base64-encoded .env for int |
+| `DOT_PROXY10X_SETTINGS_PROD` | Prod deploy (lon1/pop1) | Base64-encoded settings.json for prod |
+| `DOT_PROXY10X_ENV_CREDS_PROD` | Prod deploy (lon1/pop1) | Base64-encoded .env for prod |
+| `SLACK_WEBHOOK` | All stages | Slack incoming webhook URL |
+| `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_REGION` | `sync-prod-data-to-s3`, `sync-configs-to-environments`, `deploy-proxy10x-virtual-servers` | IAM user credentials for the S3 data bucket |
+| `PROXY10X_S3_BUCKET` | Same three workflows | Bucket holding `data/servers/<env>/` and `data/rules/<env>/` |
+
+Those three workflows run `.github/actions/aws-s3-preflight` before any transfer.
+It probes `sts:GetCallerIdentity` and one `s3 ls`, so a rotated, revoked or
+AWS-quarantined key is named as such instead of surfacing as a bare `AccessDenied`
+from inside `aws s3 sync`. It fails the job where S3 is the source of truth and
+only warns where the S3 step is a best-effort overlay.
+
+Runner-local secrets (on 192.168.1.193):
+
+```
+/home/bwalia/.secrets/proxy10x/
+├── int/     → settings.json + .env (BACKEND_HOST=192.168.1.193)
+├── test/    → settings.json + .env (BACKEND_HOST=192.168.1.140)
+└── lon1/    → settings.json + .env (BACKEND_HOST=lon1.pop0.uk)
+```
+
+---
+
+## Smoke Tests & Health Checks
+
+Each deployment stage runs post-deploy health gates before promoting to the next environment:
+
+1. `openresty -t` — nginx config syntax validation
+2. `systemctl is-active openresty` — service running check
+3. Health endpoint curl (12 retries x 5s) — HTTP 200 required
+
+### Go Tests (Stage 3 / Smoke Test Int)
+
+| File | Framework | What it tests |
+|------|-----------|--------------|
+| `QA/01_healthcheck_test.go` | Go `testing` | `/ping` endpoint returns JSON with `redis_status_msg`, `pod_uptime`, `node_uptime` |
+
+Run locally:
+```bash
+cd QA
+TARGET_HOST=http://192.168.1.193:8080 go test -v -run TestHealthCheck -timeout 60s
+```
+
+### API Endpoint Verification (Stage 3)
+
+| Endpoint | Type | Required |
+|----------|------|----------|
+| `/health` | Core health check | Yes (blocks pipeline) |
+| `/api/servers` | Server configs API | No (skip if admin UI disabled) |
+| `/api/rules` | Rule configs API | No (skip if admin UI disabled) |
+| `/api/waf_rules` | WAF rules API | No (skip if admin UI disabled) |
+| `/api/waf_policies` | WAF policies API | No (skip if admin UI disabled) |
+
+### JSON Config Validation (Stage 1)
+
+| Validation | Tool | Scope |
+|------------|------|-------|
+| Server configs | `python3 -m json.tool` | `data/servers/**/*.json` |
+| Rule configs | `python3 -m json.tool` | `data/rules/**/*.json` |
+| WAF rules | `python3 -m json.tool` | `data/waf_rules/**/*.json` |
+| WAF policies | `python3 -m json.tool` | `data/waf_policies/**/*.json` |
+| Jinja2 templates | `jinja2.Environment.parse()` | `infra/ansible/roles/**/*.j2` |
+
+---
+
+## Fail-Fast Behavior
+
+Both pipelines stop immediately on failure and send Slack alerts:
+
+### Delivery Pipeline
+```
+Stage 1 fails  → "Build & Validate FAILED"              → pipeline stops
+Stage 2 fails  → "Deploy Int FAILED"                    → pipeline stops
+Stage 3 fails  → "Smoke Test Int FAILED"                → pipeline stops (before test)
+Stage 4 fails  → "Deploy Test FAILED"                   → pipeline stops (before prod)
+Stage 5a fails → "Production Deployment FAILED (lon1)"  → alert + manual rollback
+Stage 5b fails → "Production Deployment FAILED (pop1)"  → alert + manual rollback
+```
+
+### Promotion Pipeline
+```
+Validate fails     → pipeline stops
+Deploy Int fails   → pipeline stops
+Smoke Test fails   → pipeline stops (before test)
+Deploy Test fails  → alert
+```
+
+### Rollback
+
+- **Non-production failure**: Fix the issue and push again.
+- **Production failure**: Re-run the delivery pipeline from a previous known-good commit on the `release` branch.
+
+---
+
+## Other Workflows
+
+| Workflow | File | Purpose |
+|----------|------|---------|
+| Deploy Virtual Servers | `deploy-proxy10x-virtual-servers.yml` | Deploy server/rule JSON configs + optional nginx conf via Ansible |
+| Reusable Deploy | `deploy-environment.yml` | Parameterized per-environment deploy (called by both pipelines) |
+| E2E Tests | `e2e-tests.yml` | Playwright browser tests against deployed frontend |
+| API Test Suite | `automated-api-test-suite.yml` | Go-based API integration tests |
+| UI Smoke Test | `automated-ui-smoke-test.yml` | Cypress UI smoke tests |
+| Backup Data | `backup-proxy10x-data.yml` | Backup Proxy10x data from production |
+| Sync Prod to S3 | `sync-prod-data-to-s3.yml` | Daily SSH rsync from lon1 → S3 + backup tarball |
+| Restore S3 to Git | `restore-prod-data-from-s3-to-git.yml` | **DR only** (manual). Auto-chain after Sync Prod→S3 disabled — CP is SoT |
+| Export POP config | `export-pop-config.yml` | Optional artifact under `infra/configuration/pops/` |
+| Deploy POP config | `deploy-pop-config.yml` | Git POP tree → bare-metal lon1/pop0 |
+| Sync POP from CP | `cp-sync-pop-to-git.yml` | **Primary:** Go `cmd/cp-sync-pop` → `data/` → PR → merge |

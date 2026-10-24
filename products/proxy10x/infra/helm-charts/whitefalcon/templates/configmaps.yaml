@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.app.name }}-cm-{{ .Values.app.target_env }}
+#   namespace: {{ .Values.targetNS }}
+data:
+    backup-database.sh: |
+      #!/bin/bash
+      TIMESTAMP=$(date +%Y-%m-%d-%H-%M)
+      if [ -z "$BACKUP_FREQUENCY" ]; then
+        echo "BACKUP_FREQUENCY is not set"
+        BACKUP_FREQUENCY="hourly"
+      fi
+      echo "Copying openresty data to minio"
+      # mc --version
+      source /tmp/secrets/.env
+      TAR_UTIL_BIN=$(which tar)
+      if [ -z "$TAR_UTIL_BIN" ]; then
+        echo "tar util not found but we will continue with the backup without compressing the redis data"
+        OPENRESTY_DUMP_FILE="/openresty-dump/"
+        DUMP_BACKUP_FILE="openresty-dump-$TIMESTAMP"
+      else
+      tar -czvf /tmp/openresty-dump.tar.gz /openresty-dump
+        OPENRESTY_DUMP_FILE="/tmp/openresty-dump.tar.gz"
+        DUMP_BACKUP_FILE="openresty-dump-$TIMESTAMP.tar.gz"
+      fi
+       
+      if [ -f $OPENRESTY_DUMP_FILE ]; then
+        mc config host add myminio $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+        if ! mc ls myminio/{{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups >/dev/null 2>&1; then
+          mc mb myminio/{{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups
+          echo "Bucket created: {{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups"
+        else
+          echo "Bucket already exists: {{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups"
+        fi
+        # Always save the latest dump file as openresty-dump-latest.rdb or tar.gz
+        mc cp $OPENRESTY_DUMP_FILE myminio/{{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups/hourly/$DUMP_LATEST_FILE
+        echo "$OPENRESTY_DUMP_FILE found OK and copied to minio bucket."
+        echo "Backup frequency is $BACKUP_FREQUENCY"
+        mc cp $OPENRESTY_DUMP_FILE myminio/{{ .Values.app.name }}-{{ .Values.app.target_env }}-cfg-backups/$BACKUP_FREQUENCY/$DUMP_BACKUP_FILE
+      else
+        echo "$OPENRESTY_DUMP_FILE not found backup failed."
+      fi
+    bootstrap-openresty.sh: |
+        #!/bin/bash
+        set -x
+        # Set Resolver for nginx
+        cp /tmp/resolver.conf ~/resolver_backup.conf && sed -i -e 's/Docker resolver/K3S resolver/' /tmp/resolver.conf && sed -i -e 's/resolver 127.0.0.11/resolver {{ .Values.app.dns_resolver }}/' /tmp/resolver.conf
+        # Set Timezone
+        echo "Openresty proxy10x Nginx Bootstrap Script"
+        FILE=/opt/nginx/data/settings.json
+        mkdir -p /opt/nginx/data
+        mkdir -p /opt/nginx/conf.d
+        if test -f "/tmp/settings/settings.json"; then
+        # Copy settings.json from secrets if provided by the deployment
+        cp /tmp/settings/settings.json $FILE
+        
+        else
+
+        if test -f "$FILE"; then
+            echo "$FILE exists."
+            echo "==========================="
+            echo "Settings Script Exists already"
+            echo "==========================="
+        else
+            echo "Settings Script does not exist. Copy sample-settings.json to settings.json"
+            SAMPLE=/opt/nginx/data/sample-settings.json
+            if test -f "$SAMPLE"; then
+                echo "$SAMPLE exists."
+                cp $SAMPLE $FILE
+            fi
+        fi
+        fi
+        echo "==========================="
+        echo "Copy user data configurations"
+        FILE=/opt/nginx/
+        cp -r /src/userdata/* $FILE
+        if [ -d "$FILE" ]; then
+          chmod 755 -R $FILE
+          chown nobody:root -R $FILE
+        fi
+        echo "==========================="
+        echo "Openresty proxy10x Src copy to /var/www/html Complete"
+        echo "==========================="
+        echo "Update openresty config file for this proxy10x env"
+        echo "==========================="
+        echo "Restart openresty nginx"
+        openresty -s reload
+        mkdir -p /opt/nginx/
+        openresty -v 2> /opt/nginx/VERSION
+        echo "==========================="
+        echo "Openresty proxy10x Nginx Bootstrap Script Completed"
+{{- if .Values.app.sync_data_onload -}}
+        echo "Openresty data sync"
+        sleep 10
+        mkdir -p /tmp/opsapi
+        touch /tmp/opsapi/sync.log
+        curl http://localhost/frontdoor/opsapi/sync >> /tmp/opsapi/sync.log
+{{- end }}
+    proxy10x.conf: |
+{{- range .Values.ingress.hosts }}
+        # Openresty proxy10x Nginx Conf Openresty proxy10x.conf src ConfigMap loaded by openresty
+        server {
+        listen         80;
+        server_name {{ .host | quote }};
+        root  /usr/local/openresty/nginx/html;
+        index          index.html;
+        location / {
+            return 200 "Openresty proxy10x Nginx Conf Openresty proxy10x.conf src ConfigMap loaded by openresty";
+        }
+        location ~ /\. {
+            deny all;
+        }
+        }
+        }
+{{- end }}

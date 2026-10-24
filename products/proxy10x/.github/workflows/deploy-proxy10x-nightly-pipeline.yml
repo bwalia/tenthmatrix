@@ -1,0 +1,447 @@
+name: Nightly Integration Pipeline (main → int → test)
+# Automated nightly pipeline: validates, deploys, and tests main branch through int and test environments
+# Runs unattended — no operator required. Stops at test (never touches acc or prod).
+# Full deploy by default: OS deps, OpenResty via prebuilt Docker image, Lua code, nginx, configs, dashboard
+# Slack notifications at every gate so the team sees results in the morning.
+
+on:
+  schedule:
+    # Run every night at 02:00 UTC (Mon–Fri)
+    - cron: "0 2 * * 1-5"
+
+  workflow_dispatch:
+    inputs:
+      DEPLOY_MODE:
+        type: choice
+        description: "Nightly deploy scope (full = everything, code = Lua/HTML only)"
+        default: "full"
+        required: true
+        options:
+          - full
+          - code
+          - nginx
+          - servers
+          - build
+
+      DEPLOY_BRANCH:
+        type: string
+        description: "Branch to test (default: main)"
+        default: "main"
+        required: true
+
+      VERBOSE_ANSIBLE:
+        type: boolean
+        description: "Enable Ansible verbose logging (-vv)"
+        default: true
+
+# Only one nightly run at a time — cancel stale runs
+concurrency:
+  group: nightly-integration
+  cancel-in-progress: true
+
+env:
+  NIGHTLY_DEPLOY_MODE: ${{ github.event.inputs.DEPLOY_MODE || 'full' }}
+  NIGHTLY_BRANCH: ${{ github.event.inputs.DEPLOY_BRANCH || 'main' }}
+  NIGHTLY_VERBOSE: ${{ github.event.inputs.VERBOSE_ANSIBLE || 'true' }}
+
+jobs:
+  # ──────────────────────────────────────────────────────
+  # Stage 1: Validate configs + templates
+  # ──────────────────────────────────────────────────────
+  validate:
+    name: "Nightly 1/5: Validate Configs & Templates"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Nightly run banner
+        run: |
+          echo "╔══════════════════════════════════════════════════════════╗"
+          echo "║        Proxy10x Nightly Integration Pipeline            ║"
+          echo "╠══════════════════════════════════════════════════════════╣"
+          echo "║  Started:      $(date -u '+%Y-%m-%d %H:%M:%S UTC')               ║"
+          echo "║  Branch:       ${{ env.NIGHTLY_BRANCH }}                              ║"
+          echo "║  Deploy mode:  ${{ env.NIGHTLY_DEPLOY_MODE }}                              ║"
+          echo "║  Verbose:      ${{ env.NIGHTLY_VERBOSE }}                             ║"
+          echo "║  Trigger:      ${{ github.event_name }}                       ║"
+          echo "║  Run ID:       ${{ github.run_id }}                    ║"
+          echo "╚══════════════════════════════════════════════════════════╝"
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ env.NIGHTLY_BRANCH }}
+
+      - name: Validate all JSON config files
+        run: |
+          echo "=== Validating All JSON Configs ==="
+          ERRORS=0
+          VALID=0
+          TOTAL=0
+          for dir in data/servers data/rules data/waf_rules data/waf_policies; do
+            DIR_COUNT=0
+            for file in $(find "$dir" -name '*.json' 2>/dev/null); do
+              TOTAL=$((TOTAL+1))
+              DIR_COUNT=$((DIR_COUNT+1))
+              if python3 -m json.tool "$file" > /dev/null 2>&1; then
+                VALID=$((VALID+1))
+              else
+                echo "::error file=$file::Invalid JSON syntax"
+                ERRORS=$((ERRORS+1))
+              fi
+            done
+            echo "  $dir: $DIR_COUNT files checked"
+          done
+          echo ""
+          echo "JSON validation: $VALID/$TOTAL valid, $ERRORS errors"
+          if [ $ERRORS -gt 0 ]; then exit 1; fi
+
+      - name: Validate Jinja2 templates
+        run: |
+          pip3 -q install jinja2
+          ERRORS=0
+          CHECKED=0
+          for file in $(find infra/ansible/roles -name '*.j2' 2>/dev/null); do
+            CHECKED=$((CHECKED+1))
+            if python3 -c "
+          from jinja2 import Environment, BaseLoader, exceptions
+          env = Environment(loader=BaseLoader(), undefined=__import__('jinja2').Undefined)
+          try:
+              env.parse(open('$file').read())
+          except exceptions.TemplateSyntaxError as e:
+              print(f'Syntax error in $file: {e}')
+              exit(1)
+          " 2>/dev/null; then
+              true
+            else
+              echo "::error file=$file::Invalid Jinja2 template"
+              ERRORS=$((ERRORS+1))
+            fi
+          done
+          echo "Jinja2 validation: $CHECKED templates checked, $ERRORS errors"
+          if [ $ERRORS -gt 0 ]; then exit 1; fi
+
+      - name: Slack notify - Validation failed
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg branch "${{ env.NIGHTLY_BRANCH }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions (Nightly)", text: (":x: *Nightly Pipeline: Validation FAILED*\nConfig or template errors on `\($branch)` — nightly stopped.\n*Logs:* \($logs)")}')"
+
+  # ──────────────────────────────────────────────────────
+  # Stage 2: Deploy to Int (192.168.1.193)
+  # ──────────────────────────────────────────────────────
+  deploy-int:
+    name: "Nightly 2/5: Deploy Int"
+    needs: [validate]
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      env_name: int
+      env_label: "Int (192.168.1.193) [nightly]"
+      stage_number: "2"
+      host_ip: "192.168.1.193"
+      ssh_user: bwalia
+      connection_mode: local
+      secrets_mode: github_secret
+      # Int: :8080 stolen by k3s CNI hostPort — use Next admin :8099 healthz.
+      health_endpoint: "http://127.0.0.1:8099/healthz"
+      health_check_mode: local
+      docker_prune: true
+      notify_success: true
+      deploy_branch: ${{ github.event.inputs.DEPLOY_BRANCH || 'main' }}
+      deploy_mode: ${{ github.event.inputs.DEPLOY_MODE || 'full' }}
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SETTINGS_SECRET: ${{ secrets.DOT_PROXY10X_SETTINGS_INT }}
+      ENV_CREDS_SECRET: ${{ secrets.DOT_PROXY10X_ENV_CREDS_INT }}
+
+  # ──────────────────────────────────────────────────────
+  # Stage 3: Smoke Test Int — health checks + API tests
+  # ──────────────────────────────────────────────────────
+  smoke-test-int:
+    name: "Nightly 3/5: Smoke Test Int"
+    # Pinned to the int runner.  On any other Linux runner (debian001) the
+    # SSH tunnel fallback below is rejected by bwalia@192.168.1.193
+    # (publickey), which failed the 2026-10-16 nightly.  The co-location
+    # check stays as a guard if the label ever moves.
+    runs-on: [self-hosted, Linux, int]
+    needs: [deploy-int]
+    timeout-minutes: 15
+    env:
+      TARGET_IP: "192.168.1.193"
+      TARGET_USER: "bwalia"
+      TARGET_PORT: "8099"
+
+    steps:
+      # actions/checkout's git-clean cannot unlink root-owned build
+      # artifacts left in the persistent self-hosted workspace (e.g.
+      # openresty-admin-next/.next/BUILD_ID created by a prior root/sudo
+      # Next.js build), which fails the Checkout step with EACCES and
+      # blocks promotion. Reclaim ownership before checkout runs.
+      - name: Pre-checkout cleanup (reclaim runner workspace)
+        run: |
+          if [ -n "$GITHUB_WORKSPACE" ] && [ -d "$GITHUB_WORKSPACE" ]; then
+            sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+            sudo rm -rf "$GITHUB_WORKSPACE/openresty-admin-next/.next" 2>/dev/null || true
+          fi
+        shell: bash
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ env.NIGHTLY_BRANCH }}
+
+      - name: Detect co-location with target
+        id: colo
+        run: |
+          IS_LOCAL=false
+          IPS="$(hostname -I 2>/dev/null || true) $(ip -o addr show 2>/dev/null | awk '{print $4}' | cut -d/ -f1) $(ifconfig 2>/dev/null | awk '/inet /{print $2}')"
+          if printf ' %s ' $IPS | grep -qFw "$TARGET_IP"; then
+            IS_LOCAL=true
+          fi
+          echo "is_local=$IS_LOCAL" >> "$GITHUB_OUTPUT"
+          if [ "$IS_LOCAL" = "true" ]; then
+            echo "Runner IS co-located with $TARGET_IP — will curl 127.0.0.1 directly."
+          else
+            echo "Runner is NOT co-located with $TARGET_IP — will tunnel via SSH."
+          fi
+
+      - name: Install SSH key (only when remote from target)
+        if: steps.colo.outputs.is_local != 'true'
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SSH_KEY" ]; then
+            if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+              echo "::error::Runner has no ~/.ssh/id_rsa and secrets.SSH_PRIVATE_KEY is not set — cannot reach ${TARGET_IP}."
+              exit 1
+            fi
+            echo "Using pre-existing runner key at ~/.ssh/id_rsa"
+          else
+            mkdir -p ~/.ssh
+            echo "$SSH_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+          fi
+          ssh-keyscan -H "$TARGET_IP" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.19'
+          cache: false
+
+      - name: Open SSH port-forward to target (only when remote)
+        if: steps.colo.outputs.is_local != 'true'
+        run: |
+          ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new \
+            -i ~/.ssh/id_rsa -N -f \
+            -L "${TARGET_PORT}:127.0.0.1:${TARGET_PORT}" \
+            "${TARGET_USER}@${TARGET_IP}"
+
+      - name: Run health check tests (Go)
+        working-directory: QA
+        env:
+          TARGET_HOST: "http://127.0.0.1:${{ env.TARGET_PORT }}"
+        run: |
+          echo "=== Go Health Check Tests ==="
+          echo "Target: $TARGET_HOST"
+          echo "Time:   $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo ""
+          go test -v -run TestHealthCheck -timeout 60s 2>&1 | tee health-results.txt
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo ""
+            echo "::error::Go health check tests FAILED"
+            exit 1
+          fi
+          echo ""
+          echo "Health check tests PASSED"
+
+      - name: Verify all API endpoints
+        run: |
+          echo "=== API Endpoint Verification ==="
+          echo ""
+          FAILED=0
+          PASSED=0
+          SKIPPED=0
+          BASE="http://127.0.0.1:${TARGET_PORT}"
+
+          # Core endpoints (must pass) — :8099 avoids k3s CNI hostPort on :8080
+          echo "--- Core endpoints (required) ---"
+          for ENDPOINT in /healthz /ping; do
+            STATUS=$(curl --silent --output /dev/null --connect-timeout 3 --max-time 8 -w "%{http_code}" "${BASE}${ENDPOINT}" 2>/dev/null || true)
+            STATUS=$(echo "$STATUS" | tr -cd '0-9' | head -c 3)
+            [[ -z "$STATUS" ]] && STATUS="000"
+            if [ "$STATUS" = "200" ]; then
+              printf "  ✓ GET :%s%-25s %s\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+              PASSED=$((PASSED+1))
+            else
+              printf "  ✗ GET :%s%-25s %s\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+              FAILED=$((FAILED+1))
+            fi
+          done
+
+          echo ""
+          echo "--- Admin API endpoints (optional) ---"
+          for ENDPOINT in /api/servers /api/rules /api/waf_rules /api/waf_policies; do
+            STATUS=$(curl --silent --output /dev/null --connect-timeout 3 --max-time 8 -w "%{http_code}" "${BASE}${ENDPOINT}" 2>/dev/null || true)
+            STATUS=$(echo "$STATUS" | tr -cd '0-9' | head -c 3)
+            [[ -z "$STATUS" ]] && STATUS="000"
+            if [ "$STATUS" = "200" ]; then
+              printf "  ✓ GET :%s%-25s %s\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+              PASSED=$((PASSED+1))
+            else
+              printf "  ○ GET :%s%-25s %s (skip)\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+              SKIPPED=$((SKIPPED+1))
+            fi
+          done
+
+          echo ""
+          echo "Results: $PASSED passed, $FAILED failed, $SKIPPED skipped"
+          if [ $FAILED -gt 0 ]; then
+            echo "::error::$FAILED core endpoint(s) failed on Int"
+            exit 1
+          fi
+          echo "All core endpoints PASSED"
+
+      - name: Tear down SSH port-forward
+        if: always() && steps.colo.outputs.is_local != 'true'
+        run: |
+          pkill -f "ssh .* -L ${TARGET_PORT}:127.0.0.1:${TARGET_PORT} ${TARGET_USER}@${TARGET_IP}" 2>/dev/null || true
+
+      - name: Slack notify - Smoke test failed
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg branch "${{ env.NIGHTLY_BRANCH }}" \
+              --arg mode "${{ env.NIGHTLY_DEPLOY_MODE }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions (Nightly)", text: (":x: *Nightly Pipeline: Smoke Test FAILED on Int*\nHealth check or API tests failed — nightly stopped before Test environment.\n*Branch:* `\($branch)` | *Mode:* \($mode)\n*Logs:* \($logs)")}')"
+
+  # ──────────────────────────────────────────────────────
+  # Stage 4: Deploy to Test (192.168.1.140) — automatic
+  # ──────────────────────────────────────────────────────
+  deploy-test:
+    name: "Nightly 4/5: Deploy Test"
+    needs: [smoke-test-int]
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      env_name: test
+      env_label: "Test (192.168.1.140) [nightly]"
+      stage_number: "4"
+      host_ip: "192.168.1.140"
+      ssh_user: bwalia
+      connection_mode: ssh
+      # vault_or_sops so any runner can deploy — see delivery pipeline
+      # test stage for the full rationale.
+      secrets_mode: vault_or_sops
+      # :8080 blackholed by k3s CNI hostPort DNAT on debian001 — use :8099.
+      health_endpoint: "http://127.0.0.1:8099/healthz"
+      health_check_mode: ssh
+      docker_prune: false
+      notify_success: true
+      deploy_branch: ${{ github.event.inputs.DEPLOY_BRANCH || 'main' }}
+      deploy_mode: ${{ github.event.inputs.DEPLOY_MODE || 'full' }}
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+
+  # ──────────────────────────────────────────────────────
+  # Stage 5: Nightly Summary (always runs)
+  # ──────────────────────────────────────────────────────
+  nightly-summary:
+    name: "Nightly 5/5: Summary & Report"
+    runs-on: ubuntu-latest
+    needs: [validate, deploy-int, smoke-test-int, deploy-test]
+    if: always()
+    steps:
+      - name: Nightly integration report
+        run: |
+          echo "╔══════════════════════════════════════════════════════════╗"
+          echo "║     Proxy10x Nightly Integration Pipeline — Report      ║"
+          echo "╠══════════════════════════════════════════════════════════╣"
+          echo "║  Completed:    $(date -u '+%Y-%m-%d %H:%M:%S UTC')               ║"
+          echo "║  Branch:       ${{ env.NIGHTLY_BRANCH }}                              ║"
+          echo "║  Deploy mode:  ${{ env.NIGHTLY_DEPLOY_MODE }}                              ║"
+          echo "║  Commit:       ${{ github.sha }}  ║"
+          echo "╠══════════════════════════════════════════════════════════╣"
+          echo "║                                                        ║"
+          echo "║  Stage 1 — Validate Configs:    ${{ needs.validate.result }}                  ║"
+          echo "║  Stage 2 — Deploy Int:          ${{ needs.deploy-int.result }}                  ║"
+          echo "║  Stage 3 — Smoke Test Int:      ${{ needs.smoke-test-int.result }}                  ║"
+          echo "║  Stage 4 — Deploy Test:         ${{ needs.deploy-test.result }}                  ║"
+          echo "║                                                        ║"
+          echo "╚══════════════════════════════════════════════════════════╝"
+
+          # Determine overall status
+          OVERALL="PASSED"
+          if [[ "${{ needs.validate.result }}" == "failure" ]] || \
+             [[ "${{ needs.deploy-int.result }}" == "failure" ]] || \
+             [[ "${{ needs.smoke-test-int.result }}" == "failure" ]] || \
+             [[ "${{ needs.deploy-test.result }}" == "failure" ]]; then
+              OVERALL="FAILED"
+          fi
+          echo ""
+          echo "Overall: $OVERALL"
+          echo "nightly_status=$OVERALL" >> $GITHUB_ENV
+
+      - name: Slack notify - Nightly passed
+        if: >
+          needs.validate.result == 'success' &&
+          needs.deploy-int.result == 'success' &&
+          needs.smoke-test-int.result == 'success' &&
+          needs.deploy-test.result == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg branch "${{ env.NIGHTLY_BRANCH }}" \
+              --arg mode "${{ env.NIGHTLY_DEPLOY_MODE }}" \
+              --arg commit "${{ github.sha }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions (Nightly)", text: (":white_check_mark: *Nightly Integration Pipeline PASSED*\nAll stages succeeded — `\($branch)` deployed through Int and Test.\n*Mode:* \($mode) | *Commit:* `\($commit)`\n*Logs:* \($logs)")}')"
+
+      - name: Slack notify - Nightly failed
+        if: >
+          needs.validate.result == 'failure' ||
+          needs.deploy-int.result == 'failure' ||
+          needs.smoke-test-int.result == 'failure' ||
+          needs.deploy-test.result == 'failure'
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg validate "${{ needs.validate.result }}" \
+              --arg int "${{ needs.deploy-int.result }}" \
+              --arg smoke "${{ needs.smoke-test-int.result }}" \
+              --arg test "${{ needs.deploy-test.result }}" \
+              --arg branch "${{ env.NIGHTLY_BRANCH }}" \
+              --arg mode "${{ env.NIGHTLY_DEPLOY_MODE }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions (Nightly)", text: (":x: *Nightly Integration Pipeline FAILED*\nValidate: \($validate) | Int: \($int) | Smoke: \($smoke) | Test: \($test)\n*Branch:* `\($branch)` | *Mode:* \($mode)\n*Logs:* \($logs)")}')"
+
+      - name: Fail pipeline if any stage failed
+        if: >
+          needs.validate.result == 'failure' ||
+          needs.deploy-int.result == 'failure' ||
+          needs.smoke-test-int.result == 'failure' ||
+          needs.deploy-test.result == 'failure'
+        run: |
+          echo "::error::Nightly integration pipeline failed — see stage results above"
+          exit 1

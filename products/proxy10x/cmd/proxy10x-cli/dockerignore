@@ -1,0 +1,24 @@
+# Scoped ignorefile for: docker build -f cmd/proxy10x-cli/Dockerfile --ignorefile cmd/proxy10x-cli/dockerignore .
+# Do not replace the repo-root .dockerignore used by the main Proxy10x Dockerfile.
+
+.git
+.github
+bin
+dist
+release
+node_modules
+openresty-admin-next
+dashboard
+data
+QA
+proxy10x-cache-tests
+ingress-controller
+infra
+demos-origins
+html
+api
+site
+docs
+*.md
+**/*_test.go
+**/testdata

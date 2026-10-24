@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Proxy10x — dynamic API gateway and reverse proxy on OpenResty. Live rules, WAF, multi-POP edge, MCP for AI agents, and a CLI for GitOps." />
+  <meta name="author" content="Workstation Solutions Limited" />
+  <meta name="theme-color" content="#f7f9fc" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b1c2c" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
+  <meta property="og:title" content="Proxy10x — Live-config API gateway" />
+  <meta property="og:description" content="Route, secure, and observe traffic from JSON and MCP — without reloading nginx for every rule change." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://proxy10x.com/images/geographic-traffic-distribution-dashboard.jpg" />
+  <title>Proxy10x — Live-config API gateway &amp; edge control plane</title>
+  <script src="/js/theme.js"></script>
+  <link rel="icon" href="/images/logo-color.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Poppins:wght@400;500;600;700&family=Unbounded:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/site.css" />
+  <style>
+    @keyframes rise-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ring-breathe {
+      0%, 100% { opacity: 0.28; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.03); }
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-body);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 20px; border-radius: 10px; border: 1px solid transparent;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: transform 60ms, box-shadow 0.2s, background 0.15s, border-color 0.15s;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--brass) 92%, #fff), var(--brass));
+      color: #fff;
+      box-shadow: 0 10px 28px var(--brass-glow);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--brass) 80%, #fff), var(--brass-dim));
+    }
+    .btn-ghost {
+      background: color-mix(in srgb, var(--steel-raised) 55%, transparent);
+      color: var(--on-steel);
+      border-color: var(--steel-line);
+    }
+    .btn-ghost:hover {
+      border-color: var(--signal);
+      color: var(--signal);
+      background: color-mix(in srgb, var(--signal) 8%, transparent);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 96px 0 80px; position: relative; overflow: hidden;
+      animation: 0.7s both rise-in;
+    }
+    .hero::before, .hero::after {
+      content: ""; position: absolute; top: 42%; left: 58%;
+      width: 36rem; height: 36rem; border-radius: 50%;
+      border: 1px solid var(--hero-ring); pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: 8s ease-in-out infinite ring-breathe;
+    }
+    .hero::after { width: 26rem; height: 26rem; opacity: 0.22; animation-delay: -2.5s; }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: var(--fs-eyebrow); font-weight: 500;
+      letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px;
+      line-height: 1.2;
+      color: var(--ink);
+      border: 1px solid color-mix(in srgb, var(--signal) 45%, var(--steel-line));
+      background: color-mix(in srgb, var(--signal) 14%, var(--steel-raised));
+      border-radius: 999px; padding: 9px 18px; margin-bottom: 26px;
+      box-shadow:
+        inset 0 1px 0 color-mix(in srgb, #fff 8%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--signal) 10%, transparent);
+    }
+    @media (max-width: 520px) {
+      .eyebrow { letter-spacing: 0.06em; padding: 8px 14px; }
+    }
+    .eyebrow .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--signal);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 30%, transparent);
+      flex-shrink: 0;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: var(--fs-display); font-weight: 700; line-height: var(--leading-tight);
+      letter-spacing: -0.02em; color: var(--ink); max-width: 18ch; text-wrap: balance;
+      margin: 0 0 20px;
+    }
+    .hero-title .grad {
+      color: var(--signal);
+      background-image: linear-gradient(105deg, #b5d4f1 0%, #87b7e6 48%, #5493d6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    html:not(.dark) .hero-title .grad {
+      background-image: linear-gradient(105deg, #3476c2 0%, #255fa8 55%, #1e4c88 100%);
+    }
+    .hero-sub {
+      color: var(--on-steel-muted); max-width: 640px; margin: 0 0 28px;
+      font-size: var(--fs-lead); line-height: 1.55;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 22px;
+      color: var(--on-steel-faint); font-size: 14.5px; font-weight: 500;
+    }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 7px; }
+    .check { color: var(--unlock); flex-shrink: 0; }
+
+    .terminal {
+      margin-top: 44px; border: 1px solid var(--steel-line); border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--term-bar), var(--term-bg));
+      overflow: hidden; box-shadow: 0 28px 80px color-mix(in srgb, #000 28%, transparent);
+      animation: 0.85s 0.12s both rise-in; position: relative; z-index: 1;
+    }
+    .terminal-bar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 16px; background: var(--term-bar); border-bottom: 1px solid var(--steel-line);
+    }
+    .tdot { width: 10px; height: 10px; border-radius: 50%; }
+    .tdot.r { background: #ff5f57; }
+    .tdot.y { background: #febc2e; }
+    .tdot.g { background: #28c840; }
+    .terminal-title {
+      margin-left: 8px; font-family: var(--font-mono); font-size: 12px; color: #7a8fa6;
+    }
+    .terminal pre {
+      margin: 0; padding: 18px 20px 22px; font-family: var(--font-mono);
+      font-size: 13.5px; line-height: 1.65; color: var(--term-ink); overflow-x: auto;
+    }
+    .c-cmd { color: #87b7e6; }
+    .c-flag { color: #b5d4f1; }
+    .c-str { color: #86efac; }
+    .c-ok { color: #3dbaa8; }
+    .c-dim { color: #64748b; }
+
+    /* Sections */
+    section { padding: 72px 0; }
+    .band-steel { background: var(--steel); color: var(--on-steel); }
+    .band-canvas {
+      background: var(--canvas);
+      color: var(--ink);
+      border-top: 1px solid var(--steel-line);
+      border-bottom: 1px solid var(--steel-line);
+    }
+    .band-raised { background: var(--canvas); }
+
+    .section-head { max-width: 640px; margin-bottom: 40px; }
+    .section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+    .kicker {
+      font-family: var(--font-mono); font-size: var(--fs-eyebrow); font-weight: 500;
+      letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--signal); margin-bottom: 12px;
+    }
+    h2 {
+      font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em;
+      font-size: var(--fs-h2); margin: 0 0 14px; color: var(--ink);
+      line-height: var(--leading-snug);
+    }
+    .section-sub { margin: 0; color: var(--on-steel-muted); font-size: var(--fs-lead); }
+
+    .grid { display: grid; gap: 18px; }
+    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 900px) {
+      .grid.cols-3, .grid.cols-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--steel-raised); border: 1px solid var(--steel-line);
+      border-radius: var(--radius); padding: 22px 22px 20px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      border-color: color-mix(in srgb, var(--brass) 55%, var(--steel-line));
+      box-shadow: 0 0 0 1px color-mix(in srgb, var(--brass) 20%, transparent);
+    }
+    .card-icon {
+      width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+      margin-bottom: 14px; color: var(--signal);
+      background: color-mix(in srgb, var(--signal) 12%, transparent);
+      border: 1px solid color-mix(in srgb, var(--signal) 28%, transparent);
+    }
+    .card h3 {
+      font-family: var(--font-body); font-size: var(--fs-h3); font-weight: 600;
+      margin: 0 0 8px; color: var(--ink);
+    }
+    .card p { margin: 0; color: var(--on-steel-muted); font-size: 15px; }
+
+    /* Video */
+    .video-frame {
+      position: relative; width: 100%; max-width: 920px; margin: 0 auto;
+      aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--steel-line); background: #0a0e14;
+      box-shadow: 0 24px 70px color-mix(in srgb, #000 18%, transparent);
+    }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-caption {
+      text-align: center; margin: 14px auto 0; max-width: 920px;
+      color: var(--on-steel-faint); font-size: 14.5px;
+    }
+    .video-caption a { color: var(--brass); font-weight: 600; }
+    .video-caption a:hover { text-decoration: underline; }
+
+    /* Media lists (videos + blogs) */
+    .media-list { display: grid; gap: 14px; }
+    .media-row {
+      display: grid; gap: 18px; align-items: center;
+      padding: 16px 18px; border-radius: var(--radius);
+      border: 1px solid var(--line-strong); background: var(--surface);
+      transition: border-color 0.15s;
+    }
+    .media-row:hover { border-color: color-mix(in srgb, var(--brass) 50%, var(--line-strong)); }
+    @media (min-width: 780px) {
+      .media-row { grid-template-columns: 220px 1fr auto; }
+    }
+    .media-thumb {
+      border-radius: 10px; overflow: hidden; border: 1px solid var(--line);
+      background: var(--canvas); aspect-ratio: 16 / 9;
+    }
+    .media-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .media-thumb--yt {
+      display: grid; place-items: center; color: var(--brass);
+      background: linear-gradient(145deg, var(--surface), var(--canvas));
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.06em;
+    }
+    .media-copy .tag {
+      font-family: var(--font-mono); font-size: var(--fs-eyebrow); font-weight: 500;
+      letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--signal); margin: 0 0 6px;
+    }
+    .media-copy h3 {
+      font-family: var(--font-body); font-size: var(--fs-h3); font-weight: 600;
+      margin: 0 0 6px; color: var(--ink);
+    }
+    .media-copy p { margin: 0; color: var(--ink-muted); font-size: 15px; }
+    .media-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .media-actions .btn { padding: 9px 14px; font-size: 13.5px; }
+
+    .btn-dark {
+      background: var(--brass); color: #fff; border-color: var(--brass);
+      box-shadow: 0 8px 20px var(--brass-glow);
+    }
+    .btn-dark:hover {
+      background: color-mix(in srgb, var(--brass) 88%, #fff);
+    }
+    .btn-outline-ink {
+      background: transparent; color: var(--on-steel); border-color: var(--line-strong);
+    }
+    .btn-outline-ink:hover { border-color: var(--brass); color: var(--brass); }
+
+    .flow-steps { display: grid; gap: 14px; }
+    .flow-step {
+      display: grid; grid-template-columns: 110px 1fr; gap: 16px;
+      padding: 18px 20px; border: 1px solid var(--steel-line); border-radius: var(--radius);
+      background: var(--steel-raised);
+    }
+    .flow-step code {
+      font-family: var(--font-mono); font-size: 12.5px; color: var(--signal);
+      align-self: start; padding-top: 2px;
+    }
+    .flow-step strong { display: block; color: var(--ink); margin-bottom: 4px; font-family: var(--font-body); }
+    .flow-step p { margin: 0; color: var(--on-steel-muted); font-size: 15px; }
+    @media (max-width: 640px) {
+      .flow-step { grid-template-columns: 1fr; }
+    }
+
+    .cta-box {
+      text-align: center; padding: 48px 28px; border-radius: calc(var(--radius) + 4px);
+      border: 1px solid var(--steel-line);
+      background: linear-gradient(180deg, var(--steel-raised), var(--canvas));
+    }
+    .cta-box h2 { max-width: 18ch; margin-left: auto; margin-right: auto; }
+    .cta-box p { color: var(--on-steel-muted); max-width: 36rem; margin: 0 auto 24px; }
+    .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="proxy10xLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--logo-from)" />
+                <stop offset="100%" stop-color="var(--logo-to)" />
+              </linearGradient>
+            </defs>
+            <path d="M24 4L6 12v12c0 11 8 21 18 24 10-3 18-13 18-24V12L24 4z" fill="url(#proxy10xLogoGrad)" />
+            <circle cx="24" cy="18" r="3" fill="white" />
+            <circle cx="16" cy="28" r="2.5" fill="white" opacity="0.9" />
+            <circle cx="32" cy="28" r="2.5" fill="white" opacity="0.9" />
+            <circle cx="24" cy="36" r="2" fill="white" opacity="0.8" />
+            <path d="M24 21v5M18 27l4-4M30 27l-4-4M24 33v-3" stroke="white" stroke-width="1.5" stroke-linecap="round" opacity="0.7" />
+          </svg>
+        </span>
+        <span>Proxy<span class="brand-accent">10x</span></span>
+      </a>
+      <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+      <nav class="nav-links" id="nav-menu">
+        <a href="#intro-video">Watch</a>
+        <a href="#how-to-videos">How-to</a>
+        <a href="#features">Features</a>
+        <a href="/waf/">WAF</a>
+        <a href="#blog">Blog</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="/swagger/">API</a>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3 7 7 0 1 0 21 14.5z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <a class="nav-cta" href="https://github.com/bwalia/tenthmatrix">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Open-source · multi-POP · live-config</span>
+        <h1 class="hero-title">
+          Live-config API gateway.
+          <span class="grad">Rules without reloads.</span>
+        </h1>
+        <p class="hero-sub">
+          Proxy10x is a self-hosted reverse proxy and edge control plane on OpenResty —
+          virtual hosts, WAF, traffic splits, geo stats, MCP, and CLI — driven from JSON
+          that takes effect without restarting nginx for every rule change.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://github.com/bwalia/tenthmatrix">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2C18 13.5 20 11 20 8a6 6 0 0 0-4-5.6 6 6 0 0 0-6 0A6 6 0 0 0 6 8c0 3 2 5.5 6 6.8A4.8 4.8 0 0 0 11 18v4"/><path d="M9 18c-4.5 1.5-4.5-2.3-7-3"/></svg>
+            Get started on GitHub
+          </a>
+          <a class="btn btn-ghost" href="#intro-video">Watch the intro</a>
+        </div>
+        <div class="hero-meta">
+          <span><svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Live rules &amp; WAF</span>
+          <span><svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Multi-POP edge</span>
+          <span><svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> UI · REST · MCP · CLI</span>
+        </div>
+
+        <div class="terminal" role="img" aria-label="Example proxy10x-cli session">
+          <div class="terminal-bar">
+            <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
+            <span class="terminal-title">proxy10x-cli — pull · push · check</span>
+          </div>
+          <pre>$ <span class="c-cmd">proxy10x-cli</span> pull <span class="c-flag">-d</span> ./cfg <span class="c-flag">--resources</span> <span class="c-str">servers,rules,waf</span>
+<span class="c-ok">✓</span> synced 42 servers · 118 rules · 6 waf policies
+
+$ <span class="c-cmd">proxy10x-cli</span> check nginx <span class="c-flag">-o</span> <span class="c-str">json</span>
+<span class="c-ok">✓</span> openresty -t ok · healthz=<span class="c-str">200</span>
+
+$ <span class="c-cmd">proxy10x-cli</span> push <span class="c-flag">-d</span> ./cfg <span class="c-flag">--yes</span> <span class="c-flag">--verify</span>
+<span class="c-dim"># rules hot — no nginx reload for match changes</span>
+<span class="c-ok">✓</span> applied · verified</pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="intro-video" class="band-raised" aria-label="Proxy10x introduction video">
+      <div class="wrap">
+        <div class="section-head center">
+          <div class="kicker">Watch</div>
+          <h2>Proxy10x in 20 minutes</h2>
+          <p class="section-sub">Live-config routing, WAF, traffic splits, MCP, and CLI — without reloading nginx for every rule change.</p>
+        </div>
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/7NJulclG5sQ"
+            title="Proxy10x introduction — live-config API gateway on OpenResty"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+            loading="lazy"
+          ></iframe>
+        </div>
+        <p class="video-caption">
+          Full walkthrough on
+          <a href="https://youtu.be/7NJulclG5sQ" rel="noopener noreferrer" target="_blank">YouTube</a>
+          · More in
+          <a href="#how-to-videos">How-to videos</a>
+        </p>
+      </div>
+    </section>
+
+    <section id="how-to-videos" class="band-canvas" aria-labelledby="howto-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">How-to videos</div>
+          <h2 id="howto-heading">Learn the platform, feature by feature</h2>
+          <p class="section-sub">A growing list of walkthroughs — start with the introduction, then jump into shorter feature videos.</p>
+        </div>
+        <div class="media-list">
+          <article class="media-row">
+            <div class="media-thumb media-thumb--yt" aria-hidden="true">INTRO · 20 MIN</div>
+            <div class="media-copy">
+              <p class="tag">1 · Introduction</p>
+              <h3>Proxy10x in 20 minutes</h3>
+              <p>Architecture, live rules, WAF, traffic splits, admin UI, MCP, and CLI — the complete product tour.</p>
+            </div>
+            <div class="media-actions">
+              <a class="btn btn-dark" href="#intro-video">Watch here</a>
+              <a class="btn btn-outline-ink" href="https://youtu.be/7NJulclG5sQ" rel="noopener noreferrer" target="_blank">YouTube</a>
+            </div>
+          </article>
+          <article class="media-row">
+            <div class="media-thumb">
+              <img
+                src="/images/geographic-traffic-distribution-dashboard.jpg"
+                alt="Geographic Traffic Distribution dashboard"
+                width="440"
+                height="248"
+                loading="lazy"
+              />
+            </div>
+            <div class="media-copy">
+              <p class="tag">2 · Feature · 2 min</p>
+              <h3>Traffic by country</h3>
+              <p>Geographic Traffic Distribution — Top Countries, live choropleth, and how IP2Location feeds the edge.</p>
+            </div>
+            <div class="media-actions">
+              <a class="btn btn-dark" href="https://youtu.be/4G_YPYj3J3k" rel="noopener noreferrer" target="_blank">YouTube</a>
+              <a class="btn btn-outline-ink" href="/blog/geographic-traffic-distribution.html">Article</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="band-canvas" style="border-top:0;padding-top:0" aria-labelledby="features-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">One edge, every control</div>
+          <h2 id="features-heading">Everything you need at the POP</h2>
+          <p class="section-sub">Route, protect, observe, and automate — each capability hot on the request path or a flag away from reload.</p>
+        </div>
+        <div class="grid cols-3">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+            <h3>Geographic traffic</h3>
+            <p>Top Countries and a world map on the admin dashboard — every request tagged via IP2Location into live traffic stats.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 17V9M12 17v-5M16 17V7"/></svg></div>
+            <h3>Dynamic routing</h3>
+            <p>Path, IP, country, JWT, S3, and cookie match with priority and specificity — no OpenResty reload for rule changes.</p>
+          </article>
+          <a class="card card-link" href="/waf/">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <h3>WAF &amp; security</h3>
+            <p>Policy packs, anomaly scoring, monitor or block, rate limits, CAPTCHA, and geo deny lists at the edge.</p>
+            <span class="card-more">Full WAF guide →</span>
+          </a>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h4m12 0h4M4.9 19.1l2.1-2.1M17 7l2.1-2.1"/></svg></div>
+            <h3>Traffic engineering</h3>
+            <p>Weighted, canary, sticky, and least-conn backends with promote/rollback and upstream health.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <h3>Auto SSL &amp; cache</h3>
+            <p>Let’s Encrypt auto-ssl, force HTTPS, edge static cache, optional Varnish and Docker blob cache.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2a4 4 0 014 4v2a4 4 0 01-4 4 4 4 0 01-4 0V2a4 4 0 014 0z"/><path d="M4 10h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V10z"/></svg></div>
+            <h3>UI · REST · MCP · CLI</h3>
+            <p>React Admin and Next.js ops, Swagger CRUD, MCP for agents, and <code>proxy10x-cli</code> for GitOps pipelines.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="pipeline" class="band-steel" aria-labelledby="pipeline-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">How traffic moves</div>
+          <h2 id="pipeline-heading">Match once. Decide per request.</h2>
+          <p class="section-sub">OpenResty loads server and rule JSON on the hot path. Only server-block nginx changes need a reload flag.</p>
+        </div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <code>rewrite</code>
+            <div>
+              <strong>gateway_ack</strong>
+              <p>Load host config, score candidate rules (path, IP, country, JWT…), run rate limit and WAF, stash the winner.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <code>access</code>
+            <div>
+              <strong>gateway_resp</strong>
+              <p>Honor response code: proxy (305), redirect, HTML block, CAPTCHA (306), or 403 — then resolve backend and timeouts.</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <code>balancer</code>
+            <div>
+              <strong>Peer + timeouts</strong>
+              <p>Weighted, canary, sticky, or least-conn selection with per-server connect/send/read timeouts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="blog" class="band-canvas" aria-labelledby="blog-heading">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">Blog</div>
+          <h2 id="blog-heading">Notes from the edge control plane</h2>
+          <p class="section-sub">Deep dives and feature write-ups — listed here as they ship.</p>
+        </div>
+        <div class="media-list">
+          <article class="media-row">
+            <div class="media-thumb">
+              <img
+                src="/images/geographic-traffic-distribution-dashboard.jpg"
+                alt="Geographic Traffic Distribution article cover"
+                width="440"
+                height="248"
+                loading="lazy"
+              />
+            </div>
+            <div class="media-copy">
+              <p class="tag">Feature deep dive</p>
+              <h3>Geographic Traffic Distribution by country</h3>
+              <p>How Top Countries and the world choropleth work — IP2Location on the hot path, traffic_stats, and atlas-ready codes.</p>
+            </div>
+            <div class="media-actions">
+              <a class="btn btn-dark" href="/blog/geographic-traffic-distribution.html">Read article</a>
+              <a class="btn btn-outline-ink" href="/blog/">All posts</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="band-steel" aria-labelledby="start-heading">
+      <div class="wrap">
+        <div class="cta-box">
+          <div class="kicker">Get going</div>
+          <h2 id="start-heading">Own the edge you run</h2>
+          <p>Clone the repo, bring up Docker with <code>./dev.sh</code>, or deploy POPs with Ansible — then drive config like code.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary" href="https://github.com/bwalia/tenthmatrix">View on GitHub</a>
+            <a class="btn btn-ghost" href="/swagger/">Swagger API</a>
+            <a class="btn btn-ghost" href="/blog/">Blog</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div>© Workstation Solutions Limited · Proxy10x</div>
+      <div class="footer-links">
+        <a href="#how-to-videos">How-to</a>
+        <a href="/waf/">WAF</a>
+        <a href="#blog">Blog</a>
+        <a href="/swagger/">API</a>
+        <a href="https://github.com/bwalia/tenthmatrix">GitHub</a>
+        <a href="https://github.com/bwalia/tenthmatrix/blob/main/products/proxy10x/docs/proxy10x-cli.md">CLI</a>
+        <a href="https://github.com/bwalia/tenthmatrix/blob/main/products/proxy10x/docs/mcp.md">MCP</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    if (window.Proxy10xTheme) {
+      Proxy10xTheme.bindNav();
+      Proxy10xTheme.bind();
+    }
+  </script>
+</body>
+</html>

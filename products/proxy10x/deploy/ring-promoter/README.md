@@ -1,0 +1,102 @@
+# Ring Promoter — proxy10x instance (k3s1 control plane)
+
+**Instance:** [https://rp.proxy10x.com/](https://rp.proxy10x.com/)
+(namespace `proxy10x-ring-promoter` on k3s1). UI:
+`https://rp.proxy10x.com/?app=proxy10x-k3s1`.
+
+This repo owns the whole instance, the same way diy-tax-return-uk owns
+`ring-promoter.diytaxreturn.co.uk` (`devops/ring-promoter/`). It used to be an
+app on the shared `rp.workstation.co.uk` instance, whose config lives in
+bwalia/ring-promoter. The copy kept here drifted from the one that instance
+actually ran, and every seed from Sep 18 to Sep 24 ran a stale
+`helm upgrade --wait` that timed out on the `<pending>` LoadBalancer IP.
+Now [`configmap.yaml`](configmap.yaml) is the only copy of the deploy script.
+
+| File | What it is |
+|------|------------|
+| [`configmap.yaml`](configmap.yaml) | App registry: `proxy10x-k3s1` and its k8sjob deploy script |
+| [`deployment.yaml`](deployment.yaml), [`service.yaml`](service.yaml), [`ingress.yaml`](ingress.yaml) | The instance |
+| [`namespace.yaml`](namespace.yaml), [`rbac.yaml`](rbac.yaml) | Namespace; control-plane SA + rights to run Jobs in `ring-exec` |
+| [`k3s1-rbac.yaml`](k3s1-rbac.yaml) | Runner (`ring-exec/ring-deploy-job`) helm rights in `proxy10x-*` |
+| [`secret.example.yaml`](secret.example.yaml) | Secret template; real one made by the bootstrap script |
+| [`../../scripts/ring-promoter-bootstrap.sh`](../../scripts/ring-promoter-bootstrap.sh) | One-time DB, Secret and GitHub secrets |
+| `data/servers/prod/host:rp.proxy10x.com.json` | Edge vhost (pop0 → k3s1 Traefik, rule `425e4925`) |
+
+## Workflows
+
+- [`deploy-ring-promoter.yml`](../../.github/workflows/deploy-ring-promoter.yml)
+  runs on a push to main touching `deploy/ring-promoter/**`. It applies the
+  manifests, restarts the pod (config is read only at boot) and checks that
+  `proxy10x-k3s1` is registered. It runs on the Mac Studio runner because the
+  k3s1 API is LAN-only.
+- [`deploy-control-plane-k3s1.yml`](../../.github/workflows/deploy-control-plane-k3s1.yml)
+  runs on a push to main touching `api/`, the chart, etc. It builds
+  `bwalia/proxy10x:sha-<7>` and `bwalia/proxy10x-admin-next:sha-<7>`, then calls
+  `POST https://rp.proxy10x.com/api/apps/proxy10x-k3s1/seed` with
+  `{"ring":"prod","version":"<full sha>"}`.
+
+## One-time setup
+
+```sh
+export KUBECONFIG=~/.kube/k3s1.yaml
+
+# 1. Runner prerequisites (shared with the old instance; skip if present)
+kubectl -n ring-exec create secret generic proxy10x-vault \
+  --from-literal=VAULT_ADDR=https://vault.workstation.co.uk \
+  --from-literal=VAULT_TOKEN='<JWT>' \
+  --from-literal=SOPS_AGE_KEY='<AGE-SECRET-KEY-…>'
+
+# 2. Database ringpromoter_proxy10x on ring-system/ring-promoter-db, the
+#    proxy10x-ring-promoter/ring-promoter Secret, and the RP_URL / RP_TOKEN
+#    GitHub secrets. Idempotent; --rotate to mint new values.
+scripts/ring-promoter-bootstrap.sh
+
+# 3. Deploy the instance
+gh workflow run deploy-ring-promoter.yml
+```
+
+4. **DNS:** `rp.proxy10x.com` CNAME `pop0.proxy10x.com` (Cloudflare, DNS-only,
+   same as `rp.workstation.co.uk`).
+5. **Edge vhost:** push `data/servers/prod/host:rp.proxy10x.com.json` to the
+   pop0 edge (delivery pipeline, `DEPLOY_MODE=servers`), or create the server
+   in the admin UI with rule `425e4925-8ce1-de5b-2d13-0b086621101f` and SSL
+   enabled.
+
+The seed workflow runs on GitHub-hosted runners, so it only works after steps
+4–5 make `rp.proxy10x.com` public.
+
+## What a seed does
+
+1. Job `rp-proxy10x-k3s1-<ring>-…` in `ring-exec` (envFrom `proxy10x-vault`).
+2. Clones this repo at `RP_VERSION`, applies CRDs, and fixes an IngressClass
+   with the wrong (immutable) controller.
+3. **prod:** `scripts/k3s1-bootstrap-control-plane.sh` (Zalando Postgres,
+   migrations, `proxy10x-settings` + `proxy10x-pgsql` from Vault → SOPS), then
+   `helm upgrade --wait=false` of `proxy10x-ingress` in `proxy10x-system` with
+   the cloud003 overlay, and OpenResty **and** dashboard pinned to
+   `sha-<7>`. Then it applies the cp.pop0.uk Traefik split and waits on the
+   openresty and dashboard rollouts.
+4. **int/test/acc:** helm only (`proxy10x-<ring>`, ClusterIP, one replica).
+5. Health: prod uses `https://cp.pop0.uk/healthz`, because its pods sit on
+   cloud003 and the CNI overlay to edge nodes doesn't carry traffic. Other
+   rings use in-cluster `:8080/healthz`.
+
+`--wait=false` is deliberate. `proxy10x-ingress-openresty` is a LoadBalancer
+whose EXTERNAL-IP stays `<pending>` (Traefik holds 80/443 on the nodes), so
+`helm --wait` can never succeed.
+
+`RP_VERSION` can be a full SHA, a short SHA or a git tag. The job resolves it to the
+commit and uses image tag `sha-<first 7 of that commit>`, the only form CI publishes.
+It fails before touching the cluster if the ref doesn't resolve, or if
+`bwalia/proxy10x` (and, for prod, `bwalia/proxy10x-admin-next`) has no image
+for that commit.
+
+## Rings
+
+Promotion goes int → test → acc → prod, and each step copies the previous
+ring's version (`POST /promote {"from_ring":"test"}` deploys to acc). CI
+(`deploy-control-plane-k3s1.yml`) seeds **prod**, then, once prod is verified
+on that version, seeds **int** in a separate `seed-int` job. int therefore
+always has a version to promote. test and acc move only when someone
+promotes. Promoting from an empty ring returns
+`409 source ring has no version to promote`.
