@@ -1,0 +1,114 @@
+name: "Product sites (GitHub Pages)"
+
+# Publishes every TenthMatrix product's own website to this repository's one
+# GitHub Pages site, each in its own folder:
+#
+#   https://bwalia.github.io/tenthmatrix/proxy10x/  ← products/proxy10x/html/
+#   https://bwalia.github.io/tenthmatrix/vault10x/  ← products/vault10x/www/ (Next static export)
+#
+# Visitors never see github.io. Each product domain is a grey-cloud CNAME to
+# the edge (lon1.pop0.uk); its vhost and rule live in .github/wslproxy/data/
+# and are pushed to the control plane (cp.pop0.uk → lon1/lon2) by
+# wslproxy-register-domains.yml. The rule proxies the domain to its folder:
+#
+#   proxy10x.com/*       → https://bwalia.github.io/tenthmatrix/proxy10x/*
+#   www.vault10x.com/*   → https://bwalia.github.io/tenthmatrix/vault10x/*
+#
+# So every site is built for the root of its own domain (absolute /paths, no
+# base path). The Pages site has no custom domain of its own.
+#
+# To add a product site: build it into _site/<product>/ below, add a server +
+# rule under .github/wslproxy/data, CNAME the domain to lon1.pop0.uk.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'products/proxy10x/html/**'
+      - 'products/vault10x/www/**'
+      - '.github/workflows/products-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Proxy10x (static HTML)
+        working-directory: products/proxy10x
+        run: |
+          set -euo pipefail
+          dest="$GITHUB_WORKSPACE/_site/proxy10x"
+          mkdir -p "$dest"
+          cp html/index.html "$dest/index.html"
+          for f in 404.html 403.html; do [ -f "html/$f" ] && cp "html/$f" "$dest/$f"; done
+          for d in blog waf swagger css js images; do
+            if [ -d "html/$d" ]; then cp -R "html/$d" "$dest/$d"; fi
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: products/vault10x/www/package-lock.json
+
+      - name: Vault10x (Next.js static export)
+        working-directory: products/vault10x/www
+        env:
+          NEXT_STATIC_EXPORT: 'true'
+          NEXT_PUBLIC_BASE_PATH: ''
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build:static
+          mkdir -p "$GITHUB_WORKSPACE/_site/vault10x"
+          cp -R out/. "$GITHUB_WORKSPACE/_site/vault10x/"
+
+      - name: Site root
+        run: |
+          set -euo pipefail
+          # Pages runs Jekyll by default, which drops _next/ and other underscore paths.
+          touch _site/.nojekyll
+          cat > _site/index.html <<'HTML'
+          <!doctype html><html lang="en"><head><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta name="robots" content="noindex">
+          <title>TenthMatrix products</title>
+          <link rel="canonical" href="https://www.tenthmatrix.com/en/products/">
+          <meta http-equiv="refresh" content="0; url=https://www.tenthmatrix.com/en/products/">
+          </head><body>
+          <p><a href="https://www.tenthmatrix.com/en/products/">TenthMatrix products</a>:
+          <a href="https://proxy10x.com/">Proxy10x</a> ·
+          <a href="https://www.vault10x.com/">Vault10x</a></p>
+          </body></html>
+          HTML
+          find _site -maxdepth 2 | sort | head -40
+          du -sh _site/*
+
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
