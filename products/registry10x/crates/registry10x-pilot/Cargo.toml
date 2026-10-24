@@ -1,0 +1,29 @@
+[package]
+name = "registry10x-pilot"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "registry10x-pilot"
+path = "src/bin/registry10x-pilot.rs"
+
+[[bin]]
+name = "registry10x-mcp"
+path = "src/bin/registry10x-mcp.rs"
+
+[dependencies]
+registry10x-db.workspace = true
+registry10x-common.workspace = true
+tokio.workspace = true
+async-trait.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sqlx.workspace = true
+chrono.workspace = true
+uuid.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+reqwest.workspace = true

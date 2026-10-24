@@ -1,0 +1,38 @@
+{
+  "id": "tm-registry10x-pages",
+  "name": "tm-registry10x-pages",
+  "profile_id": "prod",
+  "priority": 1,
+  "rules_tags": [
+    "tenthmatrix",
+    "prod",
+    "pages",
+    "registry10x"
+  ],
+  "servers": [
+    "host:registry10x.com",
+    "host:www.registry10x.com"
+  ],
+  "match": {
+    "rules": {
+      "path": "/",
+      "path_key": "starts_with",
+      "jwt_token_validation": "equals",
+      "country_key": "equals",
+      "client_ip_key": "equals"
+    },
+    "response": {
+      "redirect_uri": "https://bwalia.github.io/tenthmatrix/registry10x",
+      "message": "",
+      "is_consul": false,
+      "code": 305,
+      "routing": {
+        "mode": "weighted"
+      },
+      "strip_path": false,
+      "auto_redirect_https": false,
+      "allow": true,
+      "backends": {}
+    }
+  }
+}

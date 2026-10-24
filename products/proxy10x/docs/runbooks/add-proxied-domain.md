@@ -119,8 +119,8 @@ public hostname until the app knows that hostname. sshweb answered
 
 ## Still open from the promptpilot setup (2026-10-10)
 
-- PRs [#1318](https://github.com/bwalia/tenthmatrix/pull/1318) and
-  [#1319](https://github.com/bwalia/tenthmatrix/pull/1319) (CP → git sync) need approval.
+- PRs [#1318](https://github.com/bwalia/wslproxy/pull/1318) and
+  [#1319](https://github.com/bwalia/wslproxy/pull/1319) (CP → git sync) need approval.
 - The explicit Cloudflare CNAME for promptpilot needs a token in
   `~/.config/cloudflare/token`. Once it's there, run:
   `add_domain.py --host promptpilot.workstation.co.uk --steps dns`

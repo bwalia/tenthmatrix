@@ -1,0 +1,25 @@
+# Compose override used by the nightly CVE scan workflow.
+#
+# The baseline docker-compose.yml hard-codes vulndb=registry10x, ingest_enabled=true,
+# and ai_enabled=true — fine for local dev with a GPU host and a patient
+# operator, but a CI run can't afford the 300MB OSV zip download or the
+# Ollama dependency. This file flips the scanner to the on-demand OSV HTTP
+# backend (no bootstrap), disables the ingest scheduler, and disables AI.
+
+services:
+  # Both services use the pre-built GHCR image in CI instead of rebuilding
+  # from source — that took >20 min on the runner's constrained docker and
+  # also isn't what's actually shipped. We test the artifact that k3s +
+  # mirror consume.
+  registry:
+    image: ghcr.io/bwalia/registry10x:latest
+    pull_policy: always
+    build: !reset null
+    environment:
+      REGISTRY10X_SCANNER__VULNDB: "osv"
+      REGISTRY10X_SCANNER__INGEST_ENABLED: "false"
+      REGISTRY10X_SCANNER__AI_ENABLED: "false"
+  auth:
+    image: ghcr.io/bwalia/registry10x:latest
+    pull_policy: always
+    build: !reset null

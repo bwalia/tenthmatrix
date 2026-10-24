@@ -1,0 +1,558 @@
+//! Rebuild event emitters.
+//!
+//! Emitters for every CI integration (design 018 R2–R3):
+//! - [`RebuildEmitter`] trait
+//! - [`GitHubDispatchEmitter`] — `repository_dispatch`
+//! - [`GitLabPipelineEmitter`] — pipeline trigger token
+//! - [`GenericWebhookEmitter`] — HMAC-signed JSON POST
+//! - [`TektonEventListenerEmitter`] — Tekton EventListener
+//! - [`RebuildEvent`] — shared payload
+
+use async_trait::async_trait;
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum TriggerCause {
+    BasePushed,
+    CveFixed,
+    ScheduledNightly,
+    Manual,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RebuildEvent {
+    pub trigger: TriggerCause,
+    pub fixed_cves: Vec<String>,
+    pub upstream_ref: String,
+    pub downstream_ref: String,
+    pub severity_max: String,
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum EmitError {
+    #[error("http: {0}")]
+    Http(#[from] reqwest::Error),
+    #[error("rejected by remote: {status} {body}")]
+    Rejected { status: u16, body: String },
+    #[error("config: {0}")]
+    Config(String),
+}
+
+#[async_trait]
+pub trait RebuildEmitter: Send + Sync {
+    fn id(&self) -> &'static str;
+    async fn emit(&self, event: &RebuildEvent) -> Result<String, EmitError>;
+}
+
+/// Posts a `repository_dispatch` to a GitHub repository, optionally
+/// targeting a specific workflow file via `event_type`.
+///
+/// Reference: <https://docs.github.com/rest/repos/repos#create-a-repository-dispatch-event>
+pub struct GitHubDispatchEmitter {
+    pub repo: String, // "owner/repo"
+    pub token: String,
+    pub event_type: String, // e.g. "rebuild-on-cve" — workflow filters on this
+    pub api_base: String,   // "https://api.github.com" by default
+    client: reqwest::Client,
+}
+
+impl GitHubDispatchEmitter {
+    pub fn new(
+        repo: impl Into<String>,
+        token: impl Into<String>,
+        event_type: impl Into<String>,
+    ) -> Self {
+        Self {
+            repo: repo.into(),
+            token: token.into(),
+            event_type: event_type.into(),
+            api_base: "https://api.github.com".into(),
+            client: reqwest::Client::new(),
+        }
+    }
+
+    pub fn with_api_base(mut self, base: impl Into<String>) -> Self {
+        self.api_base = base.into();
+        self
+    }
+}
+
+#[async_trait]
+impl RebuildEmitter for GitHubDispatchEmitter {
+    fn id(&self) -> &'static str {
+        "github-dispatch"
+    }
+
+    async fn emit(&self, event: &RebuildEvent) -> Result<String, EmitError> {
+        if !self.repo.contains('/') {
+            return Err(EmitError::Config(format!(
+                "GitHub repo must be 'owner/name', got {}",
+                self.repo
+            )));
+        }
+        let url = format!(
+            "{}/repos/{}/dispatches",
+            self.api_base.trim_end_matches('/'),
+            self.repo
+        );
+        let body = serde_json::json!({
+            "event_type": self.event_type,
+            "client_payload": {
+                "trigger": match event.trigger {
+                    TriggerCause::BasePushed => "base_pushed",
+                    TriggerCause::CveFixed => "cve_fixed",
+                    TriggerCause::ScheduledNightly => "scheduled_nightly",
+                    TriggerCause::Manual => "manual",
+                },
+                "upstream_ref":   event.upstream_ref,
+                "downstream_ref": event.downstream_ref,
+                "fixed_cves":     event.fixed_cves,
+                "severity_max":   event.severity_max,
+            },
+        });
+        let resp = self
+            .client
+            .post(&url)
+            .header("Accept", "application/vnd.github+json")
+            .header("X-GitHub-Api-Version", "2022-11-28")
+            .header(reqwest::header::USER_AGENT, "registry10x-rebuild")
+            .bearer_auth(&self.token)
+            .json(&body)
+            .send()
+            .await?;
+
+        let status = resp.status();
+        if !status.is_success() {
+            let body = resp.text().await.unwrap_or_default();
+            return Err(EmitError::Rejected {
+                status: status.as_u16(),
+                body,
+            });
+        }
+        Ok(format!("{}", status.as_u16()))
+    }
+}
+
+// ── GitLab pipeline trigger ──────────────────────────────────────────────────
+
+pub struct GitLabPipelineEmitter {
+    pub api_base: String,
+    pub project_id: String,
+    pub trigger_token: String,
+    pub ref_: String,
+    client: reqwest::Client,
+}
+
+impl GitLabPipelineEmitter {
+    pub fn new(
+        project_id: impl Into<String>,
+        trigger_token: impl Into<String>,
+        ref_: impl Into<String>,
+    ) -> Self {
+        Self {
+            api_base: "https://gitlab.com".into(),
+            project_id: project_id.into(),
+            trigger_token: trigger_token.into(),
+            ref_: ref_.into(),
+            client: reqwest::Client::new(),
+        }
+    }
+    pub fn with_api_base(mut self, base: impl Into<String>) -> Self {
+        self.api_base = base.into();
+        self
+    }
+}
+
+#[async_trait]
+impl RebuildEmitter for GitLabPipelineEmitter {
+    fn id(&self) -> &'static str {
+        "gitlab-pipeline"
+    }
+
+    async fn emit(&self, event: &RebuildEvent) -> Result<String, EmitError> {
+        if self.project_id.is_empty() {
+            return Err(EmitError::Config("GitLab project_id is empty".into()));
+        }
+        let url = format!(
+            "{}/api/v4/projects/{}/trigger/pipeline",
+            self.api_base.trim_end_matches('/'),
+            self.project_id
+        );
+        let trigger_str = match event.trigger {
+            TriggerCause::BasePushed => "base_pushed",
+            TriggerCause::CveFixed => "cve_fixed",
+            TriggerCause::ScheduledNightly => "scheduled_nightly",
+            TriggerCause::Manual => "manual",
+        };
+        let params = [
+            ("token", self.trigger_token.as_str()),
+            ("ref", self.ref_.as_str()),
+            ("variables[REGISTRY10X_TRIGGER]", trigger_str),
+            ("variables[REGISTRY10X_UPSTREAM]", event.upstream_ref.as_str()),
+            (
+                "variables[REGISTRY10X_DOWNSTREAM]",
+                event.downstream_ref.as_str(),
+            ),
+            (
+                "variables[REGISTRY10X_SEVERITY_MAX]",
+                event.severity_max.as_str(),
+            ),
+        ];
+        let resp = self.client.post(&url).form(&params).send().await?;
+        let status = resp.status();
+        if !status.is_success() {
+            let body = resp.text().await.unwrap_or_default();
+            return Err(EmitError::Rejected {
+                status: status.as_u16(),
+                body,
+            });
+        }
+        Ok(format!("{}", status.as_u16()))
+    }
+}
+
+// ── Generic HMAC webhook ─────────────────────────────────────────────────────
+
+pub struct GenericWebhookEmitter {
+    pub url: String,
+    pub hmac_secret: String,
+    pub header_name: String,
+    client: reqwest::Client,
+}
+
+impl GenericWebhookEmitter {
+    pub fn new(url: impl Into<String>, hmac_secret: impl Into<String>) -> Self {
+        Self {
+            url: url.into(),
+            hmac_secret: hmac_secret.into(),
+            header_name: "X-Registry10x-Signature".into(),
+            client: reqwest::Client::new(),
+        }
+    }
+    pub fn with_header_name(mut self, name: impl Into<String>) -> Self {
+        self.header_name = name.into();
+        self
+    }
+}
+
+/// Compute the same HMAC the emitter sends. Receivers can call this
+/// against the request body + their stored secret and `secure_eq`
+/// against the header value to verify the request originated here.
+pub fn compute_webhook_signature(secret: &str, body: &[u8]) -> Result<String, EmitError> {
+    use hmac::{Hmac, Mac};
+    type HmacSha256 = Hmac<sha2::Sha256>;
+    let mut mac = HmacSha256::new_from_slice(secret.as_bytes())
+        .map_err(|e| EmitError::Config(format!("hmac key: {e}")))?;
+    mac.update(body);
+    Ok(format!(
+        "sha256={}",
+        hex::encode(mac.finalize().into_bytes())
+    ))
+}
+
+#[async_trait]
+impl RebuildEmitter for GenericWebhookEmitter {
+    fn id(&self) -> &'static str {
+        "webhook"
+    }
+
+    async fn emit(&self, event: &RebuildEvent) -> Result<String, EmitError> {
+        if self.hmac_secret.is_empty() {
+            return Err(EmitError::Config("hmac_secret is empty".into()));
+        }
+        let body = serde_json::to_vec(event)
+            .map_err(|e| EmitError::Config(format!("event serialise: {e}")))?;
+        let sig = compute_webhook_signature(&self.hmac_secret, &body)?;
+        let resp = self
+            .client
+            .post(&self.url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .header(&self.header_name, sig)
+            .header(reqwest::header::USER_AGENT, "registry10x-rebuild")
+            .body(body)
+            .send()
+            .await?;
+        let status = resp.status();
+        if !status.is_success() {
+            let resp_body = resp.text().await.unwrap_or_default();
+            return Err(EmitError::Rejected {
+                status: status.as_u16(),
+                body: resp_body,
+            });
+        }
+        Ok(format!("{}", status.as_u16()))
+    }
+}
+
+// ── Tekton EventListener emitter ─────────────────────────────────────────────
+
+pub struct TektonEventListenerEmitter {
+    pub url: String,
+    pub auth_header: Option<(String, String)>,
+    client: reqwest::Client,
+}
+
+impl TektonEventListenerEmitter {
+    pub fn new(url: impl Into<String>) -> Self {
+        Self {
+            url: url.into(),
+            auth_header: None,
+            client: reqwest::Client::new(),
+        }
+    }
+    pub fn with_auth(mut self, header_name: impl Into<String>, value: impl Into<String>) -> Self {
+        self.auth_header = Some((header_name.into(), value.into()));
+        self
+    }
+}
+
+#[async_trait]
+impl RebuildEmitter for TektonEventListenerEmitter {
+    fn id(&self) -> &'static str {
+        "tekton-eventlistener"
+    }
+
+    async fn emit(&self, event: &RebuildEvent) -> Result<String, EmitError> {
+        let mut req = self
+            .client
+            .post(&self.url)
+            .header(reqwest::header::CONTENT_TYPE, "application/json")
+            .header(reqwest::header::USER_AGENT, "registry10x-rebuild")
+            .json(event);
+        if let Some((name, value)) = &self.auth_header {
+            req = req.header(name, value);
+        }
+        let resp = req.send().await?;
+        let status = resp.status();
+        if !status.is_success() {
+            let body = resp.text().await.unwrap_or_default();
+            return Err(EmitError::Rejected {
+                status: status.as_u16(),
+                body,
+            });
+        }
+        Ok(format!("{}", status.as_u16()))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn rejects_malformed_repo() {
+        let e = GitHubDispatchEmitter::new("invalid-no-slash", "tok", "rebuild-on-cve");
+        let err = e
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::CveFixed,
+                fixed_cves: vec!["CVE-2025-0001".into()],
+                upstream_ref: "debian:bookworm-slim".into(),
+                downstream_ref: "acme/prod/api:latest".into(),
+                severity_max: "high".into(),
+            })
+            .await
+            .unwrap_err();
+        match err {
+            EmitError::Config(_) => {}
+            other => panic!("expected Config error, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn event_serialises_lower_snake_trigger() {
+        let v = serde_json::to_value(TriggerCause::CveFixed).unwrap();
+        assert_eq!(v, serde_json::Value::String("cve_fixed".into()));
+    }
+
+    #[tokio::test]
+    async fn gitlab_rejects_empty_project_id() {
+        let e = GitLabPipelineEmitter::new("", "tok", "main");
+        let err = e
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::Manual,
+                fixed_cves: vec![],
+                upstream_ref: "x".into(),
+                downstream_ref: "y".into(),
+                severity_max: "low".into(),
+            })
+            .await
+            .unwrap_err();
+        matches!(err, EmitError::Config(_));
+    }
+
+    #[tokio::test]
+    async fn webhook_rejects_empty_secret() {
+        let e = GenericWebhookEmitter::new("https://example.invalid", "");
+        let err = e
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::Manual,
+                fixed_cves: vec![],
+                upstream_ref: "x".into(),
+                downstream_ref: "y".into(),
+                severity_max: "low".into(),
+            })
+            .await
+            .unwrap_err();
+        matches!(err, EmitError::Config(_));
+    }
+
+    #[test]
+    fn webhook_signature_is_deterministic() {
+        let body = br#"{"ok":true}"#;
+        let a = compute_webhook_signature("secret", body).unwrap();
+        let b = compute_webhook_signature("secret", body).unwrap();
+        assert_eq!(a, b);
+        assert!(a.starts_with("sha256="));
+        assert_eq!(a.len(), "sha256=".len() + 64);
+    }
+
+    #[test]
+    fn webhook_signature_changes_with_secret() {
+        let body = b"abc";
+        let a = compute_webhook_signature("alpha", body).unwrap();
+        let b = compute_webhook_signature("beta", body).unwrap();
+        assert_ne!(a, b);
+    }
+
+    #[test]
+    fn emitter_ids_are_distinct() {
+        let gh = GitHubDispatchEmitter::new("o/r", "t", "evt").id();
+        let gl = GitLabPipelineEmitter::new("123", "t", "main").id();
+        let wh = GenericWebhookEmitter::new("url", "secret").id();
+        let tk = TektonEventListenerEmitter::new("url").id();
+        assert_eq!(gh, "github-dispatch");
+        assert_eq!(gl, "gitlab-pipeline");
+        assert_eq!(wh, "webhook");
+        assert_eq!(tk, "tekton-eventlistener");
+    }
+
+    async fn mock_http_once(
+        expect_path_substr: &str,
+        status: u16,
+        resp_body: &str,
+    ) -> (String, tokio::task::JoinHandle<()>) {
+        let expect = expect_path_substr.to_string();
+        let body = resp_body.to_string();
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+        let handle = tokio::spawn(async move {
+            use tokio::io::{AsyncReadExt, AsyncWriteExt};
+            let (mut sock, _) = listener.accept().await.unwrap();
+            let mut buf = vec![0u8; 8192];
+            let n = sock.read(&mut buf).await.unwrap();
+            let req = String::from_utf8_lossy(&buf[..n]);
+            assert!(
+                req.contains(&expect),
+                "expected path containing {expect:?}, got:\n{req}"
+            );
+            let resp = format!(
+                "HTTP/1.1 {status} OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                body.len()
+            );
+            sock.write_all(resp.as_bytes()).await.unwrap();
+        });
+        (format!("http://{addr}"), handle)
+    }
+
+    /// Mock GitHub API: one successful `repository_dispatch` per call.
+    #[tokio::test]
+    async fn github_dispatch_hits_mock_once() {
+        use std::sync::Arc;
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        let hits = Arc::new(AtomicUsize::new(0));
+        let hits2 = hits.clone();
+        let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap();
+
+        tokio::spawn(async move {
+            let (mut sock, _) = listener.accept().await.unwrap();
+            use tokio::io::{AsyncReadExt, AsyncWriteExt};
+            let mut buf = vec![0u8; 4096];
+            let n = sock.read(&mut buf).await.unwrap();
+            let req = String::from_utf8_lossy(&buf[..n]);
+            assert!(req.contains("POST /repos/acme/api/dispatches"));
+            assert!(req.contains("rebuild-on-cve"));
+            hits2.fetch_add(1, Ordering::SeqCst);
+            let body = b"{}";
+            let resp = format!(
+                "HTTP/1.1 204 No Content\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                body.len()
+            );
+            sock.write_all(resp.as_bytes()).await.unwrap();
+            sock.write_all(body).await.ok();
+        });
+
+        let emitter = GitHubDispatchEmitter::new("acme/api", "tok", "rebuild-on-cve")
+            .with_api_base(format!("http://{addr}"));
+        let status = emitter
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::CveFixed,
+                fixed_cves: vec!["CVE-2026-1".into()],
+                upstream_ref: "debian:bookworm-slim".into(),
+                downstream_ref: "acme/prod/api:latest".into(),
+                severity_max: "high".into(),
+            })
+            .await
+            .unwrap();
+        assert_eq!(status, "204");
+        assert_eq!(hits.load(Ordering::SeqCst), 1);
+    }
+
+    #[tokio::test]
+    async fn gitlab_pipeline_hits_mock() {
+        let (base, handle) =
+            mock_http_once("/api/v4/projects/42/trigger/pipeline", 201, r#"{"id":1}"#).await;
+        let emitter = GitLabPipelineEmitter::new("42", "tok", "main").with_api_base(&base);
+        let status = emitter
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::CveFixed,
+                fixed_cves: vec!["CVE-2026-2".into()],
+                upstream_ref: "debian:bookworm-slim".into(),
+                downstream_ref: "acme/api:latest".into(),
+                severity_max: "high".into(),
+            })
+            .await
+            .unwrap();
+        assert_eq!(status, "201");
+        handle.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn webhook_hits_mock_with_signature() {
+        let (base, handle) = mock_http_once("POST /hooks/rebuild", 200, "ok").await;
+        let url = format!("{base}/hooks/rebuild");
+        let emitter = GenericWebhookEmitter::new(&url, "s3cret");
+        let status = emitter
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::Manual,
+                fixed_cves: vec![],
+                upstream_ref: "x".into(),
+                downstream_ref: "y".into(),
+                severity_max: "low".into(),
+            })
+            .await
+            .unwrap();
+        assert_eq!(status, "200");
+        handle.await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn tekton_hits_mock() {
+        let (base, handle) = mock_http_once("POST /", 202, "").await;
+        let emitter = TektonEventListenerEmitter::new(&base).with_auth("Authorization", "Bearer t");
+        let status = emitter
+            .emit(&RebuildEvent {
+                trigger: TriggerCause::BasePushed,
+                fixed_cves: vec![],
+                upstream_ref: "alpine:3.20".into(),
+                downstream_ref: "acme/svc:1".into(),
+                severity_max: "medium".into(),
+            })
+            .await
+            .unwrap();
+        assert_eq!(status, "202");
+        handle.await.unwrap();
+    }
+}

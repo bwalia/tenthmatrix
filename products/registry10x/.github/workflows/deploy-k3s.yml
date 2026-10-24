@@ -1,0 +1,324 @@
+name: Deploy to k3s
+
+# Manual only. The acc `registry10x` release on k3s1 is owned by the
+# bwalia/diy-tax-return-uk repo (devops/helm-charts/registry10x, deployed by its
+# deploy-registry10x.yml). The chart and values-acc.yaml here lag behind that
+# chart, so running this against acc reverts production: on 2026-09-26 an
+# automatic run (triggered by a chart change merged here) applied chart 0.4.0
+# over the live 0.5.0 install, swapping the registry config, the Ingress class
+# and basic auth, the registry NodePort and the NetworkPolicies. There used to
+# be a push trigger on deploy/helm/registry10x/**; it was removed for that
+# reason, and a manual run has to be confirmed explicitly.
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "acc"
+        type: choice
+        options:
+          - acc
+      confirm:
+        description: >-
+          acc is deployed from bwalia/diy-tax-return-uk; this chart will
+          overwrite it. Type "overwrite-acc" to run anyway.
+        required: true
+        type: string
+
+env:
+  RELEASE_NAME: registry10x
+  CHART_PATH: deploy/helm/registry10x
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'acc' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'acc' }}
+
+    steps:
+      - name: Require explicit confirmation
+        if: inputs.confirm != 'overwrite-acc'
+        run: |
+          echo "::error::acc is deployed from bwalia/diy-tax-return-uk. Re-run with confirm=overwrite-acc to overwrite it with this repo's chart."
+          exit 1
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Verify cluster connectivity
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Determine values file
+        id: values
+        run: |
+          ENV="${{ github.event.inputs.environment || 'acc' }}"
+          VALUES_FILE="${CHART_PATH}/values-${ENV}.yaml"
+          if [ ! -f "$VALUES_FILE" ]; then
+            echo "::error::Values file not found: $VALUES_FILE"
+            exit 1
+          fi
+          echo "file=$VALUES_FILE" >> "$GITHUB_OUTPUT"
+          echo "namespace=$ENV" >> "$GITHUB_OUTPUT"
+          echo "Using values: $VALUES_FILE"
+
+      - name: Helm dependency update
+        run: helm dependency update "$CHART_PATH" || true
+
+      - name: Helm diff (dry-run)
+        run: |
+          echo "=== Dry-run diff ==="
+          helm upgrade "$RELEASE_NAME" "$CHART_PATH" \
+            -n "${{ steps.values.outputs.namespace }}" \
+            -f "${{ steps.values.outputs.file }}" \
+            --dry-run --debug 2>&1 | tail -50
+
+      - name: Pre-deploy reconciliation (one-shot ownership + immutable spec)
+        run: |
+          # Two specific failure modes show up on this release that
+          # can't be fixed inside the chart alone — see run
+          # 25965587486:
+          #
+          # 1. SSA field-manager conflicts. Helm v3 server-side
+          #    applies under field-manager `helm`. Any field
+          #    previously written by `kubectl patch` (manager
+          #    `kubectl-patch`) or by the legacy first-install
+          #    pathway (manager `before-first-apply`) belongs to
+          #    that other manager, and helm refuses to overwrite
+          #    with `Apply failed with N conflict: conflict with
+          #    "<manager>"`. We fix it by re-applying the rendered
+          #    chart once with `--server-side --force-conflicts
+          #    --field-manager=helm`, which transfers ownership.
+          #
+          # 2. Immutable StatefulSet spec. K8s forbids any change
+          #    to a StatefulSet's `volumeClaimTemplates`. The chart
+          #    used to put a `helm.sh/chart` label on the VCT,
+          #    which moves on every chart-version bump and trips
+          #    the API validation. The chart no longer emits those
+          #    labels, but the live object still has them, and
+          #    the diff alone is enough to fail. Orphan-delete
+          #    the StatefulSet (cascade=orphan keeps the running
+          #    pod and the PVC) so helm can recreate it cleanly
+          #    on the next step. The orphaned pod is adopted by
+          #    the new StatefulSet via its selectorLabels, and
+          #    the data on the PVC is preserved.
+          NS="${{ steps.values.outputs.namespace }}"
+          ROLL_ID="$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_SHA:0:7}"
+
+          # (1) reclaim field ownership on mutable kinds
+          RENDER=$(mktemp)
+          helm template "$RELEASE_NAME" "$CHART_PATH" \
+            -n "$NS" \
+            -f "${{ steps.values.outputs.file }}" \
+            --set "registry.podAnnotations.registry10x\\.io/rolled-at=${ROLL_ID}" \
+            --set "auth.podAnnotations.registry10x\\.io/rolled-at=${ROLL_ID}" \
+            > "$RENDER"
+          # Skip kinds that fight SSA reclaim:
+          #   - StatefulSet: handled in step 2 below.
+          #   - Job: spec is immutable, recreated each run anyway.
+          #   - PersistentVolumeClaim: `.spec.volumeName` is set by
+          #     the PV controller after binding. Reclaiming under
+          #     `helm` makes helm own that field, then the next
+          #     helm upgrade renders without it and the API rejects
+          #     with "spec is immutable after creation". Leave PVCs
+          #     under the PV controller's manager.
+          #   - CustomResourceDefinition: cluster-scoped and CR
+          #     definitions can't tolerate field churn during a
+          #     namespace-scoped reclaim cycle.
+          #   - ConfigMap / Secret: rarely have stale field-managers
+          #     (no `kubectl patch` history) and pre-creating them
+          #     here trips helm's release tracking — `helm upgrade
+          #     --wait` polls for them via its own informer cache and
+          #     intermittently sees `NotFound, context deadline
+          #     exceeded` (run 26283941945). Let helm own them
+          #     end-to-end.
+          awk '
+            BEGIN { RS="---\n"; ORS="---\n" }
+            {
+              if ($0 ~ /\nkind: (StatefulSet|Job|PersistentVolumeClaim|CustomResourceDefinition|ConfigMap|Secret)\n/) next
+              if ($0 ~ /^kind: (StatefulSet|Job|PersistentVolumeClaim|CustomResourceDefinition|ConfigMap|Secret)\n/) next
+              print
+            }
+          ' "$RENDER" \
+            | kubectl apply --server-side --force-conflicts \
+                --field-manager=helm -n "$NS" -f - || true
+
+          # (2) orphan-delete the StatefulSet if its rendered VCT
+          # differs from the live VCT, so helm upgrade isn't blocked
+          # by `spec: Forbidden`. Cheap heuristic: if the live VCT
+          # carries a `helm.sh/chart` label and the chart template
+          # no longer emits one, the upgrade will conflict — drop
+          # the StatefulSet now (orphan keeps pod + PVC).
+          if kubectl get statefulset registry10x-postgres -n "$NS" >/dev/null 2>&1; then
+            LIVE_VCT_CHART=$(kubectl get statefulset registry10x-postgres -n "$NS" \
+              -o jsonpath='{.spec.volumeClaimTemplates[0].metadata.labels.helm\.sh/chart}' 2>/dev/null || true)
+            if [ -n "$LIVE_VCT_CHART" ]; then
+              echo "Orphan-deleting registry10x-postgres (live VCT has helm.sh/chart=$LIVE_VCT_CHART; new chart drops it)"
+              kubectl delete statefulset registry10x-postgres -n "$NS" --cascade=orphan --wait=true
+            fi
+          fi
+
+      - name: Deploy with Helm
+        run: |
+          # Bump a pod-annotation every run so pods roll even when the tag is
+          # :latest and the spec is otherwise unchanged. Without this a helm
+          # upgrade with unchanged values is a no-op and new images never get
+          # pulled — which bit us once. The chart reads these under
+          # .Values.registry.podAnnotations / .Values.auth.podAnnotations
+          # (per-component), so the --set paths must match.
+          #
+          # `--take-ownership` is defence-in-depth on top of the
+          # pre-deploy reclaim step; it lets helm adopt resources
+          # whose ownership annotations are missing or stale.
+          ROLL_ID="$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_SHA:0:7}"
+          helm upgrade --install "$RELEASE_NAME" "$CHART_PATH" \
+            -n "${{ steps.values.outputs.namespace }}" \
+            -f "${{ steps.values.outputs.file }}" \
+            --set "registry.podAnnotations.registry10x\\.io/rolled-at=${ROLL_ID}" \
+            --set "auth.podAnnotations.registry10x\\.io/rolled-at=${ROLL_ID}" \
+            --take-ownership \
+            --wait --timeout 10m
+
+      - name: Diagnose on deploy failure
+        if: failure()
+        run: |
+          NS="${{ steps.values.outputs.namespace }}"
+          echo "=== Pod status ==="
+          kubectl get pods -n "$NS" -l app.kubernetes.io/part-of=registry10x -o wide || true
+          echo ""
+          echo "=== Deployment status ==="
+          kubectl get deploy -n "$NS" -l app.kubernetes.io/part-of=registry10x -o wide || true
+          echo ""
+          echo "=== Recent events ==="
+          kubectl get events -n "$NS" --sort-by=.lastTimestamp | tail -40 || true
+          echo ""
+          for kind in registry auth; do
+            POD=$(kubectl get pods -n "$NS" \
+              -l "app.kubernetes.io/component=$kind,app.kubernetes.io/instance=registry10x" \
+              -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+            if [ -n "$POD" ]; then
+              echo "=== describe $POD ==="
+              kubectl describe pod -n "$NS" "$POD" | tail -60 || true
+              echo ""
+              echo "=== logs $POD (last 80) ==="
+              kubectl logs -n "$NS" "$POD" --tail=80 --all-containers=true 2>&1 || true
+              echo ""
+            fi
+          done
+
+      - name: Verify deployment
+        run: |
+          echo "=== Pod status ==="
+          kubectl get pods -n "${{ steps.values.outputs.namespace }}" \
+            -l app.kubernetes.io/part-of=registry10x -o wide
+
+          echo ""
+          echo "=== Deployment status ==="
+          kubectl get deploy -n "${{ steps.values.outputs.namespace }}" \
+            -l app.kubernetes.io/part-of=registry10x
+
+          echo ""
+          echo "=== Ingress ==="
+          kubectl get ingress -n "${{ steps.values.outputs.namespace }}" \
+            -l app.kubernetes.io/part-of=registry10x
+
+      - name: Smoke test
+        run: |
+          NS="${{ steps.values.outputs.namespace }}"
+          REGISTRY_HOST=$(kubectl get ingress -n "$NS" \
+            "$RELEASE_NAME" -o jsonpath='{.spec.rules[0].host}')
+          echo "Registry: $REGISTRY_HOST"
+
+          # Two-stage smoke test:
+          #   1. Try the external ingress (covers DNS + TLS + cert + ingress
+          #      controller). If the public proxy is up, this is the most
+          #      end-to-end check we can do.
+          #   2. If the ingress is unreachable (transient proxy outage,
+          #      certbot challenge in flight, etc.), fall back to an
+          #      in-cluster check via `kubectl exec` against the registry
+          #      service. This proves the deployment is healthy even when
+          #      the external path is degraded.
+          #
+          # Each curl gets explicit --connect-timeout and --max-time so a
+          # hanging proxy doesn't burn 2-minute connect timeouts per
+          # attempt and starve the loop budget.
+
+          v2_ok() {
+            # $1 = base URL, no trailing slash. Echoes "PASS" on success
+            # via stdout; non-zero exit on failure.
+            local base="$1"
+            curl -fsS --connect-timeout 5 --max-time 15 \
+              "${base}/health" >/dev/null || return 1
+            local code
+            code=$(curl -sS -o /dev/null -w "%{http_code}" \
+              --connect-timeout 5 --max-time 15 \
+              -H "Accept: application/json" "${base}/v2/" || echo "000")
+            case "$code" in
+              200|401) echo "PASS"; return 0 ;;
+              *)       echo "::error::Unexpected /v2/ status: $code" >&2; return 1 ;;
+            esac
+          }
+
+          # Stage 1 — external ingress, retried with backoff.
+          for i in 1 2 3 4 5 6; do
+            if [ "$(v2_ok "https://$REGISTRY_HOST" || true)" = "PASS" ]; then
+              echo "=== Smoke test PASSED via ingress (attempt $i) ==="
+              exit 0
+            fi
+            echo "ingress attempt $i: not ready yet (proxy may be transient)"
+            sleep $((i * 5))
+          done
+          echo "::warning::External ingress unreachable; falling back to in-cluster check"
+
+          # Stage 2 — in-cluster via `kubectl exec` against an existing
+          # registry pod. Picks any pod from the deployment and shells out
+          # to whatever HTTP client it has (curl preferred, wget as
+          # fallback). The registry image ships busybox-style wget so this
+          # works without sidecars.
+          POD=$(kubectl get pods -n "$NS" \
+            -l app.kubernetes.io/name=registry10x-registry \
+            -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)
+          if [ -z "$POD" ]; then
+            echo "::error::No registry pods labelled app.kubernetes.io/name=registry10x-registry in $NS"
+            exit 1
+          fi
+          echo "Probing pod: $POD"
+
+          probe() {
+            # Try curl, then wget. Both ship in different base images;
+            # whichever one's present wins. Returns the HTTP body on
+            # success or non-zero on failure.
+            local path="$1"
+            kubectl exec -n "$NS" "$POD" -c registry -- \
+              sh -c "command -v curl >/dev/null && curl -fsS --max-time 10 http://localhost:5000${path} \
+                  || (command -v wget >/dev/null && wget -qO- --timeout=10 http://localhost:5000${path})"
+          }
+
+          if ! probe "/health"; then
+            echo "::error::In-cluster /health probe failed against pod $POD"
+            kubectl logs -n "$NS" "$POD" -c registry --tail=50 || true
+            exit 1
+          fi
+          V2_STATUS=$(kubectl exec -n "$NS" "$POD" -c registry -- \
+            sh -c 'command -v curl >/dev/null \
+              && curl -sS -o /dev/null -w "%{http_code}" --max-time 10 http://localhost:5000/v2/ \
+              || (command -v wget >/dev/null && wget -qSO /dev/null --timeout=10 http://localhost:5000/v2/ 2>&1 \
+                  | awk "/HTTP/{print \$2; exit}")' || echo "000")
+          echo "in-cluster /v2 status: $V2_STATUS"
+          case "$V2_STATUS" in
+            200|401) echo "=== Smoke test PASSED via in-cluster fallback ===" ;;
+            *)       echo "::error::In-cluster /v2/ returned unexpected $V2_STATUS"
+                     kubectl logs -n "$NS" "$POD" -c registry --tail=50 || true
+                     exit 1 ;;
+          esac

@@ -5,6 +5,7 @@ name: "Product sites (GitHub Pages)"
 #
 #   https://bwalia.github.io/tenthmatrix/proxy10x/  ← products/proxy10x/html/
 #   https://bwalia.github.io/tenthmatrix/vault10x/  ← products/vault10x/www/ (Next static export)
+#   https://bwalia.github.io/tenthmatrix/registry10x/ ← products/registry10x/docs/landing/
 #
 # Visitors never see github.io. Each product domain is a grey-cloud CNAME to
 # the edge (lon1.pop0.uk); its vhost and rule live in .github/wslproxy/data/
@@ -13,6 +14,7 @@ name: "Product sites (GitHub Pages)"
 #
 #   proxy10x.com/*       → https://bwalia.github.io/tenthmatrix/proxy10x/*
 #   www.vault10x.com/*   → https://bwalia.github.io/tenthmatrix/vault10x/*
+#   registry10x.com/*    → https://bwalia.github.io/tenthmatrix/registry10x/*
 #
 # So every site is built for the root of its own domain (absolute /paths, no
 # base path). The Pages site has no custom domain of its own.
@@ -26,6 +28,7 @@ on:
     paths:
       - 'products/proxy10x/html/**'
       - 'products/vault10x/www/**'
+      - 'products/registry10x/docs/landing/**'
       - '.github/workflows/products-pages.yml'
   workflow_dispatch:
 
@@ -57,6 +60,12 @@ jobs:
           done
           # The landing links to /swagger/; the UI page is swagger.html.
           [ -f "$dest/swagger/swagger.html" ] && cp "$dest/swagger/swagger.html" "$dest/swagger/index.html"
+
+      - name: Registry10x (static HTML)
+        run: |
+          set -euo pipefail
+          mkdir -p _site/registry10x
+          cp -R products/registry10x/docs/landing/. _site/registry10x/
 
       - uses: actions/setup-node@v4
         with:
@@ -91,7 +100,8 @@ jobs:
           </head><body>
           <p><a href="https://www.tenthmatrix.com/en/products/">TenthMatrix products</a>:
           <a href="https://proxy10x.com/">Proxy10x</a> ·
-          <a href="https://www.vault10x.com/">Vault10x</a></p>
+          <a href="https://www.vault10x.com/">Vault10x</a> ·
+          <a href="https://registry10x.com/">Registry10x</a></p>
           </body></html>
           HTML
           find _site -maxdepth 2 | sort | head -40
