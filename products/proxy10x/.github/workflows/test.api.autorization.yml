@@ -1,0 +1,123 @@
+name: API authentication test
+
+on:
+  workflow_dispatch:
+    inputs:
+      TARGET_ENV:
+        type: choice
+        description: "Please choose the Target Environment"
+        default: "dev"
+        required: true
+        options:
+          - dev
+          - local
+          - int2
+          - int6
+          - test
+          # `acc` was decommissioned along with 187.77.179.206.
+          - prod
+      LOGIN_EMAIL:
+        description: "Login Email (leave empty to use secret)"
+        required: false
+        type: string
+      LOGIN_PASSWORD:
+        description: "Login Password (leave empty to use secret)"
+        required: false
+        type: string
+      EXECUTE_FUNCTION:
+        description: "Delete Rules After Execution"
+        required: true
+        default: true
+        type: boolean
+
+env:
+  TARGET_ENV: ${{ inputs.TARGET_ENV }}
+  LOGIN_EMAIL: ${{ inputs.LOGIN_EMAIL || secrets.LOGIN_EMAIL }}
+  LOGIN_PASSWORD: ${{ inputs.LOGIN_PASSWORD || secrets.LOGIN_PASSWORD }}
+  JWT_TOKEN_KEY: ${{ secrets.JWT_TOKEN_KEY }}
+  DELETE_TEST_DATA: ${{ inputs.EXECUTE_FUNCTION }}
+  QA_EXPIRED_JWT_TOKEN_KEY: ${{ secrets.QA_EXPIRED_JWT_TOKEN_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Setup local environment
+        run: |
+          ./deploy-to-docker.sh "dev" "proxy10x" "${{ secrets.JWT_TOKEN_KEY }}"
+
+      - name: API Test For Rules & Servers
+        working-directory: ./QA
+        run: |
+          if [[ "${{ inputs.TARGET_ENV }}" == 'dev' ]]; then
+            export TARGET_HOST="https://dev-our.proxy10x.com"
+            export SERVER_NAME="dev-frontend.proxy10x.com"
+            export SERVER_ID_QA="host:dev-frontend.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://dev-frontend.proxy10x.com"
+            export PROFILE_ID="dev"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'int2' ]]; then
+            export TARGET_HOST="https://api-int.proxy10x.com"
+            export SERVER_NAME="qa.int2.proxy10x.com"
+            export SERVER_ID_QA="host:qa.int2.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://qa.int2.proxy10x.com"
+            export PROFILE_ID="int"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'int6' ]]; then
+            export TARGET_HOST="https://api-int.proxy10x.com"
+            export SERVER_NAME="qa.int.proxy10x.com"
+            export SERVER_ID_QA="host:qa.int.proxy10x.com"
+            export NODE_APP_IP="10.43.81.65:3009"
+            export FRONT_URL="https://qa.int.proxy10x.com"
+            export PROFILE_ID="int"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'test' ]]; then
+            export TARGET_HOST="https://api-test.proxy10x.com"
+            export SERVER_NAME="test6.proxy10x.com"
+            export SERVER_ID_QA="host:test6.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://test6.proxy10x.com"
+            export PROFILE_ID="test"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'local' ]]; then
+            export TARGET_HOST="http://localhost:8081"
+            export SERVER_NAME="localhost"
+            export SERVER_ID_QA="host:localhost"
+            export NODE_APP_IP="172.177.0.10:3009"
+            export FRONT_URL="http://localhost:8069"
+            export PROFILE_ID="dev"
+
+          # `acc` branch removed — 187.77.179.206 was decommissioned.
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'prod' ]]; then
+            export TARGET_HOST="https://api-prod.proxy10x.com"
+            export SERVER_NAME="frontdoor-prod.proxy10x.com"
+            export SERVER_ID_QA="host:frontdoor-prod.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://frontdoor-prod.proxy10x.com"
+            export PROFILE_ID="prod"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == '' ]]; then
+            export TARGET_HOST="https://api-dev-our.proxy10x.com"
+            export SERVER_NAME="frontdoor-dev-our.proxy10x.com"
+            export SERVER_ID_QA="host:frontdoor-dev-our.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://frontdoor-dev-our.proxy10x.com"
+            export PROFILE_ID="dev"
+
+          else
+            echo "Unsupported TARGET_ENV:${{ inputs.TARGET_ENV }}"
+            exit 1
+          fi
+
+          go test -v -run "Test10_"

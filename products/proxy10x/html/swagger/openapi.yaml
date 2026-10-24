@@ -1,0 +1,2967 @@
+openapi: 3.0.0
+info:
+  title: Proxy10x OpsAPI Gateway & MCP Server Documentation
+  description: API endpoints reference for performing CRUD operations for Servers, Security Rules and HTTP Routes. Includes MCP (Model Context Protocol) endpoints for AI agent integration with typed resource schemas, Swagger-to-MCP mappers, and JSON-RPC 2.0 support.
+  version: 1.4.0
+tags:
+  - name: Servers  
+    description: Create and Manage servers aka HTTP hosts
+  - name: Rules
+    description: Create and Manage host specific Security Rules and HTTP Routes
+  - name: Cache
+    description: Enable and Manage static content caching per server
+  - name: WAF Rules
+    description: Create and manage Web Application Firewall detection rules (SQLi, XSS, command injection, LFI, protocol violations, and custom patterns)
+  - name: WAF Policies
+    description: Create and manage WAF policies that group rules with anomaly scoring, whitelisting, and blocking configuration
+  - name: WAF Events
+    description: View real-time WAF security events (blocked and monitored requests)
+  - name: Traffic
+    description: Traffic management APIs for multi-backend routing, canary releases, A/B testing, and weighted load balancing
+  - name: Bookmarks
+    description: Auto-generated bookmarks from Virtual Servers with promote-to-saved support. Lean bookmarks are ephemeral (derived from server configs), user bookmarks are persisted to disk.
+  - name: MCP
+    description: |
+      Model Context Protocol (MCP) server endpoints for AI agent integration.
+      Provides structured, read-only access to Proxy10x configuration and status
+      with typed resource schemas (proxy10x.server, proxy10x.rule, etc.) and
+      Swagger-to-MCP resource mappers. Responses include typed envelopes with
+      explicit relationships between resources.
+      Compatible with Claude MCP client, OpenAI Agents, and Cursor IDE.
+    x-ai-agent: true
+paths:
+  /api/rules:
+    get:
+      tags:
+        - Rules
+      summary: Retrieve a list of all the security rules and the routes. 
+      operationId: getRules
+      parameters:
+        - name: params
+          in: query
+          description: Search keyword
+          required: false
+          schema:
+            type: object
+            properties:
+              pagination:
+                type: object
+                default: {page: 1, perPage: 10}
+              sort:
+                type: object
+                default: {field: id, order: ASC}
+              filter:
+                type: object
+                default: {profile_id: prod}
+      responses:
+        '200':
+          description: Successfully retrieved a list of all HTTP Security rules and or the routes
+      security:
+        - bearerAuth: []          
+          
+    post:
+      tags:
+        - Rules
+      summary: Create a new rule
+      operationId: createRule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rules'
+      responses:
+        '201':
+          description: Successfully created a new Security Rule and HTTP Route
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleResponse'
+      security:
+        - bearerAuth: []                
+                
+  /api/rules/{id}:
+    get:
+      tags:
+        - Rules
+      summary: Retrieve HTTP Route or Security Rule by ID
+      operationId: getRuleById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the rule to retrieve
+          required: true
+          schema:
+            type: string
+        - name: envprofile
+          in: query
+          description: Profile Name
+          required: false
+          schema:
+            type: string
+            default: test
+      responses:
+         '200':
+            description: Returned information about a specific rule
+         '404':
+            description: Not found
+      security:
+        - bearerAuth: []            
+            
+    put:
+      tags:
+        - Rules
+      summary: Update a security rule or HTTP Route by ID
+      operationId: updateRuleById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the rule to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rules'
+      responses:
+        '200':
+          description: Successfully updated rule
+        '404':
+          description: Not found
+      security:
+        - bearerAuth: []          
+          
+          
+    delete:
+      tags:
+        - Rules
+      summary: Delete a security rule or HTTP Route by ID
+      operationId: deleteRuleById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the rule to delete
+          required: true
+          schema:
+            type: string
+        - name: envProfile
+          in: query
+          description: Profile Name
+          required: false
+          schema:
+            type: string
+            default: test
+      responses:
+        '200':
+          description: Successfully deleted a rule
+      security:
+        - bearerAuth: []
+            
+  /api/servers:
+    get:
+      tags:
+        - Servers
+      summary: Retrieve a list of all the HTTP server hosts. 
+      operationId: getServers
+      parameters:
+        - name: params
+          in: query
+          description: Search keyword
+          required: false
+          schema:
+            type: object
+            properties:
+              pagination:
+                type: object
+                default: {page: 1, perPage: 10}
+              sort:
+                type: object
+                default: {field: id, order: ASC}
+              filter:
+                type: object
+                default: {profile_id: prod}
+      responses:
+        '200':
+          description: Successfully retrieved a list of all the HTTP servers
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - Servers
+      summary: Create a new server
+      operationId: createServer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Servers'
+      responses:
+        '201':
+          description: Successfully created a new server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerResponse'
+      security:
+        - bearerAuth: []                
+                
+  /api/servers/{id}:
+    get:
+      tags:
+        - Servers
+      summary: Retrieve a HTTP server by ID
+      operationId: getServerById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the server to retrieve
+          required: true
+          schema:
+            type: string
+        - name: envprofile
+          in: query
+          description: Profile Name
+          required: false
+          schema:
+            type: string
+            default: test
+      responses:
+         '200':
+            description: Returned information about a specific server
+         '404':
+            description: Item not found
+      security:
+        - bearerAuth: []            
+          
+    put:
+      tags:
+        - Servers
+      summary: Update a HTTP server by ID
+      operationId: updateItemById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the server to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Servers'
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Item not found
+      security:
+        - bearerAuth: []          
+          
+          
+    delete:
+      tags:
+        - Servers
+      summary: Delete a HTTP server by ID
+      operationId: deleteServerById
+      parameters:
+        - name: id
+          in: path
+          description: ID of the item to delete
+          required: true
+          schema:
+            type: string
+        - name: envProfile
+          in: query
+          description: Profile Name
+          required: false
+          schema:
+            type: string
+            default: test
+      responses:
+        '200':
+          description: Successfully deleted a server
+      security:
+        - bearerAuth: []
+
+  /api/profiles:
+    get:
+      tags:
+        - Profiles
+      summary: Retrieve a list of all the security rules and the routes. 
+      operationId: getProfiles
+      parameters:
+        - name: params
+          in: query
+          description: Search keyword
+          required: false
+          schema:
+            type: object
+            properties:
+              pagination:
+                type: object
+                default: {page: 1, perPage: 10}
+              sort:
+                type: object
+                default: {field: id, order: ASC}
+              filter:
+                type: object
+                default: {profile_id: prod}
+      responses:
+        '200':
+          description: Successfully retrieved a list of all HTTP Security rules and or the routes
+      security:
+        - bearerAuth: []          
+          
+    post:
+      tags:
+        - Profiles
+      summary: Create a new profile
+      operationId: createProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: prod
+      responses:
+        '201':
+          description: Successfully created a new Security Rule and HTTP Route
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    default: 200
+                  message:
+                    type: string
+                    default: Success
+      security:
+        - bearerAuth: []                
+  
+  /api/user/login:
+    post:
+        tags:
+        - Login
+        summary: Login to server
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    default: email@mail.com
+                  password:
+                    type: string
+                    default: abc123
+        responses:
+          '201':
+            description: Login Successfull
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    status:
+                      type: number
+                      default: 200
+                    message:
+                      type: string
+                      default: Success
+
+  /password/reset:
+    post:
+      tags:
+        - PasswordReset
+      summary: Password Reset API
+      operationId: resetPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  default: abc123
+                newPassword:
+                  type: string
+                  default: abc123
+      responses:
+        '201':
+          description: Successfully resets the password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    default: 200
+                  message:
+                    type: string
+                    default: Success
+      security:
+        - bearerAuth: []     
+
+
+  /api/openresty_status:
+    get:
+      tags:
+      - Openresty
+      summary: Check the status of openresty (openresty -t)
+      responses:
+        '200':
+          description: nginx the configuration file /usr/local/openresty/nginx/conf/nginx.conf syntax is ok
+      security:
+        - bearerAuth: []   
+          
+  /api/openresty/error_logs:
+    get:
+      tags:
+      - Openresty
+      summary: Get all the logs of openresty
+      responses:
+        '200':
+          description: signal process started     
+      security:
+        - bearerAuth: []
+        
+  /api/push-data:
+    post:
+      tags:
+      - Syncing Data
+      summary: Login to server
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instance:
+                  type: string
+                  default: uuid of instance
+                profile:
+                  type: string
+                  default: your profile name
+      responses:
+        '200':
+          description: signal process started     
+      security:
+        - bearerAuth: []
+        
+  /api/password/reset:
+    post:
+      tags:
+      - Reset Password
+      summary: Reset you password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword:
+                  type: string
+                  default: old password
+                newPassword:
+                  type: string
+                  default: new password
+      responses:
+        '200':
+          description: Password has been successfully reset
+      security:
+        - bearerAuth: []
+
+  /api/cache/status/{server_name}:
+    get:
+      tags:
+        - Cache
+      summary: Get cache status for a server
+      operationId: getCacheStatus
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name (e.g., example.com)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cache status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      server_name:
+                        type: string
+                      cache_enabled:
+                        type: boolean
+                      cache_ttl:
+                        type: number
+                      message:
+                        type: string
+      security:
+        - bearerAuth: []
+
+  /api/cache/config/{server_name}:
+    get:
+      tags:
+        - Cache
+      summary: Get cache configuration for a server
+      operationId: getCacheConfig
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cache configuration retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheConfig'
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Cache
+      summary: Update cache configuration for a server
+      operationId: updateCacheConfig
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CacheConfig'
+      responses:
+        '200':
+          description: Cache configuration updated successfully
+      security:
+        - bearerAuth: []
+
+  /api/cache/configs:
+    get:
+      tags:
+        - Cache
+      summary: List all cache configurations
+      operationId: listCacheConfigs
+      responses:
+        '200':
+          description: List of all cache configurations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CacheConfig'
+      security:
+        - bearerAuth: []
+
+  /api/cache/stats:
+    get:
+      tags:
+        - Cache
+      summary: Get global cache statistics
+      operationId: getCacheStats
+      responses:
+        '200':
+          description: Cache statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      capacity:
+                        type: number
+                      free_space:
+                        type: number
+                      keys_count:
+                        type: number
+      security:
+        - bearerAuth: []
+
+  /api/cache/stats/{server_name}:
+    get:
+      tags:
+        - Cache
+      summary: Get cache statistics for a specific server
+      operationId: getServerCacheStats
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Server cache statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      server_name:
+                        type: string
+                      cached_items:
+                        type: number
+                      total_size_bytes:
+                        type: number
+      security:
+        - bearerAuth: []
+
+  /api/cache/enable/{server_name}:
+    post:
+      tags:
+        - Cache
+      summary: Enable caching for a server
+      operationId: enableCache
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cache_ttl:
+                  type: number
+                  description: Cache TTL in seconds
+                  default: 3600
+                cached_extensions:
+                  type: array
+                  items:
+                    type: string
+                  description: File extensions to cache
+      responses:
+        '200':
+          description: Caching enabled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  server_name:
+                    type: string
+                  cache_enabled:
+                    type: boolean
+      security:
+        - bearerAuth: []
+
+  /api/cache/disable/{server_name}:
+    post:
+      tags:
+        - Cache
+      summary: Disable caching for a server
+      operationId: disableCache
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Caching disabled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  server_name:
+                    type: string
+                  cache_enabled:
+                    type: boolean
+      security:
+        - bearerAuth: []
+
+  /api/cache/clear/{server_name}:
+    post:
+      tags:
+        - Cache
+      summary: Clear cache for a specific server
+      operationId: clearServerCache
+      parameters:
+        - name: server_name
+          in: path
+          description: The server domain name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cache cleared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  server_name:
+                    type: string
+      security:
+        - bearerAuth: []
+
+  /api/cache/clear-all:
+    post:
+      tags:
+        - Cache
+      summary: Clear all cached content
+      operationId: clearAllCache
+      responses:
+        '200':
+          description: All cache cleared successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+
+  /api/traffic/topology:
+    get:
+      tags:
+        - Traffic
+      summary: Get traffic routing topology
+      description: Returns the complete servers-to-rules-to-backends graph for the ingress overview. Includes server nodes, rules with multi-backend routing, backend stats, and connection mappings with weight percentages.
+      operationId: getTrafficTopology
+      parameters:
+        - name: profile_id
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Traffic topology retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TrafficTopology'
+      security:
+        - bearerAuth: []
+
+  /api/traffic/backends:
+    get:
+      tags:
+        - Traffic
+      summary: Get backend stats for a rule
+      description: Returns per-backend statistics including request count, error count, average latency, health status, and current weight for all backends of a specific rule.
+      operationId: getTrafficBackendStats
+      parameters:
+        - name: rule_id
+          in: query
+          description: The rule ID to get backend stats for
+          required: true
+          schema:
+            type: string
+        - name: profile_id
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Backend stats retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TrafficBackendStats'
+        '400':
+          description: Missing rule_id parameter
+        '404':
+          description: Rule not found
+      security:
+        - bearerAuth: []
+
+  /api/traffic/backends/weights:
+    post:
+      tags:
+        - Traffic
+      summary: Update backend traffic weights
+      description: Update the weight distribution for a rule's backends. Weights are normalized to sum to 100%. Changes take effect immediately without nginx reload (gateway reads from disk per-request).
+      operationId: updateTrafficWeights
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrafficWeightUpdate'
+      responses:
+        '200':
+          description: Weights updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      rule_id:
+                        type: string
+                      backends:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TrafficBackend'
+                      effective_immediately:
+                        type: boolean
+                        default: true
+                      timestamp:
+                        type: string
+        '400':
+          description: Validation error (missing rule_id, invalid backends)
+        '404':
+          description: Rule not found
+      security:
+        - bearerAuth: []
+
+  /api/traffic/backends/promote:
+    post:
+      tags:
+        - Traffic
+      summary: Promote a backend to 100% traffic
+      description: Promote a specific backend to receive 100% of traffic. All other backends are set to 0% weight. The rule's redirect_uri is updated to point to the promoted backend. Used to complete a canary deployment.
+      operationId: promoteBackend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rule_id, promote_label]
+              properties:
+                rule_id:
+                  type: string
+                  description: The rule ID containing the backend to promote
+                promote_label:
+                  type: string
+                  description: Label of the backend to promote (e.g., 'canary')
+                profile_id:
+                  type: string
+                  description: Environment profile
+                  default: prod
+      responses:
+        '200':
+          description: Backend promoted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      rule_id:
+                        type: string
+                      promoted_label:
+                        type: string
+                      promoted_address:
+                        type: string
+                      backends:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TrafficBackend'
+                      timestamp:
+                        type: string
+        '400':
+          description: Validation error
+        '404':
+          description: Rule or backend not found
+      security:
+        - bearerAuth: []
+
+  /api/traffic/backends/rollback:
+    post:
+      tags:
+        - Traffic
+      summary: Rollback to single-backend routing
+      description: Remove the backends array and routing configuration from a rule, restoring single-backend routing via redirect_uri. Use this to undo a canary or A/B test deployment.
+      operationId: rollbackBackend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rule_id]
+              properties:
+                rule_id:
+                  type: string
+                  description: The rule ID to rollback
+                profile_id:
+                  type: string
+                  description: Environment profile
+                  default: prod
+      responses:
+        '200':
+          description: Rollback completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      rule_id:
+                        type: string
+                      redirect_uri:
+                        type: string
+                      removed_backends:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/TrafficBackend'
+                      timestamp:
+                        type: string
+        '400':
+          description: Validation error
+        '404':
+          description: Rule not found
+      security:
+        - bearerAuth: []
+
+  /api/traffic/health:
+    get:
+      tags:
+        - Traffic
+      summary: Get backend health status
+      description: Returns health status of all backends across all rules that have multi-backend routing configured. Health is determined by active health checks (if configured) or defaults to healthy.
+      operationId: getTrafficHealth
+      parameters:
+        - name: profile_id
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Backend health retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TrafficRuleHealth'
+      security:
+        - bearerAuth: []
+
+  /api/waf_rules:
+    get:
+      tags:
+        - WAF Rules
+      summary: List all WAF detection rules
+      description: Retrieve a paginated list of all WAF rules. Supports filtering by profile, sorting, and pagination.
+      operationId: listWafRules
+      parameters:
+        - name: pagination[page]
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: pagination[perPage]
+          in: query
+          description: Items per page
+          required: false
+          schema:
+            type: number
+            default: 25
+        - name: sort[field]
+          in: query
+          description: Field to sort by
+          required: false
+          schema:
+            type: string
+            default: id
+        - name: sort[order]
+          in: query
+          description: Sort order
+          required: false
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: ASC
+        - name: filter[profile_id]
+          in: query
+          description: Environment profile filter
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Successfully retrieved WAF rules list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WafRule'
+                  total:
+                    type: number
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - WAF Rules
+      summary: Create a new WAF rule
+      operationId: createWafRule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WafRuleInput'
+      responses:
+        '201':
+          description: WAF rule created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WafRule'
+        '400':
+          description: Validation error (invalid pattern, missing required fields, duplicate name)
+      security:
+        - bearerAuth: []
+
+  /api/waf_rules/{id}:
+    get:
+      tags:
+        - WAF Rules
+      summary: Get a WAF rule by ID
+      operationId: getWafRuleById
+      parameters:
+        - name: id
+          in: path
+          description: WAF rule ID (e.g., waf-rule-sqli-001)
+          required: true
+          schema:
+            type: string
+        - name: envprofile
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: WAF rule retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/WafRule'
+        '404':
+          description: WAF rule not found
+      security:
+        - bearerAuth: []
+
+    put:
+      tags:
+        - WAF Rules
+      summary: Update a WAF rule by ID
+      operationId: updateWafRuleById
+      parameters:
+        - name: id
+          in: path
+          description: WAF rule ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WafRuleInput'
+      responses:
+        '200':
+          description: WAF rule updated successfully
+        '400':
+          description: Validation error
+        '404':
+          description: WAF rule not found
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - WAF Rules
+      summary: Delete a WAF rule by ID
+      operationId: deleteWafRuleById
+      parameters:
+        - name: id
+          in: path
+          description: WAF rule ID
+          required: true
+          schema:
+            type: string
+        - name: envProfile
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: WAF rule deleted successfully
+      security:
+        - bearerAuth: []
+
+  /api/waf_rules/seed:
+    post:
+      tags:
+        - WAF Rules
+      summary: Seed default OWASP WAF rules
+      description: Populates the WAF rules and default policy with 20 built-in OWASP-inspired detection rules (SQLi, XSS, command injection, LFI, protocol violations). Skips rules that already exist on disk.
+      operationId: seedWafRules
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                profile_id:
+                  type: string
+                  description: Target environment profile
+                  default: prod
+      responses:
+        '200':
+          description: Seed operation completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rules_written:
+                    type: number
+                    description: Number of new rules written to disk
+                  rules_skipped:
+                    type: number
+                    description: Number of rules skipped (already exist)
+                  policies_written:
+                    type: number
+                    description: Number of policies written
+      security:
+        - bearerAuth: []
+
+  /api/waf_policies:
+    get:
+      tags:
+        - WAF Policies
+      summary: List all WAF policies
+      description: Retrieve a paginated list of all WAF policies. Supports filtering by profile, sorting, and pagination.
+      operationId: listWafPolicies
+      parameters:
+        - name: pagination[page]
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: pagination[perPage]
+          in: query
+          description: Items per page
+          required: false
+          schema:
+            type: number
+            default: 25
+        - name: sort[field]
+          in: query
+          description: Field to sort by
+          required: false
+          schema:
+            type: string
+            default: id
+        - name: sort[order]
+          in: query
+          description: Sort order
+          required: false
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: ASC
+        - name: filter[profile_id]
+          in: query
+          description: Environment profile filter
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Successfully retrieved WAF policies list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WafPolicy'
+                  total:
+                    type: number
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - WAF Policies
+      summary: Create a new WAF policy
+      operationId: createWafPolicy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WafPolicyInput'
+      responses:
+        '201':
+          description: WAF policy created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WafPolicy'
+        '400':
+          description: Validation error (missing required fields, duplicate name)
+      security:
+        - bearerAuth: []
+
+  /api/waf_policies/{id}:
+    get:
+      tags:
+        - WAF Policies
+      summary: Get a WAF policy by ID
+      operationId: getWafPolicyById
+      parameters:
+        - name: id
+          in: path
+          description: WAF policy ID (e.g., waf-policy-default)
+          required: true
+          schema:
+            type: string
+        - name: envprofile
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: WAF policy retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/WafPolicy'
+        '404':
+          description: WAF policy not found
+      security:
+        - bearerAuth: []
+
+    put:
+      tags:
+        - WAF Policies
+      summary: Update a WAF policy by ID
+      operationId: updateWafPolicyById
+      parameters:
+        - name: id
+          in: path
+          description: WAF policy ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WafPolicyInput'
+      responses:
+        '200':
+          description: WAF policy updated successfully
+        '400':
+          description: Validation error
+        '404':
+          description: WAF policy not found
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - WAF Policies
+      summary: Delete a WAF policy by ID
+      operationId: deleteWafPolicyById
+      parameters:
+        - name: id
+          in: path
+          description: WAF policy ID
+          required: true
+          schema:
+            type: string
+        - name: envProfile
+          in: query
+          description: Environment profile
+          required: false
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: WAF policy deleted successfully
+      security:
+        - bearerAuth: []
+
+  /api/waf_events:
+    get:
+      tags:
+        - WAF Events
+      summary: List WAF security events
+      description: Retrieve real-time WAF events from the in-memory event store. Events have a 1-hour TTL and are sorted by timestamp descending. Supports filtering by host and event type.
+      operationId: listWafEvents
+      parameters:
+        - name: pagination[page]
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: pagination[perPage]
+          in: query
+          description: Items per page
+          required: false
+          schema:
+            type: number
+            default: 25
+        - name: filter[host]
+          in: query
+          description: Filter by server hostname
+          required: false
+          schema:
+            type: string
+        - name: filter[type]
+          in: query
+          description: Filter by event type
+          required: false
+          schema:
+            type: string
+            enum: [blocked, monitored, error]
+      responses:
+        '200':
+          description: WAF events retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WafEvent'
+                  total:
+                    type: number
+      security:
+        - bearerAuth: []
+
+  /api/bookmarks:
+    get:
+      tags:
+        - Bookmarks
+      summary: List all bookmarks (merged lean + user)
+      description: Returns a merged list of auto-generated lean bookmarks (from virtual server configs) and user-saved bookmarks. User bookmarks override lean bookmarks by host match. Supports pagination, search, category filter, and sorting.
+      operationId: listBookmarks
+      parameters:
+        - name: pagination[page]
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: pagination[perPage]
+          in: query
+          description: Items per page
+          required: false
+          schema:
+            type: number
+            default: 100
+        - name: sort[field]
+          in: query
+          description: Sort field
+          required: false
+          schema:
+            type: string
+            default: title
+            enum: [title, host, category, auto_generated]
+        - name: sort[order]
+          in: query
+          description: Sort direction
+          required: false
+          schema:
+            type: string
+            default: ASC
+            enum: [ASC, DESC]
+        - name: filter[q]
+          in: query
+          description: Search by host, title, or description
+          required: false
+          schema:
+            type: string
+        - name: filter[category]
+          in: query
+          description: Filter by category
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bookmarks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Bookmark'
+                  total:
+                    type: number
+      security:
+        - bearerAuth: []
+
+    post:
+      tags:
+        - Bookmarks
+      summary: Create or promote a bookmark
+      description: Promotes an auto-generated lean bookmark to a user-saved bookmark, or creates a new user bookmark. User bookmarks are persisted to disk and override lean bookmarks.
+      operationId: createBookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkInput'
+      responses:
+        '200':
+          description: Bookmark saved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Bookmark'
+                  message:
+                    type: string
+      security:
+        - bearerAuth: []
+
+  /api/bookmarks/{id}:
+    get:
+      tags:
+        - Bookmarks
+      summary: Get a single bookmark by ID
+      description: Retrieve a specific bookmark by its ID from the merged lean + user bookmark set.
+      operationId: getBookmark
+      parameters:
+        - name: id
+          in: path
+          description: Bookmark ID (e.g. bm-example-com)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bookmark found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Bookmark'
+        '404':
+          description: Bookmark not found
+      security:
+        - bearerAuth: []
+
+    delete:
+      tags:
+        - Bookmarks
+      summary: Delete a user bookmark
+      description: Removes a user-saved bookmark. The corresponding lean bookmark (if any) will reappear in the merged list. Cannot delete lean-only bookmarks.
+      operationId: deleteBookmark
+      parameters:
+        - name: id
+          in: path
+          description: Bookmark ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bookmark reverted to auto-generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: User bookmark not found
+      security:
+        - bearerAuth: []
+
+  /mcp/manifest:
+    get:
+      tags:
+        - MCP
+      summary: Get MCP server manifest
+      description: Returns the MCP server manifest describing protocol version, server info, and capabilities. This is the primary discovery endpoint for AI agents.
+      operationId: mcpManifest
+      x-ai-agent: true
+      responses:
+        '200':
+          description: MCP manifest returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpManifest'
+              example:
+                jsonrpc: "2.0"
+                result:
+                  protocolVersion: "2025-03-26"
+                  serverInfo:
+                    name: "proxy10x-mcp"
+                    version: "1.0.0"
+                    description: "Proxy10x MCP Server"
+                  capabilities:
+                    resources:
+                      subscribe: false
+                      listChanged: false
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/capabilities:
+    get:
+      tags:
+        - MCP
+      summary: Get detailed MCP capabilities
+      description: Returns detailed capability information including available resources, tools, authentication requirements, and rate limiting configuration.
+      operationId: mcpCapabilities
+      x-ai-agent: true
+      responses:
+        '200':
+          description: Capabilities returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpCapabilities'
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/resources:
+    get:
+      tags:
+        - MCP
+      summary: List available MCP resources
+      description: Returns a list of all available MCP resources that can be read by AI agents. Resources include servers, rules, upstreams, SSL configs, cache configs, health status, metrics, WAF rules, WAF policies, WAF events, and gateway config.
+      operationId: mcpListResources
+      x-ai-agent: true
+      responses:
+        '200':
+          description: Resource list returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpResourceList'
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/resources/{resourceId}:
+    get:
+      tags:
+        - MCP
+      summary: Read a specific MCP resource
+      description: Fetches the data for a specific resource by ID. Available resources are servers, rules, upstreams, profiles, ssl, cache, health, metrics, settings, waf_rules, waf_policies, waf_events, and gateway_config. Secrets are automatically redacted.
+      operationId: mcpReadResource
+      x-ai-agent: true
+      parameters:
+        - name: resourceId
+          in: path
+          required: true
+          description: "Resource identifier. One of: servers, rules, upstreams, profiles, ssl, cache, health, metrics, settings, waf_rules, waf_policies, waf_events, gateway_config, traffic_splits"
+          schema:
+            type: string
+            enum: [servers, rules, upstreams, profiles, ssl, cache, health, metrics, settings, waf_rules, waf_policies, waf_events, gateway_config, traffic_splits]
+        - name: profile_id
+          in: query
+          required: false
+          description: Environment profile filter (e.g., prod, dev, staging)
+          schema:
+            type: string
+            default: prod
+      responses:
+        '200':
+          description: Resource data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpResourceResponse'
+        '404':
+          description: Resource not found
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/tools:
+    get:
+      tags:
+        - MCP
+      summary: List available MCP tools
+      description: Returns a list of available MCP tools. Tools are feature-flagged and must be explicitly enabled via mcp.tools_enabled configuration.
+      operationId: mcpListTools
+      x-ai-agent: true
+      responses:
+        '200':
+          description: Tool list returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpToolList'
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/tools/{toolName}:
+    post:
+      tags:
+        - MCP
+      summary: Execute an MCP tool
+      description: |
+        Executes a specific MCP tool. Available tools include:
+        - **validate_config**: Validate nginx/OpenResty configuration syntax
+        - **get_error_logs**: Retrieve recent error log entries
+        - **reload_config**: Reload nginx configuration (requires read-write mode)
+        - **test_waf_rule**: Test a WAF regex pattern against sample input (read-only)
+        - **bind_waf_policy**: Bind a WAF policy to a server (requires read-write mode)
+        - **unbind_waf_policy**: Remove WAF policy binding from a server (requires read-write mode)
+        - **update_traffic_split**: Update backend traffic weight distribution (requires read-write mode)
+        - **promote_backend**: Promote a backend to 100% traffic (requires read-write mode)
+        - **rollback_backend**: Rollback to single-backend routing (requires read-write mode)
+      operationId: mcpExecuteTool
+      x-ai-agent: true
+      parameters:
+        - name: toolName
+          in: path
+          required: true
+          description: "Tool name. One of: validate_config, get_error_logs, reload_config, test_waf_rule, bind_waf_policy, unbind_waf_policy, update_traffic_split, promote_backend, rollback_backend"
+          schema:
+            type: string
+            enum: [validate_config, get_error_logs, reload_config, test_waf_rule, bind_waf_policy, unbind_waf_policy, update_traffic_split, promote_backend, rollback_backend]
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Tool-specific parameters
+              properties:
+                dry_run:
+                  type: boolean
+                  description: "For reload_config: if true, only validates without reloading"
+                  default: true
+                lines:
+                  type: number
+                  description: "For get_error_logs: maximum lines to return"
+                  default: 100
+                pattern:
+                  type: string
+                  description: "For test_waf_rule: regex or string pattern to test"
+                test_input:
+                  type: string
+                  description: "For test_waf_rule: sample input to match against"
+                pattern_type:
+                  type: string
+                  description: "For test_waf_rule: pattern type"
+                  enum: [regex, string]
+                  default: regex
+                server_id:
+                  type: string
+                  description: "For bind/unbind_waf_policy: target server ID"
+                waf_policy_id:
+                  type: string
+                  description: "For bind_waf_policy: WAF policy ID to bind"
+                mode_override:
+                  type: string
+                  description: "For bind_waf_policy: override policy mode for this server"
+                  enum: [block, monitor]
+                profile_id:
+                  type: string
+                  description: "For bind/unbind_waf_policy: environment profile"
+                  default: prod
+      responses:
+        '200':
+          description: Tool executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpToolResult'
+        '400':
+          description: Tool error or tools disabled
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/schemas:
+    get:
+      tags:
+        - MCP
+      summary: List available MCP schemas
+      description: Returns a list of all typed MCP schemas including resource schemas (proxy10x.server, proxy10x.rule, etc.), protocol schemas (manifest, capabilities), and error schemas. Use these schemas to understand the structure of MCP responses.
+      operationId: mcpListSchemas
+      x-ai-agent: true
+      responses:
+        '200':
+          description: Schema list returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    default: "2.0"
+                  result:
+                    type: object
+                    properties:
+                      schema_version:
+                        type: string
+                        description: Schema registry version
+                      schemas:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Schema identifier
+                            type:
+                              type: string
+                              description: Schema type (e.g., proxy10x.mcp.manifest)
+                            version:
+                              type: string
+                              description: Schema version
+                            description:
+                              type: string
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/schemas/{schemaName}:
+    get:
+      tags:
+        - MCP
+      summary: Get a specific MCP schema
+      description: Returns the full schema definition for a specific schema type. Includes property definitions, types, constraints, relationships, and examples. Useful for AI agents to understand response structures.
+      operationId: mcpGetSchema
+      x-ai-agent: true
+      parameters:
+        - name: schemaName
+          in: path
+          required: true
+          description: "Schema name. Core schemas: manifest, capabilities, resource, resource_list, tool, tool_result, error. Resource schemas: servers, rules, upstreams, profiles, ssl, cache, health, metrics, settings"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Schema returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                    default: "2.0"
+                  result:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      schema:
+                        type: object
+                        description: Full schema definition with properties, types, and constraints
+        '404':
+          description: Schema not found
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+  /mcp/jsonrpc:
+    post:
+      tags:
+        - MCP
+      summary: JSON-RPC 2.0 endpoint
+      description: Full MCP protocol JSON-RPC 2.0 endpoint. Supports methods initialize, resources/list, resources/read, tools/list, tools/call, and ping.
+      operationId: mcpJsonRpc
+      x-ai-agent: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/McpJsonRpcRequest'
+            examples:
+              initialize:
+                summary: Initialize MCP session
+                value:
+                  jsonrpc: "2.0"
+                  id: 1
+                  method: "initialize"
+                  params:
+                    protocolVersion: "2025-03-26"
+                    clientInfo:
+                      name: "my-agent"
+                      version: "1.0.0"
+              list_resources:
+                summary: List available resources
+                value:
+                  jsonrpc: "2.0"
+                  id: 2
+                  method: "resources/list"
+              read_resource:
+                summary: Read a resource
+                value:
+                  jsonrpc: "2.0"
+                  id: 3
+                  method: "resources/read"
+                  params:
+                    uri: "proxy10x://resources/health"
+      responses:
+        '200':
+          description: JSON-RPC response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/McpJsonRpcResponse'
+      security:
+        - mcpApiKey: []
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    mcpApiKey:
+      type: apiKey
+      in: header
+      name: X-MCP-API-Key
+      description: API key for MCP endpoint authentication
+  schemas:
+    Servers:
+      type: object
+      properties:
+        server_name:
+          type: string
+          default: localhost
+        profile_id:
+          type: string
+          default: test
+        root:
+          type: string
+          default: /var/www/html
+        rules:
+          type: string
+          default: f8107018-2979-4c16-cd61-ab8a8b3303b1 (Rule uuid)
+        index:
+          type: string
+          default: index.html
+        locations:
+          type: object
+          default: {
+            "location_path": "/api",
+            "location_opts": ["allow", "try_files"],
+            "location_vals": { "allow": "127.0.0.1", "try_files": "html" }
+          }
+        access_log:
+          type: string
+          default: logs/access.log
+        error_log:
+          type: string
+          default: logs/error.log
+        match_cases:
+          type: object
+          default: [
+            { "statement": "a0b5fe52-2fdc-cf47-2b82-f3c69ee39ae2 (Rule uuid)", "condition": "and"}
+          ]
+        listens:
+          type: object
+          default: [{ "listen": "8080" }]
+        created_at:
+          type: number
+          default: 1687334596
+        custom_block:
+          type: object
+          default: [{ "additional_block": "include /tmp/resolver.conf;" }]
+        config:
+          type: string
+          default: "server {\n        listen 8080;  # Listen on port (HTTP)\n        server_name localhost;  # Your domain name\n        root /var/www/html;  # Document root directory\n        index index.html;  # Default index files\n        access_log /logs/access.log;  # Access log file location\n        error_log /logs/error.log;  # Error log file location\n\n        location /api {\n                  allow 127.0.0.1\ntry_files html\n                  }\n        include resolver.conf;\n    }\n    "
+        config_status:
+          type: boolean
+          default: false
+    ServerResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          default: ef9d2897-92ea-9a96-ce7d-268dd0cb36b7
+        server_name:
+          type: string
+          default: localhost
+        profile_id:
+          type: string
+          default: test
+        root:
+          type: string
+          default: /var/www/html
+        rules:
+          type: string
+          default: f8107018-2979-4c16-cd61-ab8a8b3303b1 (Rule uuid)
+        index:
+          type: string
+          default: index.html
+        locations:
+          type: object
+          default: {
+            "location_path": "/api",
+            "location_opts": ["allow", "try_files"],
+            "location_vals": { "allow": "127.0.0.1", "try_files": "html" }
+          }
+        access_log:
+          type: string
+          default: logs/access.log
+        error_log:
+          type: string
+          default: logs/error.log
+        match_cases:
+          type: object
+          default: [
+            { "statement": "a0b5fe52-2fdc-cf47-2b82-f3c69ee39ae2 (Rule uuid)", "condition": "and"}
+          ]
+        listens:
+          type: object
+          default: [{ "listen": "8080" }]
+        created_at:
+          type: number
+          default: 1687334596
+        custom_block:
+          type: object
+          default: [{ "additional_block": "include /tmp/resolver.conf;" }]
+        config:
+          type: string
+          default: "server {\n        listen 8080;  # Listen on port (HTTP)\n        server_name localhost;  # Your domain name\n        root /var/www/html;  # Document root directory\n        index index.html;  # Default index files\n        access_log /logs/access.log;  # Access log file location\n        error_log /logs/error.log;  # Error log file location\n\n        location /api {\n                  allow 127.0.0.1\ntry_files html\n                  }\n        include resolver.conf;\n    }\n    "
+        config_status:
+          type: boolean
+          default: false
+    Rules:
+      type: object
+      properties:
+        name:
+          type: string
+          default: Rule_Name
+        profile_id:
+          type: string
+          default: test
+        version:
+          type: number
+          default: 1
+        priority:
+          type: number
+          default: 1
+        match:
+          type: object
+          default:
+              {"rules":{"path_key":"starts_with","path":"/api","country_key":"equals","country":"BE","client_ip_key":"equals","client_ip":" 172.18.0.1","jwt_token_validation":"equals","jwt_token_validation_value":"Authorization","jwt_token_validation_key":"<JWT_TOKEN>"}}
+        response:  
+          type: object
+          default:
+            {"allow":false,"code":403,"message":"SGVsbG8gd29ybGQh"}
+  
+          
+    RuleResponse:
+      type: object
+      properties:
+        name: 
+          type: string
+          default: Rule_name
+        profile_id:
+          type: string
+          default: test
+        id:
+          type: string
+          default: ef9d2897-92ea-9a96-ce7d-268dd0cb36b7
+        priority:
+          type: number
+          default: 1
+        version:
+          type: number
+          default: 1
+        created_at:
+          type: number
+          default: 1687429983
+        match:
+          type: object
+          default:
+              {"rules":{"path_key":"starts_with","path":"/api","country_key":"equals","country":"BE","client_ip_key":"equals","client_ip":" 172.18.0.1","jwt_token_validation":"equals","jwt_token_validation_value":"Authorization","jwt_token_validation_key":"<JWT_TOKEN>"}}
+        response:  
+          type: object
+          default:
+            {"allow":false,"code":403,"message":"SGVsbG8gd29ybGQh"}
+
+    CacheConfig:
+      type: object
+      properties:
+        server_name:
+          type: string
+          description: The domain name of the server
+        cache_enabled:
+          type: boolean
+          description: Whether caching is enabled for this server
+          default: false
+        cache_ttl:
+          type: number
+          description: Cache time-to-live in seconds
+          default: 3600
+        cache_max_size:
+          type: string
+          description: Maximum cache size
+          default: "100m"
+        cache_inactive:
+          type: string
+          description: Time after which inactive items are removed
+          default: "60m"
+        cache_valid_codes:
+          type: array
+          items:
+            type: number
+          description: HTTP status codes to cache
+          default: [200, 301, 302]
+        cache_bypass_cookie:
+          type: string
+          description: Cookie name that will bypass cache
+          default: ""
+        cache_bypass_header:
+          type: string
+          description: Header name that will bypass cache
+          default: ""
+        cached_extensions:
+          type: array
+          items:
+            type: string
+          description: File extensions to cache
+          default: ["js", "css", "woff", "woff2", "jpg", "png", "gif", "svg", "ico"]
+        cached_mime_types:
+          type: array
+          items:
+            type: string
+          description: MIME types to cache
+          default: ["text/css", "application/javascript", "image/jpeg", "image/png", "font/woff2"]
+        updated_at:
+          type: number
+          description: Timestamp when config was last updated
+
+    WafRule:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique WAF rule identifier
+          default: waf-rule-sqli-001
+        name:
+          type: string
+          description: Human-readable rule name
+          default: "SQL Injection - UNION SELECT"
+        description:
+          type: string
+          description: Detailed description of what this rule detects
+        category:
+          type: string
+          description: Attack category
+          enum: [sqli, xss, cmdi, lfi, rfi, protocol, custom]
+          default: sqli
+        severity:
+          type: string
+          description: Severity level
+          enum: [critical, high, medium, low, info]
+          default: critical
+        enabled:
+          type: boolean
+          description: Whether this rule is active
+          default: true
+        target:
+          type: string
+          description: Request component to inspect
+          enum: [url, headers, body, args, cookies, user_agent, all]
+          default: url
+        pattern:
+          type: string
+          description: PCRE regex pattern or literal string to match
+          default: "(?i)(?:union\\s+(?:all\\s+)?select)"
+        pattern_type:
+          type: string
+          description: How to interpret the pattern
+          enum: [regex, string]
+          default: regex
+        action:
+          type: string
+          description: Action to take when pattern matches
+          enum: [block, monitor, allow]
+          default: block
+        score:
+          type: number
+          description: Anomaly score contribution when matched
+          default: 10
+        tags:
+          type: array
+          items:
+            type: string
+          description: Classification tags
+          default: ["owasp-top10", "sqli", "a03"]
+        profile_id:
+          type: string
+          description: Environment profile
+          default: prod
+        created_at:
+          type: number
+          description: Unix epoch timestamp
+        updated_at:
+          type: number
+          description: Unix epoch timestamp
+
+    WafRuleInput:
+      type: object
+      required: [name, category, pattern, target, action]
+      properties:
+        name:
+          type: string
+          description: Human-readable rule name (must be unique within profile)
+        description:
+          type: string
+        category:
+          type: string
+          enum: [sqli, xss, cmdi, lfi, rfi, protocol, custom]
+        severity:
+          type: string
+          enum: [critical, high, medium, low, info]
+          default: medium
+        enabled:
+          type: boolean
+          default: true
+        target:
+          type: string
+          enum: [url, headers, body, args, cookies, user_agent, all]
+        pattern:
+          type: string
+          description: PCRE regex pattern (validated at creation time) or literal string
+        pattern_type:
+          type: string
+          enum: [regex, string]
+          default: regex
+        action:
+          type: string
+          enum: [block, monitor, allow]
+        score:
+          type: number
+          default: 5
+        tags:
+          type: array
+          items:
+            type: string
+        profile_id:
+          type: string
+          default: prod
+
+    WafPolicy:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique WAF policy identifier
+          default: waf-policy-default
+        name:
+          type: string
+          description: Human-readable policy name
+          default: "Default WAF Policy"
+        description:
+          type: string
+        mode:
+          type: string
+          description: "Policy mode: block (active protection) or monitor (logging only)"
+          enum: [block, monitor]
+          default: monitor
+        enabled:
+          type: boolean
+          default: true
+        waf_rules:
+          type: array
+          items:
+            type: string
+          description: List of WAF rule IDs included in this policy
+          default: ["waf-rule-sqli-001", "waf-rule-xss-001"]
+        anomaly_threshold:
+          type: number
+          description: Cumulative anomaly score threshold for blocking
+          default: 5
+        paranoia_level:
+          type: number
+          description: Detection sensitivity level (1=low, 4=max)
+          default: 1
+          minimum: 1
+          maximum: 4
+        body_inspection:
+          type: boolean
+          description: Whether to inspect request body
+          default: true
+        max_body_size:
+          type: number
+          description: Maximum request body size to inspect (bytes)
+          default: 1048576
+        whitelist:
+          type: object
+          description: Whitelisted items that bypass WAF inspection
+          properties:
+            ips:
+              type: array
+              items:
+                type: string
+              default: ["127.0.0.1"]
+            paths:
+              type: array
+              items:
+                type: string
+              default: ["/health", "/ping", "/metrics"]
+            user_agents:
+              type: array
+              items:
+                type: string
+              default: []
+        blocked_response:
+          type: object
+          description: Custom block page configuration
+          properties:
+            status_code:
+              type: number
+              default: 403
+            content_type:
+              type: string
+              default: "text/html"
+        profile_id:
+          type: string
+          default: prod
+        created_at:
+          type: number
+        updated_at:
+          type: number
+
+    WafPolicyInput:
+      type: object
+      required: [name, mode]
+      properties:
+        name:
+          type: string
+          description: Policy name (must be unique within profile)
+        description:
+          type: string
+        mode:
+          type: string
+          enum: [block, monitor]
+        enabled:
+          type: boolean
+          default: true
+        waf_rules:
+          type: array
+          items:
+            type: string
+        anomaly_threshold:
+          type: number
+          default: 5
+        paranoia_level:
+          type: number
+          default: 1
+        body_inspection:
+          type: boolean
+          default: true
+        max_body_size:
+          type: number
+          default: 1048576
+        whitelist:
+          type: object
+          properties:
+            ips:
+              type: array
+              items:
+                type: string
+            paths:
+              type: array
+              items:
+                type: string
+            user_agents:
+              type: array
+              items:
+                type: string
+        blocked_response:
+          type: object
+          properties:
+            status_code:
+              type: number
+            content_type:
+              type: string
+        profile_id:
+          type: string
+          default: prod
+
+    WafEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Event identifier (timestamp-rule_id)
+        timestamp:
+          type: number
+          description: Unix epoch timestamp when event occurred
+        type:
+          type: string
+          description: Event type
+          enum: [blocked, monitored, error]
+        host:
+          type: string
+          description: Server hostname that triggered the event
+        rule_id:
+          type: string
+          description: ID of the WAF rule that matched
+        rule_name:
+          type: string
+          description: Name of the matched rule
+        category:
+          type: string
+          description: Attack category
+          enum: [sqli, xss, cmdi, lfi, rfi, protocol, custom]
+        severity:
+          type: string
+          enum: [critical, high, medium, low, info]
+        client_ip:
+          type: string
+          description: Client IP address
+        uri:
+          type: string
+          description: Request URI that triggered the rule
+        method:
+          type: string
+          description: HTTP method
+        score:
+          type: number
+          description: Anomaly score for this match
+        matched_data:
+          type: string
+          description: The input data that matched the pattern
+
+    TrafficBackend:
+      type: object
+      properties:
+        address:
+          type: string
+          description: Backend address (host:port)
+          default: "10.0.0.1:8080"
+        weight:
+          type: number
+          description: Traffic weight percentage (0-100)
+          default: 50
+        label:
+          type: string
+          description: Human-readable backend label
+          default: stable
+
+    TrafficRouting:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: Routing algorithm
+          enum: [weighted, round_robin, header, cookie, least_conn]
+          default: weighted
+        header_name:
+          type: string
+          description: Header name for header-based routing
+          default: "X-Canary"
+        header_value:
+          type: string
+          description: Header value that routes to canary backend
+          default: "true"
+        cookie_name:
+          type: string
+          description: Cookie name for sticky session routing
+          default: "canary_session"
+        sticky:
+          type: boolean
+          description: Enable sticky sessions (pin client to first selected backend)
+          default: false
+
+    TrafficTopology:
+      type: object
+      properties:
+        servers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              server_name:
+                type: string
+              ssl_enabled:
+                type: boolean
+              waf_enabled:
+                type: boolean
+              rule_ids:
+                type: array
+                items:
+                  type: string
+        rules_with_backends:
+          type: array
+          items:
+            type: object
+            properties:
+              rule_id:
+                type: string
+              rule_name:
+                type: string
+              server_name:
+                type: string
+              path:
+                type: string
+              routing:
+                $ref: '#/components/schemas/TrafficRouting'
+              backends:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrafficBackend'
+              backend_stats:
+                type: array
+                items:
+                  type: object
+        connections:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+                description: Server name
+              to:
+                type: string
+                description: Backend address
+              label:
+                type: string
+              weight:
+                type: number
+
+    TrafficBackendStats:
+      type: object
+      properties:
+        rule_id:
+          type: string
+        routing:
+          $ref: '#/components/schemas/TrafficRouting'
+        backends:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              label:
+                type: string
+              weight:
+                type: number
+              healthy:
+                type: boolean
+              stats:
+                type: object
+                properties:
+                  total_requests:
+                    type: number
+                  total_errors:
+                    type: number
+                  avg_latency_ms:
+                    type: number
+
+    TrafficWeightUpdate:
+      type: object
+      required: [rule_id, backends]
+      properties:
+        rule_id:
+          type: string
+          description: Rule ID to update weights for
+        profile_id:
+          type: string
+          description: Environment profile
+          default: prod
+        backends:
+          type: array
+          description: Backend weight updates
+          items:
+            type: object
+            required: [label, weight]
+            properties:
+              label:
+                type: string
+                description: Backend label
+              weight:
+                type: number
+                description: New weight percentage (0-100)
+
+    TrafficRuleHealth:
+      type: object
+      properties:
+        rule_id:
+          type: string
+        rule_name:
+          type: string
+        backends:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              label:
+                type: string
+              weight:
+                type: number
+              healthy:
+                type: boolean
+
+    McpManifest:
+      type: object
+      description: MCP server manifest following the Model Context Protocol specification
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        result:
+          type: object
+          properties:
+            protocolVersion:
+              type: string
+              description: MCP protocol version
+              default: "2025-03-26"
+            serverInfo:
+              type: object
+              properties:
+                name:
+                  type: string
+                  default: "proxy10x-mcp"
+                version:
+                  type: string
+                  default: "1.0.0"
+                description:
+                  type: string
+                vendor:
+                  type: string
+                  default: "Proxy10x"
+                homepage:
+                  type: string
+                  default: "https://www.proxy10x.com/"
+            capabilities:
+              type: object
+              properties:
+                resources:
+                  type: object
+                  properties:
+                    subscribe:
+                      type: boolean
+                      default: false
+                    listChanged:
+                      type: boolean
+                      default: false
+                tools:
+                  type: object
+                  nullable: true
+            instructions:
+              type: string
+
+    McpCapabilities:
+      type: object
+      description: Detailed MCP server capabilities for agent discovery
+      properties:
+        server:
+          type: string
+        version:
+          type: string
+        protocol_version:
+          type: string
+        mode:
+          type: string
+          enum: [read-only, read-write]
+        capabilities:
+          type: object
+          properties:
+            resources:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  uri:
+                    type: string
+                  mimeType:
+                    type: string
+                  category:
+                    type: string
+                  read_only:
+                    type: boolean
+            tools:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  inputSchema:
+                    type: object
+            authentication:
+              type: object
+              properties:
+                type:
+                  type: string
+                header:
+                  type: string
+                description:
+                  type: string
+        metadata:
+          type: object
+          properties:
+            x-ai-agent:
+              type: boolean
+            x-mcp-compatible:
+              type: boolean
+            platform:
+              type: string
+            gateway_type:
+              type: string
+
+    McpResourceList:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        result:
+          type: object
+          properties:
+            resources:
+              type: array
+              items:
+                type: object
+                properties:
+                  uri:
+                    type: string
+                    description: Resource URI (e.g., proxy10x://resources/servers)
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  mimeType:
+                    type: string
+                    default: "application/json"
+                  metadata:
+                    type: object
+
+    McpResourceResponse:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        result:
+          type: object
+          properties:
+            contents:
+              type: array
+              items:
+                type: object
+                properties:
+                  uri:
+                    type: string
+                  mimeType:
+                    type: string
+                  data:
+                    type: object
+                    description: The resource data (structure varies by resource type)
+
+    McpToolList:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        result:
+          type: object
+          properties:
+            tools:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  inputSchema:
+                    type: object
+                  annotations:
+                    type: object
+
+    McpToolResult:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        result:
+          type: object
+          properties:
+            tool:
+              type: string
+            result:
+              type: object
+            isError:
+              type: boolean
+
+    McpJsonRpcRequest:
+      type: object
+      required: [jsonrpc, method]
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        id:
+          oneOf:
+            - type: string
+            - type: number
+        method:
+          type: string
+          description: "MCP method: initialize, resources/list, resources/read, tools/list, tools/call, ping"
+          enum: ["initialize", "resources/list", "resources/read", "tools/list", "tools/call", "ping"]
+        params:
+          type: object
+          description: Method-specific parameters
+
+    McpJsonRpcResponse:
+      type: object
+      properties:
+        jsonrpc:
+          type: string
+          default: "2.0"
+        id:
+          oneOf:
+            - type: string
+            - type: number
+        result:
+          type: object
+          description: Successful result (present if no error)
+        error:
+          type: object
+          description: Error object (present if request failed)
+          properties:
+            code:
+              type: number
+            message:
+              type: string
+    Bookmark:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique bookmark ID (e.g. bm-example-com)
+          example: bm-example-com
+        host:
+          type: string
+          description: Virtual server hostname
+          example: example.com
+        title:
+          type: string
+          description: Display title (defaults to host)
+          example: Example Site
+        url:
+          type: string
+          description: Full URL to the server
+          example: https://example.com
+        description:
+          type: string
+          description: User-provided description
+        category:
+          type: string
+          description: User-defined category
+          example: production
+        tags:
+          type: array
+          items:
+            type: string
+          description: User-defined tags
+          example: ["frontend", "live"]
+        auto_generated:
+          type: boolean
+          description: Whether this is an auto-generated lean bookmark or user-saved
+        profile_id:
+          type: string
+          description: Server profile/environment
+          example: prod
+        proxy_pass:
+          type: string
+          description: Backend proxy address from the first matching rule
+        ssl_enabled:
+          type: boolean
+          description: Whether SSL is configured on the server
+        server_id:
+          type: string
+          description: Original server file ID
+    BookmarkInput:
+      type: object
+      required:
+        - id
+        - host
+      properties:
+        id:
+          type: string
+          description: Bookmark ID
+          example: bm-example-com
+        host:
+          type: string
+          description: Virtual server hostname
+          example: example.com
+        title:
+          type: string
+          description: Display title
+        url:
+          type: string
+          description: Full URL
+        description:
+          type: string
+          description: Description
+        category:
+          type: string
+          description: Category
+        tags:
+          type: array
+          items:
+            type: string
+          description: Tags
+        auto_generated:
+          type: boolean
+          default: false

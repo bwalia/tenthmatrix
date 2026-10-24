@@ -1,0 +1,32 @@
+[Unit]
+# One-shot job that refreshes the IP2Location LITE country database.
+# Triggered by proxy10x-ip2location-refresh.timer (monthly).  Can also
+# be invoked manually: `systemctl start proxy10x-ip2location-refresh`.
+Description=Refresh IP2Location LITE country database
+Documentation=https://github.com/{{ proxy10x_git_repo | default('bwalia/proxy10x') }}
+After=network-online.target openresty.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/proxy10x-ip2location-refresh.sh
+
+# Tight timeout — the download is ~165 MB on a healthy link, the
+# script's own --max-time is 600s.  Anything beyond 15 min and the
+# unit is stuck.
+TimeoutStartSec=900
+
+# Security hardening — the script only needs to write to one file
+# and shell out to systemctl.  Lock everything else down.
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/usr/local/openresty/nginx
+ProtectHome=true
+PrivateTmp=true
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=proxy10x-ip2location-refresh
+
+[Install]
+WantedBy=multi-user.target

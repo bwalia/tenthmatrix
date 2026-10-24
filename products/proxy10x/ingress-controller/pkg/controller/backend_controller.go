@@ -1,0 +1,317 @@
+package controller
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"time"
+
+	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/tools/record"
+	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller"
+	"sigs.k8s.io/controller-runtime/pkg/log"
+
+	proxy10xv1alpha1 "github.com/proxy10x/proxy10x/ingress-controller/pkg/apis/proxy10x/v1alpha1"
+)
+
+// Proxy10xBackendReconciler reconciles a Proxy10xBackend object
+type Proxy10xBackendReconciler struct {
+	client.Client
+	Scheme   *runtime.Scheme
+	Recorder record.EventRecorder
+
+	// IngressClass is the ingress class this controller handles.
+	// If empty, all Proxy10xBackend resources are processed.
+	IngressClass string
+
+	// LuaConfigUpdater handles pushing config to OpenResty
+	LuaConfigUpdater ConfigUpdater
+}
+
+// ConfigUpdater interface for updating Lua configuration
+type ConfigUpdater interface {
+	UpdateBackend(ctx context.Context, name string, config BackendConfig) error
+	DeleteBackend(ctx context.Context, name string) error
+}
+
+// BackendConfig represents the config sent to Lua
+type BackendConfig struct {
+	Upstreams      []UpstreamConfig      `json:"upstreams"`
+	LoadBalancing  string                `json:"load_balancing"`
+	HealthCheck    *HealthCheckConfig    `json:"health_check,omitempty"`
+	CircuitBreaker *CircuitBreakerConfig `json:"circuit_breaker,omitempty"`
+}
+
+type UpstreamConfig struct {
+	Host        string `json:"host"`
+	Port        int    `json:"port"`
+	Weight      int    `json:"weight,omitempty"`
+	MaxFails    int    `json:"max_fails,omitempty"`
+	FailTimeout int    `json:"fail_timeout,omitempty"`
+}
+
+type HealthCheckConfig struct {
+	Enabled        bool   `json:"enabled"`
+	Interval       int    `json:"interval,omitempty"`
+	Timeout        int    `json:"timeout,omitempty"`
+	Path           string `json:"path,omitempty"`
+	ExpectedStatus int    `json:"expected_status,omitempty"`
+}
+
+type CircuitBreakerConfig struct {
+	Enabled   bool `json:"enabled"`
+	Threshold int  `json:"threshold,omitempty"`
+	Timeout   int  `json:"timeout,omitempty"`
+}
+
+// +kubebuilder:rbac:groups=proxy10x.io,resources=proxy10xbackends,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=proxy10x.io,resources=proxy10xbackends/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=proxy10x.io,resources=proxy10xbackends/finalizers,verbs=update
+// +kubebuilder:rbac:groups="",resources=events,verbs=create;patch
+
+// Reconcile handles Proxy10xBackend reconciliation
+func (r *Proxy10xBackendReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	logger := log.FromContext(ctx)
+	logger.Info("Reconciling Proxy10xBackend", "name", req.Name, "namespace", req.Namespace)
+
+	// Fetch the Proxy10xBackend instance
+	backend := &proxy10xv1alpha1.Proxy10xBackend{}
+	err := r.Get(ctx, req.NamespacedName, backend)
+	if err != nil {
+		if errors.IsNotFound(err) {
+			// Object not found, could have been deleted
+			logger.Info("Proxy10xBackend not found, likely deleted", "name", req.Name)
+			// Delete from Lua config
+			if err := r.LuaConfigUpdater.DeleteBackend(ctx, req.Name); err != nil {
+				logger.Error(err, "Failed to delete backend from Lua config")
+				return ctrl.Result{}, err
+			}
+			return ctrl.Result{}, nil
+		}
+		logger.Error(err, "Failed to get Proxy10xBackend")
+		return ctrl.Result{}, err
+	}
+
+	// Check if this backend matches our ingress class
+	if !r.matchesIngressClass(backend.Spec.IngressClassName) {
+		logger.Info("Skipping Proxy10xBackend, ingress class does not match",
+			"name", req.Name,
+			"controllerIngressClass", r.IngressClass,
+			"resourceIngressClassName", backend.Spec.IngressClassName,
+		)
+		return ctrl.Result{}, nil
+	}
+
+	// Check if the backend is being deleted
+	if backend.DeletionTimestamp != nil {
+		logger.Info("Proxy10xBackend is being deleted", "name", req.Name)
+		if err := r.LuaConfigUpdater.DeleteBackend(ctx, req.Name); err != nil {
+			logger.Error(err, "Failed to delete backend from Lua config")
+			return ctrl.Result{}, err
+		}
+		return ctrl.Result{}, nil
+	}
+
+	// Convert CRD to Lua config format
+	luaConfig := r.buildBackendConfig(backend)
+
+	// Update Lua configuration
+	if err := r.LuaConfigUpdater.UpdateBackend(ctx, backend.Name, luaConfig); err != nil {
+		logger.Error(err, "Failed to update backend in Lua config")
+		r.Recorder.Event(backend, "Warning", "ConfigUpdateFailed", fmt.Sprintf("Failed to update Lua config: %v", err))
+
+		// Update status
+		backend.Status.Conditions = []metav1.Condition{
+			{
+				Type:               "Ready",
+				Status:             metav1.ConditionFalse,
+				Reason:             "ConfigUpdateFailed",
+				Message:            err.Error(),
+				LastTransitionTime: metav1.Now(),
+			},
+		}
+		if err := r.Status().Update(ctx, backend); err != nil {
+			logger.Error(err, "Failed to update backend status")
+		}
+
+		return ctrl.Result{RequeueAfter: 30 * time.Second}, err
+	}
+
+	logger.Info("Successfully updated backend in Lua config", "name", backend.Name)
+	r.Recorder.Event(backend, "Normal", "ConfigUpdated", "Lua configuration updated successfully")
+
+	// Update status
+	activeCount := 0
+	for _, upstream := range backend.Spec.Upstreams {
+		if upstream.Host != "" {
+			activeCount++
+		}
+	}
+
+	backend.Status.ActiveUpstreams = activeCount
+	backend.Status.TotalUpstreams = len(backend.Spec.Upstreams)
+	backend.Status.LastUpdated = metav1.Now()
+	backend.Status.Conditions = []metav1.Condition{
+		{
+			Type:               "Ready",
+			Status:             metav1.ConditionTrue,
+			Reason:             "ConfigUpdated",
+			Message:            "Backend configuration synced to OpenResty",
+			LastTransitionTime: metav1.Now(),
+		},
+	}
+
+	if err := r.Status().Update(ctx, backend); err != nil {
+		logger.Error(err, "Failed to update backend status")
+		return ctrl.Result{}, err
+	}
+
+	return ctrl.Result{}, nil
+}
+
+// buildBackendConfig converts CRD spec to Lua config format
+func (r *Proxy10xBackendReconciler) buildBackendConfig(backend *proxy10xv1alpha1.Proxy10xBackend) BackendConfig {
+	config := BackendConfig{
+		Upstreams:     make([]UpstreamConfig, 0, len(backend.Spec.Upstreams)),
+		LoadBalancing: backend.Spec.LoadBalancing,
+	}
+
+	for _, upstream := range backend.Spec.Upstreams {
+		config.Upstreams = append(config.Upstreams, UpstreamConfig{
+			Host:        upstream.Host,
+			Port:        upstream.Port,
+			Weight:      upstream.Weight,
+			MaxFails:    upstream.MaxFails,
+			FailTimeout: upstream.FailTimeout,
+		})
+	}
+
+	if backend.Spec.HealthCheck != nil && backend.Spec.HealthCheck.Enabled {
+		config.HealthCheck = &HealthCheckConfig{
+			Enabled:        true,
+			Interval:       backend.Spec.HealthCheck.Interval,
+			Timeout:        backend.Spec.HealthCheck.Timeout,
+			Path:           backend.Spec.HealthCheck.Path,
+			ExpectedStatus: backend.Spec.HealthCheck.ExpectedStatus,
+		}
+	}
+
+	if backend.Spec.CircuitBreaker != nil && backend.Spec.CircuitBreaker.Enabled {
+		config.CircuitBreaker = &CircuitBreakerConfig{
+			Enabled:   true,
+			Threshold: backend.Spec.CircuitBreaker.Threshold,
+			Timeout:   backend.Spec.CircuitBreaker.Timeout,
+		}
+	}
+
+	return config
+}
+
+// SetupWithManager sets up the controller with the Manager
+func (r *Proxy10xBackendReconciler) SetupWithManager(mgr ctrl.Manager) error {
+	return ctrl.NewControllerManagedBy(mgr).
+		For(&proxy10xv1alpha1.Proxy10xBackend{}).
+		WithOptions(controller.Options{
+			MaxConcurrentReconciles: 3,
+		}).
+		Complete(r)
+}
+
+// matchesIngressClass returns true if the resource should be handled by this controller.
+// A resource matches if:
+//   - the controller has no ingress class configured (handles everything), or
+//   - the resource has no ingressClassName set (handled by any controller), or
+//   - the resource's ingressClassName matches the controller's ingress class.
+func (r *Proxy10xBackendReconciler) matchesIngressClass(resourceClassName *string) bool {
+	if r.IngressClass == "" {
+		return true
+	}
+	if resourceClassName == nil || *resourceClassName == "" {
+		return true
+	}
+	return *resourceClassName == r.IngressClass
+}
+
+// HTTPConfigUpdater implements ConfigUpdater via HTTP API to OpenResty.
+// It sends backend configurations to the OpenResty Lua API which manages
+// upstream pools dynamically without requiring NGINX reloads.
+type HTTPConfigUpdater struct {
+	BaseURL    string
+	HTTPClient *http.Client
+}
+
+// NewHTTPConfigUpdater creates a new HTTPConfigUpdater with sensible defaults
+func NewHTTPConfigUpdater(baseURL string) *HTTPConfigUpdater {
+	return &HTTPConfigUpdater{
+		BaseURL: baseURL,
+		HTTPClient: &http.Client{
+			Timeout: 5 * time.Second,
+		},
+	}
+}
+
+// UpdateBackend sends backend config to OpenResty via HTTP POST
+// POST /api/internal/backends/{name}
+func (u *HTTPConfigUpdater) UpdateBackend(ctx context.Context, name string, config BackendConfig) error {
+	configJSON, err := json.Marshal(config)
+	if err != nil {
+		return fmt.Errorf("failed to marshal backend config: %w", err)
+	}
+
+	url := fmt.Sprintf("%s/backends/%s", u.BaseURL, name)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(configJSON))
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := u.HTTPClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to call OpenResty API at %s: %w", url, err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	if resp.StatusCode >= 300 {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("OpenResty API returned %d for %s: %s", resp.StatusCode, url, string(body))
+	}
+
+	return nil
+}
+
+// DeleteBackend removes backend from OpenResty via HTTP DELETE
+// DELETE /api/internal/backends/{name}
+func (u *HTTPConfigUpdater) DeleteBackend(ctx context.Context, name string) error {
+	url := fmt.Sprintf("%s/backends/%s", u.BaseURL, name)
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)
+	if err != nil {
+		return fmt.Errorf("failed to create request: %w", err)
+	}
+
+	resp, err := u.HTTPClient.Do(req)
+	if err != nil {
+		// If OpenResty is not reachable, log but don't fail hard
+		// (the backend may already be gone)
+		return fmt.Errorf("failed to call OpenResty API at %s: %w", url, err)
+	}
+	defer func() { _ = resp.Body.Close() }()
+
+	// 404 is acceptable — backend was already removed
+	if resp.StatusCode == http.StatusNotFound {
+		return nil
+	}
+
+	if resp.StatusCode >= 300 {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("OpenResty API returned %d for DELETE %s: %s", resp.StatusCode, url, string(body))
+	}
+
+	return nil
+}

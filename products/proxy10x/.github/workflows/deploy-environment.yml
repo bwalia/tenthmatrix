@@ -1,0 +1,1134 @@
+name: Deploy Environment
+# Reusable workflow: parameterized deployment to a single Proxy10x environment
+# Called by build-deploy-proxy10x.yml for each environment in the promotion chain
+
+on:
+  workflow_call:
+    inputs:
+      env_name:
+        description: "Ansible target_env value (int, test, acc, prod)"
+        type: string
+        required: true
+      runner_label:
+        description: >-
+          Self-hosted runner label to schedule this job on.  Defaults to
+          env_name so the historical "one runner per env, labelled after
+          the env" convention still works.  Set explicitly when the box
+          that has SSH+key access to the target isn't the box tagged
+          with env_name — e.g. prod / prod-lon1 (lon1.pop0.uk) is deployed
+          from the mac-studio runner labelled `acc` (the historical `prod`
+          runner lived on the retired pop0 box). pop1 is retired.
+        type: string
+        default: ""
+      env_label:
+        description: "Human-readable label for logs and Slack (e.g. 'Int (192.168.1.193)')"
+        type: string
+        required: true
+      stage_number:
+        description: "Pipeline stage number for Slack messages (e.g. '2', '6a')"
+        type: string
+        required: true
+      host_ip:
+        description: "Target host IP address"
+        type: string
+        required: true
+      ssh_user:
+        description: "SSH user for remote connections (ignored for local)"
+        type: string
+        default: "root"
+      connection_mode:
+        description: >-
+          Connection mode: local (sudo, no SSH), ssh (password/agent), ssh_key
+          (deploy key). Auto-downgraded to `local` at runtime when host_ip is
+          one of the runner's own IPs (co-located runner+target) — see the
+          "Resolve effective connection mode" step.
+        type: string
+        required: true
+      secrets_mode:
+        description: >-
+          Secrets source: vault (HashiCorp Vault), sops (SOPS+age-encrypted
+          files in Git), vault_or_sops (probe Vault first, fall back to SOPS
+          if Vault is unreachable / has no secret at the expected path —
+          prevents deploy failure when Vault is temporarily down or a host
+          hasn't been onboarded to Vault yet), github_secret (decode from
+          GH secret), or runner_file (read from disk).
+        type: string
+        required: true
+      settings_file_path:
+        description: "Path to settings.json on runner (only for secrets_mode=runner_file)"
+        type: string
+        default: ""
+      env_file_path:
+        description: "Path to .env on runner (only for secrets_mode=runner_file)"
+        type: string
+        default: ""
+      seed_from_host:
+        description: >-
+          When true (with secrets_mode=runner_file + connection_mode=ssh_key),
+          pull the host's CURRENT live settings.json (+ .env) over SSH into
+          settings_file_path/env_file_path before validating. Lets a host
+          redeploy its own live config without storing a copy in a GH secret
+          or SOPS file. The deploy is idempotent (writes the same config back).
+        type: boolean
+        default: false
+      host_settings_path:
+        description: "On-host path to the live settings.json (used only when seed_from_host=true)"
+        type: string
+        default: "/opt/nginx/data/settings.json"
+      host_env_path:
+        description: "On-host path to the live .env (used only when seed_from_host=true; best-effort)"
+        type: string
+        default: "/opt/nginx/data/.env"
+      seed_source_ip:
+        description: >-
+          Host to PULL the live settings.json FROM when seed_from_host=true.
+          Defaults to host_ip (self-seed). Set to a DIFFERENT host (e.g. seed a
+          brand-new pop from an existing one) to clone another host's live
+          config onto this deploy target. The runner's ~/.ssh/id_rsa must be
+          authorized on this source host.
+        type: string
+        default: ""
+      seed_source_user:
+        description: "SSH user for seed_source_ip (defaults to ssh_user)."
+        type: string
+        default: ""
+      health_endpoint:
+        description: "URL to curl for health check (e.g. http://127.0.0.1:8099/healthz on int — avoid :8080 when k3s CNI hostPort steals it)"
+        type: string
+        required: true
+      health_check_mode:
+        description: "How to check health: local (curl from runner), ssh (curl via SSH), external (curl public URL)"
+        type: string
+        required: true
+      docker_prune:
+        description: "Run Docker system prune before deploy"
+        type: boolean
+        default: false
+      notify_success:
+        description: "Send Slack notification on success"
+        type: boolean
+        default: false
+      deploy_branch:
+        description: "Git branch to deploy"
+        type: string
+        required: true
+      deploy_mode:
+        description: "Deploy mode: code, nginx, servers, dashboard, dashboard-next, os_deps, build, full, permissions"
+        type: string
+        required: true
+      nextjs_dashboard_port:
+        description: "Port the nginx-fronted Next.js dashboard listens on (nginx_nextjs_dashboard_port). Used only by the post-deploy dashboard health gate."
+        type: string
+        default: "8099"
+      push_repo_data:
+        description: >-
+          Push this repo's data/servers|rules/<env> over the target's live
+          config: auto (default: yes, except on lon1, whose live config is
+          the source pop0 mirrors), always, or never.
+        type: string
+        default: "auto"
+      smoke_domain:
+        description: >-
+          Optional public domain to smoke-test after the /healthz gate, e.g.
+          lon1.pop0.uk. When set, the runner curls https://<domain>/healthz
+          externally — proves DNS + public routing, and runs from ANY runner
+          (no SSH needed). Skip on LAN envs with no public DNS.
+        type: string
+        default: ""
+    secrets:
+      SLACK_WEBHOOK:
+        required: true
+      SETTINGS_SECRET:
+        required: false
+      ENV_CREDS_SECRET:
+        required: false
+      VAULT_ADDR:
+        required: false
+      VAULT_TOKEN:
+        required: false
+      # SOPS_AGE_KEY: the FULL age private key value (one line, starts
+      # with `AGE_SECRET_KEY-1…`).  Required when secrets_mode=sops.
+      # See infra/secrets/README.md for how to generate + rotate it.
+      SOPS_AGE_KEY:
+        required: false
+      # SSH_PRIVATE_KEY: private key used to reach the target host in
+      # connection_mode=ssh_key. Optional — if empty, the runner is
+      # expected to already have a usable key at ~/.ssh/id_rsa (the
+      # historical behaviour for pre-provisioned runners).
+      SSH_PRIVATE_KEY:
+        required: false
+
+jobs:
+  deploy:
+    name: "Deploy ${{ inputs.env_label }}"
+    # OS-agnostic: match any self-hosted runner carrying the target
+    # label, whether it is Linux or macOS. Hardcoding `Linux` here left
+    # the `acc` job queued forever because the only `acc` runner is
+    # macOS.  The label defaults to env_name (historical convention:
+    # one runner per env, labelled after the env), but the caller can
+    # override via `runner_label` when the box with the right SSH keys
+    # / network reach doesn't match the env — see input docs.
+    runs-on: [self-hosted, "${{ inputs.runner_label != '' && inputs.runner_label || inputs.env_name }}"]
+    # A `full` deploy is ~20 min of real work (cdn-dependencies alone may
+    # take up to its 15-min async limit), so 30 left almost no headroom.
+    timeout-minutes: 45
+
+    steps:
+      # Self-hosted runners reuse their workspace between jobs. A prior
+      # job (e.g. a Dockerized build) can leave root-owned files such as
+      # openresty-admin-next/.next, which actions/checkout — running as
+      # the runner user — cannot delete when it cleans the workspace.
+      # That fails the whole job at "Checkout code" (EACCES unlink). The
+      # runner deploys sequentially on a shared host, so the failure
+      # recurs every time a Next.js build precedes another deploy on the
+      # same runner. Reclaim ownership before checkout so the clean step
+      # always succeeds. No-op on a fresh/empty workspace.
+      - name: Reclaim runner workspace ownership
+        run: |
+          if [ -n "$GITHUB_WORKSPACE" ] && [ -d "$GITHUB_WORKSPACE" ]; then
+            sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.deploy_branch }}
+          # Need tags so `git describe --tags --abbrev=0` resolves the
+          # release version at build time.  `fetch-depth: 0` pulls the
+          # full history — required because a shallow clone (the default
+          # depth 1) doesn't include ANY tag refs even with
+          # `fetch-tags: true`.  Cost is small (few MB extra) and this
+          # is the reusable workflow that runs once per deploy.
+          fetch-depth: 0
+          fetch-tags: true
+
+      # ── Auto-detect a co-located target ──
+      # If the deploy TARGET (host_ip) is one of THIS runner's own IP
+      # addresses, the runner and the target are the SAME machine. SSHing
+      # to yourself needs a self-authorized key and normally just fails
+      # with "Permission denied (publickey,password)" — which is exactly
+      # how the acc/pop0 deploy broke: env_name=prod pins the job to the
+      # `prod` self-hosted runner, and that runner IS pop0
+      # (187.124.112.155), so `ssh root@187.124.112.155` from the box to
+      # itself was rejected. When co-located we transparently downgrade to
+      # a LOCAL Ansible connection (--connection=local + sudo): every role
+      # task in proxy10x-ops.yml runs on this host directly, no SSH hop and
+      # no key needed. Downgrade only — a genuinely remote target keeps its
+      # configured ssh/ssh_key mode. Portable across Linux and macOS
+      # runners (hostname -I / ip / ifconfig).
+      - name: Resolve effective connection mode
+        id: conn
+        run: |
+          MODE="${{ inputs.connection_mode }}"
+          HOST="${{ inputs.host_ip }}"
+          if [[ "$MODE" != "local" ]]; then
+            LOCAL_IPS="127.0.0.1 ::1"
+            command -v hostname >/dev/null 2>&1 && LOCAL_IPS="$LOCAL_IPS $(hostname -I 2>/dev/null || true)"
+            command -v ip       >/dev/null 2>&1 && LOCAL_IPS="$LOCAL_IPS $(ip -o addr show 2>/dev/null | awk '{print $4}' | cut -d/ -f1)"
+            command -v ifconfig >/dev/null 2>&1 && LOCAL_IPS="$LOCAL_IPS $(ifconfig 2>/dev/null | awk '/inet /{print $2}')"
+            if printf ' %s ' $LOCAL_IPS | grep -qFw "$HOST"; then
+              echo "::notice::Target $HOST is this runner ($MODE requested) — using a LOCAL Ansible connection (no SSH)."
+              MODE="local"
+            else
+              echo "Target $HOST is remote from this runner — using '$MODE' connection."
+            fi
+          else
+            echo "connection_mode=local requested — no SSH."
+          fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+
+      - name: Install Ansible
+        run: |
+          if command -v ansible &> /dev/null; then
+            echo "Ansible already installed: $(ansible --version | head -1)"
+          elif command -v brew &> /dev/null; then
+            brew install ansible
+          elif command -v zypper &> /dev/null; then
+            sudo zypper install -y ansible
+          elif command -v apt-get &> /dev/null; then
+            sudo apt-get install -y ansible
+          else
+            echo "::error::No supported package manager found (brew, zypper or apt-get)"
+            exit 1
+          fi
+
+      # ── Prepare Next.js dashboard build (standalone mode) ──
+      # No `cache: npm` and no actions/cache for .next: every runner is
+      # self-hosted, so ~/.npm already persists on disk, and the GitHub
+      # cache had grown to ~2 GB — restoring it at ~3 MB/s on the int
+      # runner took 10m40s and pushed a `full` deploy past the 30-min
+      # job timeout (run 38813186611). Ansible wipes .next before its
+      # build anyway, so a restored .next was never used.
+      - name: Setup Node.js
+        if: contains(inputs.deploy_mode, 'dashboard') || inputs.deploy_mode == 'full'
+        uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+
+      # Writes .env.production and exports PROXY10X_VERSION. The build
+      # itself is done once, by Ansible (deploy_nextjs_admin_ui.yml
+      # "Wipe previous Next.js build output" + "Build Next.js dashboard
+      # locally"), which deletes .next first — building here too only
+      # added ~2 min per deploy.
+      - name: Prepare Next.js build env (version + .env.production)
+        if: contains(inputs.deploy_mode, 'dashboard') || inputs.deploy_mode == 'full'
+        run: |
+          echo "Preparing Next.js build env..."
+
+          # Prefer setup-node's node; fall back to nvm/system if setup-node skipped
+          # or PATH was overridden on the self-hosted runner.
+          if ! command -v node &> /dev/null; then
+            export NVM_DIR="${HOME}/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+          fi
+          if ! command -v node &> /dev/null; then
+            echo "Node.js not found — installing via nvm..."
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+            export NVM_DIR="${HOME}/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            nvm install 20
+            nvm use 20
+          fi
+          echo "Node.js version: $(node --version)"
+
+          # Resolve the release version.  Priority:
+          #   1. `git describe --tags --abbrev=0` — the most recent
+          #      annotated OR lightweight tag reachable from HEAD.
+          #      This is the source of truth for a released build.
+          #   2. `system/app.json:version.version` — fallback for
+          #      untagged branches, forks, and any repo state where a
+          #      tag was never created (or the checkout is somehow
+          #      missing them).
+          #   3. `1.0.0` — hard fallback if BOTH sources fail (a bare
+          #      repo with no tags AND no app.json).  Should never
+          #      trigger in practice; kept so the build can't error
+          #      out on a missing version.
+          #
+          # Historical bug this fixes: on 2026-07-02 int deployed a
+          # 1.0.13-tagged build but showed 1.0.10 in the dashboard
+          # footer because someone bumped the tag without touching
+          # system/app.json.  Git tags are now authoritative.
+          APP_VERSION="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+          if [ -n "$APP_VERSION" ]; then
+              echo "  version source: git tag ($APP_VERSION)"
+          else
+              APP_VERSION=$(python3 -c "import json; print(json.load(open('system/app.json'))['version']['version'])" 2>/dev/null || echo "")
+              if [ -n "$APP_VERSION" ]; then
+                  echo "  version source: system/app.json ($APP_VERSION) — no git tag reachable from HEAD"
+              else
+                  APP_VERSION="1.0.0"
+                  echo "  version source: default 1.0.0 — no git tag AND no system/app.json"
+              fi
+          fi
+
+          # Build number: keep sourcing from app.json for continuity
+          # with existing dashboards.  If it's missing, use the commit
+          # SHA so operators always have SOMETHING to correlate a
+          # deploy against a build.
+          APP_BUILD=$(python3 -c "import json; print(json.load(open('system/app.json'))['version']['build'])" 2>/dev/null || echo "${GITHUB_SHA:-unknown}")
+          DEPLOY_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          # Export the resolved version so the Ansible-playbook step
+          # (a separate shell) can pass it as `proxy10x_version=…` in
+          # --extra-vars.  Without this, Ansible falls back to its own
+          # defaults/main.yml lookup of system/app.json — same bug this
+          # step just fixed.
+          {
+            echo "PROXY10X_VERSION=${APP_VERSION}"
+            echo "PROXY10X_BUILD=${APP_BUILD}"
+          } >> "$GITHUB_ENV"
+
+          cd openresty-admin-next
+
+          # Generate .env.production with build-time variables
+          # NEXT_PUBLIC_API_URL=/api is relative — works on any host:port, no CORS
+          cat > .env.production <<ENVEOF
+          NEXT_PUBLIC_API_URL=/api
+          NEXT_PUBLIC_FRONT_URL=
+          NEXT_PUBLIC_APP_NAME=proxy10x
+          NEXT_PUBLIC_APP_DISPLAY_NAME=Proxy10x
+          NEXT_PUBLIC_APP_VERSION=${APP_VERSION}
+          NEXT_PUBLIC_APP_BUILD_NUMBER=${APP_BUILD}
+          NEXT_PUBLIC_DEPLOYMENT_TIME=${DEPLOY_TIME}
+          NEXT_PUBLIC_TARGET_PLATFORM=BARE_METAL
+          ENVEOF
+          # Strip leading whitespace from env file.
+          # Use a temp file + mv rather than `sed -i` — BSD/macOS sed
+          # requires an explicit backup-suffix arg for -i (`sed -i ''`),
+          # so bare `sed -i` fails on the macOS runner. This form is
+          # portable across GNU (Linux) and BSD (macOS) sed.
+          sed 's/^[[:space:]]*//' .env.production > .env.production.tmp \
+            && mv .env.production.tmp .env.production
+
+          echo "Generated .env.production:"
+          cat .env.production
+
+          echo "Next.js build runs in the Ansible playbook step."
+
+      # ── Secrets: resolve vault_or_sops fallback ───────────────────────
+      # For every mode except `vault_or_sops`, this step is a passthrough:
+      # steps.resolve_mode.outputs.mode = inputs.secrets_mode.  For
+      # `vault_or_sops` we probe Vault (fetch the actual settings.json
+      # path — NOT /sys/health, which is often blocked on hosted Vaults
+      # even when the KV endpoints work) and pick:
+      #   - vault  when the fetch returns HTTP 200 and non-empty data
+      #   - sops   for any other outcome (no creds, curl failure, non-2xx,
+      #            empty payload, JSON parse failure)
+      # The probe is INFORMATIONAL: if it picks vault but Vault flakes
+      # during the real fetch inside Ansible, the deploy fails loudly at
+      # that stage — same as any single-mode setup.  The value here is
+      # preventing a failure BEFORE Ansible even starts, when we can
+      # confidently see Vault won't answer.
+      #
+      # Every downstream mode-specific step reads
+      # `steps.resolve_mode.outputs.mode` instead of `inputs.secrets_mode`,
+      # so an existing caller passing `secrets_mode: sops` (etc.) keeps
+      # exactly its current behaviour.
+      - name: Resolve secrets mode (vault_or_sops fallback)
+        id: resolve_mode
+        shell: bash
+        env:
+          VAULT_ADDR_SECRET: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN_SECRET: ${{ secrets.VAULT_TOKEN }}
+        run: |
+          set -uo pipefail
+          RAW="${{ inputs.secrets_mode }}"
+          if [ "$RAW" != "vault_or_sops" ]; then
+            echo "  mode is '$RAW' (passthrough — no fallback logic)"
+            echo "mode=$RAW" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "  mode is 'vault_or_sops' — probing Vault..."
+
+          # No creds → SOPS.  Explicit reason so the log line answers
+          # "why didn't it use Vault?" without a bug report.
+          if [ -z "${VAULT_ADDR_SECRET:-}" ] || [ -z "${VAULT_TOKEN_SECRET:-}" ]; then
+            echo "  Vault creds missing (VAULT_ADDR or VAULT_TOKEN empty) — using SOPS"
+            echo "mode=sops" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Same whitespace-stripping the vault step does, for the same
+          # reasons (accidental echo/printf padding when the secret was
+          # set).  Applied to a local copy — don't leak into env.
+          VA="$(printf '%s' "$VAULT_ADDR_SECRET" | tr -d '[:space:]')"
+          VT="$(printf '%s' "$VAULT_TOKEN_SECRET" | tr -d '[:space:]')"
+
+          # Fetch the actual secret the deploy would use — that's the
+          # only useful probe.  /sys/health is unreliable (see the
+          # comment on the vault step below).  KV v2 path shape:
+          #   /v1/secret/data/proxy10x/<env>/settings.json
+          PROBE_URL="${VA}/v1/secret/data/proxy10x/${{ inputs.env_name }}/settings.json"
+          STATUS="$(curl -sSL --max-time 10 -o /tmp/vault_probe.json -w '%{http_code}' \
+            -H "X-Vault-Token: $VT" "$PROBE_URL" 2>/dev/null || echo 000)"
+
+          if [ "$STATUS" != "200" ]; then
+            echo "  Vault probe returned HTTP $STATUS — using SOPS"
+            echo "mode=sops" >> "$GITHUB_OUTPUT"
+            rm -f /tmp/vault_probe.json
+            exit 0
+          fi
+
+          # Only trust Vault if the secret is COMPLETE and for the RIGHT env.
+          # Supports WSLVault {"data":"<base64-json>"} and HashiCorp KV v2
+          # {"data":{"data":{...}}}. Incomplete/wrong-env payloads fall back
+          # to SOPS (in-repo source of truth).
+          if ! jq -e --arg env "${{ inputs.env_name }}" '
+                (if (.data | type) == "string" then (.data | @base64d | fromjson)
+                 elif (.data.data | type) == "object" then .data.data
+                 elif (.data.data | type) == "string" then (.data.data | @base64d | fromjson)
+                 else empty end)
+                | (type == "object") and (length > 0)
+                  and (.super_user != null) and (.env_profile == $env)
+              ' /tmp/vault_probe.json >/dev/null 2>&1; then
+            VEP="$(jq -r '
+              (if (.data | type) == "string" then (.data | @base64d | fromjson)
+               elif (.data.data | type) == "object" then .data.data
+               else {} end).env_profile // "<missing>"
+              ' /tmp/vault_probe.json 2>/dev/null || echo "<missing>")"
+            echo "  Vault 200 but data is incomplete or env_profile ('$VEP') != '${{ inputs.env_name }}' — using SOPS"
+            echo "mode=sops" >> "$GITHUB_OUTPUT"
+            rm -f /tmp/vault_probe.json
+            exit 0
+          fi
+
+          rm -f /tmp/vault_probe.json
+          echo "  Vault has a complete secret for '${{ inputs.env_name }}' at $PROBE_URL — using Vault"
+          echo "mode=vault" >> "$GITHUB_OUTPUT"
+
+      # ── Secrets: Vault ─────────────────────────────────────────────────
+      # The actual fetch happens inside ansible (deploy_data.yml uri tasks)
+      # so the same code path works for both workflow and local-machine runs.
+      # This step just makes VAULT_ADDR / VAULT_TOKEN available to the
+      # ansible-playbook process via $GITHUB_ENV.
+      - name: Export Vault credentials
+        if: steps.resolve_mode.outputs.mode == 'vault'
+        shell: bash
+        env:
+          VAULT_ADDR_SECRET: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN_SECRET: ${{ secrets.VAULT_TOKEN }}
+        run: |
+          # Turn off bash -e explicitly so curl/validation failures produce a
+          # clear error message instead of a silent exit. We manage exits by
+          # hand below.
+          set +e
+
+          # Trim any accidental leading/trailing whitespace that may have
+          # been introduced when the secret was set via echo / printf.
+          VAULT_ADDR_SECRET="$(printf '%s' "$VAULT_ADDR_SECRET" | tr -d '[:space:]')"
+          VAULT_TOKEN_SECRET="$(printf '%s' "$VAULT_TOKEN_SECRET" | tr -d '[:space:]')"
+
+          if [ -z "$VAULT_ADDR_SECRET" ]; then
+            echo "::error::secrets.VAULT_ADDR is empty — set it with: gh secret set VAULT_ADDR --repo bwalia/tenthmatrix"
+            exit 1
+          fi
+          if [ -z "$VAULT_TOKEN_SECRET" ]; then
+            echo "::error::secrets.VAULT_TOKEN is empty — set it with: gh secret set VAULT_TOKEN --repo bwalia/tenthmatrix"
+            exit 1
+          fi
+          case "$VAULT_ADDR_SECRET" in
+            http://*|https://*) ;;
+            *)
+              echo "::error::secrets.VAULT_ADDR must start with http:// or https:// (got a value with length=${#VAULT_ADDR_SECRET} starting: $(printf '%s' "$VAULT_ADDR_SECRET" | head -c 10 | sed 's/./*/g'))"
+              exit 1 ;;
+          esac
+
+          # Probe Vault — INFORMATIONAL ONLY. Some Vault setups expose the
+          # secret paths but block /v1/sys/health at the reverse-proxy layer
+          # (observed on run 24294596315: same secrets / same runner as a
+          # previously-passing run, but the health endpoint returned 404).
+          # The authoritative test is ansible's own uri task fetching the
+          # actual secret in deploy_data.yml; if that fails it surfaces a
+          # real error. This probe just logs reachability for diagnostics.
+          STATUS="$(curl -sSL --max-time 10 -o /dev/null -w '%{http_code}' \
+            -H "X-Vault-Token: $VAULT_TOKEN_SECRET" \
+            "$VAULT_ADDR_SECRET/v1/sys/health" 2>/tmp/curl_err)"
+          CURL_RC=$?
+
+          if [ "$CURL_RC" -ne 0 ]; then
+            ERR="$(cat /tmp/curl_err 2>/dev/null | head -c 300)"
+            echo "::warning::Vault probe could not connect: curl exit=$CURL_RC (${ERR:-no detail}). Continuing — ansible's uri task will surface the real error if Vault is actually unreachable."
+          else
+            case "$STATUS" in
+              200|429|473|501|503)
+                echo "Vault reachable via /v1/sys/health (HTTP $STATUS)" ;;
+              *)
+                echo "::warning::Vault /v1/sys/health returned HTTP $STATUS (expected 200/429/473/501/503). This often just means the health endpoint is blocked at a reverse proxy; the actual secret fetch may still work. Continuing — ansible's uri task is authoritative." ;;
+            esac
+          fi
+
+          # Mask the token in any downstream logs that might happen to echo
+          # env vars, then export to GITHUB_ENV for the ansible-playbook step.
+          echo "::add-mask::$VAULT_TOKEN_SECRET"
+          {
+            echo "VAULT_ADDR=$VAULT_ADDR_SECRET"
+            echo "VAULT_TOKEN=$VAULT_TOKEN_SECRET"
+            # Empty paths so the existing extra-vars line stays valid; ansible
+            # ignores them when vault_secrets_enabled=true.
+            echo "settings_path="
+            echo "env_path="
+          } >> "$GITHUB_ENV"
+
+      # ── Secrets: SOPS + age ────────────────────────────────────────────
+      # When secrets_mode=sops:
+      #   1. Install the `sops` binary + `age` (sops uses age under the
+      #      hood; community.sops needs the binary on $PATH).
+      #   2. Install the `community.sops` Ansible collection.
+      #   3. Export SOPS_AGE_KEY so the lookup plugin can decrypt.
+      # Set settings_path/env_path empty (the legacy file-copy guard
+      # path uses these — irrelevant in sops mode but defined to avoid
+      # an "undefined" surprise downstream).
+      - name: Install SOPS + age + community.sops collection
+        if: steps.resolve_mode.outputs.mode == 'sops'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v sops >/dev/null; then
+            # Pinned to a stable major release; bump as needed.  The
+            # 3.x line is fully compatible with age private keys
+            # generated by any age CLI version.
+            SOPS_VERSION="3.9.4"
+            ARCH="$(dpkg --print-architecture 2>/dev/null || uname -m)"
+            case "$ARCH" in
+              x86_64|amd64) ASSET="sops-v${SOPS_VERSION}.linux.amd64" ;;
+              aarch64|arm64) ASSET="sops-v${SOPS_VERSION}.linux.arm64" ;;
+              *) echo "::error::Unsupported runner arch '$ARCH' for sops install"; exit 1 ;;
+            esac
+            curl -fsSL "https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/${ASSET}" -o /tmp/sops
+            sudo install -m 0755 /tmp/sops /usr/local/bin/sops
+            sops --version
+          fi
+          if ! command -v age >/dev/null; then
+            # `age` itself isn't required at runtime (sops embeds the
+            # decryption logic), but installing it makes operator
+            # debugging easier on the runner.
+            AGE_VERSION="1.2.0"
+            curl -fsSL "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" -o /tmp/age.tgz
+            tar -C /tmp -xzf /tmp/age.tgz
+            sudo install -m 0755 /tmp/age/age /usr/local/bin/age || true
+          fi
+          # Collection install is idempotent; safe to re-run.
+          ansible-galaxy collection install community.sops --force
+
+      - name: Export SOPS age key
+        if: steps.resolve_mode.outputs.mode == 'sops'
+        shell: bash
+        env:
+          SOPS_AGE_KEY_SECRET: ${{ secrets.SOPS_AGE_KEY }}
+        run: |
+          set -uo pipefail
+          if [ -z "$SOPS_AGE_KEY_SECRET" ]; then
+            echo "::error::secrets.SOPS_AGE_KEY is empty — set it with: gh secret set SOPS_AGE_KEY --repo bwalia/tenthmatrix < /path/to/age-private-key.txt"
+            exit 1
+          fi
+          # `SOPS_AGE_KEY` is the documented env var sops picks up
+          # without needing a key file on disk.  Marked with `::add-mask::`
+          # so any accidental echo in subsequent steps doesn't leak it.
+          echo "::add-mask::$SOPS_AGE_KEY_SECRET"
+          {
+            echo "SOPS_AGE_KEY=$SOPS_AGE_KEY_SECRET"
+            # Set vault_secrets_enabled=false explicitly so the role's
+            # mode-determination doesn't surprise us; sops_secrets_enabled
+            # is what flips the SOPS branch on.
+            echo "vault_secrets_enabled=false"
+            echo "sops_secrets_enabled=true"
+            echo "settings_path="
+            echo "env_path="
+          } >> "$GITHUB_ENV"
+
+      # ── Secrets: decode from GitHub Secret ──
+      - name: Decode settings from GitHub Secret
+        if: steps.resolve_mode.outputs.mode == 'github_secret'
+        run: |
+          echo "${{ secrets.SETTINGS_SECRET }}" | base64 -d > /tmp/settings_${{ inputs.host_ip }}.json
+          if [ ! -s /tmp/settings_${{ inputs.host_ip }}.json ]; then
+            echo "::error::Settings file is empty or failed to decode"
+            exit 1
+          fi
+          python3 -m json.tool /tmp/settings_${{ inputs.host_ip }}.json > /dev/null 2>&1 || {
+            echo "::error::Settings file contains invalid JSON"; exit 1;
+          }
+          echo "${{ secrets.ENV_CREDS_SECRET }}" | base64 -d > /tmp/.env_${{ inputs.host_ip }}
+          if [ ! -s /tmp/.env_${{ inputs.host_ip }} ]; then
+            echo "::warning::Env file is empty (may be expected)"
+          fi
+          echo "settings_path=/tmp/settings_${{ inputs.host_ip }}.json" >> $GITHUB_ENV
+          echo "env_path=/tmp/.env_${{ inputs.host_ip }}" >> $GITHUB_ENV
+
+      # ── Secrets: self-seed from the live host over SSH ──
+      # Pulls the target's CURRENT settings.json (+ .env) into the
+      # runner_file paths so the host redeploys its own live config.
+      # Runs before the runner_file validation below, which then sees a
+      # populated, valid file. Only used by hosts that opt in via
+      # seed_from_host (e.g. prod pop0, which has no GH-secret/SOPS copy).
+      - name: Seed settings from live host (SSH self-seed)
+        if: steps.resolve_mode.outputs.mode == 'runner_file' && inputs.seed_from_host
+        run: |
+          set -euo pipefail
+          if [[ "${{ inputs.connection_mode }}" != "ssh_key" ]]; then
+            echo "::error::seed_from_host requires connection_mode=ssh_key"; exit 1
+          fi
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          # Seed SOURCE host: defaults to the deploy target (self-seed), but can
+          # be overridden to clone another host's live config (e.g. pop1 from pop0).
+          SEED_IP="${{ inputs.seed_source_ip || inputs.host_ip }}"
+          SEED_USER="${{ inputs.seed_source_user || inputs.ssh_user }}"
+          ssh-keyscan -H "$SEED_IP" >> ~/.ssh/known_hosts 2>/dev/null || true
+          SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=10 -i ~/.ssh/id_rsa"
+          SETTINGS="${{ inputs.settings_file_path }}"
+          ENVFILE="${{ inputs.env_file_path }}"
+          if [[ -z "$SETTINGS" ]]; then
+            echo "::error::settings_file_path must be set when seed_from_host=true"; exit 1
+          fi
+          mkdir -p "$(dirname "$SETTINGS")"
+          echo "Pulling live settings.json from ${SEED_USER}@${SEED_IP}:${{ inputs.host_settings_path }}"
+          ssh $SSH_OPTS "${SEED_USER}@${SEED_IP}" \
+            "cat '${{ inputs.host_settings_path }}'" > "$SETTINGS" || {
+            echo "::error::Failed to read live settings from seed source host"; exit 1; }
+          if [[ ! -s "$SETTINGS" ]]; then
+            echo "::error::Live settings.json on host is empty: ${{ inputs.host_settings_path }}"; exit 1
+          fi
+          python3 -m json.tool "$SETTINGS" > /dev/null 2>&1 || {
+            echo "::error::Live settings.json pulled from host is not valid JSON"; exit 1; }
+          echo "Seeded $(wc -c < "$SETTINGS") bytes of valid settings.json"
+          # .env is best-effort: try the configured host path, fall back to
+          # the deploy-time /tmp/.env, else leave empty (non-fatal warning).
+          if [[ -n "$ENVFILE" ]]; then
+            mkdir -p "$(dirname "$ENVFILE")"
+            ssh $SSH_OPTS "${SEED_USER}@${SEED_IP}" \
+              "cat '${{ inputs.host_env_path }}' 2>/dev/null || cat /tmp/.env 2>/dev/null || true" > "$ENVFILE" || true
+            if [[ -s "$ENVFILE" ]]; then
+              echo "Seeded $(wc -c < "$ENVFILE") bytes of .env"
+            else
+              echo "::warning::No live .env found on host (looked at ${{ inputs.host_env_path }} and /tmp/.env) — continuing with empty env"
+            fi
+          fi
+
+      # ── Secrets: validate from runner file ──
+      - name: Validate settings from runner file
+        if: steps.resolve_mode.outputs.mode == 'runner_file'
+        run: |
+          SETTINGS="${{ inputs.settings_file_path }}"
+          ENVFILE="${{ inputs.env_file_path }}"
+          if [ ! -f "$SETTINGS" ]; then
+            echo "::error::Settings file not found: $SETTINGS"
+            exit 1
+          fi
+          python3 -m json.tool "$SETTINGS" > /dev/null 2>&1 || {
+            echo "::error::Settings file contains invalid JSON"; exit 1;
+          }
+          if [ ! -f "$ENVFILE" ]; then
+            echo "::warning::Env file not found: $ENVFILE (may be expected)"
+          fi
+          echo "settings_path=$SETTINGS" >> $GITHUB_ENV
+          echo "env_path=$ENVFILE" >> $GITHUB_ENV
+
+      # ── SSH setup (remote connections only) ──
+      - name: Setup SSH and test connectivity
+        if: steps.conn.outputs.mode != 'local'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          ssh-keyscan -H ${{ inputs.host_ip }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+          SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=10"
+          if [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]]; then
+            # If a key was passed via secret, materialise it. Otherwise
+            # fall back to a key already provisioned on the runner.
+            if [[ -n "${SSH_PRIVATE_KEY:-}" ]]; then
+              printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+              chmod 600 ~/.ssh/id_rsa
+            fi
+            if [[ ! -f ~/.ssh/id_rsa ]]; then
+              echo "::error::SSH key not found at ~/.ssh/id_rsa and secrets.SSH_PRIVATE_KEY is empty. Set it with: gh secret set SSH_PRIVATE_KEY --repo bwalia/tenthmatrix < /path/to/deploy-key"
+              exit 1
+            fi
+            SSH_OPTS="$SSH_OPTS -i ~/.ssh/id_rsa"
+          fi
+
+          ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} "echo 'SSH OK'" 2>&1 || {
+            echo "::error::SSH connection failed to ${{ inputs.ssh_user }}@${{ inputs.host_ip }}"; exit 1;
+          }
+
+      # ── Docker prune ──
+      - name: Clean up Docker resources
+        if: inputs.docker_prune
+        run: |
+          if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+            if command -v docker &> /dev/null; then
+              echo "Pruning Docker on ${{ inputs.host_ip }}..."
+              sudo docker system prune -y 2>&1 || true
+            else
+              echo "Docker not installed — skipping prune"
+            fi
+          else
+            SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=10"
+            [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]] && SSH_OPTS="$SSH_OPTS -i ~/.ssh/id_rsa"
+            ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+              'if command -v docker &> /dev/null; then echo "Pruning Docker..."; docker system prune -y; else echo "Docker not installed — skipping prune"; fi' 2>&1 || true
+          fi
+
+      # ── Ansible deploy ──
+      - name: Run Ansible Playbook
+        timeout-minutes: 25
+        run: |
+          DEPLOY_MODE="${{ inputs.deploy_mode }}"
+          TAGS_FLAG=""
+          if [[ "$DEPLOY_MODE" == "full" ]]; then
+            echo "Full deploy to ${{ inputs.env_label }}"
+          elif [[ "$DEPLOY_MODE" == "build" ]]; then
+            TAGS_FLAG="--tags os_deps,build"
+            echo "Build deploy to ${{ inputs.env_label }}"
+          elif [[ "$DEPLOY_MODE" == "dashboard" ]]; then
+            TAGS_FLAG="--tags dashboard,dashboard-next"
+            echo "Next.js dashboard deploy to ${{ inputs.env_label }}"
+          elif [[ "$DEPLOY_MODE" == "dashboard-next" ]]; then
+            TAGS_FLAG="--tags dashboard-next"
+            echo "Next.js dashboard deploy to ${{ inputs.env_label }}"
+          elif [[ "$DEPLOY_MODE" == "permissions" ]]; then
+            # Surgical repair: run only tasks tagged `always` (fix_permissions,
+            # OS/host probes). A non-existent tag skips every other task while
+            # ansible still runs `always`-tagged ones — which includes
+            # fix_permissions.yml → /usr/sbin/fix-permissions.sh, the single
+            # source of truth for /opt/nginx/data ownership. Use when the
+            # admin API returns "Permission denied" on a rule/server file
+            # (root-owned files that www-data cannot read).
+            TAGS_FLAG="--tags __permissions_only__"
+            echo "Permissions-only repair on ${{ inputs.env_label }}"
+          else
+            TAGS_FLAG="--tags $DEPLOY_MODE"
+            echo "$DEPLOY_MODE deploy to ${{ inputs.env_label }}"
+          fi
+
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
+          # Build ansible-playbook command based on connection mode.
+          # For local+vault mode we must preserve VAULT_ADDR and VAULT_TOKEN
+          # through sudo; by default sudo scrubs env vars, so ansible's
+          # lookup('env', 'VAULT_TOKEN') in deploy_data.yml would see an
+          # empty string and the vault_secrets_enabled assertion would fail.
+          # Use the RESOLVED mode from the resolve_mode step, not the raw
+          # input.  For `vault_or_sops`, this may be `vault` or `sops`
+          # depending on what the probe found; for every other input value
+          # the resolved mode equals the input.
+          RESOLVED_MODE="${{ steps.resolve_mode.outputs.mode }}"
+
+          CMD_PREFIX=""
+          CONN_FLAGS=""
+          if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+            if [[ "$RESOLVED_MODE" == "vault" ]]; then
+              CMD_PREFIX="sudo --preserve-env=VAULT_ADDR,VAULT_TOKEN"
+            elif [[ "$RESOLVED_MODE" == "sops" ]]; then
+              # sudo scrubs env by default; the community.sops lookup in
+              # deploy_data.yml needs SOPS_AGE_KEY to decrypt, so preserve it.
+              CMD_PREFIX="sudo --preserve-env=SOPS_AGE_KEY"
+            else
+              CMD_PREFIX="sudo"
+            fi
+            CONN_FLAGS="--connection=local"
+          elif [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]]; then
+            CONN_FLAGS="--private-key ~/.ssh/id_rsa --timeout 30"
+          else
+            CONN_FLAGS="--timeout 30"
+          fi
+
+          # Force the role's mode-toggle from the workflow side, so an
+          # operator picking `secrets_mode: <x>` in the call site always
+          # wins regardless of any host_vars defaults.  Uses RESOLVED_MODE
+          # so vault_or_sops correctly translates to whichever branch the
+          # probe selected.
+          SECRETS_FLAG=""
+          case "$RESOLVED_MODE" in
+            vault) SECRETS_FLAG="vault_secrets_enabled=true sops_secrets_enabled=false" ;;
+            sops)  SECRETS_FLAG="vault_secrets_enabled=false sops_secrets_enabled=true" ;;
+            *)     SECRETS_FLAG="vault_secrets_enabled=false sops_secrets_enabled=false" ;;
+          esac
+
+          # Absolute inventory path — self-hosted runners share one workspace
+          # across concurrent jobs; a relative -i can race a mid-checkout wipe
+          # and yield "Could not match supplied host pattern" for lon1.pop0.uk
+          # (run 34495805656). Fail fast with the inventory contents instead.
+          INV="${GITHUB_WORKSPACE}/infra/ansible/hosts"
+          PLAYBOOK="${GITHUB_WORKSPACE}/infra/ansible/proxy10x-ops.yml"
+          HOST="${{ inputs.host_ip }}"
+          if [[ ! -f "$INV" ]]; then
+            echo "::error::Ansible inventory missing at $INV (cwd=$(pwd))"
+            ls -la "${GITHUB_WORKSPACE}/infra/ansible" || true
+            exit 1
+          fi
+          if ! grep -qE "^${HOST}([[:space:]]|$)" "$INV"; then
+            echo "::error::Inventory $INV does not list host '${HOST}' — refusing to deploy"
+            echo "---- inventory ----"
+            cat "$INV"
+            echo "---- ansible-inventory --list (hostnames) ----"
+            ansible-inventory -i "$INV" --list 2>/dev/null | head -c 4000 || true
+            exit 1
+          fi
+          echo "Inventory OK: ${HOST} present in $INV"
+
+          $CMD_PREFIX ansible-playbook "$PLAYBOOK" \
+            -i "$INV" \
+            -l "$HOST" \
+            $CONN_FLAGS \
+            $TAGS_FLAG \
+            --extra-vars "nginx_user_password=THISCOMESFROMSECRETS target_env=${{ inputs.env_name }} local_settings_file_path=${{ env.settings_path }} local_env_file_path=${{ env.env_path }} proxy10x_version=${PROXY10X_VERSION} proxy10x_build_number=${{ github.run_id }} proxy10x_git_sha=${{ github.sha }} proxy10x_git_repo=${{ github.repository }} proxy10x_deployment_time=$(date -u +%Y-%m-%dT%H:%M:%SZ) $SECRETS_FLAG"
+
+      # ── Deploy server/rule configs ──
+      # Skipped in `permissions` mode: that mode's whole point is a
+      # perms-only repair with zero data changes. Pushing proxy10x's own
+      # data/servers/<env>/ + data/rules/<env>/ would overwrite whatever
+      # drift the operator is currently debugging.
+      #
+      # Also skipped on lon1 unless push_repo_data=always. lon1's live
+      # config is edited through its admin API and is the source pop0
+      # mirrors (infra/edge-sync/); the repo copy is an older snapshot, so
+      # every code/dashboard deploy used to roll lon1's config back to it
+      # (CLAUDE.md #22). To push repo data to lon1 on purpose, use
+      # deploy-proxy10x-virtual-servers.yml.
+      - name: Decide whether to push repo server/rule data
+        id: repo_data
+        run: |
+          mode="${{ inputs.push_repo_data }}"
+          host="${{ inputs.host_ip }}"
+          case "$mode" in auto|always|never) ;; *)
+            echo "::error::push_repo_data must be auto, always or never (got: ${mode})"; exit 1 ;;
+          esac
+          push=true
+          if [ "${{ inputs.deploy_mode }}" = "permissions" ] || [ "$mode" = "never" ]; then
+            push=false
+          elif [ "$mode" = "auto" ]; then
+            case "$host" in
+              lon1.pop0.uk|195.20.255.201|85.190.106.189)
+                # POP edges: desired config comes from CP → infra/configuration/pops/
+                # (export-pop-config / deploy-pop-config). Do not clobber with repo data/.
+                push=false
+                ;;
+            esac
+          fi
+          echo "push=${push}" >> "$GITHUB_OUTPUT"
+          if [ "$push" = false ]; then
+            echo "::notice::Not pushing repo data/servers|rules to ${host} (push_repo_data=${mode}, deploy_mode=${{ inputs.deploy_mode }}); live edge config is left as is."
+          fi
+
+      - name: Deploy server configs and rules
+        if: ${{ steps.repo_data.outputs.push == 'true' }}
+        timeout-minutes: 20
+        run: |
+          echo "Deploying server configs for env: ${{ inputs.env_name }} to ${{ inputs.host_ip }}"
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
+          CMD_PREFIX=""
+          CONN_FLAGS=""
+          if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+            CMD_PREFIX="sudo"
+            CONN_FLAGS="--connection=local"
+          elif [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]]; then
+            CONN_FLAGS="--private-key ~/.ssh/id_rsa"
+          fi
+
+          $CMD_PREFIX ansible-playbook "${GITHUB_WORKSPACE}/infra/ansible/deploy-configs.yml" \
+            -i "${GITHUB_WORKSPACE}/infra/ansible/hosts" \
+            -l "${{ inputs.host_ip }}" \
+            $CONN_FLAGS \
+            -e "target_env=${{ inputs.env_name }} local_data_dir=${{ github.workspace }}/data"
+
+      # ── Health gate ──
+      - name: Post-deploy health gate
+        run: |
+          echo "Verifying deployment on ${{ inputs.env_label }}..."
+
+          SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=10"
+          [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]] && SSH_OPTS="$SSH_OPTS -i ~/.ssh/id_rsa"
+
+          # Nginx config test
+          if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+            sudo /usr/local/openresty/bin/openresty -t 2>&1 || {
+              echo "::error::Nginx config test failed"; exit 1;
+            }
+            sudo systemctl is-active openresty 2>&1 || {
+              echo "::error::OpenResty service not running"; exit 1;
+            }
+          else
+            # Use sudo for non-root SSH users (openresty -t needs access to logs/pid files)
+            SUDO_PREFIX=""
+            [[ "${{ inputs.ssh_user }}" != "root" ]] && SUDO_PREFIX="sudo"
+            ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+              "$SUDO_PREFIX /usr/local/openresty/bin/openresty -t" 2>&1 || {
+              echo "::error::Nginx config test failed on ${{ inputs.host_ip }}"; exit 1;
+            }
+            ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+              "$SUDO_PREFIX systemctl is-active openresty" 2>&1 || {
+              echo "::error::OpenResty not running on ${{ inputs.host_ip }}"; exit 1;
+            }
+          fi
+
+          # Health endpoint check.
+          # Always bound curl: without --connect-timeout a blackholed port
+          # (e.g. k3s CNI hostPort stealing :8080) hangs ~2m per attempt.
+          # Prefer writing the code to a file so a failing curl (-f / timeout)
+          # cannot concatenate with `|| echo 000` into "000000".
+          #
+          # Runner-portability: health_check_mode=local curls the runner's own
+          # loopback, which only works if the runner IS the target. When the
+          # caller says `local` but conn.mode already downgraded us to
+          # something else (i.e. runner isn't co-located after all), upgrade
+          # the health check to ssh so the same YAML works from any runner
+          # that has the SSH key. Same rule the connection mode uses.
+          EFFECTIVE_HC="${{ inputs.health_check_mode }}"
+          if [[ "$EFFECTIVE_HC" == "local" && "${{ steps.conn.outputs.mode }}" != "local" ]]; then
+            echo "::notice::health_check_mode=local but runner is remote from target — upgrading to ssh so this runs from any runner."
+            EFFECTIVE_HC="ssh"
+          fi
+          RETRIES=12
+          WAIT=5
+          CURL_OPTS=(--silent --show-error --output /dev/null --connect-timeout 3 --max-time 8)
+          for i in $(seq 1 $RETRIES); do
+            CODE_FILE=$(mktemp)
+            if [[ "$EFFECTIVE_HC" == "local" ]]; then
+              curl "${CURL_OPTS[@]}" -w "%{http_code}" "${{ inputs.health_endpoint }}" >"$CODE_FILE" 2>/dev/null || true
+            elif [[ "$EFFECTIVE_HC" == "ssh" ]]; then
+              ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+                "curl --silent --output /dev/null --connect-timeout 3 --max-time 8 -w '%{http_code}' ${{ inputs.health_endpoint }} 2>/dev/null" \
+                >"$CODE_FILE" 2>/dev/null || true
+            else
+              curl "${CURL_OPTS[@]}" -w "%{http_code}" "${{ inputs.health_endpoint }}" >"$CODE_FILE" 2>/dev/null || true
+            fi
+            STATUS=$(tr -cd '0-9' <"$CODE_FILE" | head -c 3)
+            rm -f "$CODE_FILE"
+            [[ -z "$STATUS" ]] && STATUS="000"
+
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (HTTP $STATUS) on ${{ inputs.health_endpoint }}"
+              break
+            fi
+            if [ "$i" = "$RETRIES" ]; then
+              echo "::error::Health check failed on ${{ inputs.env_label }} (${{ inputs.health_endpoint }}) after $((RETRIES * WAIT))s"
+              exit 1
+            fi
+            echo "Attempt $i/$RETRIES: HTTP $STATUS on ${{ inputs.health_endpoint }} — waiting ${WAIT}s..."
+            sleep $WAIT
+          done
+
+      # Optional domain-based smoke test. Runs entirely from the runner —
+      # no SSH — so it exercises DNS + public routing exactly the way a real
+      # client would, and is completely runner-agnostic. Only runs when the
+      # caller passes `smoke_domain` (LAN envs with no public DNS skip it).
+      - name: Post-deploy domain smoke test
+        if: inputs.smoke_domain != ''
+        run: |
+          DOMAIN="${{ inputs.smoke_domain }}"
+          URL="https://${DOMAIN}/healthz"
+          echo "Smoke-testing ${URL} from the runner (external, DNS-based)..."
+          RETRIES=6
+          WAIT=5
+          for i in $(seq 1 $RETRIES); do
+            CODE_FILE=$(mktemp)
+            curl --silent --show-error --output /dev/null --connect-timeout 5 --max-time 10 \
+              -w "%{http_code}" "$URL" >"$CODE_FILE" 2>/dev/null || true
+            STATUS=$(tr -cd '0-9' <"$CODE_FILE" | head -c 3)
+            rm -f "$CODE_FILE"
+            [[ -z "$STATUS" ]] && STATUS="000"
+            if [ "$STATUS" = "200" ]; then
+              echo "Domain smoke test passed (HTTP $STATUS) on $URL"
+              exit 0
+            fi
+            echo "Attempt $i/$RETRIES: HTTP $STATUS on $URL — waiting ${WAIT}s..."
+            sleep $WAIT
+          done
+          echo "::error::Domain smoke test failed on ${{ inputs.env_label }} ($URL) after $((RETRIES * WAIT))s"
+          exit 1
+
+      # ── Next.js dashboard health gate ──
+      # Only runs when this deploy actually touched the dashboard
+      # (dashboard-next / dashboard / full).  The main gate above only
+      # checks the Lua API on :8080 — without this, a Next.js service
+      # that failed to start would still let the pipeline pass green.
+      #
+      # Connection-mode based (not health_check_mode) because the
+      # dashboard port is bound to localhost on the target and isn't
+      # reachable externally on prod hosts — so we always check it
+      # locally or over SSH, mirroring the openresty -t check above.
+      - name: Post-deploy Next.js dashboard health gate
+        if: contains(inputs.deploy_mode, 'dashboard') || inputs.deploy_mode == 'full'
+        run: |
+          PORT="${{ inputs.nextjs_dashboard_port }}"
+          # /login always returns 200 (the root redirects to it when
+          # unauthenticated, which would muddy a status-code check).
+          URL="http://localhost:${PORT}/login"
+          SVC="proxy10x-nextjs-dashboard"
+          echo "Verifying Next.js dashboard on ${{ inputs.env_label }} (port ${PORT})..."
+
+          SSH_OPTS="-o BatchMode=yes -o ConnectTimeout=10"
+          [[ "${{ steps.conn.outputs.mode }}" == "ssh_key" ]] && SSH_OPTS="$SSH_OPTS -i ~/.ssh/id_rsa"
+
+          # 1) systemd service must be active
+          if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+            sudo systemctl is-active "$SVC" >/dev/null 2>&1 || {
+              echo "::error::$SVC is not active on ${{ inputs.host_ip }}"
+              sudo systemctl status "$SVC" --no-pager -l 2>&1 | tail -30 || true
+              exit 1
+            }
+          else
+            SUDO_PREFIX=""
+            [[ "${{ inputs.ssh_user }}" != "root" ]] && SUDO_PREFIX="sudo"
+            ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+              "$SUDO_PREFIX systemctl is-active $SVC" >/dev/null 2>&1 || {
+              echo "::error::$SVC is not active on ${{ inputs.host_ip }}"
+              ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+                "$SUDO_PREFIX systemctl status $SVC --no-pager -l 2>&1 | tail -30" || true
+              exit 1
+            }
+          fi
+          echo "Service $SVC is active"
+
+          # helper: run a curl either locally or over SSH (bounded; no 000000 concat)
+          probe() {
+            local u="$1" code_file status
+            code_file=$(mktemp)
+            if [[ "${{ steps.conn.outputs.mode }}" == "local" ]]; then
+              curl --silent --output /dev/null --connect-timeout 3 --max-time 8 \
+                -w "%{http_code}" "$u" >"$code_file" 2>/dev/null || true
+            else
+              ssh $SSH_OPTS ${{ inputs.ssh_user }}@${{ inputs.host_ip }} \
+                "curl --silent --output /dev/null --connect-timeout 3 --max-time 8 -w '%{http_code}' '$u' 2>/dev/null" \
+                >"$code_file" 2>/dev/null || true
+            fi
+            status=$(tr -cd '0-9' <"$code_file" | head -c 3)
+            rm -f "$code_file"
+            [[ -z "$status" ]] && status="000"
+            echo "$status"
+          }
+
+          # 2) dashboard must serve /login with HTTP 200 (retry: the
+          #    Node server takes a few seconds to bind after restart)
+          RETRIES=12
+          WAIT=5
+          OK=""
+          for i in $(seq 1 $RETRIES); do
+            STATUS=$(probe "$URL")
+            if [ "$STATUS" = "200" ]; then
+              echo "Next.js /login OK (HTTP $STATUS)"
+              OK=1; break
+            fi
+            echo "Attempt $i/$RETRIES: HTTP $STATUS on $URL — waiting ${WAIT}s..."
+            sleep $WAIT
+          done
+          if [ -z "$OK" ]; then
+            echo "::error::Next.js dashboard did not return 200 on $URL after $((RETRIES * WAIT))s"
+            exit 1
+          fi
+
+          # 3) the /api/* proxy must REACH the backend.  Unauthenticated
+          #    we expect 401 (or any non-5xx); a 5xx means the dashboard's
+          #    API proxy is misrouted to a dead port — exactly the
+          #    baked-wrong-port bug this guards against.  Without this
+          #    check the dashboard can pass /login yet show empty
+          #    server/rule lists in the browser.
+          API_URL="http://localhost:${PORT}/api/servers?_format=json"
+          API_STATUS=$(probe "$API_URL")
+          if [ "$API_STATUS" -ge 500 ] 2>/dev/null || [ "$API_STATUS" = "000" ]; then
+            echo "::error::Next.js /api proxy is broken (HTTP $API_STATUS on /api/servers). Likely PROXY10X_API_URL points at the wrong/dead backend port."
+            exit 1
+          fi
+          echo "Next.js /api proxy reaches backend (HTTP $API_STATUS — non-5xx, auth gate working)"
+          echo "Next.js dashboard health check passed"
+          exit 0
+
+      # ── Slack notifications ──
+      - name: Slack notify - deployed
+        if: success() && inputs.notify_success
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg envlabel "${{ inputs.env_label }}" \
+              --arg mode "${{ inputs.deploy_mode }}" \
+              --arg host "${{ inputs.host_ip }}" \
+              --arg branch "${{ github.ref_name }}" \
+              --arg commit "${{ github.sha }}" \
+              --arg actor "${{ github.actor }}" \
+              --arg event "${{ github.event_name }}" \
+              '{channel: "github-updates", username: "GitHub Actions", text: (":white_check_mark: *Proxy10x \($envlabel) — Success*\n*Mode:* \($mode) | *Host:* \($host)\n*Branch:* \($branch) | *Commit:* `\($commit)`\n*Triggered by:* \($actor) (\($event))")}')"
+
+      - name: Slack notify - deploy failed
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg stage "${{ inputs.stage_number }}" \
+              --arg envlabel "${{ inputs.env_label }}" \
+              --arg mode "${{ inputs.deploy_mode }}" \
+              --arg host "${{ inputs.host_ip }}" \
+              --arg branch "${{ github.ref_name }}" \
+              --arg commit "${{ github.sha }}" \
+              --arg actor "${{ github.actor }}" \
+              --arg event "${{ github.event_name }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions", text: (":x: *Stage \($stage) FAILED: \($envlabel)*\nDeploy or health check failed — pipeline stopped.\n*Mode:* \($mode) | *Host:* \($host)\n*Branch:* \($branch) | *Commit:* `\($commit)`\n*Triggered by:* \($actor) (\($event))\n*Logs:* \($logs)")}')"

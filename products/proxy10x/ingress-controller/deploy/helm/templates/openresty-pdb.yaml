@@ -1,0 +1,16 @@
+{{- if .Values.openresty.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "proxy10x.fullname" . }}-openresty
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "proxy10x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: proxy
+spec:
+  minAvailable: {{ .Values.openresty.podDisruptionBudget.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "proxy10x.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: proxy
+{{- end }}

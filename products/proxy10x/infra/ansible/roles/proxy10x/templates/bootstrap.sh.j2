@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -x
+
+  mkdir -p "/data" \
+    && chmod +x "/data/" \
+    && chown www-data:root "/data/" \
+    && chmod 755 -R "/data/"

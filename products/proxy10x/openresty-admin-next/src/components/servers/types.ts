@@ -1,0 +1,161 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Shared types for the server form components.
+   ────────────────────────────────────────────────────────────────────────── */
+
+import type { LocationEntry } from "./sections/LocationBlockEditor";
+import type { ApiGwConfig } from "./apiGwTypes";
+
+/** Upstream (nginx `proxy_pass`) timeouts.  Each value is a number in
+ *  seconds; an empty string means "use the nginx default (60s)" so
+ *  the operator can partially override without setting all three.
+ *
+ *  Persisted on disk as `proxy_timeouts: {connect_timeout, send_timeout,
+ *  read_timeout}` — read by api/gateway_resp.lua and applied to the
+ *  balancer via `balancer.set_timeouts()`.  See CLAUDE.md §15 point 4. */
+export interface ProxyTimeouts {
+  connect_timeout: number | string;
+  send_timeout: number | string;
+  read_timeout: number | string;
+}
+
+export interface VarnishConfig {
+  listen_address: string;
+  listen_port: string;
+  admin_listen_port: string;
+  cache_ttl_default: number | string;
+  cache_grace: number | string;
+  cache_keep: number | string;
+  cache_size: string;
+  backend_connect_timeout: number | string;
+  backend_first_byte_timeout: number | string;
+  backend_between_bytes_timeout: number | string;
+  health_check_enabled: boolean;
+  health_check_url: string;
+  health_check_interval: number | string;
+  health_check_timeout: number | string;
+}
+
+export interface VarnishSnippet {
+  name: string;
+  enabled: boolean;
+  priority: number;
+  hook_point: string;
+  content: string;
+}
+
+export interface ServerFormState {
+  /* Basic */
+  server_name: string;
+  proxy_server_name: string;
+  /** Upstream Host header used when traffic is served by a NON-primary
+   *  (failover/mirror) backend of the assigned rule. Rules are shared
+   *  across many domains, so the domain-specific mirror hostname lives
+   *  here on the server, not on the rule. Empty = no override. */
+  mirror_host_header: string;
+  profile_id: string;
+  /** POPs (Points of Presence) this server should be served from.
+   *  Empty array = unassigned; the DNS provisioner falls back to a
+   *  profile-default list when this is empty. */
+  pop_ids: string[];
+  /** Which DNS record type the provisioner manages.  Default "A". */
+  dns_record_type: "A" | "AAAA" | "BOTH" | "CNAME";
+  /** Required when dns_record_type === "CNAME". */
+  dns_cname_target: string;
+  servers_tags: string[];
+  root: string;
+  index: string;
+  access_log: string;
+  error_log: string;
+
+  /* Listen */
+  listens: { listen: string }[];
+
+  /* SSL */
+  ssl_enabled: boolean;
+  ssl_email: string;
+  ssl_auto_renew: boolean;
+  ssl_force_https: boolean;
+  ssl_staging: boolean;
+  /** Also serve (and certify) hosts this URL vouches for — api/on_demand.lua. */
+  on_demand_ask_url: string;
+
+  /* Cache */
+  cache_enabled: boolean;
+  cache_ttl: number;
+  cache_bypass_auth: boolean;
+  cache_bypass_cookie: string;
+  cached_mime_types: string[];
+
+  // Docker / OCI registry blob caching — separate from static-content
+  // cache above.  Only applies when this server is fronting a
+  // container registry.  Stored on disk with the same field names via
+  // /v2/(name)/blobs/(digest) + /v2/(name)/manifests/(ref) handling in
+  // nginx.  Empty-string TTLs mean "use nginx defaults"
+  // (see cache_manager.lua).
+  cache_docker_blobs: boolean;
+  cache_docker_blobs_ttl: string;
+  cache_docker_manifests: boolean;
+  cache_docker_manifests_ttl: string;
+  cache_docker_serve_stale: boolean;
+  cache_docker_stale_ttl: string;
+
+  /* Upstream (proxy_pass) timeouts.  See ProxyTimeouts docs above. */
+  proxy_timeouts: ProxyTimeouts;
+
+  /* WAF */
+  waf_enabled: boolean;
+  waf_policy_id: string;
+  waf_mode_override: string;
+
+  /* Rate limiting */
+  rate_limit_enabled: boolean;
+  rate_limit: { requests_per_second: number; burst: number };
+
+  /* Headers */
+  custom_headers: { header_key: string; header_value: string }[];
+  custom_response_headers: { header_key: string; header_value: string }[];
+
+  /* Locations */
+  locations: LocationEntry[];
+
+  /* Advanced blocks */
+  custom_block: { additional_block: string }[];
+  custom_location_block: { additional_location_block: string }[];
+  custom_http_block: { additional_http_block: string }[];
+
+  /* Generated config */
+  config: string;
+  /** Whether the compiled nginx config for this server is active in
+   *  `/opt/nginx/conf.d/`.  Toggling this triggers the api.lua
+   *  `CreateUpdateRecord` path that runs `openresty -t` and touches
+   *  the reload flag.  Without it, the server exists in the data
+   *  store but no traffic is served for it. */
+  config_status: boolean;
+
+  /* Varnish */
+  varnish_enabled: boolean;
+  varnish_config: VarnishConfig;
+  varnish_snippets: VarnishSnippet[];
+  varnish_vcl_config: string;
+
+  /* Rules */
+  /**
+   * The primary rule assigned to this server.  Empty string means
+   * "none".  Additional rules combined via AND/OR live in `match_cases`.
+   *
+   * Persisted on the backend as an array (`[]` or `[rule_id]`) for
+   * consistency with legacy records; see `buildPayload` /
+   * `toFormState`.
+   */
+  rules: string;
+  /**
+   * Match case = one "additional rule to evaluate, combined with the
+   * primary rule via AND/OR".  The Lua gateway
+   * (api/rule_loader.lua:parse_match_cases) reads `statement` as a
+   * single rule_id string and `condition` as "and" / "or" / "none".
+   */
+  match_cases: { condition: string; statement: string }[];
+
+  /* Kong-class API gateway (api/api_gw/) — nested policy object */
+  api_gw: ApiGwConfig;
+}

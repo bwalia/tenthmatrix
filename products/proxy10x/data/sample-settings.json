@@ -1,0 +1,89 @@
+{
+  "serial_number": "4cadeac519161973818e1bce2acdf8e1",
+  "roles": [
+    "release_manager",
+    "admin",
+    "read_only",
+    "read_write"
+  ],
+  "instance_locked": "true",
+  "env_profile": "int",
+  "redis_port": "localhost",
+  "storage_type": "disk",
+  "pgsql": {
+    "pg_host": "postgres",
+    "pg_port": 5432,
+    "pg_database": "proxy10x",
+    "pg_user": "proxy10x",
+    "pg_password": ""
+  },
+  "nginx": {
+    "tenant_conf_path": "/opt/nginx/conf.d",
+    "default": {
+      "no_rule": "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgaHR0cC1lcXVpdj0icmVmcmVzaCIgY29udGVudD0iMDt1cmw9aHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+PHRpdGxlPlJlZGlyZWN0aW5nLi4uPC90aXRsZT48L2hlYWQ+PGJvZHk+PHA+UmVkaXJlY3RpbmcgdG8gPGEgaHJlZj0iaHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+V1NMIFByb3h5PC9hPi4uLjwvcD48L2JvZHk+PC9odG1sPg==",
+      "conf_mismatch": "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgaHR0cC1lcXVpdj0icmVmcmVzaCIgY29udGVudD0iMDt1cmw9aHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+PHRpdGxlPlJlZGlyZWN0aW5nLi4uPC90aXRsZT48L2hlYWQ+PGJvZHk+PHA+UmVkaXJlY3RpbmcgdG8gPGEgaHJlZj0iaHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+V1NMIFByb3h5PC9hPi4uLjwvcD48L2JvZHk+PC9odG1sPg==",
+      "no_server": "PCFET0NUWVBFIGh0bWw+PGh0bWw+PGhlYWQ+PG1ldGEgaHR0cC1lcXVpdj0icmVmcmVzaCIgY29udGVudD0iMDt1cmw9aHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+PHRpdGxlPlJlZGlyZWN0aW5nLi4uPC90aXRsZT48L2hlYWQ+PGJvZHk+PHA+UmVkaXJlY3RpbmcgdG8gPGEgaHJlZj0iaHR0cHM6Ly93c2xwcm94eS5jb20vaW5kZXguaHRtbCI+V1NMIFByb3h5PC9hPi4uLjwvcD48L2JvZHk+PC9odG1sPg=="
+    },
+    "reboot_file_path": "/tmp/nginx/nginx-reboot-required",
+    "content_type": "text/html"
+  },
+  "redis_host": "",
+  "ip2location_path": "/tmp/IP2LOCATION-LITE-DB11.IPV6.BIN",
+  "consul": {
+    "dns_server_port": 8600,
+    "dns_server_host": "127.0.0.1"
+  },
+  "dns_resolver": {
+    "nameservers": {
+      "primary": "8.8.8.8",
+      "port": "53",
+      "secondary": "8.8.4.4"
+    }
+  },
+  "instance_id": "docker-standlone-dev",
+  "env_vars": {
+    "FRONT_URL": "http://localhost:8069",
+    "JWT_SECURITY_PASSPHRASE": "docker-standlone-dev-jwt",
+    "REDIS_PORT": 6379,
+    "APP_NAME": "Openresty",
+    "API_PAGE_SIZE": 1000,
+    "STACK": "Lua 5.1",
+    "VITE_DEPLOYMENT_TIME": "20240821210059",
+    "NGINX_CONFIG_DIR": "/opt/nginx",
+    "VERSION": "1.0",
+    "REDIS_HOST": "proxy10x-redis",
+    "HOSTNAME": "localhost"
+  },
+  "instance_name": "docker standlone dev",
+  "instance_hash": "54d21aa4592f9171cf26f704724a7b30e455dc89",
+  "super_user": {
+    "email": "admin@admin.com",
+    "password": "CHANGE_ME",
+    "username": "admin"
+  },
+  "admin": {
+    "api_url": "/api"
+  },
+  "mcp": {
+    "enabled": true,
+    "mode": "read-only",
+    "tools_enabled": false,
+    "api_key": "",
+    "api_key_header": "X-MCP-API-Key",
+    "rate_limit": 100,
+    "redact_secrets": true
+  },
+  "captcha": {
+    "provider": "turnstile",
+    "site_key": "",
+    "secret_key": "",
+    "theme": "dark",
+    "cookie_ttl": 3600
+  },
+  "waf": {
+    "enabled": true,
+    "default_policy": "waf-policy-default",
+    "body_inspection": true,
+    "max_body_size": 1048576
+  }
+}

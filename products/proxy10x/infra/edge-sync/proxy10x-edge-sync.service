@@ -1,0 +1,11 @@
+[Unit]
+Description=Mirror proxy10x servers/rules/WAF policies from the source edge (lon1)
+Documentation=file:///usr/local/share/doc/proxy10x-edge-sync/README.md
+Wants=network-online.target
+After=network-online.target openresty.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/proxy10x-edge-sync
+TimeoutStartSec=300
+Nice=10

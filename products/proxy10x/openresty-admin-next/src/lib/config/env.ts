@@ -1,0 +1,143 @@
+/**
+ * Runtime environment configuration — validated at import time via Zod.
+ *
+ * Throws at module load if any required env var is missing or malformed,
+ * so the app fails fast during build / boot rather than at some random
+ * render time.  Import the `env` export and use `env.appVersion` etc.
+ *
+ * Two schemas:
+ *   - clientEnvSchema: NEXT_PUBLIC_* vars, safe to inline in bundle
+ *   - serverEnvSchema: vars only available in Node runtime
+ */
+
+import { z } from "zod";
+
+// ─── Client-side (bundled) ──────────────────────────────────────────────
+
+const clientEnvSchema = z.object({
+  NEXT_PUBLIC_APP_NAME: z.string().min(1).default("proxy10x"),
+  NEXT_PUBLIC_APP_DISPLAY_NAME: z.string().min(1).default("Proxy10x"),
+  NEXT_PUBLIC_APP_VERSION: z.string().default("dev"),
+  NEXT_PUBLIC_APP_BUILD_NUMBER: z.string().default("local"),
+  NEXT_PUBLIC_DEPLOYMENT_TIME: z.string().default(""),
+  // Which environment this build is running in.  Drives the colour
+  // badge in the footer so a single glance tells you whether you're
+  // looking at prod or a staging tier.  `local` covers laptop /
+  // docker compose; the rest map 1:1 to the deploy pipeline tiers.
+  NEXT_PUBLIC_ENV_NAME: z
+    .enum(["local", "int", "test", "acc", "prod"])
+    .default("local"),
+  // Full git SHA of the deployed commit — empty in dev.  The footer
+  // renders the first 7 chars and links to the GitHub commit page.
+  NEXT_PUBLIC_GIT_SHA: z.string().default(""),
+  // `owner/repo` — used to build the commit / actions-run URLs.
+  // Centralised here (not hard-coded in Footer.tsx) so an internal
+  // mirror or fork can override it without code changes.
+  NEXT_PUBLIC_GIT_REPO: z.string().default("bwalia/proxy10x"),
+  // Accept the four deploy targets we actually ship to.  `BARE_METAL`
+  // is the value the Ansible systemd template sets on int / test /
+  // acc / prod (see infra/ansible/roles/proxy10x/templates/
+  // proxy10x-nextjs-dashboard.service.j2:28); without it here, env
+  // validation throws on import and every page that pulls in this
+  // module 500s.  `NATIVE` is kept as an alias for older deployments.
+  NEXT_PUBLIC_TARGET_PLATFORM: z
+    .enum(["DOCKER", "KUBERNETES", "NATIVE", "BARE_METAL"])
+    .default("DOCKER"),
+  NEXT_PUBLIC_THEME_PRIMARY_COLOR: z
+    .string()
+    .regex(/^[0-9A-Fa-f]{6}$/, "must be a 6-char hex color without #")
+    .default("6366f1"),
+  NEXT_PUBLIC_THEME_SECONDARY_COLOR: z
+    .string()
+    .regex(/^[0-9A-Fa-f]{6}$/, "must be a 6-char hex color without #")
+    .default("10b981"),
+});
+
+// ─── Server-side only ───────────────────────────────────────────────────
+
+const serverEnvSchema = z.object({
+  PROXY10X_API_URL: z
+    .string()
+    .url()
+    .default("http://proxy10x-local:8080"),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+});
+
+// ─── Parse + expose ─────────────────────────────────────────────────────
+
+function formatZodError(
+  kind: "client" | "server",
+  error: z.ZodError,
+): string {
+  const issues = error.issues
+    .map((i) => `  - ${i.path.join(".") || "<root>"}: ${i.message}`)
+    .join("\n");
+  return `Invalid ${kind} environment variables:\n${issues}`;
+}
+
+// Critical: Next.js inlines `process.env.NEXT_PUBLIC_X` into the
+// client bundle ONLY when accessed by explicit property name — not
+// when `process.env` is passed around as a whole object.  Webpack's
+// DefinePlugin substitutes literal text matches like
+// `process.env.NEXT_PUBLIC_APP_VERSION`, but a call like
+// `safeParse(process.env)` reaches the browser with `process.env`
+// shimmed to `{ NODE_ENV: "production" }` — every NEXT_PUBLIC_* var
+// is undefined, every Zod `.default(...)` kicks in, and the footer
+// permanently shows `LOCAL · vdev · Build local` no matter what the
+// ansible build step set.  Build each field explicitly so the
+// inlining can fire.
+const clientEnv = {
+  NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+  NEXT_PUBLIC_APP_DISPLAY_NAME: process.env.NEXT_PUBLIC_APP_DISPLAY_NAME,
+  NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION,
+  NEXT_PUBLIC_APP_BUILD_NUMBER: process.env.NEXT_PUBLIC_APP_BUILD_NUMBER,
+  NEXT_PUBLIC_DEPLOYMENT_TIME: process.env.NEXT_PUBLIC_DEPLOYMENT_TIME,
+  NEXT_PUBLIC_ENV_NAME: process.env.NEXT_PUBLIC_ENV_NAME,
+  NEXT_PUBLIC_GIT_SHA: process.env.NEXT_PUBLIC_GIT_SHA,
+  NEXT_PUBLIC_GIT_REPO: process.env.NEXT_PUBLIC_GIT_REPO,
+  NEXT_PUBLIC_TARGET_PLATFORM: process.env.NEXT_PUBLIC_TARGET_PLATFORM,
+  NEXT_PUBLIC_THEME_PRIMARY_COLOR: process.env.NEXT_PUBLIC_THEME_PRIMARY_COLOR,
+  NEXT_PUBLIC_THEME_SECONDARY_COLOR: process.env.NEXT_PUBLIC_THEME_SECONDARY_COLOR,
+};
+
+const clientResult = clientEnvSchema.safeParse(clientEnv);
+if (!clientResult.success) {
+  throw new Error(formatZodError("client", clientResult.error));
+}
+
+// Only parse server schema in a Node runtime — skip on client bundles.
+// `process.env` IS the real env on the server (no Webpack rewriting),
+// so passing it as an object here is correct.
+const isServer = typeof window === "undefined";
+const serverResult = isServer
+  ? serverEnvSchema.safeParse(process.env)
+  : { success: true as const, data: serverEnvSchema.parse({}) };
+
+if (isServer && !serverResult.success) {
+  throw new Error(formatZodError("server", serverResult.error));
+}
+
+const client = clientResult.data;
+const server = serverResult.success ? serverResult.data : serverEnvSchema.parse({});
+
+/**
+ * Validated env.  Field names intentionally drop the `NEXT_PUBLIC_` prefix
+ * so callers use `env.appName` rather than the raw variable name.
+ */
+export const env = {
+  appName: client.NEXT_PUBLIC_APP_NAME,
+  appDisplayName: client.NEXT_PUBLIC_APP_DISPLAY_NAME,
+  appVersion: client.NEXT_PUBLIC_APP_VERSION,
+  buildNumber: client.NEXT_PUBLIC_APP_BUILD_NUMBER,
+  deploymentTime: client.NEXT_PUBLIC_DEPLOYMENT_TIME,
+  envName: client.NEXT_PUBLIC_ENV_NAME,
+  gitSha: client.NEXT_PUBLIC_GIT_SHA,
+  gitRepo: client.NEXT_PUBLIC_GIT_REPO,
+  targetPlatform: client.NEXT_PUBLIC_TARGET_PLATFORM,
+  primaryColor: client.NEXT_PUBLIC_THEME_PRIMARY_COLOR,
+  secondaryColor: client.NEXT_PUBLIC_THEME_SECONDARY_COLOR,
+  /** Server-only: undefined on the client (not bundled). */
+  apiUrl: isServer ? server.PROXY10X_API_URL : undefined,
+  /** Server-only: undefined on the client (not bundled). */
+  nodeEnv: isServer ? server.NODE_ENV : undefined,
+} as const;

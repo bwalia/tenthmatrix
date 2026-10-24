@@ -1,0 +1,139 @@
+---
+# Nginx configuration directories and base configs
+
+# ── ATOMIC GUARD: snapshot conf.d before role-driven modifications ────────
+#
+# Why this exists:
+# The 2026-06-29 prod outage left /opt/nginx/conf.d/ holding a
+# default.conf (and missing tenant .confs) from a different env, and
+# none of the subsequent tasks caught it — the only validation was
+# the systemctl restart at the very end, by which time the wrong
+# files were already live.
+#
+# What it does:
+# Hardlinks the current conf.d/ to /opt/nginx/conf.d.predeploy/ at
+# the start of the role's nginx tasks.  Because cp -al only creates
+# hardlinks (zero data copy, ~10ms for thousands of files), the
+# snapshot is effectively free.  Any Ansible task that *replaces* a
+# file in conf.d/ goes through write-temp + rename, which creates a
+# new inode — the snapshot keeps the OLD inode under conf.d.predeploy.
+# At the end of finalize.yml an openresty -t check decides whether to
+# promote the new state or restore the snapshot.
+#
+# Coverage:
+# Catches any syntax-level breakage from changes to default.conf, the
+# rsynced nginx-conf.d/ files, the synchronized nginx-tenants.d/
+# files, or anything else the role writes to conf.d/.  Does NOT catch
+# *semantically* wrong configs that still parse (env_profile mismatch
+# is handled separately in deploy_data.yml).
+- name: "Atomic guard: snapshot conf.d/ before nginx role modifications"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    rm -rf /opt/nginx/conf.d.predeploy
+    if [ -d /opt/nginx/conf.d ]; then
+      # cp -al = hardlink copy.  Modifications inside conf.d/ via
+      # write-then-rename (Ansible copy/template/synchronize default)
+      # leave the snapshot pointing at the old inodes.  In-place
+      # writes (rare in this role) would leak through — none of the
+      # existing tasks do that.
+      cp -al /opt/nginx/conf.d /opt/nginx/conf.d.predeploy
+    else
+      # First-ever deploy on this host — make an empty snapshot so the
+      # rollback path is unambiguous.
+      mkdir -p /opt/nginx/conf.d.predeploy
+    fi
+  # /bin/sh is dash on Debian, which lacks `set -o pipefail` — force bash.
+  args:
+    executable: /bin/bash
+  changed_when: false
+  tags: [nginx, code, dashboard, servers]
+
+- name: Ensure base nginx conf directory exists
+  ansible.builtin.file:
+    path: /opt/nginx/base.d/
+    state: directory
+    owner: "www-data"
+    group: root
+    mode: 0775
+  notify: Restart openresty
+  tags: [nginx, code, dashboard, servers]
+
+- name: Render nginx base TCP stream config
+  # Single stream{} block: k3s0 (9443) on every pop; k3s1api (6443) only on the
+  # pop whose host_vars sets k3s1api_lb_listen (pop1 / ip-10-0-0-207). Was a
+  # static copy of nginx-base.d/; templated so the pop-specific k3s1api LB can
+  # be gated by a host var instead of shipping a host-specific listen IP to all.
+  ansible.builtin.template:
+    src: nginx_tcp_streams.conf.j2
+    dest: /opt/nginx/base.d/nginx_tcp_streams.conf
+    owner: "www-data"
+    group: root
+    mode: "0644"
+  notify: Restart openresty
+  tags: [nginx, code, dashboard, servers]
+
+- name: Ensure tenants nginx conf directory exists
+  ansible.builtin.file:
+    path: /opt/nginx/conf.d/
+    state: directory
+    owner: "www-data"
+    group: root
+    mode: 0775
+  notify: Restart openresty
+  tags: [nginx, code, dashboard, servers]
+
+- name: Add nginx configuration
+  copy:
+    src: ../../nginx-conf.d/
+    dest: /opt/nginx/conf.d/
+    owner: "www-data"
+    group: root
+    mode: "0644"
+  tags: [nginx, code, dashboard, servers]
+
+- name: Template default server configuration
+  template:
+    src: default.conf.j2
+    dest: /opt/nginx/conf.d/default.conf
+    owner: "www-data"
+    group: root
+    mode: "0644"
+  notify: Restart openresty
+  tags: [nginx, code, dashboard, servers]
+
+# ── Log rotation ─────────────────────────────────────────────────────────
+# Prod 2026-07-14: error.log grew to 1.9 GB / 6.2 M lines because there
+# was no rotation at all — every /api/logs/* request (which slurped the
+# whole file into memory, separately fixed in api/api.lua) blocked the
+# single-worker gateway for 10+ seconds AND the disk was headed for
+# fill.  The template writes /etc/logrotate.d/openresty; the daily cron
+# hook that ships with the `logrotate` package (added to base_packages)
+# picks it up and runs it via /etc/cron.daily/logrotate.
+#
+# Config is idempotent (template copy).  A subsequent `logrotate --force`
+# is intentionally NOT run — waiting for the natural cron cadence
+# means we don't rotate mid-request if this happens to run during a
+# heavy log burst.  Operators who need to trim NOW can:
+#   sudo logrotate --force /etc/logrotate.d/openresty
+#
+# Ensure the binary exists even when deploy_mode=nginx skips the
+# base_packages role (lon1 2026-08-08: validate failed "command not found").
+- name: Ensure logrotate is installed (for openresty rotation validate)
+  ansible.builtin.package:
+    name: logrotate
+    state: present
+  tags: [nginx, code, dashboard, servers]
+
+- name: Install openresty log rotation config
+  ansible.builtin.template:
+    src: openresty-logrotate.j2
+    dest: /etc/logrotate.d/openresty
+    owner: root
+    group: root
+    mode: "0644"
+    # Validate the config before it lands so a template typo can't
+    # leave the host with a broken rotation policy.  `logrotate -d`
+    # runs in debug/dry-run mode against the temp file (%s) —
+    # doesn't touch any real logs.
+    validate: "logrotate -d %s"
+  tags: [nginx, code, dashboard, servers]

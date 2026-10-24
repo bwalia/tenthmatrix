@@ -17,6 +17,31 @@ Next.js 16 App Router, React 19, `output: 'standalone'`, every page under a
 `[locale]` segment (13 locales, next-intl). No Bootstrap, no Font Awesome, no
 AOS, no shop.
 
+## Monorepo layout
+
+The website is the repository root. TenthMatrix products live under
+`products/<name>/`, each with its own README and CLAUDE.md:
+
+- `products/proxy10x/` — **Proxy10x**, the proxy POP and API gateway for
+  AI-assisted development (OpenResty + Lua, Go agent/CLI, Next.js admin UI).
+  Imported from the WSL Proxy codebase as a clean snapshot (no history, no
+  live fleet data or secrets) and rebranded. Its workflows under
+  `products/proxy10x/.github/` are **inactive** until ported to the root
+  `.github/workflows/` with a `paths:` filter.
+
+Website CI ignores `products/**` (`paths-ignore` on build-and-deploy, eslint
+ignores, `.dockerignore`), so a product commit doesn't redeploy the site. The
+live edge fleet is still the separate `wslproxy` repo: `.github/wslproxy/` and
+`wslproxy-register-domains.yml` here talk to that fleet and keep its name.
+
+On the site the product page is `/proxy10x` (`/wsl-proxy` redirects to it and
+is left out of the sitemap). It still canonicalises to Workstation's
+`/wsl-proxy` through `RENAMED_ROUTES` in
+`scripts/migration/build-seo-canonical.mjs`; move it to `SELF_CANONICAL` once
+the page copy is rewritten. Blog/article slugs and image files that contain
+`wslproxy` are URLs and were kept; links to `wslproxy.org` stay until
+proxy10x.com is live.
+
 ## Development Commands
 
 ```bash

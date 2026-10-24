@@ -1,0 +1,11 @@
+- hosts: openresty_native_cluster 
+  become: yes
+  roles:
+    - ubuntu
+    - proxy10x
+    - powerdns
+    - consul
+    - k3s
+  vars:
+    nginx_port: 80
+    consul_port: 8500

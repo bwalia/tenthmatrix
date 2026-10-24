@@ -1,0 +1,21 @@
+name: Build and Deploy to MinIO
+
+on:
+  push:
+    branches:
+      - dummy
+env:
+    MINIO_ENDPOINT: "http://localhost:9000"
+    MINIO_BUCKET: "brahmstra-dashboard"
+
+jobs:
+  build:
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Build and Deploy Brahmstra UI to MinIO
+        run: |
+          sudo bash build-push-dashboard-minio.sh ${{ secrets.MINIO_ACCESS_KEY }} ${{ secrets.MINIO_SECRET_KEY }} ${{ secrets.GH_CLONE_TOKEN }}

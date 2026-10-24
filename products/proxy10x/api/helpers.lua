@@ -1,0 +1,818 @@
+local ApiErrors = require("errors")
+local configPath = os.getenv("NGINX_CONFIG_DIR") or "/opt/nginx/"
+local Helper = {}
+
+-- ── Bounded tail-of-file reader ───────────────────────────────────────
+-- Reads the last `max_bytes` of a file without slurping the whole thing
+-- into memory.  Returns:
+--   lines      : array of the last complete lines within the window
+--                (most recent LAST, oldest FIRST — natural log order)
+--   file_size  : total bytes of the file
+--   truncated  : true if only a suffix of the file was read (i.e., the
+--                caller wants to know the returned lines are NOT the
+--                entire file)
+--
+-- Why this exists: the prior implementation of /api/logs/access and
+-- /api/logs/errors did `for line in f:lines() do lines[#lines+1] = line`
+-- to slurp the WHOLE log file (1.4M lines / 352 MB access, 6.2M lines /
+-- 1.9 GB error on prod, growing) into a Lua table before slicing the
+-- last 200.  On prod (worker_processes = 1) that blocked every other
+-- request through the gateway while the read completed — repeatedly
+-- brought the whole proxy down whenever an operator opened /logs.
+--
+-- Contract:
+--   * Never allocates more than `max_bytes` bytes for the read buffer.
+--   * Never touches the file if it doesn't exist / can't be opened.
+--   * Skips the FIRST partial line in the buffer (since we started
+--     mid-line unless we happened to seek exactly to a newline).
+--   * Small files (< max_bytes) are read whole — no truncation, no
+--     partial-line skip.
+--
+-- Caller is responsible for further filtering / slicing after this
+-- returns.  The reader stays dumb; it just gives you a bounded window
+-- of complete log lines.
+function Helper.readTailLines(path, max_bytes)
+    max_bytes = tonumber(max_bytes) or (5 * 1024 * 1024) -- default 5 MiB
+    local f, open_err = io.open(path, "rb")
+    if not f then
+        return {}, 0, false, open_err
+    end
+
+    -- Seek to end to learn the size, then seek back at most max_bytes.
+    -- Using seek("end") + seek("set", size - N) avoids reading past the
+    -- window and avoids the O(N) cost of iterating with f:lines().
+    local size, seek_err = f:seek("end")
+    if not size then
+        f:close()
+        return {}, 0, false, seek_err
+    end
+    local truncated = false
+    local read_bytes = size
+    if size > max_bytes then
+        read_bytes = max_bytes
+        f:seek("set", size - max_bytes)
+        truncated = true
+    else
+        f:seek("set", 0)
+    end
+
+    local buf = f:read(read_bytes) or ""
+    f:close()
+
+    -- Split into lines.  If we started mid-line (truncated == true),
+    -- the first entry is a partial line — discard it so the caller
+    -- doesn't get a corrupted record.  A trailing empty entry from a
+    -- terminal "\n" is naturally handled by the filter below.
+    local lines = {}
+    for line in buf:gmatch("([^\n]*)\n?") do
+        if line ~= "" then
+            lines[#lines + 1] = line
+        end
+    end
+    if truncated and #lines > 0 then
+        table.remove(lines, 1)
+    end
+
+    return lines, size, truncated
+end
+
+
+-- Load Global Settings
+
+
+function Helper.loadrequire(module)
+    local function requiref(module)
+        require(module)
+    end
+    res = pcall(requiref,module)
+    if not(res) then
+        return false
+        -- Do Stuff when no module
+    else
+        return true
+    end
+end
+
+
+function Helper.settings()
+    local readSettings, errSettings = io.open(configPath .. "data/settings.json", "rb")
+    local settings = {}
+    if readSettings == nil then
+        ngx.log(ngx.WARN, "settings.json not found at " .. configPath .. "data/settings.json — using safe defaults")
+    else
+        local jsonString = readSettings:read "*a"
+        readSettings:close()
+        if jsonString and jsonString ~= "" then
+            local ok, decoded = pcall(Cjson.decode, jsonString)
+            if ok and type(decoded) == "table" then
+                settings = decoded
+            else
+                ngx.log(ngx.ERR, "settings.json contains invalid JSON — using safe defaults")
+            end
+        else
+            ngx.log(ngx.WARN, "settings.json is empty — using safe defaults")
+        end
+    end
+
+    -- Ensure critical fields always have safe defaults
+    if not settings.env_profile or settings.env_profile == "" then
+        settings.env_profile = "prod"
+    end
+    if not settings.storage_type or settings.storage_type == "" then
+        settings.storage_type = "disk"
+    end
+    if not settings.instance_locked or settings.instance_locked == "" then
+        settings.instance_locked = "true"
+    end
+    if not settings.nginx then
+        settings.nginx = {}
+    end
+
+    return settings
+end
+
+-- Asc Table
+function Helper.sortAsc(field)
+    return function(a, b)
+        local aValue = a[field]
+        local bValue = b[field]
+
+        if aValue == nil and bValue == nil then
+            return false
+        elseif aValue == nil then
+            return false
+        elseif bValue == nil then
+            return true
+        end
+
+        return aValue < bValue
+    end
+end
+
+-- Desc Table
+function Helper.sortDesc(field)
+    return function(a, b)
+        local aValue = a[field]
+        local bValue = b[field]
+
+        if aValue == nil and bValue == nil then
+            return false
+        elseif aValue == nil then
+            return false
+        elseif bValue == nil then
+            return true
+        end
+
+        return aValue > bValue
+    end
+end
+
+-- Generate UUID
+function Helper.generate_uuid()
+    local random = math.random(1000000000)
+    local timestamp = os.time
+    local hash = ngx.md5(tostring(random) .. tostring(timestamp))
+    local uuid = string.format("%s-%s-%s-%s-%s", string.sub(hash, 1, 8), string.sub(hash, 9, 12),
+        string.sub(hash, 13, 16), string.sub(hash, 17, 20), string.sub(hash, 21, 32))
+    return uuid
+end
+
+-- Check if string is IP or not
+function Helper.isIpAddress(str)
+    local pattern = "^%d+%.%d+%.%d+%.%d+:%d*$" -- IP with port
+    local ip_pattern = "^%d+%.%d+%.%d+%.%d+$" -- IP without port
+
+    local ip_part = string.match(str, ip_pattern)
+    local ip_with_port_part = string.match(str, pattern)
+
+    if ip_part or ip_with_port_part then
+        -- Extract IP and port if available
+        local a, b, c, d, port = string.match(str, "(%d+)%.(%d+)%.(%d+)%.(%d+):?(%d*)")
+        if tonumber(a) <= 255 and tonumber(b) <= 255 and tonumber(c) <= 255 and tonumber(d) <= 255 then
+            if port == "" or (tonumber(port) and tonumber(port) <= 65535) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+-- Test Nginx server block. Workers run as www-data; fix-permissions grants
+-- execute on /usr/local/openresty/nginx/sbin/nginx so sudo is not required
+-- (and often fails with "a password is required" on prod hosts).
+function Helper.testNginxConfig()
+    local nginxBin = "/usr/local/openresty/nginx/sbin/nginx"
+    if not Helper.isFileExists(nginxBin) then
+        nginxBin = "openresty"
+    end
+    local command = nginxBin .. " -t 2>&1"
+
+    local handle = io.popen(command)
+    if handle then
+        local result = handle:read("*all")
+        local success, _, _ = handle:close()
+        return result, success
+    else
+        return "Failed to execute command.", false
+    end
+end
+
+-- Check String contains Messagelocal function check_nginx_syntax_ok(output)
+function Helper.isStringContains(stringPtrn, message)
+    if string.find(message, stringPtrn) then
+        return true
+    else
+        return false
+    end
+end
+
+-- Check is Directory exists
+function Helper.isDirectoryExists(path)
+    local attr = LFS.attributes(path)
+    return attr and attr.mode == "directory"
+end
+
+-- Delete Directory
+function Helper.removeDir(path)
+    -- Check if path exists
+    if Helper.isDirectoryExists(path) then
+        -- Recursively delete contents of the directory
+        for file in LFS.dir(path) do
+            if file ~= "." and file ~= ".." then
+                local full_path = path .. "/" .. file
+                local attr = LFS.attributes(full_path)
+                if attr.mode == "directory" then
+                    -- Recursively remove subdirectory
+                    Helper.removeDir(full_path)
+                else
+                    -- Remove file
+                    os.remove(full_path)
+                end
+            end
+        end
+        -- Remove the now empty directory
+        LFS.rmdir(path)
+        return "Directory removed: " .. path
+    else
+        return "Directory does not exist: " .. path
+    end
+end
+
+-- Read Log file
+function Helper.readLogFile(path)
+    local file, fileErr = io.open(path, "r")
+    if not file then return fileErr, ngx.HTTP_BAD_REQUEST end
+
+    local max_size = 10 * 1024  -- 10KB
+    file:seek("end", -max_size)
+    local content = file:read("*a")
+    file:close()
+    return content, ngx.HTTP_OK
+end
+
+--- Search a log file and return matching lines.
+---
+--- Reads the file from the tail (newest entries first) so recent
+--- matches surface quickly for incident response.  Uses PCRE via
+--- ngx.re.find when `regex == true`, otherwise plain substring
+--- match (faster + safe against catastrophic backtracking).
+---
+--- @param path    string  Absolute path to the log file.
+--- @param opts    table   { query=string, regex=boolean, case_sensitive=boolean,
+---                          limit=integer, max_scan_bytes=integer }
+--- @return table|string  On success: { matches = {{lineno, text}, ...},
+---                                     scanned_bytes = integer,
+---                                     total_lines_scanned = integer,
+---                                     truncated = boolean }.
+---                       On error  : error message string.
+--- @return integer       HTTP status code (200 on success, 4xx on error).
+function Helper.searchLogFile(path, opts)
+    opts = opts or {}
+    local query          = opts.query or ""
+    local is_regex       = opts.regex == true
+    local case_sensitive = opts.case_sensitive == true
+    local limit          = tonumber(opts.limit) or 500
+    local max_scan_bytes = tonumber(opts.max_scan_bytes) or (16 * 1024 * 1024) -- 16 MB
+
+    -- Clamp limits defensively — callers may pass absurd values.
+    if limit < 1 then limit = 1 elseif limit > 2000 then limit = 2000 end
+    if max_scan_bytes < 1024 then max_scan_bytes = 1024
+    elseif max_scan_bytes > (64 * 1024 * 1024) then max_scan_bytes = 64 * 1024 * 1024 end
+
+    -- Validate / pre-compile regex once so we can return a sensible
+    -- error string instead of a generic 500 on bad user input.
+    local re_options = case_sensitive and "" or "jo"  -- j=JIT, o=cache compiled
+    if is_regex and query ~= "" then
+        -- "jo" implies case-sensitive.  Add "i" for case-insensitive.
+        if not case_sensitive then re_options = "ijo" end
+        local ok_compile = ngx.re.find("", query, re_options)
+        -- ngx.re.find returns nil+err on compile failure
+        if ok_compile == nil then
+            local _, err = ngx.re.find("", query, re_options)
+            if err and err ~= "no match" then
+                return ("Invalid regex: " .. err), ngx.HTTP_BAD_REQUEST
+            end
+        end
+    end
+
+    local file, fileErr = io.open(path, "rb")
+    if not file then
+        return (fileErr or ("cannot open log file: " .. path)), ngx.HTTP_BAD_REQUEST
+    end
+
+    -- How many bytes of the file should we scan?  Seek to
+    -- `max(0, filesize - max_scan_bytes)` so we always cover the
+    -- tail even on massive log files.
+    local size_ok = file:seek("end")
+    local file_size = size_ok or 0
+    local scan_start = file_size > max_scan_bytes
+        and (file_size - max_scan_bytes) or 0
+    local truncated = scan_start > 0
+    file:seek("set", scan_start)
+
+    -- Read the whole scan window in one shot, then walk backwards
+    -- line-by-line so newest matches land first.  Reading all at
+    -- once is simpler + fine for the 16 MB default cap (well under
+    -- nginx worker memory headroom).
+    local content = file:read("*a") or ""
+    file:close()
+
+    -- Split into lines without copying the entire list unnecessarily;
+    -- we walk back-to-front and stop at `limit`.
+    local lines = {}
+    local n = 0
+    for line in (content .. "\n"):gmatch("([^\n]*)\n") do
+        n = n + 1
+        lines[n] = line
+    end
+
+    -- Empty-table marker so cjson emits `[]` when there are no
+    -- matches instead of `{}` — the dashboard's result renderer
+    -- iterates this with `.map()` and would crash on an object.
+    local cjson_ok, cjson = pcall(require, "cjson")
+    local matches = cjson_ok and setmetatable({}, cjson.empty_array_mt) or {}
+    local match_count = 0
+    local query_lower = case_sensitive and query or query:lower()
+
+    -- Walk newest → oldest.  `lineno` is relative to the scan window;
+    -- when `truncated` is true the caller knows that line 1 here is
+    -- not line 1 of the file.
+    for i = n, 1, -1 do
+        local line = lines[i]
+        if line ~= "" then
+            local hit
+            if query == "" then
+                hit = true
+            elseif is_regex then
+                local from = ngx.re.find(line, query, re_options)
+                hit = from ~= nil
+            elseif case_sensitive then
+                hit = string.find(line, query, 1, true) ~= nil
+            else
+                hit = string.find(line:lower(), query_lower, 1, true) ~= nil
+            end
+            if hit then
+                match_count = match_count + 1
+                matches[match_count] = { lineno = i, text = line }
+                if match_count >= limit then break end
+            end
+        end
+    end
+
+    return {
+        matches = matches,
+        scanned_bytes = #content,
+        total_lines_scanned = n,
+        truncated = truncated,
+    }, ngx.HTTP_OK
+end
+
+-- Write file
+function Helper.writeFile(filePath, value)
+    local file, err = io.open(filePath, "w")
+    if file == nil then
+        return false, err
+    else
+        file:write(Cjson.encode(value))
+        file:close()
+        return true, nil
+    end
+end
+
+-- Safe write for settings.json with backup, validation, and rate limiting
+-- Protects against empty content, corruption, and excessive writes
+local _last_settings_write = 0
+local SETTINGS_WRITE_MIN_INTERVAL = 2 -- minimum seconds between writes
+
+function Helper.writeSettingsFile(filePath, value)
+    -- Validate value is not nil or empty
+    if value == nil then
+        return false, "Cannot save settings: value is nil"
+    end
+
+    -- Encode to JSON first to validate before touching the file
+    local ok, encoded = pcall(Cjson.encode, value)
+    if not ok or encoded == nil then
+        return false, "Cannot save settings: JSON encoding failed"
+    end
+
+    -- Reject empty or trivially small JSON (must have core fields)
+    if #encoded < 50 then
+        return false, "Cannot save settings: content too small (" .. #encoded .. " bytes), refusing to overwrite"
+    end
+
+    -- Validate required fields exist
+    if type(value) ~= "table" then
+        return false, "Cannot save settings: value must be a table"
+    end
+    local required_fields = {"instance_id", "super_user", "env_vars"}
+    for _, field in ipairs(required_fields) do
+        if value[field] == nil then
+            return false, "Cannot save settings: missing required field '" .. field .. "'"
+        end
+    end
+
+    -- Rate limit: prevent excessive writes from rapid UI requests
+    local now = ngx.now()
+    if (now - _last_settings_write) < SETTINGS_WRITE_MIN_INTERVAL then
+        return false, "Cannot save settings: too many writes, please wait " .. SETTINGS_WRITE_MIN_INTERVAL .. " seconds between updates"
+    end
+
+    -- Create timestamped backup of current file before overwriting
+    local backup_ok = true
+    local existing, _ = io.open(filePath, "r")
+    if existing then
+        local current_content = existing:read("*a")
+        existing:close()
+        if current_content and #current_content > 0 then
+            local timestamp = os.date("%Y%m%d_%H%M%S")
+            local backup_path = filePath:gsub("settings%.json$", "settings_backup_" .. timestamp .. ".json")
+            local backup_file, backup_err = io.open(backup_path, "w")
+            if backup_file then
+                backup_file:write(current_content)
+                backup_file:close()
+                ngx.log(ngx.NOTICE, "Settings backup created: " .. backup_path)
+
+                -- Keep only the last 10 backups (clean up old ones)
+                local dir = filePath:match("(.*/)")
+                if dir then
+                    local handle = io.popen('ls -t ' .. dir .. 'settings_backup_*.json 2>/dev/null | tail -n +11')
+                    if handle then
+                        for old_backup in handle:lines() do
+                            os.remove(old_backup)
+                        end
+                        handle:close()
+                    end
+                end
+            else
+                ngx.log(ngx.WARN, "Failed to create settings backup: " .. (backup_err or "unknown error"))
+            end
+        end
+    end
+
+    -- Write to temp file first, then rename (atomic write)
+    local tmp_path = filePath .. ".tmp"
+    local file, err = io.open(tmp_path, "w")
+    if file == nil then
+        return false, "Cannot save settings: failed to open temp file - " .. (err or "unknown error")
+    end
+
+    file:write(encoded)
+    file:close()
+
+    -- Verify the temp file was written correctly
+    local verify, _ = io.open(tmp_path, "r")
+    if verify then
+        local written = verify:read("*a")
+        verify:close()
+        if written ~= encoded then
+            os.remove(tmp_path)
+            return false, "Cannot save settings: written content verification failed"
+        end
+    else
+        return false, "Cannot save settings: failed to verify temp file"
+    end
+
+    -- Atomic rename; Secret/ConfigMap subPath mounts reject rename ("Resource busy").
+    local rename_ok, rename_err = os.rename(tmp_path, filePath)
+    if not rename_ok then
+        local err_s = tostring(rename_err or "")
+        if err_s:find("Resource busy", 1, true) or err_s:find("Invalid cross-device", 1, true) then
+            -- Fall back to in-place overwrite (works on plain files; Secret mounts are often RO).
+            local dest, dest_err = io.open(filePath, "w")
+            os.remove(tmp_path)
+            if not dest then
+                return false, "Cannot save settings: mounted read-only (Secret/ConfigMap?). "
+                    .. "Update Secret proxy10x-settings via bootstrap/helm instead of the UI. "
+                    .. "(" .. (dest_err or err_s) .. ")"
+            end
+            dest:write(encoded)
+            dest:close()
+            _last_settings_write = now
+            ngx.log(ngx.NOTICE, "Settings file updated in-place (rename unavailable): " .. filePath)
+            return true, nil
+        end
+        os.remove(tmp_path)
+        return false, "Cannot save settings: rename failed - " .. err_s
+    end
+
+    _last_settings_write = now
+    ngx.log(ngx.NOTICE, "Settings file updated successfully: " .. filePath)
+    return true, nil
+end
+
+-- Hash password
+function Helper.hashPassword(password)
+    local resty_sha256 = require "resty.sha256"
+    local sha256 = resty_sha256:new()
+    sha256:update(password)
+    local digest = sha256:final()
+    local hash = ngx.encode_base64(digest)
+    return hash
+end
+
+-- Generate JWT Token
+function Helper.generateToken()
+    local settings = Helper.settings()
+    local jwt = JWT
+    local passPhrase = settings.env_vars.JWT_SECURITY_PASSPHRASE or os.getenv("JWT_SECURITY_PASSPHRASE")
+    return jwt:sign(passPhrase, {
+        header = {
+            typ = "JWT",
+            alg = "HS256"
+        },
+        payload = {
+            sub = "123456",
+            exp = ngx.time() + 3600
+        }
+    })
+end
+
+-- Check if file Exists on path
+function Helper.isFileExists(filePath)
+    local attr = LFS.attributes(filePath)
+    if attr then
+        return true
+    else
+        return false
+    end
+end
+
+-- Read data from file
+function Helper.getDataFromFile(path)
+    local fileData = nil
+    local file, err = io.open(path, "rb")
+    if file ~= nil then
+        fileData = file:read "*a"
+        file:close()
+    end
+    return fileData, err
+end
+
+-- Clean the string remove double qoutes from start and end
+function Helper.cleanString(input)
+    -- Remove double quotes from start and end
+    local output = input:match('^"(.*)"$') or input
+    -- Replace \n with new line
+    output = output:gsub("\\n", "\n")
+    return output
+end
+
+-- Create Directory
+-- Create path and any missing parents, mkdir -p style. LFS.mkdir makes exactly
+-- one level, so this used to fail silently on a nested target and leave callers
+-- writing into a directory that was never created. Callers throughout the code
+-- already assume the name means what it says.
+--
+-- Returns true on success (including when the directory already exists), or
+-- nil plus a message, matching LFS.mkdir's contract.
+function Helper.createDirectoryRecursive(path)
+    if path == nil or path == "" then
+        return nil, "cannot create a directory with an empty path"
+    end
+    local built = ""
+    if path:sub(1, 1) == "/" then
+        built = "/"
+    end
+    for segment in path:gmatch("[^/]+") do
+        if built == "" or built == "/" then
+            built = built .. segment
+        else
+            built = built .. "/" .. segment
+        end
+        if not Helper.isDirectoryExists(built) then
+            local ok, err = LFS.mkdir(built)
+            -- A racing writer may have won; existence is what matters, not who won.
+            if not ok and not Helper.isDirectoryExists(built) then
+                return nil, (err or "mkdir failed") .. " while creating " .. built
+            end
+        end
+    end
+    return true
+end
+
+-- Save data to files
+function Helper.setDataToFile(path, value, dir, fileType)
+    -- Check if the directory exists
+    if not Helper.isDirectoryExists(dir) then
+        -- Directory doesn't exist, so create it
+        local parent = dir:match("^(.*)/[^/]+/?$")
+        if parent and not Helper.isDirectoryExists(parent) then
+            Helper.createDirectoryRecursive(parent)  -- Recursively create parent directories
+        end
+        local success, errorMsg = Helper.createDirectoryRecursive(dir)
+        if errorMsg ~= nil then
+            ApiErrors.throwError(errorMsg .. " while creating " .. dir, ngx.HTTP_BAD_REQUEST)
+        end
+    end
+    local file, err = io.open(path, "w")
+    if file == nil then
+        ApiErrors.throwError("Couldn't read file: " .. err, ngx.HTTP_BAD_REQUEST)
+    else
+        if fileType == "conf" then
+            local cleanedContent = value:gsub('"(.-)"', function(s)
+                return Helper.cleanString(s)
+            end)
+            file:write(cleanedContent)
+            file:close()
+        else
+            file:write(Cjson.encode(value))
+            file:close()
+        end
+    end
+end
+
+-- Convert payloads to Lua table
+-- Request JSON is decoded so arrays re-encode as arrays: with plain cjson an
+-- empty [] from the dashboard came back as {} once saved, which is why most
+-- stored servers have `match_cases: {}` although the UI sends a list.
+local function decode_request_json(raw)
+    return require("config_io").decode_json_arrays(raw)
+end
+
+function Helper.GetPayloads(body)
+    -- Prefer the raw request body over ngx.req.get_post_args():
+    -- form parsing splits the body at the first literal "=" (and decodes
+    -- "+" to space), so rebuilding JSON from key .. value silently drops
+    -- that "=" — corrupting any base64 field (e.g. a rule's
+    -- jwt_token_validation_key losing its padding) for clients that send
+    -- plain JSON without the admin UI's = escaping. get_body_data()
+    -- is nil unless the dispatcher already called ngx.req.read_body(),
+    -- so GET handlers passing uri_args fall through to the legacy path.
+    local raw = ngx.req.get_body_data()
+    if not raw then
+        local body_file = ngx.req.get_body_file()
+        if body_file then
+            local f = io.open(body_file, "rb")
+            if f then
+                raw = f:read("*a")
+                f:close()
+            end
+        end
+    end
+    if raw then
+        local ok, decoded = pcall(decode_request_json, raw)
+        if ok and type(decoded) == "table" then
+            return decoded
+        end
+    end
+
+    local keyset = {}
+    local n = 0
+    for k, v in pairs(body) do
+        n = n + 1
+        if type(v) == "string" then
+            if v ~= nil and v ~= "" then
+                table.insert(keyset, decode_request_json(k .. v))
+            end
+        else
+            table.insert(keyset, decode_request_json(k))
+        end
+    end
+    return keyset[1]
+end
+
+function Helper.isBase64(input)
+    return input:match("^[A-Za-z0-9+/=]+$") ~= nil
+end
+local b='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+function Helper.decodeBase64(data)
+    if not Helper.isBase64(data) then
+        return nil, "Invalid Base64 input."
+    end
+    
+    data = data:gsub('[^'..b..'=]', '')  -- Remove any non-base64 characters
+    return (data:gsub('.', function(x)
+        if x == '=' then return '' end
+        local r, f = '', (b:find(x) - 1)
+        for i = 6, 1, -1 do r = r .. (f % 2 ^ i - f % 2 ^ (i - 1) > 0 and '1' or '0') end
+        return r;
+    end):gsub('%d%d%d%d%d%d%d%d', function(x)
+        return string.char(tonumber(x, 2))
+    end))
+end
+
+function Helper.isUniqueField(folderPath, field, value)
+    local ConfigIO = require("config_io")
+    -- LFS.dir throws on a missing directory, which made creating the first
+    -- record of a type in an environment (e.g. the first WAF policy in
+    -- "int") a 500. No directory means nothing to collide with.
+    if not Helper.isDirectoryExists(folderPath) then
+        return true
+    end
+    for file_name in LFS.dir(folderPath) do
+        if ConfigIO.is_config_name(file_name) then
+            local filePath = folderPath .. "/" .. file_name
+            local content, err = Helper.getDataFromFile(filePath)
+            if err == nil and content then
+                local existing_data = ConfigIO.decode(content, filePath)
+                if existing_data and existing_data[field] == value then
+                    return false, "Name '" .. value .. "' already exists in " .. file_name
+                end
+            end
+        end
+    end
+    return true
+end
+
+-- Is From EU countries
+function Helper.isEU(countryCode)
+    local EuCountries = {
+        AD = true, AL = true, AT = true, AX = true, BA = true, BE = true, BG = true, BY = true, CH = true,
+        CZ = true, DE = true, DK = true, EE = true, ES = true, FI = true, FO = true, FR = true, GB = true,
+        GG = true, GI = true, GR = true, HR = true, HU = true, IE = true, IM = true, IS = true, IT = true,
+        JE = true, LI = true, LT = true, LU = true, LV = true, MC = true, MD = true, ME = true, MK = true,
+        MT = true, NL = true, NO = true, PL = true, PT = true, RO = true, RS = true, RU = true, SE = true,
+        SI = true, SJ = true, SK = true, SM = true, UA = true, VA = true
+    }
+    return EuCountries[countryCode] or false
+end
+
+
+-- Delete files from Directory
+function Helper.deleteAllFiles(directory)
+    local p = io.popen('find "' .. directory .. '" -type f')
+    local success, msg = true, nil
+    if not p then
+        return false, "Failed to open directory:"
+    end
+    for file in p:lines() do
+        local result, err = os.remove(file)
+        if not result then
+            success, msg = false, err
+        end
+    end
+    p:close()
+    return success, msg
+end
+
+-- Get all files in a directory
+function Helper.getFilesInDirectory(directory)
+    -- Check if directory exists first
+    if not Helper.isDirectoryExists(directory) then
+        return nil, "Directory does not exist: " .. directory
+    end
+
+    local files = {}
+    local iter, dir_obj = LFS.dir(directory)
+    if not iter then
+        return nil, "Failed to read directory: " .. directory
+    end
+
+    for file in iter, dir_obj do
+        if file ~= "." and file ~= ".." then
+            table.insert(files, file)
+        end
+    end
+
+    return files, nil
+end
+
+-- Create directory with parents (like mkdir -p)
+function Helper.createDirectoryWithParents(path)
+    -- Split path into parts
+    local parts = {}
+    for part in string.gmatch(path, "[^/]+") do
+        table.insert(parts, part)
+    end
+
+    -- Build and create each directory level
+    local currentPath = ""
+    if path:sub(1, 1) == "/" then
+        currentPath = "/"
+    end
+
+    for _, part in ipairs(parts) do
+        currentPath = currentPath .. part .. "/"
+        if not Helper.isDirectoryExists(currentPath) then
+            local success, err = LFS.mkdir(currentPath)
+            if not success and not Helper.isDirectoryExists(currentPath) then
+                return false, "Failed to create directory: " .. currentPath .. " - " .. (err or "unknown error")
+            end
+        end
+    end
+
+    return true, nil
+end
+
+return Helper

@@ -1,0 +1,33 @@
+---
+# Deploy application code: HTML pages and Lua API files
+
+- name: Sync HTML files
+  ansible.posix.synchronize:
+    src: ../../html/
+    dest: /usr/local/openresty/nginx/html
+  register: sync_html
+  # rsync opens its own SSH connection (no ControlMaster), so one dropped
+  # connect fails the deploy. Retrying is safe: rsync is idempotent.
+  until: sync_html is succeeded
+  retries: 3
+  delay: 10
+  tags: [code, dashboard]
+
+- debug:
+    var: sync_html.stdout_lines
+  tags: [code, dashboard]
+
+- name: Sync API files
+  ansible.posix.synchronize:
+    src: ../../api/
+    dest: /usr/local/openresty/nginx/html/api
+  notify: Restart openresty
+  register: sync_api
+  until: sync_api is succeeded
+  retries: 3
+  delay: 10
+  tags: [code, dashboard]
+
+- debug:
+    var: sync_api.stdout_lines
+  tags: [code, dashboard]

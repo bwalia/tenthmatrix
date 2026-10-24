@@ -1,0 +1,135 @@
+name: API Test Suite execution on selected env
+
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch:
+    inputs:
+      TARGET_ENV:
+        type: choice
+        description: "Please choose the Target Environment"
+        default: "dev"
+        required: true
+        options:
+          - dev
+          - local
+          - int2
+          - int6
+          - test
+          # `acc` was decommissioned along with 187.77.179.206.
+
+      PROFILE_ID:
+        type: choice
+        description: "Please choose the Target Profile"
+        default: "dev"
+        required: true
+        options:
+          - dev
+          - test
+          - qa_test
+          - prod
+
+      DELETE_TEST_DATA:
+        description: "Delete Test Data After Execution"
+        required: true
+        default: true
+        type: boolean
+      LOGIN_EMAIL:
+        description: "Login Email (leave empty to use secret)"
+        required: false
+        type: string
+      LOGIN_PASSWORD:
+        description: "Login Password (leave empty to use secret)"
+        required: false
+        type: string
+
+env:
+  TARGET_ENV: ${{ inputs.TARGET_ENV || 'dev'}}
+  PROFILE_ID: ${{ inputs.PROFILE_ID || 'dev'}}
+  LOGIN_EMAIL: ${{ inputs.LOGIN_EMAIL || secrets.LOGIN_EMAIL }}
+  LOGIN_PASSWORD: ${{ inputs.LOGIN_PASSWORD || secrets.LOGIN_PASSWORD }}
+  JWT_TOKEN_KEY_DEV: ${{ secrets.JWT_TOKEN_KEY_DEV }}
+  JWT_TOKEN_KEY_TEST: ${{ secrets.JWT_TOKEN_KEY_TEST }}
+  JWT_TOKEN_KEY_INT: ${{ secrets.JWT_TOKEN_KEY_INT }}
+  JWT_TOKEN_KEY_ACC: ${{ secrets.JWT_TOKEN_KEY_ACC }}
+  JWT_TOKEN_KEY: ${{ secrets.JWT_TOKEN_KEY }}
+  DELETE_TEST_DATA: ${{ inputs.DELETE_TEST_DATA || 'true'}}
+  QA_EXPIRED_JWT_TOKEN_KEY: ${{ secrets.QA_EXPIRED_JWT_TOKEN_KEY }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Setup local environment
+        if: ${{ inputs.TARGET_ENV == 'local' }}
+        run: |
+          ./deploy-to-docker.sh "dev" "proxy10x" "${{ secrets.JWT_TOKEN_KEY }}"
+
+      - name: API Test For Rules & Servers
+        working-directory: ./QA
+        run: |
+          if [[ "${{ inputs.TARGET_ENV }}" == 'dev' ]]; then
+            export TARGET_HOST="https://dev-our.proxy10x.com"
+            export SERVER_NAME="dev-frontend.proxy10x.com"
+            export SERVER_ID_QA="host:dev-frontend.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://dev-frontend.proxy10x.com"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_DEV }}"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'int2' ]]; then
+            export TARGET_HOST="https://api-int.proxy10x.com"
+            export SERVER_NAME="frontdoor-int.proxy10x.com"
+            export SERVER_ID_QA="host:frontdoor-int.proxy10x.com"
+            export NODE_APP_IP="10.43.140.53:3009"
+            export FRONT_URL="https://frontdoor-int.proxy10x.com"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_INT }}"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'int6' ]]; then
+            export TARGET_HOST="https://api-int.proxy10x.com"
+            export SERVER_NAME="qa-int.proxy10x.com"
+            export SERVER_ID_QA="host:qa-int.proxy10x.com"
+            export NODE_APP_IP="10.43.81.65:3009"
+            export FRONT_URL="https://qa-int.proxy10x.com"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_INT }}"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'test' ]]; then
+            export TARGET_HOST="https://api-test.proxy10x.com"
+            export SERVER_NAME="frontdoor-test.proxy10x.com"
+            export SERVER_ID_QA="host:frontdoor-test.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://frontdoor-test.proxy10x.com"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_TEST }}"
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == 'local' ]]; then
+            export TARGET_HOST="http://localhost:8081"
+            export SERVER_NAME="localhost"
+            export SERVER_ID_QA="host:localhost"
+            export NODE_APP_IP="172.177.0.10:3009"
+            export FRONT_URL="http://localhost:8069"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_DEV }}"
+
+          # `acc` branch removed — 187.77.179.206 was decommissioned.
+
+          elif [[ "${{ inputs.TARGET_ENV }}" == '' ]]; then
+            export TARGET_HOST="https://dev-our.proxy10x.com"
+            export SERVER_NAME="dev-frontend.proxy10x.com"
+            export SERVER_ID_QA="host:dev-frontend.proxy10x.com"
+            export NODE_APP_IP=""
+            export FRONT_URL="https://dev-frontend.proxy10x.com"
+            export JWT_TOKEN_KEY="${{ secrets.JWT_TOKEN_KEY_DEV }}"
+
+          else
+            echo "Unsupported TARGET_ENV:${{ inputs.TARGET_ENV }}"
+            exit 1
+          fi
+
+          # Run main test functions (excluding helper functions from 11_entire_api_crud_test.go)
+          go test -v -run "TestHealthCheck|TestLoginAccess|TestApiAccessAuth|TestHostOverRide|TestClientIP|TestURLPath|TestCheckRulePriority|TestDeleteRules|TestRedirectURI|TestRuleResponse|Test10_"

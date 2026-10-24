@@ -1,0 +1,24 @@
+# Grafana dashboard file-provisioning for Proxy10x.
+#
+# Use this if Grafana runs where you control the filesystem (docker volume /
+# config management). Copy to /etc/grafana/provisioning/dashboards/ and mount
+# the dashboards/ directory at /var/lib/grafana/dashboards/proxy10x.
+#
+# If you only have API access to int-grafana.diytaxreturn.co.uk, use
+# ../../scripts/import-dashboard.sh instead — it pushes straight into the
+# existing "Proxy10x Monitoring" folder (uid afmpjjn28j4zkc).
+
+apiVersion: 1
+
+providers:
+  - name: proxy10x-sre
+    orgId: 1
+    folder: Proxy10x Monitoring
+    folderUid: afmpjjn28j4zkc
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 60
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards/proxy10x
+      foldersFromFilesStructure: false

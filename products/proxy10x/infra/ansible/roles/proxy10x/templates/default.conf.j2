@@ -1,0 +1,239 @@
+    # Default server configuration — works independently of Lua gateway
+    # Frontend: {{ nginx_default_server_frontend | default('') }}
+    # Backend:  {{ nginx_default_server_backend | default('') }}
+    # Let's Encrypt Email: {{ letsencrypt_email }}
+{% set _pub = nginx_public_bind_ip | default('') %}
+{% set _listen80 = (_pub ~ ':80') if (_pub | length > 0) else '80' %}
+{% set _listen443 = (_pub ~ ':443') if (_pub | length > 0) else '443' %}
+
+{% if nginx_default_server_frontend | default('') | length > 0 %}
+    # ──────────────────────────────────────────────────────
+    # FRONTEND — Public landing page
+    # ──────────────────────────────────────────────────────
+
+    # HTTP (port 80) — serves landing page + ACME challenge
+    server {
+        listen       {{ _listen80 }};
+        server_name  {{ nginx_default_server_frontend }}{% if host_lan_ip | default('') and host_lan_ip != nginx_default_server_backend_nextjs | default('') %} {{ host_lan_ip }}{% endif %};
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+    }
+
+    # HTTPS (port 443) — landing page with auto-ssl
+    server {
+        listen       {{ _listen443 }} ssl;
+        server_name  {{ nginx_default_server_frontend }};
+
+        http2 on;
+
+        ssl_session_timeout  5m;
+        ssl_session_cache shared:frontend_ssl:10m;
+        ssl_session_tickets off;
+
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+        ssl_prefer_server_ciphers off;
+
+        ssl_certificate_by_lua_block {
+            auto_ssl:ssl_certificate()
+        }
+
+        ssl_certificate /etc/ssl/resty-auto-ssl-fallback.crt;
+        ssl_certificate_key /etc/ssl/resty-auto-ssl-fallback.key;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+    }
+{% endif %}
+
+{% if nginx_default_server_backend | default('') | length > 0 %}
+    # ──────────────────────────────────────────────────────
+    # BACKEND — Admin UI (proxy to 127.0.0.1:{{ nginx_default_server_backend_port }})
+    # Works even when Lua gateway is down
+    # ──────────────────────────────────────────────────────
+
+    # HTTP (port 80) — redirect to HTTPS + ACME challenge
+    server {
+        listen       {{ _listen80 }};
+        server_name  {{ nginx_default_server_backend }};
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    # HTTPS (port 443) — admin UI with auto-ssl
+    server {
+        listen       {{ _listen443 }} ssl;
+        server_name  {{ nginx_default_server_backend }};
+
+        http2 on;
+
+        ssl_session_timeout  5m;
+        ssl_session_cache shared:backend_ssl:10m;
+        ssl_session_tickets off;
+
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+        ssl_prefer_server_ciphers off;
+
+        ssl_certificate_by_lua_block {
+            auto_ssl:ssl_certificate()
+        }
+
+        ssl_certificate /etc/ssl/resty-auto-ssl-fallback.crt;
+        ssl_certificate_key /etc/ssl/resty-auto-ssl-fallback.key;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        # Fast-path public health check — served by nginx/openresty Lua
+        # directly with no proxy hop.  Exact-match `= /health` beats the
+        # `location /` catch-all below it, so the request never reaches
+        # the admin backend on :{{ nginx_default_server_backend_port }}.
+        # Same handler as the admin server on port {{ nginx_default_server_backend_port }} —
+        # ping.lua returns a JSON status document (worker state, cache
+        # counters, etc).  Used by external monitors that need a stable
+        # public URL on the dashboard host.
+        # Canonical /healthz (Kubernetes-standard).  /health kept as an
+        # alias so external monitors and legacy pipeline health_endpoint
+        # values (http://.../health) keep working during the migration.
+        location ~ ^/(health|healthz)$ {
+            default_type 'application/json';
+            add_header 'Access-Control-Allow-Origin' '*';
+            add_header 'Access-Control-Allow-Methods' 'GET';
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With';
+            content_by_lua_file /usr/local/openresty/nginx/html/api/ping.lua;
+        }
+
+        location / {
+            proxy_pass http://127.0.0.1:{{ nginx_default_server_backend_port }};
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_connect_timeout 30s;
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
+        }
+    }
+{% endif %}
+
+{% if nginx_default_server_backend_nextjs | default('') | length > 0 %}
+    # ──────────────────────────────────────────────────────
+    # BACKEND (Next.js) — proxy to 127.0.0.1:{{ nginx_nextjs_node_port }}
+    # Canonical production domain served by the Next.js standalone dashboard.
+    # Mirrors the cert handling above so auto-ssl can renew via HTTP-01.
+    # ──────────────────────────────────────────────────────
+
+    # HTTP (port 80) — redirect to HTTPS + ACME challenge
+    server {
+        listen       {{ _listen80 }};
+        server_name  {{ nginx_default_server_backend_nextjs }};
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    # HTTPS (port 443) — Next.js dashboard with auto-ssl
+    server {
+        listen       {{ _listen443 }} ssl;
+        server_name  {{ nginx_default_server_backend_nextjs }};
+
+        http2 on;
+
+        ssl_session_timeout  5m;
+        ssl_session_cache shared:backend_ssl_nextjs:10m;
+        ssl_session_tickets off;
+
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+        ssl_prefer_server_ciphers off;
+
+        ssl_certificate_by_lua_block {
+            auto_ssl:ssl_certificate()
+        }
+
+        ssl_certificate /etc/ssl/resty-auto-ssl-fallback.crt;
+        ssl_certificate_key /etc/ssl/resty-auto-ssl-fallback.key;
+
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+        location /.well-known/acme-challenge/ {
+            content_by_lua_block {
+                auto_ssl:challenge_server()
+            }
+        }
+
+        # Fast-path public health check — served by nginx/openresty Lua
+        # directly, bypassing the Next.js dashboard on
+        # :{{ nginx_nextjs_node_port }} (which has no /health route and
+        # would return 404).  Exact-match `= /health` beats the
+        # `location /` catch-all below it.  Before this location was
+        # added, external monitors hitting {{ nginx_default_server_backend_nextjs }}/health
+        # got 404 from the Next.js server; now they get the same JSON
+        # status document as ping.lua serves on the admin port.
+        # Canonical /healthz (Kubernetes-standard).  /health kept as an
+        # alias so external monitors and legacy pipeline health_endpoint
+        # values (http://.../health) keep working during the migration.
+        location ~ ^/(health|healthz)$ {
+            default_type 'application/json';
+            add_header 'Access-Control-Allow-Origin' '*';
+            add_header 'Access-Control-Allow-Methods' 'GET';
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With';
+            content_by_lua_file /usr/local/openresty/nginx/html/api/ping.lua;
+        }
+
+        location / {
+            proxy_pass http://127.0.0.1:{{ nginx_nextjs_node_port }};
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cache_bypass $http_upgrade;
+            proxy_connect_timeout 30s;
+            proxy_read_timeout 600s;
+            proxy_send_timeout 600s;
+        }
+    }
+{% endif %}

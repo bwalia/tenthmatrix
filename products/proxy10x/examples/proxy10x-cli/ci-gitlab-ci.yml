@@ -1,0 +1,40 @@
+# Example GitLab CI job using the proxy10x-cli container image.
+# Image: ghcr.io/bwalia/proxy10x-cli:latest
+#
+# CI/CD variables (masked/protected as needed):
+#   PROXY10X_BASE_URL
+#   PROXY10X_TOKEN
+# Optional for private GHCR pull:
+#   CI_REGISTRY / DOCKER_AUTH_CONFIG, or deploy token for ghcr.io
+
+stages:
+  - verify
+
+variables:
+  PROXY10X_CLI_IMAGE: "ghcr.io/bwalia/proxy10x-cli:latest"
+  PROXY10X_ASSUME_YES: "1"
+
+proxy10x-check-nginx:
+  stage: verify
+  image:
+    name: $PROXY10X_CLI_IMAGE
+    entrypoint: [""]
+  script:
+    - proxy10x-cli version
+    - proxy10x-cli status health -o json
+    - proxy10x-cli check nginx -o json
+
+proxy10x-pull-dry-run:
+  stage: verify
+  image:
+    name: $PROXY10X_CLI_IMAGE
+    entrypoint: [""]
+  script:
+    - set -euo pipefail
+    - proxy10x-cli pull -d ./cfg --resources servers,rules -o json
+    - proxy10x-cli push -d ./cfg --resources servers,rules --dry-run -o json
+  artifacts:
+    paths:
+      - cfg/
+    expire_in: 1 day
+    when: always
