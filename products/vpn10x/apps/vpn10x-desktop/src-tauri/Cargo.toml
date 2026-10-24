@@ -1,0 +1,28 @@
+# Its own workspace, deliberately.
+#
+# Tauri pulls in the platform webview - WebKit on macOS, webkit2gtk on Linux -
+# which the CI runner has no reason to install and the control plane has no
+# reason to link against. Sharing the root workspace would put all of that in
+# the lockfile every `cargo build` resolves, and in everything cargo-deny has
+# to licence-check. The desktop app builds from this directory instead.
+[workspace]
+
+[package]
+name = "vpn10x-desktop"
+version = "0.1.0"
+description = "VPN10x desktop"
+authors = ["VPN10x"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["process", "rt", "io-util"] }
+
+[lib]
+name = "vpn10x_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]

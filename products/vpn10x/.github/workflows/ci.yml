@@ -1,0 +1,110 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  # The desktop window's decisions live in view.js and are tested without a
+  # browser. (The Tauri bridge needs a webview SDK to build; `make test` in
+  # apps/vpn10x-desktop runs it on a Mac.)
+  desktop-view:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/vpn10x-desktop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/vpn10x-desktop/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+  rust:
+    runs-on: ubuntu-latest
+
+    # The control-plane authorization tests drive the real router against a
+    # real database. Without this service they would be skipped, and skipped
+    # authorization tests are indistinguishable from absent ones.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: vpn10x
+          POSTGRES_PASSWORD: vpn10x
+          POSTGRES_DB: vpn10x
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U vpn10x -d vpn10x"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://vpn10x:vpn10x@localhost:5432/vpn10x
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: fmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: test
+        run: cargo test --workspace
+      - name: build
+        run: cargo build --workspace --release
+
+  # Supply-chain checks are a gate, not a note. `continue-on-error` here meant a
+  # known-vulnerable dependency could be merged without anyone noticing.
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: install cargo-audit
+        run: cargo install cargo-audit --locked
+      # Exceptions live in .cargo/audit.toml, each with the evidence that the
+      # advisory does not reach a compiled binary and the date it was checked.
+      - name: audit
+        run: cargo audit --deny warnings
+
+  deny:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: install cargo-deny
+        run: cargo install cargo-deny --locked
+      - name: licences, bans and advisories
+        run: cargo deny check
+
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: install cargo-cyclonedx
+        run: cargo install cargo-cyclonedx --locked
+      - name: generate SBOM
+        run: cargo cyclonedx --format json --all
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: "**/*.cdx.json"
+          if-no-files-found: error

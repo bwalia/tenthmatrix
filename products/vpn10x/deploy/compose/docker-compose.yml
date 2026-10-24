@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: vpn10x
+      POSTGRES_PASSWORD: vpn10x
+      POSTGRES_DB: vpn10x
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vpn10x -d vpn10x"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  dex:
+    image: ghcr.io/dexidp/dex:v2.41.1
+    command: ["dex", "serve", "/etc/dex/config.yaml"]
+    ports:
+      - "5556:5556"
+    volumes:
+      - ./dex.yaml:/etc/dex/config.yaml:ro
+
+  control:
+    build:
+      context: ../..
+      dockerfile: deploy/compose/Dockerfile.control
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://vpn10x:vpn10x@postgres:5432/vpn10x
+      RUST_LOG: info
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./control.yaml:/etc/vpn10x/control.yaml:ro
+      - ../../gitops/examples:/gitops:ro
+    command: ["--config", "/etc/vpn10x/control.yaml"]
+
+  gateway:
+    build:
+      context: ../..
+      dockerfile: deploy/compose/Dockerfile.gateway
+    depends_on:
+      - control
+    environment:
+      RUST_LOG: info
+    volumes:
+      - ./gateway.yaml:/etc/vpn10x/gateway.yaml:ro
+    command: ["--config", "/etc/vpn10x/gateway.yaml"]
+    cap_add:
+      - NET_ADMIN
+    # manage_interface remains false in compose for portability
+
+volumes:
+  pgdata:

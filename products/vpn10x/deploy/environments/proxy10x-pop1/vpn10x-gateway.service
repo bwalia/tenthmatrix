@@ -1,0 +1,24 @@
+# /etc/systemd/system/vpn10x-gateway.service on proxy10x-pop1.
+#
+# Runs the signed v0.1.0 gateway image with host networking so it can see and
+# manage the hub's WireGuard interface. NET_ADMIN only — not privileged.
+[Unit]
+Description=VPN10x Zero Trust gateway
+After=network-online.target docker.service wg-quick@__WG_INTERFACE__.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/docker rm -f vpn10x-gateway
+ExecStart=/usr/bin/docker run --rm --name vpn10x-gateway \
+  --network host --cap-drop ALL --cap-add NET_ADMIN \
+  --env RUST_LOG=info \
+  -v /etc/vpn10x/gateway.yaml:/etc/vpn10x/gateway.yaml:ro \
+  -v /var/lib/vpn10x-gateway:/var/lib/vpn10x-gateway \
+  ghcr.io/bwalia/vpn10x-gateway:0.1.0 --config /etc/vpn10x/gateway.yaml
+ExecStop=/usr/bin/docker stop vpn10x-gateway
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

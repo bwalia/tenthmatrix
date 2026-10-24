@@ -1,0 +1,48 @@
+server:
+  listen: "0.0.0.0:8080"
+  public_url: "http://localhost:8080"
+  expose_docs: true
+
+product:
+  namespace: vpn10x
+  display_name: "VPN10x"
+
+database:
+  url: "postgres://vpn10x:vpn10x@postgres:5432/vpn10x"
+
+identity:
+  dev_login_enabled: true
+  oidc:
+    # The issuer is the identity Dex signs into every token, and Dex is
+    # configured with this value. The browser resolves it; the control-plane
+    # container does not, which is what internal_url is for.
+    issuer: "http://localhost:5556/dex"
+    # Where this container reaches Dex. Only the address dialled differs — the
+    # issuer above is still checked against the discovery document and the
+    # token's iss claim.
+    internal_url: "http://dex:5556/dex"
+    client_id: "vpn10x-client"
+    client_secret: "vpn10x-client-secret"
+    scopes:
+      - openid
+      - profile
+      - email
+    redirect_uri: "http://localhost:8080/auth/oidc/callback"
+    # Lets the iOS client complete a login against the dev stack. See
+    # docs/IOS.md; without this its callback scheme is refused.
+    native_schemes:
+      - io.vpn10x.zerotrust
+
+wireguard:
+  default_port: 51820
+
+gitops:
+  enabled: true
+  path: "/gitops"
+
+bootstrap:
+  ops_service_token: "dev-ops-token-change-me"
+  gateway_registration_token: "dev-gateway-token-change-me"
+  scim_service_token: "dev-scim-token-change-me"
+  admin_emails:
+    - "alice@example.com"

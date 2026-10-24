@@ -1,0 +1,282 @@
+// What the window shows, decided from what the agent reported.
+//
+// Pure functions of `vpn10x status --json` and `vpn10x dns status --json`, with no
+// DOM and no Tauri, so every decision here is tested in view.test.js rather
+// than discovered by clicking. main.js only applies the result.
+
+/** Which panel to show. An imported profile needs no sign-in. */
+export function panelFor(status) {
+  return status.mode === "signed_out" ? "signedOut" : "dashboard";
+}
+
+/**
+ * The dashboard, for either mode.
+ *
+ * A session record and a live interface are different things and are kept
+ * apart: "connected" means an interface is up, whatever the session says.
+ */
+export function dashboard(status) {
+  const connected = Boolean(status.interface);
+  const direct = status.mode === "direct";
+  const fact = (value, hidden = false) => ({ value: value ?? "—", hidden });
+  const optional = (value) => fact(value, !value);
+
+  return {
+    connected,
+    stateText: connected ? "Connected" : "Disconnected",
+    facts: {
+      profile: fact(status.profile?.name, !direct),
+      controlUrl: fact(status.control_url, direct),
+      email: fact(status.user, direct),
+      device: fact(status.device, direct),
+      identity: fact(status.identity, direct),
+      posture: fact(status.posture),
+      interface: fact(status.interface ?? "Down"),
+      gateway: optional(status.gateway),
+      expires: optional(
+        status.session_expires
+          ? new Date(status.session_expires).toLocaleString()
+          : null,
+      ),
+    },
+    warning: otherVpnWarning(status),
+    showConnect: !connected,
+    showDisconnect: connected,
+    showNetworkPicker: !direct && !connected,
+    leave: direct
+      ? { label: "Remove profile", command: "remove_profile" }
+      : { label: "Sign out", command: "sign_out" },
+  };
+}
+
+/** The DNS overrides section. */
+export function dnsView(dns) {
+  const count = dns.entries.length;
+  const overrides = `${count} override${count === 1 ? "" : "s"}`;
+  if (!dns.supported) {
+    return { summary: "Not available on this platform", tone: "muted", toggle: null };
+  }
+  if (dns.error) {
+    return { summary: dns.error, tone: "bad", toggle: null };
+  }
+  if (!dns.enabled) {
+    return {
+      summary: `Off · ${overrides}`,
+      tone: "muted",
+      toggle: { label: "Turn on", command: "dns_enable" },
+    };
+  }
+  const off = { label: "Turn off", command: "dns_disable" };
+  if (!dns.running) {
+    return {
+      summary: "On, but the resolver is not answering",
+      tone: "bad",
+      toggle: { label: "Restart", command: "dns_enable" },
+    };
+  }
+  if (!dns.in_sync) {
+    return {
+      summary: `On · ${overrides} · new names need applying`,
+      tone: "warn",
+      toggle: { label: "Apply", command: "dns_enable" },
+    };
+  }
+  return { summary: `On · ${overrides}`, tone: "ok", toggle: off };
+}
+
+const LABEL = /^(?!-)[a-z0-9_-]{1,63}(?<!-)$/i;
+
+/**
+ * Check an override before sending it. The agent validates again — these
+ * names become files under /etc/resolver — but a message here is quicker.
+ */
+export function validateOverride(name, address) {
+  const trimmed = name.trim().replace(/\.$/, "");
+  const wild = trimmed.startsWith("*.");
+  const host = wild ? trimmed.slice(2) : trimmed;
+  const labels = host.split(".");
+  if (!host || host.length > 253 || !labels.every((l) => LABEL.test(l))) {
+    return "Enter a host name, like intranet.example.com or *.dev.example.com";
+  }
+  if (wild && labels.length < 2) {
+    return "That wildcard is too broad; it needs at least two labels";
+  }
+  if (!isIp(address.trim())) {
+    return "Enter an IPv4 or IPv6 address, like 10.0.0.5";
+  }
+  return null;
+}
+
+function isIp(text) {
+  const v4 = text.split(".");
+  if (v4.length === 4 && v4.every((p) => /^\d{1,3}$/.test(p) && Number(p) <= 255)) {
+    return true;
+  }
+  if (!text.includes(":") || !/^[0-9a-f:.]+$/i.test(text)) return false;
+  try {
+    // The URL parser is a strict IPv6 validator that every webview has.
+    new URL(`http://[${text}]/`);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Mirror of the agent's rule: https, or plain http to this machine only. */
+export function controlUrlProblem(text) {
+  let url;
+  try {
+    url = new URL(text.trim());
+  } catch {
+    return "Enter the control plane's full URL, like https://vpn.example.com";
+  }
+  const host = url.hostname.replace(/^\[|\]$/g, "");
+  const local = host === "localhost" || host === "::1" || host.startsWith("127.");
+  if (url.protocol === "https:") return null;
+  if (url.protocol === "http:" && local) return null;
+  return "The control plane must use https unless it is on this computer";
+}
+
+export function profileNameFromFile(fileName) {
+  const stem = fileName.replace(/\.conf$/i, "");
+  return stem || "WireGuard";
+}
+
+/**
+ * Which sign-in buttons to offer, from `vpn10x sign-in-methods --json`. When the
+ * methods could not be read, browser sign-in is still offered: it is what
+ * every control plane serves.
+ */
+export function signInOptions(methods) {
+  const opsapi = methods?.opsapi;
+  return {
+    browser: methods?.oidc ?? true,
+    opsapi: opsapi
+      ? {
+          label: "Sign in with OpsAPI",
+          hint: `Your ${opsapi.namespace} account at ${hostOf(opsapi.url)}. ` +
+            "The password goes to OpsAPI, not to the VPN.",
+        }
+      : null,
+  };
+}
+
+function hostOf(url) {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
+}
+
+/** Check the OpsAPI form before sending anything. */
+export function opsapiProblem(email, password) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    return "Enter your email address";
+  }
+  if (!password) return "Enter your password";
+  return null;
+}
+
+/** What follows `vpn10x login --opsapi --json`. */
+export function afterOpsapiSignIn(result) {
+  if (result?.status === "code_required") {
+    return {
+      step: "code",
+      challenge: result.challenge,
+      prompt: `Enter the code sent to ${result.email}`,
+    };
+  }
+  return { step: "done" };
+}
+
+/**
+ * The official WireGuard app's tunnels run beside ours. Two tunnels claiming
+ * the same routes is the usual reason "connected" carries no traffic.
+ */
+export function otherVpnWarning(status) {
+  const names = (status.other_wireguard ?? []).map((n) => `“${n}”`);
+  if (!names.length) return null;
+  const list = names.length === 1
+    ? names[0]
+    : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+  return `The WireGuard app also has ${list} connected. If both tunnels route ` +
+    "the same addresses, disconnect one of them.";
+}
+
+// --- The tunnel list and detail pane ------------------------------------
+
+/** Whether the live interface belongs to profile `name`. */
+function isUp(status, name) {
+  return status.profile?.name === name && Boolean(status.interface);
+}
+
+/** The sidebar's tunnels, in import order. */
+export function tunnelList(status, selected) {
+  return (status.profiles ?? []).map((p) => ({
+    name: p.name,
+    up: isUp(status, p.name),
+    selected: p.name === selected,
+  }));
+}
+
+function keepalive(value) {
+  if (value == null || value === "") return null;
+  const seconds = Number(value);
+  if (seconds === 0 || value === "off") return "off";
+  return `every ${seconds} second${seconds === 1 ? "" : "s"}`;
+}
+
+/** Label/value rows, leaving out whatever the config does not set. */
+function rows(pairs) {
+  return pairs.filter(([, v]) => v != null && v !== "" && !(Array.isArray(v) && !v.length))
+    .map(([k, v]) => [k, Array.isArray(v) ? v.join(", ") : String(v)]);
+}
+
+/**
+ * The detail pane for one tunnel, laid out as the WireGuard app lays it out.
+ * Only one tunnel runs at a time: activating another replaces it, in one
+ * privileged step.
+ */
+export function tunnelDetail(status, name) {
+  const p = (status.profiles ?? []).find((x) => x.name === name);
+  if (!p) return null;
+  const up = isUp(status, name);
+  return {
+    title: p.name,
+    up,
+    statusText: up ? "Active" : "Inactive",
+    interfaceName: up ? status.interface : null,
+    interface: rows([
+      ["Public key", p.public_key],
+      ["Addresses", p.address],
+      ["DNS servers", p.dns],
+      ["Listen port", p.listen_port],
+      ["MTU", p.mtu],
+    ]),
+    peers: (p.peers ?? []).map((peer) =>
+      rows([
+        ["Peer", peer.public_key],
+        ["Endpoint", peer.endpoint],
+        ["Allowed IPs", peer.allowed_ips],
+        ["Persistent keepalive", keepalive(peer.persistent_keepalive)],
+      ])
+    ),
+    action: up
+      ? { label: "Deactivate", command: "disconnect" }
+      : { label: "Activate", command: "activate_profile" },
+  };
+}
+
+/**
+ * What the sidebar should have selected after a refresh: what was selected,
+ * if it still exists; else the active tunnel; else the first; else signing in.
+ * Sections (organisation, DNS, posture) are named `section:<id>`.
+ */
+export function chooseSelection(status, current) {
+  const names = (status.profiles ?? []).map((p) => p.name);
+  if (current?.startsWith("section:")) return current;
+  if (current && names.includes(current)) return current;
+  if (status.profile && names.includes(status.profile.name)) return status.profile.name;
+  return names[0] ?? "section:organisation";
+}

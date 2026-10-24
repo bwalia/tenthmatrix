@@ -1,0 +1,60 @@
+[package]
+name = "vpn10x-control"
+description = "VPN10x control plane"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "vpn10x_control"
+path = "src/lib.rs"
+
+[[bin]]
+name = "vpn10x-control"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+axum = { workspace = true }
+base64 = { workspace = true }
+chrono = { workspace = true }
+clap = { workspace = true }
+hex = { workspace = true }
+hmac = { workspace = true }
+jsonwebtoken = { workspace = true }
+metrics = { workspace = true }
+metrics-exporter-prometheus = { workspace = true }
+rand = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+sha2 = { workspace = true }
+sqlx = { workspace = true }
+subtle = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+url = { workspace = true }
+utoipa = { workspace = true }
+utoipa-swagger-ui = { workspace = true }
+uuid = { workspace = true }
+vpn10x-crypto = { workspace = true }
+vpn10x-policy = { workspace = true }
+vpn10x-types = { workspace = true }
+ipnetwork = "0.20"
+
+[dev-dependencies]
+futures = "0.3"
+http-body-util = "0.1"
+# Generates the throwaway keypairs the id_token tests sign with, so no private
+# key is committed. Deliberately not `rsa`: the cargo-audit exception for
+# RUSTSEC-2023-0071 is justified by `rsa` never being compiled, and adding it
+# here — even as a dev-dependency — would make that justification untrue.
+p256 = { version = "0.13", features = ["ecdsa", "pkcs8"] }
+serde_yaml = { workspace = true }
+tower = { workspace = true, features = ["util"] }

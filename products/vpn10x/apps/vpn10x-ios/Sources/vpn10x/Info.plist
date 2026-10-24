@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- The standard bundle keys. Xcode does not synthesise these when
+	     INFOPLIST_FILE is set, and a bundle without CFBundleIdentifier fails
+	     to install with "Missing bundle ID" long after it has built cleanly. -->
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleDisplayName</key>
+	<string>VPN10x Zero Trust</string>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<!-- Permits cleartext to loopback and the local network, and nothing
+		     else: a self-hosted control plane in development is on 127.0.0.1,
+		     and arbitrary loads stay off. A production deployment is reached
+		     over HTTPS and needs no exception at all. -->
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Reaches a control plane running on this machine during development.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<!-- Where the sign-in comes back to. Derived from a domain name
+			     because private-use schemes are first come, first served, and
+			     the control plane will only accept schemes an operator has
+			     named in identity.oidc.native_schemes. -->
+			<key>CFBundleURLName</key>
+			<string>io.vpn10x.zerotrust.callback</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>io.vpn10x.zerotrust</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -1,0 +1,367 @@
+use anyhow::{Context, Result};
+use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
+use uuid::Uuid;
+use vpn10x_crypto::{generate_wireguard_keypair, SecureKeyStore};
+use vpn10x_types::{
+    CreateSessionRequest, CreateSessionResponse, Network, RegisterDeviceRequest,
+    RegisterDeviceResponse,
+};
+
+use crate::oidc;
+use crate::opsapi;
+use crate::posture;
+use crate::state::AgentState;
+use crate::tunnel::{self, Escalation, TunnelState};
+
+pub struct ControlClient {
+    http: reqwest::Client,
+}
+
+impl ControlClient {
+    pub fn new() -> Self {
+        Self {
+            http: reqwest::Client::new(),
+        }
+    }
+
+    /// Sign in through the identity provider.
+    ///
+    /// This is what a real deployment uses. `dev_login` below talks to an
+    /// endpoint the control plane refuses to serve unless it is bound to
+    /// loopback, so it can only ever reach a local demo.
+    pub async fn login(&self, state: &mut AgentState, open_browser: bool) -> Result<()> {
+        let token = oidc::browser_login(&self.http, &state.control_url, open_browser).await?;
+        state.access_token = Some(token.access_token);
+        state.user_id = Some(token.user_id);
+        state.email = Some(token.email);
+        state.save()?;
+        Ok(())
+    }
+
+    /// Sign in with an OpsAPI account: `password` goes to OpsAPI, never to the
+    /// control plane. Returns a code request when OpsAPI emails one; finish
+    /// with [`Self::opsapi_verify_code`].
+    pub async fn opsapi_login(
+        &self,
+        state: &mut AgentState,
+        email: &str,
+        password: &str,
+    ) -> Result<Option<opsapi::Step>> {
+        oidc::check_control_plane(&self.http, &state.control_url).await?;
+        let url = opsapi::opsapi_url(&self.http, &state.control_url).await?;
+        match opsapi::begin(&self.http, &url, email, password).await? {
+            opsapi::Step::Token(token) => {
+                self.adopt_opsapi_token(state, &token).await?;
+                Ok(None)
+            }
+            step => Ok(Some(step)),
+        }
+    }
+
+    /// The second half of [`Self::opsapi_login`], with the emailed code.
+    pub async fn opsapi_verify_code(
+        &self,
+        state: &mut AgentState,
+        challenge: &str,
+        code: &str,
+    ) -> Result<()> {
+        let url = opsapi::opsapi_url(&self.http, &state.control_url).await?;
+        let token = opsapi::verify_code(&self.http, &url, challenge, code).await?;
+        self.adopt_opsapi_token(state, &token).await
+    }
+
+    /// Trade the OpsAPI token for a VPN10x one. The OpsAPI token is dropped here
+    /// and never saved.
+    async fn adopt_opsapi_token(&self, state: &mut AgentState, token: &str) -> Result<()> {
+        let issued = opsapi::exchange(&self.http, &state.control_url, token).await?;
+        state.access_token = Some(issued.access_token);
+        state.user_id = Some(issued.user_id);
+        state.email = Some(issued.email);
+        state.save()?;
+        Ok(())
+    }
+
+    /// Which sign-in methods the configured control plane offers.
+    pub async fn sign_in_methods(&self, state: &AgentState) -> Result<opsapi::SignInMethods> {
+        opsapi::methods(&self.http, &state.control_url).await
+    }
+
+    pub async fn dev_login(&self, state: &mut AgentState, email: &str) -> Result<()> {
+        #[derive(serde::Deserialize)]
+        struct TokenResponse {
+            access_token: String,
+            user_id: Uuid,
+            email: String,
+        }
+        let resp: TokenResponse = self
+            .http
+            .post(format!(
+                "{}/auth/dev/login",
+                state.control_url.trim_end_matches('/')
+            ))
+            .json(&serde_json::json!({ "email": email }))
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?;
+        state.access_token = Some(resp.access_token);
+        state.user_id = Some(resp.user_id);
+        state.email = Some(resp.email);
+        state.save()?;
+        Ok(())
+    }
+
+    pub async fn ensure_device(&self, state: &mut AgentState) -> Result<Uuid> {
+        if let Some(id) = state.device_id {
+            return Ok(id);
+        }
+        let store = vpn10x_crypto::FileKeyStore::new(AgentState::keystore_dir()?)?;
+        let kp = generate_wireguard_keypair();
+        store
+            .store("wg.private", kp.private_key_b64.as_bytes())
+            .await?;
+
+        let hostname = hostname();
+        let req = RegisterDeviceRequest {
+            name: hostname.clone(),
+            platform: std::env::consts::OS.into(),
+            os_version: Some(std::env::consts::ARCH.into()),
+            agent_version: Some(env!("CARGO_PKG_VERSION").into()),
+            wireguard_public_key: kp.public_key_b64.clone(),
+            posture: posture::collect(),
+        };
+        let resp: RegisterDeviceResponse = self
+            .http
+            .post(format!(
+                "{}/api/v1/devices/register",
+                state.control_url.trim_end_matches('/')
+            ))
+            .headers(auth_headers(state)?)
+            .json(&req)
+            .send()
+            .await?
+            .error_for_status()
+            .context("device register")?
+            .json()
+            .await?;
+        state.device_id = Some(resp.device.id);
+        state.device_name = Some(resp.device.name);
+        state.wireguard_public_key = Some(resp.device.wireguard_public_key);
+        state.save()?;
+        Ok(resp.device.id)
+    }
+
+    pub async fn list_networks(&self, state: &AgentState) -> Result<Vec<Network>> {
+        let networks: Vec<Network> = self
+            .http
+            .get(format!(
+                "{}/api/v1/networks",
+                state.control_url.trim_end_matches('/')
+            ))
+            .headers(auth_headers(state)?)
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?;
+        Ok(networks)
+    }
+
+    pub async fn connect(
+        &self,
+        state: &mut AgentState,
+        network_name: Option<&str>,
+    ) -> Result<CreateSessionResponse> {
+        let device_id = self.ensure_device(state).await?;
+        let networks = self.list_networks(state).await?;
+        let network = if let Some(name) = network_name {
+            networks
+                .into_iter()
+                .find(|n| n.name == name)
+                .context("network not found")?
+        } else {
+            networks.into_iter().next().context("no networks")?
+        };
+        let req = CreateSessionRequest {
+            network_id: network.id,
+            device_id,
+            posture: posture::collect(),
+        };
+        let response = self
+            .http
+            .post(format!(
+                "{}/api/v1/sessions",
+                state.control_url.trim_end_matches('/')
+            ))
+            .headers(auth_headers(state)?)
+            .json(&req)
+            .send()
+            .await?;
+        let resp: CreateSessionResponse = match response.status().as_u16() {
+            200..=299 => response.json().await?,
+            403 => anyhow::bail!(
+                "create session: access was refused. Your account, this device's posture, or \
+                 the network's policy does not allow it; if you were recently removed from \
+                 the directory, this is why"
+            ),
+            503 => anyhow::bail!(
+                "create session: the control plane could not check your account with the \
+                 directory just now; try again shortly"
+            ),
+            _ => return Err(response.error_for_status().unwrap_err()).context("create session"),
+        };
+        state.session = Some(resp.session.clone());
+        state.wireguard = Some(resp.wireguard.clone());
+        state.network_name = Some(network.name.clone());
+        state.save()?;
+        let conf_path = AgentState::wg_conf_path()?;
+        state.write_wg_config(&conf_path)?;
+        tracing::info!(path = %conf_path.display(), "wrote wireguard config");
+        Ok(resp)
+    }
+
+    /// Create a session and bring the interface up.
+    ///
+    /// The session is created first because the gateway has to know about the
+    /// peer before traffic will pass. If the interface then fails to come up
+    /// the session is left in place rather than silently revoked: that is what
+    /// `vpn10x status` reports as "Session open, tunnel down", and it is what the
+    /// user retries against once they have fixed whatever wg-quick complained
+    /// about.
+    pub async fn connect_and_bring_up(
+        &self,
+        state: &mut AgentState,
+        network_name: Option<&str>,
+        escalation: Escalation,
+    ) -> Result<(CreateSessionResponse, TunnelState)> {
+        let resp = self.connect(state, network_name).await?;
+        let conf_path = AgentState::wg_conf_path()?;
+        let tunnel = tunnel::up(&conf_path, escalation).await?;
+        tracing::info!(interface = %tunnel.interface(), "tunnel up");
+        Ok((resp, tunnel))
+    }
+
+    /// Tear the interface down, then release the session.
+    ///
+    /// In that order: releasing the session first would leave an interface up
+    /// and pointed at a gateway that has already dropped the peer, which looks
+    /// to the user like a connected tunnel that silently blackholes.
+    pub async fn disconnect_and_tear_down(
+        &self,
+        state: &mut AgentState,
+        escalation: Escalation,
+    ) -> Result<()> {
+        let conf_path = AgentState::wg_conf_path()?;
+        tunnel::down(&conf_path, escalation).await?;
+        self.disconnect(state).await
+    }
+
+    pub async fn disconnect(&self, state: &mut AgentState) -> Result<()> {
+        if let Some(session) = &state.session {
+            let _ = self
+                .http
+                .delete(format!(
+                    "{}/api/v1/sessions/{}",
+                    state.control_url.trim_end_matches('/'),
+                    session.id
+                ))
+                .headers(auth_headers(state)?)
+                .send()
+                .await;
+        }
+        state.session = None;
+        state.wireguard = None;
+        state.network_name = None;
+        state.save()?;
+        Ok(())
+    }
+
+    pub fn logout(&self, state: &mut AgentState) -> Result<()> {
+        state.access_token = None;
+        state.email = None;
+        state.user_id = None;
+        state.session = None;
+        state.wireguard = None;
+        state.network_name = None;
+        state.save()?;
+        Ok(())
+    }
+}
+
+impl Default for ControlClient {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+fn auth_headers(state: &AgentState) -> Result<HeaderMap> {
+    let token = state
+        .access_token
+        .as_ref()
+        .context("not logged in; run vpn10x login")?;
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        AUTHORIZATION,
+        HeaderValue::from_str(&format!("Bearer {token}"))?,
+    );
+    Ok(headers)
+}
+
+fn hostname() -> String {
+    hostname_impl().unwrap_or_else(|| "unknown-device".into())
+}
+
+/// Ask the kernel. `/etc/hostname` does not exist on macOS and `HOSTNAME` is
+/// a shell variable a GUI-launched process never sees, which is how every Mac
+/// used to register as "unknown-device".
+#[cfg(not(unix))]
+fn hostname_impl() -> Option<String> {
+    std::env::var("COMPUTERNAME")
+        .ok()
+        .map(|name| display_hostname(&name))
+        .filter(|name| !name.is_empty())
+}
+
+#[cfg(unix)]
+fn hostname_impl() -> Option<String> {
+    let mut buf = [0u8; 256];
+    // SAFETY: the buffer is valid for its length; gethostname NUL-terminates
+    // within it or truncates, and we stop at the first NUL either way.
+    let rc = unsafe { libc::gethostname(buf.as_mut_ptr().cast(), buf.len()) };
+    let from_kernel = (rc == 0)
+        .then(|| {
+            let end = buf.iter().position(|&b| b == 0).unwrap_or(buf.len());
+            String::from_utf8_lossy(&buf[..end]).into_owned()
+        })
+        .map(|name| display_hostname(&name))
+        .filter(|name| !name.is_empty());
+    from_kernel.or_else(|| std::env::var("COMPUTERNAME").ok())
+}
+
+/// `alices-mbp.local` reads better as `alices-mbp` in a device list; the
+/// `.local` suffix is mDNS plumbing, not part of the name.
+fn display_hostname(name: &str) -> String {
+    name.trim().trim_end_matches(".local").to_string()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_hostname_comes_from_the_kernel_not_the_environment() {
+        let name = hostname();
+        assert_ne!(name, "unknown-device");
+        assert!(!name.ends_with(".local"), "{name}");
+    }
+
+    #[test]
+    fn the_mdns_suffix_is_dropped() {
+        assert_eq!(display_hostname("alices-mbp.local"), "alices-mbp");
+        assert_eq!(
+            display_hostname("build01.example.com"),
+            "build01.example.com"
+        );
+    }
+}

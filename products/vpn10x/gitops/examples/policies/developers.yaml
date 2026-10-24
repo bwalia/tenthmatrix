@@ -1,0 +1,20 @@
+apiVersion: vpn10x.com/v1
+kind: AccessPolicy
+metadata:
+  name: developers-development
+spec:
+  subjects:
+    groups:
+      - developers
+  resources:
+    - development
+  device:
+    # Naming the checks that matter rather than requiring every signal to pass:
+    # the application firewall is off on a default macOS install, so
+    # `compliant: true` would deny a fleet on day one. See docs/POSTURE.md.
+    requiredSignals:
+      - disk_encryption
+  session:
+    duration: 8h
+  action:
+    connect: true

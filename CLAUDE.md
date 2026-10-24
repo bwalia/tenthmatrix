@@ -28,6 +28,15 @@ The website is the repository root. TenthMatrix products live under
   live fleet data or secrets) and rebranded. Its workflows under
   `products/proxy10x/.github/` are **inactive** until ported to the root
   `.github/workflows/` with a `paths:` filter.
+- `products/vpn10x/` — **VPN10x**, the WireGuard Zero Trust security layer
+  for AI-assisted development and work (Rust control plane, gateway, agent and
+  CLI; Tauri desktop app; iOS app). Imported from the WSL Zero Trust VPN
+  (wslvpn) codebase the same way. Pairs with Proxy10x: Proxy10x access
+  profiles resolve a VPN10x overlay address to its session identity
+  (`products/proxy10x/docs/VPN_ACCESS.md`). Workflows inactive, as above.
+
+Neither product's domain (proxy10x.com, vpn10x.com) is registered yet; they
+appear in docs and config only.
 
 Website CI ignores `products/**` (`paths-ignore` on build-and-deploy, eslint
 ignores, `.dockerignore`), so a product commit doesn't redeploy the site. The

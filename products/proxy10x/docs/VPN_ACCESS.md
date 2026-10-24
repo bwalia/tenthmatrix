@@ -1,7 +1,7 @@
 # VPN-only access
 
 Restrict endpoints to clients connected through the
-[wslvpn](https://github.com/bwalia/wslvpn) Zero Trust overlay, using a `cidr`
+[VPN10x](../../vpn10x/) Zero Trust overlay, using a `cidr`
 match on the client IP.
 
 This is the network layer: *"the request arrived over the VPN."* It does not yet
@@ -187,7 +187,7 @@ which names the bundle.
 | `endpoints[].path` | yes | — | Path to protect |
 | `endpoints[].path_key` | no | `starts_with` | `starts_with`, `ends_with` or `equals` |
 | `endpoints[].allow_cidrs` | no | profile `allow_cidrs` | Ranges allowed to reach this endpoint |
-| `endpoints[].groups` | no | profile `groups` | wslvpn groups allowed; any-of. See [identity](#per-user-access-identity) |
+| `endpoints[].groups` | no | profile `groups` | VPN10x groups allowed; any-of. See [identity](#per-user-access-identity) |
 | `endpoints[].origin` | no | profile `origin`, else server `proxy_pass` | Where allowed requests are proxied |
 | `allow_cidrs` | no | — | Default range for every endpoint |
 | `groups` | no | — | Default groups for every endpoint |
@@ -384,15 +384,15 @@ rule.
 
 ## Not yet covered
 
-**Posture.** wslvpn evaluates device posture at session creation, but the proxy
+**Posture.** VPN10x evaluates device posture at session creation, but the proxy
 does not re-check it per request. A device that falls out of compliance
 mid-session keeps access until its session ends.
 
 **Non-HTTP services.** Databases, SSH and anything else Proxy10x does not proxy
-are unaffected by these rules. Restrict those on the wslvpn gateway with network
+are unaffected by these rules. Restrict those on the VPN10x gateway with network
 routes and the nftables allowlist.
 
-**Tunnel-level revocation.** Separately from the cache above, a revoked wslvpn
+**Tunnel-level revocation.** Separately from the cache above, a revoked vpn10x
 session loses its tunnel and with it the overlay address, so network-level
 access ends when the peer is removed from the gateway.
 

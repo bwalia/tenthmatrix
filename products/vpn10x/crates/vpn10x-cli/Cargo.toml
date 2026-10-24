@@ -1,0 +1,19 @@
+[package]
+name = "vpn10x-cli"
+description = "VPN10x CLI"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "vpn10x"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+tracing-subscriber = { workspace = true }
+vpn10x-dns = { workspace = true }
+vpn10x-agent = { path = "../vpn10x-agent", version = "0.1.0" }
