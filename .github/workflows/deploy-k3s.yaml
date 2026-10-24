@@ -55,6 +55,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The self-hosted runners don't all ship Helm (debian003 doesn't);
+      # install a pinned version instead of relying on the host.
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+
       - name: Setup Kubeconfig
         id: kubeconfig
         run: |
