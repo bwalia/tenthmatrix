@@ -80,7 +80,7 @@ public final class TunnelController {
         ]
 
         manager.protocolConfiguration = proto
-        manager.localizedDescription = "VPN10x Zero Trust"
+        manager.localizedDescription = "VPN10x"
         manager.isEnabled = true
         // Deliberately not enabling on-demand. A VPN that reconnects itself
         // whenever the phone sees a network is a decision for an administrator

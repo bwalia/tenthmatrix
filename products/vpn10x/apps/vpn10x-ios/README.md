@@ -1,4 +1,4 @@
-# VPN10x Zero Trust — iOS
+# VPN10x — iOS
 
 A WireGuard client for iOS: SwiftUI app, `NEPacketTunnelProvider` extension, and
 the real wireguard-go data plane.

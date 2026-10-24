@@ -3,7 +3,7 @@
 # Runs the signed v0.1.0 gateway image with host networking so it can see and
 # manage the hub's WireGuard interface. NET_ADMIN only — not privileged.
 [Unit]
-Description=VPN10x Zero Trust gateway
+Description=VPN10x gateway
 After=network-online.target docker.service wg-quick@__WG_INTERFACE__.service
 Wants=network-online.target
 Requires=docker.service

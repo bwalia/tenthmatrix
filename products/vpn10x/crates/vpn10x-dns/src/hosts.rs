@@ -176,7 +176,7 @@ impl Overrides {
     /// Render back to hosts-file text, one line per entry.
     pub fn render(&self) -> String {
         let mut out = String::from(
-            "# Managed by VPN10x Zero Trust. One address, then the names it answers for.\n",
+            "# Managed by VPN10x. One address, then the names it answers for.\n",
         );
         for entry in self.entries() {
             out.push_str(&format!("{}\t{}\n", entry.address, entry.name));

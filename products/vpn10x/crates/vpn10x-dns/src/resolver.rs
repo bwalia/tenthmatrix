@@ -21,7 +21,7 @@ use crate::hosts::normalise;
 
 pub const RESOLVER_DIR: &str = "/etc/resolver";
 pub const MARKER: &str =
-    "# Managed by VPN10x Zero Trust (`vpn10x dns`). Do not edit; `vpn10x dns apply` rewrites it.";
+    "# Managed by VPN10x (`vpn10x dns`). Do not edit; `vpn10x dns apply` rewrites it.";
 
 /// The file for one domain.
 pub fn render(address: IpAddr, port: u16) -> String {

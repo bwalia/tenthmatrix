@@ -8,7 +8,7 @@ REVISION  := $(shell cat WIREGUARD_REVISION)
 UPSTREAM  := Packages/WireGuardKit/upstream
 SIMULATOR := platform=iOS Simulator,name=iPhone 17
 
-.PHONY: bootstrap upstream project test build-device clean
+.PHONY: archive testflight bootstrap upstream project test build-device clean
 
 bootstrap: upstream project
 
@@ -57,6 +57,29 @@ build-device:
 		-scheme VPN10x \
 		-destination 'generic/platform=iOS' \
 		CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+
+# TestFlight: archive with automatic signing (registers the app, tunnel
+# extension, App Group and Network Extension capability on first run), then
+# export and upload to App Store Connect. Needs an Apple ID for team PAS2QUVJHC
+# signed in to Xcode, and the app record (bundle id io.vpn10x.zerotrust.ios)
+# created once in App Store Connect. Build numbers are managed on upload.
+ARCHIVE := build/VPN10x.xcarchive
+
+archive:
+	xcodebuild archive \
+		-project VPN10x.xcodeproj \
+		-scheme VPN10x \
+		-destination 'generic/platform=iOS' \
+		-archivePath $(ARCHIVE) \
+		-allowProvisioningUpdates \
+		CODE_SIGN_STYLE=Automatic
+
+testflight: archive
+	xcodebuild -exportArchive \
+		-archivePath $(ARCHIVE) \
+		-exportOptionsPlist ExportOptions.plist \
+		-exportPath build/export \
+		-allowProvisioningUpdates
 
 clean:
 	rm -rf VPN10x.xcodeproj $(UPSTREAM)

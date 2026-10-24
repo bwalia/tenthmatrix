@@ -17,7 +17,7 @@ struct ContentView: View {
                     StatusView()
                 }
             }
-            .navigationTitle("VPN10x Zero Trust")
+            .navigationTitle("VPN10x")
         }
     }
 }
