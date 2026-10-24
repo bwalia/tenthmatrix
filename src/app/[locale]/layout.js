@@ -5,6 +5,7 @@ import { getMessages, isValidLocale, locales } from '@/utils/getMessages';
 import SiteHeader from '../components/layout/SiteHeader';
 import SiteFooter from '../components/layout/SiteFooter';
 import CookieConsent from '../components/layout/CookieConsent';
+import ChatDock from '../components/chat/ChatDock';
 import JsonLd from '../components/seo/JsonLd';
 import Document from '../Document';
 import { organizationSchema, websiteSchema } from '../utils/schemaMarkup';
@@ -47,6 +48,7 @@ export default async function LocaleLayout({ children, params }) {
         </main>
         <SiteFooter locale={locale} />
         <CookieConsent locale={locale} />
+        <ChatDock />
         <JsonLd data={[organizationSchema(), websiteSchema(locale)]} />
       </NextIntlClientProvider>
     </Document>
