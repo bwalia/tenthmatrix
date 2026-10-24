@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 /**
@@ -14,6 +15,11 @@ const isStaticExport = process.env.NEXT_STATIC_EXPORT === "true";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 const nextConfig: NextConfig = {
+  // This app lives inside the TenthMatrix monorepo (products/vault10x/www).
+  // Without a pinned root, Next picks the repo root from its lockfile and
+  // builds the TenthMatrix website's src/proxy.js as this app's proxy.
+  turbopack: { root: path.resolve(__dirname) },
+  outputFileTracingRoot: path.resolve(__dirname),
   ...(isStaticExport
     ? {
         output: "export",
