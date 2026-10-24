@@ -1,0 +1,39 @@
+[package]
+name = "lease-manager"
+version = "0.1.0"
+edition = "2021"
+description = "Lease lifecycle management with automatic expiration"
+license = "Apache-2.0"
+
+[[bin]]
+name = "lease-manager"
+path = "src/main.rs"
+
+[dependencies]
+vault10x-core = { path = "../../crates/vault10x-core" }
+vault10x-storage = { path = "../../crates/vault10x-storage" }
+vault10x-cluster = { path = "../../crates/vault10x-cluster" }
+tokio = { workspace = true }
+tonic = { workspace = true }
+prost = { workspace = true }
+axum = { workspace = true }
+tower = { workspace = true }
+tower-http = { workspace = true }
+sqlx = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+config = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+reqwest = { workspace = true }
+once_cell = { workspace = true }
+prometheus = { workspace = true }
+
+[build-dependencies]
+tonic-build = { workspace = true }
+protoc-bin-vendored = "3"

@@ -1,0 +1,25 @@
+# Argo CD project scoping the vault10x regions.
+#
+# Kept separate from `default` so a mistake in a region's values cannot deploy
+# into an unrelated namespace: destinations are limited to the vault10x
+# namespaces, and cluster-scoped resources are denied outright (the chart
+# creates none — every resource it renders is namespaced).
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: vault10x
+  namespace: argocd
+spec:
+  description: vault10x secret-management regions (active/active HA mesh)
+  sourceRepos:
+    - https://github.com/bwalia/tenthmatrix.git
+    - https://charts.bitnami.com/bitnami
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: vault10x
+    - server: https://kubernetes.default.svc
+      namespace: vault10x-*
+  clusterResourceWhitelist: []
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'

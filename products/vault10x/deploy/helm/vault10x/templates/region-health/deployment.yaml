@@ -1,0 +1,105 @@
+{{/*
+region-health/deployment.yaml
+Polls remote region health endpoints and updates system.regions with current
+status and replication lag.  Handles region promotion requests via HTTP API.
+Leader election via PostgreSQL advisory locks.
+*/}}
+{{- if .Values.regionHealth.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vault10x.componentFullname" (dict "component" "region-health" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "vault10x.componentLabels" (dict "component" "region-health" "componentType" "replication" "context" $) | nindent 4 }}
+  {{- with .Values.regionHealth.podAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.regionHealth.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "vault10x.componentSelectorLabels" (dict "component" "region-health" "context" $) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "vault10x.componentLabels" (dict "component" "region-health" "componentType" "replication" "context" $) | nindent 8 }}
+      {{- if .Values.monitoring.enabled }}
+      annotations:
+        {{- toYaml .Values.monitoring.scrapeAnnotations | nindent 8 }}
+        prometheus.io/port: {{ .Values.regionHealth.httpPort | quote }}
+        {{- with .Values.regionHealth.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- else }}
+      {{- with .Values.regionHealth.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "vault10x.serviceAccountName" . }}
+      {{- include "vault10x.podSecurityContext" . | nindent 6 }}
+      containers:
+        - name: region-health
+          image: {{ include "vault10x.image" (dict "image" .Values.regionHealth.image "context" $) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          {{- include "vault10x.containerSecurityContext" . | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.regionHealth.httpPort }}
+              protocol: TCP
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "vault10x.dbCredentialsSecretName" . }}
+                  key: {{ include "vault10x.dbAppPasswordSecretKey" . }}
+                  optional: false
+            - name: DATABASE_URL
+              value: {{ printf "postgresql://%s:$(DB_PASSWORD)@%s:%s/%s"
+                          (include "vault10x.dbAppUser" .)
+                          (include "vault10x.postgresHost" .)
+                          (include "vault10x.postgresPort" .)
+                          .Values.postgresql.auth.database }}
+            # Public keys for verifying per-tenant Ed25519 tokens. The /v1/sys
+            # endpoints are now gated on platform administration; without this
+            # they reject every request with 401 "VAULT_JWKS_URL is not
+            # configured" and the Regions and Cluster pages go blank.
+            - name: VAULT_JWKS_URL
+              value: "http://{{ include "vault10x.componentFullname" (dict "component" "identity-service" "context" $) }}:8082/v1/identity/.well-known/jwks.json"
+            {{- include "vault10x.regionEnv" . | nindent 12 }}
+            - name: REGION_HEALTH_LISTEN_ADDR
+              value: {{ printf "0.0.0.0:%d" (int .Values.regionHealth.httpPort) | quote }}
+            {{- with .Values.regionHealth.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.regionHealth.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- include "vault10x.podScheduling" (dict "service" .Values.regionHealth "context" $) | nindent 6 }}
+{{- end }}
