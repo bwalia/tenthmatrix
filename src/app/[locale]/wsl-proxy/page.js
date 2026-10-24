@@ -1,14 +1,15 @@
-import { createRoute } from '@/app/components/sections/createRoute';
-import ProductLanding from '@/app/components/sections/templates/ProductLanding';
+import { permanentRedirect } from 'next/navigation';
+import { locales } from '@/utils/getMessages';
 
+// WSL Proxy is now Proxy10x (/proxy10x). Keeps old links and bookmarks working:
+// a 308 on k3s, a meta-refresh page in the S3 static export.
 export const dynamic = 'force-static';
 
-const route = createRoute({
-  file: 'wsl-proxy.json',
-  route: '/wsl-proxy',
-  Template: ProductLanding,
-});
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
 
-export const generateStaticParams = route.generateStaticParams;
-export const generateMetadata = route.generateMetadata;
-export default route.Page;
+export default async function WslProxyRedirect({ params }) {
+  const { locale } = await params;
+  permanentRedirect(`/${locale}/proxy10x`);
+}

@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "title": "TenthMatrix Proxy10x — API গেটওয়ে, CDN ও WAF | TenthMatrix",
+    "description": "TenthMatrix Proxy10x প্রোডাক্ট পেজ: লাইভ-কনফিগ প্রক্সি কীভাবে কাজ করে, বিস্তারিত বৈশিষ্ট্য, WAF engine v2 নিয়ম ও ধাপ, CDN ক্যাশ, মাল্টি-POP DNS, এবং Agents/MCP Gateway রোডম্যাপ। wslproxy.org দেখুন।",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API গেটওয়ে, CDN, WAF নিয়ম, OpenResty, এজ ক্যাশ, MCP গেটওয়ে, Agents Gateway, রিভার্স প্রক্সি, wslproxy.org"
+  },
+  "header": {
+    "title": "TenthMatrix Proxy10x",
+    "subtitle": "API গেটওয়ে, CDN ও এন্টারপ্রাইজ WAF — প্রোডাক্ট সংক্ষিপ্ত বিবরণ",
+    "description": "TenthMatrix Proxy10x (Proxy10x) হলো TenthMatrix-এর সম্পূর্ণ API গেটওয়ে ও CDN এজ কন্ট্রোল প্লেন। এটি আপনার অরিজিনের সামনে থাকে এবং প্রতিটি রিকোয়েস্টে কী হবে তা ঠিক করে — রাউট, সুরক্ষা, ক্যাশ ও পর্যবেক্ষণ — লাইভ JSON ও MCP কনফিগ থেকে, প্রতিটি নিয়ম পরিবর্তনে nginx রিলোড ছাড়াই।"
+  },
+  "intro": {
+    "title": "TenthMatrix Proxy10x কী?",
+    "body": "Proxy10x হলো OpenResty-ভিত্তিক একটি ডায়নামিক API গেটওয়ে ও রিভার্স প্রক্সি। অপারেটররা ভার্চুয়াল হোস্ট, রাউটিং নিয়ম, WAF নীতি, ক্যাশ, ট্রাফিক স্প্লিট ও এজ POP পরিচালনা করেন Admin UI, REST API, MCP টুল বা proxy10x-cli দিয়ে। দৈনন্দিন নিয়ম হট পাথে কার্যকর হয়; শুধু সার্ভার-স্তরের listen বা SSL ব্লক বদলালে nginx রিলোড হয়।",
+    "links": [
+      {
+        "label": "wslproxy.org",
+        "href": "https://wslproxy.org"
+      },
+      {
+        "label": "WAF ডকুমেন্টেশন",
+        "href": "https://wslproxy.org/waf/"
+      },
+      {
+        "label": "Swagger API",
+        "href": "https://wslproxy.org/swagger/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "প্রক্সি কীভাবে কাজ করে",
+    "intro": "একটি সলিউশন প্লেবুকের মতো: একবার মেলান, প্রতিটি রিকোয়েস্টে সিদ্ধান্ত নিন, তারপর প্রক্সি বা সুরক্ষা দিন। সাধারণ নিয়ম পরিবর্তনে কন্ট্রোল প্লেনকে কখনো এজ রিস্টার্ট করতে হয় না।",
+    "flow": [
+      {
+        "title": "১. রিকোয়েস্ট POP-এ পৌঁছায়",
+        "text": "ব্রাউজার, API ও এজেন্ট TenthMatrix Proxy10x এজে (Docker, বেয়ার-মেটাল Ansible POP, বা k3s Helm ingress) পৌঁছায়। OpenResty TLS গ্রহণ করে এবং Lua হট পাথে প্রবেশ করে।"
+      },
+      {
+        "title": "২. রাউটিং নিয়ম মেলান",
+        "text": "gateway_ack.lua ভার্চুয়াল হোস্ট লোড করে এবং ডিস্ক বা Redis থেকে লাইভ নিয়ম মূল্যায়ন করে: path, IP, দেশ, JWT, S3, cookie এবং আরও। অগ্রাধিকার ও নির্দিষ্টতা বিজয়ী নির্বাচন করে — কোনো nginx রিলোড নয়।"
+      },
+      {
+        "title": "৩. পাইপলাইন: রেট লিমিট → WAF → রেসপন্ড",
+        "text": "গেটওয়ে পাইপলাইন প্রথমে রেট লিমিট চালায়, তারপর WAF ইঞ্জিন (ধাপ + সিগনেচার), তারপর gateway_resp.lua রেসপন্স অ্যাকশন ও ব্যালান্সার টাইমআউট প্রয়োগ করে।"
+      },
+      {
+        "title": "৪. ফলাফল নির্ধারণ করুন",
+        "text": "সাধারণ ফলাফল: upstream-এ 305 রিভার্স-প্রক্সি, 301/302 রিডাইরেক্ট, স্ট্যাটিক HTML ব্লক, CAPTCHA চ্যালেঞ্জ, বা সাপোর্ট ID হেডারসহ 403 WAF ব্লক।"
+      },
+      {
+        "title": "৫. ব্যালান্স ও পর্যবেক্ষণ",
+        "text": "প্রক্সি রেসপন্সের জন্য balancer_by_lua weighted, RR, canary, sticky বা least-conn প্রয়োগ করে। হেলথ, মেট্রিক্স ও ট্রাফিক পরিসংখ্যান অপস ও AI লগ হুকে যায়।"
+      },
+      {
+        "title": "৬. অপারেটর ও এজেন্ট কনফিগ চালায়",
+        "text": "মানুষ Admin UI / CLI ব্যবহার করে; এজেন্ট সার্ভার, নিয়ম ও WAF বাইন্ড CRUD করতে REST বা MCP টুল ব্যবহার করে — একই সারফেস, GitOps-বান্ধব pull/push।"
+      }
+    ],
+    "responseCodes": [
+      {
+        "code": "305",
+        "meaning": "upstream-এ রিভার্স প্রক্সি (প্রাথমিক গেটওয়ে পাথ)"
+      },
+      {
+        "code": "301 / 302",
+        "meaning": "রিডাইরেক্ট"
+      },
+      {
+        "code": "200 HTML",
+        "meaning": "স্ট্যাটিক / ব্র্যান্ডেড ব্লক বা ইন্টারস্টিশিয়াল"
+      },
+      {
+        "code": "CAPTCHA",
+        "meaning": "চালিয়ে যাওয়ার আগে চ্যালেঞ্জ"
+      },
+      {
+        "code": "403 WAF",
+        "meaning": "X-WAF-* ও X-Support-ID হেডারসহ WAF দ্বারা ব্লক"
+      }
+    ]
+  },
+  "features": {
+    "title": "প্রধান প্রোডাক্ট বৈশিষ্ট্য বিস্তারিত",
+    "intro": "নিয়ন্ত্রিত এজের জন্য যা দরকার সবকিছু: রাউটিং, নিরাপত্তা, CDN ক্যাশ, মাল্টি-POP ডেলিভারি, এবং এমন কন্ট্রোল প্লেন যা মানুষ ও এজেন্ট উভয়েই চালাতে পারে।",
+    "items": [
+      {
+        "title": "ডায়নামিক রাউটিং নিয়ম",
+        "description": "path, IP, দেশ, JWT claims, S3-ধাঁচের keys ও cookies-এ মেলান। অ্যাকশনের মধ্যে রিভার্স প্রক্সি, রিডাইরেক্ট, HTML রেসপন্স ও CAPTCHA আছে। নিয়মগুলো অগ্রাধিকার অনুযায়ী সাজানো এবং সমতায় নির্দিষ্টতা সিদ্ধান্ত নেয়, যাতে nginx রিস্টার্ট ছাড়াই সবচেয়ে নির্ভুল রাউট জেতে।",
+        "icon": "bi-signpost-split"
+      },
+      {
+        "title": "ট্রাফিক ইঞ্জিনিয়ারিং",
+        "description": "Weighted, round-robin, হেডার-ভিত্তিক canary, cookie sticky সেশন ও least-conn ব্যালান্সিং। canary সুস্থ দেখালে কন্ট্রোল প্লেন থেকে ব্যাকএন্ড প্রমোট বা রোলব্যাক করুন — অথবা এক অ্যাকশনেই ফিরিয়ে আনুন।",
+        "icon": "bi-shuffle"
+      },
+      {
+        "title": "এন্টারপ্রাইজ WAF engine v2",
+        "description": "পলিসি প্যাক প্রতিটি ডোমেইন, সেবা ও রাউটে বাইন্ড হয়। ধাপগুলোর মধ্যে মেথড allow-list, filetype deny, IP/geo তালিকা, JWT অ্যালগরিদম নীতি, JSON body প্রোফাইল, ব্রুট-ফোর্স ভেলোসিটি ও OpenAPI পজিটিভ সিকিউরিটি — সাথে নিয়ন্ত্রিত অ্যাটাক সিগনেচার ও অ্যানোমালি স্কোরিং। ব্লকিং বা ট্রান্সপারেন্ট (মনিটর) মোড।",
+        "icon": "bi-shield-lock"
+      },
+      {
+        "title": "CDN ও এজ ক্যাশ",
+        "description": "এজ স্ট্যাটিক ক্যাশ, ঐচ্ছিক Docker blob ক্যাশ ও Varnish হুক আপনাকে অরিজিনের সামনে CDN-ধাঁচের স্তর দেয় — API গেটওয়ে ট্রাফিকের পাশাপাশি মার্কেটিং সাইট, API ডকুমেন্টেশন ও আর্টিফ্যাক্ট ডেলিভারির জন্য আদর্শ।",
+        "icon": "bi-hdd-network"
+      },
+      {
+        "title": "SSL ও HTTPS",
+        "description": "auto-ssl / Let’s Encrypt, প্রতি-ডোমেইন SSL JSON ও force-HTTPS নীতি, যাতে প্রতিটি ভার্চুয়াল হোস্ট POP-এ সঠিকভাবে TLS টার্মিনেট করতে পারে।",
+        "icon": "bi-lock"
+      },
+      {
+        "title": "মাল্টি-POP + DNS",
+        "description": "এজ লোকেশন ঘোষণা করুন এবং নিরাপত্তা গার্ডরেলসহ Cloudflare A-records প্রভিশন করুন। একটি সাধারণ প্রোডাকশন প্যাটার্ন হলো public POP → k3s NodePort → proxy10x-ingress Helm → app pods।",
+        "icon": "bi-globe2"
+      },
+      {
+        "title": "কন্ট্রোল প্লেন",
+        "description": "React Admin ও Next.js ড্যাশবোর্ড, Swagger REST, Claude/Cursor-এর জন্য MCP টুল, এবং pull/push/diff/verify ওয়ার্কফ্লোর জন্য proxy10x-cli ইমেজ (ghcr.io/bwalia/proxy10x-cli)।",
+        "icon": "bi-sliders"
+      },
+      {
+        "title": "যেকোনো জায়গায় ডিপ্লয় করুন",
+        "description": "ল্যাবের জন্য Docker Compose, বেয়ার-মেটাল বা VM POP-এর জন্য Ansible, এবং k3s / Kubernetes-এর জন্য Helm ingress-controller চার্ট — সব এনভায়রনমেন্টে একটি প্রোডাক্ট সারফেস।",
+        "icon": "bi-box-seam"
+      },
+      {
+        "title": "অবজার্ভেবিলিটি",
+        "description": "/health, /healthz, /ready, Prometheus /metrics, traffic stats, structured WAF security logs, and AI log analysis hooks for SRE teams.",
+        "icon": "bi-graph-up"
+      }
+    ]
+  },
+  "waf": {
+    "title": "WAF নিয়ম ও প্রয়োগ",
+    "intro": "WAF চলে OpenResty রিকোয়েস্ট পাথে (এন্টারপ্রাইজ NGINX WAF প্যাটার্ন দ্বারা অনুপ্রাণিত)। এটি ডিফল্টভাবে fail-open যাতে WAF বাগ সাইট ডাউন করতে না পারে, প্রতিটি ব্লকে ব্যাখ্যাযোগ্য, এবং সাধারণ v1 নিয়ম তালিকার সাথে ব্যাকওয়ার্ড কম্প্যাটিবল। গাইডেড ট্যুর ও বিস্তারিত জানতে নিচের সম্পর্কিত লেখা দেখুন — অথবা এই পৃষ্ঠার WAF ভিডিও দেখুন।",
+    "pipelineTitle": "রিকোয়েস্ট-পাথ পাইপলাইন",
+    "pipeline": [
+      "rewrite_by_lua: gateway_ack.lua রাউটিং নিয়ম নির্বাচন করে",
+      "gateway_pipeline.execute(): rate-limit → WAF → continue",
+      "waf_engine.inspect(): পলিসি লোড, বাইন্ডিং নির্ধারণ, ধাপ চালানো, তারপর সিগনেচার",
+      "ব্লক হলে: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
+    ],
+    "stagesTitle": "ধাপ পাইপলাইন (সিগনেচারের আগে)",
+    "stages": [
+      {
+        "code": "VIOL_METHOD",
+        "name": "মেথড allow-list",
+        "detail": "শুধু অনুমোদিত HTTP মেথড (যেমন GET, POST, HEAD, OPTIONS)।"
+      },
+      {
+        "code": "VIOL_FILETYPE",
+        "name": "Filetype deny",
+        "detail": ".env, .sql, .bak, .git, .pem-এর মতো সংবেদনশীল এক্সটেনশন ব্লক করুন।"
+      },
+      {
+        "code": "VIOL_IP_DENY / VIOL_GEO",
+        "name": "IP তালিকা ও geo",
+        "detail": "CIDR allow/deny করুন এবং IP2Location-ধাঁচের DB দিয়ে দেশ deny করুন।"
+      },
+      {
+        "code": "VIOL_JWT_ALG",
+        "name": "JWT অ্যালগরিদম নীতি",
+        "detail": "দুর্বল algs (none, HS256) deny করুন; প্রয়োজনে RS256/ES256 বাধ্যতামূলক করুন।"
+      },
+      {
+        "code": "VIOL_JSON_SIZE / DEPTH",
+        "name": "JSON body প্রোফাইল",
+        "detail": "পার্সার অপব্যবহার রোধে JSON গভীরতা ও body আকার সীমিত করুন।"
+      },
+      {
+        "code": "VIOL_BRUTE_FORCE",
+        "name": "ব্রুট-ফোর্স ভেলোসিটি",
+        "detail": "IP-ভিত্তিক প্রতি-পাথ স্লাইডিং উইন্ডো (যেমন /api/login)।"
+      },
+      {
+        "code": "VIOL_OPENAPI_*",
+        "name": "OpenAPI পজিটিভ সিকিউরিটি",
+        "detail": "শুধু ঘোষিত path+method সারফেস (টেমপ্লেটেড পাথ) অনুমোদন করুন।"
+      }
+    ],
+    "signaturesTitle": "সিগনেচার নিয়ম ও গভর্নেন্স",
+    "signaturesIntro": "প্রতিটি সিগনেচারের একটি স্থির ID (অ্যাড্রেসযোগ্য একক), বিভাগ/সেট, তীব্রতা, ম্যাচ লক্ষ্য (url, args, body, headers, cookies, UA, বা all), regex বা string প্যাটার্ন, অ্যাকশন (block বা monitor) এবং অ্যানোমালি স্কোর থাকে।",
+    "governance": [
+      {
+        "title": "disable",
+        "text": "signatures.disable একটি নিয়ম সম্পূর্ণ এড়িয়ে যায়।"
+      },
+      {
+        "title": "stage",
+        "text": "signatures.stage একটি টাইমস্ট্যাম্প পর্যন্ত শুধু অ্যালার্ম দেয় — নিরাপদ রোলআউট যা staged থাকাকালীন কখনো অ্যানোমালি স্কোরে যোগ হয় না।"
+      },
+      {
+        "title": "সিগনেচার সেট",
+        "text": "প্রতিটি নিয়ম পুনরায় না লিখেই পুরো সেট (যেমন SET_SQLI) block ও alarm-এর মধ্যে টগল করুন।"
+      },
+      {
+        "title": "অ্যানোমালি থ্রেশহোল্ড",
+        "text": "সঞ্চিত স্কোর ≥ থ্রেশহোল্ড হলে VIOL_ANOMALY_SCORE ওঠে, এমনকি কোনো একক সিগনেচার একা ব্লক না করলেও।"
+      }
+    ],
+    "bindingTitle": "বাইন্ডিং অগ্রাধিকার",
+    "bindingIntro": "সবচেয়ে নির্দিষ্টটি জেতে: route override → প্রতি-সার্ভার waf_mode_override → পলিসি ডিফল্ট enforcementMode (blocking বা transparent/monitor)। প্রতিটি ফাইন্ডিং রেকর্ড করে কোন বাইন্ডিং জিতেছে, যাতে লগ উত্তর দিতে পারে “এটি কেন ব্লক হলো?”",
+    "modes": [
+      {
+        "title": "ব্লকিং",
+        "text": "লঙ্ঘন সাপোর্ট ID ও ঐচ্ছিক ব্র্যান্ডেড ব্লক পেজসহ 403 ফেরত দেয়।"
+      },
+      {
+        "title": "ট্রান্সপারেন্ট / মনিটর",
+        "text": "লঙ্ঘন শুধু অ্যালার্ম ও লগ করে — ড্রাই-রান ও স্টেজিংয়ের জন্য আদর্শ।"
+      }
+    ]
+  },
+  "roadmap": {
+    "title": "Agents Gateway ও MCP Gateway",
+    "intro": "TenthMatrix, Proxy10x-কে এজেন্ট যুগে প্রসারিত করছে। HTTP API-এর সামনে থাকা একই এজ নিয়ন্ত্রণ করবে এজেন্ট ও Model Context Protocol (MCP) ক্লায়েন্ট কীভাবে টুল ও ব্যাকএন্ডে পৌঁছায়।",
+    "items": [
+      {
+        "title": "MCP Gateway (চলমান)",
+        "description": "বাহ্যিক MCP সার্ভারের সামনে একটি নিয়ন্ত্রিত প্রবেশদ্বার — auth ব্রিজিং, tool/method allow-deny তালিকা, tools/call-এর অডিট, এবং প্রতি-টুল রেট লিমিট। ক্লায়েন্ট কখনো upstream টোকেন রাখে না।",
+        "status": "In progress"
+      },
+      {
+        "title": "Agents Gateway (চলমান)",
+        "description": "মাল্টি-এজেন্ট ট্রাফিকের জন্য নীতি, রাউটিং ও অবজার্ভেবিলিটি — যাতে এজেন্ট ফ্লিট আপনার API ও CDN ওয়ার্কলোডের মতো একই TenthMatrix Proxy10x এজ দিয়ে অরিজিনে পৌঁছায়।",
+        "status": "In progress"
+      },
+      {
+        "title": "MCP ব্যবস্থাপনা সারফেস (উপলব্ধ)",
+        "description": "Proxy10x ইতিমধ্যে তার Admin সারফেস Claude, Cursor ও অন্যান্য এজেন্টের জন্য MCP টুল হিসেবে উন্মুক্ত করে — IDE না ছেড়েই নিয়ম কনফিগার করুন ও এজ পরীক্ষা করুন।",
+        "status": "Available"
+      }
+    ]
+  },
+  "architecture": {
+    "title": "সলিউশন আর্কিটেকচার",
+    "intro": "ক্লায়েন্ট ও এজেন্ট TenthMatrix Proxy10x POP-এ পৌঁছায়। এজ লাইভ নিয়ম মেলায়, WAF ও ক্যাশ প্রয়োগ করে, তারপর অরিজিনে ব্যালান্স করে। অপারেটররা সবকিছু Admin UI, REST, MCP বা CLI দিয়ে চালান।",
+    "steps": [
+      {
+        "title": "এজ POP",
+        "text": "OpenResty + Lua হট পাথ: নিয়ম মেলান, রেসপন্ড করুন, ব্যাকএন্ড ব্যালান্স করুন।"
+      },
+      {
+        "title": "লাইভ কনফিগ",
+        "text": "ডিস্ক বা Redis থেকে নিয়ম, WAF ও ট্রাফিক স্প্লিট — দৈনন্দিন পরিবর্তনে কোনো nginx রিলোড নয়।"
+      },
+      {
+        "title": "কন্ট্রোল প্লেন",
+        "text": "মানুষ ও এজেন্টের জন্য Admin UI, REST, MCP ও proxy10x-cli।"
+      },
+      {
+        "title": "অরিজিন",
+        "text": "API, k3s সেবা, স্ট্যাটিক সাইট, এবং ভবিষ্যতের MCP / এজেন্ট upstream।"
+      }
+    ]
+  },
+  "relatedReading": {
+    "title": "সম্পর্কিত লেখা",
+    "intro": "একই লাইভ-কনফিগ এজে ব্যাখ্যাযোগ্য Web Application Firewall — নীতি, ধাপ, মনিটর বা ব্লক, এবং প্রতিটি সিদ্ধান্তে সাপোর্ট ID।",
+    "items": [
+      {
+        "label": "Proxy10x WAF ব্লগ",
+        "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "ব্যাখ্যাযোগ্য এজ WAF নিবন্ধ",
+        "href": "/articles/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "WAF Engine v2 ব্লগ",
+        "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+        "external": false
+      },
+      {
+        "label": "WAF Engine v2-এর ভেতরে",
+        "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
+        "external": false
+      },
+      {
+        "label": "WAF ট্যুর ভিডিও",
+        "href": "https://youtu.be/r10XSonA5JE",
+        "external": true
+      },
+      {
+        "label": "wslproxy.org/waf",
+        "href": "https://wslproxy.org/waf/",
+        "external": true
+      }
+    ]
+  },
+  "cta": {
+    "title": "TenthMatrix Proxy10x নিন",
+    "body": "wslproxy.org-এ প্রোডাক্টটি দেখুন, TenthMatrix-এ WAF-এর বিস্তারিত বিশ্লেষণ পড়ুন, অথবা এজ, CDN, WAF ও এজেন্ট গেটওয়ে ডিপ্লয়মেন্ট নিয়ে আমাদের সাথে কথা বলুন।",
+    "primary": {
+      "text": "wslproxy.org খুলুন",
+      "href": "https://wslproxy.org"
+    },
+    "secondary": {
+      "text": "WAF নিবন্ধ পড়ুন",
+      "href": "/articles/wslproxy-waf-web-application-firewall"
+    },
+    "tertiary": {
+      "text": "TenthMatrix-এর সাথে যোগাযোগ করুন",
+      "href": "/contact-us"
+    },
+    "quaternary": {
+      "text": "প্রোডাক্ট সংক্ষিপ্ত বিবরণ নিবন্ধ",
+      "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
+    }
+  },
+  "externalSite": {
+    "label": "প্রোডাক্ট সাইটে চালিয়ে যান",
+    "href": "https://wslproxy.org",
+    "text": "ডেমো, ডকুমেন্টেশন ও সর্বশেষ TenthMatrix Proxy10x রিলিজের জন্য wslproxy.org দেখুন।"
+  },
+  "videos": [
+    {
+      "title": "দেখুন: TenthMatrix Proxy10x পরিচিতি",
+      "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
+      "watchUrl": "https://youtu.be/7NJulclG5sQ",
+      "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix Proxy10x — প্রোডাক্ট পরিচিতি",
+      "caption": "দেখুন",
+      "productUrl": "https://wslproxy.org",
+      "productLabel": "wslproxy.org"
+    },
+    {
+      "title": "দেখুন: Proxy10x WAF ট্যুর",
+      "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
+      "watchUrl": "https://youtu.be/r10XSonA5JE",
+      "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix Proxy10x WAF ট্যুর",
+      "caption": "দেখুন",
+      "productUrl": "https://wslproxy.org/waf/",
+      "productLabel": "wslproxy.org/waf"
+    }
+  ]
+}

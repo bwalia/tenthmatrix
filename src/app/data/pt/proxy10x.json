@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "title": "TenthMatrix Proxy10x — API Gateway, CDN e WAF | TenthMatrix",
+    "description": "Página do produto TenthMatrix Proxy10x: como funciona o proxy com configuração ao vivo, recursos detalhados, regras e etapas do motor WAF v2, cache CDN, DNS multi-POP e roadmap do Agents/MCP Gateway. Acesse wslproxy.org.",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API gateway, CDN, regras de WAF, OpenResty, cache de borda, MCP gateway, Agents Gateway, proxy reverso, wslproxy.org"
+  },
+  "header": {
+    "title": "TenthMatrix Proxy10x",
+    "subtitle": "API Gateway, CDN e WAF empresarial — Visão geral do produto",
+    "description": "O TenthMatrix Proxy10x (Proxy10x) é o plano de controle completo de API gateway e borda CDN da TenthMatrix. Ele fica na frente das suas origens e decide a cada requisição o que acontece — rotear, proteger, cachear e observar — a partir de configurações JSON e MCP ao vivo, sem recarregar o nginx a cada mudança de regra."
+  },
+  "intro": {
+    "title": "O que é o TenthMatrix Proxy10x?",
+    "body": "O Proxy10x é um API gateway dinâmico e proxy reverso sobre OpenResty. Os operadores gerenciam hosts virtuais, regras de roteamento, políticas de WAF, cache, divisão de tráfego e POPs de borda por uma interface de administração, API REST, ferramentas MCP ou o proxy10x-cli. As regras do dia a dia entram em vigor no caminho crítico; o nginx só recarrega quando blocos listen ou SSL no nível do servidor mudam.",
+    "links": [
+      {
+        "label": "wslproxy.org",
+        "href": "https://wslproxy.org"
+      },
+      {
+        "label": "Documentação do WAF",
+        "href": "https://wslproxy.org/waf/"
+      },
+      {
+        "label": "API Swagger",
+        "href": "https://wslproxy.org/swagger/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "Como o proxy funciona",
+    "intro": "Como um manual de soluções: corresponder uma vez, decidir a cada requisição e então fazer proxy ou proteger. O plano de controle nunca precisa reiniciar a borda para mudanças comuns de regras.",
+    "flow": [
+      {
+        "title": "1. A requisição chega a um POP",
+        "text": "Navegadores, APIs e agentes chegam a uma borda do TenthMatrix Proxy10x (Docker, POP bare-metal com Ansible ou ingress Helm em k3s). O OpenResty aceita o TLS e entra no caminho crítico em Lua."
+      },
+      {
+        "title": "2. Corresponder a uma regra de roteamento",
+        "text": "gateway_ack.lua carrega o host virtual e avalia regras ao vivo do disco ou do Redis: caminho, IP, país, JWT, S3, cookie e mais. Prioridade e especificidade escolhem a vencedora — sem recarregar o nginx."
+      },
+      {
+        "title": "3. Pipeline: limite de taxa → WAF → resposta",
+        "text": "O pipeline do gateway aplica os limites de taxa, depois o motor WAF (etapas + assinaturas), e então gateway_resp.lua aplica a ação de resposta e os timeouts do balanceador."
+      },
+      {
+        "title": "4. Decidir o resultado",
+        "text": "Resultados típicos: 305 proxy reverso para um upstream, redirecionamento 301/302, bloqueio com HTML estático, desafio CAPTCHA ou bloqueio WAF 403 com cabeçalhos de ID de suporte."
+      },
+      {
+        "title": "5. Balancear e observar",
+        "text": "Para respostas de proxy, balancer_by_lua aplica balanceamento ponderado, RR, canary, sticky ou least-conn. Saúde, métricas e estatísticas de tráfego alimentam as operações e os hooks de logs com IA."
+      },
+      {
+        "title": "6. Operadores e agentes conduzem a configuração",
+        "text": "Pessoas usam a interface de administração / CLI; agentes usam REST ou ferramentas MCP para CRUD de servidores, regras e vínculos de WAF — a mesma interface, com pull/push compatível com GitOps."
+      }
+    ],
+    "responseCodes": [
+      {
+        "code": "305",
+        "meaning": "Proxy reverso para o upstream (caminho principal do gateway)"
+      },
+      {
+        "code": "301 / 302",
+        "meaning": "Redirecionamento"
+      },
+      {
+        "code": "200 HTML",
+        "meaning": "Bloqueio ou página intermediária estática / com marca"
+      },
+      {
+        "code": "CAPTCHA",
+        "meaning": "Desafio antes de continuar"
+      },
+      {
+        "code": "403 WAF",
+        "meaning": "Bloqueado pelo WAF com cabeçalhos X-WAF-* e X-Support-ID"
+      }
+    ]
+  },
+  "features": {
+    "title": "Principais recursos do produto em detalhe",
+    "intro": "Tudo o que você precisa para uma borda governada: roteamento, segurança, cache CDN, entrega multi-POP e um plano de controle que pessoas e agentes podem operar.",
+    "items": [
+      {
+        "title": "Regras de roteamento dinâmicas",
+        "description": "Correspondência por caminho, IP, país, claims JWT, chaves no estilo S3 e cookies. As ações incluem proxy reverso, redirecionamento, respostas HTML e CAPTCHA. As regras são ordenadas por prioridade com desempate por especificidade, então a rota mais precisa vence sem reiniciar o nginx.",
+        "icon": "bi-signpost-split"
+      },
+      {
+        "title": "Engenharia de tráfego",
+        "description": "Balanceamento ponderado, round-robin, canary por cabeçalho, sessões sticky por cookie e least-conn. Promova ou reverta backends pelo plano de controle quando um canary parecer saudável — ou retire-o com uma única ação.",
+        "icon": "bi-shuffle"
+      },
+      {
+        "title": "Motor WAF empresarial v2",
+        "description": "Pacotes de políticas se vinculam por domínio, serviço e rota. As etapas cobrem listas de métodos permitidos, bloqueio por tipo de arquivo, listas de IP/geo, política de algoritmos JWT, perfis de corpo JSON, velocidade de força bruta e segurança positiva OpenAPI — além de assinaturas de ataque governadas e pontuação de anomalias. Modos de bloqueio ou transparente (monitoramento).",
+        "icon": "bi-shield-lock"
+      },
+      {
+        "title": "CDN e cache de borda",
+        "description": "Cache estático de borda, cache opcional de blobs Docker e hooks do Varnish oferecem uma camada tipo CDN na frente das origens — ideal para sites de marketing, documentação de APIs e entrega de artefatos junto ao tráfego do API gateway.",
+        "icon": "bi-hdd-network"
+      },
+      {
+        "title": "SSL e HTTPS",
+        "description": "auto-ssl / Let’s Encrypt, JSON de SSL por domínio e políticas de HTTPS forçado para que cada host virtual termine o TLS corretamente no POP.",
+        "icon": "bi-lock"
+      },
+      {
+        "title": "Multi-POP + DNS",
+        "description": "Declare locais de borda e provisione registros A no Cloudflare com proteções. Um padrão comum em produção é POP público → NodePort do k3s → Helm proxy10x-ingress → pods da app.",
+        "icon": "bi-globe2"
+      },
+      {
+        "title": "Plano de controle",
+        "description": "Painéis React Admin e Next.js, REST com Swagger, ferramentas MCP para Claude/Cursor e a imagem proxy10x-cli (ghcr.io/bwalia/proxy10x-cli) para fluxos pull/push/diff/verify.",
+        "icon": "bi-sliders"
+      },
+      {
+        "title": "Implante em qualquer lugar",
+        "description": "Docker Compose para laboratórios, Ansible para POPs bare-metal ou em VM e charts Helm de ingress controller para k3s / Kubernetes — uma única interface de produto em todos os ambientes.",
+        "icon": "bi-box-seam"
+      },
+      {
+        "title": "Observabilidade",
+        "description": "/health, /healthz, /ready, Prometheus /metrics, traffic stats, structured WAF security logs, and AI log analysis hooks for SRE teams.",
+        "icon": "bi-graph-up"
+      }
+    ]
+  },
+  "waf": {
+    "title": "Regras e aplicação do WAF",
+    "intro": "O WAF roda no caminho da requisição do OpenResty (inspirado em padrões de WAF empresarial para NGINX). É fail-open por padrão para que um bug no WAF não derrube o site, explicável em cada bloqueio e compatível com listas simples de regras v1. Para um tour guiado e uma análise aprofundada, veja as leituras relacionadas abaixo — ou assista ao vídeo do WAF nesta página.",
+    "pipelineTitle": "Pipeline no caminho da requisição",
+    "pipeline": [
+      "rewrite_by_lua: gateway_ack.lua seleciona a regra de roteamento",
+      "gateway_pipeline.execute(): limite de taxa → WAF → continuar",
+      "waf_engine.inspect(): carrega a política, resolve o vínculo, executa as etapas e depois as assinaturas",
+      "Ao bloquear: 403 + X-WAF-Block, X-WAF-Rule, X-WAF-Violation, X-Support-ID"
+    ],
+    "stagesTitle": "Pipeline de etapas (antes das assinaturas)",
+    "stages": [
+      {
+        "code": "VIOL_METHOD",
+        "name": "Lista de métodos permitidos",
+        "detail": "Apenas métodos HTTP permitidos (por exemplo, GET, POST, HEAD, OPTIONS)."
+      },
+      {
+        "code": "VIOL_FILETYPE",
+        "name": "Bloqueio por tipo de arquivo",
+        "detail": "Bloqueia extensões sensíveis como .env, .sql, .bak, .git, .pem."
+      },
+      {
+        "code": "VIOL_IP_DENY / VIOL_GEO",
+        "name": "Listas de IP e geo",
+        "detail": "Permite/bloqueia CIDRs e bloqueia países via base de dados tipo IP2Location."
+      },
+      {
+        "code": "VIOL_JWT_ALG",
+        "name": "Política de algoritmos JWT",
+        "detail": "Bloqueia algoritmos fracos (none, HS256); exige RS256/ES256 quando necessário."
+      },
+      {
+        "code": "VIOL_JSON_SIZE / DEPTH",
+        "name": "Perfil de corpo JSON",
+        "detail": "Limita a profundidade do JSON e o tamanho do corpo para evitar abuso do parser."
+      },
+      {
+        "code": "VIOL_BRUTE_FORCE",
+        "name": "Velocidade de força bruta",
+        "detail": "Janelas deslizantes por caminho (por exemplo, /api/login) indexadas por IP."
+      },
+      {
+        "code": "VIOL_OPENAPI_*",
+        "name": "Segurança positiva OpenAPI",
+        "detail": "Permite apenas combinações de caminho+método declaradas (caminhos com template)."
+      }
+    ],
+    "signaturesTitle": "Regras de assinaturas e governança",
+    "signaturesIntro": "Cada assinatura tem um ID estável (a unidade endereçável), categoria/conjunto, severidade, alvo de correspondência (url, args, body, headers, cookies, UA ou all), padrão regex ou de texto, ação (block ou monitor) e pontuação de anomalia.",
+    "governance": [
+      {
+        "title": "disable",
+        "text": "signatures.disable ignora uma regra por completo."
+      },
+      {
+        "title": "stage",
+        "text": "signatures.stage apenas gera alarmes até um timestamp — um rollout seguro que nunca soma à pontuação de anomalia enquanto está em staging."
+      },
+      {
+        "title": "conjuntos de assinaturas",
+        "text": "Alterne conjuntos inteiros (por exemplo, SET_SQLI) entre bloqueio e alarme sem reescrever cada regra."
+      },
+      {
+        "title": "limite de anomalia",
+        "text": "Pontuação acumulada ≥ limite dispara VIOL_ANOMALY_SCORE mesmo que nenhuma assinatura sozinha bloqueasse."
+      }
+    ],
+    "bindingTitle": "Precedência de vínculos",
+    "bindingIntro": "Vence o mais específico: sobrescrita de rota → waf_mode_override por servidor → enforcementMode padrão da política (blocking ou transparent/monitor). Cada achado registra qual vínculo venceu, para que os logs respondam “por que isto foi bloqueado?”",
+    "modes": [
+      {
+        "title": "Bloqueio",
+        "text": "Violações retornam 403 com ID de suporte e página de bloqueio com marca opcional."
+      },
+      {
+        "title": "Transparente / monitoramento",
+        "text": "Violações apenas geram alarmes e logs — ideal para dry-run e staging."
+      }
+    ]
+  },
+  "roadmap": {
+    "title": "Agents Gateway e MCP Gateway",
+    "intro": "A TenthMatrix está levando o Proxy10x para a era dos agentes. A mesma borda que fica na frente das APIs HTTP vai governar como agentes e clientes do Model Context Protocol (MCP) acessam ferramentas e backends.",
+    "items": [
+      {
+        "title": "MCP Gateway (em desenvolvimento)",
+        "description": "Uma porta de entrada governada na frente de servidores MCP externos — ponte de autenticação, listas de permissão/bloqueio de ferramentas/métodos, auditoria de tools/call e limites de taxa por ferramenta. Os clientes nunca têm os tokens do upstream.",
+        "status": "In progress"
+      },
+      {
+        "title": "Agents Gateway (em desenvolvimento)",
+        "description": "Políticas, roteamento e observabilidade para tráfego multiagente — para que frotas de agentes cheguem às origens pela mesma borda do TenthMatrix Proxy10x que suas APIs e cargas CDN.",
+        "status": "In progress"
+      },
+      {
+        "title": "Interface de gerenciamento MCP (disponível)",
+        "description": "O Proxy10x já expõe sua própria interface de administração como ferramentas MCP para Claude, Cursor e outros agentes — configure regras e inspecione a borda sem sair do seu IDE.",
+        "status": "Available"
+      }
+    ]
+  },
+  "architecture": {
+    "title": "Arquitetura da solução",
+    "intro": "Clientes e agentes chegam a um POP do TenthMatrix Proxy10x. A borda aplica regras ao vivo, WAF e cache, e depois balanceia para as origens. Os operadores controlam tudo pela interface de administração, REST, MCP ou CLI.",
+    "steps": [
+      {
+        "title": "POP de borda",
+        "text": "Caminho crítico OpenResty + Lua: corresponder regras, responder, balancear backends."
+      },
+      {
+        "title": "Configuração ao vivo",
+        "text": "Regras, WAF e divisões de tráfego do disco ou do Redis — sem recarregar o nginx para mudanças do dia a dia."
+      },
+      {
+        "title": "Plano de controle",
+        "text": "Interface de administração, REST, MCP e proxy10x-cli para pessoas e agentes."
+      },
+      {
+        "title": "Origens",
+        "text": "APIs, serviços em k3s, sites estáticos e futuros upstreams MCP / de agentes."
+      }
+    ]
+  },
+  "relatedReading": {
+    "title": "Leituras relacionadas",
+    "intro": "Web Application Firewall explicável na mesma borda com configuração ao vivo — políticas, etapas, monitoramento ou bloqueio e IDs de suporte em cada decisão.",
+    "items": [
+      {
+        "label": "Blog do WAF do Proxy10x",
+        "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "Artigo sobre o WAF de borda explicável",
+        "href": "/articles/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "Blog do WAF Engine v2",
+        "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+        "external": false
+      },
+      {
+        "label": "Por dentro do WAF Engine v2",
+        "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
+        "external": false
+      },
+      {
+        "label": "Vídeo de tour pelo WAF",
+        "href": "https://youtu.be/r10XSonA5JE",
+        "external": true
+      },
+      {
+        "label": "wslproxy.org/waf",
+        "href": "https://wslproxy.org/waf/",
+        "external": true
+      }
+    ]
+  },
+  "cta": {
+    "title": "Obter o TenthMatrix Proxy10x",
+    "body": "Conheça o produto em wslproxy.org, leia a análise aprofundada do WAF na TenthMatrix ou fale conosco sobre implantações de borda, CDN, WAF e gateway de agentes.",
+    "primary": {
+      "text": "Abrir wslproxy.org",
+      "href": "https://wslproxy.org"
+    },
+    "secondary": {
+      "text": "Ler o artigo do WAF",
+      "href": "/articles/wslproxy-waf-web-application-firewall"
+    },
+    "tertiary": {
+      "text": "Falar com a TenthMatrix",
+      "href": "/contact-us"
+    },
+    "quaternary": {
+      "text": "Artigo de visão geral do produto",
+      "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
+    }
+  },
+  "externalSite": {
+    "label": "Continuar no site do produto",
+    "href": "https://wslproxy.org",
+    "text": "Acesse wslproxy.org para demos, documentação e as versões mais recentes do TenthMatrix Proxy10x."
+  },
+  "videos": [
+    {
+      "title": "Assista: introdução ao TenthMatrix Proxy10x",
+      "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
+      "watchUrl": "https://youtu.be/7NJulclG5sQ",
+      "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix Proxy10x — introdução ao produto",
+      "caption": "Assistir",
+      "productUrl": "https://wslproxy.org",
+      "productLabel": "wslproxy.org"
+    },
+    {
+      "title": "Assista: tour pelo WAF do Proxy10x",
+      "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
+      "watchUrl": "https://youtu.be/r10XSonA5JE",
+      "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
+      "thumbnailAlt": "Tour pelo WAF do TenthMatrix Proxy10x",
+      "caption": "Assistir",
+      "productUrl": "https://wslproxy.org/waf/",
+      "productLabel": "wslproxy.org/waf"
+    }
+  ]
+}

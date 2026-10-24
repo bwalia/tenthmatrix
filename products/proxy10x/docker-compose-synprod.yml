@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+  synprod-pop-server:
+    container_name: synprod-pop
+    restart: always
+    build:
+      args:
+        - APP_ENV=dev
+        - APP_NAME=synprod-pop
+        - DNS_RESOLVER=127.0.0.11
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8095:8080"
+      - "8091:80"
+    networks:
+      - openresty-network
+    volumes:
+      - ./nginx-dev.conf.tmpl:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./data:/opt/nginx/data
+      - ./html/swagger:/usr/local/openresty/nginx/html/swagger
+      - ./api:/usr/local/openresty/nginx/html/api
+    env_file: .env.docker
+
+  synprod-pop-redis:
+    container_name: synprod-pop-redis
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      - openresty-network
+    volumes:
+      - redis-database:/data
+
+  synprod-pop-sample-api:
+    container_name: synprod-pop-sample-api
+    build:
+      context: .
+      dockerfile: Dockerfile_nodeapp
+    ports:
+      - "3011:3009"
+    networks:
+      openresty-network:
+        ipv4_address: 172.177.0.10
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./.env.nodeapp:/app/.env            
+      
+networks: 
+  openresty-network:
+    ipam:
+      config:
+        - subnet: 172.177.0.0/16
+
+volumes:
+  redis-database:

@@ -1,0 +1,12 @@
+# Files and directories to ignore when copying to the Docker image
+
+# Next.js admin — its own image handles this, not needed in the main image
+openresty-admin-next/node_modules
+openresty-admin-next/.next
+openresty-admin-next/.env.local
+
+# Docker build artifacts and local-only state
+.next
+data/cache
+data/varnish
+data/servers/*/conf

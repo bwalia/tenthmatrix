@@ -1,0 +1,261 @@
+version: '3.8'
+
+# Local Development Docker Compose Configuration
+# Uses unique ports to avoid conflicts with common local services
+# Includes proper volume mounts for hot-reload development
+#
+# Start with: ./dev.sh start
+# Or directly: docker compose -f docker-compose-local.yml up -d --build
+
+services:
+  proxy10x:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: dev
+        DNS_RESOLVER: 127.0.0.11
+    container_name: proxy10x-local
+    restart: unless-stopped
+    # nginx listens on unix:/var/run/nginx/nginx.sock. After an unclean stop
+    # (Docker/Colima VM restart, OOM, crash) the socket file stays in the
+    # container's writable layer, every restart then fails with
+    # "bind() ... (98: Address in use)", and the container crash-loops. A tmpfs
+    # gives each start an empty /var/run/nginx.
+    tmpfs:
+      - /var/run/nginx
+
+    ports:
+      # HTTP proxy (default 80 → 18180 to avoid conflicts)
+      - "18180:80"
+      # HTTPS proxy (default 443 → 18443 to avoid conflicts)
+      - "18443:443"
+      # Admin Dashboard & API (default 8080 → 18280 to avoid conflicts)
+      - "18280:8080"
+      # Next.js Admin Dashboard (port 8099 → 18299 externally)
+      - "18299:8099"
+
+    volumes:
+      # Hot-reload Lua API files (changes reflect per-request, no restart needed)
+      - ./api:/usr/local/openresty/nginx/html/api
+
+      # Hot-reload HTML/static files
+      - ./html:/usr/local/openresty/nginx/html
+
+      # Configuration files
+      - ./data:/opt/nginx/data
+      - ./nginx-dev.conf.tmpl:/usr/local/openresty/nginx/conf/nginx.conf
+
+      # SSL certificates (persistent across restarts)
+      - proxy10x-certs-local:/etc/resty-auto-ssl
+
+      # Swagger documentation
+      - ./html/swagger:/usr/local/openresty/nginx/html/swagger
+
+    environment:
+      NGINX_CONFIG_DIR: /opt/nginx/
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DNS_RESOLVER: 127.0.0.11
+      LUA_LOG_LEVEL: debug
+      SSL_STAGING: "true"
+      # PostgreSQL storage backend (used when storage_type=pgsql in settings.json)
+      PROXY10X_PG_HOST: postgres
+      PROXY10X_PG_PORT: 5432
+      PROXY10X_PG_DB: proxy10x
+      PROXY10X_PG_USER: proxy10x
+      PROXY10X_PG_PASSWORD: proxy10x_local_dev
+
+    depends_on:
+      redis:
+        condition: service_healthy
+      demo-node-app:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.2
+
+    # Run as root in dev for easier file permissions
+    user: root
+
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    container_name: proxy10x-redis-local
+    restart: unless-stopped
+
+    ports:
+      # Redis (default 6379 → 6479 to avoid conflicts)
+      - "6479:6379"
+
+    volumes:
+      - redis-data-local:/data
+
+    command: redis-server --appendonly yes --loglevel debug
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.3
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Demo Node.js origin server (backend for proxy testing)
+  # The Proxy10x gateway rule for "localhost" proxies to this app on port 3009
+  demo-node-app:
+    build:
+      context: .
+      dockerfile: demos-origins/node-app/Dockerfile
+    container_name: demo-node-app-local
+    restart: unless-stopped
+
+    ports:
+      # Node app (direct access for debugging)
+      - "3009:3009"
+
+    volumes:
+      # Hot-reload: nodemon watches for file changes automatically
+      - ./demos-origins/node-app/server.js:/app/server.js
+      - ./demos-origins/node-app/login.html:/app/login.html
+      - ./demos-origins/node-app/success.html:/app/success.html
+      - ./demos-origins/node-app/jwt.js:/app/jwt.js
+      - ./demos-origins/node-app/verifyToken.js:/app/verifyToken.js
+
+    environment:
+      NODE_ENV: development
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?JWT_SECRET_KEY is required - pass via environment or .env.local file}
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.10
+
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3009/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ── PostgreSQL ────────────────────────────────────────────────────────────
+  # Optional third storage backend (set storage_type: pgsql in settings.json)
+  postgres:
+    image: postgres:16-alpine
+    container_name: proxy10x-postgres-local
+    restart: unless-stopped
+
+    ports:
+      # Exposed on 5436 to avoid conflicts with any local postgres on 5432
+      - "5436:5432"
+
+    environment:
+      POSTGRES_DB: proxy10x
+      POSTGRES_USER: proxy10x
+      POSTGRES_PASSWORD: proxy10x_local_dev
+
+    volumes:
+      - postgres-data-local:/var/lib/postgresql/data
+      # Schema is applied automatically on first start
+      - ./infra/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./infra/pgsql/migrations/0001_baseline.sql:/docker-entrypoint-initdb.d/02-typed.sql
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.4
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U proxy10x -d proxy10x"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Adminer (Database UI) ─────────────────────────────────────────────────
+  # Lightweight database management tool — connect to PostgreSQL at postgres:5432
+  adminer:
+    image: adminer:latest
+    container_name: proxy10x-adminer-local
+    restart: unless-stopped
+
+    ports:
+      - "8380:8080"
+
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: dracula
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.7
+
+  # ── Next.js Admin Dashboard ──────────────────────────────────────────────
+  # Standalone Next.js app — the sole admin UI.
+  # Runs on port 7619 (internal and external) with hot-reload in dev mode
+  openresty-admin-next:
+    build:
+      context: ./openresty-admin-next
+      dockerfile: Dockerfile.dev
+    container_name: proxy10x-admin-next-local
+    restart: unless-stopped
+
+    ports:
+      - "7619:7619"
+
+    volumes:
+      # Bind-mount source for hot-reload (Next.js Fast Refresh)
+      - ./openresty-admin-next/src:/app/src
+      - ./openresty-admin-next/public:/app/public
+      - ./openresty-admin-next/next.config.ts:/app/next.config.ts
+      - ./openresty-admin-next/postcss.config.js:/app/postcss.config.js
+      - ./openresty-admin-next/package.json:/app/package.json
+      # Persist node_modules inside the container (avoid Mac ↔ Linux ABI issues)
+      - next-admin-node-modules:/app/node_modules
+
+    environment:
+      # Internal docker network URL used by Next.js server-side rewrites
+      PROXY10X_API_URL: http://proxy10x-local:8080
+      # Next.js dev server port
+      PORT: 7619
+
+    depends_on:
+      proxy10x:
+        condition: service_healthy
+
+    networks:
+      proxy10x-local-network:
+        ipv4_address: 172.177.0.5
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:7619 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  proxy10x-local-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.177.0.0/16
+          gateway: 172.177.0.1
+
+volumes:
+  proxy10x-certs-local:
+  redis-data-local:
+  postgres-data-local:
+  next-admin-node-modules:

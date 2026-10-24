@@ -1,0 +1,279 @@
+# Default values for proxy10x-ingress-controller
+
+# Controller configuration
+controller:
+  # Number of controller replicas
+  replicas: 1
+
+  # Container image
+  image:
+    repository: bwalia/proxy10x-ingress-controller
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+  # Security context
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+
+  # Leader election
+  leaderElection:
+    enabled: true
+
+  # Logging
+  logging:
+    level: info
+    format: json
+
+  # Metrics
+  metrics:
+    enabled: true
+    port: 8080
+    # ClusterIP: scrape in-cluster (ServiceMonitor) or `kubectl port-forward`.
+    # It was LoadBalancer (#903), and k3s ServiceLB then ran an svclb DaemonSet
+    # per release holding hostPort 8080 on EVERY node. prod's claimed :8080 on
+    # all 8 LAN nodes, including the Ansible int/test/acc hosts (.193/.140/.47;
+    # see #1272, ":8080 returns HTTP 000"), and each of int/test/acc left 8
+    # svclb pods Pending on the same port.
+    serviceType: ClusterIP
+
+  # Health probes
+  healthProbe:
+    port: 8081
+
+# OpenResty proxy configuration
+openresty:
+  # Use built-in nginx.conf from the OpenResty image (skip ConfigMap mount)
+  # Set to false to use ConfigMap-based config from files/ in this chart
+  useBuiltinConfig: true
+
+  # Startup script run as `/bin/sh -c` when useBuiltinConfig is true. The
+  # image's built-in nginx.conf is the Docker dev template: it includes
+  # /tmp/resolver.conf and proxies `location /` to host.docker.internal:7619,
+  # which doesn't resolve in k3s, so nginx exits with
+  # `[emerg] host not found in upstream "host.docker.internal"`. This writes
+  # the k3s resolver, rewrites that location, and execs nginx.
+  # Until 2026-09-24 this lived ONLY on the prod Deployment (applied by hand
+  # with `kubectl replace` on 2026-09-15), so every int/test/acc release
+  # crash-looped. Kept byte-identical to what prod ran. Set to "" to use the
+  # image entrypoint.
+  builtinConfigStartup: |-
+    set -ex
+    printf 'resolver 10.43.0.10 ipv6=off;\n' > /tmp/resolver.conf
+    CONF=/usr/local/openresty/nginx/conf/nginx.conf
+    # Serve built admin UI instead of proxying to host Next.js (dev-only).
+    if grep -q 'proxy_pass http://host.docker.internal:7619;' "$CONF"; then
+      sed -i 's|proxy_pass http://host.docker.internal:7619;|root /usr/local/openresty/nginx/html/openresty-admin/dist; try_files $uri $uri/ /index.html;|' "$CONF"
+      # Drop leftover proxy_* headers in that block (harmless if left; remove Upgrade lines)
+      sed -i '/root \/usr\/local\/openresty\/nginx\/html\/openresty-admin\/dist; try_files/,/}/ {
+        /proxy_http_version/d
+        /proxy_set_header/d
+      }' "$CONF"
+      echo patched location /
+    fi
+    nginx -t
+    exec /usr/local/openresty/nginx/sbin/nginx -g 'daemon off;'
+
+  # Number of proxy replicas
+  replicas: 3
+
+  # Control-plane settings.json. Prefer Vault (WSLVault), fall back to SOPS
+  # via scripts/k3s1-bootstrap-control-plane.sh, then apply as this Secret.
+  # Mounted at /opt/nginx/data/settings.json. Empty = image sample settings.
+  settings:
+    existingSecret: ""
+    secretKey: settings.json
+
+  # Postgres connection for storage_type=pgsql (Secret keys: pg_host, pg_port,
+  # pg_database, pg_user, pg_password). Injected as PROXY10X_PG_* env vars.
+  # Materialized by the same bootstrap script (Zalando password for in-cluster).
+  pgsql:
+    existingSecret: ""
+
+  # Control-plane admin UI. When dashboard.enabled, the Next.js Deployment
+  # serves / via Traefik (see deploy/k3s1/proxy10x-cp-traefik-ingress.yaml).
+  controlPlane:
+    enabled: false
+    host: cp.pop0.uk
+    # Fixed NodePort for lon1 edge rules (data/rules/prod/cp-pop0-control-plane.json)
+    nodePort: 32080
+    tls: true
+    # cert-manager ClusterIssuer when certManager.enabled (optional)
+    clusterIssuer: letsencrypt-prod
+    dashboard:
+      enabled: false
+      replicas: 1
+      port: 7619
+      # In-cluster OpenResty admin API (Lua). Service name matches fullnameOverride.
+      apiUrl: http://proxy10x-ingress-openresty:8080
+      allowedOrigins: cp.pop0.uk
+      image:
+        repository: bwalia/proxy10x-admin-next
+        tag: "latest"
+        pullPolicy: IfNotPresent
+      resources:
+        limits:
+          cpu: "1"
+          memory: 512Mi
+        requests:
+          cpu: 50m
+          memory: 128Mi
+
+  # Container image
+  image:
+    repository: bwalia/tenthmatrix
+    tag: "latest"
+    pullPolicy: IfNotPresent
+
+  # Resource limits and requests
+  resources:
+    limits:
+      cpu: "2"
+      memory: 2Gi
+    requests:
+      cpu: "1"
+      memory: 512Mi
+
+  # Security context - OpenResty master starts as root for port binding,
+  # then drops privileges to nobody/nginx worker processes.
+  securityContext:
+    runAsUser: 0
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+      add:
+        - NET_BIND_SERVICE
+        - CHOWN
+        - SETUID
+        - SETGID
+
+  # Service configuration
+  service:
+    type: LoadBalancer
+    annotations: {}
+    externalTrafficPolicy: Local
+    ports:
+      http: 80
+      https: 443
+
+  # HorizontalPodAutoscaler
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  # PodDisruptionBudget
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 2
+
+  # Shared dictionaries for Lua
+  sharedDicts:
+    upstreams: "10m"
+    upstream_health: "10m"
+    rate_limit: "10m"
+    cache: "50m"
+
+  # nginx.conf configuration
+  config:
+    workerProcesses: auto
+    workerConnections: 10240
+    keepaliveTimeout: 65
+    clientMaxBodySize: "10m"
+
+# IngressClass configuration
+ingressClass:
+  name: proxy10x
+  isDefaultClass: false
+  parameters: {}
+
+# cert-manager integration
+# When disabled, a self-signed TLS certificate is created for the default HTTPS server.
+# Enable if you have cert-manager installed and want automatic certificate management.
+certManager:
+  enabled: false
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+# Observability
+observability:
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    serviceMonitor:
+      # Requires Prometheus Operator CRDs. Set to true if you have kube-prometheus-stack installed.
+      enabled: false
+      interval: 30s
+      scrapeTimeout: 10s
+
+  # Structured logging
+  logging:
+    format: json
+    level: info
+
+  # OpenTelemetry (optional)
+  opentelemetry:
+    enabled: false
+    endpoint: ""
+
+# RBAC configuration
+rbac:
+  create: true
+
+# ServiceAccount configuration
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod labels
+podLabels: {}
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations: []
+
+# Affinity
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - proxy10x-ingress-controller
+          topologyKey: kubernetes.io/hostname
+
+# Network policies
+networkPolicy:
+  enabled: false
+
+# Pod security policy
+podSecurityPolicy:
+  enabled: false

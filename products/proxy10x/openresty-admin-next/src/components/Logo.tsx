@@ -1,0 +1,143 @@
+import React from "react";
+
+/* Proxy10x logo — corporate blue brand for the Next.js admin. */
+
+const GRADIENT_ID = "proxy10x-logo-gradient";
+
+export interface LogoProps {
+  width?: number;
+  height?: number;
+  variant?: "full" | "icon";
+  theme?: "light" | "dark";
+  title?: string;
+  className?: string;
+}
+
+const Logo: React.FC<LogoProps> = ({
+  width = 180,
+  height = 40,
+  variant = "full",
+  theme = "dark",
+  title = "Proxy10x",
+  className,
+}) => {
+  const wordmarkColor = theme === "dark" ? "#eef2f6" : "#0b1c2c";
+  const accentColor = "#255fa8";
+  const gradientId = GRADIENT_ID;
+
+  if (variant === "icon") {
+    return (
+      <svg
+        width={height}
+        height={height}
+        viewBox="0 0 48 48"
+        role="img"
+        aria-label={title}
+        className={className}
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>{title}</title>
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#5493d6" />
+            <stop offset="100%" stopColor="#1e4c88" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M24 4L6 12v12c0 11 8 21 18 24 10-3 18-13 18-24V12L24 4z"
+          fill={`url(#${gradientId})`}
+        />
+        <circle cx="24" cy="18" r="3" fill="white" />
+        <circle cx="16" cy="28" r="2.5" fill="white" opacity="0.9" />
+        <circle cx="32" cy="28" r="2.5" fill="white" opacity="0.9" />
+        <circle cx="24" cy="36" r="2" fill="white" opacity="0.8" />
+        <path
+          d="M24 21v5M18 27l4-4M30 27l-4-4M24 33v-3"
+          stroke="white"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          opacity="0.7"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox="0 0 200 44"
+      role="img"
+      aria-label={title}
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <title>{title}</title>
+      <defs>
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#5493d6" />
+          <stop offset="100%" stopColor="#1e4c88" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(2, 2)">
+        <path
+          d="M20 2L4 8v10c0 9 6.5 17 16 20 9.5-3 16-11 16-20V8L20 2z"
+          fill={`url(#${gradientId})`}
+        />
+        <circle cx="20" cy="14" r="2.5" fill="white" />
+        <circle cx="13" cy="22" r="2" fill="white" opacity="0.9" />
+        <circle cx="27" cy="22" r="2" fill="white" opacity="0.9" />
+        <circle cx="20" cy="29" r="1.5" fill="white" opacity="0.8" />
+        <path
+          d="M20 16.5v3M15 21l3-3M25 21l-3-3M20 27v-2"
+          stroke="white"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity="0.7"
+        />
+      </g>
+      {/* Unbounded (display face, as workstation-website). textLength pins
+          the wordmark to the slot before the ADMIN badge whatever face loads. */}
+      <text
+        x="48"
+        y="28"
+        style={{ fontFamily: "var(--font-display)" }}
+        fontSize="17"
+        textLength="96"
+        lengthAdjust="spacingAndGlyphs"
+      >
+        <tspan fontWeight="700" fill={wordmarkColor}>
+          Proxy
+        </tspan>
+        <tspan fontWeight="500" fill={accentColor}>
+          10x
+        </tspan>
+      </text>
+      <rect
+        x="148"
+        y="12"
+        width="48"
+        height="20"
+        rx="4"
+        fill={`url(#${gradientId})`}
+        opacity="0.18"
+      />
+      <text
+        x="172"
+        y="26"
+        style={{ fontFamily: "var(--font-sans)" }}
+        fontSize="10"
+        fontWeight="600"
+        fill={accentColor}
+        textAnchor="middle"
+        letterSpacing="0.5"
+      >
+        ADMIN
+      </text>
+    </svg>
+  );
+};
+
+Logo.displayName = "Logo";
+
+export default Logo;

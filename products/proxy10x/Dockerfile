@@ -1,0 +1,292 @@
+# ============================================================================
+# Proxy10x Docker Image - OpenResty-based API Gateway
+# ============================================================================
+#
+# This Dockerfile builds a production-ready OpenResty image with:
+# - Lua API Gateway functionality
+# - Automatic SSL/TLS certificate management (Let's Encrypt)
+# - Reverse proxy and load balancing
+# - Admin API (Lua); UI is openresty-admin-next (separate image / Ansible)
+# - Prometheus metrics
+# - Traffic analytics
+# - Redis session storage
+# - Consul integration
+#
+# GitHub: https://github.com/proxy10x/proxy10x
+# Docker Hub: https://hub.docker.com/r/bwalia/proxy10x
+#
+# Maintainer: Balinder Walia <bwalia@workstation.co.uk>
+# ============================================================================
+
+ARG RESTY_FAT_IMAGE_BASE="openresty/openresty"
+ARG RESTY_FAT_IMAGE_TAG="alpine"
+
+FROM ${RESTY_FAT_IMAGE_BASE}:${RESTY_FAT_IMAGE_TAG} as builder
+
+ARG RESTY_FAT_IMAGE_BASE="openresty/openresty"
+ARG RESTY_FAT_IMAGE_TAG="alpine"
+ARG RESTY_LUAROCKS_VERSION="3.12.2"
+
+# OpenContainers Image Specification labels
+LABEL org.opencontainers.image.title="Proxy10x"
+LABEL org.opencontainers.image.description="OpenResty-based API Gateway with Auto SSL, Reverse Proxy, and Admin Dashboard"
+LABEL org.opencontainers.image.url="https://github.com/proxy10x/proxy10x"
+LABEL org.opencontainers.image.source="https://github.com/proxy10x/proxy10x"
+LABEL org.opencontainers.image.vendor="Proxy10x"
+LABEL org.opencontainers.image.authors="Balinder Walia <bwalia@workstation.co.uk>"
+LABEL org.opencontainers.image.documentation="https://github.com/proxy10x/proxy10x#docker"
+
+# Build information
+LABEL resty_fat_image_base="${RESTY_FAT_IMAGE_BASE}"
+LABEL resty_fat_image_tag="${RESTY_FAT_IMAGE_TAG}"
+LABEL resty_luarocks_version="${RESTY_LUAROCKS_VERSION}"
+
+#RUN set -ex && apk --no-cache add sudo
+
+RUN apk update && apk upgrade
+
+RUN apk add --no-cache --virtual .build-deps \
+    perl-dev \
+    && apk add --no-cache \
+    bash \
+    git \
+    aws-cli \
+    build-base \
+    curl \
+    libintl \ 
+    linux-headers \
+    make \
+    musl \
+    outils-md5 \
+    perl \
+    unzip \
+    wget \
+    openssl \
+    jq \
+    && cd /tmp \
+    && curl -fSL https://luarocks.github.io/luarocks/releases/luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz -o luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
+    && tar xzf luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
+    && cd luarocks-${RESTY_LUAROCKS_VERSION} \
+    && ./configure \
+    --prefix=/usr/local/openresty/luajit \
+    --with-lua=/usr/local/openresty/luajit \
+    --lua-suffix=jit-2.1.0-beta3 \
+    --with-lua-include=/usr/local/openresty/luajit/include/luajit-2.1 \
+    && make build \
+    && make install \
+    && cd /tmp \
+    && rm -rf luarocks-${RESTY_LUAROCKS_VERSION} luarocks-${RESTY_LUAROCKS_VERSION}.tar.gz \
+    && apk add --no-cache --virtual .gettext gettext \
+    && mv /usr/bin/envsubst /tmp/ \
+    && apk del .build-deps .gettext \
+    && mv /tmp/envsubst /usr/local/bin/
+
+# IP to Country DB - https://lite.ip2location.com/database/ip-country
+RUN cd /tmp/ && wget https://edgeone-public.s3.eu-west-2.amazonaws.com/src/openresty/IP2LOCATION-LITE-DB11.IPV6.BIN/IP2LOCATION-LITE-DB11.IPV6.BIN -O /tmp/IP2LOCATION-LITE-DB11.IPV6.BIN
+#   COPY ./IP2LOCATION-LITE-DB11.IPV6.BIN /tmp
+
+# Add LuaRocks paths
+# If OpenResty changes, these may need updating:
+#    /usr/local/openresty/bin/resty -e 'print(package.path)'
+#    /usr/local/openresty/bin/resty -e 'print(package.cpath)'
+ENV LUA_PATH="/usr/local/openresty/site/lualib/?.ljbc;/usr/local/openresty/site/lualib/?/init.ljbc;/usr/local/openresty/lualib/?.ljbc;/usr/local/openresty/lualib/?/init.ljbc;/usr/local/openresty/site/lualib/?.lua;/usr/local/openresty/site/lualib/?/init.lua;/usr/local/openresty/lualib/?.lua;/usr/local/openresty/lualib/?/init.lua;./?.lua;/usr/local/openresty/luajit/share/luajit-2.1.0-beta3/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;/usr/local/openresty/luajit/share/lua/5.1/?.lua;/usr/local/openresty/luajit/share/lua/5.1/?/init.lua"
+
+ENV LUA_CPATH="/usr/local/openresty/site/lualib/?.so;/usr/local/openresty/lualib/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/local/openresty/luajit/lib/lua/5.1/?.so"
+
+RUN opm get bungle/lua-resty-session
+RUN opm get ip2location/ip2location-resty
+RUN opm get bungle/lua-resty-template
+RUN opm get thibaultcha/lua-resty-mlcache
+RUN opm get 3scale/lua-resty-env
+# RUN opm get SkyLothar/lua-resty-jwt
+# RUN opm get pintsized/lua-resty-http
+
+RUN luarocks install lua-resty-jwt
+RUN luarocks install lua-resty-session
+RUN luarocks install lua-resty-http
+RUN luarocks install lua-resty-openidc
+RUN luarocks install base64
+RUN luarocks install lua-resty-redis-connector
+RUN luarocks install lua-resty-dns
+RUN luarocks install lua-resty-resolver
+RUN luarocks install luafilesystem
+# pgmoon falls back to luasocket outside some ngx phases; required for storage_type=pgsql init
+RUN luarocks install luasocket
+# lua-resty-auto-ssl pulls in the `sockproc` native dependency.  sockproc's
+# source uses legacy C (`void proc_exit()` instead of `void proc_exit(int)`)
+# and its Makefile hardcodes `-Werror`.  Alpine 3.19+ ships GCC 13+ which
+# treats the mismatched function-pointer type as an error (not just a
+# warning), breaking the build.
+#
+# Fix: wrap `gcc` with a tiny shim that appends
+# `-Wno-error=incompatible-pointer-types` so the offending warning stays a
+# warning.  The wrapper is removed once the install completes, so later
+# builds (and the final image) use stock gcc.
+RUN mv /usr/bin/gcc /usr/bin/gcc.real \
+    && printf '#!/bin/sh\nexec /usr/bin/gcc.real "$@" -Wno-error=incompatible-pointer-types\n' > /usr/bin/gcc \
+    && chmod +x /usr/bin/gcc \
+    && luarocks install lua-resty-auto-ssl \
+    && rm -f /usr/bin/gcc \
+    && mv /usr/bin/gcc.real /usr/bin/gcc
+# RUN luarocks install lua-resty-aws-auth
+RUN luarocks install pgmoon
+
+RUN mkdir -p /etc/resty-auto-ssl
+RUN chown -R root:nobody /etc/resty-auto-ssl/
+RUN chmod -R 775 /etc/resty-auto-ssl
+
+RUN openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 \
+    -subj '/CN=sni-support-required-for-valid-ssl' \
+    -keyout /etc/ssl/resty-auto-ssl-fallback.key \
+    -out /etc/ssl/resty-auto-ssl-fallback.crt
+#COPY nginx/test.conf /usr/local/openresty/nginx/conf/nginx.conf
+# COPY nginx/hd4dp.conf /etc/nginx/conf.d/hd4dp.conf
+# COPY nginx/sessions_demo_server.conf /etc/nginx/conf.d/sessions_demo_server.conf
+ENV NGINX_CONFIG_DIR="/opt/nginx/"
+RUN mkdir -p ${NGINX_CONFIG_DIR} && chmod 777 ${NGINX_CONFIG_DIR}
+
+# mc - MinIO Client is used to backup nginx openresty configuration to S3
+# Installed early to be cached (before COPY commands that change frequently)
+# TARGETARCH is automatically provided by Docker for multi-platform builds (amd64, arm64, etc.)
+ARG TARGETARCH
+# Classic /client/mc/… URLs now return 410; AIStor client path is the current download.
+RUN ARCH="${TARGETARCH:-amd64}" && \
+    wget https://dl.min.io/aistor/mc/release/linux-${ARCH}/mc -O /usr/local/bin/mc \
+    --tries=3 --timeout=30 && \
+    chmod +x /usr/local/bin/mc && \
+    mc --version
+
+ARG APP_ENV="dev"
+
+# ==============================================================================
+# COPY commands below - cache will be invalidated when source files change
+# ==============================================================================
+
+COPY ./system ${NGINX_CONFIG_DIR}system
+
+COPY ./html /usr/local/openresty/nginx/
+COPY ./data ${NGINX_CONFIG_DIR}data
+COPY ./data/sample-settings.json ${NGINX_CONFIG_DIR}data/settings.json
+COPY ./api /usr/local/openresty/nginx/html/api
+COPY ./nginx-${APP_ENV}.conf.tmpl /tmp/nginx.conf.tmpl
+COPY ./resolver.conf.tmpl /tmp/resolver.conf.tmpl
+COPY ./html/swagger /usr/local/openresty/nginx/html/swagger
+
+#RUN chmod -R 777 /usr/local/openresty/nginx/html/data && chmod -R 777 /usr/local/openresty/nginx/html/data/servers 
+
+ENV DNS_RESOLVER="127.0.0.11"
+ARG DNS_RESOLVER="127.0.0.11"
+
+# ARG DOCKERIZE_VERSION="v0.6.1"
+# RUN wget https://github.com/jwilder/dockerize/releases/download/${DOCKERIZE_VERSION}/dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+#     && tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz \
+#     && rm dockerize-alpine-linux-amd64-${DOCKERIZE_VERSION}.tar.gz
+
+RUN cp /tmp/nginx.conf.tmpl /usr/local/openresty/nginx/conf/nginx.conf
+RUN cp /tmp/resolver.conf.tmpl /tmp/resolver.conf
+
+#RUN dockerize -template /usr/local/openresty/nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+
+RUN sed -i "s/resolver 127.0.0.11/resolver ${DNS_RESOLVER}/g" /tmp/resolver.conf
+
+# ============================================================================
+# Service Integration: Consul
+# ============================================================================
+# Install Consul for service discovery and configuration management
+# Optional: Can be disabled by removing this section if not needed
+
+RUN apk add --no-cache --virtual .build-deps \
+    unzip \
+    curl \
+    && curl -o /tmp/consul.zip https://releases.hashicorp.com/consul/1.19.1/consul_1.19.1_linux_amd64.zip \
+    && unzip /tmp/consul.zip -d /usr/local/bin/ \
+    && rm /tmp/consul.zip \
+    && mkdir -p /etc/consul.d
+
+# Add a basic Consul configuration file
+COPY ./infra/consul/consul.json /etc/consul.d/consul.json
+
+# ============================================================================
+# Port Definitions
+# ============================================================================
+# HTTP traffic
+EXPOSE 80
+# HTTPS traffic
+EXPOSE 443
+# Admin Dashboard & Prometheus Metrics
+EXPOSE 8080
+# Consul API (Service Discovery)
+EXPOSE 8500
+
+RUN luarocks install lua-resty-consul
+
+# Install nginx-lua-prometheus for Prometheus metrics
+RUN cd /tmp && \
+    git clone https://github.com/knyar/nginx-lua-prometheus.git && \
+    cp /tmp/nginx-lua-prometheus/prometheus.lua /usr/local/openresty/lualib/ && \
+    cp /tmp/nginx-lua-prometheus/prometheus_keys.lua /usr/local/openresty/lualib/ && \
+    cp /tmp/nginx-lua-prometheus/prometheus_resty_counter.lua /usr/local/openresty/lualib/ && \
+    rm -rf /tmp/nginx-lua-prometheus
+
+# Install lua-resty-upstream-healthcheck for active health checks on upstreams
+RUN cd /tmp && \
+    git clone https://github.com/openresty/lua-resty-upstream-healthcheck.git && \
+    mkdir -p /usr/local/openresty/lualib/resty/upstream && \
+    cp /tmp/lua-resty-upstream-healthcheck/lib/resty/upstream/healthcheck.lua /usr/local/openresty/lualib/resty/upstream/ && \
+    rm -rf /tmp/lua-resty-upstream-healthcheck
+
+# Unix section
+# Unix socket will be created here "/var/run/nginx/nginx.sock"
+RUN mkdir -p "/var/run/nginx/" \
+    && chmod +x "/var/run/nginx/" \
+    && chown root:root "/var/run/nginx/" \
+    && chmod 755 -R "/var/run/nginx/"
+
+RUN mkdir -p "/var/log/nginx/" \
+    && chmod +x "/var/log/nginx/" \
+    && chown root:root "/var/log/nginx/" \
+    && chmod 755 -R "/var/log/nginx/"
+
+RUN mkdir -p "/var/cache/nginx/docker_blobs" \
+    && chown -R nobody:root "/var/cache/nginx/" \
+    && chmod 775 -R "/var/cache/nginx/"
+
+
+WORKDIR /usr/local/openresty/nginx/html
+
+RUN mkdir -p "${NGINX_CONFIG_DIR}data/servers" && \
+    mkdir -p "${NGINX_CONFIG_DIR}data/rules" && \
+    mkdir -p "${NGINX_CONFIG_DIR}data/ssl" && \
+    mkdir -p "${NGINX_CONFIG_DIR}data/upstreams/prod" && \
+    touch "${NGINX_CONFIG_DIR}data/upstreams/prod/upstreams.conf"
+
+RUN chmod -R 777 ${NGINX_CONFIG_DIR}data && \
+    chmod -R 777 ${NGINX_CONFIG_DIR}data/servers && \
+    chmod -R 777 ${NGINX_CONFIG_DIR}data/rules && \
+    chmod -R 777 ${NGINX_CONFIG_DIR}data/ssl && \
+    chmod -R 777 ${NGINX_CONFIG_DIR}data/upstreams && \
+    # chmod -R 777 ${NGINX_CONFIG_DIR}data/security_rules.json && \
+    chown -R nobody:root ${NGINX_CONFIG_DIR}data/
+# chmod 777 ${NGINX_CONFIG_DIR}data/sample-settings.json
+
+# ============================================================================
+# Health Check
+# ============================================================================
+# Container health check to ensure OpenResty is responding properly
+# The health check probes the admin dashboard endpoint on port 8080
+#
+# States:
+# - healthy: Container is working and responding to requests
+# - unhealthy: Container failed multiple health checks (will be restarted)
+# - starting: Container is still initializing
+
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=40s \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# ============================================================================
+# Container Entry Point
+# ============================================================================
+COPY ./scripts/docker-entrypoint-openresty.sh /usr/local/bin/docker-entrypoint-openresty.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint-openresty.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint-openresty.sh"]

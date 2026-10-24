@@ -59,9 +59,9 @@
         {
           "icon": "shield-alt",
           "title": "Security at the edge",
-          "description": "WSL Proxy puts an API gateway, WAF rules and rate limits in front of the agent and the tools it calls.",
-          "href": "/wsl-proxy",
-          "linkLabel": "See WSL Proxy"
+          "description": "Proxy10x puts an API gateway, WAF rules and rate limits in front of the agent and the tools it calls.",
+          "href": "/proxy10x",
+          "linkLabel": "See Proxy10x"
         },
         {
           "icon": "chart-line",
@@ -120,7 +120,7 @@
           "dimension": "Security model",
           "inhouse": "Whatever you build, which often starts with long-lived API keys.",
           "saas": "A shared multi-tenant platform. You rely on the vendor's controls.",
-          "tm": "Short-lived scoped credentials from WSL Vault, edge controls from WSL Proxy, and an audit log of every action."
+          "tm": "Short-lived scoped credentials from WSL Vault, edge controls from Proxy10x, and an audit log of every action."
         },
         {
           "dimension": "Operating it after launch",
@@ -160,7 +160,7 @@
       "items": [
         {
           "question": "Can we check these claims before we sign anything?",
-          "answer": "Yes. WSL Vault, WSL Proxy, Ring Promoter and Jobshout have public documentation and source repositories. We're happy to walk your engineers through how they fit together on a call."
+          "answer": "Yes. WSL Vault, Proxy10x, Ring Promoter and Jobshout have public documentation and source repositories. We're happy to walk your engineers through how they fit together on a call."
         },
         {
           "question": "Do we have to use your products?",

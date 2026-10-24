@@ -1,0 +1,17 @@
+# Copy to ~/.config/proxy10x/cli.yaml
+base_url: https://lon1.pop0.uk
+profile_id: prod
+output: table
+auth:
+  # token via PROXY10X_TOKEN or `proxy10x-cli auth login`
+  username: ""
+mcp:
+  api_key: ""   # or PROXY10X_MCP_API_KEY
+  write: false
+inventory:
+  - name: lon1
+    base_url: https://lon1.pop0.uk
+  - name: lon1
+    base_url: https://lon1.pop0.uk
+  - name: pop0
+    base_url: https://prod-our-v1.proxy10x.com

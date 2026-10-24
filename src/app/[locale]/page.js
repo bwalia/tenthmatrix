@@ -74,7 +74,7 @@ const BENEFITS = [
   { key: 'data', icon: Lock, href: '/outsource-ai-development#security-ip' },
   { key: 'vault', icon: KeyRound, href: '/wsl-vault' },
   { key: 'releases', icon: GitBranch, href: '/ring-promoter' },
-  { key: 'edge', icon: Shield, href: '/wsl-proxy' },
+  { key: 'edge', icon: Shield, href: '/proxy10x' },
   { key: 'observe', icon: LineChart, href: '/articles/llm-bottlenecks-observability-otel-cost-control' },
   { key: 'production', icon: Wrench, href: '/articles' },
 ];
@@ -88,7 +88,7 @@ const ENGAGEMENTS = [
 
 const PRODUCTS = [
   { key: 'ringPromoter', name: 'Ring Promoter', href: '/ring-promoter', icon: GitBranch },
-  { key: 'wslProxy', name: 'WSL Proxy', href: '/wsl-proxy', icon: Shield },
+  { key: 'proxy10x', name: 'Proxy10x', href: '/proxy10x', icon: Shield },
   { key: 'wslVault', name: 'WSL Vault', href: '/wsl-vault', icon: KeyRound, status: 'openSource' },
   { key: 'jobshout', name: 'Jobshout', href: '/jobshout', icon: Briefcase, status: 'openSource' },
   { key: 'jev', name: 'Jev', href: '/insights/jev', icon: Gauge, status: 'research' },

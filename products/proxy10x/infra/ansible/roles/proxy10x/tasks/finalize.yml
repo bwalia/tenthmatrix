@@ -1,0 +1,306 @@
+---
+# Final deployment steps: nginx.conf, permissions, SSL, tenants, service start, verification
+
+- name: Template nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /usr/local/openresty/nginx/conf/nginx.conf
+  notify: Restart openresty
+  tags: [nginx, code, dashboard, servers]
+
+# NOTE: The fix-permissions script (formerly copied+run here) now lives in
+# tasks/fix_permissions.yml, included from main.yml with `tags: [always]` so
+# ownership is corrected on every run — including `--tags build` upgrades,
+# which skip finalize.yml. See that file for the full rationale.
+
+- name: Deploy Let's Encrypt contact email configuration
+  template:
+    src: letsencrypt-contact.sh.j2
+    dest: /opt/nginx/data/ssl-certs/letsencrypt/conf.d/contact.sh
+    owner: "www-data"
+    group: root
+    mode: "0644"
+  tags: [nginx, servers]
+
+- name: Sync tenant configurations
+  ansible.posix.synchronize:
+    src: ../../nginx-tenants.d/
+    dest: /opt/nginx/conf.d/
+  notify: Restart openresty
+  register: sync_tenants
+  # rsync opens its own SSH connection (no ControlMaster), so one dropped
+  # connect fails the deploy. Retrying is safe: rsync is idempotent.
+  until: sync_tenants is succeeded
+  retries: 3
+  delay: 10
+  tags: [nginx, servers]
+
+- name: Deploy default.conf when a frontend, backend or dashboard domain is configured
+  template:
+    src: default.conf.j2
+    dest: /opt/nginx/conf.d/default.conf
+    mode: 0664
+    owner: www-data
+    group: root
+  # nginx_default_server_backend_nextjs renders the public 443 dashboard
+  # vhost; on dashboard-only POPs (e.g. pop1) it's the ONLY public domain,
+  # so it must keep default.conf (otherwise requests fall through to the
+  # catch-all gateway and the dashboard is unreachable at /).
+  when: >
+    (nginx_default_server_frontend | default('') | length > 0) or
+    (nginx_default_server_backend | default('') | length > 0) or
+    (nginx_default_server_backend_nextjs | default('') | length > 0)
+  tags: [nginx, servers]
+
+- name: Remove default.conf when no public domain is configured
+  file:
+    path: /opt/nginx/conf.d/default.conf
+    state: absent
+  when: >
+    (nginx_default_server_frontend | default('') | length == 0) and
+    (nginx_default_server_backend | default('') | length == 0) and
+    (nginx_default_server_backend_nextjs | default('') | length == 0)
+  tags: [nginx, servers]
+
+- name: Ensure SSL domain directory exists
+  file:
+    path: /opt/nginx/data/ssl
+    state: directory
+    mode: '0775'
+    owner: www-data
+    group: root
+  tags: [nginx, servers]
+
+- name: Generate SSL domain files for default server frontend/backend/dashboard domains
+  shell: |
+    CREATED=0
+    for domain in {{ nginx_default_server_frontend | default('') }} {{ nginx_default_server_backend | default('') }} {{ nginx_default_server_backend_nextjs | default('') }}; do
+      [ -z "$domain" ] && continue
+      ssl_file="/opt/nginx/data/ssl/${domain}.json"
+      if [ ! -f "$ssl_file" ]; then
+        echo "{\"ssl_enabled\": true, \"server_name\": \"${domain}\"}" > "$ssl_file"
+        chown www-data:root "$ssl_file"
+        chmod 664 "$ssl_file"
+        echo "Created: $ssl_file"
+        CREATED=$((CREATED+1))
+      fi
+    done
+    echo "Default server SSL domain files created: $CREATED"
+  register: default_ssl_gen
+  changed_when: "'Created:' in default_ssl_gen.stdout"
+  # nginx_default_server_backend_nextjs is the per-pop dashboard domain; on
+  # dashboard-only POPs (e.g. pop1) it's the ONLY public domain, so without
+  # it auto-ssl's allow_domain gate rejects the cert ("domain not allowed").
+  when: >
+    (nginx_default_server_frontend | default('') | length > 0) or
+    (nginx_default_server_backend | default('') | length > 0) or
+    (nginx_default_server_backend_nextjs | default('') | length > 0)
+  tags: [nginx, servers]
+
+- name: Show default server SSL domain generation
+  debug:
+    msg: "{{ default_ssl_gen.stdout_lines }}"
+  # default_ssl_gen is skipped (no stdout_lines) when a host exposes only
+  # the dashboard and both frontend/backend domains are empty (e.g. pop1).
+  when: default_ssl_gen is defined and default_ssl_gen.stdout_lines is defined and default_ssl_gen.stdout_lines | length > 0
+  tags: [nginx, servers]
+
+- name: Generate SSL domain files from server configs
+  shell: |
+    CREATED=0
+    for env_dir in /opt/nginx/data/servers/*/; do
+      [ -d "$env_dir" ] || continue
+      for config_file in "$env_dir"*.json; do
+        [ -f "$config_file" ] || continue
+        ssl_enabled=$(jq -r '.ssl_enabled // false' "$config_file" 2>/dev/null)
+        server_name=$(jq -r '.server_name // empty' "$config_file" 2>/dev/null)
+        if [ "$ssl_enabled" = "true" ] && [ -n "$server_name" ]; then
+          ssl_file="/opt/nginx/data/ssl/${server_name}.json"
+          if [ ! -f "$ssl_file" ]; then
+            echo "{\"ssl_enabled\": true, \"server_name\": \"${server_name}\"}" > "$ssl_file"
+            chown www-data:root "$ssl_file"
+            chmod 664 "$ssl_file"
+            echo "Created: $ssl_file"
+            CREATED=$((CREATED+1))
+          fi
+        fi
+      done
+    done
+    echo "SSL domain files created: $CREATED"
+  register: ssl_gen_result
+  changed_when: "'Created:' in ssl_gen_result.stdout"
+  tags: [nginx, servers]
+
+- name: Display SSL domain generation result
+  debug:
+    msg: "{{ ssl_gen_result.stdout_lines }}"
+  when: ssl_gen_result.stdout_lines | length > 0
+  tags: [nginx, servers]
+
+- name: Template servers-mixed-nginx.conf
+  template:
+    src: servers-mixed-nginx.conf.j2
+    dest: /opt/nginx/conf.d/servers-mixed-nginx.conf
+    mode: 0777
+  tags: [nginx, servers]
+
+- debug:
+    var: sync_tenants.stdout_lines
+  when: sync_tenants is defined
+  tags: [nginx, servers]
+
+- name: Pre-flight nginx config test
+  command: /usr/local/openresty/nginx/sbin/nginx -t
+  register: nginx_preflight
+  changed_when: false
+  ignore_errors: true
+  tags: [nginx, code, dashboard, servers]
+
+- name: Show pre-flight config test result
+  debug:
+    msg: "{{ nginx_preflight.stderr_lines | default(nginx_preflight.stdout_lines) }}"
+  when: nginx_preflight is defined
+  tags: [nginx, code, dashboard, servers]
+
+# ── ATOMIC GUARD: rollback conf.d on pre-flight failure ───────────────────
+#
+# Paired with the snapshot taken at the top of nginx_config.yml.  If
+# the pre-flight openresty -t fails, swap conf.d/ back to the
+# pre-deploy snapshot and abort BEFORE the restart task — otherwise
+# systemd's openresty restart fails, workers die, and the host is
+# down until manual recovery.  The failed conf.d/ is preserved (just
+# renamed) so operators can compare against the snapshot and figure
+# out what the templates rendered wrong.
+#
+# Only acts when the snapshot exists (i.e. nginx_config.yml ran in
+# this play — partial deploys with --tags servers may skip it, in
+# which case there's nothing to roll back to and we fall through to
+# the existing error-display behaviour).
+- name: "Atomic guard: roll back conf.d/ if pre-flight failed"
+  ansible.builtin.shell: |
+    set -euo pipefail
+    SNAPSHOT=/opt/nginx/conf.d.predeploy
+    if [ ! -d "$SNAPSHOT" ]; then
+      echo "no-snapshot"
+      exit 0
+    fi
+    FAILED=/opt/nginx/conf.d.failed-{{ ansible_date_time.iso8601_basic_short }}
+    rm -rf "$FAILED"
+    mv /opt/nginx/conf.d "$FAILED"
+    mv "$SNAPSHOT" /opt/nginx/conf.d
+    echo "rolled-back-to:$SNAPSHOT  failed-preserved-at:$FAILED"
+  # /bin/sh is dash on Debian, which lacks `set -o pipefail` — force bash.
+  args:
+    executable: /bin/bash
+  register: _confd_rollback
+  changed_when: "'rolled-back-to' in _confd_rollback.stdout"
+  when: nginx_preflight is defined and nginx_preflight.rc != 0
+  tags: [nginx, code, dashboard, servers]
+
+- name: "Atomic guard: abort deploy after rollback"
+  ansible.builtin.fail:
+    msg: |
+      ABORTING DEPLOY — openresty -t failed after nginx role modifications.
+
+      stderr from openresty -t:
+      {{ nginx_preflight.stderr | default('(no stderr)') }}
+
+      conf.d/ rollback status: {{ _confd_rollback.stdout | default('(no snapshot to roll back to)') }}
+
+      A subsequent systemd restart with this broken config would have
+      taken the host down.  Either the rolled-back conf.d/ is back to
+      its pre-deploy state, OR (if no snapshot was taken — partial
+      deploy with insufficient tags) the broken state is preserved
+      for inspection.  Either way: investigate and re-run.
+  when: nginx_preflight is defined and nginx_preflight.rc != 0
+  tags: [nginx, code, dashboard, servers]
+
+- name: "Atomic guard: clean up successful snapshot"
+  ansible.builtin.file:
+    path: /opt/nginx/conf.d.predeploy
+    state: absent
+  when: nginx_preflight is defined and nginx_preflight.rc == 0
+  tags: [nginx, code, dashboard, servers]
+
+- name: Stop existing OpenResty service before restart
+  systemd:
+    name: openresty
+    state: stopped
+  ignore_errors: true
+  tags: [nginx, code, dashboard, servers]
+
+# A bare `killall nginx` matches every process named "nginx" in the HOST pid
+# namespace — which on a k3s node includes the nginx masters running inside
+# containers (longhorn-ui, beacon-nginx, any ingress/app pod built on nginx).
+# They take the SIGTERM, exit 0 ("Completed"), and kubelet restarts them, so a
+# nightly deploy silently racked up a restart per pod per night on whichever
+# node hosts this runner. Scope the kill to host processes by skipping anything
+# whose cgroup says it belongs to a container runtime.
+- name: Kill any stale host nginx processes (never container nginx)
+  shell: |
+    for pid in $(pgrep -x nginx 2>/dev/null || true); do
+      grep -qE 'kubepods|containerd|docker|libpod|crio' "/proc/$pid/cgroup" 2>/dev/null && continue
+      kill -TERM "$pid" 2>/dev/null || true
+    done
+  changed_when: false
+  tags: [nginx, code, dashboard, servers]
+
+- name: Wait for ports to be released
+  pause:
+    seconds: 2
+  tags: [nginx, code, dashboard, servers]
+
+- name: Enable and start OpenResty service
+  systemd:
+    name: openresty
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  register: openresty_start
+  ignore_errors: true
+  tags: [nginx, code, dashboard, servers]
+
+- name: Capture OpenResty service status on failure
+  shell: |
+    echo "=== systemctl status ==="
+    systemctl status openresty.service --no-pager -l 2>&1 || true
+    echo "=== journalctl last 30 lines ==="
+    journalctl -u openresty.service --no-pager -n 30 2>&1 || true
+  register: service_debug
+  when: openresty_start is failed
+  tags: [nginx, code, dashboard, servers]
+
+- name: Show OpenResty service failure details
+  debug:
+    msg: "{{ service_debug.stdout_lines }}"
+  when: openresty_start is failed and service_debug is defined
+  tags: [nginx, code, dashboard, servers]
+
+- name: Fail if OpenResty service did not start
+  fail:
+    msg: "OpenResty service failed to start. See diagnostic output above."
+  when: openresty_start is failed
+  tags: [nginx, code, dashboard, servers]
+
+- name: Verify Nginx config
+  command: openresty -t
+  changed_when: false
+  tags: [nginx, code, dashboard, servers]
+
+- name: Verify OpenResty file descriptor limits
+  shell: |
+    NGINX_PID=$(pgrep -o nginx || pgrep -o openresty || echo "")
+    if [ -n "$NGINX_PID" ]; then
+      cat /proc/$NGINX_PID/limits | grep "open files"
+    else
+      echo "Nginx not running - limits will be applied on next start"
+    fi
+  register: fd_limits_check
+  changed_when: false
+  tags: [nginx]
+
+- name: Display current file descriptor limits
+  debug:
+    msg: "{{ fd_limits_check.stdout_lines }}"
+  when: fd_limits_check is defined
+  tags: [nginx]

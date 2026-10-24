@@ -1,0 +1,54 @@
+{{- if and .Values.openresty.controlPlane.enabled .Values.openresty.controlPlane.host }}
+{{- $dashboard := and .Values.openresty.controlPlane.dashboard .Values.openresty.controlPlane.dashboard.enabled }}
+{{- $dashPort := .Values.openresty.controlPlane.dashboard.port | default 7619 }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "proxy10x.fullname" . }}-control-plane
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "proxy10x.labels" . | nindent 4 }}
+    app.kubernetes.io/component: control-plane
+  annotations:
+    {{- if and .Values.certManager.enabled .Values.openresty.controlPlane.tls }}
+    cert-manager.io/cluster-issuer: {{ .Values.openresty.controlPlane.clusterIssuer | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingressClass.name }}
+  {{- if .Values.openresty.controlPlane.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.openresty.controlPlane.host | quote }}
+      secretName: {{ include "proxy10x.fullname" . }}-control-plane-tls
+  {{- end }}
+  rules:
+    - host: {{ .Values.openresty.controlPlane.host | quote }}
+      http:
+        paths:
+          {{- if $dashboard }}
+          {{- range $p := list "/api" "/health" "/healthz" "/ready" "/readyz" "/swagger" "/mcp" "/metrics" }}
+          - path: {{ $p }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "proxy10x.fullname" $ }}-openresty
+                port:
+                  name: api
+          {{- end }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "proxy10x.fullname" . }}-dashboard
+                port:
+                  number: {{ $dashPort }}
+          {{- else }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "proxy10x.fullname" . }}-openresty
+                port:
+                  name: api
+          {{- end }}
+{{- end }}

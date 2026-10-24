@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: {{ .Values.ingressClass.name }}
+  labels:
+    {{- include "proxy10x.labels" . | nindent 4 }}
+  {{- if .Values.ingressClass.isDefaultClass }}
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+  {{- end }}
+spec:
+  controller: proxy10x.io/ingress-controller
+  {{- with .Values.ingressClass.parameters }}
+  parameters:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}

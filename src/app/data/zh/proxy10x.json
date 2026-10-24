@@ -1,0 +1,344 @@
+{
+  "meta": {
+    "title": "TenthMatrix Proxy10x — API 网关、CDN 与 WAF | TenthMatrix",
+    "description": "TenthMatrix Proxy10x 产品页:实时配置代理的工作原理、详细功能、WAF 引擎 v2 规则与阶段、CDN 缓存、多 POP DNS,以及 Agents/MCP Gateway 路线图。访问 wslproxy.org。",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API 网关, CDN, WAF 规则, OpenResty, 边缘缓存, MCP 网关, Agents Gateway, 反向代理, wslproxy.org"
+  },
+  "header": {
+    "title": "TenthMatrix Proxy10x",
+    "subtitle": "API 网关、CDN 与企业级 WAF — 产品概览",
+    "description": "TenthMatrix Proxy10x(Proxy10x)是 TenthMatrix 完整的 API 网关与 CDN 边缘控制平面。它部署在源站之前,依据实时 JSON 和 MCP 配置逐请求决定处理方式——路由、防护、缓存与观测——每次规则变更都无需重载 nginx。"
+  },
+  "intro": {
+    "title": "什么是 TenthMatrix Proxy10x?",
+    "body": "Proxy10x 是基于 OpenResty 的动态 API 网关和反向代理。运维人员可通过管理界面、REST API、MCP 工具或 proxy10x-cli 管理虚拟主机、路由规则、WAF 策略、缓存、流量拆分和边缘 POP。日常规则在热路径上即时生效;仅当服务器级 listen 或 SSL 配置块变更时才重载 nginx。",
+    "links": [
+      {
+        "label": "wslproxy.org",
+        "href": "https://wslproxy.org"
+      },
+      {
+        "label": "WAF 文档",
+        "href": "https://wslproxy.org/waf/"
+      },
+      {
+        "label": "Swagger API",
+        "href": "https://wslproxy.org/swagger/"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "代理如何工作",
+    "intro": "就像一本解决方案手册:匹配一次,逐请求决策,然后代理或防护。普通规则变更时,控制平面无需重启边缘节点。",
+    "flow": [
+      {
+        "title": "1. 请求到达 POP",
+        "text": "浏览器、API 和智能体访问 TenthMatrix Proxy10x 边缘节点(Docker、Ansible 裸机 POP 或 k3s Helm ingress)。OpenResty 接收 TLS 并进入 Lua 热路径。"
+      },
+      {
+        "title": "2. 匹配路由规则",
+        "text": "gateway_ack.lua 加载虚拟主机,并从磁盘或 Redis 评估实时规则:路径、IP、国家、JWT、S3、Cookie 等。由优先级和精确度决定胜出规则——无需重载 nginx。"
+      },
+      {
+        "title": "3. 流水线:限流 → WAF → 响应",
+        "text": "网关流水线先执行限流,再运行 WAF 引擎(阶段 + 签名),最后由 gateway_resp.lua 应用响应动作和负载均衡超时设置。"
+      },
+      {
+        "title": "4. 决定结果",
+        "text": "典型结果:305 反向代理到上游、301/302 重定向、静态 HTML 拦截页、CAPTCHA 质询,或带支持 ID 头的 403 WAF 拦截。"
+      },
+      {
+        "title": "5. 负载均衡与观测",
+        "text": "对于代理响应,balancer_by_lua 采用加权、轮询、金丝雀、会话保持或最少连接策略。健康状况、指标和流量统计会输送给运维和 AI 日志钩子。"
+      },
+      {
+        "title": "6. 运维人员与智能体驱动配置",
+        "text": "人类使用管理界面 / CLI;智能体通过 REST 或 MCP 工具对服务器、规则和 WAF 绑定进行增删改查——同一界面,支持 GitOps 式 pull/push。"
+      }
+    ],
+    "responseCodes": [
+      {
+        "code": "305",
+        "meaning": "反向代理到上游(网关主路径)"
+      },
+      {
+        "code": "301 / 302",
+        "meaning": "重定向"
+      },
+      {
+        "code": "200 HTML",
+        "meaning": "静态 / 品牌化拦截页或插页"
+      },
+      {
+        "code": "CAPTCHA",
+        "meaning": "继续前进行质询"
+      },
+      {
+        "code": "403 WAF",
+        "meaning": "被 WAF 拦截,附带 X-WAF-* 和 X-Support-ID 头"
+      }
+    ]
+  },
+  "features": {
+    "title": "产品主要功能详解",
+    "intro": "打造受管边缘所需的一切:路由、安全、CDN 缓存、多 POP 分发,以及人类与智能体都能驱动的控制平面。",
+    "items": [
+      {
+        "title": "动态路由规则",
+        "description": "可按路径、IP、国家、JWT 声明、S3 风格键和 Cookie 匹配。动作包括反向代理、重定向、HTML 响应和 CAPTCHA。规则按优先级排序,同级时以精确度决胜,最精确的路由胜出,无需重启 nginx。",
+        "icon": "bi-signpost-split"
+      },
+      {
+        "title": "流量工程",
+        "description": "支持加权、轮询、基于请求头的金丝雀、Cookie 会话保持和最少连接负载均衡。金丝雀表现健康时,可在控制平面推进或回滚后端——也可一键撤回。",
+        "icon": "bi-shuffle"
+      },
+      {
+        "title": "企业级 WAF 引擎 v2",
+        "description": "策略包可按域名、服务和路由绑定。阶段涵盖方法白名单、文件类型拒绝、IP/地理列表、JWT 算法策略、JSON 请求体配置、暴力破解速率和 OpenAPI 正向安全——外加受管攻击签名和异常评分。支持拦截或透明(监控)模式。",
+        "icon": "bi-shield-lock"
+      },
+      {
+        "title": "CDN 与边缘缓存",
+        "description": "边缘静态缓存、可选的 Docker blob 缓存和 Varnish 钩子,在源站前构建 CDN 式缓存层——非常适合营销网站、API 文档和制品分发,与 API 网关流量并行。",
+        "icon": "bi-hdd-network"
+      },
+      {
+        "title": "SSL 与 HTTPS",
+        "description": "auto-ssl / Let’s Encrypt、按域名的 SSL JSON 以及强制 HTTPS 策略,让每个虚拟主机都能在 POP 正确终止 TLS。",
+        "icon": "bi-lock"
+      },
+      {
+        "title": "多 POP + DNS",
+        "description": "声明边缘位置,并在安全护栏下配置 Cloudflare A 记录。常见的生产模式是:公共 POP → k3s NodePort → proxy10x-ingress Helm → 应用 Pod。",
+        "icon": "bi-globe2"
+      },
+      {
+        "title": "控制平面",
+        "description": "React Admin 与 Next.js 仪表盘、Swagger REST、面向 Claude/Cursor 的 MCP 工具,以及用于 pull/push/diff/verify 工作流的 proxy10x-cli 镜像(ghcr.io/bwalia/proxy10x-cli)。",
+        "icon": "bi-sliders"
+      },
+      {
+        "title": "随处部署",
+        "description": "实验环境用 Docker Compose,裸机或虚拟机 POP 用 Ansible,k3s / Kubernetes 用 Helm ingress-controller chart——跨环境统一的产品体验。",
+        "icon": "bi-box-seam"
+      },
+      {
+        "title": "可观测性",
+        "description": "/health, /healthz, /ready, Prometheus /metrics, traffic stats, structured WAF security logs, and AI log analysis hooks for SRE teams.",
+        "icon": "bi-graph-up"
+      }
+    ]
+  },
+  "waf": {
+    "title": "WAF 规则与执行",
+    "intro": "WAF 运行在 OpenResty 请求路径中(借鉴企业级 NGINX WAF 模式)。默认故障放行,WAF 缺陷不会导致网站宕机;每次拦截都可解释;并向后兼容简单的 v1 规则列表。如需导览和深入解析,请参阅下方相关阅读——或观看本页的 WAF 视频。",
+    "pipelineTitle": "请求路径流水线",
+    "pipeline": [
+      "rewrite_by_lua:gateway_ack.lua 选择路由规则",
+      "gateway_pipeline.execute():限流 → WAF → 继续",
+      "waf_engine.inspect():加载策略、解析绑定、运行各阶段,然后执行签名",
+      "拦截时:403 + X-WAF-Block、X-WAF-Rule、X-WAF-Violation、X-Support-ID"
+    ],
+    "stagesTitle": "阶段流水线(签名之前)",
+    "stages": [
+      {
+        "code": "VIOL_METHOD",
+        "name": "方法白名单",
+        "detail": "仅允许指定的 HTTP 方法(如 GET、POST、HEAD、OPTIONS)。"
+      },
+      {
+        "code": "VIOL_FILETYPE",
+        "name": "文件类型拒绝",
+        "detail": "拦截敏感扩展名,如 .env、.sql、.bak、.git、.pem。"
+      },
+      {
+        "code": "VIOL_IP_DENY / VIOL_GEO",
+        "name": "IP 列表与地理位置",
+        "detail": "允许/拒绝 CIDR,并通过 IP2Location 类数据库拒绝特定国家。"
+      },
+      {
+        "code": "VIOL_JWT_ALG",
+        "name": "JWT 算法策略",
+        "detail": "拒绝弱算法(none、HS256);按需强制使用 RS256/ES256。"
+      },
+      {
+        "code": "VIOL_JSON_SIZE / DEPTH",
+        "name": "JSON 请求体配置",
+        "detail": "限制 JSON 深度和请求体大小,防止解析器滥用。"
+      },
+      {
+        "code": "VIOL_BRUTE_FORCE",
+        "name": "暴力破解速率",
+        "detail": "按路径的滑动窗口(如 /api/login),以 IP 为键。"
+      },
+      {
+        "code": "VIOL_OPENAPI_*",
+        "name": "OpenAPI 正向安全",
+        "detail": "仅允许已声明的路径+方法(支持模板化路径)。"
+      }
+    ],
+    "signaturesTitle": "签名规则与治理",
+    "signaturesIntro": "每条签名都有稳定的 ID(可寻址单元)、类别/集合、严重级别、匹配目标(url、args、body、headers、cookies、UA 或全部)、正则或字符串模式、动作(block 或 monitor)以及异常分值。",
+    "governance": [
+      {
+        "title": "disable",
+        "text": "signatures.disable 会完全跳过某条规则。"
+      },
+      {
+        "title": "stage",
+        "text": "signatures.stage 在指定时间前仅告警——安全的灰度上线方式,处于暂存期间不计入异常分值。"
+      },
+      {
+        "title": "签名集",
+        "text": "整体切换签名集(如 SET_SQLI)的拦截与告警状态,无需逐条重写规则。"
+      },
+      {
+        "title": "异常阈值",
+        "text": "累计分值 ≥ 阈值即触发 VIOL_ANOMALY_SCORE,即使没有任何单条签名会单独拦截。"
+      }
+    ],
+    "bindingTitle": "绑定优先级",
+    "bindingIntro": "最精确者胜出:路由覆盖 → 服务器级 waf_mode_override → 策略默认 enforcementMode(blocking 或 transparent/monitor)。每条检测结果都会记录胜出的绑定,让日志能回答“为什么被拦截?”",
+    "modes": [
+      {
+        "title": "拦截模式",
+        "text": "违规请求返回 403,附带支持 ID 和可选的品牌化拦截页。"
+      },
+      {
+        "title": "透明 / 监控模式",
+        "text": "违规仅告警并记录日志——非常适合试运行和预发布环境。"
+      }
+    ]
+  },
+  "roadmap": {
+    "title": "Agents Gateway 与 MCP Gateway",
+    "intro": "TenthMatrix 正将 Proxy10x 扩展到智能体时代。承接 HTTP API 的同一边缘,将治理智能体和 Model Context Protocol(MCP)客户端访问工具与后端的方式。",
+    "items": [
+      {
+        "title": "MCP Gateway(开发中)",
+        "description": "位于外部 MCP 服务器前的受管入口——认证桥接、工具/方法允许与拒绝列表、tools/call 审计以及按工具限流。客户端无需持有上游令牌。",
+        "status": "In progress"
+      },
+      {
+        "title": "Agents Gateway(开发中)",
+        "description": "为多智能体流量提供策略、路由和可观测性——让智能体集群与您的 API 和 CDN 工作负载一样,通过同一 TenthMatrix Proxy10x 边缘访问源站。",
+        "status": "In progress"
+      },
+      {
+        "title": "MCP 管理界面(已可用)",
+        "description": "Proxy10x 已将自身管理界面以 MCP 工具形式开放给 Claude、Cursor 及其他智能体——无需离开 IDE 即可配置规则、检查边缘。",
+        "status": "Available"
+      }
+    ]
+  },
+  "architecture": {
+    "title": "解决方案架构",
+    "intro": "客户端和智能体访问 TenthMatrix Proxy10x POP。边缘匹配实时规则,应用 WAF 和缓存,再负载均衡到源站。运维人员通过管理界面、REST、MCP 或 CLI 掌控一切。",
+    "steps": [
+      {
+        "title": "边缘 POP",
+        "text": "OpenResty + Lua 热路径:匹配规则、响应、负载均衡后端。"
+      },
+      {
+        "title": "实时配置",
+        "text": "规则、WAF 和流量拆分来自磁盘或 Redis——日常变更无需重载 nginx。"
+      },
+      {
+        "title": "控制平面",
+        "text": "面向人类与智能体的管理界面、REST、MCP 和 proxy10x-cli。"
+      },
+      {
+        "title": "源站",
+        "text": "API、k3s 服务、静态网站,以及未来的 MCP / 智能体上游。"
+      }
+    ]
+  },
+  "relatedReading": {
+    "title": "相关阅读",
+    "intro": "在同一实时配置边缘上的可解释 Web 应用防火墙——策略、阶段、监控或拦截,每次决策都附带支持 ID。",
+    "items": [
+      {
+        "label": "Proxy10x WAF 博客",
+        "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "可解释边缘 WAF 文章",
+        "href": "/articles/wslproxy-waf-web-application-firewall",
+        "external": false
+      },
+      {
+        "label": "WAF Engine v2 博客",
+        "href": "/docs/blogs/wslproxy-waf-engine-v2-enterprise-enforcement",
+        "external": false
+      },
+      {
+        "label": "深入 WAF Engine v2",
+        "href": "/articles/workstation-wsl-proxy-waf-engine-v2",
+        "external": false
+      },
+      {
+        "label": "WAF 导览视频",
+        "href": "https://youtu.be/r10XSonA5JE",
+        "external": true
+      },
+      {
+        "label": "wslproxy.org/waf",
+        "href": "https://wslproxy.org/waf/",
+        "external": true
+      }
+    ]
+  },
+  "cta": {
+    "title": "获取 TenthMatrix Proxy10x",
+    "body": "在 wslproxy.org 了解产品,在 TenthMatrix 阅读 WAF 深度解析,或与我们探讨边缘、CDN、WAF 和智能体网关部署。",
+    "primary": {
+      "text": "打开 wslproxy.org",
+      "href": "https://wslproxy.org"
+    },
+    "secondary": {
+      "text": "阅读 WAF 文章",
+      "href": "/articles/wslproxy-waf-web-application-firewall"
+    },
+    "tertiary": {
+      "text": "联系 TenthMatrix",
+      "href": "/contact-us"
+    },
+    "quaternary": {
+      "text": "产品概览文章",
+      "href": "/articles/workstation-wsl-proxy-api-gateway-cdn"
+    }
+  },
+  "externalSite": {
+    "label": "前往产品网站了解更多",
+    "href": "https://wslproxy.org",
+    "text": "访问 wslproxy.org 获取演示、文档及 TenthMatrix Proxy10x 最新版本。"
+  },
+  "videos": [
+    {
+      "title": "观看:TenthMatrix Proxy10x 介绍",
+      "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
+      "watchUrl": "https://youtu.be/7NJulclG5sQ",
+      "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix Proxy10x — 产品介绍",
+      "caption": "观看",
+      "productUrl": "https://wslproxy.org",
+      "productLabel": "wslproxy.org"
+    },
+    {
+      "title": "观看:Proxy10x WAF 导览",
+      "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
+      "watchUrl": "https://youtu.be/r10XSonA5JE",
+      "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
+      "thumbnailAlt": "TenthMatrix Proxy10x WAF 导览",
+      "caption": "观看",
+      "productUrl": "https://wslproxy.org/waf/",
+      "productLabel": "wslproxy.org/waf"
+    }
+  ]
+}

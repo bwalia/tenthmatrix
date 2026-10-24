@@ -82,7 +82,7 @@ export const NAV_GROUPS = [
     key: 'tools',
     overview: '/products',
     items: [
-      { key: 'wslProxy', href: '/wsl-proxy', icon: Shield },
+      { key: 'proxy10x', href: '/proxy10x', icon: Shield },
       { key: 'wslVault', href: '/wsl-vault', icon: KeyRound },
       { key: 'ringPromoter', href: '/ring-promoter', icon: GitBranch },
       { key: 'sysops', href: '/sysops247', icon: Activity },
@@ -150,7 +150,7 @@ export const NAV_GROUPS = [
 export const FOOTER_COLUMNS = [
   { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'startProject'] },
   { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
-  { key: 'products', items: ['ringPromoter', 'wslProxy', 'wslVault', 'jobshout', 'jev', 'allProducts'] },
+  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
   { key: 'resources', items: ['articles', 'blog', 'insights', 'docs', 'faqs', 'news'] },
   { key: 'company', items: ['about', 'whyTenthmatrix', 'partners', 'stories', 'bookOnline', 'contact'] },

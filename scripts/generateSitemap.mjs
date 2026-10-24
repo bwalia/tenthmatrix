@@ -31,7 +31,8 @@ const corePages = {
 };
 // Every other static route under src/app/[locale] (no [dynamic] segment).
 // noindex/utility routes are left out; legal pages get a low priority.
-const EXCLUDE = new Set(['brand', 'search', 'terms-of-service/privacy-policy']);
+// Redirect-only routes (e.g. wsl-proxy → proxy10x) are left out too.
+const EXCLUDE = new Set(['brand', 'search', 'terms-of-service/privacy-policy', 'wsl-proxy']);
 const LEGAL = /^(privacy-policy|cookie-policy|terms-of-service|refund-policy|accessibility-statement|data-deletion|sitemap-page)$/;
 function discoverRoutes(dir, base = '') {
   const out = [];

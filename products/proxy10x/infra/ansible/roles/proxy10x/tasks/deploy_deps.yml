@@ -1,0 +1,103 @@
+---
+# Install Lua dependencies: luarocks modules and CDN dependencies
+# Runs during explicit build or auto-build when OpenResty is freshly installed
+
+- name: Copy CDN dependencies script
+  template:
+    src: cdn-dependencies.sh.j2
+    dest: /tmp/cdn-dependencies.sh
+    mode: 0777
+  tags: [build]
+
+- name: Install Lua modules via luarocks
+  async: 600
+  poll: 20
+  shell: |
+    export PATH="/usr/local/openresty/luajit/bin:/usr/local/openresty/bin:/usr/local/bin:$PATH"
+
+    # ── GCC 14+ compatibility shim ────────────────────────────────────────
+    # lua-resty-auto-ssl vendors juce/sockproc, whose Makefile hardcodes
+    #   gcc -Wall -Werror -o sockproc sockproc.c
+    # with no CC/CFLAGS override. GCC 14 promoted -Wincompatible-pointer-types
+    # from a warning to an error, so sockproc.c:154 (the signal() handler
+    # signature) turns that -Werror into a hard build failure. First hit on
+    # pop0's Ubuntu 26.04 / GCC 15 rebuild (2026-08-28): the rock failed to
+    # install and OpenResty then died at init.lua:223 `require "resty.auto-ssl"`.
+    # Shim `gcc` on PATH and append the demotion flags AFTER the caller's args
+    # so they win over the hardcoded -Werror. No-op on older toolchains.
+    _REAL_GCC=$(command -v gcc 2>/dev/null || true)
+    if [ -n "$_REAL_GCC" ]; then
+      GCC_SHIM_DIR=$(mktemp -d)
+      printf '#!/bin/sh\nexec "%s" "$@" -Wno-incompatible-pointer-types -Wno-error=incompatible-pointer-types\n' \
+        "$_REAL_GCC" > "$GCC_SHIM_DIR/gcc"
+      chmod +x "$GCC_SHIM_DIR/gcc"
+      export PATH="$GCC_SHIM_DIR:$PATH"
+      echo "gcc shim active: $GCC_SHIM_DIR/gcc -> $_REAL_GCC"
+      echo "gcc version: $($_REAL_GCC -dumpversion 2>&1)"
+    fi
+
+    LUAROCKS_BIN=$(which luarocks 2>/dev/null)
+    echo "luarocks binary: $LUAROCKS_BIN"
+    echo "luarocks version: $(luarocks --version 2>&1 | head -1)"
+    echo "default deploy dir: $(luarocks config deploy_lua_dir 2>/dev/null)"
+    echo "unzip: $(which unzip 2>/dev/null || echo 'NOT FOUND')"
+    echo ""
+
+    # Install rocks to OpenResty tree so nginx can find them
+    TREE="/usr/local/openresty/luajit"
+    FAILED=0
+
+    # Pin lua-resty-jwt to 0.2.3 — version 0.3.1 requires resty.utils which
+    # is not available, causing OpenResty to fail on startup
+    echo "=== Installing lua-resty-jwt 0.2.3 (pinned) ==="
+    if luarocks install --tree="$TREE" lua-resty-jwt 0.2.3 2>&1; then
+      echo "+++ lua-resty-jwt 0.2.3 OK"
+    else
+      echo "--- lua-resty-jwt 0.2.3 FAILED"
+      FAILED=1
+    fi
+
+    for rock in lua-resty-session lua-resty-http lua-resty-openidc base64 lua-resty-redis-connector lua-resty-dns lua-resty-resolver luafilesystem lua-resty-auto-ssl pgmoon lua-resty-consul; do
+      echo "=== Installing $rock ==="
+      if luarocks install --tree="$TREE" "$rock" 2>&1; then
+        echo "+++ $rock OK"
+      else
+        echo "--- $rock FAILED"
+        FAILED=1
+      fi
+    done
+
+    echo ""
+    echo "=== Installation summary ==="
+    echo "Rocks in tree $TREE:"
+    luarocks list --tree="$TREE" 2>&1 | head -40
+    echo ""
+    echo "Looking for jwt.lua:"
+    find "$TREE" /usr/local/share -name "jwt.lua" 2>/dev/null || echo "jwt.lua NOT FOUND"
+    exit $FAILED
+  register: luarocks_install_result
+  ignore_errors: true
+  tags: [build]
+
+- name: Show luarocks install output
+  debug:
+    msg: "{{ luarocks_install_result.stdout_lines }}"
+  when: luarocks_install_result is defined and luarocks_install_result.stdout_lines is defined
+  tags: [build]
+
+- name: Execute the cdn-dependencies.sh script
+  shell: /tmp/cdn-dependencies.sh 2>&1
+  register: cdn_deps_result
+  # Download-bound (IP2Location LITE DB is hundreds of MB from S3, plus
+  # git clones / opm gets). 300s sat right at the edge and timed out on
+  # the test host; the wget calls inside the script now have their own
+  # --timeout/--tries so a true stall fails fast rather than eating this.
+  async: 900
+  poll: 15
+  tags: [build]
+
+- name: Show cdn-dependencies output (last 40 lines)
+  debug:
+    msg: "{{ cdn_deps_result.stdout_lines[-40:] }}"
+  when: cdn_deps_result is defined and cdn_deps_result.stdout_lines is defined
+  tags: [build]

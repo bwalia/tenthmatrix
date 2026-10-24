@@ -1,0 +1,322 @@
+# Deploy Proxy10x control plane to k3s1 via Ring Promoter
+#
+# On merge to main: build/push bwalia/proxy10x:sha-<short> +
+# bwalia/proxy10x-admin-next:sha-<short>, then seed proxy10x-k3s1 prod on
+# https://rp.proxy10x.com/ (this repo's own Ring Promoter instance,
+# deploy/ring-promoter/, deployed by deploy-ring-promoter.yml) — that creates
+# a ring-exec Job which
+# Vault-bootstraps + helm-upgrades proxy10x-ingress in proxy10x-system
+# (pinned to cloud003 / cp.pop0.uk) and applies the Traefik path split.
+#
+# Repo secrets:
+#   DOCKER_USER / DOCKER_PASSWD
+#   RP_URL    = https://rp.proxy10x.com
+#   RP_TOKEN  = proxy10x-ring-promoter/ring-promoter RP_API_TOKEN
+#   (both set by scripts/ring-promoter-bootstrap.sh)
+#   RP_PROD_PASSWORD (optional; only if RP_PROD_PASSWORD is set on the instance)
+#
+# One-time cluster prereqs (not created by this workflow):
+#   kubectl -n ring-exec create secret generic proxy10x-vault \
+#     --from-literal=VAULT_ADDR=https://vault.workstation.co.uk \
+#     --from-literal=VAULT_TOKEN=hvs.…
+#   kubectl apply -f deploy/ring-promoter/k3s1-rbac.yaml
+#   Instance + app registry: deploy/ring-promoter/ (configmap.yaml is the
+#   only copy of the proxy10x-k3s1 deploy script)
+
+name: Deploy control plane (k3s1)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "Dockerfile"
+      - "docker-entrypoint*.sh"
+      - "scripts/k3s1*.sh"
+      - "openresty-admin-next/**"
+      - "ingress-controller/deploy/helm/**"
+      - "deploy/k3s1/**"
+      - "deploy/postgres/**"
+      - ".github/workflows/deploy-control-plane-k3s1.yml"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Git ref / SHA to seed (default: this commit SHA)"
+        required: false
+        default: ""
+
+concurrency:
+  group: deploy-control-plane-k3s1
+  cancel-in-progress: false
+
+env:
+  IMAGE: docker.io/bwalia/proxy10x
+  DASHBOARD_IMAGE: docker.io/bwalia/proxy10x-admin-next
+  RP_URL_DEFAULT: https://rp.proxy10x.com
+
+jobs:
+  deploy:
+    name: Build images + seed prod on rp.proxy10x.com
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Tags are needed for `git describe` below (footer version).
+          fetch-depth: 0
+
+      - name: Compute tags
+        id: meta
+        run: |
+          set -euo pipefail
+          VER="${{ github.event.inputs.version }}"
+          if [ -z "$VER" ]; then VER="${{ github.sha }}"; fi
+          SHORT="$(printf '%s' "$VER" | cut -c1-7)"
+          if [ "${#VER}" -eq 40 ]; then
+            TAG="sha-${SHORT}"
+          else
+            TAG="$VER"
+          fi
+          DEPLOY_TIME="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          # Footer version comes from the nearest release tag, the same source
+          # deploy-environment.yml uses for the Ansible edges (lon1 shows
+          # v1.0.158). package.json was never bumped, so cp showed 0.2.0.
+          APP_VER="$(git describe --tags --abbrev=0 --match 'v[0-9]*' 2>/dev/null || true)"
+          if [ -z "$APP_VER" ]; then APP_VER="$SHORT"; fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "short=$SHORT" >> "$GITHUB_OUTPUT"
+          echo "deploy_time=$DEPLOY_TIME" >> "$GITHUB_OUTPUT"
+          echo "app_version=$APP_VER" >> "$GITHUB_OUTPUT"
+          echo "build_number=${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          echo "Deploy version=${VER} image_tag=${TAG} app_version=${APP_VER}"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWD }}
+
+      - name: Build and push bwalia/proxy10x
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ steps.meta.outputs.tag }}
+            ${{ env.IMAGE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+          sbom: false
+
+      - name: Build and push bwalia/proxy10x-admin-next
+        uses: docker/build-push-action@v5
+        with:
+          context: ./openresty-admin-next
+          file: ./openresty-admin-next/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.DASHBOARD_IMAGE }}:${{ steps.meta.outputs.tag }}
+            ${{ env.DASHBOARD_IMAGE }}:latest
+          build-args: |
+            NEXT_PUBLIC_APP_VERSION=${{ steps.meta.outputs.app_version }}
+            NEXT_PUBLIC_APP_BUILD_NUMBER=${{ steps.meta.outputs.build_number }}
+            NEXT_PUBLIC_DEPLOYMENT_TIME=${{ steps.meta.outputs.deploy_time }}
+            NEXT_PUBLIC_ENV_NAME=prod
+            NEXT_PUBLIC_GIT_SHA=${{ steps.meta.outputs.version }}
+            NEXT_PUBLIC_GIT_REPO=bwalia/proxy10x
+            NEXT_PUBLIC_TARGET_PLATFORM=KUBERNETES
+          cache-from: type=gha,scope=admin-next
+          cache-to: type=gha,mode=max,scope=admin-next
+          provenance: false
+          sbom: false
+
+      - name: Seed proxy10x-k3s1 prod via Ring Promoter
+        id: seed
+        continue-on-error: true
+        env:
+          RP_URL: ${{ secrets.RP_URL }}
+          RP_TOKEN: ${{ secrets.RP_TOKEN }}
+          RP_PROD_PASSWORD: ${{ secrets.RP_PROD_PASSWORD }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+          RP_URL="${RP_URL:-$RP_URL_DEFAULT}"
+          RP_URL="${RP_URL%/}"
+          case "$RP_URL" in
+            https://rp.proxy10x.com) ;;
+            *)
+              echo "::error::RP_URL must be https://rp.proxy10x.com (got: ${RP_URL})"
+              exit 1
+              ;;
+          esac
+          if [ -z "${RP_TOKEN:-}" ]; then
+            echo "::error::secrets.RP_TOKEN is empty — run scripts/ring-promoter-bootstrap.sh (sets RP_URL + RP_TOKEN)"
+            exit 1
+          fi
+
+          BODY=$(jq -n \
+            --arg ring prod \
+            --arg version "$VERSION" \
+            --arg password "${RP_PROD_PASSWORD:-}" \
+            '{ring:$ring, version:$version} + (if $password != "" then {password:$password} else {} end)')
+
+          echo "POST ${RP_URL}/api/apps/proxy10x-k3s1/seed"
+          echo "body: $(echo "$BODY" | jq -c 'del(.password) | . + (if .password then {password:"***"} else {} end)' 2>/dev/null || echo "$BODY" | sed 's/"password":"[^"]*"/"password":"***"/')"
+
+          # Sync seed waits for the k8sjob (timeout 25m on the app).
+          # Allow up to 35m wall clock — RP/gateway 504s were aborting at ~12m.
+          HTTP_CODE=$(curl -sS -o /tmp/rp-seed.json -w '%{http_code}' \
+            --connect-timeout 30 \
+            --max-time 2100 \
+            -X POST "${RP_URL}/api/apps/proxy10x-k3s1/seed" \
+            -H "Authorization: Bearer ${RP_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d "$BODY")
+
+          echo "HTTP ${HTTP_CODE}"
+          cat /tmp/rp-seed.json
+          echo
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Ring Promoter seed failed (HTTP ${HTTP_CODE}). Images are on Docker Hub; retry seed or helm-upgrade manually."
+            exit 1
+          fi
+
+          echo "seed accepted"
+
+      # RP sync seed frequently returns HTTP 504 from the edge while the
+      # in-cluster ring-exec Job still finishes helm + Traefik apply. Treat
+      # gateway timeouts as soft-fail and let smoke decide success.
+      - name: Smoke check control plane
+        id: smoke
+        run: |
+          set -euo pipefail
+          SEED_OK="${{ steps.seed.outcome }}"
+          if [ "$SEED_OK" != "success" ]; then
+            echo "::warning::Ring Promoter seed HTTP failed (outcome=${SEED_OK}). Waiting for in-cluster Job; images ${{ env.IMAGE }}:${{ steps.meta.outputs.tag }} + ${{ env.DASHBOARD_IMAGE }}:${{ steps.meta.outputs.tag }} are on Docker Hub."
+          fi
+          NEXT_OK=0
+          for i in $(seq 1 48); do
+            code=$(curl -sS -o /tmp/cp-health.body -w '%{http_code}' \
+              --connect-timeout 5 --max-time 15 \
+              https://cp.pop0.uk/healthz || true)
+            echo "attempt $i healthz: HTTP ${code}"
+            if [ "$code" = "200" ]; then
+              head -c 200 /tmp/cp-health.body; echo
+              ui=$(curl -sS -o /tmp/cp-login.body -w '%{http_code}' \
+                --connect-timeout 5 --max-time 15 \
+                https://cp.pop0.uk/login || true)
+              echo "login: HTTP ${ui}"
+              if grep -qiE 'next|Outfit|fraunces|Proxy10x Admin|generator" content="Next' /tmp/cp-login.body 2>/dev/null; then
+                echo "Next.js UI looks live"
+                NEXT_OK=1
+                echo "next_ok=1" >> "$GITHUB_OUTPUT"
+                exit 0
+              fi
+              echo "::warning::/login did not look like Next.js yet (may still be rolling Traefik path split)"
+            fi
+            sleep 10
+          done
+          echo "next_ok=0" >> "$GITHUB_OUTPUT"
+          if [ "$SEED_OK" = "success" ]; then
+            echo "::warning::seed accepted but cp.pop0.uk did not show Next.js within ~8m — check https://rp.proxy10x.com/?app=proxy10x-k3s1"
+            exit 0
+          fi
+          echo "::error::Ring Promoter seed failed and cp.pop0.uk did not become healthy with Next.js. Images were pushed — helm-upgrade manually with tag ${{ steps.meta.outputs.tag }} and apply deploy/k3s1/proxy10x-cp-traefik-ingress.yaml."
+          exit 1
+
+      # The smoke check above only proves cp.pop0.uk answers — the PREVIOUS
+      # build answers too. On 2026-09-24 a seed that never reached Ring
+      # Promoter (DNS for rp.proxy10x.com not yet created) still went green.
+      # Ring Promoter sets prod current_version only when the deploy Job
+      # succeeds, so require it to equal the version this run seeded.
+      - name: Verify prod runs the seeded version
+        env:
+          RP_URL: ${{ secrets.RP_URL }}
+          RP_TOKEN: ${{ secrets.RP_TOKEN }}
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: |
+          set -euo pipefail
+          RP_URL="${RP_URL:-$RP_URL_DEFAULT}"
+          RP_URL="${RP_URL%/}"
+          # Up to 25m: the deploy Job's own timeout, for a seed that 504'd at
+          # the gateway while the Job kept running.
+          for i in $(seq 1 50); do
+            cur=$(curl -sS --connect-timeout 10 --max-time 20 \
+              -H "Authorization: Bearer ${RP_TOKEN}" \
+              "${RP_URL}/api/apps/proxy10x-k3s1/rings" 2>/dev/null \
+              | jq -r '.rings[] | select(.ring.name == "prod") | .current_version' 2>/dev/null || true)
+            echo "attempt $i: prod current_version=${cur:-<unreadable>}"
+            if [ "$cur" = "$VERSION" ]; then
+              echo "prod is on ${VERSION}"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::Ring Promoter prod is on '${cur:-unknown}', not ${VERSION}. The seed did not deploy — check ${RP_URL}/?app=proxy10x-k3s1 and kubectl -n ring-exec get jobs."
+          exit 1
+
+  # Keep the int ring on the same build as prod, so int -> test -> acc
+  # promotions always have something to promote. Until 2026-09-24 CI only
+  # seeded prod, test never had a version, and promoting to acc returned
+  # 409 "source ring has no version to promote".
+  #
+  # Runs only after prod is verified on this version, as its own job so a
+  # failed int deploy is visible without marking prod's deploy red.
+  seed-int:
+    name: Seed int ring on rp.proxy10x.com
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Seed proxy10x-k3s1 int and verify
+        env:
+          RP_URL: ${{ secrets.RP_URL }}
+          RP_TOKEN: ${{ secrets.RP_TOKEN }}
+          VERSION: ${{ needs.deploy.outputs.version }}
+        run: |
+          set -euo pipefail
+          RP_URL="${RP_URL:-$RP_URL_DEFAULT}"
+          RP_URL="${RP_URL%/}"
+          if [ -z "${VERSION}" ] || [ -z "${RP_TOKEN:-}" ]; then
+            echo "::error::missing version (${VERSION:-empty}) or RP_TOKEN"
+            exit 1
+          fi
+          body=$(jq -n --arg ring int --arg version "$VERSION" '{ring:$ring, version:$version}')
+          echo "POST ${RP_URL}/api/apps/proxy10x-k3s1/seed ${body}"
+          code=$(curl -sS -o /tmp/rp-seed-int.json -w '%{http_code}' \
+            --connect-timeout 30 --max-time 1800 \
+            -X POST "${RP_URL}/api/apps/proxy10x-k3s1/seed" \
+            -H "Authorization: Bearer ${RP_TOKEN}" \
+            -H 'Content-Type: application/json' \
+            -d "$body" || true)
+          echo "HTTP ${code}"
+          jq -c '{success, message}' /tmp/rp-seed-int.json 2>/dev/null || head -c 500 /tmp/rp-seed-int.json || true
+          echo
+          # A 504 at the edge can still mean the Job finished, so the
+          # ring's recorded version decides, not the HTTP code.
+          for i in $(seq 1 50); do
+            cur=$(curl -sS --connect-timeout 10 --max-time 20 \
+              -H "Authorization: Bearer ${RP_TOKEN}" \
+              "${RP_URL}/api/apps/proxy10x-k3s1/rings" 2>/dev/null \
+              | jq -r '.rings[] | select(.ring.name == "int") | .current_version' 2>/dev/null || true)
+            echo "attempt $i: int current_version=${cur:-<unreadable>}"
+            if [ "$cur" = "$VERSION" ]; then
+              echo "int is on ${VERSION}"
+              exit 0
+            fi
+            if [ "$code" = "422" ]; then
+              break   # Ring Promoter reported the deploy itself failed
+            fi
+            sleep 30
+          done
+          echo "::error::int is on '${cur:-unknown}', not ${VERSION}. Check ${RP_URL}/?app=proxy10x-k3s1 and kubectl -n ring-exec get jobs."
+          exit 1

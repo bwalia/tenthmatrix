@@ -1,0 +1,83 @@
+"use client";
+
+import React from "react";
+import { cn } from "@/lib/utils/cn";
+
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface CardSectionProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+const CardRoot = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ className, children, ...rest }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-[#122233]",
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+);
+CardRoot.displayName = "Card";
+
+const Header = React.forwardRef<HTMLDivElement, CardSectionProps>(
+  ({ className, children, ...rest }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-700",
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+);
+Header.displayName = "Card.Header";
+
+const Body = React.forwardRef<HTMLDivElement, CardSectionProps>(
+  ({ className, children, ...rest }, ref) => (
+    <div ref={ref} className={cn("px-6 py-4", className)} {...rest}>
+      {children}
+    </div>
+  )
+);
+Body.displayName = "Card.Body";
+
+const Footer = React.forwardRef<HTMLDivElement, CardSectionProps>(
+  ({ className, children, ...rest }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        "border-t border-slate-200 px-6 py-4 dark:border-slate-700",
+        className
+      )}
+      {...rest}
+    >
+      {children}
+    </div>
+  )
+);
+Footer.displayName = "Card.Footer";
+
+/**
+ * Named exports are REQUIRED for consumption from Server Components.
+ * React's server/client boundary only exposes the default export of a
+ * `"use client"` module — properties attached via `Object.assign`
+ * (the `Card.Header` / `Card.Body` compound pattern) are stripped.
+ *
+ * Client component callers may continue to use `<Card.Header>` syntax;
+ * server component callers must use the named `<CardHeader>` imports.
+ */
+export { Header as CardHeader, Body as CardBody, Footer as CardFooter };
+
+const Card = Object.assign(CardRoot, {
+  Header,
+  Body,
+  Footer,
+});
+
+export default Card;

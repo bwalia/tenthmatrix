@@ -1,0 +1,427 @@
+name: CI/CD Promotion Pipeline (main → int → test)
+# Deploys from main branch through non-production environments: int → smoke test → test.
+# (The `acc` tier on 187.77.179.206 was decommissioned — promotion
+# now stops at `test` and prod releases run from the release branch
+# via deploy-proxy10x-delivery-pipeline.yml.)
+#
+# Auto-trigger policy (push to `main`):
+#   - int  → `full`  (everything: api code, nginx, servers, both admin
+#                     UIs, os_deps, build).  This is the canary host
+#                     where every layer is verified before promotion.
+#   - test → `code`  (Lua api/* only — int already proved the rest).
+#
+# Manual `workflow_dispatch` lets ops pick any DEPLOY_MODE and stop
+# at any TARGET_ENV — useful for surgical redeploys (e.g. push only
+# `dashboard-next` to test after an admin-UI hotfix).
+#
+# Production hosts are never touched here — use
+# deploy-proxy10x-delivery-pipeline.yml for production releases from
+# the release branch.
+
+on:
+  push:
+    branches:
+      - build
+  workflow_dispatch:
+    inputs:
+      DEPLOY_MODE:
+        type: choice
+        description: >-
+          What to deploy. Prefer `code` for routine promotions. `full`/`build`
+          use the prebuilt OpenResty image (no on-host compile by default).
+        default: "code"
+        required: true
+        options:
+          - code
+          - full
+          - nginx
+          - servers
+          - dashboard
+          - dashboard-next
+          - os_deps
+          - build
+
+      TARGET_ENV:
+        type: choice
+        description: "How far to promote (stops after this environment)"
+        default: "test"
+        required: true
+        options:
+          - int
+          - test
+
+# Prevent concurrent promotions
+concurrency:
+  group: promotion-pipeline
+  cancel-in-progress: false
+
+jobs:
+  # ──────────────────────────────────────────────────────
+  # Stage 1: Validate configs on main branch
+  # ──────────────────────────────────────────────────────
+  validate:
+    name: "Validate Configs (main)"
+    # Was [self-hosted, Linux, int] — but this job only runs git
+    # checkout + `python -m json.tool` over data/, neither of which
+    # needs the int runner.  Moving to ubuntu-latest means the
+    # promotion pipeline no longer gets STUCK AT STAGE 1 when int
+    # is offline (which is what happened on run 28359601509).
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Show promotion settings
+        run: |
+          echo "Deploy mode: ${{ github.event.inputs.DEPLOY_MODE }}"
+          echo "Promote to:  ${{ github.event.inputs.TARGET_ENV }}"
+          echo "Branch:      main"
+
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Validate all JSON config files
+        run: |
+          echo "=== Validating All JSON Configs ==="
+          ERRORS=0
+          VALID=0
+          for dir in data/servers data/rules data/waf_rules data/waf_policies; do
+            for file in $(find "$dir" -name '*.json' 2>/dev/null); do
+              if python3 -m json.tool "$file" > /dev/null 2>&1; then
+                VALID=$((VALID+1))
+              else
+                echo "::error file=$file::Invalid JSON syntax"
+                ERRORS=$((ERRORS+1))
+              fi
+            done
+          done
+          echo "Total: $VALID valid, $ERRORS invalid"
+          if [ $ERRORS -gt 0 ]; then exit 1; fi
+
+      - name: Slack notify - Validation failed
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg actor "${{ github.actor }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions", text: (":x: *Promotion Pipeline: Validation FAILED*\nConfig validation errors on main — promotion stopped.\n*Triggered by:* \($actor)\n*Logs:* \($logs)")}')"
+
+  # ──────────────────────────────────────────────────────
+  # Stage 1.5: Probe the int self-hosted runner.
+  # Same pattern as the delivery pipeline — see that file for the
+  # rationale.  Runs on ubuntu-latest (always available); falls back
+  # to "assume online" on API failure so a permissions hiccup never
+  # silently skips a real deploy.
+  # ──────────────────────────────────────────────────────
+  preflight-int:
+    name: "Stage 1.5: Probe Int Runner"
+    needs: [validate]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    outputs:
+      runner_online: ${{ steps.probe.outputs.online }}
+    steps:
+      - name: Check if int self-hosted runner is online
+        id: probe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          ONLINE=true
+          REASON="(fail-safe default — API not queried)"
+          if API_OUT=$(gh api "/repos/${{ github.repository }}/actions/runners" 2>&1); then
+            ONLINE_COUNT=$(printf '%s' "$API_OUT" | jq '
+              [ .runners[]
+                | select(any(.labels[]; .name == "int"))
+                | select(.status == "online")
+              ] | length
+            ')
+            if [ "${ONLINE_COUNT:-0}" -gt 0 ]; then
+              ONLINE=true
+              REASON="$ONLINE_COUNT online int runner(s) found"
+            else
+              ONLINE=false
+              REASON="no online int runner — skipping deploy-int + smoke-test-int"
+            fi
+          else
+            REASON="API query failed; assuming runner online. Response: $(printf '%s' "$API_OUT" | head -c 200)"
+          fi
+          echo "Decision: online=$ONLINE — $REASON"
+          if [ "$ONLINE" = "false" ]; then
+            echo "::warning::Int runner offline — deploy-int + smoke-test-int will be skipped. Pipeline will continue to test stage. Reason: $REASON"
+          else
+            echo "::notice::Int runner check passed — $REASON"
+          fi
+          echo "online=$ONLINE" >> "$GITHUB_OUTPUT"
+
+      - name: Slack notify - Int skipped (runner offline)
+        if: steps.probe.outputs.online == 'false'
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg actor "${{ github.actor }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions", text: (":warning: *Promotion Pipeline — Int (192.168.1.193) SKIPPED*\nInt self-hosted runner is offline; deploy + smoke-test skipped, promotion continuing to test.\n*Triggered by:* \($actor)\n*Logs:* \($logs)")}')"
+
+  # ──────────────────────────────────────────────────────
+  # Stage 2: Deploy to Int (skipped when int runner is offline)
+  # ──────────────────────────────────────────────────────
+  deploy-int:
+    needs: [validate, preflight-int]
+    if: needs.preflight-int.outputs.runner_online == 'true'
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      env_name: int
+      env_label: "Int (192.168.1.193)"
+      stage_number: "2"
+      host_ip: "192.168.1.193"
+      ssh_user: bwalia
+      connection_mode: local
+      # Secrets decrypted from committed SOPS+age files
+      # (infra/secrets/<env>/) using the SOPS_AGE_KEY repo secret.
+      secrets_mode: sops
+      # Int: :8080 stolen by k3s CNI hostPort — use Next admin :8099 healthz.
+      health_endpoint: "http://127.0.0.1:8099/healthz"
+      health_check_mode: local
+      docker_prune: false
+      notify_success: false
+      deploy_branch: main
+      # int is the canary — push to main runs `full` so every layer
+      # is exercised here before promoting code-only to test/acc.
+      # Manual workflow_dispatch can override DEPLOY_MODE for a
+      # scoped redeploy.
+      deploy_mode: ${{ github.event.inputs.DEPLOY_MODE || 'full' }}
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      # Kept so emergency rollback to secrets_mode: github_secret works
+      # without another commit.
+      SETTINGS_SECRET: ${{ secrets.DOT_PROXY10X_SETTINGS_INT }}
+      ENV_CREDS_SECRET: ${{ secrets.DOT_PROXY10X_ENV_CREDS_INT }}
+
+  # ──────────────────────────────────────────────────────
+  # Stage 3: Smoke Test Int
+  # ──────────────────────────────────────────────────────
+  # Skipped automatically when preflight-int says the runner is
+  # offline (otherwise this job would also queue forever waiting
+  # for the same offline runner).
+  smoke-test-int:
+    name: "Smoke Test Int"
+    # Any Linux self-hosted runner — see delivery pipeline test-int for
+    # the co-location + SSH port-forward pattern that lets this run from
+    # any runner with the SSH key, not only the int box itself.
+    runs-on: [self-hosted, Linux]
+    needs: [deploy-int, preflight-int]
+    if: |
+      always() && !failure() && !cancelled() &&
+      needs.preflight-int.outputs.runner_online == 'true' &&
+      needs.deploy-int.result == 'success'
+    timeout-minutes: 10
+    env:
+      TARGET_IP: "192.168.1.193"
+      TARGET_USER: "bwalia"
+      TARGET_PORT: "8099"
+    steps:
+      # actions/checkout's git-clean cannot unlink root-owned build
+      # artifacts left in the persistent self-hosted workspace (e.g.
+      # openresty-admin-next/.next/BUILD_ID created by a prior root/sudo
+      # Next.js build), which fails the Checkout step with EACCES and
+      # blocks promotion. Reclaim ownership before checkout runs.
+      - name: Pre-checkout cleanup (reclaim runner workspace)
+        run: |
+          if [ -n "$GITHUB_WORKSPACE" ] && [ -d "$GITHUB_WORKSPACE" ]; then
+            sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+            sudo rm -rf "$GITHUB_WORKSPACE/openresty-admin-next/.next" 2>/dev/null || true
+          fi
+        shell: bash
+
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - name: Detect co-location with target
+        id: colo
+        run: |
+          IS_LOCAL=false
+          IPS="$(hostname -I 2>/dev/null || true) $(ip -o addr show 2>/dev/null | awk '{print $4}' | cut -d/ -f1) $(ifconfig 2>/dev/null | awk '/inet /{print $2}')"
+          if printf ' %s ' $IPS | grep -qFw "$TARGET_IP"; then
+            IS_LOCAL=true
+          fi
+          echo "is_local=$IS_LOCAL" >> "$GITHUB_OUTPUT"
+          if [ "$IS_LOCAL" = "true" ]; then
+            echo "Runner IS co-located with $TARGET_IP — will curl 127.0.0.1 directly."
+          else
+            echo "Runner is NOT co-located with $TARGET_IP — will tunnel via SSH."
+          fi
+
+      - name: Install SSH key (only when remote from target)
+        if: steps.colo.outputs.is_local != 'true'
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          if [ -z "$SSH_KEY" ]; then
+            if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+              echo "::error::Runner has no ~/.ssh/id_rsa and secrets.SSH_PRIVATE_KEY is not set — cannot reach ${TARGET_IP}."
+              exit 1
+            fi
+            echo "Using pre-existing runner key at ~/.ssh/id_rsa"
+          else
+            mkdir -p ~/.ssh
+            echo "$SSH_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+          fi
+          ssh-keyscan -H "$TARGET_IP" >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.19"
+          cache: false
+
+      - name: Open SSH port-forward to target (only when remote)
+        if: steps.colo.outputs.is_local != 'true'
+        run: |
+          ssh -o BatchMode=yes -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new \
+            -i ~/.ssh/id_rsa -N -f \
+            -L "${TARGET_PORT}:127.0.0.1:${TARGET_PORT}" \
+            "${TARGET_USER}@${TARGET_IP}"
+
+      - name: Run health check tests (Go)
+        working-directory: QA
+        env:
+          TARGET_HOST: "http://127.0.0.1:${{ env.TARGET_PORT }}"
+        run: |
+          go test -v -run TestHealthCheck -timeout 60s 2>&1 | tee health-results.txt
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "::error::Go health check tests failed"
+            exit 1
+          fi
+
+      - name: Verify core endpoints
+        run: |
+          FAILED=0
+          BASE="http://127.0.0.1:${TARGET_PORT}"
+          for ENDPOINT in /healthz; do
+            STATUS=$(curl --silent --output /dev/null --connect-timeout 3 --max-time 8 -w "%{http_code}" "${BASE}${ENDPOINT}" 2>/dev/null || true)
+            STATUS=$(echo "$STATUS" | tr -cd '0-9' | head -c 3)
+            [[ -z "$STATUS" ]] && STATUS="000"
+            if [ "$STATUS" = "200" ]; then
+              printf "  GET :%s%-20s OK (%s)\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+            else
+              printf "  GET :%s%-20s FAIL (%s)\n" "$TARGET_PORT" "$ENDPOINT" "$STATUS"
+              FAILED=$((FAILED+1))
+            fi
+          done
+          if [ $FAILED -gt 0 ]; then
+            echo "::error::Core endpoint check failed"
+            exit 1
+          fi
+          echo "All checks passed"
+
+      - name: Tear down SSH port-forward
+        if: always() && steps.colo.outputs.is_local != 'true'
+        run: |
+          pkill -f "ssh .* -L ${TARGET_PORT}:127.0.0.1:${TARGET_PORT} ${TARGET_USER}@${TARGET_IP}" 2>/dev/null || true
+
+      - name: Slack notify - Smoke test failed
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: |
+          curl -sf -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n \
+              --arg actor "${{ github.actor }}" \
+              --arg logs "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel: "github-updates", username: "GitHub Actions", text: (":x: *Promotion Pipeline: Smoke Test FAILED on Int*\nPromotion stopped before test environment.\n*Triggered by:* \($actor)\n*Logs:* \($logs)")}')"
+
+  # ──────────────────────────────────────────────────────
+  # Stage 4: Deploy to Test (final stage in this pipeline —
+  # `acc` was decommissioned, prod releases run from the release
+  # branch via deploy-proxy10x-delivery-pipeline.yml)
+  # ──────────────────────────────────────────────────────
+  deploy-test:
+    needs: [smoke-test-int]
+    # `always() && !failure() && !cancelled()` lets test run when
+    # smoke-test-int was SKIPPED (because the int runner was
+    # offline) but NOT when it actually failed.  Without this, a
+    # skipped int would cascade-skip test too — defeating the
+    # whole point of the preflight gate above.
+    if: >
+      always() && !failure() && !cancelled() &&
+      (github.event_name != 'workflow_dispatch' ||
+       github.event.inputs.TARGET_ENV == 'test')
+    uses: ./.github/workflows/deploy-environment.yml
+    with:
+      env_name: test
+      env_label: "Test (192.168.1.140)"
+      stage_number: "4"
+      host_ip: "192.168.1.140"
+      ssh_user: bwalia
+      connection_mode: ssh
+      # vault_or_sops so any runner can deploy — see delivery pipeline
+      # test stage for the full rationale.
+      secrets_mode: vault_or_sops
+      # :8080 blackholed by k3s CNI hostPort DNAT on debian001 — use :8099.
+      health_endpoint: "http://127.0.0.1:8099/healthz"
+      health_check_mode: ssh
+      docker_prune: false
+      notify_success: true
+      deploy_branch: main
+      # Push to main → `code` only (int already proved every other
+      # layer in the canary stage above).  Manual workflow_dispatch
+      # can override DEPLOY_MODE for a scoped or `full` redeploy.
+      deploy_mode: ${{ github.event.inputs.DEPLOY_MODE || 'code' }}
+    secrets:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+      VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+
+  # ──────────────────────────────────────────────────────
+  # Summary
+  # ──────────────────────────────────────────────────────
+  summary:
+    name: Promotion Summary
+    runs-on: ubuntu-latest
+    needs: [validate, deploy-int, smoke-test-int, deploy-test]
+    if: always()
+    steps:
+      - name: Promotion Summary
+        run: |
+          echo "============================================"
+          echo "  CI/CD Promotion Pipeline Summary"
+          echo "============================================"
+          echo ""
+          echo "  Deploy mode: ${{ github.event.inputs.DEPLOY_MODE }}"
+          echo "  Target env:  ${{ github.event.inputs.TARGET_ENV }}"
+          echo "  Branch:      main"
+          echo ""
+          echo "  Validate:        ${{ needs.validate.result }}"
+          echo "  Deploy Int:      ${{ needs.deploy-int.result }}"
+          echo "  Smoke Test Int:  ${{ needs.smoke-test-int.result }}"
+          echo "  Deploy Test:     ${{ needs.deploy-test.result }}"
+          echo ""
+          echo "  Commit:  ${{ github.sha }}"
+          echo "  Trigger: ${{ github.actor }}"
+          echo "============================================"
+
+          if [[ "${{ needs.validate.result }}" == "failure" ]] || \
+             [[ "${{ needs.deploy-int.result }}" == "failure" ]] || \
+             [[ "${{ needs.smoke-test-int.result }}" == "failure" ]] || \
+             [[ "${{ needs.deploy-test.result }}" == "failure" ]]; then
+              echo "::error::Promotion pipeline failed — see results above"
+              exit 1
+          fi

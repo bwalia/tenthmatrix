@@ -1,0 +1,195 @@
+name: Restore Prod Data from S3 to Git
+
+# DR-only: download an S3 prod backup tarball, refresh data/servers|rules|waf_*|
+# upstreams|pops (prod), and open (or update) a PR for human review.
+# Does NOT auto-merge — merge manually after approving the diff.
+#
+# DISABLED auto-chain (2026-10): control plane (cp.pop0.uk) is the desired-config
+# source of truth. Auto-running after "Sync Prod Data to S3" pulled lon1 edge
+# snapshots back into git and fought the CP → POP publish path
+# (infra/configuration/README.md). Keep workflow_dispatch for true DR only —
+# never schedule this against a healthy CP.
+
+on:
+  workflow_dispatch:
+    inputs:
+      backup_file:
+        description: "S3 backup tarball name under backups/ (default: latest prod_backup_*.tar.gz)"
+        required: false
+        type: string
+      confirm_dr:
+        description: "Type RESTORE-FROM-S3 to confirm this is a DR restore (not a routine sync)"
+        required: true
+        type: string
+
+concurrency:
+  group: dr-s3-restore-to-git
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  restore-and-pr:
+    name: "DR: S3 backup → data/ PR (test runner)"
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, test]
+    timeout-minutes: 30
+
+    steps:
+      - name: Require explicit DR confirmation
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event.inputs.confirm_dr }}" != "RESTORE-FROM-S3" ]; then
+            echo "::error::Refusing restore. Set confirm_dr=RESTORE-FROM-S3. CP (cp.pop0.uk) is SoT; this workflow is DR-only."
+            exit 1
+          fi
+
+      - name: Reclaim runner workspace ownership
+        run: |
+          if [ -n "$GITHUB_WORKSPACE" ] && [ -d "$GITHUB_WORKSPACE" ]; then
+            sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE" 2>/dev/null || true
+          fi
+
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          # This action validates by calling sts:GetCallerIdentity itself and,
+          # on a deleted key, aborts the job with the bare line `The security
+          # token included in the request is invalid.` -- before the preflight
+          # below, which exists to say what that means and what to do. Export
+          # the credentials here; let the preflight be the one that judges.
+          skip-credential-validation: true
+
+      - name: Ensure AWS CLI and jq
+        run: |
+          set -euo pipefail
+          command -v aws >/dev/null || { echo "::error::aws CLI required on test runner"; exit 1; }
+          command -v jq >/dev/null || { echo "::error::jq required on test runner"; exit 1; }
+          aws --version
+
+      # S3 is the source of truth for this restore, so name a dead credential
+      # here rather than at `aws s3 ls` three steps down. The other two S3
+      # workflows have had this since bbd60f93; this one was missed.
+      - name: Verify S3 access
+        uses: ./.github/actions/aws-s3-preflight
+        with:
+          bucket: ${{ secrets.PROXY10X_S3_BUCKET }}
+          prefix: backups/
+
+      - name: Resolve backup tarball from S3
+        id: backup
+        env:
+          INPUT_BACKUP: ${{ github.event.inputs.backup_file }}
+        run: |
+          set -euo pipefail
+          S3_BUCKET="${{ secrets.PROXY10X_S3_BUCKET }}"
+          if [[ -n "${INPUT_BACKUP}" ]]; then
+            BACKUP_FILE="${INPUT_BACKUP}"
+          else
+            BACKUP_FILE=$(aws s3 ls "s3://${S3_BUCKET}/backups/" \
+              | awk '/prod_backup_[0-9_]+\.tar\.gz$/ {print $4}' \
+              | sort \
+              | tail -1)
+          fi
+          if [[ -z "${BACKUP_FILE}" ]]; then
+            echo "::error::No prod_backup_*.tar.gz found in s3://${S3_BUCKET}/backups/"
+            exit 1
+          fi
+          echo "backup_file=${BACKUP_FILE}" >> "${GITHUB_OUTPUT}"
+          echo "backup_key=backups/${BACKUP_FILE}" >> "${GITHUB_OUTPUT}"
+          echo "Using s3://${S3_BUCKET}/backups/${BACKUP_FILE}"
+
+      - name: Download and extract backup
+        run: |
+          set -euo pipefail
+          S3_BUCKET="${{ secrets.PROXY10X_S3_BUCKET }}"
+          KEY="${{ steps.backup.outputs.backup_key }}"
+          FILE="${{ steps.backup.outputs.backup_file }}"
+          WORK="${RUNNER_TEMP}/dr-restore"
+          rm -rf "${WORK}"
+          mkdir -p "${WORK}"
+          aws s3 cp "s3://${S3_BUCKET}/${KEY}" "${WORK}/${FILE}"
+          mkdir -p "${WORK}/extracted"
+          tar -xzf "${WORK}/${FILE}" -C "${WORK}/extracted"
+          echo "DR_RESTORE_ROOT=${WORK}/extracted" >> "${GITHUB_ENV}"
+          echo "Extracted $(tar -tzf "${WORK}/${FILE}" | wc -l | tr -d ' ') entries"
+
+      - name: Sync backup trees into data/
+        run: |
+          set -euo pipefail
+          chmod +x scripts/dr-sync-s3-backup-to-data.sh
+          ./scripts/dr-sync-s3-backup-to-data.sh "${DR_RESTORE_ROOT}" data
+
+      - name: Summarize diff
+        id: diff
+        run: |
+          set -euo pipefail
+          git add data/servers/prod data/rules/prod data/waf_policies/prod \
+            data/waf_rules/prod data/upstreams/prod data/pops 2>/dev/null || true
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> "${GITHUB_OUTPUT}"
+            echo "No changes vs main — skipping PR"
+          else
+            echo "has_changes=true" >> "${GITHUB_OUTPUT}"
+            echo "=== Staged summary ==="
+            git diff --staged --stat
+          fi
+
+      - name: Create or update DR pull request
+        if: steps.diff.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dr/prod-data-from-s3
+          delete-branch: true
+          base: main
+          title: "dr(prod): sync gateway data from S3 backup"
+          commit-message: "dr(prod): sync servers, rules, WAF, upstreams, pops from S3"
+          body: |
+            ## Automated DR sync from S3
+
+            This PR was opened by [Restore Prod Data from S3 to Git](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+
+            | Field | Value |
+            |-------|-------|
+            | Backup | `${{ steps.backup.outputs.backup_file }}` |
+            | Trigger | `${{ github.event_name }}` |
+            | Source workflow | ${{ github.event.workflow_run.html_url || 'manual' }} |
+
+            ### Trees updated
+            - `data/servers/prod/`
+            - `data/rules/prod/`
+            - `data/waf_policies/prod/`, `data/waf_rules/prod/`
+            - `data/upstreams/prod/`
+            - `data/pops/` (when present in backup)
+
+            S3 signing keys in rules are redacted to `REDACTED_S3_*` for git safety.
+
+            ### Required: manual approval
+            **Review the diff and merge this PR when satisfied.** There is no auto-merge.
+
+            **Warning:** `cp.pop0.uk` is the desired-config source of truth. Merging this
+            PR updates git `data/` from an **edge** snapshot (lon1 via S3). Do **not**
+            treat this as a routine sync into the control plane. Prefer CP → POP publish
+            (`infra/configuration/README.md`). Use this PR only for disaster recovery.
+          labels: |
+            dr
+            automated
+
+      - name: No changes notice
+        if: steps.diff.outputs.has_changes != 'true'
+        run: echo "✅ Backup processed; git data/ already matches — no PR opened."
