@@ -1,0 +1,345 @@
+use std::sync::Arc;
+use std::time::Duration;
+
+use chrono::Utc;
+use futures::StreamExt;
+use kube::api::{Api, PostParams};
+use kube::runtime::Controller;
+use kube::runtime::reflector::ObjectRef;
+use kube::runtime::watcher::Config as WatcherConfig;
+use kube::{Client, CustomResourceExt, ResourceExt};
+use tracing::{error, info};
+
+mod operator;
+mod policies;
+mod tenancy;
+
+use operator::Registry10x;
+use operator::reconcile::{
+    OperatorCtx, error_policy as operator_error_policy, reconcile as reconcile_registry,
+};
+use tenancy::{AccessPolicy, Project, Tenant, TokenPolicy};
+
+// ---------------------------------------------------------------------------
+// Context shared across reconcilers
+// ---------------------------------------------------------------------------
+
+pub(crate) struct Ctx {
+    pub(crate) client: Client,
+    pub(crate) http: reqwest::Client,
+    pub(crate) auth_service_url: String,
+    /// Registry base URL for policy sync (optional).
+    pub(crate) registry_service_url: Option<String>,
+    /// Bearer token for admin PUT to registry (optional).
+    pub(crate) registry_admin_token: Option<String>,
+}
+
+// ---------------------------------------------------------------------------
+// Error type
+// ---------------------------------------------------------------------------
+
+#[derive(Debug, thiserror::Error)]
+pub(crate) enum ControllerError {
+    #[error("Kubernetes API error: {0}")]
+    Kube(#[from] kube::Error),
+
+    #[error("Validation failed: {0}")]
+    Validation(String),
+
+    #[error("HTTP error: {0}")]
+    Http(#[from] reqwest::Error),
+
+    #[error("Serialization error: {0}")]
+    Serde(#[from] serde_json::Error),
+}
+
+// ---------------------------------------------------------------------------
+// Helper: publish a Kubernetes Event
+// ---------------------------------------------------------------------------
+
+pub(crate) struct EventInfo<'a> {
+    namespace: Option<&'a str>,
+    regarding_kind: &'a str,
+    regarding_name: &'a str,
+    regarding_uid: &'a str,
+    reason: &'a str,
+    message: &'a str,
+    event_type: &'a str,
+}
+
+pub(crate) async fn publish_event(
+    client: &Client,
+    info: &EventInfo<'_>,
+) -> Result<(), ControllerError> {
+    let events: Api<k8s_openapi::api::events::v1::Event> = match info.namespace {
+        Some(ns) => Api::namespaced(client.clone(), ns),
+        None => Api::default_namespaced(client.clone()),
+    };
+
+    let now = Utc::now();
+    let event = k8s_openapi::api::events::v1::Event {
+        metadata: kube::api::ObjectMeta {
+            generate_name: Some(format!("{}-", info.regarding_name)),
+            namespace: info.namespace.map(String::from),
+            ..Default::default()
+        },
+        regarding: Some(k8s_openapi::api::core::v1::ObjectReference {
+            kind: Some(info.regarding_kind.to_string()),
+            name: Some(info.regarding_name.to_string()),
+            uid: Some(info.regarding_uid.to_string()),
+            namespace: info.namespace.map(String::from),
+            api_version: Some("registry10x.com/v1alpha1".to_string()),
+            ..Default::default()
+        }),
+        reason: Some(info.reason.to_string()),
+        note: Some(info.message.to_string()),
+        type_: Some(info.event_type.to_string()),
+        event_time: Some(k8s_openapi::apimachinery::pkg::apis::meta::v1::MicroTime(
+            now,
+        )),
+        reporting_controller: Some("registry10x-controller".to_string()),
+        reporting_instance: Some("registry10x-controller-0".to_string()),
+        action: Some(info.reason.to_string()),
+        ..Default::default()
+    };
+
+    let pp = PostParams::default();
+    events.create(&pp, &event).await?;
+    Ok(())
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    // `registry10x-controller crd` prints the Registry10x CRD, which is how
+    // deploy/helm/registry10x/templates/crds/registry10x.yaml is generated.
+    if std::env::args().nth(1).as_deref() == Some("crd") {
+        print!("{}", serde_yaml::to_string(&Registry10x::crd())?);
+        return Ok(());
+    }
+
+    // Initialize tracing
+    tracing_subscriber::fmt()
+        .with_env_filter(
+            tracing_subscriber::EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info")),
+        )
+        .json()
+        .init();
+
+    info!("starting registry10x-controller");
+
+    // The release image builds every workspace binary in one cargo
+    // invocation, so feature unification enables both of rustls' crypto
+    // backends (ring and aws-lc-rs). rustls then can't pick a process-wide
+    // default and the kube client panics while building its TLS config.
+    // Choose ring explicitly; `Err` only means one is already installed.
+    let _ = rustls::crypto::ring::default_provider().install_default();
+
+    let client = Client::try_default().await?;
+
+    let auth_service_url = std::env::var("AUTH_SERVICE_URL")
+        .unwrap_or_else(|_| "http://registry10x-auth:8080".to_string());
+
+    let registry_service_url = std::env::var("REGISTRY_SERVICE_URL").ok();
+    let registry_admin_token = std::env::var("REGISTRY_ADMIN_TOKEN").ok();
+    let ctx = Arc::new(Ctx {
+        client: client.clone(),
+        http: reqwest::Client::builder()
+            .timeout(Duration::from_secs(10))
+            .build()?,
+        auth_service_url,
+        registry_service_url,
+        registry_admin_token,
+    });
+
+    // --- Tenant controller (cluster-scoped) ---
+    let tenants: Api<Tenant> = Api::all(client.clone());
+    let tenant_ctrl = Controller::new(tenants, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            tenancy::reconcile_tenant,
+            tenancy::error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "tenant reconciled"),
+                Err(e) => error!(error = %e, "tenant reconcile loop error"),
+            }
+        });
+
+    // --- Project controller ---
+    let projects: Api<Project> = Api::all(client.clone());
+    let project_ctrl = Controller::new(projects, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            tenancy::reconcile_project,
+            tenancy::error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "project reconciled"),
+                Err(e) => error!(error = %e, "project reconcile loop error"),
+            }
+        });
+
+    // --- AccessPolicy controller ---
+    let access_policies: Api<AccessPolicy> = Api::all(client.clone());
+    let access_ctrl = Controller::new(access_policies, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            tenancy::reconcile_access_policy,
+            tenancy::error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "access-policy reconciled"),
+                Err(e) => error!(error = %e, "access-policy reconcile loop error"),
+            }
+        });
+
+    // --- TokenPolicy controller ---
+    let token_policies: Api<TokenPolicy> = Api::all(client.clone());
+    let token_ctrl = Controller::new(token_policies, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            tenancy::reconcile_token_policy,
+            tenancy::error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "token-policy reconciled"),
+                Err(e) => error!(error = %e, "token-policy reconcile loop error"),
+            }
+        });
+
+    // --- ImageVerificationPolicy controller (001 B4) ---
+    let ivp: Api<policies::ImageVerificationPolicy> = Api::all(client.clone());
+    let ivp_ctrl = Controller::new(ivp, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            policies::reconcile_image_verification_policy,
+            policies::image_verification_policy_error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "image-verification-policy reconciled"),
+                Err(e) => error!(error = %e, "image-verification-policy reconcile loop error"),
+            }
+        });
+
+    // --- RebuildSubscription controller (018 R2) ---
+    let rsubs: Api<policies::RebuildSubscription> = Api::all(client.clone());
+    let rsub_ctrl = Controller::new(rsubs, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            policies::reconcile_rebuild_subscription,
+            policies::rebuild_subscription_error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "rebuild-subscription reconciled"),
+                Err(e) => error!(error = %e, "rebuild-subscription reconcile loop error"),
+            }
+        });
+
+    // --- AdmissionPolicy controller (002 D2) ---
+    let admits: Api<policies::AdmissionPolicy> = Api::all(client.clone());
+    let admit_ctrl = Controller::new(admits, WatcherConfig::default())
+        .shutdown_on_signal()
+        .run(
+            policies::reconcile_admission_policy,
+            policies::admission_policy_error_policy,
+            ctx.clone(),
+        )
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "admission-policy reconciled"),
+                Err(e) => error!(error = %e, "admission-policy reconcile loop error"),
+            }
+        });
+
+    // --- Registry10x lifecycle operator ---
+    // Owned objects are watched too, so a Deployment finishing its rollout
+    // (or someone editing it) triggers a reconcile of its Registry10x.
+    let operator_ctx = Arc::new(OperatorCtx {
+        client: client.clone(),
+        http: reqwest::Client::builder()
+            .timeout(Duration::from_secs(15))
+            .build()?,
+    });
+    let owned = || WatcherConfig::default().labels("app.kubernetes.io/managed-by=registry10x-operator");
+    let registry_ctrl = Controller::new(
+        Api::<Registry10x>::all(client.clone()),
+        WatcherConfig::default(),
+    );
+    // A ConfigMap edit must roll the pods that mount it, so map ConfigMap
+    // events back to every Registry10x that references it.
+    let registries = registry_ctrl.store();
+    let registry_ctrl = registry_ctrl
+        .owns(
+            Api::<k8s_openapi::api::apps::v1::Deployment>::all(client.clone()),
+            owned(),
+        )
+        .owns(
+            Api::<k8s_openapi::api::core::v1::Service>::all(client.clone()),
+            owned(),
+        )
+        .owns(
+            Api::<k8s_openapi::api::batch::v1::Job>::all(client.clone()),
+            owned(),
+        )
+        .watches(
+            Api::<k8s_openapi::api::core::v1::ConfigMap>::all(client.clone()),
+            WatcherConfig::default(),
+            move |cm| {
+                let ns = cm.namespace();
+                let name = cm.name_any();
+                registries
+                    .state()
+                    .into_iter()
+                    .filter(|r| r.namespace() == ns && r.spec.config_map_name == name)
+                    .map(|r| ObjectRef::from_obj(&*r))
+                    .collect::<Vec<_>>()
+            },
+        )
+        .shutdown_on_signal()
+        .run(reconcile_registry, operator_error_policy, operator_ctx)
+        .for_each(|res| async move {
+            match res {
+                Ok(o) => info!(resource = ?o, "registry10x reconciled"),
+                // Owned objects being garbage-collected after their
+                // Registry10x was deleted still trigger reconciles.
+                Err(kube::runtime::controller::Error::ObjectNotFound(o)) => {
+                    tracing::debug!(resource = %o, "registry10x already deleted")
+                }
+                Err(e) => error!(error = %e, "registry10x reconcile loop error"),
+            }
+        });
+
+    info!("all controllers started; waiting for shutdown signal");
+
+    // Run all controllers concurrently — they all exit on SIGTERM.
+    tokio::select! {
+        () = tenant_ctrl => info!("tenant controller exited"),
+        () = project_ctrl => info!("project controller exited"),
+        () = access_ctrl => info!("access-policy controller exited"),
+        () = token_ctrl => info!("token-policy controller exited"),
+        () = ivp_ctrl => info!("image-verification-policy controller exited"),
+        () = rsub_ctrl => info!("rebuild-subscription controller exited"),
+        () = admit_ctrl => info!("admission-policy controller exited"),
+        () = registry_ctrl => info!("registry10x operator exited"),
+    }
+
+    info!("registry10x-controller shut down");
+    Ok(())
+}

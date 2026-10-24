@@ -1,0 +1,6792 @@
+//! Registry10x OCI Registry Service
+//!
+//! Implements the Docker Registry HTTP API V2 / OCI Distribution Specification
+//! with multi-tenant isolation, JWT authentication, and filesystem-backed storage.
+
+mod admission;
+mod audit;
+mod dashboard;
+mod pilot_http;
+mod promote;
+mod webhook;
+
+use std::collections::HashMap;
+use std::sync::Arc;
+use std::time::{Duration, Instant};
+
+use axum::{
+    Router,
+    extract::{DefaultBodyLimit, FromRequestParts, Path, Query, Request, State},
+    http::{HeaderMap, HeaderValue, StatusCode, header, request::Parts},
+    middleware::{self, Next},
+    response::{IntoResponse, Response},
+    routing::{get, head, patch, post, put},
+};
+use base64::Engine as _;
+use bytes::Bytes;
+use futures::TryStreamExt;
+use governor::{Quota, RateLimiter, clock::DefaultClock, state::keyed::DefaultKeyedStateStore};
+use jsonwebtoken::{DecodingKey, TokenData, Validation};
+use metrics::{counter, gauge, histogram};
+use metrics_exporter_prometheus::{PrometheusBuilder, PrometheusHandle};
+use object_store::aws::AmazonS3Builder;
+use object_store::azure::MicrosoftAzureBuilder;
+use object_store::gcp::GoogleCloudStorageBuilder;
+use object_store::{
+    ClientOptions, ObjectStore, RetryConfig as ObjectStoreRetryConfig, local::LocalFileSystem,
+    path::Path as StorePath,
+};
+use tokio::sync::RwLock;
+use tower_http::trace::TraceLayer;
+use tracing::{debug, error, info, instrument, warn};
+use uuid::Uuid;
+
+use registry10x_common::auth::TokenClaims;
+use registry10x_common::config::RegistryConfig;
+use registry10x_common::errors::RegistryError;
+use registry10x_common::models::{Action, Role};
+use registry10x_common::storage::{
+    blob_path, manifest_path, sha256_digest, tag_link_path, tags_prefix, upload_path,
+};
+
+use registry10x_mirror::service::MirrorConfig as MirrorServiceConfig;
+use registry10x_mirror::upstream::UpstreamConfig;
+use registry10x_mirror::{MirrorScope, MirrorService};
+use registry10x_replication::event::ReplicationEvent;
+use registry10x_replication::failover::FailoverManager;
+use registry10x_replication::region::{
+    MultiRegionConfig as ReplicationMultiRegionConfig, RegionConfig as ReplicationRegionConfig,
+    ReplicationMode, ReplicationPolicy,
+};
+use registry10x_replication::replicator::{ReplicationHandle, Replicator};
+use registry10x_resilience::{
+    ChunkedPutConfig, CircuitBreakerConfig, ResilientObjectStore, RetryPolicy, put_chunked,
+};
+use registry10x_scanner::{
+    ScannerRuntime, config::ScannerConfig, model::ScanJob, queue::Queue as ScanQueue,
+};
+
+/// Build an object store from a [`registry10x_common::config::StorageConfig`].
+fn build_object_store(
+    cfg: &registry10x_common::config::StorageConfig,
+) -> anyhow::Result<Arc<dyn ObjectStore>> {
+    let backend = cfg.backend.as_str();
+    let root = &cfg.root;
+    let raw: Arc<dyn ObjectStore> = match backend {
+        "filesystem" => {
+            std::fs::create_dir_all(root)?;
+            Arc::new(LocalFileSystem::new_with_prefix(root)?)
+        }
+        "s3" | "minio" => {
+            let mut builder = AmazonS3Builder::new()
+                .with_bucket_name(root)
+                .with_retry(ObjectStoreRetryConfig {
+                    max_retries: cfg.retry_max_retries,
+                    retry_timeout: Duration::from_secs(cfg.retry_timeout_secs),
+                    ..Default::default()
+                })
+                .with_client_options(
+                    ClientOptions::new()
+                        .with_connect_timeout(Duration::from_secs(cfg.connect_timeout_secs))
+                        .with_timeout(Duration::from_secs(cfg.request_timeout_secs)),
+                );
+            if let Some(ref endpoint) = cfg.endpoint {
+                builder = builder.with_endpoint(endpoint);
+                builder = builder.with_virtual_hosted_style_request(false);
+            }
+            if let Some(ref region) = cfg.region {
+                builder = builder.with_region(region);
+            }
+            if let Some(ref access_key) = cfg.access_key {
+                builder = builder.with_access_key_id(access_key);
+            }
+            if let Some(ref secret_key) = cfg.secret_key {
+                builder = builder.with_secret_access_key(secret_key);
+            }
+            if backend == "minio" {
+                builder = builder.with_virtual_hosted_style_request(false);
+                builder = builder.with_allow_http(true);
+            }
+            Arc::new(builder.build()?)
+        }
+        "gcs" => Arc::new(
+            GoogleCloudStorageBuilder::new()
+                .with_bucket_name(root)
+                .build()?,
+        ),
+        "azure" => {
+            let mut builder = MicrosoftAzureBuilder::new().with_container_name(root);
+            if let Some(ref access_key) = cfg.access_key {
+                builder = builder.with_account(access_key);
+            }
+            if let Some(ref secret_key) = cfg.secret_key {
+                builder = builder.with_access_key(secret_key);
+            }
+            Arc::new(builder.build()?)
+        }
+        other => anyhow::bail!(
+            "Unsupported storage backend: '{other}'. Supported: filesystem, s3, minio, gcs, azure"
+        ),
+    };
+    Ok(raw)
+}
+
+// ── Application State ────────────────────────────────────────────────────────
+
+type KeyedRateLimiter = RateLimiter<String, DefaultKeyedStateStore<String>, DefaultClock>;
+
+/// Shared application state available to all handlers.
+#[derive(Clone)]
+struct AppState {
+    store: Arc<dyn ObjectStore>,
+    config: Arc<RegistryConfig>,
+    decoding_key: Arc<DecodingKey>,
+    prom_handle: PrometheusHandle,
+    #[allow(dead_code)]
+    rate_limiters: Arc<RwLock<HashMap<String, Arc<KeyedRateLimiter>>>>,
+    default_rate_limiter: Arc<KeyedRateLimiter>,
+    /// Pull-through mirror service (optional).
+    mirror_service: Option<Arc<MirrorService>>,
+    /// Replication handle for enqueuing events (optional).
+    replication_handle: Option<ReplicationHandle>,
+    /// Failover manager for multi-region read failover (optional).
+    failover_manager: Option<Arc<FailoverManager>>,
+    /// Webhook notifier handle for external event notifications (optional).
+    webhook_handle: Option<webhook::WebhookHandle>,
+    /// Scanner job queue (optional). When present, successful manifest
+    /// pushes enqueue a background scan job. The concrete impl is either
+    /// in-process (`TokioQueue`) or durable (`PostgresQueue`) depending on
+    /// `REGISTRY10X_SCANNER__QUEUE_BACKEND`.
+    scanner_queue: Option<Arc<dyn ScanQueue>>,
+    /// Online-GC refcount writer. Always present; defaults to a
+    /// no-op when `[gc.online]` / `REGISTRY10X_GC__ONLINE` is disabled.
+    /// Bumped on manifest push, decremented on manifest delete.
+    gc_refcounter: Arc<dyn registry10x_gc::BlobRefCounter>,
+    /// Control handle for the continuous reaper. `None` when GC is
+    /// disabled or the reaper task isn't running.
+    gc_reaper_control: Option<Arc<registry10x_gc::ReaperControl>>,
+    /// Postgres pool used by GC's reconciler endpoint. `None` when GC
+    /// is disabled.
+    gc_pool: Option<sqlx::PgPool>,
+    /// TTL reaper handle (013 slice 2). `None` when ephemeral / TTL is
+    /// disabled. Lets admin endpoints flip pause/resume.
+    ttl_reaper_control: Option<Arc<registry10x_ephemeral::TtlReaperControl>>,
+    /// Usage / cost telemetry recorder. Always present; defaults to a
+    /// no-op when `[usage]` / `REGISTRY10X_USAGE__ENABLED` is disabled.
+    /// Called from blob/manifest hot paths to seed the rollup pipeline.
+    usage_recorder: Arc<dyn registry10x_cost::UsageRecorder>,
+    /// Typed-artifact validator registry. `None` when 016 is disabled
+    /// (the default); when populated, every put_manifest dispatches to
+    /// the matching ArtifactType impl and persists metadata.
+    artifact_registry: Option<Arc<registry10x_artifact_types::ArtifactRegistry>>,
+    /// Registry audit log for tracking who pushed/pulled what.
+    audit_log: Arc<audit::RegistryAuditLog>,
+    /// Optional JSONL export + Merkle checkpoint handles (005 A3).
+    audit_export: Option<Arc<AuditExportRuntime>>,
+    /// Scanner Redis result store for admission (002). None when scanner off.
+    scan_store: Option<Arc<dyn registry10x_scanner::EphemeralStore>>,
+    /// Admission decision cache (002).
+    admission_cache: Arc<admission::DecisionCache>,
+    /// Optional second object store for cross-backend promote (006).
+    promote_dest_store: Option<Arc<dyn ObjectStore>>,
+    /// Per-tenant LLM spend tracker for `/v2/_pilot/chat` (019).
+    pilot_budget: Option<Arc<registry10x_pilot::BudgetTracker>>,
+    /// Process start time for uptime tracking.
+    #[allow(dead_code)]
+    start_time: Instant,
+}
+
+/// Shared handles for ad-hoc and periodic audit export.
+struct AuditExportRuntime {
+    checkpoints: Arc<dyn registry10x_audit::CheckpointStore>,
+    dest: Arc<dyn registry10x_audit::ExportDestination>,
+    compress: bool,
+}
+
+// ── JWT Auth Extractor ───────────────────────────────────────────────────────
+
+/// Extracts and validates JWT bearer tokens from the Authorization header.
+/// Handlers that need authentication should include `AuthenticatedClaims` as a parameter.
+struct AuthenticatedClaims(TokenClaims);
+
+/// Helper trait to extract AppState from itself (used by the FromRequestParts impl).
+trait FromRef<T> {
+    fn from_ref(input: &T) -> Self;
+}
+
+impl FromRef<AppState> for AppState {
+    fn from_ref(input: &AppState) -> Self {
+        input.clone()
+    }
+}
+
+impl<S> FromRequestParts<S> for AuthenticatedClaims
+where
+    S: Send + Sync,
+    AppState: FromRef<S>,
+{
+    type Rejection = RegistryError;
+
+    async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
+        let app_state = AppState::from_ref(state);
+
+        let auth_header = parts
+            .headers
+            .get(header::AUTHORIZATION)
+            .and_then(|v| v.to_str().ok())
+            .ok_or_else(|| {
+                debug!("Request missing Authorization header");
+                RegistryError::Unauthorized
+            })?;
+
+        let token = auth_header.strip_prefix("Bearer ").ok_or_else(|| {
+            debug!("Authorization header is not Bearer token");
+            RegistryError::Unauthorized
+        })?;
+
+        let algorithm = if app_state.config.auth.signing_algorithm == "EdDSA" {
+            jsonwebtoken::Algorithm::EdDSA
+        } else {
+            jsonwebtoken::Algorithm::RS256
+        };
+        let mut validation = Validation::new(algorithm);
+        validation.set_audience(&[&app_state.config.auth.audience]);
+        validation.set_issuer(&[&app_state.config.auth.issuer]);
+        validation.validate_exp = true;
+
+        let token_data: TokenData<TokenClaims> =
+            jsonwebtoken::decode(token, &app_state.decoding_key, &validation).map_err(|e| {
+                let uri = parts.uri.to_string();
+                match e.kind() {
+                    jsonwebtoken::errors::ErrorKind::ExpiredSignature => {
+                        debug!(uri = %uri, "Token expired");
+                        RegistryError::TokenExpired
+                    }
+                    _ => {
+                        warn!(uri = %uri, error = %e, "JWT validation failed");
+                        RegistryError::TokenInvalid {
+                            reason: e.to_string(),
+                        }
+                    }
+                }
+            })?;
+
+        Ok(AuthenticatedClaims(token_data.claims))
+    }
+}
+
+// ── Auth Helpers ─────────────────────────────────────────────────────────────
+
+/// Check that the token's claims authorize the given action on the specified repository.
+fn authorize(
+    claims: &TokenClaims,
+    tenant: &str,
+    project: &str,
+    name: &str,
+    action: Action,
+) -> Result<(), RegistryError> {
+    let repo_path = format!("{tenant}/{project}/{name}");
+
+    // Check role-level permission first
+    if !claims.role.can(action) {
+        return Err(RegistryError::Forbidden {
+            reason: format!("role {:?} does not permit action {:?}", claims.role, action),
+        });
+    }
+
+    // Admin role bypasses scope checks
+    if claims.role == Role::Admin {
+        return Ok(());
+    }
+
+    // Check scopes: at least one scope must match the repository and include the action
+    let scope_ok = claims
+        .scopes
+        .iter()
+        .any(|s| (s.repository == repo_path || s.repository == "*") && s.actions.contains(&action));
+
+    if !scope_ok {
+        return Err(RegistryError::Forbidden {
+            reason: format!("token scopes do not grant {action:?} on {repo_path}"),
+        });
+    }
+
+    Ok(())
+}
+
+// ── Dashboard Auth Middleware ────────────────────────────────────────────────
+
+/// Basic auth middleware for dashboard and API routes.
+async fn dashboard_auth_middleware(
+    State(config): State<Arc<registry10x_common::config::DashboardAuthConfig>>,
+    request: Request,
+    next: Next,
+) -> Response {
+    if !config.enabled {
+        return next.run(request).await;
+    }
+
+    // Extract Basic auth credentials
+    let auth_header = request
+        .headers()
+        .get(header::AUTHORIZATION)
+        .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.strip_prefix("Basic "));
+
+    let authenticated = if let Some(encoded) = auth_header {
+        if let Ok(decoded) = base64::engine::general_purpose::STANDARD.decode(encoded.trim()) {
+            if let Ok(cred_str) = String::from_utf8(decoded) {
+                if let Some((user, pass)) = cred_str.split_once(':') {
+                    let pass_hash = {
+                        use sha2::{Digest, Sha256};
+                        hex::encode(Sha256::digest(pass.as_bytes()))
+                    };
+                    user == config.username
+                        && constant_time_compare(
+                            pass_hash.as_bytes(),
+                            config.password_hash.as_bytes(),
+                        )
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+    } else {
+        false
+    };
+
+    if authenticated {
+        next.run(request).await
+    } else {
+        let realm = format!("Basic realm=\"{}\"", config.realm);
+        let mut response = (StatusCode::UNAUTHORIZED, "Unauthorized").into_response();
+        if let Ok(val) = HeaderValue::from_str(&realm) {
+            response.headers_mut().insert("www-authenticate", val);
+        }
+        response
+    }
+}
+
+/// Constant-time byte comparison to avoid timing attacks.
+fn constant_time_compare(a: &[u8], b: &[u8]) -> bool {
+    if a.len() != b.len() {
+        return false;
+    }
+    let mut diff = 0u8;
+    for (x, y) in a.iter().zip(b.iter()) {
+        diff |= x ^ y;
+    }
+    diff == 0
+}
+
+// ── Request ID Middleware ────────────────────────────────────────────────────
+
+async fn request_id_middleware(mut request: Request, next: Next) -> Response {
+    let request_id = Uuid::new_v4().to_string();
+    if let Ok(val) = HeaderValue::from_str(&request_id) {
+        request.headers_mut().insert("x-request-id", val);
+    }
+
+    // Capture the Host header and scheme for dynamic Www-Authenticate realm
+    let host = request
+        .headers()
+        .get(header::HOST)
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("localhost:5000")
+        .to_string();
+    let scheme = request
+        .headers()
+        .get("x-forwarded-proto")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("https")
+        .to_string();
+
+    let mut response = next.run(request).await;
+    if let Ok(val) = HeaderValue::from_str(&request_id) {
+        response.headers_mut().insert("x-request-id", val);
+    }
+
+    // Override Www-Authenticate realm to use the request's own host/scheme.
+    // The registry proxies /auth/token to the auth service, so Docker always
+    // follows the realm back to the same host it connected to.
+    // Skip if the response already has a Basic auth challenge (e.g., dashboard auth).
+    if response.status() == StatusCode::UNAUTHORIZED {
+        let existing_auth = response
+            .headers()
+            .get("www-authenticate")
+            .and_then(|v| v.to_str().ok())
+            .unwrap_or("");
+        if !existing_auth.starts_with("Basic ") {
+            let service_name = std::env::var("REGISTRY10X_AUTH_SERVICE")
+                .unwrap_or_else(|_| "registry10x-registry".to_string());
+            let realm = if let Ok(ext_url) = std::env::var("REGISTRY10X_EXTERNAL_URL") {
+                format!("{}/auth/token", ext_url.trim_end_matches('/'))
+            } else {
+                format!("{scheme}://{host}/auth/token")
+            };
+            let header_val = format!("Bearer realm=\"{realm}\",service=\"{service_name}\"");
+            if let Ok(val) = HeaderValue::from_str(&header_val) {
+                response.headers_mut().insert("www-authenticate", val);
+            }
+        }
+    }
+    response
+}
+
+// ── Rate Limiting Middleware ─────────────────────────────────────────────────
+
+async fn rate_limit_middleware(
+    State(state): State<AppState>,
+    request: Request,
+    next: Next,
+) -> Result<Response, RegistryError> {
+    // Extract tenant from path if present, otherwise use IP-based limiting
+    let path = request.uri().path().to_string();
+    let key = {
+        let segments: Vec<&str> = path.split('/').filter(|s| !s.is_empty()).collect();
+        // /v2/{tenant}/{project}/{name}/...
+        if segments.len() >= 2 && segments[0] == "v2" && segments[1] != "_catalog" {
+            segments[1].to_string()
+        } else {
+            "anonymous".to_string()
+        }
+    };
+
+    if state.default_rate_limiter.check_key(&key).is_err() {
+        counter!("registry10x_rate_limit_rejected_total", "tenant" => key.clone()).increment(1);
+        return Err(RegistryError::RateLimitExceeded);
+    }
+
+    Ok(next.run(request).await)
+}
+
+// ── HTTP Metrics Middleware ──────────────────────────────────────────────────
+
+/// Map a raw URL path onto a low-cardinality route label so dashboards
+/// don't blow up. Anything inside `/v2/.../{thing}/...` collapses to a
+/// stable family identifier.
+fn classify_route(path: &str, method: &str) -> &'static str {
+    if path == "/v2/" {
+        return "v2_check";
+    }
+    if path == "/v2/_catalog" {
+        return "catalog";
+    }
+    if path == "/health" {
+        return "health";
+    }
+    if path == "/metrics" {
+        return "metrics";
+    }
+    if path.starts_with("/auth/token") {
+        return "auth_token_proxy";
+    }
+    if path.starts_with("/internal/replicate/manifest") {
+        return "internal_replicate_manifest";
+    }
+    if path.starts_with("/internal/replicate/blob") {
+        return "internal_replicate_blob";
+    }
+    if path.starts_with("/internal/replicate/delete") {
+        return "internal_replicate_delete";
+    }
+    if path.starts_with("/internal/replication/status") {
+        return "internal_replication_status";
+    }
+    if path.starts_with("/dashboard") {
+        return "dashboard";
+    }
+    if path.starts_with("/api/") {
+        return "dashboard_api";
+    }
+    if path.starts_with("/v2/") {
+        if path.contains("/manifests/") {
+            return match method {
+                "GET" => "manifest_get",
+                "HEAD" => "manifest_head",
+                "PUT" => "manifest_put",
+                "DELETE" => "manifest_delete",
+                _ => "manifest_other",
+            };
+        }
+        if path.contains("/blobs/uploads") {
+            return match method {
+                "POST" => "blob_upload_initiate",
+                "PATCH" => "blob_upload_chunk",
+                "PUT" => "blob_upload_complete",
+                _ => "blob_upload_other",
+            };
+        }
+        if path.contains("/blobs/") {
+            return match method {
+                "GET" => "blob_get",
+                "HEAD" => "blob_head",
+                _ => "blob_other",
+            };
+        }
+        if path.contains("/tags/list") {
+            return "tags_list";
+        }
+        if path.contains("/status/") {
+            return "image_status";
+        }
+        return "v2_other";
+    }
+    "other"
+}
+
+/// Status class — `2xx`, `3xx`, ... — used as a low-cardinality label.
+fn status_class(status: u16) -> &'static str {
+    match status / 100 {
+        1 => "1xx",
+        2 => "2xx",
+        3 => "3xx",
+        4 => "4xx",
+        5 => "5xx",
+        _ => "other",
+    }
+}
+
+async fn http_metrics_middleware(request: Request, next: Next) -> Response {
+    let started = Instant::now();
+    let method_owned = request.method().as_str().to_string();
+    let route = classify_route(request.uri().path(), &method_owned);
+
+    gauge!("registry10x_http_requests_in_flight", "route" => route).increment(1.0);
+
+    let response = next.run(request).await;
+
+    let elapsed = started.elapsed().as_secs_f64();
+    let status = response.status().as_u16();
+    let class = status_class(status);
+
+    gauge!("registry10x_http_requests_in_flight", "route" => route).decrement(1.0);
+    counter!("registry10x_http_requests_total",
+        "route" => route, "method" => method_owned.clone(), "status_class" => class)
+    .increment(1);
+    histogram!("registry10x_http_request_duration_seconds",
+        "route" => route, "method" => method_owned)
+    .record(elapsed);
+
+    response
+}
+
+// ── Storage error classification ────────────────────────────────────────────
+
+/// True when an object-store error means "the object is not present,"
+/// as opposed to a real IO/backend failure. This matters because the
+/// `get_blob`/`get_manifest` miss paths must only fall through to the
+/// mirror or return 404 when the object is truly absent — real IO
+/// failures must still surface as 5xx (R4).
+fn is_store_not_found(err: &object_store::Error) -> bool {
+    matches!(err, object_store::Error::NotFound { .. })
+}
+
+/// Translate the common-config `MirrorScopeConfig` (string-tagged,
+/// forward-compatible) into the strongly-typed `MirrorScope` the
+/// mirror service consumes. Unknown or missing modes fall back to
+/// `DefaultTenantOnly`, which is the safe default that keeps private
+/// projects out of the upstream path.
+fn mirror_scope_from_config(
+    cfg: Option<&registry10x_common::config::MirrorScopeConfig>,
+) -> MirrorScope {
+    let Some(cfg) = cfg else {
+        return MirrorScope::default();
+    };
+    let default_tenant = cfg
+        .default_tenant
+        .clone()
+        .unwrap_or_else(|| "_".to_string());
+    match cfg.mode.as_deref() {
+        Some("all") => MirrorScope::All,
+        Some("allowlist") => MirrorScope::Allowlist {
+            tenants: cfg.tenants.clone(),
+            projects: cfg.projects.clone(),
+        },
+        Some("denylist") => MirrorScope::Denylist {
+            tenants: cfg.tenants.clone(),
+            projects: cfg.projects.clone(),
+        },
+        Some("manifest_linked") | Some("manifest-linked") => MirrorScope::ManifestLinked,
+        Some("default_tenant_only") | Some("default-tenant-only") | None => {
+            MirrorScope::DefaultTenantOnly { default_tenant }
+        }
+        Some(other) => {
+            warn!(
+                mode = %other,
+                "Unknown mirror.scope.mode, falling back to default_tenant_only"
+            );
+            MirrorScope::DefaultTenantOnly { default_tenant }
+        }
+    }
+}
+
+// ── Path Parameters ──────────────────────────────────────────────────────────
+
+#[derive(Debug, serde::Deserialize)]
+struct RepoPath {
+    tenant: String,
+    project: String,
+    name: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct ManifestRef {
+    tenant: String,
+    project: String,
+    name: String,
+    reference: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct BlobRef {
+    tenant: String,
+    project: String,
+    name: String,
+    digest: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct UploadRef {
+    tenant: String,
+    project: String,
+    name: String,
+    uuid: String,
+}
+
+/// Default tenant used for 2-segment Docker image paths (namespace/repo).
+const DEFAULT_TENANT: &str = "_";
+
+/// Where the registry reaches the auth service when it proxies to it
+/// (`/auth/token` and the dashboard's user/group/robot-account pages).
+/// Kubernetes charts name the Service `<release>-auth`; set
+/// `REGISTRY10X_AUTH_SERVICE_URL` when that isn't `registry10x-auth`.
+const DEFAULT_AUTH_SERVICE_URL: &str = "http://registry10x-auth:5001";
+
+/// `REGISTRY10X_AUTH_SERVICE_URL` if set and non-empty, else the default.
+/// Deliberately not `server.auth_listen_addr`: that is the address the auth
+/// process binds (default `0.0.0.0:5001`), which from the registry process
+/// is itself, not the auth service.
+fn resolve_auth_service_url(from_env: Option<String>) -> String {
+    from_env
+        .map(|u| u.trim().trim_end_matches('/').to_string())
+        .filter(|u| !u.is_empty())
+        .unwrap_or_else(|| DEFAULT_AUTH_SERVICE_URL.to_string())
+}
+
+fn auth_service_url() -> String {
+    resolve_auth_service_url(std::env::var("REGISTRY10X_AUTH_SERVICE_URL").ok())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct RepoPath2 {
+    project: String,
+    name: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct ManifestRef2 {
+    project: String,
+    name: String,
+    reference: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct BlobRef2 {
+    project: String,
+    name: String,
+    digest: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct UploadRef2 {
+    project: String,
+    name: String,
+    uuid: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct DigestQuery {
+    digest: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct PaginationQuery {
+    n: Option<usize>,
+    last: Option<String>,
+}
+
+// ── Handlers ─────────────────────────────────────────────────────────────────
+
+/// GET /v2/ - API version check.
+///
+/// Per the OCI Distribution spec, this endpoint must return 401 Unauthorized
+/// with a `Www-Authenticate` challenge when the client has no credentials, so
+/// that clients like `docker` and `skopeo` know to fetch a bearer token before
+/// attempting push/pull. The request-id middleware rewrites the realm to the
+/// request's own host. Authenticated requests (any Authorization header) get 200.
+#[instrument(name = "v2_check", skip(headers))]
+async fn v2_check(headers: HeaderMap) -> Response {
+    if headers.get(header::AUTHORIZATION).is_some() {
+        return (
+            StatusCode::OK,
+            [("Docker-Distribution-API-Version", "registry/2.0")],
+            "{}",
+        )
+            .into_response();
+    }
+    (
+        StatusCode::UNAUTHORIZED,
+        [("Docker-Distribution-API-Version", "registry/2.0")],
+        "{\"errors\":[{\"code\":\"UNAUTHORIZED\",\"message\":\"authentication required\"}]}",
+    )
+        .into_response()
+}
+
+/// GET/POST /auth/token — Proxy to the auth service.
+/// When the registry is accessed directly (not via ingress), Docker follows the
+/// Www-Authenticate realm to the registry's own URL. This handler proxies the
+/// token request to the auth service so Docker can obtain tokens without needing
+/// to know the auth service's internal address.
+async fn proxy_auth_token(
+    State(_state): State<AppState>,
+    req: Request,
+) -> Result<Response, RegistryError> {
+    let auth_url = auth_service_url();
+    let uri = req.uri();
+    let query = uri.query().map(|q| format!("?{q}")).unwrap_or_default();
+    let target = format!("{auth_url}/auth/token{query}");
+
+    let client = reqwest::Client::new();
+    let mut proxy_req = client.request(req.method().clone(), &target);
+
+    // Forward auth headers (Basic auth from Docker)
+    if let Some(auth) = req.headers().get(header::AUTHORIZATION) {
+        proxy_req = proxy_req.header("Authorization", auth.to_str().unwrap_or(""));
+    }
+    if let Some(ct) = req.headers().get(header::CONTENT_TYPE) {
+        proxy_req = proxy_req.header("Content-Type", ct.to_str().unwrap_or(""));
+    }
+
+    // Forward body for POST requests
+    let body_bytes = axum::body::to_bytes(req.into_body(), 1024 * 64)
+        .await
+        .unwrap_or_default();
+    if !body_bytes.is_empty() {
+        proxy_req = proxy_req.body(body_bytes.to_vec());
+    }
+
+    let resp = proxy_req.send().await.map_err(|e| {
+        error!(target = %target, error = %e, "Failed to proxy auth token request");
+        RegistryError::Internal(format!("auth proxy error: {e}"))
+    })?;
+
+    let status =
+        StatusCode::from_u16(resp.status().as_u16()).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR);
+    let headers = resp.headers().clone();
+    let body = resp.bytes().await.unwrap_or_default();
+
+    let mut response = (status, body).into_response();
+    // Copy relevant headers from auth response
+    for (name, value) in headers.iter() {
+        if name == "content-type" || name == "cache-control" {
+            response.headers_mut().insert(name, value.clone());
+        }
+    }
+    Ok(response)
+}
+
+/// GET /health - Health check
+#[instrument(name = "health_check")]
+async fn health_check() -> impl IntoResponse {
+    (
+        StatusCode::OK,
+        axum::Json(serde_json::json!({"status": "healthy"})),
+    )
+}
+
+/// GET /metrics - Prometheus metrics
+async fn metrics_handler(State(state): State<AppState>) -> impl IntoResponse {
+    (StatusCode::OK, state.prom_handle.render())
+}
+
+/// Read a manifest or blob from another region after a local miss.
+///
+/// The primary is where pushes land, so a miss there is final: asking a
+/// replica would only return its 401 (the proxy sends no credentials) or its
+/// own pull-through from this primary. On a replica, only a 2xx answer counts;
+/// anything else, or no healthy region, is a miss and the caller returns
+/// ManifestUnknown/BlobUnknown instead of serving an error body as content.
+async fn failover_read(failover: Option<&FailoverManager>, path: &str) -> Option<Bytes> {
+    let failover = failover?;
+    if failover.is_local_primary() {
+        return None;
+    }
+    info!(path = %path, "Local miss, trying failover region");
+    match failover.proxy_get(path, None).await {
+        Ok(resp) if (200..300).contains(&resp.status) => Some(resp.body),
+        Ok(resp) => {
+            debug!(path = %path, region = %resp.source_region, status = resp.status,
+                "Failover region did not have it");
+            None
+        }
+        Err(e) => {
+            warn!(path = %path, error = %e, "Failover read failed");
+            None
+        }
+    }
+}
+
+/// HEAD /v2/{tenant}/{project}/{name}/manifests/{reference}
+#[instrument(name = "head_manifest", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, reference = %params.reference))]
+async fn head_manifest(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<ManifestRef>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    // HEAD only checks local storage — no mirror fallback.
+    // Docker will follow up with GET on miss, which has mirror fallback.
+    let path = resolve_manifest_path(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &params.reference,
+    )
+    .await?;
+    let store_path = StorePath::from(path);
+
+    // A missing manifest must return 404 (ManifestUnknown), not 500. With a
+    // lazy object store, `get()` can return Ok for an absent object and the
+    // not-found only surfaces at `.bytes()`; map not-found at BOTH stages to
+    // ManifestUnknown and keep genuine storage failures as 500. (docker push
+    // HEADs the new manifest digest before upload — a 500 here aborts it.)
+    let data = state
+        .store
+        .get(&store_path)
+        .await
+        .map_err(|e| {
+            if is_store_not_found(&e) {
+                RegistryError::ManifestUnknown {
+                    reference: params.reference.clone(),
+                }
+            } else {
+                RegistryError::Storage(e.to_string())
+            }
+        })?
+        .bytes()
+        .await
+        .map_err(|e| {
+            if is_store_not_found(&e) {
+                RegistryError::ManifestUnknown {
+                    reference: params.reference.clone(),
+                }
+            } else {
+                RegistryError::Storage(e.to_string())
+            }
+        })?;
+
+    let digest = sha256_digest(&data);
+    let media_type = detect_manifest_media_type(&data);
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&digest).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_str(&media_type).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_LENGTH,
+        HeaderValue::from_str(&data.len().to_string()).unwrap(),
+    );
+
+    Ok((StatusCode::OK, headers).into_response())
+}
+
+/// GET /v2/{tenant}/{project}/{name}/manifests/{reference}
+#[instrument(name = "get_manifest", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, reference = %params.reference))]
+async fn get_manifest(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<ManifestRef>,
+) -> Result<Response, RegistryError> {
+    let op_start = Instant::now();
+
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    counter!("registry_pull_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(1);
+    counter!("registry_manifest_pull_total").increment(1);
+
+    // Try local storage first, then upstream mirror, then failover.
+    // A tag whose manifest is gone (dangling link) is a local miss too.
+    let local = match resolve_manifest_path(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &params.reference,
+    )
+    .await
+    {
+        Ok(path) => match state.store.get(&StorePath::from(path)).await {
+            Ok(result) => Some(
+                result
+                    .bytes()
+                    .await
+                    .map_err(|e| RegistryError::Storage(e.to_string()))?,
+            ),
+            Err(e) if is_store_not_found(&e) => None,
+            Err(e) => return Err(RegistryError::Storage(e.to_string())),
+        },
+        Err(_) => None,
+    };
+    let data = match local {
+        Some(data) => data,
+        None => {
+            // Local miss — try pull-through mirror (upstream registries)
+            if let Some(ref mirror) = state.mirror_service {
+                info!(
+                    tenant = %params.tenant,
+                    project = %params.project,
+                    name = %params.name,
+                    reference = %params.reference,
+                    "Local manifest miss, trying upstream mirror"
+                );
+                match mirror
+                    .fetch_manifest(
+                        &params.tenant,
+                        &params.project,
+                        &params.name,
+                        &params.reference,
+                    )
+                    .await
+                {
+                    Ok(result) => result.data,
+                    Err(e) if e.is_not_found_equivalent() => {
+                        return Err(RegistryError::ManifestUnknown {
+                            reference: params.reference.clone(),
+                        });
+                    }
+                    Err(e) => {
+                        return Err(RegistryError::UpstreamError(e.to_string()));
+                    }
+                }
+            } else if let Some(body) = failover_read(
+                state.failover_manager.as_deref(),
+                &format!(
+                    "/v2/{}/{}/{}/manifests/{}",
+                    params.tenant, params.project, params.name, params.reference
+                ),
+            )
+            .await
+            {
+                body
+            } else {
+                return Err(RegistryError::ManifestUnknown {
+                    reference: params.reference.clone(),
+                });
+            }
+        }
+    };
+
+    let digest = sha256_digest(&data);
+    let media_type = detect_manifest_media_type(&data);
+
+    // Verify-on-pull (001 B4). Skip cosign `.sig` artifacts themselves.
+    if state.config.signing.enabled && !registry10x_signing::is_cosign_sig_tag(&params.reference) {
+        enforce_pull_signature_policy(
+            &state,
+            &claims.sub,
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &digest,
+        )
+        .await?;
+    }
+
+    // Admission gate (002). Skip cosign `.sig` tags.
+    if state.config.admission.enabled && !registry10x_signing::is_cosign_sig_tag(&params.reference) {
+        enforce_admission(
+            &state,
+            &claims,
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &digest,
+        )
+        .await?;
+    }
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&digest).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_str(&media_type).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_LENGTH,
+        HeaderValue::from_str(&data.len().to_string()).unwrap(),
+    );
+    headers.insert(
+        "Docker-Distribution-API-Version",
+        HeaderValue::from_static("registry/2.0"),
+    );
+
+    let duration = op_start.elapsed();
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.pull")
+        .record(duration.as_secs_f64());
+    let _ = state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "manifest.pull".into(),
+            subject: claims.sub.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: params.reference.clone(),
+            digest: digest.clone(),
+            size_bytes: data.len() as u64,
+            status_code: 200,
+            duration_ms: duration.as_millis() as u64,
+        })
+        .await;
+
+    record_usage(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        registry10x_cost::UsageOp::ManifestGet,
+        data.len() as i64,
+        registry10x_cost::UsageSrc::Origin,
+        200,
+        Some(claims.sub.clone()),
+    );
+
+    Ok((StatusCode::OK, headers, data).into_response())
+}
+
+/// PUT /v2/{tenant}/{project}/{name}/manifests/{reference}
+#[instrument(name = "put_manifest", skip(state, claims, req_headers, body), fields(tenant = %params.tenant, project = %params.project, name = %params.name, reference = %params.reference))]
+async fn put_manifest(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<ManifestRef>,
+    req_headers: HeaderMap,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let op_start = Instant::now();
+
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    counter!("registry_push_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(1);
+    counter!("registry_manifest_push_total").increment(1);
+    counter!("registry_push_bytes_total").increment(body.len() as u64);
+
+    // Validate JSON
+    serde_json::from_slice::<serde_json::Value>(&body).map_err(|e| {
+        RegistryError::ManifestInvalid {
+            reason: e.to_string(),
+        }
+    })?;
+
+    let digest = sha256_digest(&body);
+
+    // Store manifest by digest
+    let digest_path = manifest_path(&params.tenant, &params.project, &params.name, &digest);
+    let digest_store_path = StorePath::from(digest_path);
+    state
+        .store
+        .put(&digest_store_path, body.clone().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // If reference is a tag (not a digest), create a tag link
+    let mut response_headers_extra: Vec<(String, String)> = Vec::new();
+    if !params.reference.starts_with("sha256:") {
+        let tag_p = tag_link_path(
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &params.reference,
+        );
+        let tag_store_path = StorePath::from(tag_p);
+        state
+            .store
+            .put(&tag_store_path, Bytes::from(digest.clone()).into())
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+        // 013 TTL header — record an `expires_at` on the tag row
+        // when X-Registry10x-TTL is set. Mirrors the design's project-
+        // default-TTL story: header wins; fallback comes from the
+        // ephemeral_repos table (slice 2 will read it). Failures
+        // never fail the push — TTL is a soft contract.
+        let ttl_header = req_headers
+            .get("x-registry10x-ttl")
+            .and_then(|v| v.to_str().ok());
+        if let (Some(raw), Some(pool)) = (ttl_header, state.gc_pool.as_ref()) {
+            let now = chrono::Utc::now();
+            match registry10x_ephemeral::parse_ttl_header(now, raw) {
+                Ok(spec) => {
+                    let expires_at = spec.expires_at;
+                    let r = sqlx::query(
+                        "INSERT INTO tags
+                             (tenant, project, repository, tag, digest,
+                              pushed_by, expires_at, ephemeral)
+                         VALUES ($1, $2, $3, $4, $5, $6, $7, FALSE)
+                         ON CONFLICT (tenant, project, repository, tag)
+                         DO UPDATE SET digest = EXCLUDED.digest,
+                                       pushed_at = NOW(),
+                                       expires_at = EXCLUDED.expires_at",
+                    )
+                    .bind(&params.tenant)
+                    .bind(&params.project)
+                    .bind(&params.name)
+                    .bind(&params.reference)
+                    .bind(&digest)
+                    .bind(&claims.sub)
+                    .bind(expires_at)
+                    .execute(pool)
+                    .await;
+                    if let Err(e) = r {
+                        warn!(error = %e, tag = %params.reference, "ttl tag upsert failed");
+                    } else {
+                        response_headers_extra
+                            .push(("X-Registry10x-TTL-Expires-At".into(), expires_at.to_rfc3339()));
+                    }
+                }
+                Err(e) => {
+                    warn!(error = %e, raw = %raw, "ignoring invalid X-Registry10x-TTL");
+                }
+            }
+        }
+    }
+
+    // Online-GC refcount bookkeeping (009). When the refcounter is the
+    // no-op impl the cost is a vtable call and an empty Vec build —
+    // negligible. When it is the Postgres impl this is one round-trip
+    // worth of UPSERTs; failures are logged but do NOT fail the push,
+    // because the reconciler (slice 3) corrects drift.
+    let parsed_config_digest = registry10x_gc::extract_config_digest(&body);
+    match registry10x_gc::extract_blob_digests(&body) {
+        Ok(blobs) => {
+            if let Err(e) = state
+                .gc_refcounter
+                .add_refs(
+                    &params.tenant,
+                    &params.project,
+                    &params.name,
+                    &digest,
+                    &blobs,
+                )
+                .await
+            {
+                warn!(error = %e, digest = %digest, "gc refcount add_refs failed");
+            }
+        }
+        Err(e) => {
+            // The manifest was already JSON-validated above; this branch
+            // is only hit if extraction encounters an unexpected shape.
+            debug!(error = %e, digest = %digest, "gc refcount skipped: manifest parse");
+        }
+    }
+
+    // 016 typed-artifact validation — when the registry recognises
+    // the manifest's media type as Helm/WASM/model/etc., run the
+    // matching validator and persist metadata into artifact_meta.
+    // Failures are logged but do NOT fail the push (slice 1 is
+    // advisory; strict-mode rejection lands in slice 2 with project
+    // policy plumbing).
+    if let (Some(reg), Some(pool)) = (state.artifact_registry.clone(), state.gc_pool.clone()) {
+        let media_type = detect_manifest_media_type(&body);
+        let body_clone = body.clone();
+        let digest_clone = digest.clone();
+        tokio::spawn(async move {
+            match reg.validate(&media_type, &body_clone).await {
+                Ok(Some(meta)) => {
+                    let store = registry10x_artifact_types::PgArtifactStore::new(pool);
+                    use registry10x_artifact_types::ArtifactStore as _;
+                    if let Err(e) = store.upsert(&digest_clone, &meta, None).await {
+                        warn!(error = %e, digest = %digest_clone, "artifact_meta upsert failed");
+                    }
+                }
+                Ok(None) => {
+                    debug!(digest = %digest_clone, "no artifact validator matched");
+                }
+                Err(e) => {
+                    debug!(error = %e, digest = %digest_clone, "artifact validator rejected");
+                    // Slice 1: advisory only. Slice 2 will persist the
+                    // failure with validation_msg and (if strict
+                    // mode is on) reject the push.
+                }
+            }
+        });
+    }
+
+    // 018 lineage capture — fetch the image config blob async and
+    // record any base-image hint into image_lineage. Fire-and-forget;
+    // failures are logged but never fail the push.
+    if let (Some(config_digest), Some(pool)) = (parsed_config_digest, state.gc_pool.clone()) {
+        let store = state.store.clone();
+        let tenant = params.tenant.clone();
+        let project = params.project.clone();
+        let repo = params.name.clone();
+        let child_digest = digest.clone();
+        tokio::spawn(async move {
+            let cfg_path = blob_path(&tenant, &project, &repo, &config_digest);
+            let cfg_store = StorePath::from(cfg_path);
+            let cfg_bytes = match store.get(&cfg_store).await {
+                Ok(g) => match g.bytes().await {
+                    Ok(b) => b,
+                    Err(e) => {
+                        debug!(error = %e, "lineage: image config read failed");
+                        return;
+                    }
+                },
+                Err(e) => {
+                    // Some manifests reference configs in other repos
+                    // (e.g. multi-arch indexes) — that's expected; skip.
+                    debug!(error = %e, "lineage: image config not local");
+                    return;
+                }
+            };
+            let Some(hint) = registry10x_rebuild::detect_lineage(&cfg_bytes) else {
+                return;
+            };
+            let r = sqlx::query(
+                "INSERT INTO image_lineage
+                     (child_digest, parent_digest, confidence)
+                 VALUES ($1, $2, $3)
+                 ON CONFLICT (child_digest, parent_digest) DO NOTHING",
+            )
+            .bind(&child_digest)
+            .bind(&hint.base_ref)
+            .bind(hint.confidence.as_str())
+            .execute(&pool)
+            .await;
+            match r {
+                Ok(_) => debug!(
+                    base = %hint.base_ref,
+                    confidence = %hint.confidence.as_str(),
+                    "lineage recorded"
+                ),
+                Err(e) => warn!(error = %e, "image_lineage insert failed"),
+            }
+        });
+    }
+
+    // Emit replication event if configured
+    if let Some(ref repl) = state.replication_handle {
+        let event = ReplicationEvent::manifest_push(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            params.reference.clone(),
+            digest.clone(),
+            body.len() as u64,
+            repl.local_region().to_string(),
+        );
+        repl.enqueue(event).await;
+    }
+
+    // Notify webhook endpoints
+    if let Some(ref wh) = state.webhook_handle {
+        let source_region = state
+            .replication_handle
+            .as_ref()
+            .map(|r| r.local_region().to_string());
+        wh.notify(webhook::WebhookPayload::manifest_push(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            params.reference.clone(),
+            digest.clone(),
+            body.len() as u64,
+            source_region,
+        ))
+        .await;
+    }
+
+    // Enqueue a background vulnerability scan (fire-and-forget). The
+    // enqueue call is spawned so an INSERT-backed queue (PostgresQueue)
+    // never blocks the push path; scans are best-effort and can be
+    // re-triggered via POST /v2/scan.
+    //
+    // Note on dedup: digest dedup is handled in the scanner worker, not
+    // here. The worker re-emits cached findings under each push's identity
+    // so every (tenant, project, repo, reference) gets its own row in
+    // the `scans` audit table — preserving "every push got scanned"
+    // semantics — while the heavy SBOM/vuln pipeline only runs once per
+    // unique manifest digest.
+    if let Some(ref q) = state.scanner_queue {
+        let job = ScanJob {
+            id: Uuid::new_v4(),
+            digest: digest.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: params.reference.clone(),
+            enqueued_at: chrono::Utc::now(),
+        };
+        let q = q.clone();
+        let digest_copy = digest.clone();
+        tokio::spawn(async move {
+            match q.enqueue(job).await {
+                Ok(()) => debug!(digest = %digest_copy, "scan job enqueued"),
+                Err(e) => warn!(digest = %digest_copy, error = %e, "scan enqueue failed"),
+            }
+        });
+    }
+
+    let location = format!(
+        "/v2/{}/{}/{}/manifests/{}",
+        params.tenant, params.project, params.name, digest
+    );
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&digest).unwrap(),
+    );
+    headers.insert(header::LOCATION, HeaderValue::from_str(&location).unwrap());
+    headers.insert(
+        "Docker-Distribution-API-Version",
+        HeaderValue::from_static("registry/2.0"),
+    );
+    for (name, value) in &response_headers_extra {
+        if let (Ok(hn), Ok(hv)) = (
+            axum::http::HeaderName::from_bytes(name.as_bytes()),
+            HeaderValue::from_str(value),
+        ) {
+            headers.insert(hn, hv);
+        }
+    }
+
+    let duration = op_start.elapsed();
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.push")
+        .record(duration.as_secs_f64());
+    state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "manifest.push".into(),
+            subject: claims.sub.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: params.reference.clone(),
+            digest: digest.clone(),
+            size_bytes: body.len() as u64,
+            status_code: 201,
+            duration_ms: duration.as_millis() as u64,
+        })
+        .await
+        .map_err(|e| RegistryError::AuditUnavailable(e.0))?;
+
+    record_usage(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        registry10x_cost::UsageOp::ManifestPut,
+        body.len() as i64,
+        registry10x_cost::UsageSrc::Origin,
+        201,
+        Some(claims.sub.clone()),
+    );
+
+    // Cosign `.sig` tag push (001 B3): register signature metadata +
+    // referrer + Sign audit without failing the OCI put.
+    if state.config.signing.enabled
+        && let Some(subject) = registry10x_signing::subject_digest_from_sig_tag(&params.reference)
+    {
+        let (signer_identity, signature_type, media_type) = if let Ok(art) =
+            serde_json::from_slice::<registry10x_signing::SignatureArtifact>(&body)
+        {
+            (
+                Some(art.signer_identity),
+                art.signature_type,
+                art.media_type,
+            )
+        } else if let Ok(env) = serde_json::from_slice::<registry10x_signing::CosignEnvelope>(&body) {
+            (
+                Some(env.key_ref),
+                "cosign-key".to_string(),
+                registry10x_signing::MEDIA_TYPE_COSIGN_ENVELOPE_V1.to_string(),
+            )
+        } else {
+            (
+                None,
+                "cosign-key".to_string(),
+                detect_manifest_media_type(&body),
+            )
+        };
+        if let Err(e) = register_signature_metadata(
+            &state,
+            &claims.sub,
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &subject,
+            &digest,
+            body.len() as i64,
+            signer_identity,
+            &signature_type,
+            &media_type,
+            &params.reference,
+        )
+        .await
+        {
+            warn!(error = %e, tag = %params.reference, "signature metadata register failed");
+        }
+    }
+
+    Ok((StatusCode::CREATED, headers).into_response())
+}
+
+/// DELETE /v2/{tenant}/{project}/{name}/manifests/{reference}
+#[instrument(name = "delete_manifest", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, reference = %params.reference))]
+async fn delete_manifest(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<ManifestRef>,
+) -> Result<Response, RegistryError> {
+    let op_start = Instant::now();
+
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Delete,
+    )?;
+
+    counter!("registry_delete_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(1);
+
+    // OCI distribution semantics: DELETE by tag removes only that tag and
+    // leaves the manifest (other tags may still point at it); DELETE by
+    // digest removes the manifest and every tag pointing at it, so no tag is
+    // left dangling. Deleting the manifest on a tag delete used to strand the
+    // repo's other tags on it, and a digest delete left all its tags behind:
+    // GET on them then failed with 500 and DELETE by tag with 404.
+    let (manifest_digest, is_tag) = match params.reference.strip_prefix("sha256-") {
+        Some(hex) => (format!("sha256:{hex}"), false),
+        None if params.reference.starts_with("sha256:") => (params.reference.clone(), false),
+        None => {
+            let digest = read_tag_link(
+                &state.store,
+                &params.tenant,
+                &params.project,
+                &params.name,
+                &params.reference,
+            )
+            .await?
+            .ok_or_else(|| RegistryError::ManifestUnknown {
+                reference: params.reference.clone(),
+            })?;
+            (digest, true)
+        }
+    };
+
+    if is_tag {
+        let tag_p = tag_link_path(
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &params.reference,
+        );
+        state
+            .store
+            .delete(&StorePath::from(tag_p))
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?;
+    } else {
+        let manifest_p = manifest_path(
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &manifest_digest,
+        );
+        let manifest_existed = match state.store.delete(&StorePath::from(manifest_p)).await {
+            Ok(()) => true,
+            Err(e) if is_store_not_found(&e) => false,
+            Err(e) => return Err(RegistryError::Storage(e.to_string())),
+        };
+        let removed_tags = delete_tags_for_digest(
+            &state.store,
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &manifest_digest,
+        )
+        .await?;
+        if !manifest_existed && removed_tags.is_empty() {
+            return Err(RegistryError::ManifestUnknown {
+                reference: params.reference.clone(),
+            });
+        }
+
+        // Online-GC refcount decrement (009). Failures don't fail the
+        // delete — drift is corrected by the reconciler in slice 3.
+        if let Err(e) = state
+            .gc_refcounter
+            .remove_refs(&params.tenant, &manifest_digest)
+            .await
+        {
+            warn!(error = %e, digest = %manifest_digest, "gc refcount remove_refs failed");
+        }
+    }
+
+    // Emit replication event if configured
+    if let Some(ref repl) = state.replication_handle {
+        let event = ReplicationEvent::manifest_delete(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            if is_tag {
+                params.reference.clone()
+            } else {
+                manifest_digest.clone()
+            },
+            manifest_digest.clone(),
+            repl.local_region().to_string(),
+        );
+        repl.enqueue(event).await;
+    }
+
+    // Notify webhook endpoints
+    if let Some(ref wh) = state.webhook_handle {
+        let source_region = state
+            .replication_handle
+            .as_ref()
+            .map(|r| r.local_region().to_string());
+        wh.notify(webhook::WebhookPayload::manifest_delete(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            params.reference.clone(),
+            params.reference.clone(),
+            source_region,
+        ))
+        .await;
+    }
+
+    let duration = op_start.elapsed();
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.delete")
+        .record(duration.as_secs_f64());
+    state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "manifest.delete".into(),
+            subject: claims.sub.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: params.reference.clone(),
+            digest: params.reference.clone(),
+            size_bytes: 0,
+            status_code: 202,
+            duration_ms: duration.as_millis() as u64,
+        })
+        .await
+        .map_err(|e| RegistryError::AuditUnavailable(e.0))?;
+
+    record_usage(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        registry10x_cost::UsageOp::Delete,
+        0,
+        registry10x_cost::UsageSrc::Origin,
+        202,
+        Some(claims.sub.clone()),
+    );
+
+    Ok(StatusCode::ACCEPTED.into_response())
+}
+
+/// HEAD /v2/{tenant}/{project}/{name}/blobs/{digest}
+#[instrument(name = "head_blob", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, digest = %params.digest))]
+async fn head_blob(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<BlobRef>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    let path = blob_path(
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &params.digest,
+    );
+    let store_path = StorePath::from(path);
+
+    // HEAD only checks local storage — no mirror fallback.
+    // Docker will follow up with GET on miss, which has mirror fallback.
+    let meta = state
+        .store
+        .head(&store_path)
+        .await
+        .map_err(|_| RegistryError::BlobUnknown {
+            digest: params.digest.clone(),
+        })?;
+    let size = meta.size;
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&params.digest).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_LENGTH,
+        HeaderValue::from_str(&size.to_string()).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/octet-stream"),
+    );
+
+    Ok((StatusCode::OK, headers).into_response())
+}
+
+/// GET /v2/{tenant}/{project}/{name}/blobs/{digest}
+#[instrument(name = "get_blob", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, digest = %params.digest))]
+async fn get_blob(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<BlobRef>,
+) -> Result<Response, RegistryError> {
+    let op_start = Instant::now();
+
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    counter!("registry_pull_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(1);
+    counter!("registry_blob_pull_total").increment(1);
+
+    let path = blob_path(
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &params.digest,
+    );
+    let store_path = StorePath::from(path);
+
+    let data = match state.store.get(&store_path).await {
+        Ok(result) => result
+            .bytes()
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?,
+        Err(store_err) => {
+            // Distinguish a true "blob not present" from a genuine
+            // backend failure. Only the former should fall through to
+            // the mirror path or return 404; a real IO error must
+            // still surface as 5xx (R4).
+            if !is_store_not_found(&store_err) {
+                return Err(RegistryError::Storage(store_err.to_string()));
+            }
+
+            if let Some(ref mirror) = state.mirror_service {
+                // R3: scope check happens inside fetch_blob, which
+                // returns MirrorError::NotInScope for private projects
+                // without ever touching an upstream client.
+                debug!(
+                    tenant = %params.tenant,
+                    digest = %params.digest,
+                    "Local blob miss, trying upstream mirror"
+                );
+                match mirror
+                    .fetch_blob(
+                        &params.tenant,
+                        &params.project,
+                        &params.name,
+                        &params.digest,
+                    )
+                    .await
+                {
+                    Ok(result) => result.data,
+                    Err(e) if e.is_not_found_equivalent() => {
+                        // R1/R2: domain answer is "not found," regardless
+                        // of whether the mirror layer said so with a clean
+                        // 404, a breaker trip, or an upstream 5xx.
+                        return Err(RegistryError::BlobUnknown {
+                            digest: params.digest.clone(),
+                        });
+                    }
+                    Err(e) => {
+                        // R4: genuine infrastructure failure (e.g. auth
+                        // config broken). Keep the 5xx path.
+                        return Err(RegistryError::UpstreamError(e.to_string()));
+                    }
+                }
+            } else if let Some(body) = failover_read(
+                state.failover_manager.as_deref(),
+                &format!(
+                    "/v2/{}/{}/{}/blobs/{}",
+                    params.tenant, params.project, params.name, params.digest
+                ),
+            )
+            .await
+            {
+                body
+            } else {
+                return Err(RegistryError::BlobUnknown {
+                    digest: params.digest.clone(),
+                });
+            }
+        }
+    };
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&params.digest).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_LENGTH,
+        HeaderValue::from_str(&data.len().to_string()).unwrap(),
+    );
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/octet-stream"),
+    );
+
+    let duration = op_start.elapsed();
+    histogram!("registry_request_duration_seconds", "operation" => "blob.pull")
+        .record(duration.as_secs_f64());
+    counter!("registry_pull_bytes_total").increment(data.len() as u64);
+    let _ = state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "blob.pull".into(),
+            subject: claims.sub.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: String::new(),
+            digest: params.digest.clone(),
+            size_bytes: data.len() as u64,
+            status_code: 200,
+            duration_ms: duration.as_millis() as u64,
+        })
+        .await;
+
+    record_usage(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        registry10x_cost::UsageOp::Pull,
+        data.len() as i64,
+        registry10x_cost::UsageSrc::Origin,
+        200,
+        Some(claims.sub.clone()),
+    );
+
+    Ok((StatusCode::OK, headers, data).into_response())
+}
+
+/// Multipart tuning for blob writes, derived from `[storage]` config.
+///
+/// Blob payloads are the only writes large enough to outlast a single
+/// request's retry deadline; manifests and tags stay well under the
+/// threshold and so keep taking the plain `put` path.
+fn chunked_put_config(config: &RegistryConfig) -> ChunkedPutConfig {
+    const MB: usize = 1024 * 1024;
+    ChunkedPutConfig {
+        threshold: (config.storage.multipart_threshold_mb as usize).saturating_mul(MB),
+        part_size: (config.storage.multipart_part_size_mb as usize).saturating_mul(MB),
+        concurrency: config.storage.multipart_concurrency,
+    }
+}
+
+/// POST /v2/{tenant}/{project}/{name}/blobs/uploads/
+#[instrument(name = "initiate_upload", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name))]
+async fn initiate_blob_upload(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<RepoPath>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    let upload_id = Uuid::new_v4().to_string();
+
+    // Create an empty upload placeholder
+    let path = upload_path(&params.tenant, &params.project, &params.name, &upload_id);
+    let store_path = StorePath::from(path);
+    state
+        .store
+        .put(&store_path, Bytes::new().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    let location = format!(
+        "/v2/{}/{}/{}/blobs/uploads/{}",
+        params.tenant, params.project, params.name, upload_id
+    );
+
+    let mut headers = HeaderMap::new();
+    headers.insert(header::LOCATION, HeaderValue::from_str(&location).unwrap());
+    headers.insert(
+        "Docker-Upload-UUID",
+        HeaderValue::from_str(&upload_id).unwrap(),
+    );
+    headers.insert(header::RANGE, HeaderValue::from_static("0-0"));
+    headers.insert(header::CONTENT_LENGTH, HeaderValue::from_static("0"));
+    headers.insert(
+        "Docker-Distribution-API-Version",
+        HeaderValue::from_static("registry/2.0"),
+    );
+
+    Ok((StatusCode::ACCEPTED, headers).into_response())
+}
+
+/// PATCH /v2/{tenant}/{project}/{name}/blobs/uploads/{uuid}
+#[instrument(name = "upload_chunk", skip(state, claims, body), fields(tenant = %params.tenant, project = %params.project, name = %params.name, uuid = %params.uuid))]
+async fn upload_blob_chunk(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<UploadRef>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    let path = upload_path(&params.tenant, &params.project, &params.name, &params.uuid);
+    let store_path = StorePath::from(path);
+
+    // Read existing upload data and append the new chunk
+    let existing = match state.store.get(&store_path).await {
+        Ok(result) => result
+            .bytes()
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?,
+        Err(_) => return Err(RegistryError::BlobUploadInvalid),
+    };
+
+    let mut combined = existing.to_vec();
+    combined.extend_from_slice(&body);
+    let end = combined.len();
+
+    counter!("registry_blob_upload_bytes_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(body.len() as u64);
+
+    put_chunked(
+        state.store.as_ref(),
+        &store_path,
+        Bytes::from(combined),
+        chunked_put_config(&state.config),
+    )
+    .await
+    .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    let location = format!(
+        "/v2/{}/{}/{}/blobs/uploads/{}",
+        params.tenant, params.project, params.name, params.uuid
+    );
+
+    let range_val = format!("0-{}", end.saturating_sub(1));
+    let mut headers = HeaderMap::new();
+    headers.insert(header::LOCATION, HeaderValue::from_str(&location).unwrap());
+    headers.insert(
+        "Docker-Upload-UUID",
+        HeaderValue::from_str(&params.uuid).unwrap(),
+    );
+    headers.insert(header::RANGE, HeaderValue::from_str(&range_val).unwrap());
+    headers.insert(header::CONTENT_LENGTH, HeaderValue::from_static("0"));
+    headers.insert(
+        "Docker-Distribution-API-Version",
+        HeaderValue::from_static("registry/2.0"),
+    );
+
+    Ok((StatusCode::ACCEPTED, headers).into_response())
+}
+
+/// PUT /v2/{tenant}/{project}/{name}/blobs/uploads/{uuid}?digest=sha256:...
+#[instrument(name = "complete_upload", skip(state, claims, body), fields(tenant = %params.tenant, project = %params.project, name = %params.name, uuid = %params.uuid))]
+async fn complete_blob_upload(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<UploadRef>,
+    Query(query): Query<DigestQuery>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let op_start = Instant::now();
+
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    let expected_digest = query.digest.ok_or(RegistryError::DigestInvalid {
+        expected: "sha256:...".to_string(),
+        actual: "<missing>".to_string(),
+    })?;
+
+    let up_path = upload_path(&params.tenant, &params.project, &params.name, &params.uuid);
+    let up_store_path = StorePath::from(up_path);
+
+    // Read the accumulated upload data
+    let existing = match state.store.get(&up_store_path).await {
+        Ok(result) => result
+            .bytes()
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?,
+        Err(_) => return Err(RegistryError::BlobUploadInvalid),
+    };
+
+    // Append any final chunk sent with the PUT
+    let mut final_data = existing.to_vec();
+    if !body.is_empty() {
+        final_data.extend_from_slice(&body);
+    }
+
+    counter!("registry_blob_upload_bytes_total",
+        "tenant" => params.tenant.clone(),
+        "project" => params.project.clone()
+    )
+    .increment(body.len() as u64);
+
+    // Verify digest
+    let actual_digest = sha256_digest(&final_data);
+    if actual_digest != expected_digest {
+        return Err(RegistryError::DigestInvalid {
+            expected: expected_digest,
+            actual: actual_digest,
+        });
+    }
+
+    // Store the final blob
+    let final_data_len = final_data.len() as u64;
+    let final_blob_path = blob_path(
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &expected_digest,
+    );
+    let final_store_path = StorePath::from(final_blob_path);
+    put_chunked(
+        state.store.as_ref(),
+        &final_store_path,
+        Bytes::from(final_data),
+        chunked_put_config(&state.config),
+    )
+    .await
+    .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // Clean up the upload session
+    let _ = state.store.delete(&up_store_path).await;
+
+    // Emit replication event if configured
+    if let Some(ref repl) = state.replication_handle {
+        let event = ReplicationEvent::blob_push(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            expected_digest.clone(),
+            final_data_len,
+            repl.local_region().to_string(),
+        );
+        repl.enqueue(event).await;
+    }
+
+    // Notify webhook endpoints
+    if let Some(ref wh) = state.webhook_handle {
+        let source_region = state
+            .replication_handle
+            .as_ref()
+            .map(|r| r.local_region().to_string());
+        wh.notify(webhook::WebhookPayload::blob_push(
+            params.tenant.clone(),
+            params.project.clone(),
+            params.name.clone(),
+            expected_digest.clone(),
+            final_data_len,
+            source_region,
+        ))
+        .await;
+    }
+
+    let location = format!(
+        "/v2/{}/{}/{}/blobs/{}",
+        params.tenant, params.project, params.name, expected_digest
+    );
+
+    let mut headers = HeaderMap::new();
+    headers.insert(header::LOCATION, HeaderValue::from_str(&location).unwrap());
+    headers.insert(
+        "Docker-Content-Digest",
+        HeaderValue::from_str(&expected_digest).unwrap(),
+    );
+    headers.insert(header::CONTENT_LENGTH, HeaderValue::from_static("0"));
+    headers.insert(
+        "Docker-Distribution-API-Version",
+        HeaderValue::from_static("registry/2.0"),
+    );
+
+    let duration = op_start.elapsed();
+    histogram!("registry_request_duration_seconds", "operation" => "blob.push")
+        .record(duration.as_secs_f64());
+    state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "blob.push".into(),
+            subject: claims.sub.clone(),
+            tenant: params.tenant.clone(),
+            project: params.project.clone(),
+            repository: params.name.clone(),
+            reference: String::new(),
+            digest: expected_digest.clone(),
+            size_bytes: final_data_len,
+            status_code: 201,
+            duration_ms: duration.as_millis() as u64,
+        })
+        .await
+        .map_err(|e| RegistryError::AuditUnavailable(e.0))?;
+
+    record_usage(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        registry10x_cost::UsageOp::Push,
+        final_data_len as i64,
+        registry10x_cost::UsageSrc::Origin,
+        201,
+        Some(claims.sub.clone()),
+    );
+
+    // 010 lazy-pull: enqueue an indexer job for this blob. The
+    // worker (when present) will rewrite/extract a TOC and register
+    // it as a referrer of the layer. Fire-and-forget; missing GC
+    // pool or disabled feature both fall through silently.
+    let lazy_enabled = std::env::var("REGISTRY10X_LAZY__ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    if let Some(pool) = state.gc_pool.clone().filter(|_| lazy_enabled) {
+        let format = std::env::var("REGISTRY10X_LAZY__FORMAT").unwrap_or_else(|_| "estargz".into());
+        let layer_digest = expected_digest.clone();
+        let tenant = params.tenant.clone();
+        let project = params.project.clone();
+        let repo = params.name.clone();
+        tokio::spawn(async move {
+            use registry10x_lazy::LazyJobStore as _;
+            let store = registry10x_lazy::PgLazyJobStore::new(pool);
+            if let Err(e) = store
+                .enqueue(
+                    &layer_digest,
+                    &format,
+                    Some(&tenant),
+                    Some(&project),
+                    Some(&repo),
+                )
+                .await
+            {
+                debug!(error = %e, %layer_digest, "lazy enqueue failed");
+            }
+        });
+    }
+
+    Ok((StatusCode::CREATED, headers).into_response())
+}
+
+/// GET /v2/{tenant}/{project}/{name}/tags/list
+#[instrument(name = "list_tags", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name))]
+async fn list_tags(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<RepoPath>,
+    Query(pagination): Query<PaginationQuery>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    let prefix = tags_prefix(&params.tenant, &params.project, &params.name);
+    let store_prefix = StorePath::from(prefix.clone());
+
+    let mut tags: Vec<String> = Vec::new();
+
+    let list_result: Vec<_> = state
+        .store
+        .list(Some(&store_prefix))
+        .try_collect()
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    for meta in &list_result {
+        let full_path = meta.location.to_string();
+        if let Some(tag) = full_path.strip_prefix(&prefix)
+            && !tag.is_empty()
+        {
+            tags.push(tag.to_string());
+        }
+    }
+
+    tags.sort();
+
+    // Apply pagination
+    let tags = if let Some(ref last) = pagination.last {
+        tags.into_iter()
+            .skip_while(|t| t.as_str() <= last.as_str())
+            .collect()
+    } else {
+        tags
+    };
+
+    let tags: Vec<String> = if let Some(n) = pagination.n {
+        tags.into_iter().take(n).collect()
+    } else {
+        tags
+    };
+
+    let repo_name = format!("{}/{}/{}", params.tenant, params.project, params.name);
+    let tag_list = registry10x_common::models::TagList {
+        name: repo_name,
+        tags,
+    };
+
+    Ok((StatusCode::OK, axum::Json(tag_list)).into_response())
+}
+
+/// GET /v2/_catalog
+#[instrument(name = "catalog", skip(state, claims))]
+async fn catalog(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(pagination): Query<PaginationQuery>,
+) -> Result<Response, RegistryError> {
+    // List repositories filtered by the tenant in the token. Push
+    // routes write under `<tenant_storage_prefix>/<project>/<repo>/`,
+    // where the prefix is the literal tenant name (e.g. `demo`),
+    // not the tenant UUID. The auth service includes the prefix in
+    // the JWT as `tenant_name`. Fall back to the UUID for older
+    // tokens issued before that field existed — those will see an
+    // empty list, which is the same behaviour as before this fix.
+    let tenant_prefix_str = claims
+        .tenant_name
+        .clone()
+        .unwrap_or_else(|| claims.tenant_id.to_string());
+    let tenant_prefix = StorePath::from(tenant_prefix_str);
+
+    let mut repositories: Vec<String> = Vec::new();
+
+    let list_result = state
+        .store
+        .list_with_delimiter(Some(&tenant_prefix))
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // Walk the tenant prefix to find project/repo combos
+    for prefix_entry in &list_result.common_prefixes {
+        let project_prefix = prefix_entry.clone();
+
+        if let Ok(project_list) = state.store.list_with_delimiter(Some(&project_prefix)).await {
+            for repo_prefix in &project_list.common_prefixes {
+                let repo_path = repo_prefix.to_string();
+                let repo_name = repo_path.trim_end_matches('/');
+                if !repo_name.is_empty() {
+                    repositories.push(repo_name.to_string());
+                }
+            }
+        }
+    }
+
+    repositories.sort();
+
+    // Apply pagination
+    let repositories = if let Some(ref last) = pagination.last {
+        repositories
+            .into_iter()
+            .skip_while(|r| r.as_str() <= last.as_str())
+            .collect()
+    } else {
+        repositories
+    };
+
+    let repositories: Vec<String> = if let Some(n) = pagination.n {
+        repositories.into_iter().take(n).collect()
+    } else {
+        repositories
+    };
+
+    let catalog_resp = registry10x_common::models::Catalog { repositories };
+
+    Ok((StatusCode::OK, axum::Json(catalog_resp)).into_response())
+}
+
+// ── Usage telemetry helper (017 integration) ───────────────────────────────
+//
+// Fire-and-forget — the recorder writes to the unlogged staging table so
+// failures shouldn't fail the request, but the spawned task also keeps the
+// hot path entirely off the Postgres latency.
+#[allow(clippy::too_many_arguments)]
+fn record_usage(
+    state: &AppState,
+    tenant: &str,
+    project: &str,
+    repository: &str,
+    op: registry10x_cost::UsageOp,
+    bytes: i64,
+    src: registry10x_cost::UsageSrc,
+    status: i32,
+    sub: Option<String>,
+) {
+    let recorder = state.usage_recorder.clone();
+    let event = registry10x_cost::UsageEvent {
+        at: chrono::Utc::now(),
+        tenant: tenant.to_string(),
+        project: project.to_string(),
+        repository: repository.to_string(),
+        op,
+        bytes,
+        src,
+        status,
+        sub,
+    };
+    tokio::spawn(async move {
+        if let Err(e) = recorder.record(&event).await {
+            debug!(error = %e, "usage recorder failed");
+        }
+    });
+}
+
+// ── Online-GC routes (009 slice 2) ───────────────────────────────────────────
+
+fn gc_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "online-gc admin endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+fn audit_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "audit endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+/// GET /v2/_audit — query chained audit rows.
+#[instrument(name = "audit_query", skip(state, claims))]
+async fn audit_query(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(params): Query<std::collections::HashMap<String, String>>,
+) -> Result<Response, RegistryError> {
+    audit_admin_authorize(&claims)?;
+    let limit = params
+        .get("limit")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(100);
+    let category = params
+        .get("category")
+        .and_then(|c| registry10x_audit::Category::parse(c));
+    let q = registry10x_audit::AuditQuery {
+        since: None,
+        until: None,
+        actor: params.get("actor").cloned(),
+        category,
+        tenant: params.get("tenant").cloned(),
+        limit,
+    };
+    let rows = state
+        .audit_log
+        .sink()
+        .query(q)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "events": rows })),
+    )
+        .into_response())
+}
+
+/// GET /v2/_audit/{id} — single chained row.
+#[instrument(name = "audit_get", skip(state, claims))]
+async fn audit_get(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(id): Path<i64>,
+) -> Result<Response, RegistryError> {
+    audit_admin_authorize(&claims)?;
+    let row = state.audit_log.sink().get(id).await.map_err(|e| match e {
+        registry10x_audit::AuditError::NotFound(id) => {
+            RegistryError::Internal(format!("audit event {id} not found"))
+        }
+        other => RegistryError::Internal(other.to_string()),
+    })?;
+    Ok((StatusCode::OK, axum::Json(row)).into_response())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct AuditVerifyBody {
+    from: i64,
+    to: i64,
+}
+
+/// POST /v2/_audit/verify — verify hash chain over `[from, to]`.
+#[instrument(name = "audit_verify", skip(state, claims))]
+async fn audit_verify(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    axum::Json(body): axum::Json<AuditVerifyBody>,
+) -> Result<Response, RegistryError> {
+    audit_admin_authorize(&claims)?;
+    let verdict = state
+        .audit_log
+        .sink()
+        .verify_chain(body.from, body.to)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    let status = if verdict.ok {
+        StatusCode::OK
+    } else {
+        StatusCode::CONFLICT
+    };
+    Ok((status, axum::Json(verdict)).into_response())
+}
+
+#[derive(Debug, serde::Deserialize, Default)]
+struct AuditExportBody {
+    /// When set with `to`, export that id range instead of pending-since-checkpoint.
+    from: Option<i64>,
+    to: Option<i64>,
+    /// Override configured compression.
+    compress: Option<bool>,
+}
+
+/// POST /v2/_audit/export — dump pending (or ranged) rows + Merkle checkpoint.
+#[instrument(name = "audit_export", skip(state, claims))]
+async fn audit_export_handler(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    body: Option<axum::Json<AuditExportBody>>,
+) -> Result<Response, RegistryError> {
+    audit_admin_authorize(&claims)?;
+    let rt = state
+        .audit_export
+        .as_ref()
+        .ok_or_else(|| RegistryError::Internal("audit export not configured".into()))?;
+    let body = body.map(|axum::Json(b)| b).unwrap_or_default();
+    let compress = body.compress.unwrap_or(rt.compress);
+    let sink = state.audit_log.sink();
+
+    let result = match (body.from, body.to) {
+        (Some(from), Some(to)) => {
+            let (result, root, _) =
+                registry10x_audit::export_range(sink.as_ref(), rt.dest.as_ref(), from, to, compress)
+                    .await
+                    .map_err(|e| RegistryError::Internal(e.to_string()))?;
+            rt.checkpoints
+                .insert(
+                    result.range_from,
+                    result.range_to,
+                    &root,
+                    &result.exported_to,
+                )
+                .await
+                .map_err(|e| RegistryError::Internal(e.to_string()))?;
+            result
+        }
+        _ => registry10x_audit::export_pending(
+            sink.as_ref(),
+            rt.checkpoints.as_ref(),
+            rt.dest.as_ref(),
+            compress,
+        )
+        .await
+        .map_err(|e| match e {
+            registry10x_audit::ExportError::Empty => {
+                RegistryError::Internal("nothing to export".into())
+            }
+            other => RegistryError::Internal(other.to_string()),
+        })?,
+    };
+
+    Ok((StatusCode::OK, axum::Json(result)).into_response())
+}
+
+/// GET /v2/_gc/status — current reaper state.
+#[instrument(name = "gc_status", skip(state, claims))]
+async fn gc_status(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    gc_admin_authorize(&claims)?;
+    let body = match &state.gc_reaper_control {
+        Some(c) => serde_json::json!({
+            "enabled": true,
+            "paused": c.is_paused(),
+            "stopped": c.is_stopped(),
+        }),
+        None => serde_json::json!({ "enabled": false }),
+    };
+    Ok((StatusCode::OK, axum::Json(body)).into_response())
+}
+
+/// POST /v2/_gc/pause — pause the continuous reaper. Idempotent.
+#[instrument(name = "gc_pause", skip(state, claims))]
+async fn gc_pause(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    gc_admin_authorize(&claims)?;
+    match &state.gc_reaper_control {
+        Some(c) => {
+            c.pause();
+            Ok((
+                StatusCode::OK,
+                axum::Json(serde_json::json!({"paused": true})),
+            )
+                .into_response())
+        }
+        None => Err(RegistryError::Internal(
+            "online-gc reaper not running".into(),
+        )),
+    }
+}
+
+/// POST /v2/_gc/resume — resume the continuous reaper. Idempotent.
+#[instrument(name = "gc_resume", skip(state, claims))]
+async fn gc_resume(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    gc_admin_authorize(&claims)?;
+    match &state.gc_reaper_control {
+        Some(c) => {
+            c.resume();
+            Ok((
+                StatusCode::OK,
+                axum::Json(serde_json::json!({"paused": false})),
+            )
+                .into_response())
+        }
+        None => Err(RegistryError::Internal(
+            "online-gc reaper not running".into(),
+        )),
+    }
+}
+
+/// POST /v2/_gc/reconcile — run the reconciler. Body
+/// `{"apply": bool, "max": int?}`.
+#[derive(Debug, serde::Deserialize, Default)]
+struct GcReconcileBody {
+    #[serde(default)]
+    apply: bool,
+    #[serde(default)]
+    max: Option<i64>,
+}
+
+#[instrument(name = "gc_reconcile", skip(state, claims))]
+async fn gc_reconcile(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    body: Option<axum::Json<GcReconcileBody>>,
+) -> Result<Response, RegistryError> {
+    gc_admin_authorize(&claims)?;
+    let body = body.map(|axum::Json(b)| b).unwrap_or_default();
+
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("online-gc not enabled".into()))?;
+
+    let cfg = registry10x_gc::ReconcileConfig {
+        apply_fix: body.apply,
+        max_blobs: body.max,
+    };
+    let stats = registry10x_gc::Reconciler::new(pool)
+        .reconcile(cfg)
+        .await
+        .map_err(|e| RegistryError::Internal(format!("reconcile failed: {e}")))?;
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({
+            "examined":  stats.blobs_examined,
+            "orphan":    stats.orphan_count,
+            "missing":   stats.missing_count,
+            "underflow": stats.underflow_count,
+            "corrected": stats.corrected,
+            "applied":   body.apply,
+        })),
+    )
+        .into_response())
+}
+
+// ── TTL reaper admin routes (013 slice 2) ────────────────────────────────────
+
+fn ttl_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "ttl admin endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+#[instrument(name = "ttl_status", skip(state, claims))]
+async fn ttl_status(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    ttl_admin_authorize(&claims)?;
+    let body = match &state.ttl_reaper_control {
+        Some(c) => serde_json::json!({
+            "enabled": true,
+            "paused":  c.is_paused(),
+            "stopped": c.is_stopped(),
+        }),
+        None => serde_json::json!({ "enabled": false }),
+    };
+    Ok((StatusCode::OK, axum::Json(body)).into_response())
+}
+
+#[instrument(name = "ttl_pause", skip(state, claims))]
+async fn ttl_pause(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    ttl_admin_authorize(&claims)?;
+    match &state.ttl_reaper_control {
+        Some(c) => {
+            c.pause();
+            Ok((
+                StatusCode::OK,
+                axum::Json(serde_json::json!({"paused": true})),
+            )
+                .into_response())
+        }
+        None => Err(RegistryError::Internal("ttl reaper not running".into())),
+    }
+}
+
+#[instrument(name = "ttl_resume", skip(state, claims))]
+async fn ttl_resume(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+) -> Result<Response, RegistryError> {
+    ttl_admin_authorize(&claims)?;
+    match &state.ttl_reaper_control {
+        Some(c) => {
+            c.resume();
+            Ok((
+                StatusCode::OK,
+                axum::Json(serde_json::json!({"paused": false})),
+            )
+                .into_response())
+        }
+        None => Err(RegistryError::Internal("ttl reaper not running".into())),
+    }
+}
+
+// ── Usage read API (017 polish) ──────────────────────────────────────────────
+
+fn usage_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "usage endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+fn parse_since(raw: &str) -> Option<i64> {
+    let raw = raw.trim();
+    let (n, unit) = raw.split_at(raw.find(|c: char| !c.is_ascii_digit())?);
+    let n: i64 = n.parse().ok()?;
+    if n < 0 {
+        return None;
+    }
+    let secs = match unit {
+        "s" => n,
+        "m" => n * 60,
+        "h" => n * 3600,
+        "d" => n * 86_400,
+        _ => return None,
+    };
+    Some(secs)
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct TenantSeriesQuery {
+    #[serde(default)]
+    since: Option<String>,
+    #[serde(default)]
+    granularity: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct TenantSeriesPath {
+    tenant: String,
+}
+
+#[instrument(name = "usage_tenant", skip(state, claims))]
+async fn usage_tenant(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(p): Path<TenantSeriesPath>,
+    Query(q): Query<TenantSeriesQuery>,
+) -> Result<Response, RegistryError> {
+    usage_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("usage backend not configured".into()))?;
+    let since_secs = q
+        .since
+        .as_deref()
+        .and_then(parse_since)
+        .unwrap_or(24 * 3600);
+    let granularity = q
+        .granularity
+        .as_deref()
+        .and_then(registry10x_cost::Granularity::parse)
+        .unwrap_or(registry10x_cost::Granularity::Hour);
+
+    let buckets = registry10x_cost::UsageReader::new(pool)
+        .tenant_series(&p.tenant, since_secs, granularity)
+        .await
+        .map_err(|e| RegistryError::Internal(format!("usage query failed: {e}")))?;
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({
+            "tenant": p.tenant,
+            "since_secs": since_secs,
+            "granularity": granularity.as_str(),
+            "buckets": buckets,
+        })),
+    )
+        .into_response())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct TopPulledQuery {
+    #[serde(default)]
+    since: Option<String>,
+    #[serde(default)]
+    limit: Option<i64>,
+}
+
+#[instrument(name = "usage_top_pulled", skip(state, claims))]
+async fn usage_top_pulled(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(q): Query<TopPulledQuery>,
+) -> Result<Response, RegistryError> {
+    usage_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("usage backend not configured".into()))?;
+    let since_secs = q
+        .since
+        .as_deref()
+        .and_then(parse_since)
+        .unwrap_or(7 * 86_400);
+    let limit = q.limit.unwrap_or(20).clamp(1, 500);
+
+    let rows = registry10x_cost::UsageReader::new(pool)
+        .top_pulled(since_secs, limit)
+        .await
+        .map_err(|e| RegistryError::Internal(format!("top_pulled query failed: {e}")))?;
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({
+            "since_secs": since_secs,
+            "limit": limit,
+            "rows": rows,
+        })),
+    )
+        .into_response())
+}
+
+// ── Referrers API (010 integration) ──────────────────────────────────────────
+
+/// GET /v2/{tenant}/{project}/{name}/referrers/{digest}
+///
+/// OCI 1.1 referrers API — returns artifacts that point at `digest`
+/// via their `subject` field (signatures, attestations, TOC artifacts,
+/// etc.). Optional `?artifactType=...` filters server-side. The
+/// response is an OCI image index whose `manifests` array carries one
+/// descriptor per referrer.
+///
+/// Reads from the shared `referrers` table populated by 010 (lazy
+/// indexer), 015 (attestations), and any future producer of typed
+/// OCI 1.1 referrer artifacts.
+#[derive(Debug, serde::Deserialize)]
+struct ReferrersQuery {
+    #[serde(default, rename = "artifactType")]
+    artifact_type: Option<String>,
+}
+
+#[instrument(name = "list_referrers", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, digest = %params.digest))]
+async fn list_referrers(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<BlobRef>,
+    Query(q): Query<ReferrersQuery>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("referrers backend not configured".into()))?;
+
+    use registry10x_lazy::ReferrerStore;
+    let store = registry10x_lazy::PgReferrerStore::new(pool);
+
+    let rows = match q.artifact_type.as_deref() {
+        Some(t) => store.list_by_type(&params.digest, t).await,
+        None => store.list(&params.digest).await,
+    }
+    .map_err(|e| RegistryError::Internal(format!("referrers query failed: {e}")))?;
+
+    // Build OCI image index envelope.
+    let manifests: Vec<serde_json::Value> = rows
+        .into_iter()
+        .map(|r| {
+            serde_json::json!({
+                "mediaType": r.media_type,
+                "digest": r.artifact_digest,
+                "size": r.size,
+                "artifactType": r.artifact_type,
+            })
+        })
+        .collect();
+
+    let body = serde_json::json!({
+        "schemaVersion": 2,
+        "mediaType": "application/vnd.oci.image.index.v1+json",
+        "manifests": manifests,
+    });
+
+    let mut headers = HeaderMap::new();
+    headers.insert(
+        header::CONTENT_TYPE,
+        HeaderValue::from_static("application/vnd.oci.image.index.v1+json"),
+    );
+    if let Some(hv) = q
+        .artifact_type
+        .as_deref()
+        .and_then(|t| HeaderValue::from_str(t).ok())
+    {
+        headers.insert("OCI-Filters-Applied", hv);
+    }
+
+    Ok((StatusCode::OK, headers, axum::Json(body)).into_response())
+}
+
+// ── Attestation upload (015 slice 2) ─────────────────────────────────────────
+//
+// POST /v2/{tenant}/{project}/{name}/attestations
+//
+// Accepts a DSSE bundle (raw bytes). The body is parsed as a DSSE
+// envelope; the inner in-toto statement gives us the subject digest
+// (which must reference an existing manifest in this repo) plus the
+// predicate type. SLSA-level inference uses the configured
+// trusted-builder allowlist. We persist a row to `attestations`,
+// register the bundle as an OCI 1.1 referrer of the subject, and
+// store the raw bundle bytes so consumers can re-fetch them.
+//
+// `verified=false` for slice 2 — DSSE signature verification arrives
+// with 001 (image signing). Admission policy gating in slice 3.
+
+#[derive(Debug, serde::Deserialize, Default)]
+struct AttestationQuery {
+    /// Optional: pin to a specific subject digest. When omitted the
+    /// bundle's first subject digest is used.
+    #[serde(default)]
+    subject: Option<String>,
+}
+
+#[instrument(name = "upload_attestation", skip(state, claims, body), fields(tenant = %params.tenant, project = %params.project, name = %params.name))]
+async fn upload_attestation(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<RepoPath>,
+    Query(q): Query<AttestationQuery>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("attestation backend not configured".into()))?;
+
+    // 1. Parse DSSE.
+    let (env, stmt) =
+        registry10x_attest::decode_envelope(&body).map_err(|e| RegistryError::ManifestInvalid {
+            reason: format!("invalid DSSE: {e}"),
+        })?;
+
+    // 2. Resolve subject digest. Caller may pin via ?subject=...; else
+    //    we use the first sha256 entry inside the in-toto statement.
+    let subject_digest = q
+        .subject
+        .clone()
+        .or_else(|| registry10x_attest::dsse::first_subject_digest(&stmt));
+    let subject_digest = subject_digest.ok_or_else(|| RegistryError::ManifestInvalid {
+        reason: "DSSE statement has no sha256 subject digest".into(),
+    })?;
+
+    // 3. Infer SLSA level from the allowlist.
+    let trusted_csv = std::env::var("REGISTRY10X_ATTEST__TRUSTED_BUILDERS").unwrap_or_default();
+    let trusted: Vec<&str> = trusted_csv
+        .split(',')
+        .map(|s| s.trim())
+        .filter(|s| !s.is_empty())
+        .collect();
+    let (level, builder_id) =
+        registry10x_attest::slsa::infer_slsa_level(&stmt.predicate_type, &stmt.predicate, &trusted);
+
+    // 4. Persist the bundle in object storage so consumers can fetch
+    //    it back via standard blob endpoints. The envelope's digest
+    //    (sha256 of the raw bytes) is the storage key.
+    let envelope_digest = registry10x_common::storage::sha256_digest(&body);
+    let env_path = registry10x_common::storage::blob_path(
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &envelope_digest,
+    );
+    state
+        .store
+        .put(&StorePath::from(env_path), body.clone().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // 4b. Try to verify the DSSE signature against any configured
+    //     ed25519 keys. Format: comma-separated `keyid:b64key` pairs
+    //     in REGISTRY10X_ATTEST__ED25519_KEYS. Empty / unconfigured ⇒
+    //     verified=false (slice-2 advisory mode).
+    let verified = {
+        use base64::Engine as _;
+        let raw = std::env::var("REGISTRY10X_ATTEST__ED25519_KEYS").unwrap_or_default();
+        let mut verifiers: Vec<Box<dyn registry10x_attest::Verifier>> = Vec::new();
+        for spec in raw.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()) {
+            if let Some((keyid, b64)) = spec.split_once(':') {
+                match base64::engine::general_purpose::STANDARD.decode(b64.as_bytes()) {
+                    Ok(bytes) => match registry10x_attest::Ed25519Verifier::from_bytes(keyid, &bytes) {
+                        Ok(v) => verifiers.push(Box::new(v)),
+                        Err(e) => warn!(keyid, error = %e, "attest: bad ed25519 key"),
+                    },
+                    Err(e) => warn!(keyid, error = %e, "attest: bad b64 ed25519 key"),
+                }
+            }
+        }
+        if verifiers.is_empty() {
+            false
+        } else {
+            matches!(
+                registry10x_attest::verify_envelope(&env, &verifiers),
+                Ok(registry10x_attest::VerifyVerdict::Verified)
+            )
+        }
+    };
+
+    // 5. Persist the row + register a referrer.
+    let attestation = registry10x_attest::store::Attestation {
+        id: Uuid::new_v4(),
+        subject_digest: subject_digest.clone(),
+        envelope_digest: envelope_digest.clone(),
+        predicate_type: stmt.predicate_type.clone(),
+        builder_id,
+        builder_kind: None,
+        slsa_level: Some(level.as_int()),
+        verified,
+        uploaded_at: chrono::Utc::now(),
+    };
+    use registry10x_attest::AttestationStore as _;
+    let store = registry10x_attest::PgAttestationStore::new(pool.clone());
+    let raw = serde_json::to_value(&env).map_err(|e| RegistryError::Internal(e.to_string()))?;
+    store
+        .put(&attestation, &raw)
+        .await
+        .map_err(|e| RegistryError::Internal(format!("attestation store: {e}")))?;
+
+    use registry10x_lazy::ReferrerStore as _;
+    let r = registry10x_lazy::Referrer {
+        subject_digest: subject_digest.clone(),
+        artifact_digest: envelope_digest.clone(),
+        artifact_type: stmt.predicate_type.clone(),
+        media_type: env.payload_type.clone(),
+        size: body.len() as i64,
+    };
+    if let Err(e) = registry10x_lazy::PgReferrerStore::new(pool).register(&r).await {
+        warn!(error = %e, "attestation referrer register failed");
+    }
+
+    let resp = serde_json::json!({
+        "id":              attestation.id,
+        "subject_digest":  subject_digest,
+        "envelope_digest": envelope_digest,
+        "predicate_type":  stmt.predicate_type,
+        "slsa_level":      level.as_int(),
+    });
+    Ok((StatusCode::CREATED, axum::Json(resp)).into_response())
+}
+
+// ── Verify-on-pull (001 B4) ──────────────────────────────────────────────────
+
+/// Enforce [`ImageVerificationPolicy`] (or `[signing].require_for_pull`) on
+/// manifest GET. Warn/log modes audit and allow; block returns Forbidden.
+async fn enforce_pull_signature_policy(
+    state: &AppState,
+    claims_sub: &str,
+    tenant: &str,
+    project: &str,
+    repo: &str,
+    subject_digest: &str,
+) -> Result<(), RegistryError> {
+    let pool = match state.gc_pool.clone() {
+        Some(p) => p,
+        None => {
+            // No Postgres ⇒ cannot evaluate policies; fail open unless
+            // require_for_pull is set (then fail closed — no way to prove).
+            if state.config.signing.require_for_pull {
+                return Err(RegistryError::Forbidden {
+                    reason: "signature required but policy store unavailable".into(),
+                });
+            }
+            return Ok(());
+        }
+    };
+
+    use registry10x_signing::PolicyStore as _;
+    let stored = registry10x_signing::PgPolicyStore::new(pool.clone())
+        .resolve(tenant, project, repo)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    let policy = match stored {
+        Some(p) => p.as_verification_policy(),
+        None if state.config.signing.require_for_pull => registry10x_signing::VerificationPolicy {
+            id: Uuid::nil(),
+            name: "require_for_pull".into(),
+            required: true,
+            trusted_signers: vec![],
+            on_violation: registry10x_signing::OnViolation::Block,
+        },
+        None => return Ok(()),
+    };
+
+    if !policy.required {
+        return Ok(());
+    }
+
+    use registry10x_signing::SignatureStore as _;
+    let records = registry10x_signing::PgSignatureStore::new(pool)
+        .list_for_subject(tenant, project, repo, subject_digest)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    let trusted_refs: Vec<&str> = policy
+        .trusted_signers
+        .iter()
+        .filter_map(|s| s.key_ref())
+        .collect();
+
+    let (trusted, reason) = if trusted_refs.is_empty() {
+        // Presence check: any registered signature satisfies the policy.
+        if records.is_empty() {
+            (false, "no signatures registered for digest".to_string())
+        } else {
+            (true, String::new())
+        }
+    } else {
+        let mut artifacts = Vec::new();
+        for rec in &records {
+            let path = blob_path(tenant, project, repo, &rec.signature_digest);
+            if let Ok(r) = state.store.get(&StorePath::from(path)).await
+                && let Ok(bytes) = r.bytes().await
+            {
+                if let Ok(art) =
+                    serde_json::from_slice::<registry10x_signing::SignatureArtifact>(&bytes)
+                {
+                    artifacts.push(art);
+                } else if let Ok(env) =
+                    serde_json::from_slice::<registry10x_signing::CosignEnvelope>(&bytes)
+                {
+                    artifacts.push(registry10x_signing::SignatureArtifact {
+                        media_type: registry10x_signing::MEDIA_TYPE_COSIGN_ENVELOPE_V1.into(),
+                        body: bytes.to_vec(),
+                        signer_identity: env.key_ref,
+                        signature_type: "cosign-key".into(),
+                    });
+                }
+            }
+        }
+        let file_provider = match &state.config.signing.key_root {
+            Some(root) => Arc::new(registry10x_signing::FilePemKeyProvider::with_root(root)),
+            None => Arc::new(registry10x_signing::FilePemKeyProvider::new()),
+        };
+        let keys = Arc::new(
+            registry10x_signing::CompositeKeyProvider::builder()
+                .file(file_provider)
+                .build(),
+        );
+        let verifier = registry10x_signing::SigstoreVerifier::new(keys);
+        use registry10x_signing::Verifier as _;
+        match verifier.verify(subject_digest, &artifacts, &policy).await {
+            Ok(outcome) => (outcome.trusted, outcome.reason.unwrap_or_default()),
+            Err(e) => (false, e.to_string()),
+        }
+    };
+
+    if trusted {
+        return Ok(());
+    }
+
+    let _ = state
+        .audit_log
+        .sink()
+        .append(
+            registry10x_audit::AuditEvent::success(
+                registry10x_audit::Category::Policy,
+                "signature.verify.miss",
+                registry10x_audit::Actor {
+                    sub: claims_sub.to_string(),
+                    role: None,
+                    source_ip: None,
+                    ua: None,
+                },
+            )
+            .with_subject(registry10x_audit::Subject {
+                tenant: Some(tenant.to_string()),
+                project: Some(project.to_string()),
+                repo: Some(repo.to_string()),
+                reference: None,
+                digest: Some(subject_digest.to_string()),
+            })
+            .with_attr("policy", serde_json::json!(policy.name))
+            .with_attr("reason", serde_json::json!(reason))
+            .with_attr(
+                "on_violation",
+                serde_json::json!(format!("{:?}", policy.on_violation).to_lowercase()),
+            ),
+        )
+        .await;
+
+    match policy.on_violation {
+        registry10x_signing::OnViolation::Block => Err(RegistryError::Forbidden {
+            reason: format!("signature policy {:?}: {reason}", policy.name),
+        }),
+        registry10x_signing::OnViolation::Warn | registry10x_signing::OnViolation::Log => {
+            warn!(
+                policy = %policy.name,
+                digest = %subject_digest,
+                %reason,
+                "signature policy miss (warn/log)"
+            );
+            Ok(())
+        }
+    }
+}
+
+// ── Image signatures (001 B3) ────────────────────────────────────────────────
+//
+// POST /v2/{tenant}/{project}/{name}/signatures/{digest}
+//   Body: SignatureArtifact JSON (from registry10x-sign) or CosignEnvelope.
+//   Stores bytes, writes cosign tag `sha256-<hex>.sig`, metadata row,
+//   OCI referrer, and a Sign audit event.
+//
+// GET  /v2/{tenant}/{project}/{name}/signatures/{digest}
+//   Lists signature descriptors for the subject digest.
+//
+// POST /v2/_verify
+//   { digest, tenant, project, repository, key_refs?: [...] }
+//
+// PUT/GET/DELETE /v2/_signing/policies/{tenant}/{name} — ImageVerificationPolicy
+//   sync surface for the controller (admin).
+
+#[derive(Debug, serde::Deserialize)]
+struct VerifyBody {
+    digest: String,
+    tenant: String,
+    project: String,
+    repository: String,
+    /// Trusted key refs for verification policy. Empty ⇒ list-only mode.
+    #[serde(default)]
+    key_refs: Vec<String>,
+}
+
+/// Postgres metadata + OCI referrer + Sign audit (bytes already in object store).
+#[allow(clippy::too_many_arguments)]
+async fn register_signature_metadata(
+    state: &AppState,
+    claims_sub: &str,
+    tenant: &str,
+    project: &str,
+    repo: &str,
+    subject_digest: &str,
+    signature_digest: &str,
+    size_bytes: i64,
+    signer_identity: Option<String>,
+    signature_type: &str,
+    media_type: &str,
+    reference: &str,
+) -> Result<Uuid, RegistryError> {
+    let pool = state.gc_pool.clone().ok_or_else(|| {
+        RegistryError::Internal(
+            "signature store requires Postgres (enable scanner/GC or audit pool)".into(),
+        )
+    })?;
+
+    let id = Uuid::new_v4();
+    let rec = registry10x_signing::SignatureRecord {
+        id,
+        subject_digest: subject_digest.to_string(),
+        tenant: tenant.to_string(),
+        project: project.to_string(),
+        repository: repo.to_string(),
+        signature_digest: signature_digest.to_string(),
+        signer_identity: signer_identity.clone(),
+        signature_type: signature_type.to_string(),
+        media_type: Some(media_type.to_string()),
+        size_bytes,
+        rekor_log_index: None,
+        signed_at: chrono::Utc::now(),
+    };
+    use registry10x_signing::SignatureStore as _;
+    registry10x_signing::PgSignatureStore::new(pool.clone())
+        .put(&rec)
+        .await
+        .map_err(|e| RegistryError::Internal(format!("signature store: {e}")))?;
+
+    use registry10x_lazy::ReferrerStore as _;
+    let r = registry10x_lazy::Referrer {
+        subject_digest: subject_digest.to_string(),
+        artifact_digest: signature_digest.to_string(),
+        artifact_type: media_type.to_string(),
+        media_type: media_type.to_string(),
+        size: size_bytes,
+    };
+    if let Err(e) = registry10x_lazy::PgReferrerStore::new(pool).register(&r).await {
+        warn!(error = %e, "signature referrer register failed");
+    }
+
+    let _ = state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "signature.push".into(),
+            subject: claims_sub.to_string(),
+            tenant: tenant.to_string(),
+            project: project.to_string(),
+            repository: repo.to_string(),
+            reference: reference.to_string(),
+            digest: signature_digest.to_string(),
+            size_bytes: size_bytes as u64,
+            status_code: 201,
+            duration_ms: 0,
+        })
+        .await;
+
+    let _ = state
+        .audit_log
+        .sink()
+        .append(
+            registry10x_audit::AuditEvent::success(
+                registry10x_audit::Category::Sign,
+                "signature.push",
+                registry10x_audit::Actor {
+                    sub: claims_sub.to_string(),
+                    role: None,
+                    source_ip: None,
+                    ua: None,
+                },
+            )
+            .with_subject(registry10x_audit::Subject {
+                tenant: Some(tenant.to_string()),
+                project: Some(project.to_string()),
+                repo: Some(repo.to_string()),
+                reference: Some(reference.to_string()),
+                digest: Some(signature_digest.to_string()),
+            })
+            .with_attr("signer_identity", serde_json::json!(signer_identity)),
+        )
+        .await;
+
+    Ok(id)
+}
+
+/// Persist signature blob + tag + Postgres row + referrer + audit.
+#[allow(clippy::too_many_arguments)]
+async fn persist_signature(
+    state: &AppState,
+    claims_sub: &str,
+    tenant: &str,
+    project: &str,
+    repo: &str,
+    subject_digest: &str,
+    body: Bytes,
+    signer_identity: Option<String>,
+    signature_type: &str,
+    media_type: &str,
+) -> Result<(String, Uuid), RegistryError> {
+    if !state.config.signing.enabled {
+        return Err(RegistryError::Forbidden {
+            reason: "signing disabled ([signing].enabled=false)".into(),
+        });
+    }
+
+    let signature_digest = sha256_digest(&body);
+
+    // Blob storage (content-addressable).
+    let blob_p = blob_path(tenant, project, repo, &signature_digest);
+    state
+        .store
+        .put(&StorePath::from(blob_p), body.clone().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // Manifest path so OCI clients can pull the signature artifact.
+    let man_p = manifest_path(tenant, project, repo, &signature_digest);
+    state
+        .store
+        .put(&StorePath::from(man_p), body.clone().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    let tag =
+        registry10x_signing::SignatureArtifact::cosign_sig_tag(subject_digest).ok_or_else(|| {
+            RegistryError::ManifestInvalid {
+                reason: "subject digest must be sha256:...".into(),
+            }
+        })?;
+    let tag_p = tag_link_path(tenant, project, repo, &tag);
+    state
+        .store
+        .put(
+            &StorePath::from(tag_p),
+            Bytes::from(signature_digest.clone()).into(),
+        )
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    let id = register_signature_metadata(
+        state,
+        claims_sub,
+        tenant,
+        project,
+        repo,
+        subject_digest,
+        &signature_digest,
+        body.len() as i64,
+        signer_identity,
+        signature_type,
+        media_type,
+        &tag,
+    )
+    .await?;
+
+    Ok((signature_digest, id))
+}
+
+#[instrument(name = "upload_signature", skip(state, claims, body), fields(tenant = %params.tenant, project = %params.project, name = %params.name, digest = %params.digest))]
+async fn upload_signature(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<BlobRef>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Push,
+    )?;
+
+    let subject_digest = params.digest.clone();
+    if !subject_digest.starts_with("sha256:") {
+        return Err(RegistryError::ManifestInvalid {
+            reason: "subject digest must be sha256:...".into(),
+        });
+    }
+
+    // Prefer SignatureArtifact JSON; fall back to CosignEnvelope; else raw bytes.
+    let (signer_identity, signature_type, media_type) =
+        if let Ok(art) = serde_json::from_slice::<registry10x_signing::SignatureArtifact>(&body) {
+            (
+                Some(art.signer_identity.clone()),
+                art.signature_type.clone(),
+                art.media_type.clone(),
+            )
+        } else if let Ok(env) = serde_json::from_slice::<registry10x_signing::CosignEnvelope>(&body) {
+            (
+                Some(env.key_ref.clone()),
+                "cosign-key".to_string(),
+                registry10x_signing::MEDIA_TYPE_COSIGN_ENVELOPE_V1.to_string(),
+            )
+        } else {
+            (
+                None,
+                "cosign-key".to_string(),
+                registry10x_signing::MEDIA_TYPE_COSIGN_SIMPLE.to_string(),
+            )
+        };
+
+    let (signature_digest, id) = persist_signature(
+        &state,
+        &claims.sub,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &subject_digest,
+        body,
+        signer_identity,
+        &signature_type,
+        &media_type,
+    )
+    .await?;
+
+    let location = format!(
+        "/v2/{}/{}/{}/blobs/{}",
+        params.tenant, params.project, params.name, signature_digest
+    );
+    let mut headers = HeaderMap::new();
+    if let Ok(hv) = HeaderValue::from_str(&location) {
+        headers.insert(header::LOCATION, hv);
+    }
+    let resp = serde_json::json!({
+        "id": id,
+        "subject_digest": subject_digest,
+        "signature_digest": signature_digest,
+        "tag": registry10x_signing::SignatureArtifact::cosign_sig_tag(&subject_digest),
+    });
+    Ok((StatusCode::CREATED, headers, axum::Json(resp)).into_response())
+}
+
+#[instrument(name = "list_signatures", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, digest = %params.digest))]
+async fn list_signatures(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<BlobRef>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+    if !state.config.signing.enabled {
+        return Err(RegistryError::Forbidden {
+            reason: "signing disabled ([signing].enabled=false)".into(),
+        });
+    }
+
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("signature store not configured".into()))?;
+
+    use registry10x_signing::SignatureStore as _;
+    let rows = registry10x_signing::PgSignatureStore::new(pool)
+        .list_for_subject(
+            &params.tenant,
+            &params.project,
+            &params.name,
+            &params.digest,
+        )
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "signatures": rows })),
+    )
+        .into_response())
+}
+
+#[instrument(name = "verify_image", skip(state, claims))]
+async fn verify_image(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    axum::Json(body): axum::Json<VerifyBody>,
+) -> Result<Response, RegistryError> {
+    authorize(
+        &claims,
+        &body.tenant,
+        &body.project,
+        &body.repository,
+        Action::Pull,
+    )?;
+
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("signature store not configured".into()))?;
+
+    use registry10x_signing::SignatureStore as _;
+    let records = registry10x_signing::PgSignatureStore::new(pool)
+        .list_for_subject(&body.tenant, &body.project, &body.repository, &body.digest)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    if body.key_refs.is_empty() {
+        // List-only: report whether any signatures exist.
+        return Ok((
+            StatusCode::OK,
+            axum::Json(serde_json::json!({
+                "trusted": !records.is_empty(),
+                "signers": records.iter().filter_map(|r| r.signer_identity.clone()).collect::<Vec<_>>(),
+                "signature_count": records.len(),
+                "mode": "list-only",
+            })),
+        )
+            .into_response());
+    }
+
+    // Load artifact bodies from object storage and verify cryptographically.
+    let mut artifacts = Vec::new();
+    for rec in &records {
+        let path = blob_path(
+            &body.tenant,
+            &body.project,
+            &body.repository,
+            &rec.signature_digest,
+        );
+        match state.store.get(&StorePath::from(path)).await {
+            Ok(r) => {
+                let bytes = r
+                    .bytes()
+                    .await
+                    .map_err(|e| RegistryError::Storage(e.to_string()))?;
+                if let Ok(art) =
+                    serde_json::from_slice::<registry10x_signing::SignatureArtifact>(&bytes)
+                {
+                    artifacts.push(art);
+                } else if let Ok(env) =
+                    serde_json::from_slice::<registry10x_signing::CosignEnvelope>(&bytes)
+                {
+                    artifacts.push(registry10x_signing::SignatureArtifact {
+                        media_type: registry10x_signing::MEDIA_TYPE_COSIGN_ENVELOPE_V1.into(),
+                        body: bytes.to_vec(),
+                        signer_identity: env.key_ref,
+                        signature_type: "cosign-key".into(),
+                    });
+                }
+            }
+            Err(e) => warn!(error = %e, digest = %rec.signature_digest, "sig blob missing"),
+        }
+    }
+
+    if !state.config.signing.enabled {
+        return Err(RegistryError::Forbidden {
+            reason: "signing disabled ([signing].enabled=false)".into(),
+        });
+    }
+
+    let file_provider = match &state.config.signing.key_root {
+        Some(root) => Arc::new(registry10x_signing::FilePemKeyProvider::with_root(root)),
+        None => Arc::new(registry10x_signing::FilePemKeyProvider::new()),
+    };
+    let keys = Arc::new(
+        registry10x_signing::CompositeKeyProvider::builder()
+            .file(file_provider)
+            .build(),
+    );
+    let verifier = registry10x_signing::SigstoreVerifier::new(keys);
+    let key_refs: Vec<&str> = body.key_refs.iter().map(|s| s.as_str()).collect();
+    let policy = registry10x_signing::VerificationPolicy::require_keys("api", &key_refs);
+    use registry10x_signing::Verifier as _;
+    match verifier.verify(&body.digest, &artifacts, &policy).await {
+        Ok(outcome) => Ok((StatusCode::OK, axum::Json(outcome)).into_response()),
+        Err(e) => Ok((
+            StatusCode::OK,
+            axum::Json(serde_json::json!({
+                "trusted": false,
+                "signers": [],
+                "reason": e.to_string(),
+            })),
+        )
+            .into_response()),
+    }
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct PolicyUpsertBody {
+    #[serde(default)]
+    id: Option<Uuid>,
+    #[serde(default)]
+    enabled: Option<bool>,
+    spec: registry10x_signing::PolicySpec,
+    #[serde(default)]
+    on_violation: Option<registry10x_signing::OnViolation>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct PolicyPath {
+    tenant: String,
+    name: String,
+}
+
+fn signing_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "signing policy endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+/// PUT /v2/_signing/policies/{tenant}/{name}
+#[instrument(name = "upsert_verification_policy", skip(state, claims))]
+async fn upsert_verification_policy(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(path): Path<PolicyPath>,
+    axum::Json(body): axum::Json<PolicyUpsertBody>,
+) -> Result<Response, RegistryError> {
+    signing_admin_authorize(&claims)?;
+    if !state.config.signing.enabled {
+        return Err(RegistryError::Forbidden {
+            reason: "signing disabled ([signing].enabled=false)".into(),
+        });
+    }
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("policy store not configured".into()))?;
+
+    let on_violation = body.on_violation.unwrap_or(body.spec.on_violation);
+    let policy = registry10x_signing::StoredVerificationPolicy {
+        id: body.id.unwrap_or_else(Uuid::new_v4),
+        name: path.name.clone(),
+        tenant: path.tenant.clone(),
+        spec: body.spec,
+        enabled: body.enabled.unwrap_or(true),
+        on_violation,
+        updated_at: chrono::Utc::now(),
+    };
+    use registry10x_signing::PolicyStore as _;
+    registry10x_signing::PgPolicyStore::new(pool)
+        .upsert(&policy)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    Ok((StatusCode::OK, axum::Json(policy)).into_response())
+}
+
+/// GET /v2/_signing/policies/{tenant}/{name}
+#[instrument(name = "get_verification_policy", skip(state, claims))]
+async fn get_verification_policy(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(path): Path<PolicyPath>,
+) -> Result<Response, RegistryError> {
+    signing_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("policy store not configured".into()))?;
+    use registry10x_signing::PolicyStore as _;
+    let found = registry10x_signing::PgPolicyStore::new(pool)
+        .get(&path.tenant, &path.name)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    match found {
+        Some(p) => Ok((StatusCode::OK, axum::Json(p)).into_response()),
+        None => Err(RegistryError::NameUnknown { name: path.name }),
+    }
+}
+
+/// DELETE /v2/_signing/policies/{tenant}/{name}
+#[instrument(name = "delete_verification_policy", skip(state, claims))]
+async fn delete_verification_policy(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(path): Path<PolicyPath>,
+) -> Result<Response, RegistryError> {
+    signing_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("policy store not configured".into()))?;
+    use registry10x_signing::PolicyStore as _;
+    let deleted = registry10x_signing::PgPolicyStore::new(pool)
+        .delete(&path.tenant, &path.name)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    if deleted {
+        Ok(StatusCode::NO_CONTENT.into_response())
+    } else {
+        Err(RegistryError::NameUnknown { name: path.name })
+    }
+}
+
+// ── Auto-rebuild (018 R2) ────────────────────────────────────────────────────
+
+fn rebuild_enabled(state: &AppState) -> Result<(), RegistryError> {
+    if !state.config.rebuild.enabled {
+        return Err(RegistryError::Forbidden {
+            reason: "rebuild disabled ([rebuild].enabled=false)".into(),
+        });
+    }
+    Ok(())
+}
+
+fn rebuild_admin_authorize(claims: &TokenClaims) -> Result<(), RegistryError> {
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "rebuild admin endpoints require Admin role".into(),
+        });
+    }
+    Ok(())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct RebuildTriggerBody {
+    tenant: String,
+    /// Subscription name within the tenant.
+    subscription: String,
+    upstream_ref: String,
+    downstream_ref: String,
+    #[serde(default)]
+    reason: Option<String>,
+    #[serde(default)]
+    fixed_cves: Vec<String>,
+    #[serde(default = "default_severity")]
+    severity_max: String,
+}
+
+fn default_severity() -> String {
+    "high".into()
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct RebuildSubPath {
+    tenant: String,
+    name: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct RebuildSubUpsert {
+    #[serde(default)]
+    id: Option<Uuid>,
+    #[serde(default)]
+    enabled: Option<bool>,
+    spec: registry10x_rebuild::SubscriptionSpec,
+}
+
+// ── Admission (002) ──────────────────────────────────────────────────────────
+
+fn claims_bypass_admission(claims: &TokenClaims) -> bool {
+    claims.sub.contains("bypass-admission")
+        || (claims.role == Role::Admin
+            && claims
+                .scopes
+                .iter()
+                .any(|s| s.repository == "*" || s.actions.contains(&Action::Manage)))
+}
+
+async fn enforce_admission(
+    state: &AppState,
+    claims: &TokenClaims,
+    tenant: &str,
+    project: &str,
+    repository: &str,
+    digest: &str,
+) -> Result<(), RegistryError> {
+    let pool = match state.gc_pool.as_ref() {
+        Some(p) => p,
+        None => return Ok(()), // no PG → no policies loaded
+    };
+    let store = admission::PgAdmissionStore::new(pool.clone());
+    let policies = store.list_tenant(tenant).await.unwrap_or_default();
+    if policies.is_empty() {
+        return Ok(());
+    }
+
+    let scan = admission::fetch_scan(state.scan_store.as_ref(), digest).await;
+    let signature_ok = if policies.iter().any(|p| p.spec.signature_required) {
+        // Reuse signing policy path when signing enabled; else treat as missing.
+        if state.config.signing.enabled {
+            Some(
+                enforce_pull_signature_policy(
+                    state,
+                    &claims.sub,
+                    tenant,
+                    project,
+                    repository,
+                    digest,
+                )
+                .await
+                .is_ok(),
+            )
+        } else {
+            Some(false)
+        }
+    } else {
+        Some(true)
+    };
+
+    let bypass = claims_bypass_admission(claims);
+    let verdict = admission::evaluate(
+        &policies,
+        scan.as_ref(),
+        &state.admission_cache,
+        admission::EvaluateInput {
+            tenant,
+            project,
+            repository,
+            digest,
+            subject: &claims.sub,
+            bypass,
+            signature_ok,
+        },
+    )
+    .await;
+
+    let _ = store
+        .record_decision(
+            digest,
+            policies.first().map(|p| p.id),
+            &verdict,
+            &claims.sub,
+        )
+        .await;
+
+    match verdict {
+        admission::AdmissionVerdict::Allow => Ok(()),
+        admission::AdmissionVerdict::Warn { reason } => {
+            warn!(%digest, %reason, "admission warn");
+            let _ = state
+                .audit_log
+                .record(audit::RegistryAuditEvent {
+                    timestamp: chrono::Utc::now(),
+                    event_type: "admission.warn".into(),
+                    subject: claims.sub.clone(),
+                    tenant: tenant.into(),
+                    project: project.into(),
+                    repository: repository.into(),
+                    reference: digest.into(),
+                    digest: digest.into(),
+                    size_bytes: 0,
+                    status_code: 200,
+                    duration_ms: 0,
+                })
+                .await;
+            Ok(())
+        }
+        admission::AdmissionVerdict::Block { reason, .. } => {
+            let _ = state
+                .audit_log
+                .record(audit::RegistryAuditEvent {
+                    timestamp: chrono::Utc::now(),
+                    event_type: "admission.block".into(),
+                    subject: claims.sub.clone(),
+                    tenant: tenant.into(),
+                    project: project.into(),
+                    repository: repository.into(),
+                    reference: digest.into(),
+                    digest: digest.into(),
+                    size_bytes: 0,
+                    status_code: 403,
+                    duration_ms: 0,
+                })
+                .await;
+            Err(RegistryError::ManifestUnverified { reason })
+        }
+    }
+}
+
+fn admission_enabled(state: &AppState) -> Result<(), RegistryError> {
+    if state.config.admission.enabled {
+        Ok(())
+    } else {
+        Err(RegistryError::Forbidden {
+            reason: "admission disabled ([admission] enabled=false)".into(),
+        })
+    }
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct AdmitTestBody {
+    #[serde(rename = "ref")]
+    image_ref: String,
+    #[serde(default)]
+    policy_name: Option<String>,
+}
+
+/// POST /v2/_admit/test — dry-run evaluator.
+#[instrument(name = "admit_test", skip(state, claims))]
+async fn admit_test(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    axum::Json(body): axum::Json<AdmitTestBody>,
+) -> Result<Response, RegistryError> {
+    admission_enabled(&state)?;
+    let parsed = promote::ImageRef::parse(&body.image_ref)?;
+    authorize(
+        &claims,
+        &parsed.tenant,
+        &parsed.project,
+        &parsed.repository,
+        Action::Manage,
+    )?;
+    let (_, bytes) = {
+        // Resolve digest via promote helper paths
+        let store = &state.store;
+        let digest = if parsed.reference.starts_with("sha256:") {
+            parsed.reference.clone()
+        } else {
+            read_tag_link(
+                store,
+                &parsed.tenant,
+                &parsed.project,
+                &parsed.repository,
+                &parsed.reference,
+            )
+            .await?
+            .ok_or_else(|| RegistryError::TagUnknown {
+                tag: parsed.reference.clone(),
+            })?
+        };
+        (digest.clone(), digest)
+    };
+    let digest = bytes;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("admission requires Postgres".into()))?;
+    let store = admission::PgAdmissionStore::new(pool);
+    let mut policies = store.list_tenant(&parsed.tenant).await?;
+    if let Some(name) = &body.policy_name {
+        policies.retain(|p| &p.name == name);
+    }
+    let scan = admission::fetch_scan(state.scan_store.as_ref(), &digest).await;
+    let verdict = admission::evaluate(
+        &policies,
+        scan.as_ref(),
+        &state.admission_cache,
+        admission::EvaluateInput {
+            tenant: &parsed.tenant,
+            project: &parsed.project,
+            repository: &parsed.repository,
+            digest: &digest,
+            subject: &claims.sub,
+            bypass: false,
+            signature_ok: Some(true),
+        },
+    )
+    .await;
+    Ok((StatusCode::OK, axum::Json(verdict)).into_response())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct AdmissionPolicyBody {
+    #[serde(default)]
+    id: Option<Uuid>,
+    #[serde(default)]
+    enabled: Option<bool>,
+    spec: admission::AdmissionPolicySpec,
+}
+
+/// PUT /v2/_admit/policies/{tenant}/{name}
+#[instrument(name = "upsert_admission_policy", skip(state, claims))]
+async fn upsert_admission_policy(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path((tenant, name)): Path<(String, String)>,
+    axum::Json(body): axum::Json<AdmissionPolicyBody>,
+) -> Result<Response, RegistryError> {
+    admission_enabled(&state)?;
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "admin required to upsert AdmissionPolicy".into(),
+        });
+    }
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("admission requires Postgres".into()))?;
+    let policy = admission::AdmissionPolicy {
+        id: body.id.unwrap_or_else(Uuid::new_v4),
+        name,
+        tenant,
+        spec: body.spec,
+        enabled: body.enabled.unwrap_or(true),
+        updated_at: chrono::Utc::now(),
+    };
+    admission::PgAdmissionStore::new(pool)
+        .upsert(&policy)
+        .await?;
+    Ok((StatusCode::OK, axum::Json(&policy)).into_response())
+}
+
+/// GET /v2/_admit/policies?tenant=
+#[instrument(name = "list_admission_policies", skip(state, claims))]
+async fn list_admission_policies(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(q): Query<std::collections::HashMap<String, String>>,
+) -> Result<Response, RegistryError> {
+    admission_enabled(&state)?;
+    let tenant = q
+        .get("tenant")
+        .cloned()
+        .ok_or_else(|| RegistryError::ManifestInvalid {
+            reason: "tenant query required".into(),
+        })?;
+    if claims.role != Role::Admin {
+        return Err(RegistryError::Forbidden {
+            reason: "admin required to list admission policies".into(),
+        });
+    }
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("admission requires Postgres".into()))?;
+    let rows = admission::PgAdmissionStore::new(pool)
+        .list_tenant(&tenant)
+        .await?;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "items": rows })),
+    )
+        .into_response())
+}
+
+// ── Promotion (006) ──────────────────────────────────────────────────────────
+
+fn promotion_enabled(state: &AppState) -> Result<(), RegistryError> {
+    if state.config.promotion.enabled {
+        Ok(())
+    } else {
+        Err(RegistryError::Forbidden {
+            reason: "promotion disabled ([promotion] enabled=false)".into(),
+        })
+    }
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct PromoteBody {
+    source: String,
+    dest: String,
+    #[serde(default = "promote_default_true")]
+    include_signatures: bool,
+    #[serde(default = "promote_default_true")]
+    include_attestations: bool,
+    #[serde(default)]
+    mode: Option<String>,
+    #[serde(default)]
+    policy: Option<String>,
+}
+
+fn promote_default_true() -> bool {
+    true
+}
+
+/// POST /v2/_promote — copy manifest (+ blobs, optional signatures) to dest.
+#[instrument(name = "promote", skip(state, claims))]
+async fn promote_handler(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    axum::Json(body): axum::Json<PromoteBody>,
+) -> Result<Response, RegistryError> {
+    promotion_enabled(&state)?;
+    let source = promote::ImageRef::parse(&body.source)?;
+    let dest = promote::ImageRef::parse(&body.dest)?;
+    authorize(
+        &claims,
+        &source.tenant,
+        &source.project,
+        &source.repository,
+        Action::Pull,
+    )?;
+    authorize(
+        &claims,
+        &dest.tenant,
+        &dest.project,
+        &dest.repository,
+        Action::Push,
+    )?;
+
+    let mode = match body.mode.as_deref() {
+        Some("dry_run") | Some("dry-run") => promote::PromoteMode::DryRun,
+        Some("on_policy_pass") => promote::PromoteMode::OnPolicyPass {
+            policy: body.policy.clone().unwrap_or_default(),
+        },
+        _ => promote::PromoteMode::Force,
+    };
+
+    if let promote::PromoteMode::OnPolicyPass { ref policy } = mode {
+        // C3: evaluate dest-scoped admission against source digest before copy.
+        if state.config.admission.enabled {
+            let (_, man_bytes) = {
+                let dig = if source.reference.starts_with("sha256:") {
+                    source.reference.clone()
+                } else {
+                    read_tag_link(
+                        &state.store,
+                        &source.tenant,
+                        &source.project,
+                        &source.repository,
+                        &source.reference,
+                    )
+                    .await?
+                    .ok_or_else(|| RegistryError::TagUnknown {
+                        tag: source.reference.clone(),
+                    })?
+                };
+                (dig.clone(), dig)
+            };
+            let digest = man_bytes;
+            let pool = state.gc_pool.as_ref().ok_or_else(|| {
+                RegistryError::Internal("on_policy_pass requires Postgres".into())
+            })?;
+            let mut policies = admission::PgAdmissionStore::new(pool.clone())
+                .list_tenant(&dest.tenant)
+                .await?;
+            if !policy.is_empty() {
+                policies.retain(|p| p.name == *policy);
+            }
+            let scan = admission::fetch_scan(state.scan_store.as_ref(), &digest).await;
+            let verdict = admission::evaluate(
+                &policies,
+                scan.as_ref(),
+                &state.admission_cache,
+                admission::EvaluateInput {
+                    tenant: &dest.tenant,
+                    project: &dest.project,
+                    repository: &dest.repository,
+                    digest: &digest,
+                    subject: &claims.sub,
+                    bypass: false,
+                    signature_ok: Some(true),
+                },
+            )
+            .await;
+            if let admission::AdmissionVerdict::Block { reason, .. } = verdict {
+                return Err(RegistryError::ManifestUnverified {
+                    reason: format!("promote on_policy_pass failed: {reason}"),
+                });
+            }
+        }
+    }
+
+    let req = promote::PromoteRequest {
+        source,
+        dest,
+        include_signatures: body.include_signatures,
+        include_attestations: body.include_attestations,
+        mode: match mode {
+            promote::PromoteMode::OnPolicyPass { .. } => promote::PromoteMode::Force,
+            other => other,
+        },
+    };
+
+    let outcome = promote::promote(promote::PromoteParams {
+        store: &state.store,
+        dest_store: state.promote_dest_store.as_ref(),
+        pool: state.gc_pool.as_ref(),
+        actor: &claims.sub,
+        req: &req,
+    })
+    .await?;
+
+    let _ = state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            timestamp: chrono::Utc::now(),
+            event_type: "manifest.promote".into(),
+            subject: claims.sub.clone(),
+            tenant: req.dest.tenant.clone(),
+            project: req.dest.project.clone(),
+            repository: req.dest.repository.clone(),
+            reference: req.dest.reference.clone(),
+            digest: outcome.dst_digest.clone(),
+            size_bytes: outcome.bytes_copied,
+            status_code: 200,
+            duration_ms: 0,
+        })
+        .await;
+
+    Ok((StatusCode::OK, axum::Json(outcome)).into_response())
+}
+
+#[derive(Debug, serde::Deserialize)]
+struct PromoteHistoryQuery {
+    tenant: String,
+    #[serde(default)]
+    project: Option<String>,
+    #[serde(default)]
+    repository: Option<String>,
+    #[serde(default = "default_promote_limit")]
+    limit: i64,
+}
+
+fn default_promote_limit() -> i64 {
+    50
+}
+
+/// GET /v2/_promote/history?tenant=&project=&repository=
+#[instrument(name = "promote_history", skip(state, claims))]
+async fn promote_history(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(q): Query<PromoteHistoryQuery>,
+) -> Result<Response, RegistryError> {
+    promotion_enabled(&state)?;
+    if claims.role != Role::Admin {
+        let project = q
+            .project
+            .as_deref()
+            .ok_or_else(|| RegistryError::Forbidden {
+                reason: "project query required for non-admin promote history".into(),
+            })?;
+        let repo = q.repository.as_deref().unwrap_or("*");
+        authorize(&claims, &q.tenant, project, repo, Action::Pull)?;
+    }
+    let pool = state
+        .gc_pool
+        .as_ref()
+        .ok_or_else(|| RegistryError::Internal("promotion history requires Postgres".into()))?;
+
+    let rows = sqlx::query(
+        "SELECT id, started_at, finished_at, actor,
+                src_tenant, src_project, src_repository, src_reference, src_digest,
+                dst_tenant, dst_project, dst_repository, dst_reference,
+                state, error, bytes_copied, blob_count, signatures_copied
+         FROM promotions
+         WHERE dst_tenant = $1
+           AND ($2::text IS NULL OR dst_project = $2)
+           AND ($3::text IS NULL OR dst_repository = $3)
+         ORDER BY started_at DESC
+         LIMIT $4",
+    )
+    .bind(&q.tenant)
+    .bind(q.project.as_deref())
+    .bind(q.repository.as_deref())
+    .bind(q.limit)
+    .fetch_all(pool)
+    .await
+    .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    use sqlx::Row;
+    let items: Vec<_> = rows
+        .iter()
+        .map(|r| {
+            let src_tenant: String = r.get("src_tenant");
+            let src_project: String = r.get("src_project");
+            let src_repository: String = r.get("src_repository");
+            let src_reference: String = r.get("src_reference");
+            let dst_tenant: String = r.get("dst_tenant");
+            let dst_project: String = r.get("dst_project");
+            let dst_repository: String = r.get("dst_repository");
+            let dst_reference: String = r.get("dst_reference");
+            serde_json::json!({
+                "id": r.get::<Uuid, _>("id"),
+                "started_at": r.get::<chrono::DateTime<chrono::Utc>, _>("started_at"),
+                "finished_at": r.get::<Option<chrono::DateTime<chrono::Utc>>, _>("finished_at"),
+                "actor": r.get::<String, _>("actor"),
+                "source": format!("{src_tenant}/{src_project}/{src_repository}:{src_reference}"),
+                "dest": format!("{dst_tenant}/{dst_project}/{dst_repository}:{dst_reference}"),
+                "src_digest": r.get::<String, _>("src_digest"),
+                "state": r.get::<String, _>("state"),
+                "error": r.get::<Option<String>, _>("error"),
+                "bytes_copied": r.get::<i64, _>("bytes_copied"),
+                "blob_count": r.get::<i32, _>("blob_count"),
+                "signatures_copied": r.get::<i32, _>("signatures_copied"),
+            })
+        })
+        .collect();
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "items": items })),
+    )
+        .into_response())
+}
+
+/// GET /v2/_promote/{id}
+#[instrument(name = "promote_status", skip(state, claims))]
+async fn promote_status(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(id): Path<Uuid>,
+) -> Result<Response, RegistryError> {
+    promotion_enabled(&state)?;
+    let pool = state
+        .gc_pool
+        .as_ref()
+        .ok_or_else(|| RegistryError::Internal("promotion status requires Postgres".into()))?;
+    type PromoRow = (
+        Uuid,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        String,
+        Option<String>,
+    );
+    let row: Option<PromoRow> = sqlx::query_as(
+        "SELECT id, actor, src_tenant, src_project, src_repository, src_reference,
+                dst_tenant, dst_project, dst_repository, dst_reference, state, error
+         FROM promotions WHERE id = $1",
+    )
+    .bind(id)
+    .fetch_optional(pool)
+    .await
+    .map_err(|e| RegistryError::Internal(e.to_string()))?;
+
+    let Some((
+        id,
+        actor,
+        src_tenant,
+        src_project,
+        src_repository,
+        src_reference,
+        dst_tenant,
+        dst_project,
+        dst_repository,
+        dst_reference,
+        st,
+        error,
+    )) = row
+    else {
+        return Err(RegistryError::NameUnknown {
+            name: id.to_string(),
+        });
+    };
+    authorize(
+        &claims,
+        &dst_tenant,
+        &dst_project,
+        &dst_repository,
+        Action::Pull,
+    )?;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({
+            "id": id,
+            "actor": actor,
+            "source": format!("{src_tenant}/{src_project}/{src_repository}:{src_reference}"),
+            "dest": format!("{dst_tenant}/{dst_project}/{dst_repository}:{dst_reference}"),
+            "state": st,
+            "error": error,
+        })),
+    )
+        .into_response())
+}
+
+/// POST /v2/_rebuild/trigger — manual fire (admin).
+#[instrument(name = "rebuild_trigger", skip(state, claims))]
+async fn rebuild_trigger(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    axum::Json(body): axum::Json<RebuildTriggerBody>,
+) -> Result<Response, RegistryError> {
+    rebuild_enabled(&state)?;
+    rebuild_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("rebuild store requires Postgres".into()))?;
+
+    use registry10x_rebuild::SubscriptionStore as _;
+    let sub = registry10x_rebuild::PgSubscriptionStore::new(pool.clone())
+        .get(&body.tenant, &body.subscription)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?
+        .ok_or_else(|| RegistryError::NameUnknown {
+            name: body.subscription.clone(),
+        })?;
+
+    if !sub.matches(&body.upstream_ref, &body.downstream_ref) {
+        return Err(RegistryError::Forbidden {
+            reason: "subscription watch does not match upstream/downstream".into(),
+        });
+    }
+
+    let trigger = match body.reason.as_deref() {
+        Some("base_pushed") => registry10x_rebuild::TriggerCause::BasePushed,
+        Some("cve_fixed") => registry10x_rebuild::TriggerCause::CveFixed,
+        Some("scheduled_nightly") => registry10x_rebuild::TriggerCause::ScheduledNightly,
+        _ => registry10x_rebuild::TriggerCause::Manual,
+    };
+
+    let svc = registry10x_rebuild::RebuildService::new(pool);
+    match svc
+        .fire(registry10x_rebuild::FireRequest {
+            subscription: sub,
+            upstream_ref: body.upstream_ref,
+            downstream_ref: body.downstream_ref,
+            trigger,
+            fixed_cves: body.fixed_cves,
+            severity_max: body.severity_max,
+        })
+        .await
+    {
+        Ok(result) => Ok((StatusCode::OK, axum::Json(result)).into_response()),
+        Err(e) => Ok((
+            StatusCode::BAD_GATEWAY,
+            axum::Json(serde_json::json!({
+                "status": "failed",
+                "error": e.to_string(),
+            })),
+        )
+            .into_response()),
+    }
+}
+
+/// GET /v2/_rebuild/subscriptions?tenant=
+#[instrument(name = "list_rebuild_subscriptions", skip(state, claims))]
+async fn list_rebuild_subscriptions(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(q): Query<std::collections::HashMap<String, String>>,
+) -> Result<Response, RegistryError> {
+    rebuild_enabled(&state)?;
+    let tenant = q.get("tenant").cloned().unwrap_or_else(|| "default".into());
+    // Admin or any authenticated reader for the tenant list.
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("rebuild store requires Postgres".into()))?;
+    use registry10x_rebuild::SubscriptionStore as _;
+    let rows = registry10x_rebuild::PgSubscriptionStore::new(pool)
+        .list_for_tenant(&tenant)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    let _ = &claims;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "subscriptions": rows })),
+    )
+        .into_response())
+}
+
+/// PUT /v2/_rebuild/subscriptions/{tenant}/{name}
+#[instrument(name = "upsert_rebuild_subscription", skip(state, claims))]
+async fn upsert_rebuild_subscription(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(path): Path<RebuildSubPath>,
+    axum::Json(body): axum::Json<RebuildSubUpsert>,
+) -> Result<Response, RegistryError> {
+    rebuild_enabled(&state)?;
+    rebuild_admin_authorize(&claims)?;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("rebuild store requires Postgres".into()))?;
+    let sub = registry10x_rebuild::RebuildSubscription {
+        id: body.id.unwrap_or_else(Uuid::new_v4),
+        tenant: path.tenant,
+        name: path.name,
+        spec: body.spec,
+        enabled: body.enabled.unwrap_or(true),
+        updated_at: chrono::Utc::now(),
+    };
+    use registry10x_rebuild::SubscriptionStore as _;
+    registry10x_rebuild::PgSubscriptionStore::new(pool)
+        .upsert(&sub)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    Ok((StatusCode::OK, axum::Json(sub)).into_response())
+}
+
+/// GET /v2/_rebuild/events?tenant=&limit=
+#[instrument(name = "list_rebuild_events", skip(state, claims))]
+async fn list_rebuild_events(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Query(q): Query<std::collections::HashMap<String, String>>,
+) -> Result<Response, RegistryError> {
+    rebuild_enabled(&state)?;
+    let _ = &claims;
+    let tenant = q.get("tenant").cloned().unwrap_or_else(|| "default".into());
+    let limit: i64 = q
+        .get("limit")
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(50)
+        .clamp(1, 500);
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("rebuild store requires Postgres".into()))?;
+    let events = registry10x_rebuild::RebuildService::new(pool)
+        .list_events(&tenant, limit)
+        .await
+        .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({ "events": events })),
+    )
+        .into_response())
+}
+
+/// GET /v2/_lineage/{digest}
+#[instrument(name = "get_lineage", skip(state, claims))]
+async fn get_lineage(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(digest): Path<String>,
+) -> Result<Response, RegistryError> {
+    let _ = &claims;
+    let pool = state
+        .gc_pool
+        .clone()
+        .ok_or_else(|| RegistryError::Internal("lineage store requires Postgres".into()))?;
+    let parents: Vec<(String, String, chrono::DateTime<chrono::Utc>)> = sqlx::query_as(
+        "SELECT parent_digest, confidence, detected_at
+         FROM image_lineage WHERE child_digest = $1
+         ORDER BY detected_at DESC",
+    )
+    .bind(&digest)
+    .fetch_all(&pool)
+    .await
+    .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    let children: Vec<(String, String, chrono::DateTime<chrono::Utc>)> = sqlx::query_as(
+        "SELECT child_digest, confidence, detected_at
+         FROM image_lineage WHERE parent_digest = $1
+         ORDER BY detected_at DESC
+         LIMIT 100",
+    )
+    .bind(&digest)
+    .fetch_all(&pool)
+    .await
+    .map_err(|e| RegistryError::Internal(e.to_string()))?;
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::json!({
+            "digest": digest,
+            "parents": parents.iter().map(|(p, c, at)| serde_json::json!({
+                "parent_digest": p, "confidence": c, "detected_at": at
+            })).collect::<Vec<_>>(),
+            "children": children.iter().map(|(ch, c, at)| serde_json::json!({
+                "child_digest": ch, "confidence": c, "detected_at": at
+            })).collect::<Vec<_>>(),
+        })),
+    )
+        .into_response())
+}
+
+// ── Helper Functions ─────────────────────────────────────────────────────────
+
+/// Read a tag link. `Ok(None)` when the tag doesn't exist.
+async fn read_tag_link(
+    store: &Arc<dyn ObjectStore>,
+    tenant: &str,
+    project: &str,
+    repo: &str,
+    tag: &str,
+) -> Result<Option<String>, RegistryError> {
+    let path = StorePath::from(tag_link_path(tenant, project, repo, tag));
+    match store.get(&path).await {
+        Ok(result) => {
+            let bytes = result
+                .bytes()
+                .await
+                .map_err(|e| RegistryError::Storage(e.to_string()))?;
+            Ok(Some(String::from_utf8_lossy(&bytes).trim().to_string()))
+        }
+        Err(e) if is_store_not_found(&e) => Ok(None),
+        Err(e) => Err(RegistryError::Storage(e.to_string())),
+    }
+}
+
+/// Delete every tag in the repo that points at `digest`, so deleting a
+/// manifest by digest leaves no dangling tags. Returns the removed tags.
+async fn delete_tags_for_digest(
+    store: &Arc<dyn ObjectStore>,
+    tenant: &str,
+    project: &str,
+    repo: &str,
+    digest: &str,
+) -> Result<Vec<String>, RegistryError> {
+    let prefix = tags_prefix(tenant, project, repo);
+    let links: Vec<_> = store
+        .list(Some(&StorePath::from(prefix.clone())))
+        .try_collect()
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    let mut removed = Vec::new();
+    for meta in links {
+        let Some(tag) = meta.location.as_ref().strip_prefix(&prefix) else {
+            continue;
+        };
+        if tag.is_empty() {
+            continue;
+        }
+        if read_tag_link(store, tenant, project, repo, tag)
+            .await?
+            .as_deref()
+            == Some(digest)
+        {
+            match store.delete(&meta.location).await {
+                Ok(()) => removed.push(tag.to_string()),
+                Err(e) if is_store_not_found(&e) => {}
+                Err(e) => return Err(RegistryError::Storage(e.to_string())),
+            }
+        }
+    }
+    Ok(removed)
+}
+
+/// Resolve a manifest reference: if it is a tag, read the tag link to get the digest,
+/// then return the manifest path by digest. If it is a digest, return the manifest path directly.
+async fn resolve_manifest_path(
+    state: &AppState,
+    tenant: &str,
+    project: &str,
+    name: &str,
+    reference: &str,
+) -> Result<String, RegistryError> {
+    // Handle digest references: sha256:abc... or sha256-abc... (OCI dash encoding)
+    let normalized_ref = if reference.starts_with("sha256-") {
+        reference.replacen("sha256-", "sha256:", 1)
+    } else {
+        reference.to_string()
+    };
+    if normalized_ref.starts_with("sha256:") {
+        // Direct digest reference
+        Ok(manifest_path(tenant, project, name, &normalized_ref))
+    } else {
+        // Tag reference: read the tag link to get the digest
+        let tag_p = tag_link_path(tenant, project, name, reference);
+        let store_path = StorePath::from(tag_p);
+
+        let result =
+            state
+                .store
+                .get(&store_path)
+                .await
+                .map_err(|_| RegistryError::ManifestUnknown {
+                    reference: reference.to_string(),
+                })?;
+
+        let digest_bytes = result
+            .bytes()
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+        let digest = String::from_utf8(digest_bytes.to_vec()).map_err(|_| {
+            RegistryError::ManifestInvalid {
+                reason: "tag link contains invalid UTF-8".to_string(),
+            }
+        })?;
+
+        let digest = digest.trim().to_string();
+        Ok(manifest_path(tenant, project, name, &digest))
+    }
+}
+
+/// Detect the media type of a manifest from its JSON content.
+fn detect_manifest_media_type(data: &[u8]) -> String {
+    if let Ok(val) = serde_json::from_slice::<serde_json::Value>(data) {
+        if let Some(mt) = val.get("mediaType").and_then(|v| v.as_str()) {
+            return mt.to_string();
+        }
+        if let Some(sv) = val.get("schemaVersion").and_then(|v| v.as_u64())
+            && sv == 2
+        {
+            if val.get("manifests").is_some() {
+                return "application/vnd.oci.image.index.v1+json".to_string();
+            }
+            return "application/vnd.oci.image.manifest.v1+json".to_string();
+        }
+    }
+    "application/vnd.oci.image.manifest.v1+json".to_string()
+}
+
+// ── Internal Replication Handlers ─────────────────────────────────────────────
+
+/// POST /internal/replicate/manifest - Receive a replicated manifest from another region.
+async fn internal_replicate_manifest(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let tenant = extract_header(&headers, "x-replication-tenant")?;
+    let project = extract_header(&headers, "x-replication-project")?;
+    let repo = extract_header(&headers, "x-replication-repo")?;
+    let reference = extract_header(&headers, "x-replication-reference")?;
+    let digest = extract_header(&headers, "x-replication-digest")?;
+
+    info!(
+        tenant = %tenant,
+        project = %project,
+        repo = %repo,
+        digest = %digest,
+        "Receiving replicated manifest"
+    );
+
+    // Store manifest by digest
+    let digest_path = manifest_path(&tenant, &project, &repo, &digest);
+    let digest_store_path = StorePath::from(digest_path);
+    state
+        .store
+        .put(&digest_store_path, body.clone().into())
+        .await
+        .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // If reference is a tag, create tag link
+    if !reference.starts_with("sha256:") {
+        let tag_p = tag_link_path(&tenant, &project, &repo, &reference);
+        let tag_store_path = StorePath::from(tag_p);
+        state
+            .store
+            .put(&tag_store_path, Bytes::from(digest.clone()).into())
+            .await
+            .map_err(|e| RegistryError::Storage(e.to_string()))?;
+    }
+
+    // Record metrics and audit for replicated manifest
+    let source_region = extract_header(&headers, "x-replication-source-region").unwrap_or_default();
+    counter!("registry_manifest_push_total",
+        "tenant" => tenant.clone(),
+        "project" => project.clone()
+    )
+    .increment(1);
+    counter!("registry_push_bytes_total").increment(body.len() as u64);
+    state
+        .audit_log
+        .record(audit::RegistryAuditEvent {
+            event_type: "manifest.replicated".into(),
+            subject: format!("replication:{source_region}"),
+            tenant: tenant.clone(),
+            project: project.clone(),
+            repository: repo.clone(),
+            reference: reference.clone(),
+            digest: digest.clone(),
+            size_bytes: body.len() as u64,
+            status_code: 200,
+            duration_ms: 0,
+            timestamp: chrono::Utc::now(),
+        })
+        .await
+        .map_err(|e| RegistryError::AuditUnavailable(e.0))?;
+
+    Ok(StatusCode::OK.into_response())
+}
+
+/// POST /internal/replicate/blob - Receive a replicated blob from another region.
+async fn internal_replicate_blob(
+    State(state): State<AppState>,
+    headers: HeaderMap,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let tenant = extract_header(&headers, "x-replication-tenant")?;
+    let project = extract_header(&headers, "x-replication-project")?;
+    let repo = extract_header(&headers, "x-replication-repo")?;
+    let digest = extract_header(&headers, "x-replication-digest")?;
+    let blob_size = body.len() as u64;
+
+    info!(
+        tenant = %tenant,
+        project = %project,
+        repo = %repo,
+        digest = %digest,
+        "Receiving replicated blob"
+    );
+
+    let store_path = StorePath::from(blob_path(&tenant, &project, &repo, &digest));
+    put_chunked(
+        state.store.as_ref(),
+        &store_path,
+        body,
+        chunked_put_config(&state.config),
+    )
+    .await
+    .map_err(|e| RegistryError::Storage(e.to_string()))?;
+
+    // Record metrics for replicated blob
+    counter!("registry_blob_upload_bytes_total",
+        "tenant" => tenant.clone(),
+        "project" => project.clone()
+    )
+    .increment(blob_size);
+    counter!("registry_push_bytes_total").increment(blob_size);
+
+    Ok(StatusCode::OK.into_response())
+}
+
+/// POST /internal/replicate/delete - Receive a replicated delete from another region.
+async fn internal_replicate_delete(
+    State(state): State<AppState>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let event: ReplicationEvent = serde_json::from_slice(&body)
+        .map_err(|e| RegistryError::Internal(format!("invalid replication event: {e}")))?;
+
+    info!(
+        tenant = %event.tenant,
+        repo = %event.repo,
+        reference = %event.reference,
+        "Receiving replicated delete"
+    );
+
+    // Same semantics as delete_manifest: a tag delete removes only the tag,
+    // a digest delete removes the manifest and every tag pointing at it.
+    if event.reference.starts_with("sha256:") {
+        let path = manifest_path(&event.tenant, &event.project, &event.repo, &event.digest);
+        let _ = state.store.delete(&StorePath::from(path)).await;
+        delete_tags_for_digest(
+            &state.store,
+            &event.tenant,
+            &event.project,
+            &event.repo,
+            &event.digest,
+        )
+        .await?;
+    } else {
+        let tag_p = tag_link_path(&event.tenant, &event.project, &event.repo, &event.reference);
+        let _ = state.store.delete(&StorePath::from(tag_p)).await;
+    }
+
+    Ok(StatusCode::OK.into_response())
+}
+
+/// GET /internal/replication/status - Get replication and failover status.
+async fn internal_replication_status(
+    State(state): State<AppState>,
+) -> Result<Response, RegistryError> {
+    let mut status = serde_json::Map::new();
+
+    if let Some(ref failover) = state.failover_manager {
+        let health = failover.all_health().await;
+        status.insert(
+            "regions".to_string(),
+            serde_json::to_value(&health).unwrap_or_default(),
+        );
+        status.insert(
+            "is_primary".to_string(),
+            serde_json::Value::Bool(failover.is_local_primary()),
+        );
+    }
+
+    Ok((
+        StatusCode::OK,
+        axum::Json(serde_json::Value::Object(status)),
+    )
+        .into_response())
+}
+
+// ── Image Status Check ──────────────────────────────────────────────────────
+
+/// GET /v2/{tenant}/{project}/{name}/status/{reference}
+///
+/// Pre-pull readiness check. Returns whether an image (manifest + all layers)
+/// is fully available and pullable. Use this to verify image availability
+/// before pulling, or to check if an image exists on the mirror.
+///
+/// Response:
+/// ```json
+/// {
+///   "available": true,
+///   "image": "demo/default/nginx:latest",
+///   "manifest": { "exists": true, "digest": "sha256:...", "mediaType": "...", "size": 1234 },
+///   "layers": [
+///     { "digest": "sha256:...", "size": 12345, "available": true },
+///     { "digest": "sha256:...", "size": 67890, "available": true }
+///   ],
+///   "config": { "digest": "sha256:...", "size": 5678, "available": true },
+///   "missing_layers": 0,
+///   "total_size": 86169
+/// }
+/// ```
+#[instrument(name = "image_status", skip(state, claims), fields(tenant = %params.tenant, project = %params.project, name = %params.name, reference = %params.reference))]
+async fn image_status(
+    State(state): State<AppState>,
+    AuthenticatedClaims(claims): AuthenticatedClaims,
+    Path(params): Path<ManifestRef>,
+) -> Result<axum::Json<serde_json::Value>, RegistryError> {
+    authorize(
+        &claims,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        Action::Pull,
+    )?;
+
+    let image_ref = format!(
+        "{}/{}/{}:{}",
+        params.tenant, params.project, params.name, params.reference
+    );
+
+    // 1. Check manifest
+    let manifest_path_result = resolve_manifest_path(
+        &state,
+        &params.tenant,
+        &params.project,
+        &params.name,
+        &params.reference,
+    )
+    .await;
+
+    let manifest_store_path = match manifest_path_result {
+        Ok(p) => p,
+        Err(_) => {
+            return Ok(axum::Json(serde_json::json!({
+                "available": false,
+                "image": image_ref,
+                "manifest": { "exists": false },
+                "layers": [],
+                "missing_layers": 0,
+                "total_size": 0,
+                "reason": "manifest not found"
+            })));
+        }
+    };
+
+    let store_path = StorePath::from(manifest_store_path);
+    let manifest_data = match state.store.get(&store_path).await {
+        Ok(result) => match result.bytes().await {
+            Ok(bytes) => bytes,
+            Err(_) => {
+                return Ok(axum::Json(serde_json::json!({
+                    "available": false,
+                    "image": image_ref,
+                    "manifest": { "exists": false },
+                    "layers": [],
+                    "missing_layers": 0,
+                    "total_size": 0,
+                    "reason": "manifest not readable"
+                })));
+            }
+        },
+        Err(_) => {
+            return Ok(axum::Json(serde_json::json!({
+                "available": false,
+                "image": image_ref,
+                "manifest": { "exists": false },
+                "layers": [],
+                "missing_layers": 0,
+                "total_size": 0,
+                "reason": "manifest not found"
+            })));
+        }
+    };
+
+    let digest = sha256_digest(&manifest_data);
+    let media_type = detect_manifest_media_type(&manifest_data);
+    let manifest_size = manifest_data.len();
+
+    // 2. Parse manifest to find layers and config
+    let manifest_json: serde_json::Value =
+        serde_json::from_slice(&manifest_data).map_err(|e| RegistryError::ManifestInvalid {
+            reason: e.to_string(),
+        })?;
+
+    let mut layer_statuses = Vec::new();
+    let mut config_status = serde_json::json!(null);
+    let mut total_size: u64 = manifest_size as u64;
+    let mut missing_layers: u32 = 0;
+
+    // Check config blob if present
+    if let Some(config) = manifest_json.get("config")
+        && let (Some(cfg_digest), Some(cfg_size)) = (
+            config.get("digest").and_then(|d| d.as_str()),
+            config.get("size").and_then(|s| s.as_u64()),
+        )
+    {
+        let cfg_path = blob_path(&params.tenant, &params.project, &params.name, cfg_digest);
+        let cfg_exists = state.store.head(&StorePath::from(cfg_path)).await.is_ok();
+        if !cfg_exists {
+            missing_layers += 1;
+        }
+        total_size += cfg_size;
+        config_status = serde_json::json!({
+            "digest": cfg_digest,
+            "size": cfg_size,
+            "available": cfg_exists
+        });
+    }
+
+    // Check each layer
+    if let Some(layers) = manifest_json.get("layers").and_then(|l| l.as_array()) {
+        for layer in layers {
+            if let (Some(layer_digest), Some(layer_size)) = (
+                layer.get("digest").and_then(|d| d.as_str()),
+                layer.get("size").and_then(|s| s.as_u64()),
+            ) {
+                let layer_store_path =
+                    blob_path(&params.tenant, &params.project, &params.name, layer_digest);
+                let layer_exists = state
+                    .store
+                    .head(&StorePath::from(layer_store_path))
+                    .await
+                    .is_ok();
+                if !layer_exists {
+                    missing_layers += 1;
+                }
+                total_size += layer_size;
+                layer_statuses.push(serde_json::json!({
+                    "digest": layer_digest,
+                    "size": layer_size,
+                    "available": layer_exists
+                }));
+            }
+        }
+    }
+
+    // For manifest lists/indexes, check sub-manifests
+    if let Some(manifests) = manifest_json.get("manifests").and_then(|m| m.as_array()) {
+        for sub in manifests {
+            if let (Some(sub_digest), Some(sub_size)) = (
+                sub.get("digest").and_then(|d| d.as_str()),
+                sub.get("size").and_then(|s| s.as_u64()),
+            ) {
+                let sub_path =
+                    manifest_path(&params.tenant, &params.project, &params.name, sub_digest);
+                let sub_exists = state.store.head(&StorePath::from(sub_path)).await.is_ok();
+                if !sub_exists {
+                    missing_layers += 1;
+                }
+                total_size += sub_size;
+                let platform = sub
+                    .get("platform")
+                    .cloned()
+                    .unwrap_or(serde_json::json!(null));
+                layer_statuses.push(serde_json::json!({
+                    "digest": sub_digest,
+                    "size": sub_size,
+                    "available": sub_exists,
+                    "platform": platform
+                }));
+            }
+        }
+    }
+
+    let all_available = missing_layers == 0;
+
+    Ok(axum::Json(serde_json::json!({
+        "available": all_available,
+        "image": image_ref,
+        "manifest": {
+            "exists": true,
+            "digest": digest,
+            "mediaType": media_type,
+            "size": manifest_size
+        },
+        "layers": layer_statuses,
+        "config": config_status,
+        "missing_layers": missing_layers,
+        "total_size": total_size
+    })))
+}
+
+// ── 2-segment wrapper handlers (default tenant) ────────────────────────────
+//
+// Standard Docker clients push with 2 path segments: {namespace}/{repo}.
+// These wrappers inject the default tenant and delegate to the 3-segment handlers.
+
+async fn head_manifest_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<ManifestRef2>,
+) -> Result<Response, RegistryError> {
+    let params = ManifestRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        reference: p.reference,
+    };
+    head_manifest(state, claims, Path(params)).await
+}
+
+async fn get_manifest_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<ManifestRef2>,
+) -> Result<Response, RegistryError> {
+    let params = ManifestRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        reference: p.reference,
+    };
+    get_manifest(state, claims, Path(params)).await
+}
+
+async fn put_manifest_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<ManifestRef2>,
+    req_headers: HeaderMap,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let params = ManifestRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        reference: p.reference,
+    };
+    put_manifest(state, claims, Path(params), req_headers, body).await
+}
+
+async fn delete_manifest_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<ManifestRef2>,
+) -> Result<Response, RegistryError> {
+    let params = ManifestRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        reference: p.reference,
+    };
+    delete_manifest(state, claims, Path(params)).await
+}
+
+async fn head_blob_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<BlobRef2>,
+) -> Result<Response, RegistryError> {
+    let params = BlobRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        digest: p.digest,
+    };
+    head_blob(state, claims, Path(params)).await
+}
+
+async fn get_blob_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<BlobRef2>,
+) -> Result<Response, RegistryError> {
+    let params = BlobRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        digest: p.digest,
+    };
+    get_blob(state, claims, Path(params)).await
+}
+
+async fn initiate_blob_upload_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<RepoPath2>,
+) -> Result<Response, RegistryError> {
+    let params = RepoPath {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+    };
+    initiate_blob_upload(state, claims, Path(params)).await
+}
+
+async fn upload_blob_chunk_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<UploadRef2>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let params = UploadRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        uuid: p.uuid,
+    };
+    upload_blob_chunk(state, claims, Path(params), body).await
+}
+
+async fn complete_blob_upload_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<UploadRef2>,
+    query: Query<DigestQuery>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let params = UploadRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        uuid: p.uuid,
+    };
+    complete_blob_upload(state, claims, Path(params), query, body).await
+}
+
+async fn image_status_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<ManifestRef2>,
+) -> Result<axum::Json<serde_json::Value>, RegistryError> {
+    let params = ManifestRef {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+        reference: p.reference,
+    };
+    image_status(state, claims, Path(params)).await
+}
+
+async fn upload_signature_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<BlobRef2>,
+    body: Bytes,
+) -> Result<Response, RegistryError> {
+    let params = BlobRef {
+        tenant: "default".into(),
+        project: p.project,
+        name: p.name,
+        digest: p.digest,
+    };
+    upload_signature(state, claims, Path(params), body).await
+}
+
+async fn list_signatures_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<BlobRef2>,
+) -> Result<Response, RegistryError> {
+    let params = BlobRef {
+        tenant: "default".into(),
+        project: p.project,
+        name: p.name,
+        digest: p.digest,
+    };
+    list_signatures(state, claims, Path(params)).await
+}
+
+async fn list_tags_2seg(
+    state: State<AppState>,
+    claims: AuthenticatedClaims,
+    Path(p): Path<RepoPath2>,
+    pagination: Query<PaginationQuery>,
+) -> Result<Response, RegistryError> {
+    let params = RepoPath {
+        tenant: DEFAULT_TENANT.to_string(),
+        project: p.project,
+        name: p.name,
+    };
+    list_tags(state, claims, Path(params), pagination).await
+}
+
+fn extract_header(headers: &HeaderMap, name: &str) -> Result<String, RegistryError> {
+    headers
+        .get(name)
+        .and_then(|v| v.to_str().ok())
+        .map(|s| s.to_string())
+        .ok_or_else(|| RegistryError::Internal(format!("missing header: {name}")))
+}
+
+/// Load scanner config from `REGISTRY10X_SCANNER__*` env vars and build the
+/// runtime. Returns `Ok(None)` when `REGISTRY10X_SCANNER__ENABLED` is not "true".
+async fn build_scanner_runtime(
+    store: Arc<dyn ObjectStore>,
+) -> anyhow::Result<Option<ScannerRuntime>> {
+    use std::env;
+    let enabled = env::var("REGISTRY10X_SCANNER__ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    if !enabled {
+        return Ok(None);
+    }
+    let postgres_url = env::var("REGISTRY10X_SCANNER__POSTGRES_URL").map_err(|_| {
+        anyhow::anyhow!("REGISTRY10X_SCANNER__POSTGRES_URL required when scanner enabled")
+    })?;
+    let redis_url = env::var("REGISTRY10X_SCANNER__REDIS_URL").map_err(|_| {
+        anyhow::anyhow!("REGISTRY10X_SCANNER__REDIS_URL required when scanner enabled")
+    })?;
+    let vulndb = env::var("REGISTRY10X_SCANNER__VULNDB").unwrap_or_else(|_| "osv".into());
+    let vulndb = match vulndb.as_str() {
+        "registry10x" => registry10x_scanner::config::VulnDbBackend::Registry10x,
+        _ => registry10x_scanner::config::VulnDbBackend::Osv,
+    };
+    let ai_enabled = env::var("REGISTRY10X_SCANNER__AI_ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(true);
+    let ai_endpoint = env::var("REGISTRY10X_SCANNER__AI_ENDPOINT")
+        .unwrap_or_else(|_| "http://127.0.0.1:11434".into());
+    let ai_model =
+        env::var("REGISTRY10X_SCANNER__AI_MODEL").unwrap_or_else(|_| "qwen2.5-coder:7b".into());
+
+    let cfg = ScannerConfig {
+        enabled: true,
+        postgres_url,
+        redis_url,
+        vulndb,
+        ai_enabled,
+        ai_endpoint,
+        ai_model,
+        workers: env::var("REGISTRY10X_SCANNER__WORKERS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(2),
+        queue_capacity: env::var("REGISTRY10X_SCANNER__QUEUE_CAPACITY")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(256),
+        result_ttl_secs: env::var("REGISTRY10X_SCANNER__RESULT_TTL_SECS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(3600),
+        pg_max_connections: env::var("REGISTRY10X_SCANNER__PG_MAX_CONNECTIONS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(8),
+        ingest_enabled: env::var("REGISTRY10X_SCANNER__INGEST_ENABLED")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(true),
+        ingest_interval_secs: env::var("REGISTRY10X_SCANNER__INGEST_INTERVAL_SECS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(21_600),
+        export_prefix: env::var("REGISTRY10X_SCANNER__EXPORT_PREFIX")
+            .unwrap_or_else(|_| "scanner-exports".into()),
+        nvd_enabled: env::var("REGISTRY10X_SCANNER__NVD_ENABLED")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(false),
+        nvd_api_key: env::var("REGISTRY10X_SCANNER__NVD_API_KEY").ok(),
+        nvd_bootstrap_window_days: env::var("REGISTRY10X_SCANNER__NVD_BOOTSTRAP_WINDOW_DAYS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(30),
+        nvd_sleep_between_pages_secs: env::var("REGISTRY10X_SCANNER__NVD_SLEEP_BETWEEN_PAGES_SECS")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(6),
+        ghsa_enabled: env::var("REGISTRY10X_SCANNER__GHSA_ENABLED")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(false),
+        ghsa_token: env::var("REGISTRY10X_SCANNER__GHSA_TOKEN").ok(),
+        rate_limit_rpm: env::var("REGISTRY10X_SCANNER__RATE_LIMIT_RPM")
+            .ok()
+            .and_then(|v| v.parse().ok())
+            .unwrap_or(600),
+        alerts_webhook_url: env::var("REGISTRY10X_SCANNER__ALERTS_WEBHOOK_URL").ok(),
+        alerts_format: env::var("REGISTRY10X_SCANNER__ALERTS_FORMAT")
+            .unwrap_or_else(|_| "generic".into()),
+        queue_backend: match env::var("REGISTRY10X_SCANNER__QUEUE_BACKEND")
+            .unwrap_or_else(|_| "tokio".into())
+            .to_lowercase()
+            .as_str()
+        {
+            "postgres" => registry10x_scanner::config::QueueBackend::Postgres,
+            _ => registry10x_scanner::config::QueueBackend::Tokio,
+        },
+        enqueue_only: env::var("REGISTRY10X_SCANNER__ENQUEUE_ONLY")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(false),
+        scan_dedup_enabled: env::var("REGISTRY10X_SCANNER__SCAN_DEDUP_ENABLED")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(true),
+    };
+
+    let rt = ScannerRuntime::build(cfg, store).await?;
+    info!(
+        "scanner runtime ready (workers={})",
+        rt.worker_handles.len()
+    );
+    Ok(Some(rt))
+}
+
+// ── Main ─────────────────────────────────────────────────────────────────────
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    // Load configuration from file if --config flag provided, otherwise defaults
+    let config = {
+        let args: Vec<String> = std::env::args().collect();
+        let config_path = args
+            .iter()
+            .find_map(|a| a.strip_prefix("--config=").map(String::from))
+            .or_else(|| {
+                args.windows(2)
+                    .find(|w| w[0] == "--config")
+                    .map(|w| w[1].clone())
+            });
+        if let Some(path) = config_path {
+            match std::fs::read_to_string(&path) {
+                Ok(contents) => match serde_yaml::from_str::<RegistryConfig>(&contents) {
+                    Ok(cfg) => {
+                        eprintln!(
+                            "Config loaded from {path}, multi_region: {}",
+                            cfg.multi_region.is_some()
+                        );
+                        cfg
+                    }
+                    Err(e) => {
+                        eprintln!("Warning: failed to parse config {path}: {e}, using defaults");
+                        RegistryConfig::default()
+                    }
+                },
+                Err(e) => {
+                    eprintln!("Warning: failed to read config {path}: {e}, using defaults");
+                    RegistryConfig::default()
+                }
+            }
+        } else {
+            RegistryConfig::default()
+        }
+    };
+    let config = {
+        let mut config = config;
+        config.rate_limit.apply_env_overrides();
+        config.storage.apply_env_overrides();
+        config
+    };
+
+    // Initialize tracing
+    let env_filter = tracing_subscriber::EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new(&config.observability.log_level));
+
+    match config.observability.log_format.as_str() {
+        "json" => {
+            tracing_subscriber::fmt()
+                .json()
+                .with_env_filter(env_filter)
+                .with_target(true)
+                .with_thread_ids(true)
+                .init();
+        }
+        _ => {
+            tracing_subscriber::fmt()
+                .with_env_filter(env_filter)
+                .with_target(true)
+                .init();
+        }
+    }
+
+    info!("Registry10x Registry starting up");
+
+    // Initialize Prometheus metrics recorder and obtain the handle for rendering
+    let prom_handle = PrometheusBuilder::new()
+        .install_recorder()
+        .expect("failed to install Prometheus recorder");
+
+    // Pre-register all metrics so they appear in /metrics from startup.
+    // Existing per-operation counters & latency histogram (kept for back-compat
+    // dashboards).
+    counter!("registry_manifest_push_total").increment(0);
+    counter!("registry_manifest_pull_total").increment(0);
+    counter!("registry_blob_pull_total").increment(0);
+    counter!("registry_delete_total", "tenant" => "", "project" => "").increment(0);
+    counter!("registry_push_bytes_total").increment(0);
+    counter!("registry_pull_bytes_total").increment(0);
+    counter!("registry_errors_total", "type" => "storage").increment(0);
+    counter!("registry_errors_total", "type" => "auth").increment(0);
+    counter!("registry_errors_total", "type" => "validation").increment(0);
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.pull").record(0.0);
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.push").record(0.0);
+    histogram!("registry_request_duration_seconds", "operation" => "manifest.delete").record(0.0);
+    histogram!("registry_request_duration_seconds", "operation" => "blob.pull").record(0.0);
+    histogram!("registry_request_duration_seconds", "operation" => "blob.push").record(0.0);
+
+    // ── Enterprise observability (HTTP, storage, mirror, replication, webhook) ──
+    // Pre-publish the build_info gauge (fixed value 1, labels carry version data
+    // — same trick used by node_exporter).
+    gauge!("registry10x_build_info",
+        "service" => "registry",
+        "version" => env!("CARGO_PKG_VERSION"),
+        "rustc" => option_env!("RUSTC_VERSION").unwrap_or("unknown"))
+    .set(1.0);
+
+    // HTTP — populated by http_metrics_middleware.
+    counter!("registry10x_http_requests_total",
+        "route" => "v2_check", "method" => "GET", "status_class" => "2xx")
+    .increment(0);
+    histogram!("registry10x_http_request_duration_seconds",
+        "route" => "v2_check", "method" => "GET")
+    .record(0.0);
+    gauge!("registry10x_http_requests_in_flight", "route" => "v2_check").set(0.0);
+
+    // Rate limiter — populated by rate_limit_middleware.
+    counter!("registry10x_rate_limit_rejected_total", "tenant" => "anonymous").increment(0);
+
+    // Storage backend (resilience layer).
+    for op in [
+        "put", "put_opts", "get", "get_opts", "head", "delete", "list",
+    ] {
+        counter!("registry10x_storage_operations_total",
+            "operation" => op, "outcome" => "success")
+        .increment(0);
+        counter!("registry10x_storage_operations_total",
+            "operation" => op, "outcome" => "error")
+        .increment(0);
+        counter!("registry10x_storage_operation_errors_total", "operation" => op).increment(0);
+        histogram!("registry10x_storage_operation_duration_seconds", "operation" => op).record(0.0);
+        counter!("registry10x_retry_attempts_total",
+            "operation" => op, "outcome" => "recovered")
+        .increment(0);
+        counter!("registry10x_retry_attempts_total",
+            "operation" => op, "outcome" => "exhausted")
+        .increment(0);
+    }
+
+    // Circuit breakers — pre-publish the storage one so dashboards always have a series.
+    gauge!("registry10x_circuit_breaker_state", "breaker" => "storage").set(0.0);
+    counter!("registry10x_circuit_breaker_transitions_total",
+        "breaker" => "storage", "to" => "open")
+    .increment(0);
+    counter!("registry10x_circuit_breaker_rejections_total", "breaker" => "storage").increment(0);
+
+    // Mirror.
+    for kind in ["manifest", "blob"] {
+        counter!("registry10x_mirror_cache_misses_total", "kind" => kind).increment(0);
+        for outcome in [
+            "fetched",
+            "not_found",
+            "error",
+            "skipped_scope",
+            "skipped_unlinked",
+            "no_upstreams",
+        ] {
+            counter!("registry10x_mirror_fetch_total", "kind" => kind, "outcome" => outcome)
+                .increment(0);
+        }
+    }
+
+    // Replication.
+    counter!("registry10x_replication_enqueued_total", "kind" => "manifest").increment(0);
+    counter!("registry10x_replication_enqueued_total", "kind" => "blob").increment(0);
+    counter!("registry10x_replication_enqueued_total", "kind" => "delete").increment(0);
+    counter!("registry10x_replication_enqueue_failures_total").increment(0);
+    gauge!("registry10x_replication_queue_depth").set(0.0);
+
+    // Webhook.
+    counter!("registry10x_webhook_enqueued_total", "event" => "manifest.push").increment(0);
+    counter!("registry10x_webhook_enqueued_total", "event" => "manifest.delete").increment(0);
+    counter!("registry10x_webhook_enqueued_total", "event" => "blob.push").increment(0);
+    counter!("registry10x_webhook_enqueue_failures_total", "event" => "manifest.push").increment(0);
+
+    // Process start-time gauge — Prometheus convention; uptime is computed
+    // by Grafana as `time() - registry10x_process_start_time_seconds`.
+    gauge!("registry10x_process_start_time_seconds").set(chrono::Utc::now().timestamp() as f64);
+
+    // Initialize object store based on configured backend
+    let storage_backend = config.storage.backend.as_str();
+    let storage_root = &config.storage.root;
+
+    let raw_store: Arc<dyn ObjectStore> = match storage_backend {
+        "filesystem" => {
+            std::fs::create_dir_all(storage_root)?;
+            info!(root = %storage_root, "Initializing filesystem storage backend");
+            Arc::new(LocalFileSystem::new_with_prefix(storage_root)?)
+        }
+        "s3" | "minio" => {
+            let mut builder = AmazonS3Builder::new()
+                .with_bucket_name(storage_root)
+                // object_store's defaults are applied explicitly so they
+                // can be tuned per environment. `retry_timeout` bounds a
+                // whole request including retries; large blobs avoid it
+                // by going out as multipart (see `put_chunked`).
+                .with_retry(ObjectStoreRetryConfig {
+                    max_retries: config.storage.retry_max_retries,
+                    retry_timeout: Duration::from_secs(config.storage.retry_timeout_secs),
+                    ..Default::default()
+                })
+                .with_client_options(
+                    ClientOptions::new()
+                        .with_connect_timeout(Duration::from_secs(
+                            config.storage.connect_timeout_secs,
+                        ))
+                        .with_timeout(Duration::from_secs(config.storage.request_timeout_secs)),
+                );
+
+            if let Some(ref endpoint) = config.storage.endpoint {
+                builder = builder.with_endpoint(endpoint);
+                // MinIO and S3-compatible stores require virtual-hosted-style to be disabled
+                builder = builder.with_virtual_hosted_style_request(false);
+            }
+            if let Some(ref region) = config.storage.region {
+                builder = builder.with_region(region);
+            }
+            if let Some(ref access_key) = config.storage.access_key {
+                builder = builder.with_access_key_id(access_key);
+            }
+            if let Some(ref secret_key) = config.storage.secret_key {
+                builder = builder.with_secret_access_key(secret_key);
+            }
+
+            // MinIO requires path-style access and may use HTTP
+            if storage_backend == "minio" {
+                builder = builder.with_virtual_hosted_style_request(false);
+                builder = builder.with_allow_http(true);
+            }
+
+            let store = builder.build()?;
+            info!(
+                bucket = %storage_root,
+                endpoint = config.storage.endpoint.as_deref().unwrap_or("default"),
+                backend = %storage_backend,
+                "Initializing S3-compatible storage backend"
+            );
+            Arc::new(store)
+        }
+        "gcs" => {
+            let builder = GoogleCloudStorageBuilder::new().with_bucket_name(storage_root);
+
+            let store = builder.build()?;
+            info!(bucket = %storage_root, "Initializing GCS storage backend");
+            Arc::new(store)
+        }
+        "azure" => {
+            let mut builder = MicrosoftAzureBuilder::new().with_container_name(storage_root);
+
+            if let Some(ref access_key) = config.storage.access_key {
+                builder = builder.with_account(access_key);
+            }
+            if let Some(ref secret_key) = config.storage.secret_key {
+                builder = builder.with_access_key(secret_key);
+            }
+
+            let store = builder.build()?;
+            info!(container = %storage_root, "Initializing Azure Blob storage backend");
+            Arc::new(store)
+        }
+        other => {
+            anyhow::bail!(
+                "Unsupported storage backend: '{}'. Supported: filesystem, s3, minio, gcs, azure",
+                other
+            );
+        }
+    };
+
+    // Wrap with resilience layer (circuit breaker + retry)
+    let store: Arc<dyn ObjectStore> = if let Some(ref resilience_cfg) = config.resilience {
+        info!("Initializing resilient storage wrapper (retry + circuit breaker)");
+        Arc::new(ResilientObjectStore::new(
+            raw_store,
+            RetryPolicy {
+                max_retries: resilience_cfg.retry.max_retries,
+                base_delay_ms: resilience_cfg.retry.base_delay_ms,
+                max_delay_ms: resilience_cfg.retry.max_delay_ms,
+                jitter: resilience_cfg.retry.jitter,
+            },
+            CircuitBreakerConfig {
+                failure_threshold: resilience_cfg.circuit_breaker.failure_threshold,
+                success_threshold: resilience_cfg.circuit_breaker.success_threshold,
+                open_duration_secs: resilience_cfg.circuit_breaker.open_duration_secs,
+            },
+        ))
+    } else {
+        raw_store
+    };
+
+    info!(backend = %storage_backend, root = %storage_root, "Storage backend initialized");
+
+    // Optional second store for true cross-backend promote (design 006).
+    let promote_dest_store: Option<Arc<dyn ObjectStore>> =
+        if let Some(ref dest_cfg) = config.promotion.dest_storage {
+            let dest = build_object_store(dest_cfg)?;
+            info!(
+                backend = %dest_cfg.backend,
+                root = %dest_cfg.root,
+                "Promotion dest storage backend initialized"
+            );
+            Some(dest)
+        } else {
+            None
+        };
+
+    // Load JWT verification key — fail hard if key is missing or invalid.
+    // A silent fallback to a dummy key causes all token validation to fail
+    // after pod restart, making pushes return 401 with no diagnostic info.
+    let verification_key_path = &config.auth.verification_key_path;
+    let verification_key_pem = std::fs::read(verification_key_path).unwrap_or_else(|e| {
+        error!(
+            path = %verification_key_path,
+            error = %e,
+            "FATAL: Cannot load JWT verification key — all authenticated requests will fail"
+        );
+        panic!("Cannot start registry without JWT verification key: {e}");
+    });
+
+    info!(
+        path = %verification_key_path,
+        size = verification_key_pem.len(),
+        algorithm = %config.auth.signing_algorithm,
+        "JWT verification key loaded"
+    );
+
+    let decoding_key = if config.auth.signing_algorithm == "EdDSA" {
+        DecodingKey::from_ed_pem(&verification_key_pem).unwrap_or_else(|e| {
+            error!(error = %e, "FATAL: Invalid EdDSA verification key PEM");
+            panic!("Invalid EdDSA verification key: {e}");
+        })
+    } else {
+        DecodingKey::from_rsa_pem(&verification_key_pem).unwrap_or_else(|e| {
+            error!(error = %e, "FATAL: Invalid RSA verification key PEM");
+            panic!("Invalid RSA verification key: {e}");
+        })
+    };
+
+    // Rate limiter: default tenant-keyed limiter
+    let default_rps = std::num::NonZeroU32::new(config.rate_limit.default_rps)
+        .unwrap_or(std::num::NonZeroU32::new(100).unwrap());
+    info!(rps = default_rps.get(), "Per-tenant rate limit configured");
+    let default_rate_limiter = Arc::new(RateLimiter::keyed(Quota::per_second(default_rps)));
+
+    // Initialize mirror service (pull-through cache)
+    let mirror_service = if let Some(ref mirror_cfg) = config.mirror {
+        if mirror_cfg.enabled && !mirror_cfg.upstreams.is_empty() {
+            info!(
+                upstreams = mirror_cfg.upstreams.len(),
+                "Initializing pull-through mirror service"
+            );
+            let svc_config = MirrorServiceConfig {
+                enabled: mirror_cfg.enabled,
+                upstreams: mirror_cfg
+                    .upstreams
+                    .iter()
+                    .map(|u| UpstreamConfig {
+                        name: u.name.clone(),
+                        url: u.url.clone(),
+                        username: u.username.clone(),
+                        password: u.password.clone(),
+                        cache_ttl_secs: u.cache_ttl_secs.unwrap_or(mirror_cfg.cache_ttl_secs),
+                        tenant_prefix: u.tenant_prefix.clone(),
+                    })
+                    .collect(),
+                cache_ttl_secs: mirror_cfg.cache_ttl_secs,
+                scope: mirror_scope_from_config(mirror_cfg.scope.as_ref()),
+            };
+            info!(scope = ?svc_config.scope, "Mirror pullthrough scope");
+            Some(Arc::new(MirrorService::new(&svc_config, store.clone())))
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+
+    // Initialize multi-region replication and failover
+    let (replication_handle, failover_manager) = if let Some(ref mr_cfg) = config.multi_region {
+        if !mr_cfg.regions.is_empty() {
+            info!(
+                local_region = %mr_cfg.local_region,
+                regions = mr_cfg.regions.len(),
+                "Initializing multi-region replication"
+            );
+
+            let repl_regions: Vec<ReplicationRegionConfig> = mr_cfg
+                .regions
+                .iter()
+                .map(|r| ReplicationRegionConfig {
+                    name: r.name.clone(),
+                    endpoint: r.endpoint.clone(),
+                    internal_endpoint: r.internal_endpoint.clone(),
+                    is_primary: r.is_primary,
+                    priority: r.priority,
+                })
+                .collect();
+
+            let repl_mode = if mr_cfg.replication.mode == "semi_sync" {
+                ReplicationMode::SemiSync
+            } else {
+                ReplicationMode::Async
+            };
+
+            let repl_config = ReplicationMultiRegionConfig {
+                local_region: mr_cfg.local_region.clone(),
+                regions: repl_regions.clone(),
+                replication: ReplicationPolicy {
+                    mode: repl_mode,
+                    max_lag_secs: mr_cfg.replication.max_lag_secs,
+                    batch_size: mr_cfg.replication.batch_size,
+                    sweep_interval_secs: mr_cfg.replication.sweep_interval_secs,
+                },
+            };
+
+            let replicator = Replicator::new(&repl_config, store.clone());
+            let repl_handle = replicator.handle();
+
+            // Start the background replication loop
+            tokio::spawn(async move {
+                replicator.run().await;
+            });
+
+            // Initialize failover manager
+            let failover_regions = repl_regions;
+            let failover = Arc::new(FailoverManager::new(
+                mr_cfg.local_region.clone(),
+                failover_regions,
+                mr_cfg.health_check_interval_secs,
+            ));
+
+            // Start the background health check loop
+            let failover_clone = failover.clone();
+            tokio::spawn(async move {
+                failover_clone.run().await;
+            });
+
+            (Some(repl_handle), Some(failover))
+        } else {
+            (None, None)
+        }
+    } else {
+        (None, None)
+    };
+
+    // Initialize webhook notifier (optional)
+    let webhook_handle = if let Some(ref wh_cfg) = config.webhooks {
+        if wh_cfg.enabled && !wh_cfg.endpoints.is_empty() {
+            info!(
+                endpoints = wh_cfg.endpoints.len(),
+                "Initializing webhook notifier"
+            );
+            let (notifier, handle) = webhook::WebhookNotifier::new(wh_cfg.clone());
+            tokio::spawn(notifier.run());
+            Some(handle)
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+
+    let listen_addr = config.server.listen_addr.clone();
+    let internal_port = config
+        .multi_region
+        .as_ref()
+        .map(|mr| mr.internal_port)
+        .unwrap_or(5002);
+
+    let start_time = Instant::now();
+
+    // ── Scanner runtime (optional; enabled by REGISTRY10X_SCANNER__ENABLED) ──
+    let scanner_runtime = match build_scanner_runtime(store.clone()).await {
+        Ok(Some(rt)) => Some(rt),
+        Ok(None) => {
+            info!("scanner disabled via config");
+            None
+        }
+        Err(e) => {
+            warn!(error = %e, "scanner runtime init failed; continuing without it");
+            None
+        }
+    };
+    let scanner_queue = scanner_runtime.as_ref().map(|rt| rt.queue.clone());
+    let scan_store = scanner_runtime.as_ref().map(|rt| rt.scan_store.clone());
+    let scanner_router = scanner_runtime.as_ref().map(|rt| rt.router.clone());
+
+    // ── Online-GC refcounter (009 slice 1) ───────────────────────────
+    // Enabled by `REGISTRY10X_GC__ONLINE=true`. When enabled, we reuse
+    // the scanner's Postgres pool (it owns the migrations); when the
+    // scanner is disabled we connect a dedicated pool. When disabled
+    // entirely the no-op refcounter keeps the manifest path unchanged
+    // and existing deployments are unaffected.
+    let gc_online_enabled = std::env::var("REGISTRY10X_GC__ONLINE")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    let (gc_refcounter, gc_reaper_control, gc_pool): (
+        Arc<dyn registry10x_gc::BlobRefCounter>,
+        Option<Arc<registry10x_gc::ReaperControl>>,
+        Option<sqlx::PgPool>,
+    ) = if gc_online_enabled {
+        let pool_opt = if let Some(rt) = scanner_runtime.as_ref() {
+            Some(rt.pg.clone())
+        } else if let Ok(url) = std::env::var("REGISTRY10X_GC__POSTGRES_URL") {
+            match registry10x_db::connect(&url, 4).await {
+                Ok(p) => match registry10x_db::migrate(&p).await {
+                    Ok(()) => Some(p),
+                    Err(e) => {
+                        warn!(error = %e, "gc postgres migrate failed; falling back to no-op refcounter");
+                        None
+                    }
+                },
+                Err(e) => {
+                    warn!(error = %e, "gc postgres connect failed; falling back to no-op refcounter");
+                    None
+                }
+            }
+        } else {
+            warn!(
+                "REGISTRY10X_GC__ONLINE=true but neither scanner nor REGISTRY10X_GC__POSTGRES_URL provided; using no-op refcounter"
+            );
+            None
+        };
+        match pool_opt {
+            Some(pool) => {
+                info!("online GC refcounter enabled (postgres-backed)");
+
+                // Spawn the continuous reaper unless explicitly disabled.
+                let reaper_enabled = std::env::var("REGISTRY10X_GC__REAPER_ENABLED")
+                    .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+                    .unwrap_or(true);
+
+                let control = if reaper_enabled {
+                    let control = registry10x_gc::ReaperControl::new();
+                    let cfg = registry10x_gc::ReaperConfig {
+                        grace: std::time::Duration::from_secs(
+                            std::env::var("REGISTRY10X_GC__REAPER_GRACE_SECS")
+                                .ok()
+                                .and_then(|v| v.parse::<u64>().ok())
+                                .unwrap_or(24 * 3600),
+                        ),
+                        batch_size: std::env::var("REGISTRY10X_GC__REAPER_BATCH")
+                            .ok()
+                            .and_then(|v| v.parse::<i64>().ok())
+                            .unwrap_or(200),
+                        idle_sleep: std::time::Duration::from_secs(
+                            std::env::var("REGISTRY10X_GC__REAPER_IDLE_SLEEP_SECS")
+                                .ok()
+                                .and_then(|v| v.parse::<u64>().ok())
+                                .unwrap_or(30),
+                        ),
+                        sweep_qps: std::env::var("REGISTRY10X_GC__REAPER_QPS")
+                            .ok()
+                            .and_then(|v| v.parse::<u32>().ok())
+                            .unwrap_or(100),
+                    };
+                    let reaper = registry10x_gc::ContinuousReaper::new(
+                        pool.clone(),
+                        store.clone(),
+                        cfg,
+                        control.clone(),
+                    );
+                    tokio::spawn(async move {
+                        let _ = reaper.run().await;
+                    });
+                    info!("online GC continuous reaper spawned");
+                    Some(control)
+                } else {
+                    info!("online GC reaper disabled by config");
+                    None
+                };
+
+                let rc: Arc<dyn registry10x_gc::BlobRefCounter> =
+                    Arc::new(registry10x_gc::PgBlobRefCounter::new(pool.clone()));
+                (rc, control, Some(pool))
+            }
+            None => (Arc::new(registry10x_gc::NoopBlobRefCounter), None, None),
+        }
+    } else {
+        (Arc::new(registry10x_gc::NoopBlobRefCounter), None, None)
+    };
+
+    // ── Lazy-pull indexer worker (010 slice 2) ───────────────────────
+    // Enabled by REGISTRY10X_LAZY__ENABLED. Spawns a worker that drains
+    // the lazy_jobs queue and dispatches to a TocIndexer impl. Slice 2
+    // ships a stub eStargz indexer that records metadata + referrers
+    // without rewriting layer bytes — proves the queue plumbing end
+    // to end so slice 3 can plug the real indexer in transparently.
+    let lazy_worker_enabled = std::env::var("REGISTRY10X_LAZY__ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    if let Some(pool) = gc_pool.clone().filter(|_| lazy_worker_enabled) {
+        // 010 polish — real ObjectStore fetcher. Jobs now carry
+        // (tenant, project, repo) so the worker can build the
+        // standard `<t>/<p>/<r>/blobs/sha256/<hex>` storage key.
+        let fetcher: Arc<dyn registry10x_lazy::LayerFetcher> =
+            Arc::new(registry10x_lazy::ObjectStoreLayerFetcher {
+                store: store.clone(),
+            });
+        let indexers: Vec<Arc<dyn registry10x_lazy::TocIndexer>> =
+            vec![Arc::new(registry10x_lazy::StubEstargzIndexer)];
+        let worker_control = registry10x_lazy::WorkerControl::new();
+        let worker = registry10x_lazy::Worker::new(
+            pool.clone(),
+            fetcher,
+            indexers,
+            registry10x_lazy::WorkerConfig::default(),
+            worker_control.clone(),
+        );
+        tokio::spawn(async move {
+            worker.run().await;
+        });
+        info!("lazy-pull worker spawned (stub indexer)");
+        let _ = worker_control;
+    }
+
+    // ── TTL reaper (013 slice 2) ─────────────────────────────────────
+    // Drains expired tag rows. Requires the GC pool + the registry's
+    // storage handle. Kill-switched by REGISTRY10X_TTL__REAPER_ENABLED;
+    // off by default so existing deployments stay no-op.
+    let ttl_reaper_control: Option<Arc<registry10x_ephemeral::TtlReaperControl>> = {
+        let enabled = std::env::var("REGISTRY10X_TTL__REAPER_ENABLED")
+            .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+            .unwrap_or(false);
+        match (enabled, gc_pool.clone()) {
+            (true, Some(pool)) => {
+                let control = registry10x_ephemeral::TtlReaperControl::new();
+                let cfg = registry10x_ephemeral::TtlReaperConfig {
+                    batch_size: std::env::var("REGISTRY10X_TTL__REAPER_BATCH")
+                        .ok()
+                        .and_then(|v| v.parse().ok())
+                        .unwrap_or(100),
+                    idle_sleep: std::time::Duration::from_secs(
+                        std::env::var("REGISTRY10X_TTL__REAPER_IDLE_SLEEP_SECS")
+                            .ok()
+                            .and_then(|v| v.parse().ok())
+                            .unwrap_or(60),
+                    ),
+                };
+                let reaper =
+                    registry10x_ephemeral::TtlReaper::new(pool, store.clone(), cfg, control.clone());
+                tokio::spawn(async move {
+                    let _ = reaper.run().await;
+                });
+                info!("ttl reaper spawned");
+                Some(control)
+            }
+            (true, None) => {
+                warn!(
+                    "REGISTRY10X_TTL__REAPER_ENABLED=true but no Postgres pool; \
+                     enable scanner or GC to provide one"
+                );
+                None
+            }
+            _ => None,
+        }
+    };
+
+    // ── Usage recorder (017 slice 1) ─────────────────────────────────
+    // Enabled by `REGISTRY10X_USAGE__ENABLED=true`. Reuses the GC pool
+    // when present (both want the same Postgres). Defaults to a no-op
+    // so existing deployments are unaffected.
+    let usage_enabled = std::env::var("REGISTRY10X_USAGE__ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    // ── Typed artifact validators (016) ──────────────────────────────
+    // Enabled by `REGISTRY10X_ARTIFACT_TYPES__ENABLED=true`. Slice 1 ships
+    // the Helm validator; further types (WASM/model/Terraform) plug
+    // in here in subsequent slices. Default off → no-op manifest path.
+    let artifact_types_enabled = std::env::var("REGISTRY10X_ARTIFACT_TYPES__ENABLED")
+        .map(|v| matches!(v.as_str(), "true" | "1" | "yes"))
+        .unwrap_or(false);
+    let artifact_registry: Option<Arc<registry10x_artifact_types::ArtifactRegistry>> =
+        if artifact_types_enabled {
+            info!("typed artifact validators enabled (helm/wasm/model/tfmodule)");
+            Some(Arc::new(
+                registry10x_artifact_types::ArtifactRegistry::new()
+                    .register(registry10x_artifact_types::HelmType)
+                    .register(registry10x_artifact_types::WasmType)
+                    .register(registry10x_artifact_types::ModelType)
+                    .register(registry10x_artifact_types::TerraformModuleType),
+            ))
+        } else {
+            None
+        };
+
+    let usage_recorder: Arc<dyn registry10x_cost::UsageRecorder> = if usage_enabled {
+        match gc_pool.clone() {
+            Some(pool) => {
+                info!("usage recorder enabled (postgres-backed)");
+
+                // Spawn drainer (staging → durable). Idempotent + crash-safe.
+                let drainer_control = registry10x_cost::DrainerControl::new();
+                let drainer_cfg = registry10x_cost::DrainerConfig {
+                    interval: std::time::Duration::from_secs(
+                        std::env::var("REGISTRY10X_USAGE__DRAINER_INTERVAL_SECS")
+                            .ok()
+                            .and_then(|v| v.parse().ok())
+                            .unwrap_or(60),
+                    ),
+                    batch_size: std::env::var("REGISTRY10X_USAGE__DRAINER_BATCH")
+                        .ok()
+                        .and_then(|v| v.parse().ok())
+                        .unwrap_or(5000),
+                };
+                let drainer =
+                    registry10x_cost::Drainer::new(pool.clone(), drainer_cfg, drainer_control.clone());
+                tokio::spawn(async move {
+                    let _ = drainer.run().await;
+                });
+                info!("usage drainer spawned");
+
+                // Spawn rollup loop (hourly + daily aggregations).
+                let rollup_control = registry10x_cost::RollupControl::new();
+                let rollup_cfg = registry10x_cost::RollupConfig {
+                    interval: std::time::Duration::from_secs(
+                        std::env::var("REGISTRY10X_USAGE__ROLLUP_INTERVAL_SECS")
+                            .ok()
+                            .and_then(|v| v.parse().ok())
+                            .unwrap_or(300),
+                    ),
+                };
+                let rollup =
+                    registry10x_cost::Rollup::new(pool.clone(), rollup_cfg, rollup_control.clone());
+                tokio::spawn(async move {
+                    let _ = rollup.run().await;
+                });
+                info!("usage rollup spawned");
+
+                // Hold the controls so the drainer/rollup don't shut down
+                // when their last reference goes away. Stored on AppState
+                // so future admin endpoints can flip them.
+                let _ = (drainer_control, rollup_control);
+
+                Arc::new(registry10x_cost::PgUsageRecorder::new(pool))
+            }
+            None => {
+                warn!(
+                    "REGISTRY10X_USAGE__ENABLED=true but no Postgres pool available; \
+                     enable scanner or GC to provide one. Falling back to no-op."
+                );
+                Arc::new(registry10x_cost::NoopUsageRecorder)
+            }
+        }
+    } else {
+        Arc::new(registry10x_cost::NoopUsageRecorder)
+    };
+
+    // ── Registry audit sink (005) ───────────────────────────────────
+    // Default backend = memory (pre-005 behaviour). Postgres reuses the
+    // shared pool (scanner/GC) and seals a hash chain with HMAC.
+    let audit_cfg = &config.audit;
+    let audit_hmac_key = std::env::var("REGISTRY10X_AUDIT__HMAC_KEY")
+        .ok()
+        .or_else(|| audit_cfg.hmac_key.clone())
+        .unwrap_or_else(|| "dev-only-audit-hmac-key-change-me!".into());
+    let mut audit_pg_pool: Option<sqlx::PgPool> = None;
+    let audit_sink: Arc<dyn registry10x_audit::AuditSink> = match audit_cfg.backend {
+        registry10x_common::config::AuditBackend::Memory => {
+            info!(key_id = %audit_cfg.hmac_key_id, "audit backend: memory");
+            Arc::new(registry10x_audit::InMemoryAudit::new(
+                audit_hmac_key.into_bytes(),
+                audit_cfg.hmac_key_id.clone(),
+            ))
+        }
+        registry10x_common::config::AuditBackend::Postgres => {
+            let pool = match gc_pool.clone() {
+                Some(p) => p,
+                None => {
+                    // Dedicated connect when GC/scanner left no pool.
+                    let url = std::env::var("REGISTRY10X_AUDIT__POSTGRES_URL")
+                        .or_else(|_| std::env::var("REGISTRY10X_GC__POSTGRES_URL"))
+                        .or_else(|_| std::env::var("DATABASE_URL"))
+                        .expect(
+                            "audit.backend=postgres requires a Postgres pool \
+                             (enable scanner/GC, or set REGISTRY10X_AUDIT__POSTGRES_URL)",
+                        );
+                    let p = registry10x_db::connect(&url, 4)
+                        .await
+                        .expect("audit postgres connect failed");
+                    registry10x_db::migrate(&p)
+                        .await
+                        .expect("audit postgres migrate failed");
+                    p
+                }
+            };
+            audit_pg_pool = Some(pool.clone());
+            let keyring = registry10x_audit::Keyring::single(
+                audit_cfg.hmac_key_id.clone(),
+                audit_hmac_key.into_bytes(),
+            );
+            let pg = registry10x_audit::PgChainedAudit::new(pool, keyring);
+            if let Err(e) = pg.ensure_key_row().await {
+                tracing::error!(error = %e, "failed to register audit hmac key row");
+                panic!("audit postgres key registration failed: {e}");
+            }
+            info!(key_id = %audit_cfg.hmac_key_id, "audit backend: postgres (chained)");
+            Arc::new(pg)
+        }
+    };
+    let audit_fail_closed = matches!(
+        audit_cfg.backend,
+        registry10x_common::config::AuditBackend::Postgres
+    ) && audit_cfg.fail_closed_writes;
+    let audit_log = Arc::new(audit::RegistryAuditLog::with_sink(
+        audit_sink.clone(),
+        audit_cfg.sample_pulls,
+        audit_fail_closed,
+    ));
+
+    // Export destination + checkpoint store (A3). Always build handles so
+    // POST /v2/_audit/export works; the background loop is gated by
+    // audit.export.enabled.
+    let audit_export: Option<Arc<AuditExportRuntime>> = {
+        let compress = audit_cfg.export.compress;
+        let dest: Arc<dyn registry10x_audit::ExportDestination> =
+            if let Some(ref path) = audit_cfg.export.filesystem_path {
+                Arc::new(registry10x_audit::FilesystemDestination::new(path))
+            } else {
+                Arc::new(registry10x_audit::MemoryDestination::default())
+            };
+        let checkpoints: Arc<dyn registry10x_audit::CheckpointStore> = match audit_pg_pool {
+            Some(pool) => Arc::new(registry10x_audit::PgCheckpointStore::new(pool)),
+            None => Arc::new(registry10x_audit::MemoryCheckpointStore::default()),
+        };
+        let runtime = Arc::new(AuditExportRuntime {
+            checkpoints,
+            dest,
+            compress,
+        });
+        if audit_cfg.export.enabled {
+            let interval = std::time::Duration::from_secs(audit_cfg.export.interval_secs.max(60));
+            let sink = audit_sink.clone();
+            let rt = runtime.clone();
+            tokio::spawn(async move {
+                let mut ticker = tokio::time::interval(interval);
+                loop {
+                    ticker.tick().await;
+                    match registry10x_audit::export_pending(
+                        sink.as_ref(),
+                        rt.checkpoints.as_ref(),
+                        rt.dest.as_ref(),
+                        rt.compress,
+                    )
+                    .await
+                    {
+                        Ok(r) => info!(
+                            rows = r.row_count,
+                            merkle = %r.merkle_root,
+                            path = %r.exported_to,
+                            "audit export checkpoint written"
+                        ),
+                        Err(registry10x_audit::ExportError::Empty) => {}
+                        Err(e) => warn!(error = %e, "audit export failed"),
+                    }
+                }
+            });
+            info!(
+                interval_secs = audit_cfg.export.interval_secs,
+                "audit export loop spawned"
+            );
+        }
+        Some(runtime)
+    };
+
+    let admission_ttl = config.admission.cache_ttl_secs;
+    let pilot_budget = if config.pilot.enabled && config.pilot.tokens_per_day > 0 {
+        Some(Arc::new(registry10x_pilot::BudgetTracker::new(
+            registry10x_pilot::SpendCap {
+                tokens_per_day: config.pilot.tokens_per_day,
+            },
+        )))
+    } else {
+        None
+    };
+    let state = AppState {
+        store,
+        config: Arc::new(config),
+        decoding_key: Arc::new(decoding_key),
+        prom_handle: prom_handle.clone(),
+        rate_limiters: Arc::new(RwLock::new(HashMap::new())),
+        default_rate_limiter,
+        mirror_service,
+        replication_handle,
+        failover_manager: failover_manager.clone(),
+        webhook_handle,
+        scanner_queue,
+        gc_refcounter,
+        gc_reaper_control,
+        gc_pool,
+        ttl_reaper_control,
+        usage_recorder,
+        artifact_registry,
+        audit_log: audit_log.clone(),
+        audit_export,
+        scan_store,
+        admission_cache: Arc::new(admission::DecisionCache::new(admission_ttl)),
+        promote_dest_store,
+        pilot_budget,
+        start_time,
+    };
+
+    // Dashboard state (shared with dashboard handlers). Its user/group/
+    // robot-account pages proxy to the auth service, so it must use the
+    // auth service's address. It used to use server.auth_listen_addr
+    // (0.0.0.0:5001), i.e. the registry pod itself, and every such request
+    // failed with 502 whenever auth ran as a separate service.
+    let auth_service_url = auth_service_url();
+    let dashboard_state = dashboard::DashboardState {
+        audit_log: audit_log.clone(),
+        store: state.store.clone(),
+        start_time,
+        failover_manager,
+        auth_service_url: Some(auth_service_url),
+    };
+
+    // Build the router
+    // Public routes (no auth required)
+    let public_routes = Router::new()
+        .route("/v2/", get(v2_check))
+        .route("/health", get(health_check))
+        .route("/metrics", get(metrics_handler))
+        .route("/auth/token", get(proxy_auth_token).post(proxy_auth_token));
+
+    // Dashboard and API routes (protected by Basic auth)
+    let dashboard_auth_config = Arc::new(state.config.server.dashboard_auth.clone());
+    let dashboard_routes = Router::new()
+        .route("/dashboard", get(dashboard::dashboard_html))
+        .route("/api/stats", get(dashboard::api_stats))
+        .route("/api/activity", get(dashboard::api_activity))
+        .route("/api/audit", get(dashboard::api_audit))
+        .route("/api/system", get(dashboard::api_system))
+        .route("/api/ha-status", get(dashboard::api_ha_status))
+        .route("/api/images", get(dashboard::api_images))
+        .route("/api/image-detail", get(dashboard::api_image_detail))
+        // Identity & Access Management (proxy to auth service)
+        .route("/api/users", get(dashboard::api_users))
+        .route("/api/groups", get(dashboard::api_groups))
+        .route("/api/robot-accounts", get(dashboard::api_robot_accounts))
+        .layer(middleware::from_fn_with_state(
+            dashboard_auth_config,
+            dashboard_auth_middleware,
+        ))
+        .with_state(dashboard_state);
+
+    // Authenticated registry routes
+    let registry_routes = Router::new()
+        // Manifest operations
+        .route(
+            "/v2/{tenant}/{project}/{name}/manifests/{reference}",
+            head(head_manifest)
+                .get(get_manifest)
+                .put(put_manifest)
+                .delete(delete_manifest),
+        )
+        // Blob operations
+        .route(
+            "/v2/{tenant}/{project}/{name}/blobs/{digest}",
+            head(head_blob).get(get_blob),
+        )
+        // Upload operations
+        .route(
+            "/v2/{tenant}/{project}/{name}/blobs/uploads/",
+            post(initiate_blob_upload),
+        )
+        .route(
+            "/v2/{tenant}/{project}/{name}/blobs/uploads/{uuid}",
+            patch(upload_blob_chunk).put(complete_blob_upload),
+        )
+        // Image status check (pre-pull readiness)
+        .route(
+            "/v2/{tenant}/{project}/{name}/status/{reference}",
+            get(image_status),
+        )
+        // Tag listing
+        .route("/v2/{tenant}/{project}/{name}/tags/list", get(list_tags))
+        // 2-segment routes (standard Docker: namespace/repo → default tenant)
+        .route(
+            "/v2/{project}/{name}/manifests/{reference}",
+            head(head_manifest_2seg)
+                .get(get_manifest_2seg)
+                .put(put_manifest_2seg)
+                .delete(delete_manifest_2seg),
+        )
+        .route(
+            "/v2/{project}/{name}/blobs/{digest}",
+            head(head_blob_2seg).get(get_blob_2seg),
+        )
+        .route(
+            "/v2/{project}/{name}/blobs/uploads/",
+            post(initiate_blob_upload_2seg),
+        )
+        .route(
+            "/v2/{project}/{name}/blobs/uploads/{uuid}",
+            patch(upload_blob_chunk_2seg).put(complete_blob_upload_2seg),
+        )
+        .route(
+            "/v2/{project}/{name}/status/{reference}",
+            get(image_status_2seg),
+        )
+        .route("/v2/{project}/{name}/tags/list", get(list_tags_2seg))
+        // Referrers (OCI 1.1) — 010 integration
+        .route(
+            "/v2/{tenant}/{project}/{name}/referrers/{digest}",
+            get(list_referrers),
+        )
+        // Attestations upload — 015 slice 2
+        .route(
+            "/v2/{tenant}/{project}/{name}/attestations",
+            post(upload_attestation),
+        )
+        // Image signatures — 001 B3
+        .route(
+            "/v2/{tenant}/{project}/{name}/signatures/{digest}",
+            get(list_signatures).post(upload_signature),
+        )
+        .route(
+            "/v2/{project}/{name}/signatures/{digest}",
+            get(list_signatures_2seg).post(upload_signature_2seg),
+        )
+        .route("/v2/_verify", post(verify_image))
+        .route(
+            "/v2/_signing/policies/{tenant}/{name}",
+            get(get_verification_policy)
+                .put(upsert_verification_policy)
+                .delete(delete_verification_policy),
+        )
+        // Auto-rebuild (018 R2)
+        .route("/v2/_rebuild/trigger", post(rebuild_trigger))
+        .route(
+            "/v2/_rebuild/subscriptions",
+            get(list_rebuild_subscriptions),
+        )
+        .route(
+            "/v2/_rebuild/subscriptions/{tenant}/{name}",
+            put(upsert_rebuild_subscription),
+        )
+        .route("/v2/_rebuild/events", get(list_rebuild_events))
+        .route("/v2/_lineage/{digest}", get(get_lineage))
+        // Atomic promotion (006 C1)
+        .route("/v2/_promote", post(promote_handler))
+        .route("/v2/_promote/history", get(promote_history))
+        .route("/v2/_promote/{id}", get(promote_status))
+        .route("/v2/_pilot/chat", post(pilot_http::pilot_chat))
+        .route("/v2/_pilot/tools", get(pilot_http::pilot_tools))
+        // Admission gate (002)
+        .route("/v2/_admit/test", post(admit_test))
+        .route("/v2/_admit/policies", get(list_admission_policies))
+        .route(
+            "/v2/_admit/policies/{tenant}/{name}",
+            put(upsert_admission_policy),
+        )
+        // Catalog
+        .route("/v2/_catalog", get(catalog))
+        // Online GC control plane (009 slice 2-3)
+        .route("/v2/_gc/status", get(gc_status))
+        .route("/v2/_gc/pause", post(gc_pause))
+        .route("/v2/_gc/resume", post(gc_resume))
+        .route("/v2/_gc/reconcile", post(gc_reconcile))
+        // TTL reaper control plane (013 slice 2)
+        .route("/v2/_ttl/status", get(ttl_status))
+        .route("/v2/_ttl/pause", post(ttl_pause))
+        .route("/v2/_ttl/resume", post(ttl_resume))
+        // Usage read API (017 polish)
+        .route("/v2/_usage/tenant/{tenant}", get(usage_tenant))
+        .route("/v2/_usage/top-pulled", get(usage_top_pulled))
+        // Chained audit (005 slice 2–3)
+        .route("/v2/_audit", get(audit_query))
+        .route("/v2/_audit/verify", post(audit_verify))
+        .route("/v2/_audit/export", post(audit_export_handler))
+        .route("/v2/_audit/{id}", get(audit_get));
+
+    // Internal replication routes — served on both the main port (for cross-cluster
+    // access via proxy) and the dedicated internal port (for intra-cluster use).
+    let internal_routes = Router::new()
+        .route(
+            "/internal/replicate/manifest",
+            post(internal_replicate_manifest),
+        )
+        .route("/internal/replicate/blob", post(internal_replicate_blob))
+        .route(
+            "/internal/replicate/delete",
+            post(internal_replicate_delete),
+        )
+        .route(
+            "/internal/replication/status",
+            get(internal_replication_status),
+        );
+
+    let app = Router::new()
+        .merge(public_routes)
+        .merge(dashboard_routes)
+        .merge(registry_routes)
+        .merge(internal_routes.clone())
+        .layer(DefaultBodyLimit::disable()) // No limit — OCI blob sizes are unbounded
+        .layer(middleware::from_fn(request_id_middleware))
+        .layer(middleware::from_fn(http_metrics_middleware))
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            rate_limit_middleware,
+        ))
+        .layer(TraceLayer::new_for_http())
+        .with_state(state.clone());
+    // Merge the scanner router AFTER applying state to the main app — at
+    // this point both are Router<()> and merge accepts them. Scanner routes
+    // carry their own ScannerState internally.
+    let app = match scanner_router {
+        Some(sr) => app.merge(sr),
+        None => app,
+    };
+
+    let internal_app = internal_routes
+        .layer(DefaultBodyLimit::disable())
+        .with_state(state);
+
+    let internal_addr = format!("0.0.0.0:{internal_port}");
+
+    // Start the internal replication listener in the background
+    let internal_listener = tokio::net::TcpListener::bind(&internal_addr).await?;
+    info!(addr = %internal_addr, "Internal replication API listening");
+    tokio::spawn(async move {
+        if let Err(e) = axum::serve(internal_listener, internal_app).await {
+            error!(error = %e, "Internal replication API error");
+        }
+    });
+
+    let listener = tokio::net::TcpListener::bind(&listen_addr).await?;
+    info!(addr = %listen_addr, "Registry10x Registry listening");
+
+    axum::serve(listener, app).await?;
+
+    Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn auth_service_url_defaults_to_the_service_not_the_listen_addr() {
+        assert_eq!(resolve_auth_service_url(None), "http://registry10x-auth:5001");
+        // The old dashboard behaviour: never the auth *bind* address.
+        assert_ne!(resolve_auth_service_url(None), "http://0.0.0.0:5001");
+    }
+
+    #[test]
+    fn auth_service_url_honours_env_and_normalises() {
+        assert_eq!(
+            resolve_auth_service_url(Some("http://registry10x-mirror-auth:5001/".into())),
+            "http://registry10x-mirror-auth:5001"
+        );
+        assert_eq!(
+            resolve_auth_service_url(Some("  http://auth:5001  ".into())),
+            "http://auth:5001"
+        );
+        // Empty or whitespace-only falls back to the default.
+        assert_eq!(
+            resolve_auth_service_url(Some("   ".into())),
+            "http://registry10x-auth:5001"
+        );
+    }
+
+    // T6: is_store_not_found distinguishes a true "not present" miss
+    // from a real backend IO failure. Only the former must fall
+    // through to the mirror or return 404; real IO errors stay 5xx.
+    #[test]
+    fn is_store_not_found_matches_only_not_found_variant() {
+        let not_found = object_store::Error::NotFound {
+            path: "tenant/project/name/blobs/sha256/abc".into(),
+            source: Box::new(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "object not found",
+            )),
+        };
+        assert!(is_store_not_found(&not_found));
+
+        let io = object_store::Error::Generic {
+            store: "mock",
+            source: Box::new(std::io::Error::other("disk exploded")),
+        };
+        assert!(
+            !is_store_not_found(&io),
+            "real IO failures must NOT be flattened to 404 (R4)"
+        );
+    }
+
+    #[test]
+    fn mirror_scope_from_config_none_defaults_to_default_tenant_only() {
+        let scope = mirror_scope_from_config(None);
+        assert!(matches!(scope, MirrorScope::DefaultTenantOnly { .. }));
+        assert!(scope.tenant_project_eligible("_", "library"));
+        assert!(!scope.tenant_project_eligible("private", "app"));
+    }
+
+    #[test]
+    fn mirror_scope_from_config_allowlist() {
+        let cfg = registry10x_common::config::MirrorScopeConfig {
+            mode: Some("allowlist".into()),
+            tenants: vec!["_".into()],
+            projects: vec!["public/library".into()],
+            default_tenant: None,
+        };
+        let scope = mirror_scope_from_config(Some(&cfg));
+        assert!(matches!(scope, MirrorScope::Allowlist { .. }));
+        assert!(scope.tenant_project_eligible("_", "anything"));
+        assert!(scope.tenant_project_eligible("public", "library"));
+        assert!(!scope.tenant_project_eligible("private", "app"));
+    }
+
+    #[test]
+    fn mirror_scope_from_config_manifest_linked() {
+        let cfg = registry10x_common::config::MirrorScopeConfig {
+            mode: Some("manifest_linked".into()),
+            tenants: vec![],
+            projects: vec![],
+            default_tenant: None,
+        };
+        let scope = mirror_scope_from_config(Some(&cfg));
+        assert!(matches!(scope, MirrorScope::ManifestLinked));
+        assert!(!scope.decides_at_tenant_level());
+    }
+
+    #[test]
+    fn mirror_scope_from_config_unknown_mode_falls_back_safely() {
+        let cfg = registry10x_common::config::MirrorScopeConfig {
+            mode: Some("typo-mode".into()),
+            tenants: vec![],
+            projects: vec![],
+            default_tenant: Some("__default__".into()),
+        };
+        let scope = mirror_scope_from_config(Some(&cfg));
+        match scope {
+            MirrorScope::DefaultTenantOnly { default_tenant } => {
+                assert_eq!(default_tenant, "__default__");
+            }
+            _ => panic!("unknown mode must fall back to DefaultTenantOnly"),
+        }
+    }
+
+    mod failover_read {
+        use super::super::failover_read;
+        use axum::{Router, http::StatusCode, routing::get};
+        use registry10x_replication::failover::FailoverManager;
+        use registry10x_replication::region::RegionConfig;
+
+        /// A peer region that serves one manifest and 401s everything else,
+        /// like a registry that wants credentials the proxy doesn't send.
+        async fn peer() -> String {
+            let app = Router::new()
+                .route("/v2/t/p/n/manifests/present", get(|| async { "manifest" }))
+                .fallback(|| async { (StatusCode::UNAUTHORIZED, "unauthorized") });
+            let listener = tokio::net::TcpListener::bind("127.0.0.1:0").await.unwrap();
+            let addr = listener.local_addr().unwrap();
+            tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
+            format!("http://{addr}")
+        }
+
+        fn manager(local: &str, peer: &str) -> FailoverManager {
+            let region = |name: &str, endpoint: &str, primary: bool, priority| RegionConfig {
+                name: name.into(),
+                endpoint: endpoint.into(),
+                internal_endpoint: endpoint.into(),
+                is_primary: primary,
+                priority,
+            };
+            FailoverManager::new(
+                local.into(),
+                vec![
+                    region(
+                        "primary",
+                        if local == "primary" {
+                            "http://unused"
+                        } else {
+                            peer
+                        },
+                        true,
+                        1,
+                    ),
+                    region(
+                        "mirror",
+                        if local == "mirror" {
+                            "http://unused"
+                        } else {
+                            peer
+                        },
+                        false,
+                        2,
+                    ),
+                ],
+                10,
+            )
+        }
+
+        #[tokio::test]
+        async fn replica_serves_peer_hit() {
+            let fm = manager("mirror", &peer().await);
+            let body = failover_read(Some(&fm), "/v2/t/p/n/manifests/present").await;
+            assert_eq!(body.as_deref(), Some(&b"manifest"[..]));
+        }
+
+        #[tokio::test]
+        async fn peer_error_is_a_miss_not_content() {
+            let fm = manager("mirror", &peer().await);
+            assert!(
+                failover_read(Some(&fm), "/v2/t/p/n/manifests/absent")
+                    .await
+                    .is_none()
+            );
+        }
+
+        #[tokio::test]
+        async fn primary_never_reads_from_replicas() {
+            let fm = manager("primary", &peer().await);
+            assert!(
+                failover_read(Some(&fm), "/v2/t/p/n/manifests/present")
+                    .await
+                    .is_none()
+            );
+        }
+
+        #[tokio::test]
+        async fn disabled_is_a_miss() {
+            assert!(
+                failover_read(None, "/v2/t/p/n/manifests/present")
+                    .await
+                    .is_none()
+            );
+        }
+    }
+
+    mod tag_links {
+        use super::super::{delete_tags_for_digest, read_tag_link};
+        use object_store::{ObjectStore, memory::InMemory, path::Path as StorePath};
+        use registry10x_common::storage::tag_link_path;
+        use std::sync::Arc;
+
+        async fn store_with(tags: &[(&str, &str)]) -> Arc<dyn ObjectStore> {
+            let store: Arc<dyn ObjectStore> = Arc::new(InMemory::new());
+            for (tag, digest) in tags {
+                let path = StorePath::from(tag_link_path("_", "p", "r", tag));
+                store.put(&path, digest.to_string().into()).await.unwrap();
+            }
+            store
+        }
+
+        #[tokio::test]
+        async fn deletes_only_tags_pointing_at_digest() {
+            let store =
+                store_with(&[("a", "sha256:1"), ("b", "sha256:1"), ("c", "sha256:2")]).await;
+            let mut removed = delete_tags_for_digest(&store, "_", "p", "r", "sha256:1")
+                .await
+                .unwrap();
+            removed.sort();
+            assert_eq!(removed, ["a", "b"]);
+            assert_eq!(
+                read_tag_link(&store, "_", "p", "r", "a").await.unwrap(),
+                None
+            );
+            assert_eq!(
+                read_tag_link(&store, "_", "p", "r", "b").await.unwrap(),
+                None
+            );
+            assert_eq!(
+                read_tag_link(&store, "_", "p", "r", "c")
+                    .await
+                    .unwrap()
+                    .as_deref(),
+                Some("sha256:2")
+            );
+        }
+
+        #[tokio::test]
+        async fn no_tags_is_empty_not_error() {
+            let store = store_with(&[]).await;
+            assert!(
+                delete_tags_for_digest(&store, "_", "p", "r", "sha256:1")
+                    .await
+                    .unwrap()
+                    .is_empty()
+            );
+        }
+
+        #[tokio::test]
+        async fn read_trims_and_reports_missing() {
+            let store = store_with(&[("t", "sha256:1\n")]).await;
+            assert_eq!(
+                read_tag_link(&store, "_", "p", "r", "t")
+                    .await
+                    .unwrap()
+                    .as_deref(),
+                Some("sha256:1")
+            );
+            assert_eq!(
+                read_tag_link(&store, "_", "p", "r", "nope").await.unwrap(),
+                None
+            );
+        }
+    }
+}

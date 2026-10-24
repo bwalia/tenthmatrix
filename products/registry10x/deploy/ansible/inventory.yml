@@ -1,0 +1,11 @@
+all:
+  hosts:
+    mirror:
+      ansible_host: 187.77.179.206
+      ansible_user: root
+      registry10x_registry_port: 5050
+      registry10x_auth_port: 5051
+      registry10x_metrics_port: 9095
+      registry10x_data_dir: /var/lib/registry10x/data
+      registry10x_config_dir: /etc/registry10x
+      registry10x_keys_dir: /etc/registry10x/keys

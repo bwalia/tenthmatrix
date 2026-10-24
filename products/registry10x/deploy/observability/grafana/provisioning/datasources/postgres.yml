@@ -1,0 +1,26 @@
+apiVersion: 1
+
+# Postgres datasource for the enterprise dashboards
+# (registry10x-enterprise-{overview,detail}) which join scan / GC /
+# usage tables for cost projection, image counts, and CVE exposure.
+#
+# Read-only role recommended in production; for the docker-compose
+# stack we reuse the registry's main user since everything's local.
+datasources:
+  - name: registry10x-postgres
+    uid: registry10x-postgres
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    user: registry10x
+    secureJsonData:
+      password: registry10x
+    jsonData:
+      database: registry10x
+      sslmode: disable
+      maxOpenConns: 4
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+      postgresVersion: 1600
+      timescaledb: false
+    editable: false

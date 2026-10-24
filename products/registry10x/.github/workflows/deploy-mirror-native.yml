@@ -1,0 +1,99 @@
+name: Deploy Mirror (Native via Ansible)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "deploy/ansible/**"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Registry10x image tag to deploy"
+        required: false
+        default: "latest"
+      observability:
+        description: "Deploy Prometheus + Grafana sidecars (host ports 9091 + 13002)"
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  deploy-mirror:
+    name: Deploy Registry10x Mirror
+    runs-on: [self-hosted, test]
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          which ansible-playbook > /dev/null 2>&1 || {
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq ansible sshpass
+          }
+          ansible --version | head -1
+
+      - name: Resolve SSH key
+        id: ssh
+        run: |
+          # Prefer a MIRROR_SSH_KEY secret when provided; fall back to an
+          # on-runner key at ~/.ssh/id_rsa. The self-hosted runner holds an
+          # operator-managed key — secret configuration stays optional.
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 187.77.179.206 >> ~/.ssh/known_hosts 2>/dev/null || true
+          if [ -n "${{ secrets.MIRROR_SSH_KEY }}" ]; then
+            echo "${{ secrets.MIRROR_SSH_KEY }}" > ~/.ssh/mirror_key
+            chmod 600 ~/.ssh/mirror_key
+            echo "key=$HOME/.ssh/mirror_key" >> "$GITHUB_OUTPUT"
+            echo "cleanup=true" >> "$GITHUB_OUTPUT"
+          elif [ -f "$HOME/.ssh/id_rsa" ]; then
+            echo "Using runner-local $HOME/.ssh/id_rsa"
+            echo "key=$HOME/.ssh/id_rsa" >> "$GITHUB_OUTPUT"
+            echo "cleanup=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::No SSH key available — set MIRROR_SSH_KEY secret or drop a key at ~/.ssh/id_rsa on the runner"
+            exit 1
+          fi
+
+      - name: Run Ansible playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "false"
+        run: |
+          cd deploy/ansible
+          # Workflow input controls whether the playbook also deploys
+          # the Prometheus + Grafana sidecars on the mirror host.
+          # Default true so the dashboard is available out of the box.
+          OBS="${{ github.event.inputs.observability || 'true' }}"
+          ansible-playbook -i inventory.yml deploy-mirror.yml \
+            --private-key "${{ steps.ssh.outputs.key }}" \
+            -e "registry10x_version=${{ github.event.inputs.version || 'latest' }}" \
+            -e "registry10x_observability_enabled=${OBS}" \
+            -v
+
+      - name: Verify deployment
+        run: |
+          echo "Testing mirror health..."
+          for i in 1 2 3 4 5; do
+            if ssh -i "${{ steps.ssh.outputs.key }}" -o StrictHostKeyChecking=no root@187.77.179.206 \
+              "curl -sf http://127.0.0.1:5050/health" 2>/dev/null; then
+              echo ""
+              echo "Mirror is healthy!"
+              exit 0
+            fi
+            echo "Attempt $i: waiting..."
+            sleep 5
+          done
+          echo "::error::Mirror health check failed"
+          exit 1
+
+      - name: Cleanup SSH key
+        if: always() && steps.ssh.outputs.cleanup == 'true'
+        run: rm -f ~/.ssh/mirror_key

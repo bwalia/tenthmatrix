@@ -1,0 +1,120 @@
+# =============================================================================
+# registry10x pull-based image auto-deploy (base; namespaced by overlays/<env>)
+#
+# Why pull-based: the k3s API is firewalled, so GitHub-hosted runners can't
+# reach it to push a deploy. The cluster CAN reach Docker Hub outbound, so we
+# invert the flow — a small in-cluster CronJob polls Docker Hub for the current
+# `bwalia/registry10x:latest` manifest digest and, when it changes, rolls the
+# registry + auth Deployments (which pull `:latest` under pullPolicy: Always).
+#
+# Security: no inbound access, no self-hosted runner (unsafe on a public repo),
+# no third-party account. RBAC is scoped to get/patch the two Deployments in
+# the overlay's namespace only. Remove with `kubectl delete -k deploy/auto-deploy/overlays/<env>`.
+# =============================================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: registry10x-image-updater
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: registry10x-image-updater
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: registry10x-image-updater
+subjects:
+  - kind: ServiceAccount
+    name: registry10x-image-updater
+roleRef:
+  kind: Role
+  name: registry10x-image-updater
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: registry10x-image-updater
+  labels:
+    app.kubernetes.io/part-of: registry10x
+    app.kubernetes.io/component: image-updater
+spec:
+  schedule: "*/5 * * * *"          # poll every 5 minutes
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  startingDeadlineSeconds: 120
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      activeDeadlineSeconds: 120
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/part-of: registry10x
+            app.kubernetes.io/component: image-updater
+        spec:
+          serviceAccountName: registry10x-image-updater
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            seccompProfile: { type: RuntimeDefault }
+          containers:
+            - name: updater
+              image: alpine/k8s:1.30.2      # ships kubectl + curl + jq
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: { drop: ["ALL"] }
+              env:
+                - name: REPO
+                  value: "bwalia/registry10x"
+                # The namespace the CronJob runs in (set by the overlay).
+                - name: NS
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                # Main registry + auth, then the env's pull-through mirror.
+                # All run 2 replicas with a rolling update and preStop drain
+                # (diy-tax-return-uk chart), so a roll doesn't drop traffic.
+                # Names missing in a namespace are skipped.
+                - name: DEPLOYMENTS
+                  value: "registry10x-registry registry10x-auth registry10x-mirror-registry registry10x-mirror-auth"
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -eu
+                  # 1. Current :latest manifest digest on Docker Hub.
+                  TOKEN=$(curl -fsS "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${REPO}:pull" | jq -r .token)
+                  HUB=$(curl -fsS -o /dev/null -D - \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    -H "Accept: application/vnd.oci.image.index.v1+json" \
+                    -H "Accept: application/vnd.docker.distribution.manifest.list.v2+json" \
+                    -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                    "https://registry-1.docker.io/v2/${REPO}/manifests/latest" \
+                    | tr -d '\r' | awk -F': ' 'tolower($1)=="docker-content-digest"{print $2}')
+                  if [ -z "${HUB}" ]; then echo "could not resolve Hub digest"; exit 1; fi
+                  echo "Docker Hub ${REPO}:latest = ${HUB}"
+
+                  # 2. Roll any deployment whose last-seen digest differs.
+                  for d in ${DEPLOYMENTS}; do
+                    if ! kubectl -n "${NS}" get deploy "$d" >/dev/null 2>&1; then
+                      echo "$d not found in ${NS}, skipping"; continue
+                    fi
+                    CUR=$(kubectl -n "${NS}" get deploy "$d" \
+                      -o jsonpath='{.spec.template.metadata.annotations.registry10x\.io/image-digest}' 2>/dev/null || true)
+                    if [ "${CUR}" = "${HUB}" ]; then
+                      echo "$d up to date"; continue
+                    fi
+                    echo "$d: ${CUR:-<none>} -> ${HUB}  (rolling)"
+                    kubectl -n "${NS}" patch deployment "$d" --type merge -p \
+                      "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"registry10x.com/image-digest\":\"${HUB}\",\"registry10x.com/rolled-at\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}}}}}"
+                  done

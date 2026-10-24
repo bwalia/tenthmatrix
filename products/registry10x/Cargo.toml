@@ -1,0 +1,148 @@
+[workspace]
+members = [
+    "crates/registry10x-common",
+    "crates/registry10x-auth",
+    "crates/registry10x-registry",
+    "crates/registry10x-controller",
+    "crates/registry10x-resilience",
+    "crates/registry10x-mirror",
+    "crates/registry10x-replication",
+    "crates/registry10x-db",
+    "crates/registry10x-ai",
+    "crates/registry10x-scanner",
+    "crates/registry10x-gc",
+    "crates/registry10x-lazy",
+    "crates/registry10x-peer",
+    "crates/registry10x-import",
+    "crates/registry10x-ephemeral",
+    "crates/registry10x-attest",
+    "crates/registry10x-artifact-types",
+    "crates/registry10x-cost",
+    "crates/registry10x-rebuild",
+    "crates/registry10x-pilot",
+    "crates/registry10x-audit",
+    "crates/registry10x-signing",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["TenthMatrix"]
+license = "Apache-2.0"
+homepage = "https://registry10x.com"
+repository = "https://github.com/bwalia/tenthmatrix"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+
+# Web framework
+axum = { version = "0.8", features = ["macros", "ws"] }
+axum-extra = { version = "0.10", features = ["typed-header"] }
+tower = { version = "0.5", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "compression-gzip", "limit", "request-id"] }
+hyper = { version = "1", features = ["full"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+toml = "0.8"
+
+# Auth / JWT / OIDC
+jsonwebtoken = "9"
+openidconnect = "4"
+oauth2 = "5"
+
+# Crypto
+sha2 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+base64 = "0.22"
+uuid = { version = "1", features = ["v4", "serde"] }
+rand = "0.9"
+
+# Storage
+object_store = { version = "0.11", features = ["aws", "gcp", "azure"] }
+bytes = "1"
+
+# Observability
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-opentelemetry = "0.28"
+opentelemetry = "0.27"
+opentelemetry_sdk = { version = "0.27", features = ["rt-tokio"] }
+opentelemetry-otlp = "0.27"
+metrics = "0.24"
+metrics-exporter-prometheus = "0.16"
+
+# Config
+config = "0.14"
+dotenvy = "0.15"
+
+# Async utilities
+futures = "0.3"
+
+# Error handling
+thiserror = "2"
+anyhow = "1"
+
+# HTTP client
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Rate limiting
+governor = "0.8"
+
+# Kubernetes
+kube = { version = "0.98", features = ["runtime", "derive", "client"] }
+k8s-openapi = { version = "0.24", features = ["latest", "schemars"] }
+schemars = "0.8"
+
+# Internal crates
+registry10x-common = { path = "crates/registry10x-common" }
+registry10x-auth = { path = "crates/registry10x-auth" }
+registry10x-registry = { path = "crates/registry10x-registry" }
+registry10x-controller = { path = "crates/registry10x-controller" }
+registry10x-resilience = { path = "crates/registry10x-resilience" }
+registry10x-mirror = { path = "crates/registry10x-mirror" }
+registry10x-replication = { path = "crates/registry10x-replication" }
+registry10x-db = { path = "crates/registry10x-db" }
+registry10x-ai = { path = "crates/registry10x-ai" }
+registry10x-scanner = { path = "crates/registry10x-scanner" }
+registry10x-gc = { path = "crates/registry10x-gc" }
+registry10x-lazy = { path = "crates/registry10x-lazy" }
+registry10x-peer = { path = "crates/registry10x-peer" }
+registry10x-import = { path = "crates/registry10x-import" }
+registry10x-ephemeral = { path = "crates/registry10x-ephemeral" }
+registry10x-attest = { path = "crates/registry10x-attest" }
+registry10x-artifact-types = { path = "crates/registry10x-artifact-types" }
+registry10x-cost = { path = "crates/registry10x-cost" }
+registry10x-rebuild = { path = "crates/registry10x-rebuild" }
+registry10x-pilot = { path = "crates/registry10x-pilot" }
+registry10x-audit = { path = "crates/registry10x-audit" }
+registry10x-signing = { path = "crates/registry10x-signing" }
+
+# Scanner deps
+sqlx = { version = "0.8", features = ["runtime-tokio-rustls", "postgres", "chrono", "uuid", "json", "migrate"] }
+redis = { version = "0.27", features = ["tokio-comp", "connection-manager"] }
+deadpool-redis = "0.18"
+tar = "0.4"
+flate2 = "1"
+zstd = "0.13"
+zip = "2"
+tempfile = "3"
+oci-spec = "0.7"
+purl = "0.1"
+semver = "1"
+regex = "1"
+async-stream = "0.3"
+
+# Async traits
+async-trait = "0.1"
+
+# System metrics
+sysinfo = "0.33"

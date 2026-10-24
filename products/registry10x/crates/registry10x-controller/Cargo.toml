@@ -1,0 +1,30 @@
+[package]
+name = "registry10x-controller"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "registry10x-controller"
+path = "src/main.rs"
+
+[dependencies]
+registry10x-common = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+kube = { workspace = true }
+k8s-openapi = { workspace = true }
+schemars = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+chrono = { workspace = true }
+uuid = { workspace = true }
+futures = { workspace = true }
+reqwest = { workspace = true }
+serde_yaml = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+# Only to pick the process-wide crypto provider; see main().
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
