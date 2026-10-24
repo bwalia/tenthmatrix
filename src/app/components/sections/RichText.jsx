@@ -1,3 +1,5 @@
+import { externalLinksInNewTab } from './links';
+
 // Renders JSON copy. Committed page JSON sometimes carries inline HTML
 // (<strong>, <a>, <br>); that markup is trusted repo content, so it is
 // rendered as HTML. Plain strings render as text.
@@ -13,7 +15,7 @@ export default function RichText({ text, as: Tag = 'p', className }) {
     s = (HAS_TAG.test(s) ? s : esc(s)).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   }
   if (HAS_TAG.test(s)) {
-    return <Tag className={className} dangerouslySetInnerHTML={{ __html: s }} />;
+    return <Tag className={className} dangerouslySetInnerHTML={{ __html: externalLinksInNewTab(s) }} />;
   }
   return <Tag className={className}>{s}</Tag>;
 }

@@ -160,7 +160,7 @@ export default function MobileNav({ locale, open, onClose }) {
                 </ul>
               </nav>
 
-              <a href={HARDWARE_URL} className={s.hardware} rel="noopener">
+              <a href={HARDWARE_URL} className={s.hardware} target="_blank" rel="noopener noreferrer">
                 <span>{t('hardware')}</span>
                 <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.75} />
               </a>

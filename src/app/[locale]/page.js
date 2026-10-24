@@ -321,7 +321,7 @@ export default async function HomePage({ params }) {
             </h2>
             <p className={s.hardwareBody}>{t('home.hardware.body')}</p>
           </div>
-          <a href={HARDWARE_URL} className={s.hardwareLink} rel="noopener">
+          <a href={HARDWARE_URL} className={s.hardwareLink} target="_blank" rel="noopener noreferrer">
             {t('home.hardware.link')}
             <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.75} />
           </a>

@@ -27,7 +27,7 @@ export default function ProductCard({ name, tagline, description, href, cta, ico
   const linkProps = { className: s.link };
   const title = href ? (
     external ? (
-      <a href={href} rel="noopener" {...linkProps}>
+      <a href={href} {...(/^(https?:)?\/\//i.test(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})} {...linkProps}>
         {name}
       </a>
     ) : (
