@@ -1,0 +1,120 @@
+# The control plane's database. Everything the control plane knows is here —
+# users, devices, sessions, the audit chain — so it is on Longhorn (replicated
+# across nodes) rather than local-path, and backed up nightly.
+apiVersion: v1
+kind: Service
+metadata:
+  name: vpn10x-postgres
+  namespace: vpn10x
+spec:
+  selector: { app: vpn10x-postgres }
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vpn10x-postgres
+  namespace: vpn10x
+spec:
+  serviceName: vpn10x-postgres
+  replicas: 1
+  selector:
+    matchLabels: { app: vpn10x-postgres }
+  template:
+    metadata:
+      labels: { app: vpn10x-postgres }
+    spec:
+      securityContext:
+        fsGroup: 70
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          env:
+            - { name: POSTGRES_USER, value: vpn10x }
+            - { name: POSTGRES_DB, value: vpn10x }
+            - name: POSTGRES_PASSWORD
+              valueFrom: { secretKeyRef: { name: vpn10x-postgres, key: POSTGRES_PASSWORD } }
+            - { name: PGDATA, value: /var/lib/postgresql/data/pgdata }
+          ports:
+            - containerPort: 5432
+          readinessProbe:
+            exec: { command: ["pg_isready", "-U", "vpn10x", "-d", "vpn10x"] }
+            periodSeconds: 5
+          livenessProbe:
+            exec: { command: ["pg_isready", "-U", "vpn10x", "-d", "vpn10x"] }
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { memory: 1Gi }
+          volumeMounts:
+            - { name: data, mountPath: /var/lib/postgresql/data }
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: longhorn
+        resources:
+          requests: { storage: 10Gi }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vpn10x-postgres-backup
+  namespace: vpn10x
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: longhorn
+  resources:
+    requests: { storage: 10Gi }
+---
+# Same shape as the other postgres-backup jobs on k3s1: dump to a file, then
+# compress, then rename — so a failed or interrupted dump can never be mistaken
+# for a good backup.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vpn10x-postgres-backup
+  namespace: vpn10x
+spec:
+  schedule: "30 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:16-alpine
+              env:
+                - { name: PGHOST, value: vpn10x-postgres.vpn10x.svc }
+                - { name: PGUSER, value: vpn10x }
+                - { name: PGDATABASE, value: vpn10x }
+                - name: PGPASSWORD
+                  valueFrom: { secretKeyRef: { name: vpn10x-postgres, key: POSTGRES_PASSWORD } }
+                - { name: RETENTION_DAYS, value: "14" }
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  set -eu
+                  TS=$(date -u +%Y%m%dT%H%M%SZ)
+                  WORK="/backups/.in-progress-${TS}.sql"
+                  OUT="/backups/vpn10x-${TS}.sql.gz"
+                  pg_dump --no-owner --no-acl -f "$WORK"
+                  gzip -c "$WORK" > "${OUT}.partial"
+                  mv "${OUT}.partial" "$OUT"
+                  rm -f "$WORK"
+                  find /backups -maxdepth 1 -name 'vpn10x-*.sql.gz' -mtime "+${RETENTION_DAYS}" -delete
+              volumeMounts:
+                - { name: backups, mountPath: /backups }
+          volumes:
+            - name: backups
+              persistentVolumeClaim: { claimName: vpn10x-postgres-backup }

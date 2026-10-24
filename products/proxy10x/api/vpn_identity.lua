@@ -1,5 +1,5 @@
 -- vpn_identity.lua
--- Resolve an overlay address to the wslvpn session identity behind it.
+-- Resolve an overlay address to the vpn10x session identity behind it.
 --
 -- Turns "the request came over the VPN" into "this request is user X in groups
 -- Y" — the difference between a network boundary and a Zero Trust one.

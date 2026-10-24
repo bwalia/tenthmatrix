@@ -1,0 +1,62 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/vpn10x-types",
+    "crates/vpn10x-crypto",
+    "crates/vpn10x-policy",
+    "crates/vpn10x-control",
+    "crates/vpn10x-gateway",
+    "crates/vpn10x-dns",
+    "crates/vpn10x-agent",
+    "crates/vpn10x-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+authors = ["VPN10x Contributors"]
+repository = "https://github.com/vpn10x-io/vpn10x"
+
+[workspace.dependencies]
+anyhow = "1"
+async-trait = "0.1"
+axum = { version = "0.8", features = ["macros"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+# BDD: Gherkin specs under each crate's tests/features.
+cucumber = "0.21"
+clap = { version = "4", features = ["derive", "env"] }
+hex = "0.4"
+hmac = "0.12"
+jsonwebtoken = "9"
+metrics = "0.24"
+metrics-exporter-prometheus = "0.16"
+rand = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+sha2 = "0.10"
+subtle = "2"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "tls-rustls", "postgres", "uuid", "chrono", "migrate", "macros", "ipnetwork", "json"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace", "cors", "request-id"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+url = { version = "2", features = ["serde"] }
+utoipa = { version = "5", features = ["chrono", "uuid"] }
+utoipa-swagger-ui = { version = "9", features = ["axum"] }
+uuid = { version = "1", features = ["serde", "v4", "v7"] }
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+zeroize = { version = "1", features = ["derive"] }
+
+# Internal crates carry an explicit version alongside the path so they are not
+# wildcard requirements: `bans.wildcards = "deny"` exists to stop a `*` from a
+# registry resolving to anything, and an unversioned path dep trips it.
+vpn10x-types = { path = "crates/vpn10x-types", version = "0.1.0" }
+vpn10x-crypto = { path = "crates/vpn10x-crypto", version = "0.1.0" }
+vpn10x-policy = { path = "crates/vpn10x-policy", version = "0.1.0" }
+vpn10x-dns = { path = "crates/vpn10x-dns", version = "0.1.0" }

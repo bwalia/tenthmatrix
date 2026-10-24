@@ -146,7 +146,7 @@ if winner then
         rule_data = winner.rule_match,
     }
 
-    -- Access-profile (wslvpn) verdict as X-P10X-VPN* headers. Before the
+    -- Access-profile (vpn10x) verdict as X-P10X-VPN* headers. Before the
     -- pipeline, so they are on the response even when WAF or rate limiting
     -- answers instead.
     local ap_ok, AccessProfile = pcall(require, "access_profile")

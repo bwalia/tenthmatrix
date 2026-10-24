@@ -1,0 +1,276 @@
+# Client
+
+The CLI (`vpn10x`) and the agent library do two separable things: talk to the
+control plane, and drive a WireGuard interface on the host. A session without an
+interface carries no traffic, so `connect` does both and `status` reports both
+independently.
+
+## Prerequisites
+
+On Windows the tunnel is run by **WireGuard for Windows** (`winget install
+WireGuard.WireGuard`): connect installs the `WireGuardTunnel$vpn10x` service with
+`wireguard.exe /installtunnelservice`, after one UAC prompt, and disconnect
+removes it. Status reads the service state with `sc query`. Everything below
+about `wg-quick` and bash applies to macOS and Linux. See
+[INSTALL.md](INSTALL.md).
+
+On macOS and Linux, `wg-quick` from the WireGuard tools has to be installed:
+
+```bash
+brew install wireguard-tools      # macOS
+apt install wireguard-tools       # Debian/Ubuntu
+```
+
+The agent searches `PATH`, then `/opt/homebrew/bin`, `/usr/local/bin` and
+`/usr/bin` — a GUI-launched process does not inherit a shell `PATH`, so the
+Homebrew locations are checked explicitly. `VPN10X_WG_QUICK` overrides the search
+with a specific path.
+
+`wg-quick` is a bash script that needs bash 4. macOS ships bash 3.2 as
+`/bin/bash`, and a privileged shell's `PATH` finds that one, so the agent does
+not leave the choice to `#!/usr/bin/env bash`: it finds a bash 4 (Homebrew's,
+usually) and runs `wg-quick` with it explicitly, with the Homebrew prefix on
+`PATH` so `wireguard-go` and `wg` are found. On macOS that means:
+
+```bash
+brew install wireguard-tools bash
+```
+
+`vpn10x diagnostics` prints which `wg-quick` and which bash it will use.
+
+## Privilege
+
+Creating a network interface needs root. The agent does not run as root, and the
+desktop GUI must not, so escalation happens per command and is visible:
+
+- running as root — `wg-quick` is invoked directly
+- otherwise — the command is re-run under `sudo`, which may prompt on a terminal
+- `--no-sudo` refuses escalation, and the command fails instead
+
+There is no persistent privileged helper. That keeps the trust boundary obvious
+at the cost of a password prompt on each connect.
+
+Everything one command needs root for runs as a single quoted `/bin/sh` script —
+for example taking a stale interface down and bringing the new one up — so
+there is one prompt, and the first failure stops the rest.
+
+## Lifecycle
+
+```bash
+vpn10x login
+vpn10x connect --network development
+vpn10x status
+vpn10x disconnect
+```
+
+`login` runs the native-app OIDC flow described below. `--no-browser` prints the
+sign-in URL instead of opening one, for a remote shell. `--dev --email you@…`
+uses the local development login instead, which the control plane only serves
+when it is bound to loopback.
+
+`connect` creates the session first, then brings the interface up, because the
+gateway has to know about the peer before traffic will pass. `disconnect`
+reverses that order — the interface goes down before the session is released, so
+there is never a window where an interface is up and pointed at a gateway that
+has already dropped the peer.
+
+If the session is created and the interface then fails to come up, the session is
+left in place rather than silently revoked. `status` reports that state as
+`Session open, tunnel down`; fix whatever `wg-quick` reported and run `connect`
+again.
+
+`--no-tunnel` on either command does the control-plane half only, and leaves the
+interface to you. It is what to use when something else on the host already
+manages WireGuard.
+
+## Signing in
+
+`login` is the RFC 8252 native-app flow. The client never holds a client secret
+and never sees your credentials:
+
+1. The client generates a random verifier and binds a listener on `127.0.0.1`
+   on a port the kernel picks.
+2. A browser opens at the control plane, carrying that loopback address and the
+   SHA-256 of the verifier — never the verifier itself.
+3. The control plane runs the OIDC handshake with your identity provider.
+4. The control plane sends the browser back to the loopback address with a
+   one-time code.
+5. The client redeems that code by presenting the verifier, and gets a token.
+
+Three properties come out of that shape:
+
+- The control plane will only send a browser to its own configured redirect or
+  to a loopback literal (`127.0.0.1`, `[::1]`) with a port. Names, including
+  `localhost`, are refused — a name can be made to resolve elsewhere, which is
+  the warning in RFC 8252 section 8.3.
+- What travels over loopback and lands in browser history is a code, not a
+  token, and it expires in two minutes.
+- The code is worthless without the verifier, which never leaves the client
+  process. A local process that watches the loopback request gains nothing. A
+  wrong verifier burns the code rather than allowing another attempt.
+
+## Signing in with an OpsAPI account
+
+When the control plane offers it (`vpn10x sign-in-methods`), you can sign in with
+your OpsAPI email and password instead of the browser:
+
+```bash
+vpn10x login --opsapi --email alice@example.com
+```
+
+The password is prompted for without echo and sent to OpsAPI — the address
+the control plane advertises, which must be https (or this machine) — never to
+the control plane. If your workspace requires a sign-in code, OpsAPI emails one
+and `login` asks for it. The control plane then checks the OpsAPI session with
+OpsAPI and the directory, and issues its own token; the OpsAPI token is not
+saved. Every `connect` is checked against the directory again. See
+[OPSAPI.md](OPSAPI.md#signing-in-with-an-opsapi-account).
+
+For a program driving the CLI (the desktop app does this), secrets go on stdin
+and never on the command line, where `ps` would show them:
+
+```bash
+printf '%s\n' "$PASSWORD" | vpn10x login --opsapi --email alice@example.com --stdin --json
+# {"status":"code_required","challenge":"…","email":"alice@example.com"}
+printf '%s\n%s\n' "$CHALLENGE" "$CODE" | vpn10x login --opsapi --code --stdin --json
+# {"status":"signed_in","email":"alice@example.com","device":"…"}
+```
+
+## Machine-readable output
+
+`vpn10x status --json` and `vpn10x networks --json` emit the same data the human
+output is rendered from. The desktop app is built on them.
+
+## Connecting with a WireGuard config
+
+A WireGuard server that is not (yet) behind the control plane needs no sign-in.
+Import the `.conf` its administrator issued, and `connect`/`disconnect` bring
+it up and down through the same privileged path as a managed session:
+
+```bash
+vpn10x profile import ~/Downloads/office.conf
+vpn10x profile import ~/Downloads/home.conf
+vpn10x profile list                 # * marks the one Connect uses
+vpn10x connect --profile home       # replaces whatever tunnel is up
+vpn10x status
+vpn10x disconnect
+vpn10x profile show home --config   # the file itself, for editing
+vpn10x profile remove office
+vpn10x profile use --none           # use the control plane instead
+```
+
+Each profile is stored as `<data dir>/profiles/<name>.conf`, mode 0600. One is
+up at a time, as the `vpn10x` interface; activating another takes the first down
+and brings the second up in one privileged run. A profile imported before
+there was a list is carried into it automatically.
+
+While a profile is imported it is what `connect` uses; `vpn10x status --json`
+reports `"mode": "direct"`. The file is validated on import, because `wg-quick`
+runs it as root:
+
+- `PreUp`, `PostUp`, `PreDown` and `PostDown` are refused. They are shell
+  commands, and a config someone was emailed would otherwise run anything it
+  liked with the rights the user granted to "connect".
+- Unknown keys are refused with their line number, so a typo fails here and not
+  inside an authorization dialog.
+- It needs one `[Interface]` with a `PrivateKey` and `Address`, and a `[Peer]`
+  with a `PublicKey`, `AllowedIPs` and an `Endpoint`.
+
+The config is stored mode 0600 and its private key is never copied into agent
+state.
+
+### Configs from the official WireGuard apps
+
+A `.conf` exported by the WireGuard apps (macOS, iOS, Windows, Android) or by
+servers such as wg-easy and PiVPN imports as it is: `ListenPort`, `MTU`,
+`PresharedKey`, full-tunnel `AllowedIPs = 0.0.0.0/0, ::/0`, DNS search domains,
+IPv6 endpoints, and extra peers without an `Endpoint` are all accepted. Files
+saved on Windows carry a UTF-8 byte order mark and CRLF line endings; both are
+removed before the file is validated and stored, because `wg-quick` would
+otherwise read the BOM as part of `[Interface]` and ignore every key under it.
+
+Hooks are refused here as they are by the macOS and iOS WireGuard apps.
+
+The official WireGuard app runs its tunnels as macOS network extensions,
+alongside the `vpn10x` interface rather than through it. `vpn10x status` (and the
+desktop window) names any tunnel the WireGuard app has connected, because two
+tunnels claiming the same routes is the usual cause of "connected, but nothing
+loads". Disconnect one of them.
+
+## Choosing the control plane
+
+```bash
+vpn10x config control-url https://vpn.example.com
+```
+
+Plain `http` is accepted only for loopback (the Compose demo): the bearer token
+rides on every request. Changing the URL signs out, since a token and device
+from one control plane mean nothing to another.
+
+## DNS overrides
+
+See [DNS.md](DNS.md): a hosts-file-style resolver, running as the user, that
+answers the names you choose and forwards the rest.
+
+## Asking for privilege without a terminal
+
+`--gui` on `connect` and `disconnect` replaces the `sudo` prompt with the
+operating system's own authorization dialog — `osascript`'s
+`with administrator privileges` on macOS, `pkexec` elsewhere. It is for callers
+with no terminal, where `sudo` would block forever on a prompt nobody can
+answer. `--no-sudo` still wins over it: a caller that says not to escalate is
+not escalated another way.
+
+## What `status` reads
+
+The connected/disconnected line comes from the operating system, not from what
+the agent remembers doing:
+
+- Linux — whether `/sys/class/net/vpn10x` exists
+- macOS — `wg-quick` records the `utun` device it was given in
+  `/var/run/wireguard/vpn10x.name`; the agent resolves that and checks the device
+
+Neither needs root, so `vpn10x status` never prompts. `vpn10x diagnostics` prints the
+resolved `wg-quick` path, the config path and the raw tunnel state.
+
+## Files
+
+| Path | Contents |
+| --- | --- |
+| `<data dir>/agent-state.json` | Session, device and access token — mode 0600 |
+| `<data dir>/vpn10x.conf` | Rendered WireGuard config, including the interface private key — mode 0600 |
+| `<data dir>/keys/wg.private` | Device private key — mode 0600 |
+| `<data dir>/profile.conf` | An imported WireGuard config — mode 0600 |
+| `<data dir>/hosts` | DNS overrides |
+| `<data dir>/dns.log` | The DNS resolver's log |
+
+`VPN10X_DATA_DIR` overrides the data directory.
+
+The data directory is `~/Library/Application Support/vpn10x-zerotrust` on macOS and
+`~/.local/share/vpn10x-zerotrust` on Linux.
+
+The config basename is what `wg-quick` turns into the interface name, so
+`vpn10x.conf` and the `vpn10x` interface are the same decision — a test asserts they
+cannot drift apart.
+
+## Troubleshooting
+
+**`wg-quick not found`** — install the WireGuard tools, or set `VPN10X_WG_QUICK`.
+
+**`this needs administrator rights`** — run under `sudo`, or (signed in) use
+`--no-tunnel` and bring the interface up yourself.
+
+**`wg-quick needs bash 4 or newer`** / **`Version mismatch: bash 3 detected`** —
+`brew install bash`. The second message is from an older agent that let
+`/usr/bin/env` pick macOS's bash 3.2.
+
+**`Cancelled: administrator permission was not granted`** — the authorization
+dialog was dismissed. Nothing changed.
+
+**`wg-quick reported success but no interface appeared`** — `wg-quick` exited 0
+without leaving a device behind. Check `wg show` as root and the system log; on
+macOS a stale `/var/run/wireguard/vpn10x.name` from an unclean shutdown is the usual
+cause.
+
+**`status` shows `Session open, tunnel down`** — the control plane has a live
+session for this device but nothing is up locally. Run `connect` again.

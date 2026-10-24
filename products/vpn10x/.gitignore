@@ -1,0 +1,25 @@
+target/
+**/*.rs.bk
+.env
+*.pem
+*.key
+.DS_Store
+apps/vpn10x-desktop/node_modules/
+apps/vpn10x-desktop/dist/
+apps/vpn10x-desktop/src-tauri/target/
+# Tauri regenerates these from tauri.conf.json on every build.
+apps/vpn10x-desktop/src-tauri/gen/schemas/
+# iOS: the Xcode project is generated from project.yml, and the WireGuard
+# sources are fetched at a pinned revision by `make bootstrap`.
+apps/vpn10x-ios/VPN10x.xcodeproj/
+apps/vpn10x-ios/Packages/WireGuardKit/upstream/
+apps/vpn10x-ios/build/
+apps/vpn10x-ios/DerivedData/
+**/xcuserdata/
+deploy/compose/data/
+
+# The bundled CLI is built by apps/vpn10x-desktop/Makefile, never committed.
+apps/vpn10x-desktop/src-tauri/binaries/
+
+# Generated deployment secrets cached by deploy/scripts/vault-load-secrets.sh.
+deploy/.secrets/

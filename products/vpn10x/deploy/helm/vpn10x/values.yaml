@@ -1,0 +1,189 @@
+# Control plane deployment values.
+#
+# The chart deploys the control plane only. Gateways sit on the network paths
+# they serve rather than in the cluster, and PostgreSQL is expected to be a
+# managed service with its own backups — see docs/OPERATIONS.md.
+
+replicaCount: 3
+
+image:
+  repository: ghcr.io/bwalia/vpn10x-control
+  tag: ""          # defaults to .Chart.AppVersion
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Defaults are the restricted Pod Security Standard: no root, no privilege
+# escalation, no capabilities, read-only root filesystem.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    # The control plane speaks plain HTTP and must never be reachable without
+    # TLS in front of it. Session bearer tokens travel on these requests.
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  host: vpn.example.com
+  tls:
+    enabled: true
+    secretName: vpn10x-tls
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    # No CPU limit: throttling a request-serving process adds tail latency
+    # without protecting anything the memory limit does not already protect.
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+
+# Keep a quorum serving during voluntary disruption (node drain, cluster
+# upgrade). With replicaCount 3 this permits one pod down at a time.
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+# Deny-by-default egress and ingress. The control plane needs to reach
+# PostgreSQL and the OIDC issuer, and nothing else.
+networkPolicy:
+  enabled: true
+  # Namespaces permitted to call the control plane, by label selector.
+  allowedIngressNamespaces: []
+  postgres:
+    port: 5432
+  # CIDRs the OIDC issuer resolves to; narrow these to your IdP.
+  identityEgressCIDRs:
+    - 0.0.0.0/0
+
+nodeSelector: {}
+tolerations: []
+
+# Spread replicas across nodes and zones so a single failure cannot take the
+# control plane down. Sessions in progress survive a control-plane outage, but
+# no new ones can be established while it is down.
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: kubernetes.io/hostname
+    whenUnsatisfiable: ScheduleAnyway
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: vpn10x
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: vpn10x
+
+# Secrets are referenced, never templated into the chart. Create the Secret out
+# of band (sealed-secrets, External Secrets Operator, a vault injector) with
+# these keys; the config file reads them as ${VAR} at startup and refuses to
+# start if one is missing.
+secrets:
+  existingSecret: vpn10x-secrets
+  keys:
+    databaseUrl: VPN10X_DATABASE_URL
+    oidcClientSecret: VPN10X_OIDC_CLIENT_SECRET
+    opsServiceToken: VPN10X_OPS_SERVICE_TOKEN
+    gatewayRegistrationToken: VPN10X_GATEWAY_REGISTRATION_TOKEN
+    scimServiceToken: VPN10X_SCIM_SERVICE_TOKEN
+
+config:
+  publicUrl: https://vpn.example.com
+  # Enumerates every route and schema; leave off outside development.
+  exposeDocs: false
+  productNamespace: vpn10x
+  productDisplayName: VPN10x
+  oidc:
+    issuer: https://idp.example.com
+    clientId: vpn10x
+    scopes: [openid, profile, email]
+    # Tolerance when comparing an id_token's exp and iat to local time.
+    clockSkewSecs: 60
+    # Set when the control plane reaches the provider at an address other than
+    # the issuer — an in-cluster provider on service DNS whose tokens name the
+    # public hostname. Only the address dialled changes; the issuer is still
+    # checked against discovery and every token's iss claim.
+    internalUrl: ""
+    # Private-use URI schemes a native app may be returned to. Empty means no
+    # mobile client can complete a login.
+    nativeSchemes: []
+  # Who may sign in. `directory` admits only people OpsAPI/SCIM provisioned;
+  # `jit` creates a user on a first verified login. With Google as the issuer,
+  # set hostedDomains to your Workspace domain or keep `directory` — the control
+  # plane refuses to start otherwise. See docs/OIDC.md.
+  admission:
+    provisioning: directory
+    hostedDomains: []
+  # Signing in with an OpsAPI account (email, password, emailed code). The
+  # control plane asks OpsAPI's /auth/me whose session it is, then confirms the
+  # person over SCIM, and asks SCIM again on every connect. Needs
+  # VPN10X_OPSAPI_API_KEY — an opsk_ key of an OpsAPI platform administrator — in
+  # secrets.existingSecret. See docs/OPSAPI.md and ADR-0004.
+  opsapi:
+    enabled: false
+    url: ""
+    # The workspace (namespace slug) people must be active members of.
+    namespace: ""
+    verifyOnConnect: true
+  wireguard:
+    defaultPort: 51820
+  gitops:
+    enabled: false
+    path: /etc/vpn10x/gitops
+  database:
+    maxConnections: 25
+    minConnections: 5
+    acquireTimeoutSecs: 5
+    idleTimeoutSecs: 300
+    maxLifetimeSecs: 1800
+  # Enforced per replica, so the effective budget is this multiplied by
+  # replicaCount. Put a shared limiter at the ingress if you need a global one.
+  rateLimit:
+    auth:
+      enabled: true
+      requests: 20
+      windowSecs: 60
+    api:
+      enabled: true
+      requests: 600
+      windowSecs: 60
+  # Reconciled on every start: adding an address grants the admin role,
+  # removing one takes it away. An empty list on a fresh database means nobody
+  # can administer the deployment.
+  adminEmails: []
+
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  labels: {}
