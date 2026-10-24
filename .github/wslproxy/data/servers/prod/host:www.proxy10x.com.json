@@ -1,0 +1,33 @@
+{
+  "listens": [
+    {
+      "listen": "80"
+    }
+  ],
+  "cache_enabled": true,
+  "access_log": "logs/www.proxy10x.com.access.log",
+  "error_log": "logs/www.proxy10x.com.error.log",
+  "ssl_enabled": true,
+  "index": "index.html",
+  "root": "/var/www/html",
+  "proxy_server_name": "bwalia.github.io",
+  "id": "host:www.proxy10x.com",
+  "match_cases": {},
+  "ssl_email": "admin@tenthmatrix.com",
+  "ssl_auto_renew": true,
+  "ssl_force_https": false,
+  "ssl_staging": false,
+  "config_status": true,
+  "server_name": "www.proxy10x.com",
+  "custom_headers": {},
+  "profile_id": "prod",
+  "rules": "tm-proxy10x-pages",
+  "dns_record_type": "CNAME",
+  "dns_cname_target": "lon1.pop0.uk",
+  "cache_ttl": "3600",
+  "cache_bypass_auth": false,
+  "rate_limit_enabled": false,
+  "varnish_enabled": false,
+  "waf_enabled": false,
+  "proxy_pass": "http://localhost"
+}

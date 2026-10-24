@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: "Vault10x"
+    orgId: 1
+    folder: "Vault10x"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

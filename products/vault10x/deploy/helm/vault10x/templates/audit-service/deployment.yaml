@@ -1,0 +1,119 @@
+{{/*
+audit-service/deployment.yaml
+The audit-service provides an append-only audit log. Every mutating action
+across the platform emits an event to the audit-service. The service persists
+events to PostgreSQL with a write-once constraint enforced at the application
+layer.
+*/}}
+{{- if .Values.auditService.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vault10x.componentFullname" (dict "component" "audit-service" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "vault10x.componentLabels" (dict "component" "audit-service" "componentType" "core" "context" $) | nindent 4 }}
+  {{- with .Values.auditService.podAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.auditService.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "vault10x.componentSelectorLabels" (dict "component" "audit-service" "context" $) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "vault10x.componentLabels" (dict "component" "audit-service" "componentType" "core" "context" $) | nindent 8 }}
+      {{- if .Values.monitoring.enabled }}
+      annotations:
+        {{- toYaml .Values.monitoring.scrapeAnnotations | nindent 8 }}
+        prometheus.io/port: {{ .Values.auditService.httpPort | quote }}
+        {{- with .Values.auditService.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- else }}
+      {{- with .Values.auditService.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "vault10x.serviceAccountName" . }}
+      {{- include "vault10x.podSecurityContext" . | nindent 6 }}
+      containers:
+        - name: audit-service
+          image: {{ include "vault10x.image" (dict "image" .Values.auditService.image "context" $) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          {{- include "vault10x.containerSecurityContext" . | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.auditService.httpPort }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ .Values.auditService.grpcPort }}
+              protocol: TCP
+          env:
+            - name: HTTP_PORT
+              value: {{ .Values.auditService.httpPort | quote }}
+            - name: GRPC_PORT
+              value: {{ .Values.auditService.grpcPort | quote }}
+            # Public keys for verifying per-tenant Ed25519 tokens on the HTTP
+            # events API. Without it audit rejects every read with 401
+            # "VAULT_JWKS_URL is not configured", the dashboard's audit widget
+            # 401s, and the UI logs the user straight back out.
+            - name: VAULT_JWKS_URL
+              value: "http://{{ include "vault10x.componentFullname" (dict "component" "identity-service" "context" $) }}:8082/v1/identity/.well-known/jwks.json"
+            # Master key for the per-tenant audit signing chain. Byte-identical
+            # across regions, like the rest of the mesh material: a record
+            # replicated from a peer verifies with the receiving region's key.
+            - name: AUDIT_SIGNING_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "vault10x.auditSigningKeySecretName" . }}
+                  key: {{ include "vault10x.auditSigningKeySecretKey" . }}
+                  optional: false
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "vault10x.dbCredentialsSecretName" . }}
+                  key: {{ include "vault10x.dbAppPasswordSecretKey" . }}
+                  optional: false
+            - name: DATABASE_URL
+              value: {{ printf "postgresql://%s:$(DB_PASSWORD)@%s:%s/%s"
+                          (include "vault10x.dbAppUser" .)
+                          (include "vault10x.postgresHost" .)
+                          (include "vault10x.postgresPort" .)
+                          .Values.postgresql.auth.database }}
+            {{- with .Values.auditService.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.auditService.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- include "vault10x.podScheduling" (dict "service" .Values.auditService "context" $) | nindent 6 }}
+{{- end }}

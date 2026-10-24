@@ -35,8 +35,23 @@ The website is the repository root. TenthMatrix products live under
   profiles resolve a VPN10x overlay address to its session identity
   (`products/proxy10x/docs/VPN_ACCESS.md`). Workflows inactive, as above.
 
-Neither product's domain (proxy10x.com, vpn10x.com) is registered yet; they
-appear in docs and config only.
+- `products/vault10x/` — **Vault10x**, the multi-tenant secrets platform for
+  AI-assisted work (13 Rust services, OpenResty gateway, Next.js admin UI,
+  Go/TS/Python SDKs, MCP server), imported from WSL Vault (wslvault). Its
+  `wslvault:` KDF/HMAC/seal labels and the `wslvault:platform-admin` role id
+  are protocol constants and keep that spelling on purpose.
+
+**Product websites.** Each product's own site is published by
+`.github/workflows/products-pages.yml` into a folder of this repo's single
+GitHub Pages site (`bwalia.github.io/tenthmatrix/<product>/`; Pages has no
+custom domain). The product domain is a grey-cloud CNAME to `lon1.pop0.uk`;
+its vhost + rule in `.github/wslproxy/data/` (`tm-<product>-pages`, upstream
+Host pinned to `bwalia.github.io`) are pushed to the control plane
+(cp.pop0.uk → lon1/lon2) by `wslproxy-register-domains.yml`, and the edge
+proxies the domain to its folder. Sites are built for their domain root.
+Live: proxy10x.com (`products/proxy10x/html/`), www.vault10x.com
+(`products/vault10x/www/`). vpn10x.com has no site yet. All three zones are in
+Cloudflare.
 
 Website CI ignores `products/**` (`paths-ignore` on build-and-deploy, eslint
 ignores, `.dockerignore`), so a product commit doesn't redeploy the site. The

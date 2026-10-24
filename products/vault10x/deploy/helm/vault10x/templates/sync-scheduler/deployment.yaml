@@ -1,0 +1,99 @@
+{{/*
+sync-scheduler/deployment.yaml
+Runs scheduled and event-driven sync jobs against external secret managers
+(AWS SM, GCP SM, etc.) using the vault10x-connectors crate.  Leader election
+via PostgreSQL advisory locks ensures only one replica runs jobs at a time.
+*/}}
+{{- if .Values.syncScheduler.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vault10x.componentFullname" (dict "component" "sync-scheduler" "context" $) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "vault10x.componentLabels" (dict "component" "sync-scheduler" "componentType" "replication" "context" $) | nindent 4 }}
+  {{- with .Values.syncScheduler.podAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.syncScheduler.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "vault10x.componentSelectorLabels" (dict "component" "sync-scheduler" "context" $) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "vault10x.componentLabels" (dict "component" "sync-scheduler" "componentType" "replication" "context" $) | nindent 8 }}
+      {{- if .Values.monitoring.enabled }}
+      annotations:
+        {{- toYaml .Values.monitoring.scrapeAnnotations | nindent 8 }}
+        prometheus.io/port: {{ .Values.syncScheduler.httpPort | quote }}
+        {{- with .Values.syncScheduler.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- else }}
+      {{- with .Values.syncScheduler.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "vault10x.serviceAccountName" . }}
+      {{- include "vault10x.podSecurityContext" . | nindent 6 }}
+      containers:
+        - name: sync-scheduler
+          image: {{ include "vault10x.image" (dict "image" .Values.syncScheduler.image "context" $) }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          {{- include "vault10x.containerSecurityContext" . | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.syncScheduler.httpPort }}
+              protocol: TCP
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "vault10x.dbCredentialsSecretName" . }}
+                  key: {{ include "vault10x.dbAppPasswordSecretKey" . }}
+                  optional: false
+            - name: DATABASE_URL
+              value: {{ printf "postgresql://%s:$(DB_PASSWORD)@%s:%s/%s"
+                          (include "vault10x.dbAppUser" .)
+                          (include "vault10x.postgresHost" .)
+                          (include "vault10x.postgresPort" .)
+                          .Values.postgresql.auth.database }}
+            {{- include "vault10x.regionEnv" . | nindent 12 }}
+            - name: SYNC_SCHEDULER_LISTEN_ADDR
+              value: {{ printf "0.0.0.0:%d" (int .Values.syncScheduler.httpPort) | quote }}
+            {{- with .Values.syncScheduler.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.syncScheduler.resources | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- include "vault10x.podScheduling" (dict "service" .Values.syncScheduler "context" $) | nindent 6 }}
+{{- end }}

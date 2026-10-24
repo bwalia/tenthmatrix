@@ -1,0 +1,38 @@
+[package]
+name = "sync-scheduler"
+version = "0.1.0"
+edition = "2021"
+description = "Scheduled and event-driven sync between Vault10x and external secret managers"
+license = "Apache-2.0"
+
+[[bin]]
+name = "sync-scheduler"
+path = "src/main.rs"
+
+[features]
+# runner.rs gates the real AWS Secrets Manager path behind `cfg(feature = "aws")`.
+# The feature never existed here, so that branch was dead and every AWS job fell
+# through to the "not compiled" bail. vault10x-connectors is already pulled with
+# `all`, so the connector is present — declare the feature and default it on.
+default = ["aws"]
+aws = ["vault10x-connectors/aws"]
+
+[dependencies]
+vault10x-core = { path = "../../crates/vault10x-core" }
+vault10x-storage = { path = "../../crates/vault10x-storage" }
+vault10x-cluster = { path = "../../crates/vault10x-cluster" }
+vault10x-connectors = { path = "../../crates/vault10x-connectors", features = ["all"] }
+tokio = { workspace = true }
+axum = { workspace = true }
+sqlx = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+uuid = { workspace = true }
+chrono = { workspace = true }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+prometheus = { workspace = true }
+cron = "0.12"
