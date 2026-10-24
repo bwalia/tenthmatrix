@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API Gateway, CDN e WAF | TenthMatrix",
-    "description": "Página do produto TenthMatrix WSL Proxy: como funciona o proxy com configuração ao vivo, recursos detalhados, regras e etapas do motor WAF v2, cache CDN, DNS multi-POP e roadmap do Agents/MCP Gateway. Acesse wslproxy.org.",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, regras de WAF, OpenResty, cache de borda, MCP gateway, Agents Gateway, proxy reverso, wslproxy.org"
+    "title": "TenthMatrix Proxy10x — API Gateway, CDN e WAF | TenthMatrix",
+    "description": "Página do produto TenthMatrix Proxy10x: como funciona o proxy com configuração ao vivo, recursos detalhados, regras e etapas do motor WAF v2, cache CDN, DNS multi-POP e roadmap do Agents/MCP Gateway. Acesse wslproxy.org.",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API gateway, CDN, regras de WAF, OpenResty, cache de borda, MCP gateway, Agents Gateway, proxy reverso, wslproxy.org"
   },
   "header": {
-    "title": "TenthMatrix WSL Proxy",
+    "title": "TenthMatrix Proxy10x",
     "subtitle": "API Gateway, CDN e WAF empresarial — Visão geral do produto",
-    "description": "O TenthMatrix WSL Proxy (WSLProxy) é o plano de controle completo de API gateway e borda CDN da TenthMatrix. Ele fica na frente das suas origens e decide a cada requisição o que acontece — rotear, proteger, cachear e observar — a partir de configurações JSON e MCP ao vivo, sem recarregar o nginx a cada mudança de regra."
+    "description": "O TenthMatrix Proxy10x (Proxy10x) é o plano de controle completo de API gateway e borda CDN da TenthMatrix. Ele fica na frente das suas origens e decide a cada requisição o que acontece — rotear, proteger, cachear e observar — a partir de configurações JSON e MCP ao vivo, sem recarregar o nginx a cada mudança de regra."
   },
   "intro": {
-    "title": "O que é o TenthMatrix WSL Proxy?",
-    "body": "O WSLProxy é um API gateway dinâmico e proxy reverso sobre OpenResty. Os operadores gerenciam hosts virtuais, regras de roteamento, políticas de WAF, cache, divisão de tráfego e POPs de borda por uma interface de administração, API REST, ferramentas MCP ou o wslproxy-cli. As regras do dia a dia entram em vigor no caminho crítico; o nginx só recarrega quando blocos listen ou SSL no nível do servidor mudam.",
+    "title": "O que é o TenthMatrix Proxy10x?",
+    "body": "O Proxy10x é um API gateway dinâmico e proxy reverso sobre OpenResty. Os operadores gerenciam hosts virtuais, regras de roteamento, políticas de WAF, cache, divisão de tráfego e POPs de borda por uma interface de administração, API REST, ferramentas MCP ou o proxy10x-cli. As regras do dia a dia entram em vigor no caminho crítico; o nginx só recarrega quando blocos listen ou SSL no nível do servidor mudam.",
     "links": [
       {
         "label": "wslproxy.org",
@@ -27,7 +27,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/bwalia/wslproxy"
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
       }
     ]
   },
@@ -37,7 +37,7 @@
     "flow": [
       {
         "title": "1. A requisição chega a um POP",
-        "text": "Navegadores, APIs e agentes chegam a uma borda do TenthMatrix WSL Proxy (Docker, POP bare-metal com Ansible ou ingress Helm em k3s). O OpenResty aceita o TLS e entra no caminho crítico em Lua."
+        "text": "Navegadores, APIs e agentes chegam a uma borda do TenthMatrix Proxy10x (Docker, POP bare-metal com Ansible ou ingress Helm em k3s). O OpenResty aceita o TLS e entra no caminho crítico em Lua."
       },
       {
         "title": "2. Corresponder a uma regra de roteamento",
@@ -114,12 +114,12 @@
       },
       {
         "title": "Multi-POP + DNS",
-        "description": "Declare locais de borda e provisione registros A no Cloudflare com proteções. Um padrão comum em produção é POP público → NodePort do k3s → Helm wslproxy-ingress → pods da app.",
+        "description": "Declare locais de borda e provisione registros A no Cloudflare com proteções. Um padrão comum em produção é POP público → NodePort do k3s → Helm proxy10x-ingress → pods da app.",
         "icon": "bi-globe2"
       },
       {
         "title": "Plano de controle",
-        "description": "Painéis React Admin e Next.js, REST com Swagger, ferramentas MCP para Claude/Cursor e a imagem wslproxy-cli (ghcr.io/bwalia/wslproxy-cli) para fluxos pull/push/diff/verify.",
+        "description": "Painéis React Admin e Next.js, REST com Swagger, ferramentas MCP para Claude/Cursor e a imagem proxy10x-cli (ghcr.io/bwalia/proxy10x-cli) para fluxos pull/push/diff/verify.",
         "icon": "bi-sliders"
       },
       {
@@ -217,7 +217,7 @@
   },
   "roadmap": {
     "title": "Agents Gateway e MCP Gateway",
-    "intro": "A TenthMatrix está levando o WSL Proxy para a era dos agentes. A mesma borda que fica na frente das APIs HTTP vai governar como agentes e clientes do Model Context Protocol (MCP) acessam ferramentas e backends.",
+    "intro": "A TenthMatrix está levando o Proxy10x para a era dos agentes. A mesma borda que fica na frente das APIs HTTP vai governar como agentes e clientes do Model Context Protocol (MCP) acessam ferramentas e backends.",
     "items": [
       {
         "title": "MCP Gateway (em desenvolvimento)",
@@ -226,19 +226,19 @@
       },
       {
         "title": "Agents Gateway (em desenvolvimento)",
-        "description": "Políticas, roteamento e observabilidade para tráfego multiagente — para que frotas de agentes cheguem às origens pela mesma borda do TenthMatrix WSL Proxy que suas APIs e cargas CDN.",
+        "description": "Políticas, roteamento e observabilidade para tráfego multiagente — para que frotas de agentes cheguem às origens pela mesma borda do TenthMatrix Proxy10x que suas APIs e cargas CDN.",
         "status": "In progress"
       },
       {
         "title": "Interface de gerenciamento MCP (disponível)",
-        "description": "O WSLProxy já expõe sua própria interface de administração como ferramentas MCP para Claude, Cursor e outros agentes — configure regras e inspecione a borda sem sair do seu IDE.",
+        "description": "O Proxy10x já expõe sua própria interface de administração como ferramentas MCP para Claude, Cursor e outros agentes — configure regras e inspecione a borda sem sair do seu IDE.",
         "status": "Available"
       }
     ]
   },
   "architecture": {
     "title": "Arquitetura da solução",
-    "intro": "Clientes e agentes chegam a um POP do TenthMatrix WSL Proxy. A borda aplica regras ao vivo, WAF e cache, e depois balanceia para as origens. Os operadores controlam tudo pela interface de administração, REST, MCP ou CLI.",
+    "intro": "Clientes e agentes chegam a um POP do TenthMatrix Proxy10x. A borda aplica regras ao vivo, WAF e cache, e depois balanceia para as origens. Os operadores controlam tudo pela interface de administração, REST, MCP ou CLI.",
     "steps": [
       {
         "title": "POP de borda",
@@ -250,7 +250,7 @@
       },
       {
         "title": "Plano de controle",
-        "text": "Interface de administração, REST, MCP e wslproxy-cli para pessoas e agentes."
+        "text": "Interface de administração, REST, MCP e proxy10x-cli para pessoas e agentes."
       },
       {
         "title": "Origens",
@@ -263,7 +263,7 @@
     "intro": "Web Application Firewall explicável na mesma borda com configuração ao vivo — políticas, etapas, monitoramento ou bloqueio e IDs de suporte em cada decisão.",
     "items": [
       {
-        "label": "Blog do WAF do WSL Proxy",
+        "label": "Blog do WAF do Proxy10x",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
@@ -295,7 +295,7 @@
     ]
   },
   "cta": {
-    "title": "Obter o TenthMatrix WSL Proxy",
+    "title": "Obter o TenthMatrix Proxy10x",
     "body": "Conheça o produto em wslproxy.org, leia a análise aprofundada do WAF na TenthMatrix ou fale conosco sobre implantações de borda, CDN, WAF e gateway de agentes.",
     "primary": {
       "text": "Abrir wslproxy.org",
@@ -317,25 +317,25 @@
   "externalSite": {
     "label": "Continuar no site do produto",
     "href": "https://wslproxy.org",
-    "text": "Acesse wslproxy.org para demos, documentação e as versões mais recentes do TenthMatrix WSL Proxy."
+    "text": "Acesse wslproxy.org para demos, documentação e as versões mais recentes do TenthMatrix Proxy10x."
   },
   "videos": [
     {
-      "title": "Assista: introdução ao TenthMatrix WSL Proxy",
+      "title": "Assista: introdução ao TenthMatrix Proxy10x",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — introdução ao produto",
+      "thumbnailAlt": "TenthMatrix Proxy10x — introdução ao produto",
       "caption": "Assistir",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "Assista: tour pelo WAF do WSL Proxy",
+      "title": "Assista: tour pelo WAF do Proxy10x",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "Tour pelo WAF do TenthMatrix WSL Proxy",
+      "thumbnailAlt": "Tour pelo WAF do TenthMatrix Proxy10x",
       "caption": "Assistir",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

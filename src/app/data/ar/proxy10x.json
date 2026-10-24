@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — بوابة API وCDN وWAF | TenthMatrix",
-    "description": "صفحة منتج TenthMatrix WSL Proxy: كيف يعمل الوكيل ذو الإعدادات الحيّة، والميزات المفصّلة، وقواعد ومراحل WAF engine v2، وذاكرة CDN المؤقتة، وDNS متعدد نقاط الحضور، وخارطة طريق Agents/MCP Gateway. زر wslproxy.org.",
-    "keywords": "TenthMatrix WSL Proxy، WSLProxy، بوابة API، CDN، قواعد WAF، OpenResty، ذاكرة الحافة المؤقتة، بوابة MCP، Agents Gateway، وكيل عكسي، wslproxy.org"
+    "title": "TenthMatrix Proxy10x — بوابة API وCDN وWAF | TenthMatrix",
+    "description": "صفحة منتج TenthMatrix Proxy10x: كيف يعمل الوكيل ذو الإعدادات الحيّة، والميزات المفصّلة، وقواعد ومراحل WAF engine v2، وذاكرة CDN المؤقتة، وDNS متعدد نقاط الحضور، وخارطة طريق Agents/MCP Gateway. زر wslproxy.org.",
+    "keywords": "TenthMatrix Proxy10x، Proxy10x، بوابة API، CDN، قواعد WAF، OpenResty، ذاكرة الحافة المؤقتة، بوابة MCP، Agents Gateway، وكيل عكسي، wslproxy.org"
   },
   "header": {
-    "title": "TenthMatrix WSL Proxy",
+    "title": "TenthMatrix Proxy10x",
     "subtitle": "بوابة API وCDN وWAF للمؤسسات — نظرة عامة على المنتج",
-    "description": "TenthMatrix WSL Proxy (WSLProxy) هو بوابة API ومستوى تحكم حافة CDN المتكاملان من TenthMatrix. يقف أمام خوادمك الأصلية ويقرر لكل طلب ما يحدث — التوجيه والتأمين والتخزين المؤقت والمراقبة — انطلاقًا من إعدادات JSON وMCP حيّة، دون إعادة تحميل nginx مع كل تغيير في القواعد."
+    "description": "TenthMatrix Proxy10x (Proxy10x) هو بوابة API ومستوى تحكم حافة CDN المتكاملان من TenthMatrix. يقف أمام خوادمك الأصلية ويقرر لكل طلب ما يحدث — التوجيه والتأمين والتخزين المؤقت والمراقبة — انطلاقًا من إعدادات JSON وMCP حيّة، دون إعادة تحميل nginx مع كل تغيير في القواعد."
   },
   "intro": {
-    "title": "ما هو TenthMatrix WSL Proxy؟",
-    "body": "WSLProxy بوابة API ووكيل عكسي ديناميكي على OpenResty. يدير المشغّلون المضيفات الافتراضية وقواعد التوجيه وسياسات WAF والتخزين المؤقت وتقسيم حركة المرور ونقاط الحضور على الحافة من واجهة الإدارة أو REST API أو أدوات MCP أو wslproxy-cli. تسري القواعد اليومية على المسار السريع؛ ولا يُعاد تحميل nginx إلا عند تغيّر كتل listen أو SSL على مستوى الخادم.",
+    "title": "ما هو TenthMatrix Proxy10x؟",
+    "body": "Proxy10x بوابة API ووكيل عكسي ديناميكي على OpenResty. يدير المشغّلون المضيفات الافتراضية وقواعد التوجيه وسياسات WAF والتخزين المؤقت وتقسيم حركة المرور ونقاط الحضور على الحافة من واجهة الإدارة أو REST API أو أدوات MCP أو proxy10x-cli. تسري القواعد اليومية على المسار السريع؛ ولا يُعاد تحميل nginx إلا عند تغيّر كتل listen أو SSL على مستوى الخادم.",
     "links": [
       {
         "label": "wslproxy.org",
@@ -27,7 +27,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/bwalia/wslproxy"
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
       }
     ]
   },
@@ -37,7 +37,7 @@
     "flow": [
       {
         "title": "1. يصل الطلب إلى نقطة حضور",
-        "text": "تصل المتصفحات وواجهات API والوكلاء إلى حافة TenthMatrix WSL Proxy (Docker، أو نقطة حضور على خوادم فعلية عبر Ansible، أو k3s Helm ingress). يستقبل OpenResty اتصال TLS ويدخل مسار Lua السريع."
+        "text": "تصل المتصفحات وواجهات API والوكلاء إلى حافة TenthMatrix Proxy10x (Docker، أو نقطة حضور على خوادم فعلية عبر Ansible، أو k3s Helm ingress). يستقبل OpenResty اتصال TLS ويدخل مسار Lua السريع."
       },
       {
         "title": "2. مطابقة قاعدة توجيه",
@@ -114,12 +114,12 @@
       },
       {
         "title": "نقاط حضور متعددة + DNS",
-        "description": "عرّف مواقع الحافة وأنشئ سجلات A على Cloudflare مع ضوابط أمان. النمط الإنتاجي الشائع هو نقطة حضور عامة → k3s NodePort → wslproxy-ingress Helm → حاويات التطبيق.",
+        "description": "عرّف مواقع الحافة وأنشئ سجلات A على Cloudflare مع ضوابط أمان. النمط الإنتاجي الشائع هو نقطة حضور عامة → k3s NodePort → proxy10x-ingress Helm → حاويات التطبيق.",
         "icon": "bi-globe2"
       },
       {
         "title": "مستوى التحكم",
-        "description": "لوحات React Admin وNext.js، وSwagger REST، وأدوات MCP لـ Claude/Cursor، وصورة wslproxy-cli (ghcr.io/bwalia/wslproxy-cli) لسير عمل pull/push/diff/verify.",
+        "description": "لوحات React Admin وNext.js، وSwagger REST، وأدوات MCP لـ Claude/Cursor، وصورة proxy10x-cli (ghcr.io/bwalia/proxy10x-cli) لسير عمل pull/push/diff/verify.",
         "icon": "bi-sliders"
       },
       {
@@ -217,7 +217,7 @@
   },
   "roadmap": {
     "title": "Agents Gateway وMCP Gateway",
-    "intro": "توسّع TenthMatrix نطاق WSL Proxy ليشمل عصر الوكلاء. ستحكم الحافة نفسها التي تتصدّر واجهات HTTP API كيفية وصول الوكلاء وعملاء Model Context Protocol (MCP) إلى الأدوات والواجهات الخلفية.",
+    "intro": "توسّع TenthMatrix نطاق Proxy10x ليشمل عصر الوكلاء. ستحكم الحافة نفسها التي تتصدّر واجهات HTTP API كيفية وصول الوكلاء وعملاء Model Context Protocol (MCP) إلى الأدوات والواجهات الخلفية.",
     "items": [
       {
         "title": "MCP Gateway (قيد التطوير)",
@@ -226,19 +226,19 @@
       },
       {
         "title": "Agents Gateway (قيد التطوير)",
-        "description": "السياسات والتوجيه وقابلية المراقبة لحركة مرور الوكلاء المتعددين — لتصل أساطيل الوكلاء إلى الخوادم الأصلية عبر حافة TenthMatrix WSL Proxy نفسها التي تمر بها واجهات API وأحمال CDN.",
+        "description": "السياسات والتوجيه وقابلية المراقبة لحركة مرور الوكلاء المتعددين — لتصل أساطيل الوكلاء إلى الخوادم الأصلية عبر حافة TenthMatrix Proxy10x نفسها التي تمر بها واجهات API وأحمال CDN.",
         "status": "In progress"
       },
       {
         "title": "واجهة إدارة MCP (متاحة)",
-        "description": "يوفّر WSLProxy بالفعل واجهة الإدارة الخاصة به كأدوات MCP لـ Claude وCursor ووكلاء آخرين — اضبط القواعد وافحص الحافة دون مغادرة بيئة التطوير.",
+        "description": "يوفّر Proxy10x بالفعل واجهة الإدارة الخاصة به كأدوات MCP لـ Claude وCursor ووكلاء آخرين — اضبط القواعد وافحص الحافة دون مغادرة بيئة التطوير.",
         "status": "Available"
       }
     ]
   },
   "architecture": {
     "title": "بنية الحل",
-    "intro": "يصل العملاء والوكلاء إلى نقطة حضور TenthMatrix WSL Proxy. تطابق الحافة القواعد الحيّة، وتطبّق WAF والتخزين المؤقت، ثم توازن الحمل نحو الخوادم الأصلية. ويدير المشغّلون كل شيء عبر واجهة الإدارة أو REST أو MCP أو CLI.",
+    "intro": "يصل العملاء والوكلاء إلى نقطة حضور TenthMatrix Proxy10x. تطابق الحافة القواعد الحيّة، وتطبّق WAF والتخزين المؤقت، ثم توازن الحمل نحو الخوادم الأصلية. ويدير المشغّلون كل شيء عبر واجهة الإدارة أو REST أو MCP أو CLI.",
     "steps": [
       {
         "title": "نقطة حضور الحافة",
@@ -250,7 +250,7 @@
       },
       {
         "title": "مستوى التحكم",
-        "text": "واجهة الإدارة وREST وMCP وwslproxy-cli للبشر والوكلاء."
+        "text": "واجهة الإدارة وREST وMCP وproxy10x-cli للبشر والوكلاء."
       },
       {
         "title": "الخوادم الأصلية",
@@ -263,7 +263,7 @@
     "intro": "جدار حماية تطبيقات ويب قابل للتفسير على حافة الإعدادات الحيّة نفسها — سياسات ومراحل ومراقبة أو حظر ومعرّفات دعم مع كل قرار.",
     "items": [
       {
-        "label": "مدونة WSL Proxy WAF",
+        "label": "مدونة Proxy10x WAF",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
@@ -295,7 +295,7 @@
     ]
   },
   "cta": {
-    "title": "احصل على TenthMatrix WSL Proxy",
+    "title": "احصل على TenthMatrix Proxy10x",
     "body": "استكشف المنتج على wslproxy.org، أو اقرأ التحليل المعمّق عن WAF على TenthMatrix، أو تحدّث إلينا عن نشر الحافة وCDN وWAF وبوابات الوكلاء.",
     "primary": {
       "text": "افتح wslproxy.org",
@@ -317,25 +317,25 @@
   "externalSite": {
     "label": "تابع على موقع المنتج",
     "href": "https://wslproxy.org",
-    "text": "زر wslproxy.org للعروض التوضيحية والوثائق وأحدث إصدارات TenthMatrix WSL Proxy."
+    "text": "زر wslproxy.org للعروض التوضيحية والوثائق وأحدث إصدارات TenthMatrix Proxy10x."
   },
   "videos": [
     {
-      "title": "شاهد: مقدمة إلى TenthMatrix WSL Proxy",
+      "title": "شاهد: مقدمة إلى TenthMatrix Proxy10x",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — تقديم المنتج",
+      "thumbnailAlt": "TenthMatrix Proxy10x — تقديم المنتج",
       "caption": "شاهد",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "شاهد: جولة في WSL Proxy WAF",
+      "title": "شاهد: جولة في Proxy10x WAF",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "جولة في TenthMatrix WSL Proxy WAF",
+      "thumbnailAlt": "جولة في TenthMatrix Proxy10x WAF",
       "caption": "شاهد",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

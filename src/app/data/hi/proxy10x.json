@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API गेटवे, CDN और WAF | TenthMatrix",
-    "description": "TenthMatrix WSL Proxy उत्पाद पृष्ठ: लाइव-कॉन्फ़िग प्रॉक्सी कैसे काम करता है, विस्तृत सुविधाएँ, WAF engine v2 नियम और चरण, CDN कैश, मल्टी-POP DNS, और Agents/MCP Gateway रोडमैप। wslproxy.org पर जाएँ।",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API गेटवे, CDN, WAF नियम, OpenResty, एज कैश, MCP गेटवे, Agents Gateway, रिवर्स प्रॉक्सी, wslproxy.org"
+    "title": "TenthMatrix Proxy10x — API गेटवे, CDN और WAF | TenthMatrix",
+    "description": "TenthMatrix Proxy10x उत्पाद पृष्ठ: लाइव-कॉन्फ़िग प्रॉक्सी कैसे काम करता है, विस्तृत सुविधाएँ, WAF engine v2 नियम और चरण, CDN कैश, मल्टी-POP DNS, और Agents/MCP Gateway रोडमैप। wslproxy.org पर जाएँ।",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API गेटवे, CDN, WAF नियम, OpenResty, एज कैश, MCP गेटवे, Agents Gateway, रिवर्स प्रॉक्सी, wslproxy.org"
   },
   "header": {
-    "title": "TenthMatrix WSL Proxy",
+    "title": "TenthMatrix Proxy10x",
     "subtitle": "API गेटवे, CDN और एंटरप्राइज़ WAF — उत्पाद अवलोकन",
-    "description": "TenthMatrix WSL Proxy (WSLProxy) TenthMatrix का संपूर्ण API गेटवे और CDN एज कंट्रोल प्लेन है। यह आपके ओरिजिन के सामने रहता है और हर रिक्वेस्ट के लिए तय करता है कि क्या होगा — रूट, सुरक्षित, कैश और ऑब्ज़र्व — लाइव JSON और MCP कॉन्फ़िग से, हर नियम बदलाव पर nginx रीलोड किए बिना।"
+    "description": "TenthMatrix Proxy10x (Proxy10x) TenthMatrix का संपूर्ण API गेटवे और CDN एज कंट्रोल प्लेन है। यह आपके ओरिजिन के सामने रहता है और हर रिक्वेस्ट के लिए तय करता है कि क्या होगा — रूट, सुरक्षित, कैश और ऑब्ज़र्व — लाइव JSON और MCP कॉन्फ़िग से, हर नियम बदलाव पर nginx रीलोड किए बिना।"
   },
   "intro": {
-    "title": "TenthMatrix WSL Proxy क्या है?",
-    "body": "WSLProxy, OpenResty पर एक डायनामिक API गेटवे और रिवर्स प्रॉक्सी है। ऑपरेटर वर्चुअल होस्ट, रूटिंग नियम, WAF नीतियाँ, कैश, ट्रैफ़िक स्प्लिट और एज POP को Admin UI, REST API, MCP टूल या wslproxy-cli से प्रबंधित करते हैं। रोज़मर्रा के नियम हॉट पाथ पर लागू होते हैं; nginx केवल तब रीलोड होता है जब सर्वर-स्तर के listen या SSL ब्लॉक बदलते हैं।",
+    "title": "TenthMatrix Proxy10x क्या है?",
+    "body": "Proxy10x, OpenResty पर एक डायनामिक API गेटवे और रिवर्स प्रॉक्सी है। ऑपरेटर वर्चुअल होस्ट, रूटिंग नियम, WAF नीतियाँ, कैश, ट्रैफ़िक स्प्लिट और एज POP को Admin UI, REST API, MCP टूल या proxy10x-cli से प्रबंधित करते हैं। रोज़मर्रा के नियम हॉट पाथ पर लागू होते हैं; nginx केवल तब रीलोड होता है जब सर्वर-स्तर के listen या SSL ब्लॉक बदलते हैं।",
     "links": [
       {
         "label": "wslproxy.org",
@@ -27,7 +27,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/bwalia/wslproxy"
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
       }
     ]
   },
@@ -37,7 +37,7 @@
     "flow": [
       {
         "title": "1. रिक्वेस्ट POP पर पहुँचती है",
-        "text": "ब्राउज़र, API और एजेंट TenthMatrix WSL Proxy एज (Docker, बेयर-मेटल Ansible POP, या k3s Helm ingress) तक पहुँचते हैं। OpenResty TLS स्वीकार करता है और Lua हॉट पाथ में प्रवेश करता है।"
+        "text": "ब्राउज़र, API और एजेंट TenthMatrix Proxy10x एज (Docker, बेयर-मेटल Ansible POP, या k3s Helm ingress) तक पहुँचते हैं। OpenResty TLS स्वीकार करता है और Lua हॉट पाथ में प्रवेश करता है।"
       },
       {
         "title": "2. रूटिंग नियम मैच करें",
@@ -114,12 +114,12 @@
       },
       {
         "title": "मल्टी-POP + DNS",
-        "description": "एज लोकेशन घोषित करें और सुरक्षा गार्डरेल के साथ Cloudflare A-records प्रोविज़न करें। एक आम प्रोडक्शन पैटर्न है public POP → k3s NodePort → wslproxy-ingress Helm → app pods।",
+        "description": "एज लोकेशन घोषित करें और सुरक्षा गार्डरेल के साथ Cloudflare A-records प्रोविज़न करें। एक आम प्रोडक्शन पैटर्न है public POP → k3s NodePort → proxy10x-ingress Helm → app pods।",
         "icon": "bi-globe2"
       },
       {
         "title": "कंट्रोल प्लेन",
-        "description": "React Admin और Next.js डैशबोर्ड, Swagger REST, Claude/Cursor के लिए MCP टूल, और pull/push/diff/verify वर्कफ़्लो के लिए wslproxy-cli इमेज (ghcr.io/bwalia/wslproxy-cli)।",
+        "description": "React Admin और Next.js डैशबोर्ड, Swagger REST, Claude/Cursor के लिए MCP टूल, और pull/push/diff/verify वर्कफ़्लो के लिए proxy10x-cli इमेज (ghcr.io/bwalia/proxy10x-cli)।",
         "icon": "bi-sliders"
       },
       {
@@ -217,7 +217,7 @@
   },
   "roadmap": {
     "title": "Agents Gateway और MCP Gateway",
-    "intro": "TenthMatrix, WSL Proxy को एजेंट युग में विस्तारित कर रहा है। HTTP API के सामने रहने वाला वही एज नियंत्रित करेगा कि एजेंट और Model Context Protocol (MCP) क्लाइंट टूल और बैकएंड तक कैसे पहुँचें।",
+    "intro": "TenthMatrix, Proxy10x को एजेंट युग में विस्तारित कर रहा है। HTTP API के सामने रहने वाला वही एज नियंत्रित करेगा कि एजेंट और Model Context Protocol (MCP) क्लाइंट टूल और बैकएंड तक कैसे पहुँचें।",
     "items": [
       {
         "title": "MCP Gateway (प्रगति पर)",
@@ -226,19 +226,19 @@
       },
       {
         "title": "Agents Gateway (प्रगति पर)",
-        "description": "मल्टी-एजेंट ट्रैफ़िक के लिए नीति, रूटिंग और ऑब्ज़र्वेबिलिटी — ताकि एजेंट फ़्लीट आपके API और CDN वर्कलोड वाले उसी TenthMatrix WSL Proxy एज से ओरिजिन तक पहुँचें।",
+        "description": "मल्टी-एजेंट ट्रैफ़िक के लिए नीति, रूटिंग और ऑब्ज़र्वेबिलिटी — ताकि एजेंट फ़्लीट आपके API और CDN वर्कलोड वाले उसी TenthMatrix Proxy10x एज से ओरिजिन तक पहुँचें।",
         "status": "In progress"
       },
       {
         "title": "MCP प्रबंधन सतह (उपलब्ध)",
-        "description": "WSLProxy पहले से ही अपनी Admin सतह को Claude, Cursor और अन्य एजेंटों के लिए MCP टूल के रूप में उपलब्ध कराता है — अपना IDE छोड़े बिना नियम कॉन्फ़िगर करें और एज की जाँच करें।",
+        "description": "Proxy10x पहले से ही अपनी Admin सतह को Claude, Cursor और अन्य एजेंटों के लिए MCP टूल के रूप में उपलब्ध कराता है — अपना IDE छोड़े बिना नियम कॉन्फ़िगर करें और एज की जाँच करें।",
         "status": "Available"
       }
     ]
   },
   "architecture": {
     "title": "सॉल्यूशन आर्किटेक्चर",
-    "intro": "क्लाइंट और एजेंट TenthMatrix WSL Proxy POP तक पहुँचते हैं। एज लाइव नियम मैच करता है, WAF और कैश लागू करता है, फिर ओरिजिन पर बैलेंस करता है। ऑपरेटर सब कुछ Admin UI, REST, MCP या CLI से चलाते हैं।",
+    "intro": "क्लाइंट और एजेंट TenthMatrix Proxy10x POP तक पहुँचते हैं। एज लाइव नियम मैच करता है, WAF और कैश लागू करता है, फिर ओरिजिन पर बैलेंस करता है। ऑपरेटर सब कुछ Admin UI, REST, MCP या CLI से चलाते हैं।",
     "steps": [
       {
         "title": "एज POP",
@@ -250,7 +250,7 @@
       },
       {
         "title": "कंट्रोल प्लेन",
-        "text": "इंसानों और एजेंटों के लिए Admin UI, REST, MCP और wslproxy-cli।"
+        "text": "इंसानों और एजेंटों के लिए Admin UI, REST, MCP और proxy10x-cli।"
       },
       {
         "title": "ओरिजिन",
@@ -263,7 +263,7 @@
     "intro": "उसी लाइव-कॉन्फ़िग एज पर व्याख्या योग्य Web Application Firewall — नीतियाँ, चरण, मॉनिटर या ब्लॉक, और हर निर्णय पर सपोर्ट ID।",
     "items": [
       {
-        "label": "WSL Proxy WAF ब्लॉग",
+        "label": "Proxy10x WAF ब्लॉग",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
@@ -295,7 +295,7 @@
     ]
   },
   "cta": {
-    "title": "TenthMatrix WSL Proxy प्राप्त करें",
+    "title": "TenthMatrix Proxy10x प्राप्त करें",
     "body": "wslproxy.org पर उत्पाद देखें, TenthMatrix पर WAF का गहन विश्लेषण पढ़ें, या एज, CDN, WAF और एजेंट गेटवे डिप्लॉयमेंट के बारे में हमसे बात करें।",
     "primary": {
       "text": "wslproxy.org खोलें",
@@ -317,25 +317,25 @@
   "externalSite": {
     "label": "उत्पाद साइट पर जारी रखें",
     "href": "https://wslproxy.org",
-    "text": "डेमो, दस्तावेज़ और नवीनतम TenthMatrix WSL Proxy रिलीज़ के लिए wslproxy.org पर जाएँ।"
+    "text": "डेमो, दस्तावेज़ और नवीनतम TenthMatrix Proxy10x रिलीज़ के लिए wslproxy.org पर जाएँ।"
   },
   "videos": [
     {
-      "title": "देखें: TenthMatrix WSL Proxy परिचय",
+      "title": "देखें: TenthMatrix Proxy10x परिचय",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — उत्पाद परिचय",
+      "thumbnailAlt": "TenthMatrix Proxy10x — उत्पाद परिचय",
       "caption": "देखें",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "देखें: WSL Proxy WAF टूर",
+      "title": "देखें: Proxy10x WAF टूर",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy WAF टूर",
+      "thumbnailAlt": "TenthMatrix Proxy10x WAF टूर",
       "caption": "देखें",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API 网关、CDN 与 WAF | TenthMatrix",
-    "description": "TenthMatrix WSL Proxy 产品页:实时配置代理的工作原理、详细功能、WAF 引擎 v2 规则与阶段、CDN 缓存、多 POP DNS,以及 Agents/MCP Gateway 路线图。访问 wslproxy.org。",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API 网关, CDN, WAF 规则, OpenResty, 边缘缓存, MCP 网关, Agents Gateway, 反向代理, wslproxy.org"
+    "title": "TenthMatrix Proxy10x — API 网关、CDN 与 WAF | TenthMatrix",
+    "description": "TenthMatrix Proxy10x 产品页:实时配置代理的工作原理、详细功能、WAF 引擎 v2 规则与阶段、CDN 缓存、多 POP DNS,以及 Agents/MCP Gateway 路线图。访问 wslproxy.org。",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API 网关, CDN, WAF 规则, OpenResty, 边缘缓存, MCP 网关, Agents Gateway, 反向代理, wslproxy.org"
   },
   "header": {
-    "title": "TenthMatrix WSL Proxy",
+    "title": "TenthMatrix Proxy10x",
     "subtitle": "API 网关、CDN 与企业级 WAF — 产品概览",
-    "description": "TenthMatrix WSL Proxy(WSLProxy)是 TenthMatrix 完整的 API 网关与 CDN 边缘控制平面。它部署在源站之前,依据实时 JSON 和 MCP 配置逐请求决定处理方式——路由、防护、缓存与观测——每次规则变更都无需重载 nginx。"
+    "description": "TenthMatrix Proxy10x(Proxy10x)是 TenthMatrix 完整的 API 网关与 CDN 边缘控制平面。它部署在源站之前,依据实时 JSON 和 MCP 配置逐请求决定处理方式——路由、防护、缓存与观测——每次规则变更都无需重载 nginx。"
   },
   "intro": {
-    "title": "什么是 TenthMatrix WSL Proxy?",
-    "body": "WSLProxy 是基于 OpenResty 的动态 API 网关和反向代理。运维人员可通过管理界面、REST API、MCP 工具或 wslproxy-cli 管理虚拟主机、路由规则、WAF 策略、缓存、流量拆分和边缘 POP。日常规则在热路径上即时生效;仅当服务器级 listen 或 SSL 配置块变更时才重载 nginx。",
+    "title": "什么是 TenthMatrix Proxy10x?",
+    "body": "Proxy10x 是基于 OpenResty 的动态 API 网关和反向代理。运维人员可通过管理界面、REST API、MCP 工具或 proxy10x-cli 管理虚拟主机、路由规则、WAF 策略、缓存、流量拆分和边缘 POP。日常规则在热路径上即时生效;仅当服务器级 listen 或 SSL 配置块变更时才重载 nginx。",
     "links": [
       {
         "label": "wslproxy.org",
@@ -27,7 +27,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/bwalia/wslproxy"
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
       }
     ]
   },
@@ -37,7 +37,7 @@
     "flow": [
       {
         "title": "1. 请求到达 POP",
-        "text": "浏览器、API 和智能体访问 TenthMatrix WSL Proxy 边缘节点(Docker、Ansible 裸机 POP 或 k3s Helm ingress)。OpenResty 接收 TLS 并进入 Lua 热路径。"
+        "text": "浏览器、API 和智能体访问 TenthMatrix Proxy10x 边缘节点(Docker、Ansible 裸机 POP 或 k3s Helm ingress)。OpenResty 接收 TLS 并进入 Lua 热路径。"
       },
       {
         "title": "2. 匹配路由规则",
@@ -114,12 +114,12 @@
       },
       {
         "title": "多 POP + DNS",
-        "description": "声明边缘位置,并在安全护栏下配置 Cloudflare A 记录。常见的生产模式是:公共 POP → k3s NodePort → wslproxy-ingress Helm → 应用 Pod。",
+        "description": "声明边缘位置,并在安全护栏下配置 Cloudflare A 记录。常见的生产模式是:公共 POP → k3s NodePort → proxy10x-ingress Helm → 应用 Pod。",
         "icon": "bi-globe2"
       },
       {
         "title": "控制平面",
-        "description": "React Admin 与 Next.js 仪表盘、Swagger REST、面向 Claude/Cursor 的 MCP 工具,以及用于 pull/push/diff/verify 工作流的 wslproxy-cli 镜像(ghcr.io/bwalia/wslproxy-cli)。",
+        "description": "React Admin 与 Next.js 仪表盘、Swagger REST、面向 Claude/Cursor 的 MCP 工具,以及用于 pull/push/diff/verify 工作流的 proxy10x-cli 镜像(ghcr.io/bwalia/proxy10x-cli)。",
         "icon": "bi-sliders"
       },
       {
@@ -217,7 +217,7 @@
   },
   "roadmap": {
     "title": "Agents Gateway 与 MCP Gateway",
-    "intro": "TenthMatrix 正将 WSL Proxy 扩展到智能体时代。承接 HTTP API 的同一边缘,将治理智能体和 Model Context Protocol(MCP)客户端访问工具与后端的方式。",
+    "intro": "TenthMatrix 正将 Proxy10x 扩展到智能体时代。承接 HTTP API 的同一边缘,将治理智能体和 Model Context Protocol(MCP)客户端访问工具与后端的方式。",
     "items": [
       {
         "title": "MCP Gateway(开发中)",
@@ -226,19 +226,19 @@
       },
       {
         "title": "Agents Gateway(开发中)",
-        "description": "为多智能体流量提供策略、路由和可观测性——让智能体集群与您的 API 和 CDN 工作负载一样,通过同一 TenthMatrix WSL Proxy 边缘访问源站。",
+        "description": "为多智能体流量提供策略、路由和可观测性——让智能体集群与您的 API 和 CDN 工作负载一样,通过同一 TenthMatrix Proxy10x 边缘访问源站。",
         "status": "In progress"
       },
       {
         "title": "MCP 管理界面(已可用)",
-        "description": "WSLProxy 已将自身管理界面以 MCP 工具形式开放给 Claude、Cursor 及其他智能体——无需离开 IDE 即可配置规则、检查边缘。",
+        "description": "Proxy10x 已将自身管理界面以 MCP 工具形式开放给 Claude、Cursor 及其他智能体——无需离开 IDE 即可配置规则、检查边缘。",
         "status": "Available"
       }
     ]
   },
   "architecture": {
     "title": "解决方案架构",
-    "intro": "客户端和智能体访问 TenthMatrix WSL Proxy POP。边缘匹配实时规则,应用 WAF 和缓存,再负载均衡到源站。运维人员通过管理界面、REST、MCP 或 CLI 掌控一切。",
+    "intro": "客户端和智能体访问 TenthMatrix Proxy10x POP。边缘匹配实时规则,应用 WAF 和缓存,再负载均衡到源站。运维人员通过管理界面、REST、MCP 或 CLI 掌控一切。",
     "steps": [
       {
         "title": "边缘 POP",
@@ -250,7 +250,7 @@
       },
       {
         "title": "控制平面",
-        "text": "面向人类与智能体的管理界面、REST、MCP 和 wslproxy-cli。"
+        "text": "面向人类与智能体的管理界面、REST、MCP 和 proxy10x-cli。"
       },
       {
         "title": "源站",
@@ -263,7 +263,7 @@
     "intro": "在同一实时配置边缘上的可解释 Web 应用防火墙——策略、阶段、监控或拦截,每次决策都附带支持 ID。",
     "items": [
       {
-        "label": "WSL Proxy WAF 博客",
+        "label": "Proxy10x WAF 博客",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
@@ -295,7 +295,7 @@
     ]
   },
   "cta": {
-    "title": "获取 TenthMatrix WSL Proxy",
+    "title": "获取 TenthMatrix Proxy10x",
     "body": "在 wslproxy.org 了解产品,在 TenthMatrix 阅读 WAF 深度解析,或与我们探讨边缘、CDN、WAF 和智能体网关部署。",
     "primary": {
       "text": "打开 wslproxy.org",
@@ -317,25 +317,25 @@
   "externalSite": {
     "label": "前往产品网站了解更多",
     "href": "https://wslproxy.org",
-    "text": "访问 wslproxy.org 获取演示、文档及 TenthMatrix WSL Proxy 最新版本。"
+    "text": "访问 wslproxy.org 获取演示、文档及 TenthMatrix Proxy10x 最新版本。"
   },
   "videos": [
     {
-      "title": "观看:TenthMatrix WSL Proxy 介绍",
+      "title": "观看:TenthMatrix Proxy10x 介绍",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — 产品介绍",
+      "thumbnailAlt": "TenthMatrix Proxy10x — 产品介绍",
       "caption": "观看",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "观看:WSL Proxy WAF 导览",
+      "title": "观看:Proxy10x WAF 导览",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy WAF 导览",
+      "thumbnailAlt": "TenthMatrix Proxy10x WAF 导览",
       "caption": "观看",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "TenthMatrix WSL Proxy — API Gateway, CDN และ WAF | TenthMatrix",
-    "description": "หน้าผลิตภัณฑ์ TenthMatrix WSL Proxy: พร็อกซีแบบ live-config ทำงานอย่างไร ฟีเจอร์โดยละเอียด กฎและสเตจของ WAF engine v2 แคช CDN, DNS แบบหลาย POP และแผนงาน Agents/MCP Gateway ไปที่ wslproxy.org",
-    "keywords": "TenthMatrix WSL Proxy, WSLProxy, API gateway, CDN, กฎ WAF, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
+    "title": "TenthMatrix Proxy10x — API Gateway, CDN และ WAF | TenthMatrix",
+    "description": "หน้าผลิตภัณฑ์ TenthMatrix Proxy10x: พร็อกซีแบบ live-config ทำงานอย่างไร ฟีเจอร์โดยละเอียด กฎและสเตจของ WAF engine v2 แคช CDN, DNS แบบหลาย POP และแผนงาน Agents/MCP Gateway ไปที่ wslproxy.org",
+    "keywords": "TenthMatrix Proxy10x, Proxy10x, API gateway, CDN, กฎ WAF, OpenResty, edge cache, MCP gateway, Agents Gateway, reverse proxy, wslproxy.org"
   },
   "header": {
-    "title": "TenthMatrix WSL Proxy",
+    "title": "TenthMatrix Proxy10x",
     "subtitle": "API Gateway, CDN และ Enterprise WAF — ภาพรวมผลิตภัณฑ์",
-    "description": "TenthMatrix WSL Proxy (WSLProxy) คือ API gateway และ CDN edge control plane ที่ครบถ้วนของ TenthMatrix อยู่หน้า origin ของคุณและตัดสินใจในแต่ละคำขอว่าจะเกิดอะไรขึ้น — กำหนดเส้นทาง ปกป้อง แคช และสังเกตการณ์ — จาก config แบบ JSON และ MCP ที่ทำงานแบบเรียลไทม์ โดยไม่ต้อง reload nginx ทุกครั้งที่เปลี่ยนกฎ"
+    "description": "TenthMatrix Proxy10x (Proxy10x) คือ API gateway และ CDN edge control plane ที่ครบถ้วนของ TenthMatrix อยู่หน้า origin ของคุณและตัดสินใจในแต่ละคำขอว่าจะเกิดอะไรขึ้น — กำหนดเส้นทาง ปกป้อง แคช และสังเกตการณ์ — จาก config แบบ JSON และ MCP ที่ทำงานแบบเรียลไทม์ โดยไม่ต้อง reload nginx ทุกครั้งที่เปลี่ยนกฎ"
   },
   "intro": {
-    "title": "TenthMatrix WSL Proxy คืออะไร?",
-    "body": "WSLProxy คือ API gateway และ reverse proxy แบบไดนามิกบน OpenResty ผู้ปฏิบัติงานจัดการ virtual host กฎการกำหนดเส้นทาง นโยบาย WAF แคช การแบ่งทราฟฟิก และ edge POP ได้จาก Admin UI, REST API, เครื่องมือ MCP หรือ wslproxy-cli กฎในการใช้งานประจำวันมีผลบน hot path ทันที nginx จะ reload เฉพาะเมื่อบล็อก listen หรือ SSL ระดับเซิร์ฟเวอร์เปลี่ยน",
+    "title": "TenthMatrix Proxy10x คืออะไร?",
+    "body": "Proxy10x คือ API gateway และ reverse proxy แบบไดนามิกบน OpenResty ผู้ปฏิบัติงานจัดการ virtual host กฎการกำหนดเส้นทาง นโยบาย WAF แคช การแบ่งทราฟฟิก และ edge POP ได้จาก Admin UI, REST API, เครื่องมือ MCP หรือ proxy10x-cli กฎในการใช้งานประจำวันมีผลบน hot path ทันที nginx จะ reload เฉพาะเมื่อบล็อก listen หรือ SSL ระดับเซิร์ฟเวอร์เปลี่ยน",
     "links": [
       {
         "label": "wslproxy.org",
@@ -27,7 +27,7 @@
       },
       {
         "label": "GitHub",
-        "href": "https://github.com/bwalia/wslproxy"
+        "href": "https://github.com/bwalia/tenthmatrix/tree/main/products/proxy10x"
       }
     ]
   },
@@ -37,7 +37,7 @@
     "flow": [
       {
         "title": "1. คำขอมาถึง POP",
-        "text": "เบราว์เซอร์ API และเอเจนต์เข้าถึง edge ของ TenthMatrix WSL Proxy (Docker, POP แบบ bare-metal ด้วย Ansible หรือ k3s Helm ingress) OpenResty รับ TLS และเข้าสู่ Lua hot path"
+        "text": "เบราว์เซอร์ API และเอเจนต์เข้าถึง edge ของ TenthMatrix Proxy10x (Docker, POP แบบ bare-metal ด้วย Ansible หรือ k3s Helm ingress) OpenResty รับ TLS และเข้าสู่ Lua hot path"
       },
       {
         "title": "2. จับคู่กฎการกำหนดเส้นทาง",
@@ -114,12 +114,12 @@
       },
       {
         "title": "หลาย POP + DNS",
-        "description": "ประกาศตำแหน่ง edge และสร้าง A-record บน Cloudflare พร้อมราวกันความปลอดภัย รูปแบบ production ที่พบบ่อยคือ POP สาธารณะ → k3s NodePort → wslproxy-ingress Helm → app pod",
+        "description": "ประกาศตำแหน่ง edge และสร้าง A-record บน Cloudflare พร้อมราวกันความปลอดภัย รูปแบบ production ที่พบบ่อยคือ POP สาธารณะ → k3s NodePort → proxy10x-ingress Helm → app pod",
         "icon": "bi-globe2"
       },
       {
         "title": "Control plane",
-        "description": "แดชบอร์ด React Admin และ Next.js, Swagger REST, เครื่องมือ MCP สำหรับ Claude/Cursor และอิมเมจ wslproxy-cli (ghcr.io/bwalia/wslproxy-cli) สำหรับเวิร์กโฟลว์ pull/push/diff/verify",
+        "description": "แดชบอร์ด React Admin และ Next.js, Swagger REST, เครื่องมือ MCP สำหรับ Claude/Cursor และอิมเมจ proxy10x-cli (ghcr.io/bwalia/proxy10x-cli) สำหรับเวิร์กโฟลว์ pull/push/diff/verify",
         "icon": "bi-sliders"
       },
       {
@@ -217,7 +217,7 @@
   },
   "roadmap": {
     "title": "Agents Gateway และ MCP Gateway",
-    "intro": "TenthMatrix กำลังขยาย WSL Proxy เข้าสู่ยุคของเอเจนต์ edge เดียวกันที่อยู่หน้า HTTP API จะกำกับดูแลวิธีที่เอเจนต์และไคลเอนต์ Model Context Protocol (MCP) เข้าถึงเครื่องมือและแบ็กเอนด์",
+    "intro": "TenthMatrix กำลังขยาย Proxy10x เข้าสู่ยุคของเอเจนต์ edge เดียวกันที่อยู่หน้า HTTP API จะกำกับดูแลวิธีที่เอเจนต์และไคลเอนต์ Model Context Protocol (MCP) เข้าถึงเครื่องมือและแบ็กเอนด์",
     "items": [
       {
         "title": "MCP Gateway (กำลังพัฒนา)",
@@ -226,19 +226,19 @@
       },
       {
         "title": "Agents Gateway (กำลังพัฒนา)",
-        "description": "นโยบาย การกำหนดเส้นทาง และการสังเกตการณ์สำหรับทราฟฟิกแบบหลายเอเจนต์ — เพื่อให้ฟลีตเอเจนต์เข้าถึง origin ผ่าน edge ของ TenthMatrix WSL Proxy เดียวกับ API และเวิร์กโหลด CDN ของคุณ",
+        "description": "นโยบาย การกำหนดเส้นทาง และการสังเกตการณ์สำหรับทราฟฟิกแบบหลายเอเจนต์ — เพื่อให้ฟลีตเอเจนต์เข้าถึง origin ผ่าน edge ของ TenthMatrix Proxy10x เดียวกับ API และเวิร์กโหลด CDN ของคุณ",
         "status": "In progress"
       },
       {
         "title": "หน้าจัดการ MCP (พร้อมใช้งาน)",
-        "description": "WSLProxy เปิดหน้า Admin ของตัวเองเป็นเครื่องมือ MCP สำหรับ Claude, Cursor และเอเจนต์อื่นๆ อยู่แล้ว — ตั้งค่ากฎและตรวจสอบ edge ได้โดยไม่ต้องออกจาก IDE",
+        "description": "Proxy10x เปิดหน้า Admin ของตัวเองเป็นเครื่องมือ MCP สำหรับ Claude, Cursor และเอเจนต์อื่นๆ อยู่แล้ว — ตั้งค่ากฎและตรวจสอบ edge ได้โดยไม่ต้องออกจาก IDE",
         "status": "Available"
       }
     ]
   },
   "architecture": {
     "title": "สถาปัตยกรรมโซลูชัน",
-    "intro": "ไคลเอนต์และเอเจนต์เข้าถึง POP ของ TenthMatrix WSL Proxy edge จะจับคู่กฎแบบเรียลไทม์ ใช้ WAF และแคช แล้วกระจายโหลดไปยัง origin ผู้ปฏิบัติงานควบคุมทุกอย่างผ่าน Admin UI, REST, MCP หรือ CLI",
+    "intro": "ไคลเอนต์และเอเจนต์เข้าถึง POP ของ TenthMatrix Proxy10x edge จะจับคู่กฎแบบเรียลไทม์ ใช้ WAF และแคช แล้วกระจายโหลดไปยัง origin ผู้ปฏิบัติงานควบคุมทุกอย่างผ่าน Admin UI, REST, MCP หรือ CLI",
     "steps": [
       {
         "title": "Edge POP",
@@ -250,7 +250,7 @@
       },
       {
         "title": "Control plane",
-        "text": "Admin UI, REST, MCP และ wslproxy-cli สำหรับมนุษย์และเอเจนต์"
+        "text": "Admin UI, REST, MCP และ proxy10x-cli สำหรับมนุษย์และเอเจนต์"
       },
       {
         "title": "Origin",
@@ -263,7 +263,7 @@
     "intro": "Web Application Firewall ที่อธิบายเหตุผลได้บน edge แบบ live-config เดียวกัน — นโยบาย สเตจ มอนิเตอร์หรือบล็อก และ support ID ในทุกการตัดสินใจ",
     "items": [
       {
-        "label": "บล็อก WSL Proxy WAF",
+        "label": "บล็อก Proxy10x WAF",
         "href": "/docs/blogs/wslproxy-waf-web-application-firewall",
         "external": false
       },
@@ -295,7 +295,7 @@
     ]
   },
   "cta": {
-    "title": "รับ TenthMatrix WSL Proxy",
+    "title": "รับ TenthMatrix Proxy10x",
     "body": "สำรวจผลิตภัณฑ์บน wslproxy.org อ่านเนื้อหาเชิงลึกเรื่อง WAF บน TenthMatrix หรือคุยกับเราเรื่องการดีพลอย edge, CDN, WAF และ agent gateway",
     "primary": {
       "text": "เปิด wslproxy.org",
@@ -317,25 +317,25 @@
   "externalSite": {
     "label": "ไปต่อที่เว็บไซต์ผลิตภัณฑ์",
     "href": "https://wslproxy.org",
-    "text": "ไปที่ wslproxy.org เพื่อดูเดโม เอกสาร และรีลีสล่าสุดของ TenthMatrix WSL Proxy"
+    "text": "ไปที่ wslproxy.org เพื่อดูเดโม เอกสาร และรีลีสล่าสุดของ TenthMatrix Proxy10x"
   },
   "videos": [
     {
-      "title": "ชม: แนะนำ TenthMatrix WSL Proxy",
+      "title": "ชม: แนะนำ TenthMatrix Proxy10x",
       "embedUrl": "https://www.youtube.com/embed/7NJulclG5sQ",
       "watchUrl": "https://youtu.be/7NJulclG5sQ",
       "thumbnail": "https://img.youtube.com/vi/7NJulclG5sQ/maxresdefault.jpg",
-      "thumbnailAlt": "TenthMatrix WSL Proxy — แนะนำผลิตภัณฑ์",
+      "thumbnailAlt": "TenthMatrix Proxy10x — แนะนำผลิตภัณฑ์",
       "caption": "รับชม",
       "productUrl": "https://wslproxy.org",
       "productLabel": "wslproxy.org"
     },
     {
-      "title": "ชม: ทัวร์ WSL Proxy WAF",
+      "title": "ชม: ทัวร์ Proxy10x WAF",
       "embedUrl": "https://www.youtube.com/embed/r10XSonA5JE",
       "watchUrl": "https://youtu.be/r10XSonA5JE",
       "thumbnail": "https://img.youtube.com/vi/r10XSonA5JE/maxresdefault.jpg",
-      "thumbnailAlt": "ทัวร์ TenthMatrix WSL Proxy WAF",
+      "thumbnailAlt": "ทัวร์ TenthMatrix Proxy10x WAF",
       "caption": "รับชม",
       "productUrl": "https://wslproxy.org/waf/",
       "productLabel": "wslproxy.org/waf"

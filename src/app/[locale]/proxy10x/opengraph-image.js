@@ -11,4 +11,4 @@ export function generateStaticParams() {
 }
 export const alt = 'TenthMatrix';
 
-export default ogImage('wsl-proxy.json', 'TenthMatrix · Products');
+export default ogImage('proxy10x.json', 'TenthMatrix · Products');
