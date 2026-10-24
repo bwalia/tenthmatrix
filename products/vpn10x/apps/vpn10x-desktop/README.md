@@ -1,4 +1,4 @@
-# VPN10x Zero Trust — Desktop (macOS)
+# VPN10x — Desktop (macOS)
 
 A window over the `vpn10x` command-line tool. The GUI holds no state and performs
 no privileged operation of its own: everything it shows is read back from
@@ -12,7 +12,7 @@ cd apps/vpn10x-desktop
 make test     # view logic (node --test) + the CLI bridge (cargo test, clippy)
 make dev      # a window over a debug build of the CLI
 make app      # release bundle, with the CLI inside it
-open src-tauri/target/release/bundle/macos/VPN10xZeroTrust.app
+open src-tauri/target/release/bundle/macos/VPN10x.app
 ```
 
 The Mac needs the WireGuard tools and a bash new enough to run `wg-quick`:

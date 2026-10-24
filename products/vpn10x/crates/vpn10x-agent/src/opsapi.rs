@@ -142,7 +142,7 @@ pub async fn begin(
         .form(&[
             ("identifier", email.trim()),
             ("password", password),
-            ("app_name", "VPN10x Zero Trust"),
+            ("app_name", "VPN10x"),
         ])
         .timeout(TIMEOUT)
         .send()

@@ -344,14 +344,14 @@ mod tests {
     #[test]
     fn the_launchd_job_runs_the_resolver_on_loopback_and_keeps_it_alive() {
         let plist = render_plist(
-            Path::new("/Applications/VPN10x Zero Trust.app/Contents/MacOS/vpn10x"),
+            Path::new("/Applications/VPN10x.app/Contents/MacOS/vpn10x"),
             Path::new("/Users/a/Library/Application Support/vpn10x-zerotrust/hosts"),
             "127.0.0.1:15353".parse().unwrap(),
             Path::new("/tmp/dns.log"),
         );
         assert!(plist.contains("<string>io.vpn10x.zerotrust.dns</string>"));
         assert!(plist.contains(
-            "    <string>/Applications/VPN10x Zero Trust.app/Contents/MacOS/vpn10x</string>\n    <string>dns</string>\n    <string>serve</string>\n    <string>--listen</string>\n    <string>127.0.0.1:15353</string>"
+            "    <string>/Applications/VPN10x.app/Contents/MacOS/vpn10x</string>\n    <string>dns</string>\n    <string>serve</string>\n    <string>--listen</string>\n    <string>127.0.0.1:15353</string>"
         ));
         assert!(plist.contains("<key>KeepAlive</key>\n  <true/>"));
         assert!(plist.contains("<key>RunAtLoad</key>\n  <true/>"));

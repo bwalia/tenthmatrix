@@ -211,7 +211,7 @@ impl AgentState {
             (None, None) => None,
         };
         AgentStatus {
-            product: "VPN10x Zero Trust".into(),
+            product: "VPN10x".into(),
             mode,
             control_url: self.control_url.clone(),
             profile: self.profile.clone(),
