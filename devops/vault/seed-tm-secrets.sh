@@ -22,7 +22,8 @@
 #   required  CAPTCHA_SITE_KEY API_SECRET JWT_SECRET_KEY BUSINESS_CODE
 #             OPSAPI_URL WEBSITE_NAMESPACE OPSAPI_API_KEY
 #   optional  REVALIDATE_SECRET (generated if absent; register it as the env's
-#             OpsAPI CMS webhook secret), REDIS_URL
+#             OpsAPI CMS webhook secret), REDIS_URL, ANTHROPIC_API_KEY (turns on
+#             the /api/chat enquiry assistant), CHAT_MODEL, CHAT_EFFORT
 #
 # Usage:
 #   ./devops/vault/seed-tm-secrets.sh int                         # dry run
@@ -36,7 +37,7 @@ KV_MOUNT="${KV_MOUNT:-kv}"
 PATH_PREFIX="${PATH_PREFIX:-tenthmatrix}"
 
 REQUIRED=(CAPTCHA_SITE_KEY API_SECRET JWT_SECRET_KEY BUSINESS_CODE OPSAPI_URL WEBSITE_NAMESPACE OPSAPI_API_KEY)
-OPTIONAL=(REVALIDATE_SECRET REDIS_URL)
+OPTIONAL=(REVALIDATE_SECRET REDIS_URL ANTHROPIC_API_KEY CHAT_MODEL CHAT_EFFORT)
 
 usage() { sed -n '2,/^set -euo/p' "$0" | sed 's/^# \{0,1\}//; /^set -euo/d'; exit "${1:-0}"; }
 
