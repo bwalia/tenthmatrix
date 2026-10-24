@@ -55,6 +55,8 @@ jobs:
           for d in blog waf swagger css js images; do
             if [ -d "html/$d" ]; then cp -R "html/$d" "$dest/$d"; fi
           done
+          # The landing links to /swagger/; the UI page is swagger.html.
+          [ -f "$dest/swagger/swagger.html" ] && cp "$dest/swagger/swagger.html" "$dest/swagger/index.html"
 
       - uses: actions/setup-node@v4
         with:

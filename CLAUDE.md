@@ -46,9 +46,18 @@ The website is the repository root. TenthMatrix products live under
 GitHub Pages site (`bwalia.github.io/tenthmatrix/<product>/`; Pages has no
 custom domain). The product domain is a grey-cloud CNAME to `lon1.pop0.uk`;
 its vhost + rule in `.github/wslproxy/data/` (`tm-<product>-pages`, upstream
-Host pinned to `bwalia.github.io`) are pushed to the control plane
-(cp.pop0.uk → lon1/lon2) by `wslproxy-register-domains.yml`, and the edge
+Host pinned to `bwalia.github.io`, `pop_ids: [lon1, pop0]`) are imported into
+the control plane cp.pop0.uk (`POST /api/projects/import`), and the edge
 proxies the domain to its folder. Sites are built for their domain root.
+**Getting a new host onto the edges today:** CP has no POP instances
+registered and nothing on lon1 pulls from CP, so after the CP import the same
+records are copied onto lon1 (`/opt/nginx/data/{servers,rules}/prod/`, new
+files only) and OpenResty is reloaded once so auto-SSL admits the new domains;
+lon2 mirrors lon1 every 5 min (`wslproxy-edge-sync.timer`). DNS is created by
+CP: `POST /api/dns/provision {server_id, profile_id}` → grey CNAME
+`lon1.pop0.uk`. `wslproxy-register-domains.yml` can't do this from CI yet (no
+`WSLPROXY_TOKEN`/`ADMIN_PASSWORD` secrets; its default runner label isn't
+registered here).
 Live: proxy10x.com (`products/proxy10x/html/`), www.vault10x.com
 (`products/vault10x/www/`). vpn10x.com has no site yet. All three zones are in
 Cloudflare.
