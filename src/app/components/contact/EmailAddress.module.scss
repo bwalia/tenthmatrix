@@ -1,0 +1,19 @@
+// The address image is a mask over currentColor, so it takes the link colour
+// (and its hover colour) in both themes. Aspect ratio from the generated SVG
+// (12600 x 1300 units).
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tm-tap-target);
+  color: inherit;
+  text-decoration: none;
+}
+
+.image {
+  display: inline-block;
+  height: 1.3em;
+  aspect-ratio: 12600 / 1300;
+  background-color: currentColor;
+  -webkit-mask: url('/brand/email-hello.svg') no-repeat center / contain;
+  mask: url('/brand/email-hello.svg') no-repeat center / contain;
+}

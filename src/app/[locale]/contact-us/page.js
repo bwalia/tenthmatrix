@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Mail, Clock, ShieldCheck } from 'lucide-react';
 import { loadLocaleData } from '@/utils/loadLocaleData';
+import EmailAddress from '@/app/components/contact/EmailAddress';
 import ContactForm from '@/app/components/contact/ContactForm';
 import { Eyebrow, LatticeArt } from '@/app/components';
 import s from './contact.module.scss';
@@ -33,7 +34,7 @@ export default async function ContactPage({ params }) {
           <ul className={s.facts}>
             <li>
               <Mail aria-hidden="true" size={18} strokeWidth={1.75} />
-              <a href={`mailto:${data.email}`}>{data.email}</a>
+              <EmailAddress />
             </li>
             <li>
               <Clock aria-hidden="true" size={18} strokeWidth={1.75} />

@@ -26,7 +26,6 @@ export function organizationSchema() {
     name: 'TenthMatrix',
     url: BASE_URL,
     logo: { '@type': 'ImageObject', url: LOGO_URL },
-    email: 'hello@tenthmatrix.com',
     description:
       'TenthMatrix builds AI agents, AI tools, AI applications and software products.',
     sameAs: [],

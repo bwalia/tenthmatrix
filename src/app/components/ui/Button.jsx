@@ -44,7 +44,12 @@ export default function Button({
   if (href) {
     if (external) {
       return (
-        <a href={href} className={cls} rel="noopener" {...rest}>
+        <a
+          href={href}
+          className={cls}
+          {...(/^(https?:)?\/\//i.test(href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+          {...rest}
+        >
           {content}
         </a>
       );

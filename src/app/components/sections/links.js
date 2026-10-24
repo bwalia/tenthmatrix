@@ -21,6 +21,22 @@ export function isExternal(href) {
   return /^(https?:)?\/\//i.test(href || '') || /^(mailto|tel):/i.test(href || '');
 }
 
+const OWN_HOST = /^https?:\/\/(www\.)?tenthmatrix\.(com|co\.uk)(\/|$)/i;
+
+/**
+ * Rich-text HTML: off-site <a href="http…"> without a target opens in a new
+ * tab, matching linkProps(). Links to tenthmatrix.com stay in the same tab.
+ */
+export function externalLinksInNewTab(html) {
+  if (!html || !/<a\s/i.test(html)) return html;
+  return html.replace(/<a\s([^>]*?)>/gi, (tag, attrs) => {
+    const href = /href\s*=\s*["']([^"']+)["']/i.exec(attrs)?.[1] || '';
+    if (!/^(https?:)?\/\//i.test(href) || OWN_HOST.test(href) || /\btarget\s*=/i.test(attrs)) return tag;
+    const rel = /\brel\s*=/i.test(attrs) ? '' : ' rel="noopener noreferrer"';
+    return `<a ${attrs} target="_blank"${rel}>`;
+  });
+}
+
 /** Shop links (shop app, /shop route, cart/checkout) are dropped everywhere. */
 export function isShopLink(href) {
   if (!href || typeof href !== 'string') return false;
