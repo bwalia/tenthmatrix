@@ -129,10 +129,10 @@ jobs:
           IMAGE_TAG="${{ steps.tag.outputs.tag }}"
           IMAGE="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}"
           echo "${{ secrets.DOCKER_PASSWD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker build -f Dockerfile.prod -t "${IMAGE}:${IMAGE_TAG}" . --no-cache
-          docker tag "${IMAGE}:${IMAGE_TAG}" "${IMAGE}:latest"
-          docker push "${IMAGE}:${IMAGE_TAG}"
-          docker push "${IMAGE}:latest"
+          # Shared BuildKit on k3s1 keeps the layer cache across ephemeral
+          # runner pods (a cold in-pod build took 21 min). --pull keeps base
+          # images fresh, which is what --no-cache was for.
+          .github/scripts/docker-build-push.sh Dockerfile.prod . "${IMAGE}" "${IMAGE_TAG}" --pull
 
   # ── Cloudflare DNS: CNAME every env host → the wslproxy edge ──────────
   # Grey cloud (proxied=false): the edge terminates TLS. Hostnames are read
