@@ -175,6 +175,13 @@ Same model as Workstation, namespace **`tenthmatrix`**:
 
 ### API routes
 - `api/blog-search` — live CMS search (`force-dynamic`); the client falls back to the Fuse index.
+- `api/chat` — the enquiry assistant (Claude, streamed SSE; `src/lib/chat/`).
+  Limits run in `src/lib/chat/gate.js` before any LLM call: 5 minutes per chat
+  session from its first message (`CHAT_TIME_LIMIT`, 403; numbers in
+  `src/lib/chat/limits.js`, which the widget copy also reads), 40 messages per
+  session and 300 per pod per 30 min. Never key a limit on the client IP: on
+  k3s1 every request arrives from the svclb address (10.42.x.x).
+  `CHAT_ENABLED=false` is the kill switch. `npm test` covers the gate.
 - `api/revalidate` — signed OpsAPI webhook → `revalidateTag('cms-posts', { expire: 0 })`.
 - `api/blogs/[slug]/like`, `api/blogs/[slug]/comment` — engagement, stored by
   `src/lib/engagement.js` in `ENGAGEMENT_STORE_DIR` (per pod, non-durable;

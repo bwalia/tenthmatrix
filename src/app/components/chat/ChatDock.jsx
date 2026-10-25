@@ -2,26 +2,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { MessageCircle, X, Send, RotateCcw } from 'lucide-react';
+import { CHAT_FREE_MINUTES } from '@/lib/chat/limits';
+import { readChat as read, writeChat as write } from './chatStore';
 import s from './ChatDock.module.scss';
 
-const STORE_KEY = 'tm_chat_v1';
 const MAX = 4000;
-
-const read = () => {
-  try {
-    return JSON.parse(sessionStorage.getItem(STORE_KEY) || 'null');
-  } catch {
-    return null;
-  }
-};
-const write = (v) => {
-  try {
-    sessionStorage.setItem(STORE_KEY, JSON.stringify(v));
-  } catch {
-    /* private mode: chat still works, just not across reloads */
-  }
-};
 
 const esc = (t) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -82,6 +69,8 @@ export default function ChatDock() {
   // the enabled check resolves, so server and client markup still match.
   const [items, setItems] = useState(() => (typeof window === 'undefined' ? [] : read()?.items || []));
   const [enquirySent, setEnquirySent] = useState(() => (typeof window === 'undefined' ? false : Boolean(read()?.enquirySent)));
+  // Minted by the server on the first message; the free time is counted per session.
+  const [sessionUuid, setSessionUuid] = useState(() => (typeof window === 'undefined' ? null : read()?.sessionUuid || null));
   const [busy, setBusy] = useState(false);
   const [input, setInput] = useState('');
   const listRef = useRef(null);
@@ -101,8 +90,8 @@ export default function ChatDock() {
   }, []);
 
   useEffect(() => {
-    if (!busy) write({ items, enquirySent });
-  }, [items, enquirySent, busy]);
+    if (!busy) write({ items, enquirySent, sessionUuid });
+  }, [items, enquirySent, sessionUuid, busy]);
 
   useEffect(() => {
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight });
@@ -122,7 +111,10 @@ export default function ChatDock() {
     async (text) => {
       const message = text.trim().slice(0, MAX);
       if (!message || busy) return;
-      const history = items.filter((it) => it.content && !it.error).map(({ role, content }) => ({ role, content }));
+      // Errored turns (and the message that got the error) stay out of the replayed history.
+      const history = items
+        .filter((it, i) => it.content && !it.error && !(it.role === 'user' && items[i + 1]?.error))
+        .map(({ role, content }) => ({ role, content }));
       setItems((prev) => [...prev, { role: 'user', content: message }, { role: 'assistant', content: '', tools: [] }]);
       setInput('');
       setBusy(true);
@@ -132,12 +124,22 @@ export default function ChatDock() {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, history, locale, page_url: window.location.href, enquiry_sent: enquirySent }),
+          body: JSON.stringify({
+            message,
+            history,
+            locale,
+            page_url: window.location.href,
+            enquiry_sent: enquirySent,
+            session_uuid: sessionUuid || undefined,
+          }),
           signal: ctrl.signal,
         });
         if (!res.ok || !res.body) {
           const d = await res.json().catch(() => null);
-          patchLast((it) => ({ ...it, error: d?.error || t('error') }));
+          if (d?.code === 'CHAT_OFFLINE') setEnabled(false);
+          const timeLimit = d?.code === 'CHAT_TIME_LIMIT';
+          const limitMsg = enquirySent ? t('timeLimitSent', { minutes: CHAT_FREE_MINUTES }) : t('timeLimit', { minutes: CHAT_FREE_MINUTES });
+          patchLast((it) => ({ ...it, error: timeLimit ? limitMsg : d?.error || t('error'), timeLimit }));
           return;
         }
         await readSse(res, ({ type, data }) => {
@@ -145,6 +147,7 @@ export default function ChatDock() {
           else if (type === 'tool')
             patchLast((it) => ({ ...it, tools: [...it.tools.filter((x) => x.name !== data.name), data] }));
           else if (type === 'enquiry') setEnquirySent(true);
+          else if (type === 'session') setSessionUuid(data.session_uuid || null);
           else if (type === 'error') patchLast((it) => ({ ...it, error: data.message || t('error') }));
         });
       } catch (err) {
@@ -154,13 +157,14 @@ export default function ChatDock() {
         abortRef.current = null;
       }
     },
-    [busy, items, locale, enquirySent, t],
+    [busy, items, locale, enquirySent, sessionUuid, t],
   );
 
   const reset = () => {
     abortRef.current?.abort();
     setItems([]);
     setEnquirySent(false);
+    setSessionUuid(null);
   };
 
   if (!enabled) return null;
@@ -221,6 +225,23 @@ export default function ChatDock() {
                       <p className={s.tool}>{t('thinking')}</p>
                     ) : null}
                     {it.error ? <p className={s.error}>{it.error}</p> : null}
+                    {it.timeLimit ? (
+                      <div className={s.cta}>
+                        {enquirySent ? null : (
+                          <Link href={`/${locale}/start-a-project?from=chat`} className={s.ctaPrimary} prefetch={false} onClick={() => setOpen(false)}>
+                            {t('sendEnquiry')}
+                          </Link>
+                        )}
+                        <Link
+                          href={`/${locale}/book-online`}
+                          className={enquirySent ? s.ctaPrimary : s.ctaSecondary}
+                          prefetch={false}
+                          onClick={() => setOpen(false)}
+                        >
+                          {t('bookCall')}
+                        </Link>
+                      </div>
+                    ) : null}
                   </div>
                 ),
               )
@@ -255,7 +276,9 @@ export default function ChatDock() {
               <Send size={18} strokeWidth={1.75} aria-hidden="true" />
             </button>
           </form>
-          <p className={s.disclaimer}>{t('disclaimer')}</p>
+          <p className={s.disclaimer}>
+            {t('disclaimer')} {t('freeTime', { minutes: CHAT_FREE_MINUTES })}
+          </p>
         </section>
       ) : null}
 

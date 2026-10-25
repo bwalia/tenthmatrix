@@ -118,6 +118,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Unit tests
+        run: npm test
+
       # Same gates as prebuild (blog assets, SVG XML, OpsAPI host map, theme
       # copy, i18n) so a bad commit fails before the slow docker build.
       - name: Verify
