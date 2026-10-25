@@ -62,6 +62,18 @@ Live: proxy10x.com (`products/proxy10x/html/`), www.vault10x.com
 (`products/vault10x/www/`). vpn10x.com has no site yet. All three zones are in
 Cloudflare.
 
+**Old repos are frozen (2026-10-25).** Actions is off in bwalia/wslvpn,
+bwalia/wslvault and bwalia/spectoncr (now Registry10x); in bwalia/wslproxy
+every workflow is disabled except the two edge-data backups. The live control
+plane and vault still run what those repos last deployed; their deploy
+workflows are ported here but frozen until a planned cutover —
+`products/proxy10x/CUTOVER.md`, `products/vault10x/CUTOVER.md`.
+
+**Runners.** Jobs run on `k3s-linux`: ephemeral pods on k3s1 from the ARC scale
+set `arc-r-tenthmatrix` (0–6, Docker-in-Docker, images built on the shared
+BuildKit via `.github/scripts/docker-build-push.sh`). Defined in
+`diy-tax-return-infra/clusters/k3s/ci-runners` (`repos.txt`, `install.sh tenthmatrix`).
+
 Website CI ignores `products/**` (`paths-ignore` on build-and-deploy, eslint
 ignores, `.dockerignore`), so a product commit doesn't redeploy the site. The
 live edge fleet is still the separate `wslproxy` repo: `.github/wslproxy/` and

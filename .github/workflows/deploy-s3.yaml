@@ -18,7 +18,7 @@ permissions:
 jobs:
   deploy:
     name: "🚀 PROD → S3 (tenthmatrix-website)"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     environment: prod
     # One S3 sync at a time across both callers. Never cancel a running sync
     # (it would leave the bucket half-updated); a newer pending run replacing an
