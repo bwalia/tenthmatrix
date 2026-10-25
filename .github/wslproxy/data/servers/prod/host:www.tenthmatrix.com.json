@@ -12,7 +12,12 @@
   "root": "/var/www/html",
   "proxy_server_name": "tenthmatrix-website.s3-website.eu-west-2.amazonaws.com",
   "id": "host:www.tenthmatrix.com",
-  "match_cases": {},
+  "match_cases": [
+    {
+      "condition": "and",
+      "statement": "tm-website-chat-api"
+    }
+  ],
   "ssl_email": "admin@tenthmatrix.com",
   "ssl_auto_renew": true,
   "ssl_force_https": false,

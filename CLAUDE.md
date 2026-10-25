@@ -281,7 +281,7 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   title (`renderOgImage({ fallbackTitle })`).
 - **int/test/acc → k3s:** `Dockerfile.prod` builds one standalone image
   (`tm-frontend`); `deploy-k3s.yaml` deploys int on push, test/acc by dispatch.
-  `devops/helm-charts/tm-chart/` (`values-prod.yaml` is unused while prod is on S3).
+  `devops/helm-charts/tm-chart/`. Prod pages are on S3; release `tm-prod` (namespace `prod`, `values-prod.yaml`, job `deploy-prod-api` after INT on push) serves only `/api/chat`, which the edge rule `tm-website-chat-api` sends to k3s (backend Host pinned to www.tenthmatrix.com) while every other path stays on S3.
 - **Edge:** Cloudflare CNAMEs (grey cloud → `lon1.pop0.uk`). wslproxy rules in
   `.github/wslproxy/data/`: `tm-website-s3-proxy` (www + apex →
   `http://tenthmatrix-website.s3-website.eu-west-2.amazonaws.com`; plain HTTP
