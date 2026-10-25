@@ -191,6 +191,51 @@
   font-size: var(--tm-text-xs);
 }
 
+// Call to action under the free-time message: enquiry and/or book a call.
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin-top: var(--tm-space-2);
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tm-tap-target);
+  padding: 0 var(--tm-space-4);
+  border: 1px solid var(--tm-accent);
+  border-radius: var(--tm-radius-sm);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-semibold);
+  text-decoration: none;
+  transition: background-color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &:focus-visible {
+    outline: var(--tm-focus-ring);
+    outline-offset: var(--tm-focus-offset);
+  }
+}
+
+.ctaPrimary {
+  background: var(--tm-accent);
+  color: var(--tm-accent-contrast);
+
+  &:hover {
+    background: var(--tm-accent-hover);
+  }
+}
+
+.ctaSecondary {
+  background: transparent;
+  color: var(--tm-accent);
+
+  &:hover {
+    background: var(--tm-accent-soft);
+  }
+}
+
 .sent {
   margin: 0;
   padding: var(--tm-space-2) var(--tm-space-3);

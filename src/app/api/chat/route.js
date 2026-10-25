@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
 import { chatEnabled, encodeSse } from '@/lib/chat/config';
 import { describeAgentError, runAgent } from '@/lib/chat/agent';
-import { rateLimit } from '@/lib/chat/rateLimit';
-import { clientKey } from '@/lib/engagement';
+import { chatGate } from '@/lib/chat/gate';
 import { locales } from '@/utils/getMessages';
 
 // Enquiry assistant. Runs on k3s only: the S3 export has no API routes, so the
@@ -12,9 +11,8 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 120;
 
-const WINDOW_MS = 30 * 60 * 1000;
-const IP_LIMIT = 40; // messages per IP per window
 const MAX_MESSAGE = 4000;
+const MAX_HISTORY_ITEM = 8000;
 
 const json = (status, body, headers) => NextResponse.json(body, { status, headers: { 'Cache-Control': 'no-store', ...headers } });
 
@@ -33,13 +31,18 @@ export async function POST(req) {
   }
   const message = typeof body?.message === 'string' ? body.message.trim() : '';
   if (!message || message.length > MAX_MESSAGE) return json(400, { error: 'Please send a message under 4,000 characters.', code: 'BAD_REQUEST' });
-  const history = Array.isArray(body.history) ? body.history.slice(-30) : [];
+  // Never trust the client's history: last 30 turns, plain user/assistant text, each capped.
+  const history = (Array.isArray(body.history) ? body.history.slice(-30) : [])
+    .filter((h) => (h?.role === 'user' || h?.role === 'assistant') && typeof h.content === 'string')
+    .map((h) => ({ role: h.role, content: h.content.slice(0, MAX_HISTORY_ITEM) }));
   const locale = locales.includes(body.locale) ? body.locale : 'en';
   const pageUrl = typeof body.page_url === 'string' && /^https?:\/\//.test(body.page_url) ? body.page_url.slice(0, 500) : '';
 
-  const check = rateLimit(`chat:${clientKey(req)}`, IP_LIMIT, WINDOW_MS);
-  if (!check.ok) {
-    return json(429, { error: `You're sending messages quickly. Please try again in ${Math.ceil(check.retryAfterSec / 60)} minute(s).`, code: 'RATE_LIMITED' }, { 'Retry-After': String(check.retryAfterSec) });
+  // Burst limits and the free time limit, before any LLM call. Checked per
+  // message, so a reply that is already streaming is never cut off.
+  const gate = chatGate({ sessionUuid: body.session_uuid, enquirySent: Boolean(body.enquiry_sent) });
+  if (!gate.ok) {
+    return json(gate.status, { error: gate.error, code: gate.code }, gate.retryAfterSec ? { 'Retry-After': String(gate.retryAfterSec) } : undefined);
   }
 
   // Page context rides in the user turn so the cached system prompt stays byte-stable.
@@ -61,6 +64,7 @@ export async function POST(req) {
           closed = true;
         }
       };
+      emit({ type: 'session', data: { session_uuid: gate.sessionUuid } });
       try {
         await runAgent({ history, message, contextNote, toolCtx, emit, signal: abort.signal });
         emit({ type: 'done', data: {} });

@@ -11,6 +11,7 @@
     "postbuild": "node scripts/copy-public-to-standalone.mjs",
     "start": "next start -p 3300",
     "lint": "eslint .",
+    "test": "node --test 'tests/*.test.mjs'",
     "fetch:blogs": "node scripts/fetchBlogs.mjs",
     "sitemap": "node scripts/generateSitemap.mjs",
     "verify:blog": "node scripts/verify-blog-assets.mjs",

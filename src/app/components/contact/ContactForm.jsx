@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CheckCircle2, AlertCircle, Send } from 'lucide-react';
 import { leadsEndpoint } from '@/utils/opsapiEnv.mjs';
+import { chatNotes } from '@/app/components/chat/chatStore';
 import s from './ContactForm.module.scss';
 
 /* Where enquiries go: the OpsAPI public CRM lead-capture endpoint,
@@ -43,6 +44,17 @@ export default function ContactForm({
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | done | error
+
+  // Arriving from the chat's "Send an enquiry" (?from=chat): start the message
+  // with what the visitor already told the assistant. Read after mount, so the
+  // statically exported page needs no search params at build time.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('from') !== 'chat') return;
+    const notes = chatNotes();
+    // sessionStorage only exists after hydration; setting it in the first render would mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (notes) setForm((f) => (f.comments ? f : { ...f, comments: notes }));
+  }, []);
 
   const set = (name) => (e) => setForm((f) => ({ ...f, [name]: e.target.value }));
 
