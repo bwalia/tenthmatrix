@@ -33,7 +33,7 @@ concurrency:
 jobs:
   check:
     name: "🔎 CMS content changed?"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     outputs:
       rebuild: ${{ steps.decide.outputs.rebuild }}
     env:

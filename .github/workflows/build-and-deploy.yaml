@@ -51,7 +51,7 @@ jobs:
   # ── Compute next release version (claims nothing; auto-tag pushes it) ──
   compute-version:
     name: "🔢 Compute Release Version"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     outputs:
       next_version: ${{ steps.calc.outputs.next_version }}
       should_tag: ${{ steps.calc.outputs.should_tag }}
@@ -87,7 +87,7 @@ jobs:
   # ── Build ──────────────────────────────────────────────────────────────
   build:
     name: "🏗️ Verify, Build & Push Docker Image"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     if: >-
       github.event_name == 'push' ||
       (github.event_name == 'workflow_dispatch' &&
@@ -140,7 +140,7 @@ jobs:
   # DNS_WSLPROXY_ENABLED repo variable.
   dns:
     name: "🌐 Cloudflare DNS (tenthmatrix.com)"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     needs: [compute-version]
     if: >-
       vars.DNS_WSLPROXY_ENABLED == 'true' &&
@@ -188,7 +188,7 @@ jobs:
   # ── Resolve image tag (deploy-only dispatch reuses one) ───────────────
   resolve-tag:
     name: "🏷️ Resolve Image Tag"
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     needs: [build]
     if: >-
       always() &&
@@ -227,7 +227,7 @@ jobs:
       values_file: values-int.yaml
       image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
       smoke_test_port: "8180"
-      runner_labels: '["self-hosted","Linux","int"]'
+      runner_labels: '["k3s-linux"]'
     secrets:
       KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -253,7 +253,7 @@ jobs:
       values_file: values-prod.yaml
       image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
       smoke_test_port: "8183"
-      runner_labels: '["self-hosted","Linux","int"]'
+      runner_labels: '["k3s-linux"]'
     secrets:
       KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -277,7 +277,7 @@ jobs:
       values_file: values-test.yaml
       image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
       smoke_test_port: "8181"
-      runner_labels: '["self-hosted","Linux","test"]'
+      runner_labels: '["k3s-linux"]'
     secrets:
       KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -301,7 +301,7 @@ jobs:
       values_file: values-acc.yaml
       image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
       smoke_test_port: "8182"
-      runner_labels: '["self-hosted","Linux","int"]'
+      runner_labels: '["k3s-linux"]'
     secrets:
       KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
@@ -327,7 +327,7 @@ jobs:
     name: "🏷️ Cut Release Tag"
     needs: [compute-version, build]
     if: needs.compute-version.outputs.should_tag == 'true'
-    runs-on: [self-hosted, Linux, int]
+    runs-on: k3s-linux
     permissions:
       contents: write
     steps:
