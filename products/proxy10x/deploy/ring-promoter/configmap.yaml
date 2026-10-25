@@ -59,7 +59,8 @@ data:
               fi
               rm -rf /src
               git clone https://github.com/bwalia/tenthmatrix /src
-              cd /src
+              # Monorepo: the product lives under products/<name>/.
+              cd /src/products/proxy10x
               # Resolve RP_VERSION (full SHA, short SHA or git tag) to the
               # commit, then derive the image tag from THAT. Images are only
               # published as sha-<7>; using a short SHA or a tag verbatim
@@ -68,7 +69,7 @@ data:
               # does not resolve is an error, not a silent default-branch
               # deploy.
               if ! git checkout -q "${ver}"; then
-                echo "RP_VERSION '${ver}' is not a commit or tag in bwalia/proxy10x" >&2
+                echo "RP_VERSION '${ver}' is not a commit or tag in bwalia/tenthmatrix" >&2
                 exit 1
               fi
               sha="$(git rev-parse HEAD)"

@@ -57,7 +57,8 @@ apps:
             echo "git clone failed (attempt $n), retrying..."
             sleep $((n*5))
           done
-          cd /src
+          # Monorepo: the product lives under products/<name>/.
+          cd /src/products/vault10x
           # Region values pin explicit per-service tags; --set overrides all of
           # them plus global.imageTag so lease-manager / sync-scheduler (which
           # fall back to global) cannot lag behind.
