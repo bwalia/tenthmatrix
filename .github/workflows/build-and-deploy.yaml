@@ -233,6 +233,32 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
+  # ── PROD API on k3s (auto on push, after INT) ─────────────────────────
+  # Prod pages are the S3 export; this release serves only what the export
+  # can't: the edge sends www.tenthmatrix.com/api/chat here (rule
+  # tm-website-chat-api), everything else stays on S3.
+  deploy-prod-api:
+    name: "🛰️ PROD API → K3S"
+    needs: [resolve-tag, deploy-int]
+    if: >-
+      always() &&
+      needs.resolve-tag.result == 'success' &&
+      needs.deploy-int.result == 'success' &&
+      github.event_name == 'push'
+    uses: ./.github/workflows/deploy-k3s.yaml
+    with:
+      environment: prod
+      namespace: prod
+      release_name: tm-prod
+      values_file: values-prod.yaml
+      image_tag: ${{ needs.resolve-tag.outputs.image_tag }}
+      smoke_test_port: "8183"
+      runner_labels: '["self-hosted","Linux","int"]'
+    secrets:
+      KUBE_CONFIG_DATA_K3S: ${{ secrets.KUBE_CONFIG_DATA_K3S }}
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
   # ── Stage 2: TEST (manual) ────────────────────────────────────────────
   deploy-test:
     name: "🔍 TEST → K3S"
