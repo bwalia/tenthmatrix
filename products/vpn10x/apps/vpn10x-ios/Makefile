@@ -63,7 +63,13 @@ build-device:
 # export and upload to App Store Connect. Needs an Apple ID for team PAS2QUVJHC
 # signed in to Xcode, and the app record (bundle id io.vpn10x.zerotrust.ios)
 # created once in App Store Connect. Build numbers are managed on upload.
+#
+# Without an Apple ID in Xcode, sign with an App Store Connect API key (Admin):
+#   make testflight ASC_KEY_ID=… ASC_ISSUER_ID=…
+# The key is read from ~/.appstoreconnect/private_keys/AuthKey_<id>.p8.
 ARCHIVE := build/VPN10x.xcarchive
+ASC_KEY_PATH ?= $(HOME)/.appstoreconnect/private_keys/AuthKey_$(ASC_KEY_ID).p8
+ASC_AUTH := $(if $(ASC_KEY_ID),-authenticationKeyPath $(ASC_KEY_PATH) -authenticationKeyID $(ASC_KEY_ID) -authenticationKeyIssuerID $(ASC_ISSUER_ID))
 
 archive:
 	xcodebuild archive \
@@ -71,7 +77,7 @@ archive:
 		-scheme VPN10x \
 		-destination 'generic/platform=iOS' \
 		-archivePath $(ARCHIVE) \
-		-allowProvisioningUpdates \
+		-allowProvisioningUpdates $(ASC_AUTH) \
 		CODE_SIGN_STYLE=Automatic
 
 testflight: archive
@@ -79,7 +85,7 @@ testflight: archive
 		-archivePath $(ARCHIVE) \
 		-exportOptionsPlist ExportOptions.plist \
 		-exportPath build/export \
-		-allowProvisioningUpdates
+		-allowProvisioningUpdates $(ASC_AUTH)
 
 clean:
 	rm -rf VPN10x.xcodeproj $(UPSTREAM)
