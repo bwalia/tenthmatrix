@@ -63,8 +63,8 @@ identity:
     #   - example.com
   # Signing in with an OpsAPI account. The app sends the password to OpsAPI;
   # the control plane checks the resulting session with OpsAPI's /auth/me and
-  # the person's record over SCIM, and checks SCIM again on every connect.
-  # See docs/OPSAPI.md and ADR-0004.
+  # the person's directory record (/api/v2/users/{uuid}), and checks it again
+  # on every connect. See docs/OPSAPI.md, ADR-0004 and ADR-0005.
   # opsapi:
   #   url: "https://api.example.com"
   #   namespace: "workstation"          # workspace people must belong to

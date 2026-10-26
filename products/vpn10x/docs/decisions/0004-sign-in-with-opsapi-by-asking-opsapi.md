@@ -1,5 +1,10 @@
 # 0004 — Signing in with OpsAPI by asking OpsAPI
 
+> **Update (2026-10-26):** the directory lookup below moved from
+> `/scim/v2/Users/{uuid}` to `/api/v2/users/{uuid}`: OpsAPI never lets an
+> `opsk_` key reach SCIM. See
+> [ADR-0005](0005-opsapi-roles-gate-access.md#also-decided-here-the-directory-check-leaves-scim).
+
 **Status:** accepted
 **Date:** 2026-10-23
 **Builds on:** [ADR-0003](0003-opsapi-is-a-directory-not-a-provider.md)
