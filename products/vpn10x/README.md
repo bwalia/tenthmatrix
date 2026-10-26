@@ -17,8 +17,8 @@ Part of the [TenthMatrix](https://www.tenthmatrix.com) product family; lives in 
 - `vpn10x-control` — Rust control plane (Axum + PostgreSQL)
 - `vpn10x-gateway` — WireGuard data plane
 - `vpn10x-agent` / `vpn10x-cli` — endpoint agent and CLI
-- `vpn10x-desktop` — the desktop app for macOS, Linux and Windows, over the CLI ([install](docs/INSTALL.md))
-- `vpn10x-ios` — iPhone and iPad client with its own packet tunnel
+- `vpn10x-desktop` — the desktop app for Linux, Windows and macOS, over the CLI ([install](docs/INSTALL.md))
+- `vpn10x-apple` — the native app for iPhone, iPad and Mac (one SwiftUI codebase, WireGuard packet tunnel, OpsAPI sign-in)
 
 ## Quick start (local)
 
@@ -74,7 +74,7 @@ database, so `make test` brings a throwaway PostgreSQL up first.
 ## Documentation
 
 - [Architecture](docs/ARCHITECTURE.md)
-- [Install](docs/INSTALL.md) · [Client](docs/CLIENT.md) · [Desktop](docs/DESKTOP.md) · [DNS overrides](docs/DNS.md) · [iOS](docs/IOS.md) · [Posture](docs/POSTURE.md)
+- [Install](docs/INSTALL.md) · [Client](docs/CLIENT.md) · [Desktop](docs/DESKTOP.md) · [DNS overrides](docs/DNS.md) · [iOS and macOS](docs/IOS.md) · [Posture](docs/POSTURE.md)
 - [Authorization](docs/AUTHORIZATION.md)
 - [Security](docs/SECURITY.md) · [Threat model](docs/THREAT-MODEL.md)
 - [Operations](docs/OPERATIONS.md) · [Upgrading](docs/UPGRADING.md) · [Troubleshooting](docs/TROUBLESHOOTING.md)

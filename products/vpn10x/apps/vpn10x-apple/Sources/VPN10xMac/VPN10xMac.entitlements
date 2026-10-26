@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sandboxed: required for the Mac App Store and TestFlight, and for an
+	     app that embeds a packet tunnel as an app extension rather than a
+	     system extension. -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<!-- The control plane and OpsAPI. -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<key>com.apple.developer.networking.networkextension</key>
+	<array>
+		<string>packet-tunnel-provider</string>
+	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)io.vpn10x.zerotrust</string>
+	</array>
+	<!-- Team-prefixed on macOS; SharedStore.appGroup matches. -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)group.io.vpn10x.zerotrust</string>
+	</array>
+</dict>
+</plist>

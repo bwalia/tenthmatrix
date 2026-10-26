@@ -54,6 +54,10 @@ identity:
   #   namespace: "workstation"          # workspace people must belong to
   #   api_key: "${VPN10X_OPSAPI_API_KEY}"  # opsk_ key of a platform administrator
   #   verify_on_connect: true
+  #   # Also require one of these OpsAPI namespace roles in the workspace, at
+  #   # sign-in and on every connect (ADR-0005). The key then needs the `user`
+  #   # scope too. Empty or absent: membership alone admits.
+  #   allowed_roles: ["owner", "admin", "vpn-user"]
 
 wireguard:
   default_port: 51820

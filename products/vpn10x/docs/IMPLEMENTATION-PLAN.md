@@ -21,7 +21,7 @@ authorization guards, GitOps policy delivery, and macOS and iOS clients.
 |---|---|
 | Control plane | `vpn10x-control` — Axum, PostgreSQL, 5 migrations, per-route guards, rate limiting |
 | Data plane | `vpn10x-gateway` — WireGuard peer reconciliation, nftables service restriction |
-| Endpoint | `vpn10x-agent`, `vpn10x-cli`, `vpn10x-desktop`, `vpn10x-ios` — real tunnel bring-up, posture signals |
+| Endpoint | `vpn10x-agent`, `vpn10x-cli`, `vpn10x-desktop`, `vpn10x-apple` — real tunnel bring-up, posture signals |
 | Policy | `vpn10x-policy` — YAML documents, default deny, first-match, GitOps applied |
 | Identity | OIDC relying party, SCIM 2.0 server, OpsAPI inbound provisioning, two roles |
 | Audit | Append-only, hash-chained, attributed to the acting principal |

@@ -10,9 +10,14 @@
 //!     does the directory, asked independently of anything the client sent,
 //!     agree that this person exists and is active?
 //!
-//! The stand-in OpsAPI below answers both the way the real one does (the shapes
-//! are taken from `routes/auth.lua` and `routes/users.lua`), so what is pinned
-//! down here is the control plane's decision, against a real database.
+//! With `allowed_roles` configured it asks a third question, at sign-in and on
+//! every connect: `GET /api/v2/user/{uuid}/namespace-memberships` — does the
+//! person hold one of the admitted roles in our namespace? (ADR-0005)
+//!
+//! The stand-in OpsAPI below answers all three the way the real one does (the
+//! shapes are taken from `routes/auth.lua`, `routes/users.lua` and
+//! `routes/namespaces.lua`), so what is pinned down here is the control plane's
+//! decision, against a real database.
 //!
 //! Requires a PostgreSQL instance; `#[sqlx::test]` provisions an isolated
 //! database per test from `DATABASE_URL` and runs the migrations into it.
@@ -43,6 +48,9 @@ struct Person {
     email: String,
     active: bool,
     namespaces: Vec<&'static str>,
+    /// Namespace roles held in each of `namespaces`.
+    roles: Vec<&'static str>,
+    is_owner: bool,
 }
 
 #[derive(Default)]
@@ -50,6 +58,10 @@ struct Directory {
     /// Session token → uuid, as OpsAPI's JWTs map to a user.
     sessions: HashMap<String, String>,
     people: HashMap<String, Person>,
+    /// Make the memberships lookup answer 500.
+    memberships_broken: bool,
+    /// Our key lacks the `user` scope: OpsAPI refuses it on `/api/v2/user/...`.
+    key_lacks_user_scope: bool,
 }
 
 type Shared = Arc<Mutex<Directory>>;
@@ -117,6 +129,79 @@ async fn scim_user(
     }
 }
 
+/// `GET /api/v2/user/{uuid}/namespace-memberships`: the person themself, or a
+/// platform admin (the API key) whose key is scoped to `user`.
+async fn memberships(
+    State(dir): State<Shared>,
+    headers: HeaderMap,
+    Path(uuid): Path<String>,
+) -> (StatusCode, Json<serde_json::Value>) {
+    let dir = dir.lock().unwrap();
+    if dir.memberships_broken {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(json!({ "error": "Internal server error" })),
+        );
+    }
+    let caller = bearer(&headers);
+    let is_key = caller.as_deref() == Some(API_KEY);
+    if is_key && dir.key_lacks_user_scope {
+        return (
+            StatusCode::FORBIDDEN,
+            Json(json!({ "error": "API key is not scoped for this module" })),
+        );
+    }
+    let is_self = caller
+        .and_then(|t| dir.sessions.get(&t).cloned())
+        .is_some_and(|own| own == uuid);
+    if !is_key && !is_self {
+        return (
+            StatusCode::FORBIDDEN,
+            Json(json!({ "error": "You can only view your own namespace memberships" })),
+        );
+    }
+    let Some(p) = dir.people.get(&uuid) else {
+        return (
+            StatusCode::NOT_FOUND,
+            Json(json!({ "error": "User not found" })),
+        );
+    };
+    let memberships: Vec<_> = p
+        .namespaces
+        .iter()
+        .map(|slug| {
+            // json_agg over no rows is NULL, which is what an owner with no
+            // role rows gets.
+            let roles = if p.roles.is_empty() {
+                serde_json::Value::Null
+            } else {
+                json!(p
+                    .roles
+                    .iter()
+                    .enumerate()
+                    .map(|(i, r)| json!({ "id": i + 1, "role_name": r, "display_name": r }))
+                    .collect::<Vec<_>>())
+            };
+            json!({
+                "membership_id": 3, "membership_uuid": Uuid::new_v4(), "status": "active",
+                "is_owner": p.is_owner, "joined_at": "2026-10-01 00:00:00",
+                "namespace_id": 1, "namespace_uuid": Uuid::new_v4(), "namespace_name": slug,
+                "namespace_slug": slug, "namespace_status": "active", "logo_url": null,
+                "roles": roles,
+            })
+        })
+        .collect();
+    let total = memberships.len();
+    (
+        StatusCode::OK,
+        Json(json!({
+            "user": { "uuid": p.uuid, "email": p.email, "first_name": "Alice", "last_name": "Example" },
+            "memberships": memberships,
+            "total": total,
+        })),
+    )
+}
+
 struct OpsApi {
     url: String,
     dir: Shared,
@@ -130,6 +215,10 @@ impl OpsApi {
         let app = Router::new()
             .route("/auth/me", route(me))
             .route("/scim/v2/Users/{id}", route(scim_user))
+            .route(
+                "/api/v2/user/{id}/namespace-memberships",
+                route(memberships),
+            )
             .with_state(dir.clone());
         tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
         Self { url, dir }
@@ -147,10 +236,20 @@ impl OpsApi {
                 email: email.into(),
                 active: true,
                 namespaces,
+                roles: Vec::new(),
+                is_owner: false,
             },
         );
         dir.sessions.insert(token.clone(), uuid.clone());
         (uuid, token)
+    }
+
+    /// Set the namespace roles someone holds, and whether they own it.
+    fn grant(&self, uuid: &str, roles: Vec<&'static str>, is_owner: bool) {
+        let mut dir = self.dir.lock().unwrap();
+        let person = dir.people.get_mut(uuid).unwrap();
+        person.roles = roles;
+        person.is_owner = is_owner;
     }
 
     fn deactivate(&self, uuid: &str) {
@@ -174,6 +273,15 @@ fn opsapi_config(url: &str) -> OpsApiConfig {
         namespace: NAMESPACE.into(),
         api_key: API_KEY.into(),
         verify_on_connect: true,
+        allowed_roles: Vec::new(),
+    }
+}
+
+/// The same, admitting only people holding one of `roles` in the namespace.
+fn opsapi_config_with_roles(url: &str, roles: &[&str]) -> OpsApiConfig {
+    OpsApiConfig {
+        allowed_roles: roles.iter().map(|r| r.to_string()).collect(),
+        ..opsapi_config(url)
     }
 }
 
@@ -231,6 +339,7 @@ async fn the_app_is_told_which_sign_in_methods_this_control_plane_offers(pool: P
     assert_eq!(status, StatusCode::OK);
     assert_eq!(body["oidc"], true);
     assert_eq!(body["opsapi"]["url"], ops.url.as_str());
+    assert_eq!(body["opsapi"]["roles_required"], false);
     // The key is the control plane's credential; it is never handed out.
     assert!(!body.to_string().contains("opsk_"), "{body}");
 
@@ -525,4 +634,229 @@ async fn provisioning_links_an_existing_account_to_its_opsapi_id(pool: PgPool) {
     .send(&app)
     .await;
     assert_eq!(status, StatusCode::CONFLICT);
+}
+
+// ---- The role gate (ADR-0005) -------------------------------------------
+
+const ROLES: &[&str] = &["owner", "admin", "vpn-user"];
+
+fn connect_request() -> serde_json::Value {
+    json!({ "device_id": Uuid::new_v4(), "network_id": Uuid::new_v4(), "posture": [] })
+}
+
+#[sqlx::test(migrations = "../../migrations")]
+async fn the_app_is_told_a_role_is_required_but_not_which(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (_, body) = get("/auth/methods").send(&app).await;
+    assert_eq!(body["opsapi"]["roles_required"], true, "{body}");
+    assert_eq!(body["opsapi"]["namespace"], NAMESPACE);
+    assert!(!body.to_string().contains("vpn-user"), "{body}");
+}
+
+#[sqlx::test(migrations = "../../migrations")]
+async fn a_member_holding_an_allowed_role_signs_in(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("alice@example.com", vec![NAMESPACE]);
+    // Role names are compared without regard to case.
+    ops.grant(&uuid, vec!["viewer", "VPN-User"], false);
+    provision(&app, "alice@example.com", &uuid).await;
+    let (status, body) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+}
+
+/// Membership is what admits without a role gate. With one, a member holding
+/// no allowed role stays out.
+#[sqlx::test(migrations = "../../migrations")]
+async fn a_member_without_an_allowed_role_is_refused(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Jit,
+    )
+    .await;
+    let (uuid, token) = ops.person("bob@example.com", vec![NAMESPACE]);
+    ops.grant(&uuid, vec!["viewer"], false);
+    let (status, _) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::UNAUTHORIZED);
+
+    let (_, token) = ops.person("carol@example.com", vec![NAMESPACE]);
+    let (status, _) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::UNAUTHORIZED, "no roles at all");
+    assert_eq!(user_count(&pool).await, 0);
+}
+
+/// A workspace owner may hold no role rows; owning it counts as `owner`.
+#[sqlx::test(migrations = "../../migrations")]
+async fn the_workspace_owner_counts_as_holding_owner(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, &["owner"])),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("owner@example.com", vec![NAMESPACE]);
+    ops.grant(&uuid, vec![], true);
+    provision(&app, "owner@example.com", &uuid).await;
+    let (status, body) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+}
+
+/// Roles are asked again on connect, with our key. Taking the role away in
+/// OpsAPI stops the next connection, and the refusal is audited as a role
+/// refusal, not as a deprovisioning.
+#[sqlx::test(migrations = "../../migrations")]
+async fn connect_after_the_role_is_removed_is_refused_and_audited(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("alice@example.com", vec![NAMESPACE]);
+    ops.grant(&uuid, vec!["vpn-user"], false);
+    provision(&app, "alice@example.com", &uuid).await;
+    let (_, body) = exchange(&app, &token).await;
+    let access = body["access_token"].as_str().unwrap().to_string();
+    let user_id: Uuid = body["user_id"].as_str().unwrap().parse().unwrap();
+
+    let request = connect_request();
+    let session = || post("/api/v1/sessions", request.clone()).with_token(&access);
+
+    // Still holding the role: on to the device lookup, which knows no such device.
+    let (status, body) = session().send(&app).await;
+    assert_eq!(status, StatusCode::NOT_FOUND, "{body}");
+
+    ops.grant(&uuid, vec!["viewer"], false);
+    let (status, _) = session().send(&app).await;
+    assert_eq!(status, StatusCode::FORBIDDEN);
+
+    let reasons: Vec<serde_json::Value> = sqlx::query_scalar(
+        "SELECT details->'reason' FROM audit_events \
+         WHERE action = 'session.create' AND decision = 'deny' AND user_id = $1",
+    )
+    .bind(user_id)
+    .fetch_all(&pool)
+    .await
+    .unwrap();
+    assert_eq!(
+        reasons,
+        vec![json!("opsapi: role not allowed in workspace")],
+        "one audited role refusal"
+    );
+
+    // Deprovisioned outright is still told apart.
+    ops.deactivate(&uuid);
+    let (status, _) = session().send(&app).await;
+    assert_eq!(status, StatusCode::FORBIDDEN);
+    let latest: serde_json::Value = sqlx::query_scalar(
+        "SELECT details->'reason' FROM audit_events \
+         WHERE action = 'session.create' AND decision = 'deny' AND user_id = $1 \
+         ORDER BY created_at DESC LIMIT 1",
+    )
+    .bind(user_id)
+    .fetch_one(&pool)
+    .await
+    .unwrap();
+    assert_eq!(latest, json!("opsapi: user not active in directory"));
+}
+
+/// If OpsAPI cannot say which roles someone holds, the answer is not "yes" —
+/// at sign-in or on connect.
+#[sqlx::test(migrations = "../../migrations")]
+async fn a_broken_memberships_lookup_fails_closed(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("alice@example.com", vec![NAMESPACE]);
+    ops.grant(&uuid, vec!["admin"], false);
+    provision(&app, "alice@example.com", &uuid).await;
+    let (_, body) = exchange(&app, &token).await;
+    let access = body["access_token"].as_str().unwrap().to_string();
+
+    ops.dir.lock().unwrap().memberships_broken = true;
+    let (status, _) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
+    let (status, _) = post("/api/v1/sessions", connect_request())
+        .with_token(&access)
+        .send(&app)
+        .await;
+    assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
+}
+
+/// Our key reaching `/api/v2/user/...` needs the `user` scope. Without it the
+/// fault is the deployment's: 503 with a pointer at the key, never a 403 for
+/// the person and never an allow.
+#[sqlx::test(migrations = "../../migrations")]
+async fn a_key_without_the_user_scope_is_a_deployment_fault(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config_with_roles(&ops.url, ROLES)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("alice@example.com", vec![NAMESPACE]);
+    ops.grant(&uuid, vec!["admin"], false);
+    provision(&app, "alice@example.com", &uuid).await;
+    // Sign-in asks with the person's own token, so it is unaffected.
+    ops.dir.lock().unwrap().key_lacks_user_scope = true;
+    let (status, body) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let access = body["access_token"].as_str().unwrap().to_string();
+
+    let (status, body) = post("/api/v1/sessions", connect_request())
+        .with_token(&access)
+        .send(&app)
+        .await;
+    assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE);
+    assert!(
+        body["message"]
+            .as_str()
+            .unwrap_or("")
+            .contains("`user` scope"),
+        "{body}"
+    );
+}
+
+/// Without allowed_roles the memberships endpoint is never asked: membership
+/// alone admits, exactly as before.
+#[sqlx::test(migrations = "../../migrations")]
+async fn without_allowed_roles_membership_alone_admits(pool: PgPool) {
+    let ops = OpsApi::start().await;
+    ops.dir.lock().unwrap().memberships_broken = true;
+    let app = control_plane(
+        &pool,
+        Some(opsapi_config(&ops.url)),
+        Provisioning::Directory,
+    )
+    .await;
+    let (uuid, token) = ops.person("alice@example.com", vec![NAMESPACE]);
+    provision(&app, "alice@example.com", &uuid).await;
+    let (status, body) = exchange(&app, &token).await;
+    assert_eq!(status, StatusCode::OK, "{body}");
+    let access = body["access_token"].as_str().unwrap().to_string();
+    let (status, body) = post("/api/v1/sessions", connect_request())
+        .with_token(&access)
+        .send(&app)
+        .await;
+    assert_eq!(status, StatusCode::NOT_FOUND, "{body}");
 }
