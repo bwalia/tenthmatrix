@@ -67,15 +67,26 @@ verifies an OpsAPI token itself — it asks OpsAPI, from two directions — and 
 SCIM again before every connection. The reasoning is in
 [ADR-0004](decisions/0004-sign-in-with-opsapi-by-asking-opsapi.md).
 
+With `allowed_roles` set, membership of the workspace is not enough: the person
+must also hold one of those OpsAPI namespace roles there, at sign-in and again
+on every connect — see
+[ADR-0005](decisions/0005-opsapi-roles-gate-access.md).
+
 ```text
 app ──email, password──▶ OpsAPI /auth/login            → token, or "code sent"
 app ──challenge, code──▶ OpsAPI /auth/2fa/verify       → token
 app ──OpsAPI token────▶ VPN10x /auth/opsapi/exchange
                          VPN10x ──token──▶ OpsAPI /auth/me              (whose session? member of the workspace?)
+                         VPN10x ──token──▶ OpsAPI /api/v2/user/{uuid}/namespace-memberships
+                                                                       (an allowed role in the workspace?)¹
                          VPN10x ──opsk_ key──▶ OpsAPI /scim/v2/Users/{uuid}   (active in the directory?)
                          → VPN10x access token
 app ──connect──▶ VPN10x /api/v1/sessions
                          VPN10x ──opsk_ key──▶ OpsAPI /scim/v2/Users/{uuid}   (still active?)
+                         VPN10x ──opsk_ key──▶ OpsAPI /api/v2/user/{uuid}/namespace-memberships
+                                                                       (still an allowed role?)¹
+
+¹ only when allowed_roles is set
 ```
 
 Configure it on the control plane:
@@ -89,10 +100,26 @@ identity:
     namespace: "workstation"       # workspace people must be active members of
     api_key: "${VPN10X_OPSAPI_API_KEY}"  # opsk_ key of an OpsAPI platform admin
     verify_on_connect: true        # default
+    allowed_roles: ["owner", "admin", "vpn-user"]  # optional; empty = membership alone
 ```
 
 With the Helm chart: `config.opsapi.enabled=true`, `config.opsapi.url`,
-`config.opsapi.namespace`, and `VPN10X_OPSAPI_API_KEY` in the existing Secret.
+`config.opsapi.namespace`, optionally `config.opsapi.allowedRoles`, and
+`VPN10X_OPSAPI_API_KEY` in the existing Secret.
+
+**Roles.** `allowed_roles` names OpsAPI namespace roles (`namespace_roles.role_name`
+in the workspace). They are compared without regard to case, and the
+workspace's owner counts as holding `owner` whether or not they have a role
+row. Leave it empty and membership alone admits, as before.
+
+**The API key.** SCIM needs the key's owner to be an OpsAPI platform
+administrator. With `allowed_roles` set, the connect check also reads
+`/api/v2/user/{uuid}/namespace-memberships` with that key, and OpsAPI confines an
+`opsk_` key to the `/api/v2/<module>` paths it is scoped for — so the key must
+carry the **`user`** scope as well. Without it every connect by an
+OpsAPI-provisioned user is a 503 that says so; nobody is let in on it. (Sign-in
+reads the same endpoint with the person's own token, which OpsAPI allows for
+one's own memberships, so sign-in works either way.)
 
 **Provision with the uuid.** People are bound by OpsAPI's user uuid, never by
 email. OpsAPI's provisioning call must carry it:
@@ -111,14 +138,19 @@ an already-linked account is refused with 409.
 |---|---|
 | Token OpsAPI does not recognise | 401 at sign-in |
 | Not an active member of `namespace` | 401 at sign-in |
-| SCIM says inactive, or does not know the uuid | 401 at sign-in; 403 at connect (audited) |
+| `allowed_roles` set, and no allowed role in `namespace` | 401 at sign-in; 403 at connect (audited: `opsapi: role not allowed in workspace`) |
+| Workspace owner, `owner` in `allowed_roles` | allowed, with or without a role row |
+| SCIM says inactive, or does not know the uuid | 401 at sign-in; 403 at connect (audited: `opsapi: user not active in directory`) |
 | An existing VPN user has the email but no matching `external_id` | 401 — never linked on email |
 | `directory` admission and never provisioned | 401 |
 | OpsAPI unreachable, or our API key rejected | 503 — never an allow |
+| Memberships lookup fails (5xx), or our key lacks the `user` scope | 503 — never an allow |
 | User not provisioned by OpsAPI (no `external_id`) | connect is not checked against OpsAPI |
 
 The desktop app shows **Sign in with OpsAPI** only when `GET /auth/methods`
-says the control plane offers it. From a terminal:
+says the control plane offers it. Its `opsapi.roles_required` says whether a
+workspace role is needed on top of membership; the role names are not
+published. From a terminal:
 
 ```bash
 vpn10x sign-in-methods

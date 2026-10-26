@@ -1,6 +1,13 @@
 # Desktop
 
-The macOS app (`apps/vpn10x-desktop`) is a Tauri window over the CLI:
+> **On a Mac there are two clients.** The native app in `apps/vpn10x-apple`
+> (`VPN10xMac`) is the same SwiftUI app as iPhone and iPad, with a packet
+> tunnel extension and OpsAPI sign-in; it is the one for the Mac App Store /
+> TestFlight. This Tauri app remains the client for Linux and Windows, and for
+> Macs whose policy needs the CLI's FileVault and firewall checks, which a
+> sandboxed app cannot make. See [IOS.md](IOS.md).
+
+The desktop app (`apps/vpn10x-desktop`) is a Tauri window over the CLI:
 
 ```text
 vpn10x-desktop → vpn10x CLI → vpn10x-agent → control plane

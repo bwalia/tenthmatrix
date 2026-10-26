@@ -64,6 +64,12 @@ data:
         # From the existing Secret, like every other credential.
         api_key: "${VPN10X_OPSAPI_API_KEY}"
         verify_on_connect: {{ .Values.config.opsapi.verifyOnConnect }}
+        {{- with .Values.config.opsapi.allowedRoles }}
+        allowed_roles:
+          {{- range . }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
 
     wireguard:

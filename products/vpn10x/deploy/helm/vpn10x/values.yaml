@@ -156,6 +156,12 @@ config:
     # The workspace (namespace slug) people must be active members of.
     namespace: ""
     verifyOnConnect: true
+    # OpsAPI namespace roles (role_name), one of which people must hold in that
+    # workspace — at sign-in and on every connect. Case-insensitive; the
+    # workspace owner counts as `owner`. Empty: membership alone admits. When
+    # set, the API key must also carry the `user` scope. See ADR-0005.
+    #   allowedRoles: [owner, admin, vpn-user]
+    allowedRoles: []
   wireguard:
     defaultPort: 51820
   gitops:

@@ -1,8 +1,15 @@
-# iOS
+# iOS and macOS
 
-A WireGuard client for iPhone and iPad: a SwiftUI app, a packet tunnel
+One WireGuard client for iPhone, iPad and Mac: a SwiftUI app, a packet tunnel
 extension running the real wireguard-go, and the same control-plane API the CLI
-uses.
+uses. The Mac app is built from the same sources (`VPN10xMac`,
+`VPN10xMacTunnel`) as a sandboxed app with the tunnel as an app extension.
+
+People sign in with OpsAPI — email, password and the emailed code — or in the
+browser, whichever `GET /auth/methods` says the control plane offers. With
+OpsAPI, the control plane admits only active members of the workspace who hold
+one of `identity.opsapi.allowed_roles`, and checks again on every connect
+([OPSAPI.md](OPSAPI.md#signing-in-with-an-opsapi-account)).
 
 ```text
 VPN10x (app)  ──▶ control plane          sign in, register, create session
@@ -16,7 +23,7 @@ from a configuration the app left for it. The extension has no UI, may be
 started by the system while the screen is locked, and is killed without
 ceremony if it uses too much memory, so it is kept as small as it can be.
 
-See [apps/vpn10x-ios/README.md](../apps/vpn10x-ios/README.md) for building it.
+See [apps/vpn10x-apple/README.md](../apps/vpn10x-apple/README.md) for building it.
 
 ## Deployment prerequisites
 
@@ -86,6 +93,12 @@ spec:
       - disk_encryption
 ```
 
+**On a Mac** the app is sandboxed and cannot run `fdesetup` or read the
+application firewall the way the CLI agent can, so `disk_encryption` and
+`firewall` are `unknown`; `device_management` is read as on iOS. Policies that
+require FileVault by name will refuse the Mac app until an MDM-backed signal is
+available, and should keep such Macs on the CLI.
+
 See [Posture](POSTURE.md) for how the results are evaluated, and for the limit
 that applies to all of this: every signal is the endpoint's own account of
 itself.
@@ -93,10 +106,15 @@ itself.
 ## What has not been proven
 
 The app compiles, the extension links wireguard-go, and everything testable off
-a device is tested — 40 tests covering the wire format, PKCE against the RFC
+a device is tested — kit tests covering the wire format, OpsAPI sign-in, PKCE against the RFC
 vector, key handling, posture and validation.
 
 Nobody has watched it carry a packet. Network Extensions do not load in the
 Simulator, so the tunnel can only be exercised on a physical device with the
 entitlement granted and a gateway to reach. That is the next thing to do, and
 until it is done this is a client that builds rather than a client that works.
+
+The Mac build has no simulator in the way — its tunnel extension links the
+universal wireguard-go and the app launches — but it equally needs signing
+against App IDs with the Network Extension capability before macOS will load
+the extension, and nobody has watched that carry a packet either.

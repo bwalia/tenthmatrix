@@ -3,6 +3,8 @@
 **Status:** accepted
 **Date:** 2026-10-23
 **Builds on:** [ADR-0003](0003-opsapi-is-a-directory-not-a-provider.md)
+**Extended by:** [ADR-0005](0005-opsapi-roles-gate-access.md) — optionally,
+membership is not enough without one of the configured workspace roles
 
 ## Context
 

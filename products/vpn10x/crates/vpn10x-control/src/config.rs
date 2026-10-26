@@ -101,13 +101,30 @@ pub struct OpsApiConfig {
     /// OpsAPI has open sign-up; an account alone is not membership.
     pub namespace: String,
     /// An `opsk_` API key belonging to a platform administrator, for the SCIM
-    /// lookups. Never sent to clients.
+    /// lookups — and, with `allowed_roles`, the role lookups on connect, for
+    /// which the key must also carry the `user` scope. Never sent to clients.
     pub api_key: String,
     /// Ask the directory again on every connect, so someone deprovisioned in
     /// OpsAPI is stopped at their next connect rather than when their VPN10x
     /// token expires.
     #[serde(default = "default_true")]
     pub verify_on_connect: bool,
+    /// OpsAPI namespace roles (`role_name`, e.g. `owner`, `admin`, `vpn-user`),
+    /// one of which a person must hold in `namespace` — at sign-in and on every
+    /// connect. Compared case-insensitively; a workspace owner counts as
+    /// holding `owner`. Empty means membership alone admits, as before.
+    #[serde(default)]
+    pub allowed_roles: Vec<String>,
+}
+
+impl OpsApiConfig {
+    /// Whether `role` (an OpsAPI `role_name`) is one this deployment admits.
+    pub fn role_allowed(&self, role: &str) -> bool {
+        let role = role.trim();
+        self.allowed_roles
+            .iter()
+            .any(|allowed| allowed.trim().eq_ignore_ascii_case(role))
+    }
 }
 
 fn default_true() -> bool {
@@ -410,6 +427,10 @@ fn validate_opsapi(opsapi: &OpsApiConfig) -> Result<()> {
     if !opsapi.api_key.starts_with("opsk_") || opsapi.api_key.len() < 20 {
         anyhow::bail!("identity.opsapi.api_key must be an OpsAPI API key (opsk_...)");
     }
+    // A blank entry would match nothing, and reads as though it were a gate.
+    if opsapi.allowed_roles.iter().any(|r| r.trim().is_empty()) {
+        anyhow::bail!("identity.opsapi.allowed_roles must not contain an empty role name");
+    }
     Ok(())
 }
 
@@ -540,6 +561,7 @@ bootstrap: {{ ops_service_token: "0123456789abcdef", gateway_registration_token:
             namespace: namespace.into(),
             api_key: key.into(),
             verify_on_connect: true,
+            allowed_roles: Vec::new(),
         });
         config
     }
@@ -551,6 +573,10 @@ bootstrap: {{ ops_service_token: "0123456789abcdef", gateway_registration_token:
         let yaml = "url: https://api.example.com\nnamespace: workstation\napi_key: opsk_x\n";
         let parsed: OpsApiConfig = serde_yaml::from_str(yaml).expect("parse");
         assert!(parsed.verify_on_connect);
+        assert!(
+            parsed.allowed_roles.is_empty(),
+            "no role gate unless asked for"
+        );
         assert!(with_opsapi("https://api.example.com", "workstation", KEY)
             .validate()
             .is_ok());
@@ -588,6 +614,28 @@ bootstrap: {{ ops_service_token: "0123456789abcdef", gateway_registration_token:
                 .to_string();
             assert!(err.contains("opsk_"), "{key}: {err}");
         }
+    }
+
+    #[test]
+    fn opsapi_allowed_roles_parse_and_compare_case_insensitively() {
+        let yaml = "url: https://api.example.com\nnamespace: workstation\napi_key: opsk_x\n\
+                    allowed_roles: [owner, Admin, vpn-user]\n";
+        let parsed: OpsApiConfig = serde_yaml::from_str(yaml).expect("parse");
+        assert_eq!(parsed.allowed_roles, ["owner", "Admin", "vpn-user"]);
+        assert!(parsed.role_allowed("admin"));
+        assert!(parsed.role_allowed("VPN-USER"));
+        assert!(!parsed.role_allowed("member"));
+        assert!(!parsed.role_allowed(""));
+    }
+
+    #[test]
+    fn opsapi_allowed_roles_must_not_be_blank() {
+        let mut config = with_opsapi("https://api.example.com", "workstation", KEY);
+        config.identity.opsapi.as_mut().unwrap().allowed_roles = vec!["admin".into()];
+        assert!(config.validate().is_ok());
+        config.identity.opsapi.as_mut().unwrap().allowed_roles = vec!["admin".into(), "  ".into()];
+        let err = config.validate().unwrap_err().to_string();
+        assert!(err.contains("allowed_roles"), "{err}");
     }
 
     /// With Google as the provider and nothing else configured, every Google
