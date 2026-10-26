@@ -64,7 +64,7 @@ OpsAPI JWTs — see
 People can sign in to the VPN with their OpsAPI email and password (and the
 emailed code, where the workspace requires one). The control plane never
 verifies an OpsAPI token itself — it asks OpsAPI, from two directions — and asks
-SCIM again before every connection. The reasoning is in
+the directory again before every connection. The reasoning is in
 [ADR-0004](decisions/0004-sign-in-with-opsapi-by-asking-opsapi.md).
 
 With `allowed_roles` set, membership of the workspace is not enough: the person
@@ -79,10 +79,10 @@ app ──OpsAPI token────▶ VPN10x /auth/opsapi/exchange
                          VPN10x ──token──▶ OpsAPI /auth/me              (whose session? member of the workspace?)
                          VPN10x ──token──▶ OpsAPI /api/v2/user/{uuid}/namespace-memberships
                                                                        (an allowed role in the workspace?)¹
-                         VPN10x ──opsk_ key──▶ OpsAPI /scim/v2/Users/{uuid}   (active in the directory?)
+                         VPN10x ──opsk_ key──▶ OpsAPI /api/v2/users/{uuid}   (active in the directory?)
                          → VPN10x access token
 app ──connect──▶ VPN10x /api/v1/sessions
-                         VPN10x ──opsk_ key──▶ OpsAPI /scim/v2/Users/{uuid}   (still active?)
+                         VPN10x ──opsk_ key──▶ OpsAPI /api/v2/users/{uuid}   (still active?)
                          VPN10x ──opsk_ key──▶ OpsAPI /api/v2/user/{uuid}/namespace-memberships
                                                                        (still an allowed role?)¹
 
@@ -112,11 +112,15 @@ in the workspace). They are compared without regard to case, and the
 workspace's owner counts as holding `owner` whether or not they have a role
 row. Leave it empty and membership alone admits, as before.
 
-**The API key.** SCIM needs the key's owner to be an OpsAPI platform
-administrator. With `allowed_roles` set, the connect check also reads
-`/api/v2/user/{uuid}/namespace-memberships` with that key, and OpsAPI confines an
-`opsk_` key to the `/api/v2/<module>` paths it is scoped for — so the key must
-carry the **`user`** scope as well. Without it every connect by an
+**The API key.** OpsAPI confines an `opsk_` key to the `/api/v2/<module>`
+paths it is scoped for, so a key can never reach `/scim/v2` — verified against
+a running OpsAPI, which answers `403 API key is not scoped for this endpoint`.
+The directory check therefore reads `/api/v2/users/{uuid}`, and the key must be
+**bound to a platform administrator** (`user_uuid` set; the admin role is what
+lets it read any account) and carry the **`users`** scope. With `allowed_roles`
+set, the connect check also reads `/api/v2/user/{uuid}/namespace-memberships`
+with that key, so it must carry the **`user`** scope as well:
+`{"users":["read"],"user":["read"]}`. Without it every connect by an
 OpsAPI-provisioned user is a 503 that says so; nobody is let in on it. (Sign-in
 reads the same endpoint with the person's own token, which OpsAPI allows for
 one's own memberships, so sign-in works either way.)
@@ -140,7 +144,7 @@ an already-linked account is refused with 409.
 | Not an active member of `namespace` | 401 at sign-in |
 | `allowed_roles` set, and no allowed role in `namespace` | 401 at sign-in; 403 at connect (audited: `opsapi: role not allowed in workspace`) |
 | Workspace owner, `owner` in `allowed_roles` | allowed, with or without a role row |
-| SCIM says inactive, or does not know the uuid | 401 at sign-in; 403 at connect (audited: `opsapi: user not active in directory`) |
+| The directory says inactive, or does not know the uuid | 401 at sign-in; 403 at connect (audited: `opsapi: user not active in directory`) |
 | An existing VPN user has the email but no matching `external_id` | 401 — never linked on email |
 | `directory` admission and never provisioned | 401 |
 | OpsAPI unreachable, or our API key rejected | 503 — never an allow |

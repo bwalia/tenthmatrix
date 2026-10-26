@@ -9,9 +9,11 @@
 //!    is and which workspaces they are an active member of. A token it does not
 //!    recognise, or a person outside the configured workspace, stops here —
 //!    OpsAPI has open sign-up, so an account on its own is not membership.
-//! 2. `GET /scim/v2/Users/{uuid}` with this deployment's own `opsk_` key. The
+//! 2. `GET /api/v2/users/{uuid}` with this deployment's own `opsk_` key. The
 //!    directory, asked independently of anything the client presented, must
-//!    agree the person exists and is active.
+//!    agree the person exists and is active. Not SCIM: OpsAPI confines an
+//!    `opsk_` key to `/api/v2/<module>` paths it is scoped for, so no key can
+//!    reach `/scim/v2` at all (ADR-0005).
 //!
 //! When `allowed_roles` is set there is a third question (ADR-0005):
 //! `GET /api/v2/user/{uuid}/namespace-memberships`, asked with the person's
@@ -90,11 +92,17 @@ struct MeNamespace {
 }
 
 #[derive(Deserialize)]
-struct ScimUser {
+struct DirectoryUser {
     #[serde(default)]
     email: Option<String>,
     #[serde(default)]
     active: Option<bool>,
+}
+
+/// `/api/v2/users/{uuid}` answers `{data: user, permissions}`.
+#[derive(Deserialize)]
+struct DirectoryEnvelope {
+    data: DirectoryUser,
 }
 
 fn unreachable(err: reqwest::Error) -> AppError {
@@ -168,7 +176,8 @@ pub enum DirectoryAnswer {
     Unknown,
 }
 
-/// Step 2, and the check on every connect: ask SCIM about `uuid`.
+/// Step 2, and the check on every connect: ask the directory about `uuid`,
+/// with our own key (scoped to `users`, owned by a platform administrator).
 pub async fn directory_lookup(
     state: &AppState,
     config: &OpsApiConfig,
@@ -180,7 +189,7 @@ pub async fn directory_lookup(
         .map_err(|_| AppError::Unavailable("OpsAPI user id is not a uuid".into()))?;
     let response = state
         .http
-        .get(endpoint(config, &format!("/scim/v2/Users/{uuid}")))
+        .get(endpoint(config, &format!("/api/v2/users/{uuid}")))
         .bearer_auth(&config.api_key)
         .timeout(TIMEOUT)
         .send()
@@ -191,14 +200,19 @@ pub async fn directory_lookup(
         return Ok(DirectoryAnswer::Unknown);
     }
     if !status.is_success() {
-        // 401/403 here mean *our* key is wrong or lacks the role — a
+        // 401/403 here mean *our* key is wrong or lacks the scope — a
         // deployment fault, not the person's — so it is reported as
         // unavailable, and never as an allow.
         return Err(AppError::Unavailable(format!(
-            "OpsAPI SCIM answered {status}; check identity.opsapi.api_key"
+            "OpsAPI users answered {status}; identity.opsapi.api_key must carry the \
+             `users` scope and belong to a platform administrator"
         )));
     }
-    let user: ScimUser = response.json().await.map_err(unreachable)?;
+    let user = response
+        .json::<DirectoryEnvelope>()
+        .await
+        .map_err(unreachable)?
+        .data;
     Ok(match user.active {
         Some(true) => DirectoryAnswer::Active { email: user.email },
         _ => DirectoryAnswer::Inactive,
@@ -502,7 +516,7 @@ pub async fn exchange(
         DirectoryAnswer::Active { email } => {
             // The two answers must be about the same person.
             if email.is_some_and(|e| !e.trim().eq_ignore_ascii_case(&person.email)) {
-                tracing::warn!(opsapi_user = %person.uuid, "denied: SCIM and /auth/me disagree on email");
+                tracing::warn!(opsapi_user = %person.uuid, "denied: the directory and /auth/me disagree on email");
                 return Err(AppError::Unauthorized);
             }
         }
@@ -527,7 +541,7 @@ pub async fn exchange(
 /// Why connect refused someone, for the audit record.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ConnectRefusal {
-    /// SCIM says inactive, or does not know them.
+    /// The directory says inactive, or does not know them.
     NotActive,
     /// Active, but holding none of `allowed_roles` in the workspace.
     RoleNotAllowed,
