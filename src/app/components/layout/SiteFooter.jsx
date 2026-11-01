@@ -71,6 +71,7 @@ export default async function SiteFooter({ locale }) {
             <p className={s.copy}>
               © {year} TenthMatrix. {t('rights')}
             </p>
+            <p className={s.copy}>{t('entity')}</p>
           </div>
         </div>
       </div>

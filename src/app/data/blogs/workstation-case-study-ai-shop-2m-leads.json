@@ -1,0 +1,53 @@
+{
+  "uuid": "blog-workstation-case-study-001",
+  "internal_id": 1041,
+  "slug": "workstation-case-study-ai-shop-2m-leads",
+  "title": "Case study: the Workstation AI shop brought in £2m+ of sales enquiries in a couple of months",
+  "sub_title": "How we built www.workstation.co.uk and shop.workstation.co.uk with AI-assisted software and an AI Sales Agent",
+  "excerpt": "We built the Workstation website and AI shop with AI-assisted software and an AI Sales Agent that configures the basket. Within a couple of months of launch it brought in more than £2m worth of sales enquiries.",
+  "meta_title": "Workstation case study: £2m+ in leads from an AI shop | TenthMatrix",
+  "meta_description": "How we built the Workstation website and AI shop with AI-assisted software and an AI Sales Agent, and how it brought in £2m+ of enquiries in a couple of months.",
+  "meta_keywords": "Workstation case study, AI sales agent, AI shop, AI-assisted software development, AI agent development UK, lead generation, shop.workstation.co.uk, TenthMatrix",
+  "cover_image": "/img/blog/workstation-ai-shop-ring-promoter/cover.svg",
+  "images": [
+    {
+      "url": "/img/blog/workstation-ai-shop-ring-promoter/cover.svg",
+      "id": 1041,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Workstation AI shop case study"
+    }
+  ],
+  "content": "<div class=\"blog-content\">\n\n<p class=\"lead\"><strong>In short:</strong> we built and launched the Workstation website and AI shop, and within a couple of months of launch it brought in more than <strong>£2m worth of sales enquiries</strong>. This page explains what we built, how we built it, and what we would do the same way for you.</p>\n\n<p><em>A note on who the customer is: Workstation and TenthMatrix are both brands of Workstation Solutions Ltd, a company registered in England and Wales. So this is our own work, not an outside client. We show it because it is the clearest proof we have of how we work, and because you can visit both sites and check what we say.</em></p>\n\n<h2>The result</h2>\n<ul>\n<li><strong>More than £2m in sales enquiries</strong> within a couple of months of launch. This is the total value of the hardware and services that buyers asked us to quote for. It is not closed revenue.</li>\n<li><strong>An AI Sales Agent that does the first sales conversation.</strong> It asks what the buyer wants to run, their budget, the GPU class they need and where it should be delivered, then builds the basket for them.</li>\n<li><strong>Every enquiry lands in one place</strong>, ready for a person to follow up.</li>\n</ul>\n\n<h2>The job</h2>\n<p>Workstation sells AI workstations, GPU servers and clusters, from a single Mac Studio to NVIDIA DGX systems. These are big purchases, and most buyers start with a question rather than a product: \"what do I need to run this model?\" A brochure site and a contact form make the buyer do the hard part. We wanted the site to do it with them.</p>\n\n<h2>What we built</h2>\n<ul>\n<li><strong><a href=\"https://www.workstation.co.uk/en\" target=\"_blank\" rel=\"noopener noreferrer\">www.workstation.co.uk</a></strong>: the main site, with product, sector and guide pages, a blog, and an enquiry form on every key page.</li>\n<li><strong><a href=\"https://shop.workstation.co.uk/\" target=\"_blank\" rel=\"noopener noreferrer\">shop.workstation.co.uk</a></strong>: the AI shop. Buyers browse machines or talk to the AI Sales Agent, which configures the basket and hands over to a quote.</li>\n<li><strong>OpsAPI behind both</strong>: our platform holds the blog and page content, the product catalogue and every lead, so the sales team works from one list.</li>\n</ul>\n\n<h2>How we built it</h2>\n<p>We built it the same way we build for clients: AI-assisted software, with people in charge.</p>\n<ol>\n<li><strong>AI pair coding and AI review.</strong> Engineers worked with AI coding agents on every part of the build, and a person reviewed and merged every change.</li>\n<li><strong>Releases gated on health.</strong> <a href=\"/en/ring-promoter\">Ring Promoter</a> moves each build of the shop through int, test, acc and prod, and only when the running app passes its health checks. If a check fails, the release rolls back. <a href=\"/en/docs/blogs/workstation-ai-shop-ring-promoter-int-to-prod\">Read how the shop is released</a>.</li>\n<li><strong>A fast, protected edge.</strong> The main site is a static site served through <a href=\"/en/proxy10x\">Proxy10x</a>, our API gateway and CDN, so pages load quickly and the origin stays behind the edge.</li>\n<li><strong>A person approves what matters.</strong> The AI Sales Agent drafts the basket and the quote request. People at Workstation check and send every quote.</li>\n</ol>\n\n<h2>Why it worked</h2>\n<p>The agent asks the questions a good salesperson asks, at any hour, in the buyer's own words. Buyers who would have left a vague contact form now send a clear, priced request. The sales team spends its time on buyers who are ready to talk, not on working out what they meant.</p>\n\n<h2>What this means for you</h2>\n<p>If your buyers start with a question, an AI sales agent can answer it and hand your team a qualified lead. If your team needs to ship faster, AI-assisted software development can get you from idea to live in far less time. We start with one job, measure it in a pilot, and only build the rest when the numbers are there.</p>\n\n<p><a href=\"/en/start-a-project\"><strong>Start a project</strong></a>: tell us the job, the systems it touches and who checks the result. We reply within one working day.</p>\n\n</div>",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "tenthmatrix-team",
+    "first_name": "TenthMatrix",
+    "last_name": "team",
+    "name": "TenthMatrix team",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "case-study",
+      "id": 1041
+    },
+    {
+      "name": "ai-agents",
+      "id": 974
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-11-01T09:00:00Z",
+  "updated_at": "2026-11-01T09:00:00Z",
+  "published_date": "2026-11-01",
+  "status": true
+}
