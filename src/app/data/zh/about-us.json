@@ -7,6 +7,34 @@
     "title": "关于 TenthMatrix",
     "tagline": "我们为外包此类工作的公司构建 AI 智能体和生成式 AI 应用"
   },
+  "storyTeaser": {
+    "eyebrow": "自 2000 年起",
+    "title": "我们的故事",
+    "description": "从 2000 年位于 Putney Bridge 的科技人才业务,到 Workstation 的硬件与软件时期,再到今天的 TenthMatrix 与 AI 智能体。了解我们一路走来的历程。",
+    "button": "阅读我们的故事"
+  },
+  "numbers": [
+    {
+      "count": "2000",
+      "title": "业务创立之年,当时名为 Workstation"
+    },
+    {
+      "count": "4",
+      "title": "10x 系列产品:Proxy10x、VPN10x、Vault10x、Registry10x"
+    },
+    {
+      "count": "£2m+",
+      "title": "Workstation AI 商店上线头两个月收到的销售咨询"
+    },
+    {
+      "count": "4",
+      "title": "每项变更都要经过的发布环:int、test、acc、prod"
+    },
+    {
+      "count": "13",
+      "title": "本网站及其文章发布所用的语言"
+    }
+  ],
   "content": [
     {
       "image": "/img/technology-hero.png",
@@ -112,6 +140,71 @@
     {
       "title": "展示过程",
       "description": "我们公开软件的工作原理,包括出过问题的部分。"
+    }
+  ],
+  "teams": [
+    {
+      "name": "Balinder Walia",
+      "designation": "CEO",
+      "about": "2009 年接手公司出任 CTO,后来成为 CEO。负责带领 TenthMatrix 和 Workstation,并仍会审阅客户智能体项目的架构。",
+      "expertise": [
+        "AI 智能体",
+        "平台工程",
+        "Kubernetes",
+        "产品战略"
+      ]
+    },
+    {
+      "name": "智能体工程",
+      "designation": "团队",
+      "about": "为客户设计并构建智能体和生成式 AI 应用:工具、提示词、评估集和审批关卡。",
+      "expertise": [
+        "Claude Agent SDK",
+        "LangGraph",
+        "MCP",
+        "RAG"
+      ]
+    },
+    {
+      "name": "平台与安全",
+      "designation": "团队",
+      "about": "构建并运行我们的智能体所依赖的产品:网关、密钥、私有网络和发布流水线。",
+      "expertise": [
+        "Proxy10x ",
+        "Vault10x",
+        "VPN10x",
+        "Ring Promoter"
+      ]
+    },
+    {
+      "name": "运维",
+      "designation": "团队",
+      "about": "系统上线后保持其健康运行:监控、成本报告、值班和事件复盘。",
+      "expertise": [
+        "SysOps 24/7",
+        "Prometheus",
+        "OpenTelemetry"
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "title": "Workstation AI 商店",
+      "description": "我们借助 AI 辅助软件构建了 Workstation 网站和 AI 商店。其 AI Sales Agent 在上线后的几个月内带来了超过 £2m 的销售咨询。",
+      "href": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "linkLabel": "阅读案例研究"
+    },
+    {
+      "title": "四款 10x 产品",
+      "description": "Proxy10x、VPN10x、Vault10x 和 Registry10x 最初是我们自己的智能体在生产环境中所需的工具,如今并存于同一个 monorepo 中。"
+    },
+    {
+      "title": "以健康检查为闸门的发布",
+      "description": "Ring Promoter 会让每项变更依次通过 int、test 和 acc,再进入 prod;当某一环的健康检查失败时,会停止晋升。"
+    },
+    {
+      "title": "以 13 种语言发布",
+      "description": "本网站、博客及技术文章均以 13 种语言发布,内容源自同一份英文原稿。"
     }
   ]
 }

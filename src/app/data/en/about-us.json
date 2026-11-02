@@ -7,6 +7,34 @@
     "title": "About TenthMatrix",
     "tagline": "We build AI agents and generative AI applications for companies that outsource the work"
   },
+  "storyTeaser": {
+    "eyebrow": "Since 2000",
+    "title": "Our story",
+    "description": "From a tech talent business at Putney Bridge in 2000, through Workstation's hardware and software years, to TenthMatrix and AI agents today. See how we got here.",
+    "button": "Read our story"
+  },
+  "numbers": [
+    {
+      "count": "2000",
+      "title": "Year the business began, as Workstation"
+    },
+    {
+      "count": "4",
+      "title": "10x products: Proxy10x, VPN10x, Vault10x, Registry10x"
+    },
+    {
+      "count": "£2m+",
+      "title": "Sales enquiries from the Workstation AI shop in its first couple of months"
+    },
+    {
+      "count": "4",
+      "title": "Release rings every change passes: int, test, acc, prod"
+    },
+    {
+      "count": "13",
+      "title": "Languages this site and its articles are published in"
+    }
+  ],
   "content": [
     {
       "image": "/img/technology-hero.png",
@@ -112,6 +140,71 @@
     {
       "title": "Show the working",
       "description": "We publish how our software works, including the parts that broke."
+    }
+  ],
+  "teams": [
+    {
+      "name": "Balinder Walia",
+      "designation": "CEO",
+      "about": "Took over the business as CTO in 2009 and later became CEO. Leads TenthMatrix and Workstation, and still reviews the architecture of client agent projects.",
+      "expertise": [
+        "AI agents",
+        "Platform engineering",
+        "Kubernetes",
+        "Product strategy"
+      ]
+    },
+    {
+      "name": "Agent engineering",
+      "designation": "Team",
+      "about": "Designs and builds client agents and generative AI applications: tools, prompts, evaluation sets and approval gates.",
+      "expertise": [
+        "Claude Agent SDK",
+        "LangGraph",
+        "MCP",
+        "RAG"
+      ]
+    },
+    {
+      "name": "Platform and security",
+      "designation": "Team",
+      "about": "Builds and runs the products our agents depend on: gateways, secrets, private networking and release pipelines.",
+      "expertise": [
+        "Proxy10x",
+        "Vault10x",
+        "VPN10x",
+        "Ring Promoter"
+      ]
+    },
+    {
+      "name": "Operations",
+      "designation": "Team",
+      "about": "Keeps live systems healthy once they ship: monitoring, cost reporting, on-call and incident reviews.",
+      "expertise": [
+        "SysOps 24/7",
+        "Prometheus",
+        "OpenTelemetry"
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "title": "The Workstation AI shop",
+      "description": "We built the Workstation website and AI shop with AI-assisted software. Its AI Sales Agent brought in more than £2m of sales enquiries within a couple of months of launch.",
+      "href": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "linkLabel": "Read the case study"
+    },
+    {
+      "title": "Four 10x products",
+      "description": "Proxy10x, VPN10x, Vault10x and Registry10x started as tools our own agents needed in production. They now live side by side in one monorepo."
+    },
+    {
+      "title": "Health-gated releases",
+      "description": "Ring Promoter moves every change through int, test and acc before prod, and stops the promotion when a ring's health checks fail."
+    },
+    {
+      "title": "Published in 13 languages",
+      "description": "This site, its blog and its technical articles are published in 13 languages from a single English source."
     }
   ]
 }

@@ -64,3 +64,26 @@
   font-size: var(--tm-text-xs);
   color: var(--tm-text-subtle);
 }
+
+.figure {
+  margin: var(--tm-space-4) 0 0;
+
+  img {
+    display: block;
+    width: 100%;
+    max-width: 36rem;
+    height: auto;
+    border-radius: var(--tm-radius);
+    border: 1px solid var(--tm-line);
+  }
+}
+
+.credit {
+  margin-top: var(--tm-space-2);
+  font-size: var(--tm-text-xs);
+  color: var(--tm-text-subtle);
+
+  a {
+    color: inherit;
+  }
+}

@@ -1,4 +1,4 @@
-import { Hero, Section, CTA } from '@/app/components';
+import { Hero, Section, CTA, Button } from '@/app/components';
 import { createRoute } from '@/app/components/sections/createRoute';
 import FeatureRows from '@/app/components/sections/FeatureRows';
 import FeatureGrid from '@/app/components/sections/FeatureGrid';
@@ -14,6 +14,20 @@ function AboutUs({ data, locale }) {
   return (
     <>
       <Hero eyebrow={h.title} title={h.tagline || h.title} art />
+      {data.storyTeaser && (
+        <Section
+          id="our-story"
+          spacing="compact"
+          eyebrow={data.storyTeaser.eyebrow}
+          title={data.storyTeaser.title}
+          lede={data.storyTeaser.description}
+          actions={
+            <Button href={localeHref('/about-us/our-story', locale)} variant="secondary" arrow>
+              {data.storyTeaser.button}
+            </Button>
+          }
+        />
+      )}
       {data.numbers?.length > 0 && (
         <Section id="numbers" spacing="compact">
           <StatsBand stats={data.numbers} />

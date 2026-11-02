@@ -7,6 +7,34 @@
     "title": "À propos de TenthMatrix",
     "tagline": "Nous construisons des agents IA et des applications d'IA générative pour les entreprises qui externalisent ce travail"
   },
+  "storyTeaser": {
+    "eyebrow": "Depuis 2000",
+    "title": "Notre histoire",
+    "description": "D'une entreprise de talents technologiques à Putney Bridge en 2000, en passant par les années matériel et logiciel de Workstation, jusqu'à TenthMatrix et aux agents IA d'aujourd'hui. Voici comment nous en sommes arrivés là.",
+    "button": "Lire notre histoire"
+  },
+  "numbers": [
+    {
+      "count": "2000",
+      "title": "Année de création de l'entreprise, sous le nom de Workstation"
+    },
+    {
+      "count": "4",
+      "title": "Produits 10x : Proxy10x, VPN10x, Vault10x, Registry10x"
+    },
+    {
+      "count": "£2m+",
+      "title": "Demandes commerciales reçues par la boutique IA de Workstation durant ses premiers mois"
+    },
+    {
+      "count": "4",
+      "title": "Anneaux de livraison que franchit chaque modification : int, test, acc, prod"
+    },
+    {
+      "count": "13",
+      "title": "Langues dans lesquelles ce site et ses articles sont publiés"
+    }
+  ],
   "content": [
     {
       "image": "/img/technology-hero.png",
@@ -112,6 +140,71 @@
     {
       "title": "Montrer le travail",
       "description": "Nous publions le fonctionnement de nos logiciels, y compris les parties qui ont cassé."
+    }
+  ],
+  "teams": [
+    {
+      "name": "Balinder Walia",
+      "designation": "CEO",
+      "about": "A repris l'entreprise en tant que CTO en 2009, puis en est devenu le CEO. Dirige TenthMatrix et Workstation, et revoit toujours l'architecture des projets d'agents des clients.",
+      "expertise": [
+        "Agents IA",
+        "Ingénierie de plateforme",
+        "Kubernetes",
+        "Stratégie produit"
+      ]
+    },
+    {
+      "name": "Ingénierie d'agents",
+      "designation": "Équipe",
+      "about": "Conçoit et développe des agents et des applications d'IA générative pour les clients : outils, prompts, jeux d'évaluation et points de validation.",
+      "expertise": [
+        "Claude Agent SDK",
+        "LangGraph",
+        "MCP",
+        "RAG"
+      ]
+    },
+    {
+      "name": "Plateforme et sécurité",
+      "designation": "Équipe",
+      "about": "Développe et exploite les produits dont dépendent nos agents : passerelles, secrets, réseaux privés et chaînes de livraison.",
+      "expertise": [
+        "Proxy10x",
+        "Vault10x",
+        "VPN10x",
+        "Ring Promoter"
+      ]
+    },
+    {
+      "name": "Exploitation",
+      "designation": "Équipe",
+      "about": "Maintient les systèmes en production en bonne santé après leur livraison : supervision, suivi des coûts, astreintes et revues d'incidents.",
+      "expertise": [
+        "SysOps 24/7",
+        "Prometheus",
+        "OpenTelemetry"
+      ]
+    }
+  ],
+  "achievements": [
+    {
+      "title": "La boutique IA de Workstation",
+      "description": "Nous avons construit le site web et la boutique IA de Workstation avec des logiciels assistés par IA. Son AI Sales Agent a généré plus de 2 millions de livres sterling de demandes commerciales en quelques mois après le lancement.",
+      "href": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "linkLabel": "Lire l'étude de cas"
+    },
+    {
+      "title": "Quatre produits 10x",
+      "description": "Proxy10x, VPN10x, Vault10x et Registry10x sont nés d'outils dont nos propres agents avaient besoin en production. Ils vivent désormais côte à côte dans un seul monorepo."
+    },
+    {
+      "title": "Livraisons conditionnées à la santé du système",
+      "description": "Ring Promoter fait passer chaque modification par int, test et acc avant prod, et interrompt la promotion lorsque les contrôles de santé d'un anneau échouent."
+    },
+    {
+      "title": "Publié en 13 langues",
+      "description": "Ce site, son blog et ses articles techniques sont publiés en 13 langues à partir d'une seule source en anglais."
     }
   ]
 }
