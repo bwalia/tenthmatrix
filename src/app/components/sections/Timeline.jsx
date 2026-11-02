@@ -5,9 +5,11 @@ import RichText from './RichText';
 
 /**
  * Dated entries (news, announcements, roadmap).
- * items: [{ date|status, title, summary|excerpt|description, source, icon }]
+ * items: [{ date|status, title, summary|excerpt|description, source, icon,
+ *          image, alt, credit: { author, license, licenseUrl, sourceUrl, sourceLabel } }]
+ * creditLabels: { label: 'Photo', via: 'via' } for image credits.
  */
-export default function Timeline({ items, headingLevel = 3 }) {
+export default function Timeline({ items, headingLevel = 3, creditLabels }) {
   const list = (items || []).filter((x) => x && x.title);
   if (!list.length) return null;
   const H = `h${headingLevel}`;
@@ -30,6 +32,23 @@ export default function Timeline({ items, headingLevel = 3 }) {
             </H>
             <RichText text={it.summary || it.excerpt || it.description} className={styles.text} />
             {it.source && <p className={styles.source}>{it.source}</p>}
+            {it.image && (
+              <figure className={styles.figure}>
+                <img src={it.image} alt={it.alt || ''} loading="lazy" decoding="async" />
+                {it.credit && (
+                  <figcaption className={styles.credit}>
+                    {creditLabels?.label || 'Photo'}: {it.credit.author},{' '}
+                    <a href={it.credit.licenseUrl} target="_blank" rel="noopener noreferrer license">
+                      {it.credit.license}
+                    </a>
+                    , {creditLabels?.via || 'via'}{' '}
+                    <a href={it.credit.sourceUrl} target="_blank" rel="noopener noreferrer">
+                      {it.credit.sourceLabel}
+                    </a>
+                  </figcaption>
+                )}
+              </figure>
+            )}
           </div>
         </li>
       ))}
