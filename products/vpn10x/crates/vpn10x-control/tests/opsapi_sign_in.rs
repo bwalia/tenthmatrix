@@ -6,7 +6,7 @@
 //!
 //!   * `GET /auth/me` with the person's token — is this a live session, for
 //!     whom, and are they an active member of our namespace?
-//!   * `GET /scim/v2/Users/{uuid}` with the control plane's own `opsk_` key —
+//!   * `GET /api/v2/users/{uuid}` with the control plane's own `opsk_` key —
 //!     does the directory, asked independently of anything the client sent,
 //!     agree that this person exists and is active?
 //!
@@ -103,8 +103,19 @@ async fn me(
     }
 }
 
-/// `GET /scim/v2/Users/{uuid}`: platform-admin only, which the API key is.
-async fn scim_user(
+/// `GET /scim/v2/Users/{uuid}`, as a real OpsAPI answers any `opsk_` key: its
+/// keys are confined to `/api/v2/<module>`, so SCIM is never reachable with
+/// one. Kept so that a regression back to SCIM fails here rather than live.
+async fn scim_user() -> (StatusCode, Json<serde_json::Value>) {
+    (
+        StatusCode::FORBIDDEN,
+        Json(json!({ "error": "API key is not scoped for this endpoint" })),
+    )
+}
+
+/// `GET /api/v2/users/{uuid}`: a platform-admin key scoped to `users`, which
+/// the API key is. Answers `{data, permissions}` like `routes/users.lua`.
+async fn directory_user(
     State(dir): State<Shared>,
     headers: HeaderMap,
     Path(uuid): Path<String>,
@@ -118,9 +129,10 @@ async fn scim_user(
     match dir.lock().unwrap().people.get(&uuid) {
         Some(p) => (
             StatusCode::OK,
-            Json(json!({ "id": p.uuid, "uuid": p.uuid, "internal_id": 7,
-                         "email": p.email, "username": p.email, "active": p.active,
-                         "roles": [] })),
+            Json(json!({ "data": { "id": p.uuid, "uuid": p.uuid, "internal_id": 7,
+                                   "email": p.email, "username": p.email, "active": p.active,
+                                   "roles": [] },
+                         "permissions": { "can_read": true } })),
         ),
         None => (
             StatusCode::NOT_FOUND,
@@ -215,6 +227,7 @@ impl OpsApi {
         let app = Router::new()
             .route("/auth/me", route(me))
             .route("/scim/v2/Users/{id}", route(scim_user))
+            .route("/api/v2/users/{id}", route(directory_user))
             .route(
                 "/api/v2/user/{id}/namespace-memberships",
                 route(memberships),

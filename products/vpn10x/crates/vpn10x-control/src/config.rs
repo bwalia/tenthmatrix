@@ -90,7 +90,8 @@ pub struct IdentityConfig {
 /// OpsAPI is not an OIDC provider and its tokens are HS256 under a secret this
 /// process must never hold (ADR-0003). So a token is never verified here; it is
 /// handed back to OpsAPI's `/auth/me`, and the answer is then checked against
-/// the directory over SCIM with this deployment's own API key (ADR-0004).
+/// the directory (`/api/v2/users/{uuid}`) with this deployment's own API key
+/// (ADR-0004, ADR-0005).
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 pub struct OpsApiConfig {
     /// OpsAPI's base URL, e.g. `https://api.example.com`. The desktop app is
@@ -100,9 +101,9 @@ pub struct OpsApiConfig {
     /// The workspace (namespace slug) a person must be an active member of.
     /// OpsAPI has open sign-up; an account alone is not membership.
     pub namespace: String,
-    /// An `opsk_` API key belonging to a platform administrator, for the SCIM
-    /// lookups — and, with `allowed_roles`, the role lookups on connect, for
-    /// which the key must also carry the `user` scope. Never sent to clients.
+    /// An `opsk_` API key bound to a platform administrator and scoped to
+    /// `users` (read), for the directory lookups — and, with `allowed_roles`,
+    /// to `user` as well, for the role lookups on connect. Never sent to clients.
     pub api_key: String,
     /// Ask the directory again on every connect, so someone deprovisioned in
     /// OpsAPI is stopped at their next connect rather than when their VPN10x

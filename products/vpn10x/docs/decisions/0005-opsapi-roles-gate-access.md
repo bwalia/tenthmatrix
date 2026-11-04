@@ -40,7 +40,7 @@ namespace roles in the configured workspace, read from
    deployment's key needs nothing extra for this step. The membership counted
    is the one whose slug is the configured workspace, with `status` active and
    the workspace active (or not reported). No allowed role → 401.
-2. On every `POST /api/v1/sessions`, after SCIM says the person is active, the
+2. On every `POST /api/v1/sessions`, after the directory says the person is active, the
    same lookup is made **with the deployment's key**. No allowed role → 403,
    audited as `opsapi: role not allowed in workspace` — distinct from
    `opsapi: user not active in directory`, so the audit log says which of the
@@ -63,7 +63,7 @@ refusal; the role names themselves are not published.
   that is still revocation's job.
 - The connect path makes two OpsAPI calls instead of one when roles are on. Both
   are bounded by the same timeout and fail closed.
-- The deployment's key gains a scope: `user` on top of what SCIM needs. It
+- The deployment's key gains a scope: `user` on top of `users`, which the directory check needs. It
   already belonged to a platform administrator, so this widens which paths it
   may reach, not whose authority it carries. It stays in the Secret and is never
   sent to clients.
@@ -71,5 +71,16 @@ refusal; the role names themselves are not published.
   array, null, or a JSON string (Postgres `json_agg` through Lapis can arrive
   either way) — because, as ADR-0003 notes, OpsAPI publishes no usable contract
   for it.
-- `verify_on_connect: false` turns off this re-check along with the SCIM one;
+- `verify_on_connect: false` turns off this re-check along with the directory one;
   roles are then checked at sign-in only.
+
+## Also decided here: the directory check leaves SCIM
+
+Testing against a running OpsAPI showed that ADR-0004's directory check could
+never have passed with a real key: OpsAPI's global filter confines an `opsk_`
+key to `/api/v2/<module>` paths it is scoped for, and `/scim/v2/Users/{uuid}`
+is not one, so every valid key is answered `403 API key is not scoped for this
+endpoint` (ADR-0004 had only confirmed that a *bad* key gets 401). The same
+record — `active` and `email` — comes from `GET /api/v2/users/{uuid}`, which a
+key bound to a platform administrator and scoped to `users` may read. The
+check, its answers and its failure modes are otherwise unchanged.
