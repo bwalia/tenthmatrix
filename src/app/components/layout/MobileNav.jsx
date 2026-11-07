@@ -167,8 +167,11 @@ export default function MobileNav({ locale, open, onClose }) {
             </div>
 
             <div className={s.bottom}>
-              <Link href={href('/start-a-project')} className={s.cta} onClick={onClose}>
+              <Link href={href('/ai-agent-journey')} className={s.cta} onClick={onClose}>
                 {t('cta')}
+              </Link>
+              <Link href={href('/start-a-project')} className={`${s.cta} ${s.ctaAlt}`} onClick={onClose}>
+                {t('ctaProject')}
               </Link>
               <div className={s.prefs}>
                 <LanguageSwitcher locale={locale} id="tm-lang-mobile" />
