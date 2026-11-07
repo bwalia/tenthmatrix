@@ -1,0 +1,750 @@
+{
+  "meta": {
+    "title": "Ontwerp uw AI-agent: een interactieve reis | TenthMatrix",
+    "description": "Beantwoord negen vragen zoals u dat zou doen in een eerste gesprek met onze forward deployed engineers. Wij vertellen u welk AI-model, welke agents en welke hosting wij voor uw bedrijf zouden bouwen."
+  },
+  "header": {
+    "eyebrow": "AI-agentreis",
+    "title": "Ontwerp uw AI-agent in negen vragen",
+    "lede": "Wij beginnen elk project vanuit uw situatie, niet vanuit een presentatie. Beantwoord de vragen die een forward deployed engineer in het eerste gesprek stelt en zie welke agent, welk model en welke hosting wij voor u zouden bouwen.",
+    "start": "Start de reis",
+    "how": "Hoe AI-agents werken",
+    "meta": [
+      "Ongeveer 3 minuten",
+      "Geen registratie nodig om uw resultaat te zien",
+      "Claude, OpenAI, Gemini, Microsoft, Grok of open source"
+    ]
+  },
+  "how": {
+    "eyebrow": "Voordat u begint",
+    "title": "Hoe een AI-agent echt werkt",
+    "lede": "Een chatbot beantwoordt een vraag. Een agent maakt een taak af. Hij leest uw data, beslist wat er moet gebeuren, gebruikt uw tools om het te doen en controleert het resultaat voordat iemand erop vertrouwt. Elke ronde van die cyclus wordt vastgelegd.",
+    "loop": [
+      {
+        "step": "01",
+        "title": "Lezen",
+        "description": "De agent verzamelt wat hij nodig heeft uit de systemen die u hebt toegestaan: de inbox, het grootboek, de ticketwachtrij, de repository. Hij ziet alleen wat zijn rechten toelaten."
+      },
+      {
+        "step": "02",
+        "title": "Redeneren",
+        "description": "Een groot taalmodel bepaalt wat de taak vraagt en plant de stappen. Alleen hier wordt intelligentie ingezet, dus die wordt besteed waar oordeelsvermogen ertoe doet."
+      },
+      {
+        "step": "03",
+        "title": "Handelen",
+        "description": "De agent gebruikt echte tools via connectoren en MCP-servers: hij stelt het antwoord op, dient het rapport in, maakt de pull request aan. Regelgebaseerde stappen blijven gewone code."
+      },
+      {
+        "step": "04",
+        "title": "Controleren",
+        "description": "Voordat er iets wordt verzonden, uitgegeven of verwijderd, stopt de agent bij een goedkeuringsmoment. U keurt goed, of wijst af met een reden waarvan hij leert. Elke stap wordt getraceerd."
+      }
+    ],
+    "layersTitle": "Drie lagen in elke agent die wij bouwen",
+    "layers": [
+      {
+        "title": "Uw kennis",
+        "description": "De databronnen die wij tijdens de verkenning koppelen, met dezelfde rechten die uw medewerkers al hebben."
+      },
+      {
+        "title": "Het model",
+        "description": "Claude, GPT, Gemini, Grok of een open-weight model, gekozen op basis van de taak, de data en waar het moet draaien."
+      },
+      {
+        "title": "Controle",
+        "description": "Goedkeuringsmomenten, budgetten, stopcondities en een audittrail, op het Jobshout agent framework."
+      }
+    ]
+  },
+  "shoes": {
+    "eyebrow": "Discovery",
+    "title": "Wij verplaatsen ons eerst in uw situatie",
+    "lede": "De meeste AI-projecten mislukken omdat ze de verkeerde stap automatiseren. Onze forward deployed engineers zitten naast de mensen die het werk doen, voordat ze één regel code schrijven.",
+    "steps": [
+      {
+        "phase": "Dag 1",
+        "title": "Het werk meekijken",
+        "description": "Wij volgen een echte werkdag: de inbox, de goedkeuringen, de spreadsheets die het bedrijf bij elkaar houden. Wij noteren elke overdracht en elk wachtmoment."
+      },
+      {
+        "phase": "Dag 2",
+        "title": "De databronnen in kaart brengen",
+        "description": "Voor elke stap leggen wij vast waar de data staat, wie de eigenaar is, hoe die bereikbaar is (API, export, database, e-mail) en hoe gevoelig die is."
+      },
+      {
+        "phase": "Dag 3",
+        "title": "Bepalen waar oordeelsvermogen nodig is",
+        "description": "Wij splitsen elk proces in regelstappen, die gewone automatisering blijven, en oordeelsstappen, waar een LLM zijn kosten waard is. Agents komen alleen waar intelligentie nodig is."
+      },
+      {
+        "phase": "Week 1–2",
+        "title": "Bouwen en naast u draaien",
+        "description": "De eerste agent draait op uw echte data, met een goedkeuringsmoment bij elke risicovolle actie. Wij stemmen hem af met de mensen die hem gebruiken en verruimen zijn rechten pas als zij hem vertrouwen."
+      }
+    ]
+  },
+  "journey": {
+    "eyebrow": "De reis",
+    "title": "Vertel ons over uw bedrijf",
+    "lede": "Dit zijn de vragen die wij in het eerste klantgesprek stellen. Uw antwoorden blijven in uw browser tot u besluit ze te versturen.",
+    "progress": "Vraag {current} van {total}",
+    "back": "Terug",
+    "next": "Volgende",
+    "skip": "Weet ik niet, overslaan",
+    "seeResult": "Bekijk mijn AI-blauwdruk",
+    "restart": "Opnieuw beginnen",
+    "multiHint": "Kies alles wat van toepassing is",
+    "singleHint": "Kies er één",
+    "summaryTitle": "Uw antwoorden tot nu toe",
+    "summaryEmpty": "Uw blauwdruk wordt hier opgebouwd terwijl u antwoordt.",
+    "questions": [
+      {
+        "id": "role",
+        "type": "single",
+        "title": "Voor wie werkt de agent als eerste?",
+        "help": "Wij beginnen met één persoon of team. De snelste winst zit meestal bij de mensen wier tijd het duurst is.",
+        "options": [
+          {
+            "value": "ceo",
+            "label": "CEO of oprichter",
+            "description": "Inbox, agenda, bestuursstukken, investeerdersupdates"
+          },
+          {
+            "value": "cto",
+            "label": "CTO of hoofd engineering",
+            "description": "Pull requests, incidenten, roadmapstatus"
+          },
+          {
+            "value": "cfo",
+            "label": "CFO of financieel directeur",
+            "description": "Maandafsluiting, uitgavengoedkeuringen, cashflowprognoses"
+          },
+          {
+            "value": "coo",
+            "label": "COO of operations",
+            "description": "Leveranciers, bestellingen, planning, uitzonderingen"
+          },
+          {
+            "value": "sales",
+            "label": "Sales en marketing",
+            "description": "Leads, offertes, CRM-hygiëne, content"
+          },
+          {
+            "value": "support",
+            "label": "Klantenservice",
+            "description": "Tickettriage, antwoorden, terugbetalingen, escalaties"
+          },
+          {
+            "value": "people",
+            "label": "HR en personeel",
+            "description": "Werving, onboarding, beleidsvragen"
+          },
+          {
+            "value": "legal",
+            "label": "Juridisch en compliance",
+            "description": "Contractbeoordeling, beleidscontroles, bewijsvoering"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "type": "multi",
+        "title": "Waar gaat de tijd nu naartoe?",
+        "help": "Kies het werk dat repetitief is maar waarbij iemand nog moet nadenken. Daar verdient een agent zichzelf terug.",
+        "options": [
+          {
+            "value": "inbox",
+            "label": "E-mail en agenda",
+            "description": "Triage, antwoorden, vergaderingen plannen en voorbereiden"
+          },
+          {
+            "value": "reporting",
+            "label": "Rapporten en briefings",
+            "description": "Bestuursstukken, wekelijkse updates, KPI-toelichting"
+          },
+          {
+            "value": "approvals",
+            "label": "Goedkeuringen en uitgaven",
+            "description": "Inkooporders, onkosten, facturen, uitzonderingen"
+          },
+          {
+            "value": "customers",
+            "label": "Klantvragen",
+            "description": "Vragen, offertes, klachten, opvolging"
+          },
+          {
+            "value": "documents",
+            "label": "Documenten en contracten",
+            "description": "Lezen, vergelijken, extraheren, samenvatten"
+          },
+          {
+            "value": "engineering",
+            "label": "Code en incidenten",
+            "description": "Reviews, on-call-samenvattingen, release notes"
+          },
+          {
+            "value": "research",
+            "label": "Onderzoek",
+            "description": "Concurrenten, markten, leveranciers, due diligence"
+          },
+          {
+            "value": "data",
+            "label": "Gegevensinvoer tussen systemen",
+            "description": "Kopiëren uit e-mail of pdf naar CRM, ERP of spreadsheets"
+          }
+        ]
+      },
+      {
+        "id": "sources",
+        "type": "multi",
+        "title": "Waar staat de data?",
+        "help": "Dit brengt een FDE als eerste in kaart tijdens een gesprek. Elke bron wordt een connector met eigen rechten.",
+        "options": [
+          {
+            "value": "m365",
+            "label": "Microsoft 365",
+            "description": "Outlook, Teams, SharePoint, OneDrive"
+          },
+          {
+            "value": "google",
+            "label": "Google Workspace",
+            "description": "Gmail, Calendar, Drive, Sheets"
+          },
+          {
+            "value": "crm",
+            "label": "CRM",
+            "description": "Salesforce, HubSpot, Dynamics, Pipedrive"
+          },
+          {
+            "value": "finance",
+            "label": "Financiën en ERP",
+            "description": "Xero, Sage, QuickBooks, NetSuite, SAP"
+          },
+          {
+            "value": "dev",
+            "label": "Engineeringtools",
+            "description": "GitHub, GitLab, Jira, Linear, Sentry"
+          },
+          {
+            "value": "helpdesk",
+            "label": "Helpdesk",
+            "description": "Zendesk, Freshdesk, ServiceNow, Intercom"
+          },
+          {
+            "value": "chat",
+            "label": "Teamchat",
+            "description": "Slack, Teams-kanalen, WhatsApp Business"
+          },
+          {
+            "value": "database",
+            "label": "Databases en datawarehouse",
+            "description": "PostgreSQL, SQL Server, Snowflake, BigQuery"
+          },
+          {
+            "value": "files",
+            "label": "Bestanden en scans",
+            "description": "Pdf's, spreadsheets, gescande formulieren, netwerkmappen"
+          },
+          {
+            "value": "legacy",
+            "label": "Eigen of verouderde systemen",
+            "description": "Maatwerkapps, oude API's, schermen zonder API"
+          }
+        ]
+      },
+      {
+        "id": "autonomy",
+        "type": "single",
+        "title": "Hoeveel moet de agent zelfstandig doen?",
+        "help": "Wij beginnen altijd met meer goedkeuring en versoepelen die naarmate het vertrouwen groeit. U kunt dit per agent en per tool aanpassen.",
+        "options": [
+          {
+            "value": "draft",
+            "label": "Alleen concepten",
+            "description": "Hij bereidt alles voor; een mens verstuurt, betaalt of publiceert"
+          },
+          {
+            "value": "gated",
+            "label": "Laag risico zelf doen, hoog risico vragen",
+            "description": "Lezen en concepten maken gaat zelfstandig; versturen, uitgeven en verwijderen wachten op goedkeuring"
+          },
+          {
+            "value": "auto",
+            "label": "Zelfstandig draaien binnen grenzen",
+            "description": "Budgetten, allowlists en stopcondities; mensen beoordelen het logboek"
+          }
+        ]
+      },
+      {
+        "id": "provider",
+        "type": "single",
+        "title": "Met welk AI-bedrijf wilt u werken?",
+        "help": "Onze engineers zijn gecertificeerd op alle grote platforms, dus de keuze is aan u, niet aan ons. Heeft u geen voorkeur, dan kiezen wij per taak.",
+        "options": [
+          {
+            "value": "anthropic",
+            "label": "Anthropic Claude",
+            "description": "Sterk in lange documenten, zorgvuldig redeneren, toolgebruik en code"
+          },
+          {
+            "value": "openai",
+            "label": "OpenAI",
+            "description": "GPT-modellen, breed ecosysteem, spraak en beeld"
+          },
+          {
+            "value": "google",
+            "label": "Google Gemini",
+            "description": "Lange context, multimodaal, dicht bij Google Workspace"
+          },
+          {
+            "value": "microsoft",
+            "label": "Microsoft",
+            "description": "Azure OpenAI en Copilot binnen uw Microsoft-tenant"
+          },
+          {
+            "value": "xai",
+            "label": "xAI Grok",
+            "description": "Realtime kennis en snel redeneren"
+          },
+          {
+            "value": "any",
+            "label": "Geen voorkeur",
+            "description": "Kies het beste model voor elke agent"
+          }
+        ]
+      },
+      {
+        "id": "openSource",
+        "type": "single",
+        "title": "Heeft u een voorkeur voor open-source modellen?",
+        "help": "Open-weight modellen zoals Llama, Qwen, Mistral, DeepSeek en gpt-oss kunnen op uw eigen hardware draaien, zonder kosten per token en zonder dat data uw netwerk verlaat.",
+        "options": [
+          {
+            "value": "yes",
+            "label": "Ja, open source eerst",
+            "description": "Gebruik open-weight modellen overal waar ze goed genoeg zijn"
+          },
+          {
+            "value": "mix",
+            "label": "Een combinatie",
+            "description": "Open source voor routinematig of gevoelig werk, een frontiermodel voor de moeilijkste stappen"
+          },
+          {
+            "value": "no",
+            "label": "Nee, gebruik het beste commerciële model",
+            "description": "Kwaliteit eerst; open source is geen vereiste"
+          }
+        ]
+      },
+      {
+        "id": "hosting",
+        "type": "single",
+        "title": "Waar moet de AI draaien?",
+        "help": "Dit bepaalt welke modellen mogelijk zijn. Een volledig offline systeem vraagt om open-weight modellen op uw eigen AI-workstations.",
+        "options": [
+          {
+            "value": "cloud",
+            "label": "Cloud-API van de aanbieder",
+            "description": "Snelst van start; data valt onder de zakelijke voorwaarden van de aanbieder"
+          },
+          {
+            "value": "tenant",
+            "label": "Onze eigen cloudtenant",
+            "description": "Azure-, AWS- of Google Cloud-account onder eigen beheer, regio VK of EU"
+          },
+          {
+            "value": "onprem",
+            "label": "Zelf gehost, op eigen locatie",
+            "description": "Eigen servers of AI-workstations, nog steeds verbonden met internet"
+          },
+          {
+            "value": "airgap",
+            "label": "Zelf gehost en offline",
+            "description": "AI-workstations zonder enige internetverbinding"
+          }
+        ]
+      },
+      {
+        "id": "sensitivity",
+        "type": "multi",
+        "title": "Met welk soort data werkt de agent?",
+        "help": "Dit bepaalt de vangrails: redactie, waar logs worden bewaard en wie wat mag goedkeuren.",
+        "options": [
+          {
+            "value": "personal",
+            "label": "Persoonsgegevens",
+            "description": "Klanten, medewerkers of patiënten onder de UK GDPR"
+          },
+          {
+            "value": "financial",
+            "label": "Financiële administratie",
+            "description": "Grootboeken, betalingen, salarisadministratie"
+          },
+          {
+            "value": "health",
+            "label": "Gezondheidsgegevens",
+            "description": "Klinische of bijzondere persoonsgegevens"
+          },
+          {
+            "value": "privileged",
+            "label": "Juridisch of vertrouwelijk voor het bestuur",
+            "description": "Vertrouwelijk advies, fusies en overnames, bestuursstukken"
+          },
+          {
+            "value": "ip",
+            "label": "Broncode en IE",
+            "description": "Repositories, ontwerpen, bedrijfsgeheimen"
+          },
+          {
+            "value": "public",
+            "label": "Grotendeels openbaar of intern",
+            "description": "Niets bijzonder gevoeligs"
+          }
+        ]
+      },
+      {
+        "id": "speed",
+        "type": "single",
+        "title": "Wanneer wilt u de eerste agent aan het werk hebben?",
+        "help": "Een forward deployed engineer heeft meestal binnen twee weken een eerste agent op uw echte data draaien.",
+        "options": [
+          {
+            "value": "now",
+            "label": "Binnen twee weken",
+            "description": "Een gerichte pilot op één proces"
+          },
+          {
+            "value": "quarter",
+            "label": "Dit kwartaal",
+            "description": "Meerdere agents en een uitrolplan"
+          },
+          {
+            "value": "exploring",
+            "label": "Wij oriënteren ons",
+            "description": "Help ons eerst de businesscase op te stellen"
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "eyebrow": "Uw AI-blauwdruk",
+    "title": "Dit zouden wij voor u bouwen",
+    "lede": "Dit is het startpunt dat een forward deployed engineer meeneemt naar uw tweede gesprek. Wij verfijnen het samen met u op uw eigen data.",
+    "agentsTitle": "Agents die wij zouden bouwen",
+    "modelTitle": "Aanbevolen modellen",
+    "primaryLabel": "Hoofdmenu",
+    "supportLabel": "Ondersteunend",
+    "hostingTitle": "Waar het draait",
+    "connectorsTitle": "Connectoren naar uw data",
+    "connectorsNone": "Wij brengen uw databronnen samen met u in kaart tijdens het eerste gesprek.",
+    "controlsTitle": "Vangrails en goedkeuringen",
+    "frameworkTitle": "Draait op het Jobshout agent framework",
+    "frameworkBody": "Elke agent die wij bouwen draait op Jobshout, ons open-source agent framework en taakbeheer: elke run wordt een taak op een bord, werk met meerdere agents draait als afhankelijkheidsgraaf, terugkerende taken worden ingepland en uw tools koppelen via MCP.",
+    "frameworkLink": "Ontdek de AI-tools en het framework van Jobshout",
+    "frameworkAgentsLink": "Bekijk de Jobshout-agents",
+    "fdeTitle": "Uw forward deployed engineer",
+    "fdeBody": "Wij wijzen vanaf dag één een forward deployed engineer toe aan uw project. Die werkt binnen uw team, is gecertificeerd voor Claude Code, OpenAI, Google, Microsoft en Grok, en bouwt en implementeert uw agents snel.",
+    "planTitle": "Opleveringsplan",
+    "scenarioTitle": "Hoe dit eruitziet op een echte dag",
+    "workstationTitle": "Offline draaien op uw eigen AI-workstations",
+    "workstationBody": "Voor een systeem zonder internetverbinding dimensioneren en leveren wij de hardware met ons zusterbedrijf Workstation: GPU-workstations en servers gebouwd voor lokale modellen, klaar voor gebruik geleverd.",
+    "workstationLink": "AI-workstations op workstation.co.uk",
+    "sendTitle": "Stuur deze blauwdruk naar een forward deployed engineer",
+    "sendBody": "Wij reageren binnen één werkdag met vragen over uw databronnen en een datum voor de eerste verkenningssessie. Pas de samenvatting hieronder gerust aan.",
+    "sendMessageLabel": "Uw blauwdruk",
+    "sendSource": "tenthmatrix_ai_agent_journey",
+    "copy": "Blauwdruk kopiëren",
+    "copied": "Gekopieerd",
+    "summaryHeading": "AI-agentblauwdruk uit de TenthMatrix-reis"
+  },
+  "recommend": {
+    "roleAgents": {
+      "ceo": {
+        "name": "Executive PA-agent",
+        "description": "Sorteert 's nachts de inbox van de CEO, stelt antwoorden op in diens stijl, maakt voor elke vergadering een briefing van één pagina en zet bestuursdata om in een eerste versie van de update van de voorzitter."
+      },
+      "cto": {
+        "name": "Engineering PA-agent",
+        "description": "Beoordeelt pull requests aan de hand van uw standaarden, vat nachtelijke incidenten samen met waarschijnlijke oorzaken en schrijft de wekelijkse engineeringstatus vanuit GitHub en Jira, zodat de CTO leest in plaats van verzamelt."
+      },
+      "cfo": {
+        "name": "Finance PA-agent",
+        "description": "Stelt de toelichting op maandafwijkingen op vanuit het grootboek, toetst facturen en inkooporders aan het beleid voordat ze bij de CFO komen en houdt een doorlopende kasbriefing actueel."
+      },
+      "coo": {
+        "name": "Operations-agent",
+        "description": "Bewaakt bestellingen, e-mails van leveranciers en planningen op uitzonderingen, rappelleert late leveringen met een opgesteld bericht en escaleert alleen wat een beslissing vraagt."
+      },
+      "sales": {
+        "name": "Pipeline-agent",
+        "description": "Onderzoekt elke nieuwe lead, stelt het eerste antwoord en de offerte op, werkt het CRM bij vanuit e-mailconversaties en signaleert deals die stil zijn gevallen."
+      },
+      "support": {
+        "name": "Klantenservice-agent",
+        "description": "Classificeert elk ticket, beantwoordt routinevragen vanuit uw kennisbank, stelt antwoorden op voor de rest en stuurt klachten en terugbetalingen door naar de juiste persoon."
+      },
+      "people": {
+        "name": "HR-agent",
+        "description": "Screent sollicitaties op basis van de functie, plant gesprekken, stelt onboardingpakketten samen en beantwoordt beleidsvragen uit uw personeelshandboek met bronvermelding."
+      },
+      "legal": {
+        "name": "Contract- en compliance-agent",
+        "description": "Leest binnenkomende contracten, vergelijkt ze met uw playbook, markeert afwijkende clausules met een voorgestelde redline en houdt een bewijslogboek bij voor audits."
+      },
+      "default": {
+        "name": "Business PA-agent",
+        "description": "Neemt het repetitieve werk dat veel oordeelsvermogen vraagt over van uw drukste mensen, te beginnen met het proces dat wij tijdens de verkenning afspreken."
+      }
+    },
+    "workAgents": {
+      "inbox": {
+        "name": "Mail-agent",
+        "description": "Volgt gekozen afzenders, onderzoekt de conversatie en laat een conceptantwoord klaarstaan ter goedkeuring."
+      },
+      "reporting": {
+        "name": "Briefing-agent",
+        "description": "Haalt volgens schema de cijfers op en schrijft de toelichting, met bronvermelding voor elk cijfer."
+      },
+      "approvals": {
+        "name": "Goedkeuringsagent",
+        "description": "Toetst elk verzoek aan beleid en budget en stuurt het door met een aanbeveling."
+      },
+      "customers": {
+        "name": "Vragenagent",
+        "description": "Beantwoordt routinevragen, stelt offertes op en volgt op tot de klant reageert."
+      },
+      "documents": {
+        "name": "Documentagent",
+        "description": "Extraheert, vergelijkt en vat contracten, rapporten en formulieren samen tot gestructureerde data."
+      },
+      "engineering": {
+        "name": "PR-review- en incidentagent",
+        "description": "Beoordeelt pull requests en zet alerts en logs om in een leesbare incidentsamenvatting."
+      },
+      "research": {
+        "name": "Onderzoeksagent",
+        "description": "Levert bevindingen met bronnen die u kunt openen: concurrenten, leveranciers, markten en due diligence."
+      },
+      "data": {
+        "name": "Gegevensinvoeragent",
+        "description": "Leest e-mails en pdf's en vult de velden in uw CRM, ERP of spreadsheet, met een controle vóór het opslaan."
+      }
+    },
+    "models": {
+      "anthropic": {
+        "name": "Anthropic Claude",
+        "why": "Zorgvuldig redeneren over lange documenten en betrouwbaar toolgebruik; onze eerste keuze voor agents die code schrijven of complexe workflows afhandelen."
+      },
+      "openai": {
+        "name": "OpenAI GPT",
+        "why": "Een breed ecosysteem met sterk algemeen redeneervermogen, beeld en spraak voor klantgerichte agents."
+      },
+      "google": {
+        "name": "Google Gemini",
+        "why": "Zeer lange context en multimodale input, en dicht bij de data als u op Google Workspace werkt."
+      },
+      "microsoft": {
+        "name": "Azure OpenAI in uw Microsoft-tenant",
+        "why": "OpenAI-modellen onder uw Microsoft-overeenkomst en datagrens, naast Copilot en de rechten van Microsoft 365."
+      },
+      "xai": {
+        "name": "xAI Grok",
+        "why": "Snel redeneren met realtime kennis, handig voor onderzoeks- en marktbewakingsagents."
+      },
+      "open": {
+        "name": "Open-weight modellen (Llama, Qwen, Mistral, DeepSeek, gpt-oss)",
+        "why": "Draaien op uw eigen hardware via vLLM of Ollama: geen kosten per token en geen data die uw netwerk verlaat."
+      },
+      "openRoutine": {
+        "name": "Een klein open-weight model voor routinestappen",
+        "why": "Classificatie, extractie en redactie draaien lokaal en goedkoop; alleen de moeilijkste stappen gaan naar het frontiermodel."
+      }
+    },
+    "hosting": {
+      "cloud": "De zakelijke API van de aanbieder, met zero data retention waar die wordt aangeboden. Snelst van start; later kunnen wij naar uw eigen tenant overstappen zonder de agents opnieuw te bouwen.",
+      "tenant": "Uw eigen Azure-, AWS- of Google Cloud-account in een regio in het VK of de EU. Modellen worden bereikt via de private endpoints van uw cloud en logs blijven in uw account.",
+      "onprem": "Zelf gehost op uw eigen servers of AI-workstations. Jobshout, de modellen en de logs draaien binnen uw netwerk; wij maken alleen verbinding met de diensten die u toestaat.",
+      "airgap": "Volledig offline op AI-workstations zonder internetverbinding. Open-weight modellen draaien lokaal, updates komen binnen via goedgekeurde media en niets verlaat het gebouw."
+    },
+    "airgapNote": "Cloudmodellen van {provider} hebben een internetverbinding nodig. Voor een offline systeem gebruiken wij daarom lokaal open-weight modellen en houden wij {provider} voor verbonden werk dat u later toevoegt.",
+    "connectors": {
+      "m365": "Microsoft Graph-connector (mail, agenda, Teams, SharePoint) met gedelegeerde rechten",
+      "google": "Google Workspace-connector (Gmail, Calendar, Drive) per gebruiker afgebakend",
+      "crm": "CRM-connector die records leest en bijwerkt, met schrijfacties achter goedkeuring",
+      "finance": "Financiële connector met leestoegang tot het grootboek; boekingen en betalingen altijd goedgekeurd",
+      "dev": "GitHub-, GitLab- en Jira-connectoren via MCP",
+      "helpdesk": "Helpdeskconnector voor tickets, macro's en kennisbank",
+      "chat": "Slack- of Teams-bot, zodat mensen agents instrueren en goedkeuren waar ze al werken",
+      "database": "Alleen-lezen database- of warehouseconnector met rechten op rijniveau",
+      "files": "Documentpipeline met OCR voor pdf's, scans en spreadsheets",
+      "legacy": "Maatwerk MCP-server of browserautomatisering voor systemen zonder bruikbare API"
+    },
+    "controls": {
+      "draft": "Alleen-concepten-modus: de agent verstuurt, betaalt of publiceert nooit; dat doet een mens.",
+      "gated": "Goedkeuringsmomenten bij elke verzending, uitgave, publicatie of verwijdering. Lezen en concepten maken gaat zelfstandig.",
+      "auto": "Autonoom binnen budgetten, allowlists en stopcondities, met een dagelijkse beoordeling van het runlogboek.",
+      "always": "Elke stap, input, output, tokenaantal en kosten worden getraceerd en bewaard voor audit.",
+      "personal": "Persoonsgegevens worden geredigeerd voordat ze een model buiten uw omgeving bereiken.",
+      "financial": "Betalingen en grootboekboekingen hebben altijd een benoemde goedkeurder nodig.",
+      "health": "Bijzondere persoonsgegevens blijven op infrastructuur die u beheert, met toegang per record gelogd.",
+      "privileged": "Vertrouwelijke en bestuursdocumenten blijven in een aparte werkruimte met eigen goedkeurders.",
+      "ip": "Broncode wordt alleen verwerkt onder zero-retention-voorwaarden of op zelf gehoste modellen."
+    },
+    "plan": {
+      "now": [
+        "Week 1: verkenning op locatie, het werk meekijken en de databronnen in kaart brengen",
+        "Week 2: eerste agent live op uw echte data met goedkeuringsmomenten",
+        "Week 3–4: afstemmen met de mensen die hem gebruiken, daarna rechten verruimen"
+      ],
+      "quarter": [
+        "Week 1–2: verkenning bij de teams en een gerangschikte lijst van agents",
+        "Week 3–6: eerste twee agents live, connectoren robuust gemaakt",
+        "Week 7–12: uitrol, training en overdracht aan uw team"
+      ],
+      "exploring": [
+        "Eén verkenningsworkshop met uw managementteam",
+        "Een schriftelijke businesscase met kosten, besparingen en risico's per agent",
+        "Een pilot van twee weken op het proces met het duidelijkste rendement"
+      ]
+    },
+    "scenarios": {
+      "ceo": "Het is 7:30. Voordat de CEO de laptop openklapt, heeft de Executive PA-agent 140 nachtelijke e-mails gelezen, de ruis gearchiveerd, 11 antwoorden in diens stijl opgesteld en bovenaan een briefing van één pagina gezet: de drie beslissingen die vandaag nodig zijn, de investeerder die op cijfers wacht en de notities voor het bestuursoverleg van 10:00. De CEO keurt acht antwoorden goed vanaf de telefoon en past er drie aan.",
+      "cto": "Om 02:14 mislukte een deployment. Om 08:00 heeft de Engineering PA-agent de logs verzameld, de falende commit gekoppeld, een incidentsamenvatting met een waarschijnlijke oorzaak geschreven en een conceptfix als pull request geopend. De on-call engineer beoordeelt die in plaats van bij nul te beginnen.",
+      "cfo": "Op werkdag twee van de maandafsluiting heeft de Finance PA-agent de bankfeed afgestemd, toelichtingen op afwijkingen opgesteld voor elke kostenplaats die meer dan 5% bewoog en de vier facturen opgesomd die het inkoopbeleid schenden. De CFO besteedt een uur aan beoordelen in plaats van drie dagen aan verzamelen.",
+      "coo": "Een leverancier mailt dat een zending een week te laat is. De Operations-agent vindt de betrokken bestellingen, stelt een bericht op aan de drie betrokken klanten en stelt een alternatieve leverancier voor uit uw goedgekeurde lijst. De operations manager keurt twee berichten goed en belt de derde klant.",
+      "sales": "Om 18:00 komt een nieuwe aanvraag binnen. De Pipeline-agent onderzoekt het bedrijf, beoordeelt de match, stelt een antwoord op met een relevante case study en reserveert een tijdslot in de agenda van de accountmanager ter goedkeuring. De lead hoort dezelfde avond nog iets.",
+      "support": "Op maandagochtend wachten 300 tickets. De Klantenservice-agent heeft er 180 routinematige beantwoord vanuit de kennisbank, voor 90 een antwoord opgesteld en 30 klachten voor een mens gemarkeerd, gesorteerd op risico op klantverloop.",
+      "people": "Een vacature trekt 400 sollicitaties. De HR-agent screent ze op de criteria, maakt een shortlist van 25 met onderbouwing, plant eerste gesprekken en stuurt elke andere kandidaat een vriendelijk antwoord ter goedkeuring.",
+      "legal": "Een klant stuurt een contract van 40 pagina's terug. De Contract- en compliance-agent vergelijkt het met uw playbook, markeert zes afwijkende clausules, stelt voor elk een redline voor en legt de beoordeling vast in het bewijslogboek.",
+      "default": "Een FDE brengt een dag door met uw team, vindt het proces dat de duurste uren opslokt en heeft binnen twee weken een agent die daarvan de eerste versie maakt op uw echte data."
+    }
+  },
+  "scenarios": {
+    "eyebrow": "Praktijkscenario's",
+    "title": "Wat wij horen in klantgesprekken, en wat wij bouwen",
+    "lede": "Samengestelde voorbeelden uit het soort eerste gesprekken dat onze forward deployed engineers voeren. Namen en cijfers zijn illustratief.",
+    "items": [
+      {
+        "badge": "CEO · zakelijke dienstverlening",
+        "title": "\"Ik besteed elke dag mijn eerste twee uur aan e-mail.\"",
+        "description": "De FDE bracht Outlook, het CRM en het bestuursportaal in kaart en ontdekte dat de meeste antwoorden vijf patronen volgden. Een Executive PA-agent stelt nu 's nachts antwoorden en vergaderbriefings op; de CEO keurt goed vanaf de telefoon.",
+        "list": [
+          "Data: Microsoft 365, HubSpot, bestuursportaal",
+          "Model: Claude via de Azure-tenant van het bedrijf",
+          "Controle: elk antwoord goedgekeurd voordat het wordt verzonden"
+        ]
+      },
+      {
+        "badge": "CFO · maakindustrie",
+        "title": "\"De maandafsluiting duurt negen dagen en het meeste is kopiëren.\"",
+        "description": "De verkenning liet zien dat het oordeelsvermogen alleen in de toelichting op afwijkingen zat; matchen en boeken waren regels. Wij automatiseerden de regels in code en zetten een agent op de toelichting en de beleidscontroles.",
+        "list": [
+          "Data: Sage, bankfeeds, spreadsheets met inkooporders",
+          "Model: een combinatie van een lokaal model voor extractie en een frontiermodel voor de toelichting",
+          "Controle: geen boeking of betaling zonder benoemde goedkeurder"
+        ]
+      },
+      {
+        "badge": "CTO · softwarebedrijf",
+        "title": "\"Mijn senior engineers zijn hun hele week kwijt aan het reviewen van andermans code.\"",
+        "description": "Een PR-review-agent toetst elke pull request aan de standaarden van het team en een tweede agent schrijft incidentsamenvattingen vanuit Sentry en logs. Seniors beoordelen de notities van de agent, niet de hele diff.",
+        "list": [
+          "Data: GitHub, Jira, Sentry, Slack",
+          "Model: Claude Code voor reviews, met een open-weight model voor logtriage",
+          "Controle: alleen opmerkingen; mergen blijft mensenwerk"
+        ]
+      },
+      {
+        "badge": "Advocatenkantoor · offline",
+        "title": "\"Niets vertrouwelijks mag ooit het gebouw verlaten.\"",
+        "description": "Wij dimensioneerden AI-workstations met Workstation en draaiden open-weight modellen volledig offline. Een contractagent vergelijkt documenten met het playbook van het kantoor en stelt redlines op; partners keuren elk ervan goed.",
+        "list": [
+          "Data: documentmanagementsysteem, precedentenbank",
+          "Model: open-weight modellen op lokale GPU-workstations",
+          "Controle: air-gapped, met auditlogs op locatie bewaard"
+        ]
+      }
+    ]
+  },
+  "fde": {
+    "eyebrow": "Forward deployed engineers",
+    "title": "Een expert in uw team, geen ticket in een wachtrij",
+    "lede": "Elk project krijgt een forward deployed engineer (FDE). Die schuift aan bij uw overleggen, leert hoe uw bedrijf echt werkt en bouwt en implementeert de agents snel samen met u.",
+    "certsTitle": "Gecertificeerd op de platforms waarvoor u kunt kiezen",
+    "certs": [
+      "Claude Code (Anthropic)",
+      "OpenAI",
+      "Google Cloud en Gemini",
+      "Microsoft Azure AI",
+      "xAI Grok"
+    ],
+    "points": [
+      {
+        "title": "Stelt de juiste vragen",
+        "description": "Waar staat de data, wie is de eigenaar, wat gebeurt er als die fout is, en welke stap vraagt echt om oordeelsvermogen."
+      },
+      {
+        "title": "Bouwt in uw systemen",
+        "description": "De agents staan in uw repository en uw cloud of op uw hardware, gekoppeld aan de tools die uw team al gebruikt."
+      },
+      {
+        "title": "Blijft tot het werkt",
+        "description": "Ze stemmen de agent af met de mensen die hem gebruiken en dragen runbooks over, zodat uw team hem zonder ons kan draaien."
+      }
+    ]
+  },
+  "framework": {
+    "eyebrow": "Framework",
+    "title": "Gebouwd op Jobshout, ons agent framework en taakbeheer",
+    "lede": "Jobshout is het open-source framework waarop elke TenthMatrix-agent draait. Elke agent heeft een eigen baan, gebruikt zijn eigen tools en stopt bij hetzelfde goedkeuringsmoment. Elke run komt op een taakbord terecht met de bijbehorende kosten en trace.",
+    "list": [
+      "Taakbord met projecten en sprints",
+      "Workflows met meerdere agents als afhankelijkheidsgraaf",
+      "Geplande taken voor dagelijks en wekelijks werk",
+      "Skills, plug-ins en MCP-connectoren",
+      "Gebruik uw eigen model, ook lokale modellen",
+      "Kosten, latentie en OpenTelemetry-traces per run"
+    ],
+    "primary": "AI-tools en framework van Jobshout",
+    "secondary": "Jobshout-agents"
+  },
+  "offline": {
+    "eyebrow": "Zelf gehoste AI",
+    "title": "Wilt u AI zonder enige internetverbinding?",
+    "body": "Sommige data mag het gebouw nooit verlaten. Wij draaien open-weight modellen op AI-workstations binnen uw netwerk, volledig offline, en bouwen daar dezelfde agents op. De hardware komt van ons zusterbedrijf Workstation.",
+    "link": "Explore AI workstations at workstation.co.uk"
+  },
+  "faq": {
+    "title": "Veelgestelde vragen",
+    "items": [
+      {
+        "question": "Wat is het verschil tussen een chatbot en een AI-agent?",
+        "answer": "Een chatbot antwoordt. Een agent voltooit een taak: hij leest uw systemen, plant, gebruikt tools om het werk te doen en stopt voor goedkeuring voordat er iets riskants gebeurt. U krijgt een afgerond concept, rapport of update, geen alinea advies."
+      },
+      {
+        "question": "Moeten wij voor één AI-bedrijf kiezen?",
+        "answer": "Nee. Veel van onze klanten gebruiken een frontiermodel voor de moeilijkste stappen en een klein open-weight model voor routinewerk. Met Jobshout kan elke agent een ander model gebruiken en kunt u later wisselen zonder opnieuw te bouwen."
+      },
+      {
+        "question": "Kunnen de agents zonder internetverbinding draaien?",
+        "answer": "Ja. Met open-weight modellen op AI-workstations van Workstation draait het hele systeem, inclusief de modellen, het framework en de logs, offline in uw gebouw."
+      },
+      {
+        "question": "Wat doet een forward deployed engineer eigenlijk?",
+        "answer": "Die werkt naast uw team, brengt uw processen en databronnen in kaart, bepaalt waar een LLM de moeite waard is en bouwt en implementeert de agents in uw omgeving. Die blijft tot de mensen die de agent gebruiken hem vertrouwen."
+      },
+      {
+        "question": "Wat gebeurt er met de antwoorden die ik in deze reis geef?",
+        "answer": "Niets, tot u op verzenden drukt. De blauwdruk wordt in uw browser opgesteld. Als u hem verstuurt, komt hij als aanvraag bij ons team terecht, zodat een engineer zich kan voorbereiden op het eerste gesprek."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Liever even overleggen?",
+    "body": "Plan een verkennend gesprek en een forward deployed engineer neemt dezelfde vragen live met u door, op uw eigen processen.",
+    "primary": "Start een project",
+    "secondary": "Over TenthMatrix"
+  }
+}

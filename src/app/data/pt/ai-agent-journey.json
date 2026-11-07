@@ -1,0 +1,750 @@
+{
+  "meta": {
+    "title": "Desenhe o seu agente de IA: uma jornada interativa | TenthMatrix",
+    "description": "Responda a nove perguntas como faria numa primeira reunião com os nossos forward deployed engineers. Dizemos-lhe que modelo de IA, que agentes e que alojamento construiríamos para a sua empresa."
+  },
+  "header": {
+    "eyebrow": "Jornada do agente de IA",
+    "title": "Desenhe o seu agente de IA em nove perguntas",
+    "lede": "Começamos cada projeto no seu lugar, não numa apresentação de slides. Responda às perguntas que um forward deployed engineer faz na primeira reunião e veja o agente, o modelo e o alojamento que construiríamos para si.",
+    "start": "Iniciar a jornada",
+    "how": "Como funcionam os agentes de IA",
+    "meta": [
+      "Cerca de 3 minutos",
+      "Sem registo para ver o seu resultado",
+      "Claude, OpenAI, Gemini, Microsoft, Grok ou código aberto"
+    ]
+  },
+  "how": {
+    "eyebrow": "Antes de começar",
+    "title": "Como funciona realmente um agente de IA",
+    "lede": "Um chatbot responde a uma pergunta. Um agente conclui um trabalho. Lê os seus dados, decide o que fazer, usa as suas ferramentas para o fazer e verifica o resultado antes que alguém dependa dele. Cada volta desse ciclo fica registada.",
+    "loop": [
+      {
+        "step": "01",
+        "title": "Ler",
+        "description": "O agente recolhe o que precisa dos sistemas que autorizou: a caixa de entrada, a contabilidade, a fila de tickets, o repositório. Só vê o que as suas permissões lhe permitem."
+      },
+      {
+        "step": "02",
+        "title": "Raciocinar",
+        "description": "Um modelo de linguagem de grande dimensão determina o que o trabalho exige e planeia os passos. É o único ponto onde se usa inteligência, por isso é investida onde o discernimento conta."
+      },
+      {
+        "step": "03",
+        "title": "Agir",
+        "description": "O agente usa ferramentas reais através de conectores e servidores MCP: redige a resposta, submete o relatório, abre o pull request. Os passos baseados em regras continuam a ser código simples."
+      },
+      {
+        "step": "04",
+        "title": "Verificar",
+        "description": "Antes de enviar, gastar ou eliminar algo, o agente para num ponto de aprovação. Aprova, ou rejeita com um motivo com o qual ele aprende. Cada passo fica rastreado."
+      }
+    ],
+    "layersTitle": "Três camadas em cada agente que construímos",
+    "layers": [
+      {
+        "title": "O seu conhecimento",
+        "description": "As fontes de dados que ligamos durante a fase de descoberta, limitadas às mesmas permissões que a sua equipa já tem."
+      },
+      {
+        "title": "O modelo",
+        "description": "Claude, GPT, Gemini, Grok ou um modelo de pesos abertos, escolhido em função da tarefa, dos dados e de onde tem de ser executado."
+      },
+      {
+        "title": "Controle",
+        "description": "Pontos de aprovação, orçamentos, condições de paragem e um registo de auditoria, executados na framework de agentes Jobshout."
+      }
+    ]
+  },
+  "shoes": {
+    "eyebrow": "Descoberta",
+    "title": "Primeiro colocamo-nos no seu lugar",
+    "lede": "A maioria dos projetos de IA falha porque automatiza o passo errado. Os nossos forward deployed engineers sentam-se com as pessoas que fazem o trabalho antes de escrever uma linha de código.",
+    "steps": [
+      {
+        "phase": "Dia 1",
+        "title": "Acompanhar o trabalho",
+        "description": "Observamos um dia de trabalho real: a caixa de entrada, as aprovações, as folhas de cálculo que sustentam o negócio. Registamos cada passagem de testemunho e cada espera."
+      },
+      {
+        "phase": "Dia 2",
+        "title": "Mapear as fontes de dados",
+        "description": "Para cada passo registamos onde estão os dados, quem é o responsável, como se acede a eles (API, exportação, base de dados, email) e o seu grau de sensibilidade."
+      },
+      {
+        "phase": "Dia 3",
+        "title": "Identificar onde é preciso discernimento",
+        "description": "Dividimos cada processo em passos de regras, que continuam como automação comum, e passos de discernimento, onde um LLM justifica o seu custo. Os agentes só entram onde é necessária inteligência."
+      },
+      {
+        "phase": "Semanas 1–2",
+        "title": "Construir e operar ao seu lado",
+        "description": "O primeiro agente funciona com os seus dados reais e um ponto de aprovação em cada ação de risco. Afinamo-lo com as pessoas que o usam e só alargamos as suas permissões quando confiam nele."
+      }
+    ]
+  },
+  "journey": {
+    "eyebrow": "A jornada",
+    "title": "Fale-nos da sua empresa",
+    "lede": "Estas são as perguntas que fazemos na primeira reunião com um cliente. As suas respostas ficam no seu navegador até decidir enviá-las.",
+    "progress": "Pergunta {current} de {total}",
+    "back": "Voltar",
+    "next": "Próximo",
+    "skip": "Não tenho a certeza, saltar",
+    "seeResult": "Ver o meu plano de IA",
+    "restart": "Recomeçar",
+    "multiHint": "Escolha todas as opções aplicáveis",
+    "singleHint": "Escolha uma opção",
+    "summaryTitle": "As suas respostas até agora",
+    "summaryEmpty": "O seu plano constrói-se aqui à medida que responde.",
+    "questions": [
+      {
+        "id": "role",
+        "type": "single",
+        "title": "Para quem trabalha o agente em primeiro lugar?",
+        "help": "Começamos com uma pessoa ou uma equipa. Os ganhos mais rápidos costumam estar nas pessoas cujo tempo é mais caro.",
+        "options": [
+          {
+            "value": "ceo",
+            "label": "CEO ou fundador",
+            "description": "Caixa de entrada, agenda, dossiês para o conselho, atualizações para investidores"
+          },
+          {
+            "value": "cto",
+            "label": "CTO ou diretor de engenharia",
+            "description": "Pull requests, incidentes, estado do roadmap"
+          },
+          {
+            "value": "cfo",
+            "label": "CFO ou diretor financeiro",
+            "description": "Fecho do mês, aprovação de despesas, previsões de tesouraria"
+          },
+          {
+            "value": "coo",
+            "label": "COO ou operações",
+            "description": "Fornecedores, encomendas, planeamento, exceções"
+          },
+          {
+            "value": "sales",
+            "label": "Vendas e marketing",
+            "description": "Leads, propostas, CRM atualizado, conteúdos"
+          },
+          {
+            "value": "support",
+            "label": "Apoio ao cliente",
+            "description": "Triagem de tickets, respostas, reembolsos, escalamentos"
+          },
+          {
+            "value": "people",
+            "label": "RH e pessoas",
+            "description": "Recrutamento, integração, perguntas sobre políticas"
+          },
+          {
+            "value": "legal",
+            "label": "Jurídico e conformidade",
+            "description": "Revisão de contratos, verificações de políticas, evidências"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "type": "multi",
+        "title": "Para onde vai o tempo hoje?",
+        "help": "Escolha o trabalho repetitivo que ainda exige que alguém pense. É aí que um agente se paga a si próprio.",
+        "options": [
+          {
+            "value": "inbox",
+            "label": "Email e agenda",
+            "description": "Triagem, respostas, agendamento e preparação de reuniões"
+          },
+          {
+            "value": "reporting",
+            "label": "Relatórios e briefings",
+            "description": "Dossiês para o conselho, atualizações semanais, comentários sobre KPI"
+          },
+          {
+            "value": "approvals",
+            "label": "Aprovações e despesas",
+            "description": "Ordens de compra, despesas, faturas, exceções"
+          },
+          {
+            "value": "customers",
+            "label": "Pedidos de clientes",
+            "description": "Perguntas, orçamentos, reclamações, seguimentos"
+          },
+          {
+            "value": "documents",
+            "label": "Documentos e contratos",
+            "description": "Ler, comparar, extrair, resumir"
+          },
+          {
+            "value": "engineering",
+            "label": "Código e incidentes",
+            "description": "Revisões, resumos de piquete, notas de versão"
+          },
+          {
+            "value": "research",
+            "label": "Pesquisa",
+            "description": "Concorrentes, mercados, fornecedores, due diligence"
+          },
+          {
+            "value": "data",
+            "label": "Introdução de dados entre sistemas",
+            "description": "Copiar de emails ou PDF para CRM, ERP ou folhas de cálculo"
+          }
+        ]
+      },
+      {
+        "id": "sources",
+        "type": "multi",
+        "title": "Onde estão os dados?",
+        "help": "É a primeira coisa que um FDE mapeia numa reunião. Cada fonte torna-se um conector com as suas próprias permissões.",
+        "options": [
+          {
+            "value": "m365",
+            "label": "Microsoft 365",
+            "description": "Outlook, Teams, SharePoint, OneDrive"
+          },
+          {
+            "value": "google",
+            "label": "Google Workspace",
+            "description": "Gmail, Calendar, Drive, Sheets"
+          },
+          {
+            "value": "crm",
+            "label": "CRM",
+            "description": "Salesforce, HubSpot, Dynamics, Pipedrive"
+          },
+          {
+            "value": "finance",
+            "label": "Finanças e ERP",
+            "description": "Xero, Sage, QuickBooks, NetSuite, SAP"
+          },
+          {
+            "value": "dev",
+            "label": "Ferramentas de engenharia",
+            "description": "GitHub, GitLab, Jira, Linear, Sentry"
+          },
+          {
+            "value": "helpdesk",
+            "label": "Help desk",
+            "description": "Zendesk, Freshdesk, ServiceNow, Intercom"
+          },
+          {
+            "value": "chat",
+            "label": "Chat da equipa",
+            "description": "Slack, canais do Teams, WhatsApp Business"
+          },
+          {
+            "value": "database",
+            "label": "Bases de dados e data warehouse",
+            "description": "PostgreSQL, SQL Server, Snowflake, BigQuery"
+          },
+          {
+            "value": "files",
+            "label": "Ficheiros e digitalizações",
+            "description": "PDF, folhas de cálculo, formulários digitalizados, pastas partilhadas"
+          },
+          {
+            "value": "legacy",
+            "label": "Sistemas internos ou legados",
+            "description": "Aplicações à medida, APIs antigas, ecrãs sem API"
+          }
+        ]
+      },
+      {
+        "id": "autonomy",
+        "type": "single",
+        "title": "Quanto deve o agente fazer sozinho?",
+        "help": "Começamos sempre com mais aprovações e aliviamo-las à medida que a confiança cresce. Pode alterar isto por agente e por ferramenta.",
+        "options": [
+          {
+            "value": "draft",
+            "label": "Apenas rascunhos",
+            "description": "Prepara tudo; uma pessoa envia, paga ou publica"
+          },
+          {
+            "value": "gated",
+            "label": "Agir no baixo risco, perguntar no alto risco",
+            "description": "Leituras e rascunhos correm sozinhos; enviar, gastar e eliminar aguardam aprovação"
+          },
+          {
+            "value": "auto",
+            "label": "Funcionar sozinho dentro de limites",
+            "description": "Orçamentos, listas de permissões e condições de paragem; as pessoas revêem o registo"
+          }
+        ]
+      },
+      {
+        "id": "provider",
+        "type": "single",
+        "title": "Com que empresa de IA gostaria de trabalhar?",
+        "help": "Os nossos engenheiros estão certificados em todas as grandes plataformas, por isso a escolha é sua, não nossa. Se não tiver preferência, escolhemos por tarefa.",
+        "options": [
+          {
+            "value": "anthropic",
+            "label": "Anthropic Claude",
+            "description": "Forte em documentos longos, raciocínio cuidadoso, uso de ferramentas e código"
+          },
+          {
+            "value": "openai",
+            "label": "OpenAI",
+            "description": "Modelos GPT, ecossistema amplo, voz e visão"
+          },
+          {
+            "value": "google",
+            "label": "Google Gemini",
+            "description": "Contexto longo, multimodal, próximo do Google Workspace"
+          },
+          {
+            "value": "microsoft",
+            "label": "Microsoft",
+            "description": "Azure OpenAI e Copilot dentro do seu tenant Microsoft"
+          },
+          {
+            "value": "xai",
+            "label": "xAI Grok",
+            "description": "Conhecimento em tempo real e raciocínio rápido"
+          },
+          {
+            "value": "any",
+            "label": "Sem preferência",
+            "description": "Escolher o melhor modelo para cada agente"
+          }
+        ]
+      },
+      {
+        "id": "openSource",
+        "type": "single",
+        "title": "Prefere modelos de código aberto?",
+        "help": "Modelos de pesos abertos como Llama, Qwen, Mistral, DeepSeek e gpt-oss podem correr no seu próprio hardware, sem fatura por token e sem que os dados saiam da sua rede.",
+        "options": [
+          {
+            "value": "yes",
+            "label": "Sim, código aberto primeiro",
+            "description": "Usar modelos de pesos abertos sempre que sejam suficientes"
+          },
+          {
+            "value": "mix",
+            "label": "Uma combinação",
+            "description": "Código aberto para trabalho rotineiro ou sensível, um modelo de fronteira para os passos mais difíceis"
+          },
+          {
+            "value": "no",
+            "label": "Não, usar o melhor modelo comercial",
+            "description": "Qualidade primeiro; o código aberto não é um requisito"
+          }
+        ]
+      },
+      {
+        "id": "hosting",
+        "type": "single",
+        "title": "Onde deve a IA ser executada?",
+        "help": "Isto decide que modelos são possíveis. Um sistema totalmente offline precisa de modelos de pesos abertos nas suas próprias estações de trabalho de IA.",
+        "options": [
+          {
+            "value": "cloud",
+            "label": "API na cloud do fornecedor",
+            "description": "O arranque mais rápido; dados cobertos pelos termos empresariais do fornecedor"
+          },
+          {
+            "value": "tenant",
+            "label": "O nosso próprio tenant na cloud",
+            "description": "Conta Azure, AWS ou Google Cloud que controlamos, região do Reino Unido ou da UE"
+          },
+          {
+            "value": "onprem",
+            "label": "Auto-alojado, nas nossas instalações",
+            "description": "Os nossos próprios servidores ou estações de trabalho de IA, ainda ligados à internet"
+          },
+          {
+            "value": "airgap",
+            "label": "Auto-alojado e offline",
+            "description": "Estações de trabalho de IA sem qualquer ligação à internet"
+          }
+        ]
+      },
+      {
+        "id": "sensitivity",
+        "type": "multi",
+        "title": "Que tipo de dados vai o agente tratar?",
+        "help": "Isto define as salvaguardas: ocultação de dados, onde ficam os registos e quem pode aprovar o quê.",
+        "options": [
+          {
+            "value": "personal",
+            "label": "Dados pessoais",
+            "description": "Clientes, colaboradores ou doentes ao abrigo do RGPD do Reino Unido"
+          },
+          {
+            "value": "financial",
+            "label": "Registos financeiros",
+            "description": "Livros contabilísticos, pagamentos, salários"
+          },
+          {
+            "value": "health",
+            "label": "Dados de saúde",
+            "description": "Dados clínicos ou de categoria especial"
+          },
+          {
+            "value": "privileged",
+            "label": "Confidencial jurídico ou do conselho",
+            "description": "Aconselhamento sob sigilo, fusões e aquisições, documentos do conselho"
+          },
+          {
+            "value": "ip",
+            "label": "Código-fonte e propriedade intelectual",
+            "description": "Repositórios, designs, segredos comerciais"
+          },
+          {
+            "value": "public",
+            "label": "Sobretudo públicos ou internos",
+            "description": "Nada particularmente sensível"
+          }
+        ]
+      },
+      {
+        "id": "speed",
+        "type": "single",
+        "title": "Quando quer o primeiro agente a funcionar?",
+        "help": "Um forward deployed engineer consegue normalmente ter um primeiro agente a funcionar com os seus dados reais em duas semanas.",
+        "options": [
+          {
+            "value": "now",
+            "label": "Dentro de duas semanas",
+            "description": "Um piloto focado num processo"
+          },
+          {
+            "value": "quarter",
+            "label": "Este trimestre",
+            "description": "Vários agentes e um plano de implementação"
+          },
+          {
+            "value": "exploring",
+            "label": "Estamos a explorar",
+            "description": "Ajudem-nos primeiro a construir o business case"
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "eyebrow": "O seu plano de IA",
+    "title": "Eis o que construiríamos para si",
+    "lede": "Este é o ponto de partida que um forward deployed engineer levaria para a sua segunda reunião. Afinamo-lo consigo sobre os seus próprios dados.",
+    "agentsTitle": "Agentes que construiríamos",
+    "modelTitle": "Modelos recomendados",
+    "primaryLabel": "Principal",
+    "supportLabel": "De apoio",
+    "hostingTitle": "Onde roda",
+    "connectorsTitle": "Conectores aos seus dados",
+    "connectorsNone": "Mapeamos as suas fontes de dados consigo na primeira reunião.",
+    "controlsTitle": "Salvaguardas e aprovações",
+    "frameworkTitle": "Corre na framework de agentes Jobshout",
+    "frameworkBody": "Todos os agentes que construímos correm no Jobshout, a nossa framework de agentes e gestor de tarefas de código aberto: cada execução torna-se uma tarefa num quadro, o trabalho multiagente corre como um grafo de dependências, os trabalhos repetidos são agendados e as suas ferramentas ligam-se através de MCP.",
+    "frameworkLink": "Explorar as ferramentas de IA e a framework Jobshout",
+    "frameworkAgentsLink": "Ver os agentes Jobshout",
+    "fdeTitle": "O seu forward deployed engineer",
+    "fdeBody": "Atribuímos um forward deployed engineer ao seu projeto desde o primeiro dia. Trabalha dentro da sua equipa, certificado em Claude Code, OpenAI, Google, Microsoft e Grok, para construir e implementar os seus agentes rapidamente.",
+    "planTitle": "Plano de entrega",
+    "scenarioTitle": "Como é isto num dia real",
+    "workstationTitle": "A funcionar offline nas suas próprias estações de trabalho de IA",
+    "workstationBody": "Para um sistema sem ligação à internet, dimensionamos e fornecemos o hardware com a nossa empresa irmã Workstation: estações de trabalho e servidores GPU concebidos para modelos locais, entregues prontos a funcionar.",
+    "workstationLink": "Estações de trabalho de IA em workstation.co.uk",
+    "sendTitle": "Envie este plano a um forward deployed engineer",
+    "sendBody": "Respondemos no prazo de um dia útil com perguntas sobre as suas fontes de dados e uma data para a primeira sessão de descoberta. Edite o resumo abaixo, se quiser.",
+    "sendMessageLabel": "O seu plano",
+    "sendSource": "tenthmatrix_ai_agent_journey",
+    "copy": "Copiar plano",
+    "copied": "Copiado",
+    "summaryHeading": "Plano de agente de IA da jornada TenthMatrix"
+  },
+  "recommend": {
+    "roleAgents": {
+      "ceo": {
+        "name": "Agente assistente executivo",
+        "description": "Faz a triagem noturna da caixa de entrada do CEO, redige respostas no seu tom, prepara um resumo de uma página antes de cada reunião e transforma os dados do conselho num primeiro rascunho da atualização do presidente."
+      },
+      "cto": {
+        "name": "Agente assistente de engenharia",
+        "description": "Revê os pull requests segundo os seus padrões, resume os incidentes noturnos com as causas prováveis e escreve o estado semanal de engenharia a partir do GitHub e do Jira, para que o CTO leia em vez de compilar."
+      },
+      "cfo": {
+        "name": "Agente assistente financeiro",
+        "description": "Redige os comentários de desvios do fecho do mês a partir da contabilidade, verifica faturas e ordens de compra face à política antes de chegarem ao CFO e mantém atualizado um briefing contínuo de tesouraria."
+      },
+      "coo": {
+        "name": "Agente de operações",
+        "description": "Vigia encomendas, emails de fornecedores e planeamentos à procura de exceções, persegue entregas atrasadas com uma mensagem redigida e só escala o que exige uma decisão."
+      },
+      "sales": {
+        "name": "Agente de pipeline",
+        "description": "Pesquisa cada novo lead, redige a primeira resposta e a proposta, atualiza o CRM a partir das conversas de email e assinala os negócios que arrefeceram."
+      },
+      "support": {
+        "name": "Agente de apoio ao cliente",
+        "description": "Classifica cada ticket, responde a perguntas rotineiras a partir da sua base de conhecimento, redige respostas para as restantes e encaminha reclamações e reembolsos para a pessoa certa."
+      },
+      "people": {
+        "name": "Agente da equipa de pessoas",
+        "description": "Faz a triagem das candidaturas face à função, agenda entrevistas, prepara os kits de integração e responde a perguntas sobre políticas a partir do seu manual, com citação da fonte."
+      },
+      "legal": {
+        "name": "Agente de contratos e conformidade",
+        "description": "Lê os contratos recebidos, compara-os com o seu playbook, destaca as cláusulas não padrão com uma proposta de alterações e mantém um registo de evidências para auditorias."
+      },
+      "default": {
+        "name": "Agente assistente de negócio",
+        "description": "Retira às suas pessoas mais ocupadas o trabalho repetitivo que exige discernimento, começando pelo processo que acordarmos na descoberta."
+      }
+    },
+    "workAgents": {
+      "inbox": {
+        "name": "Agente de email",
+        "description": "Vigia os remetentes escolhidos, analisa a conversa e deixa um rascunho de resposta para aprovação."
+      },
+      "reporting": {
+        "name": "Agente de briefings",
+        "description": "Recolhe os números de forma agendada e escreve o comentário, indicando de onde veio cada valor."
+      },
+      "approvals": {
+        "name": "Agente de aprovações",
+        "description": "Verifica cada pedido face à política e ao orçamento e encaminha-o com uma recomendação."
+      },
+      "customers": {
+        "name": "Agente de pedidos",
+        "description": "Responde a perguntas rotineiras, redige orçamentos e faz seguimento até o cliente responder."
+      },
+      "documents": {
+        "name": "Agente de documentos",
+        "description": "Extrai, compara e resume contratos, relatórios e formulários em dados estruturados."
+      },
+      "engineering": {
+        "name": "Agente de revisão de PR e incidentes",
+        "description": "Revê pull requests e transforma alertas e logs num resumo de incidente legível."
+      },
+      "research": {
+        "name": "Agente de pesquisa",
+        "description": "Devolve conclusões com fontes que pode abrir: concorrentes, fornecedores, mercados e due diligence."
+      },
+      "data": {
+        "name": "Agente de introdução de dados",
+        "description": "Lê emails e PDF e escreve os campos no seu CRM, ERP ou folha de cálculo, com uma verificação antes de guardar."
+      }
+    },
+    "models": {
+      "anthropic": {
+        "name": "Anthropic Claude",
+        "why": "Raciocínio cuidadoso sobre documentos longos e uso fiável de ferramentas; a nossa primeira escolha para agentes que escrevem código ou gerem fluxos de trabalho complexos."
+      },
+      "openai": {
+        "name": "OpenAI GPT",
+        "why": "Um ecossistema amplo com raciocínio geral sólido, visão e voz para agentes de contacto com clientes."
+      },
+      "google": {
+        "name": "Google Gemini",
+        "why": "Contexto muito longo e entrada multimodal, e próximo dos dados se trabalha com Google Workspace."
+      },
+      "microsoft": {
+        "name": "Azure OpenAI no seu tenant Microsoft",
+        "why": "Modelos OpenAI ao abrigo do seu contrato e perímetro de dados Microsoft, a par do Copilot e das permissões do Microsoft 365."
+      },
+      "xai": {
+        "name": "xAI Grok",
+        "why": "Raciocínio rápido com conhecimento em tempo real, útil para agentes de pesquisa e monitorização de mercado."
+      },
+      "open": {
+        "name": "Modelos de pesos abertos (Llama, Qwen, Mistral, DeepSeek, gpt-oss)",
+        "why": "Correm no seu próprio hardware através de vLLM ou Ollama: sem fatura por token e sem dados a sair da sua rede."
+      },
+      "openRoutine": {
+        "name": "Um modelo pequeno de pesos abertos para os passos rotineiros",
+        "why": "Classificação, extração e ocultação de dados correm localmente e a baixo custo; só os passos mais difíceis vão para o modelo de fronteira."
+      }
+    },
+    "hosting": {
+      "cloud": "A API empresarial do fornecedor, com retenção zero de dados quando disponível. O arranque mais rápido; podemos migrar para o seu próprio tenant mais tarde sem reconstruir os agentes.",
+      "tenant": "A sua própria conta Azure, AWS ou Google Cloud numa região do Reino Unido ou da UE. Os modelos são acedidos através dos endpoints privados da sua cloud e os registos ficam na sua conta.",
+      "onprem": "Auto-alojado nos seus próprios servidores ou estações de trabalho de IA. O Jobshout, os modelos e os registos correm dentro da sua rede; só nos ligamos aos serviços que autorizar.",
+      "airgap": "Totalmente offline em estações de trabalho de IA sem ligação à internet. Os modelos de pesos abertos correm localmente, as atualizações chegam em suportes aprovados e nada sai do edifício."
+    },
+    "airgapNote": "Os modelos na cloud da {provider} precisam de ligação à internet, por isso, para um sistema offline, usaríamos modelos de pesos abertos localmente e manteríamos a {provider} para qualquer trabalho ligado que acrescente mais tarde.",
+    "connectors": {
+      "m365": "Conector Microsoft Graph (email, calendário, Teams, SharePoint) com permissões delegadas",
+      "google": "Conector Google Workspace (Gmail, Calendar, Drive) com âmbito por utilizador",
+      "crm": "Conector de CRM que lê e atualiza registos, com escritas sujeitas a aprovação",
+      "finance": "Conector financeiro com acesso de leitura à contabilidade; lançamentos e pagamentos sempre aprovados",
+      "dev": "Conectores GitHub, GitLab e Jira através de MCP",
+      "helpdesk": "Conector de help desk para tickets, macros e base de conhecimento",
+      "chat": "Bot de Slack ou Teams para que as pessoas instruam e aprovem os agentes onde já trabalham",
+      "database": "Conector só de leitura a base de dados ou data warehouse com permissões ao nível da linha",
+      "files": "Pipeline de documentos com OCR para PDF, digitalizações e folhas de cálculo",
+      "legacy": "Servidor MCP à medida ou automação de browser para sistemas sem API utilizável"
+    },
+    "controls": {
+      "draft": "Modo só rascunhos: o agente nunca envia, paga nem publica; quem o faz é uma pessoa.",
+      "gated": "Pontos de aprovação em cada envio, despesa, publicação ou eliminação. Leituras e rascunhos correm sozinhos.",
+      "auto": "Autónomo dentro de orçamentos, listas de permissões e condições de paragem, com revisão diária do registo de execução.",
+      "always": "Cada passo, entrada, saída, contagem de tokens e custo é rastreado e guardado para auditoria.",
+      "personal": "Os dados pessoais são ocultados antes de chegarem a qualquer modelo fora do seu perímetro.",
+      "financial": "Pagamentos e lançamentos contabilísticos precisam sempre de um aprovador designado.",
+      "health": "Os dados de categoria especial ficam em infraestrutura que controla, com acesso registado por registo.",
+      "privileged": "Os documentos sob sigilo e do conselho ficam num espaço de trabalho separado com os seus próprios aprovadores.",
+      "ip": "O código-fonte é processado apenas com termos de retenção zero ou em modelos auto-alojados."
+    },
+    "plan": {
+      "now": [
+        "Semana 1: descoberta no local, acompanhando o trabalho e mapeando as fontes de dados",
+        "Semana 2: primeiro agente em funcionamento com os seus dados reais e pontos de aprovação",
+        "Semanas 3–4: afinação com as pessoas que o usam e alargamento das permissões"
+      ],
+      "quarter": [
+        "Semanas 1–2: descoberta em todas as equipas e uma lista priorizada de agentes",
+        "Semanas 3–6: dois primeiros agentes em funcionamento, conectores reforçados",
+        "Semanas 7–12: implementação, formação e passagem para a sua equipa"
+      ],
+      "exploring": [
+        "Um workshop de descoberta com a sua equipa de gestão",
+        "Um business case escrito com custos, poupanças e riscos por agente",
+        "Um piloto de duas semanas no processo com o retorno mais claro"
+      ]
+    },
+    "scenarios": {
+      "ceo": "São 7:30. Antes de o CEO abrir o portátil, o agente assistente executivo leu 140 emails da noite, arquivou o ruído, redigiu 11 respostas no seu tom e colocou no topo um resumo de uma página: as três decisões de hoje, o investidor que aguarda números e as notas para a chamada do conselho das 10:00. O CEO aprova oito respostas no telemóvel e edita três.",
+      "cto": "Uma implementação falhou às 02:14. Às 08:00, o agente assistente de engenharia já reuniu os logs, associou o commit com falha, escreveu um resumo do incidente com uma causa provável e abriu uma correção em rascunho como pull request. O engenheiro de piquete revê-a em vez de começar do zero.",
+      "cfo": "No segundo dia útil do fecho do mês, o agente assistente financeiro reconciliou o extrato bancário, redigiu comentários de desvios para cada centro de custo que variou mais de 5% e listou as quatro faturas que violam a política de compras. O CFO passa uma hora a rever em vez de três dias a compilar.",
+      "coo": "Um fornecedor avisa por email que uma remessa vai atrasar uma semana. O agente de operações encontra as encomendas afetadas, redige uma mensagem para os três clientes envolvidos e propõe um fornecedor alternativo da sua lista aprovada. O gestor de operações aprova duas mensagens e telefona ao terceiro cliente.",
+      "sales": "Chega um novo pedido às 18:00. O agente de pipeline pesquisa a empresa, avalia a adequação, redige uma resposta com um caso de estudo relevante e reserva um horário na agenda do gestor de conta para aprovação. O lead recebe resposta na mesma noite.",
+      "support": "Numa segunda-feira de manhã há 300 tickets à espera. O agente de apoio ao cliente respondeu a 180 rotineiros a partir da base de conhecimento, redigiu respostas para 90 e sinalizou 30 reclamações para uma pessoa, ordenadas por risco de abandono.",
+      "people": "Uma vaga atrai 400 candidaturas. O agente da equipa de pessoas faz a triagem face aos critérios, pré-seleciona 25 com justificação, agenda as primeiras entrevistas e envia a cada um dos restantes candidatos uma resposta cordial para aprovação.",
+      "legal": "Um cliente devolve um contrato de 40 páginas. O agente de contratos e conformidade compara-o com o seu playbook, destaca seis cláusulas não padrão, sugere alterações para cada uma e regista a revisão no registo de evidências.",
+      "default": "Um FDE passa um dia com a sua equipa, encontra o processo que consome as horas mais caras e, em duas semanas, tem um agente a fazer o primeiro rascunho com os seus dados reais."
+    }
+  },
+  "scenarios": {
+    "eyebrow": "Cenários reais",
+    "title": "O que ouvimos nas reuniões com clientes e o que construímos",
+    "lede": "Exemplos compostos a partir do tipo de primeiras reuniões que os nossos forward deployed engineers conduzem. Nomes e números são ilustrativos.",
+    "items": [
+      {
+        "badge": "CEO · serviços profissionais",
+        "title": "\"Passo as duas primeiras horas de cada dia no email.\"",
+        "description": "O FDE mapeou o Outlook, o CRM e o portal do conselho e descobriu que a maioria das respostas seguia cinco padrões. Um agente assistente executivo redige agora respostas e resumos de reuniões durante a noite; o CEO aprova no telemóvel.",
+        "list": [
+          "Dados: Microsoft 365, HubSpot, portal do conselho",
+          "Modelo: Claude através do tenant Azure da empresa",
+          "Controlo: cada resposta aprovada antes de ser enviada"
+        ]
+      },
+      {
+        "badge": "CFO · indústria",
+        "title": "\"O fecho do mês demora nove dias e quase tudo é copiar.\"",
+        "description": "A descoberta mostrou que o discernimento só estava nos comentários de desvios; a reconciliação e os lançamentos eram regras. Automatizámos as regras em código e pusemos um agente nos comentários e nas verificações de políticas.",
+        "list": [
+          "Dados: Sage, extratos bancários, folhas de cálculo de ordens de compra",
+          "Modelo: uma combinação de um modelo local para extração e um modelo de fronteira para os comentários",
+          "Controlo: nenhum lançamento ou pagamento sem um aprovador designado"
+        ]
+      },
+      {
+        "badge": "CTO · empresa de software",
+        "title": "\"Os meus engenheiros seniores passam a semana a rever o código dos outros.\"",
+        "description": "Um agente de revisão de PR verifica cada pull request face aos padrões da equipa e um segundo agente escreve resumos de incidentes a partir do Sentry e dos logs. Os seniores revêem as notas do agente, não o diff completo.",
+        "list": [
+          "Dados: GitHub, Jira, Sentry, Slack",
+          "Modelo: Claude Code para a revisão, com um modelo de pesos abertos para a triagem de logs",
+          "Controlo: apenas comentários; o merge continua a ser humano"
+        ]
+      },
+      {
+        "badge": "Escritório de advogados · offline",
+        "title": "\"Nada sob sigilo pode alguma vez sair do edifício.\"",
+        "description": "Dimensionámos estações de trabalho de IA com a Workstation e corremos modelos de pesos abertos totalmente offline. Um agente de contratos compara documentos com o playbook do escritório e redige propostas de alterações; os sócios aprovam cada uma.",
+        "list": [
+          "Dados: sistema de gestão documental, banco de precedentes",
+          "Modelo: modelos de pesos abertos em estações de trabalho GPU locais",
+          "Controlo: isolado da rede, com registos de auditoria guardados no local"
+        ]
+      }
+    ]
+  },
+  "fde": {
+    "eyebrow": "Forward deployed engineers",
+    "title": "Um especialista na sua equipa, não um ticket numa fila",
+    "lede": "Cada projeto tem um forward deployed engineer (FDE). Junta-se às suas reuniões, aprende como o seu negócio funciona realmente e constrói e implementa os agentes consigo, rapidamente.",
+    "certsTitle": "Certificados nas plataformas que poderá escolher",
+    "certs": [
+      "Claude Code (Anthropic)",
+      "OpenAI",
+      "Google Cloud e Gemini",
+      "Microsoft Azure AI",
+      "xAI Grok"
+    ],
+    "points": [
+      {
+        "title": "Faz as perguntas certas",
+        "description": "Onde estão os dados, quem é o responsável, o que acontece quando estão errados e que passo precisa realmente de discernimento."
+      },
+      {
+        "title": "Constrói nos seus sistemas",
+        "description": "Os agentes vivem no seu repositório e na sua cloud ou no seu hardware, ligados às ferramentas que a sua equipa já usa."
+      },
+      {
+        "title": "Fica até funcionar",
+        "description": "Afina o agente com as pessoas que o usam e entrega os runbooks, para que a sua equipa o possa operar sem nós."
+      }
+    ]
+  },
+  "framework": {
+    "eyebrow": "Framework",
+    "title": "Construído sobre o Jobshout, a nossa framework de agentes e gestor de tarefas",
+    "lede": "O Jobshout é a framework de código aberto em que corre cada agente TenthMatrix. Cada agente tem a sua própria faixa, usa as suas próprias ferramentas e para no mesmo ponto de aprovação. Cada execução aparece num quadro de tarefas com o seu custo e rastreio.",
+    "list": [
+      "Quadro de tarefas com projetos e sprints",
+      "Fluxos multiagente como grafo de dependências",
+      "Trabalhos agendados para tarefas diárias e semanais",
+      "Skills, plugins e conectores MCP",
+      "Use o seu próprio modelo, incluindo modelos locais",
+      "Custo, latência e traces OpenTelemetry por execução"
+    ],
+    "primary": "Ferramentas de IA e framework Jobshout",
+    "secondary": "Agentes Jobshout"
+  },
+  "offline": {
+    "eyebrow": "IA auto-alojada",
+    "title": "Quer a sua IA sem qualquer ligação à internet?",
+    "body": "Alguns dados nunca podem sair do edifício. Corremos modelos de pesos abertos em estações de trabalho de IA dentro da sua rede, totalmente offline, e construímos os mesmos agentes por cima. O hardware vem da nossa empresa irmã Workstation.",
+    "link": "Explore AI workstations at workstation.co.uk"
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "items": [
+      {
+        "question": "Qual é a diferença entre um chatbot e um agente de IA?",
+        "answer": "Um chatbot responde. Um agente conclui uma tarefa: lê os seus sistemas, planeia, usa ferramentas para fazer o trabalho e para para aprovação antes de qualquer ação de risco. Recebe um rascunho, relatório ou atualização concluídos, não um parágrafo de conselhos."
+      },
+      {
+        "question": "Temos de escolher uma única empresa de IA?",
+        "answer": "Não. Muitos dos nossos clientes usam um modelo de fronteira para os passos mais difíceis e um modelo pequeno de pesos abertos para os rotineiros. O Jobshout permite que cada agente use um modelo diferente, e pode mudar mais tarde sem reconstruir."
+      },
+      {
+        "question": "Os agentes podem funcionar sem qualquer ligação à internet?",
+        "answer": "Sim. Com modelos de pesos abertos em estações de trabalho de IA da Workstation, todo o sistema, incluindo os modelos, a framework e os registos, funciona offline dentro do seu edifício."
+      },
+      {
+        "question": "O que faz realmente um forward deployed engineer?",
+        "answer": "Senta-se com a sua equipa, mapeia os seus processos e fontes de dados, decide onde vale a pena usar um LLM e constrói e implementa os agentes no seu ambiente. Fica até as pessoas que usam o agente confiarem nele."
+      },
+      {
+        "question": "O que acontece às respostas que dou nesta jornada?",
+        "answer": "Nada, até carregar em enviar. O plano é elaborado no seu navegador. Se o enviar, chega à nossa equipa como um pedido para que um engenheiro possa preparar a primeira reunião."
+      }
+    ]
+  },
+  "cta": {
+    "title": "Prefere conversar sobre o assunto?",
+    "body": "Marque uma chamada de descoberta e um forward deployed engineer percorrerá as mesmas perguntas consigo, ao vivo, sobre os seus próprios processos.",
+    "primary": "Iniciar um projeto",
+    "secondary": "Sobre a TenthMatrix"
+  }
+}
