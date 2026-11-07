@@ -243,3 +243,16 @@
   justify-content: space-between;
   gap: var(--tm-space-3);
 }
+
+.ctaAlt {
+  margin-top: var(--tm-space-2);
+  border: 1px solid var(--tm-line-strong);
+  background: transparent;
+  color: var(--tm-text);
+
+  &:hover {
+    background: transparent;
+    border-color: var(--tm-text-muted);
+    color: var(--tm-text);
+  }
+}

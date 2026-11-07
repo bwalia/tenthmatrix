@@ -213,7 +213,10 @@ export default function SiteHeader({ locale }) {
             <Search aria-hidden="true" size={20} strokeWidth={1.75} />
           </Link>
           <ThemeToggle />
-          <Link href={href('/start-a-project')} className={s.contact} prefetch={false}>
+          <Link href={href('/start-a-project')} className={s.contactAlt} prefetch={false}>
+            {t('ctaProject')}
+          </Link>
+          <Link href={href('/ai-agent-journey')} className={s.contact} prefetch={false}>
             {t('cta')}
           </Link>
           <button

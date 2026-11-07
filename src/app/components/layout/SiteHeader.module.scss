@@ -353,8 +353,8 @@
     @include focus-ring;
   }
 
-  // Shown on tablets and wide desktops; hidden 1080-1280 where the six
-  // menu triggers need the room (the drawer and footer still link to it).
+  // Shown on tablets and wide desktops; hidden 1080-1400 where the menu
+  // triggers need the room in longer locales (the drawer still links to it).
   @include up($bp-md) {
     display: inline-flex;
   }
@@ -363,7 +363,7 @@
     display: none;
   }
 
-  @include up($bp-xl) {
+  @media (min-width: 1400px) {
     display: inline-flex;
   }
 }
@@ -372,5 +372,36 @@
 @include up($bp-xl) {
   .trigger {
     padding: 0 0.7rem;
+  }
+}
+
+// Secondary "Start a project" beside the primary "Start AI Journey". Only on
+// wide desktops, where the header has room for both; the drawer always has it.
+.contactAlt {
+  display: none;
+  align-items: center;
+  min-height: 40px;
+  margin-left: var(--tm-space-2);
+  padding: 0 var(--tm-space-4);
+  border: 1px solid var(--tm-line-strong);
+  border-radius: var(--tm-radius-sm);
+  color: var(--tm-text);
+  font-size: var(--tm-text-sm);
+  font-weight: var(--tm-weight-semibold);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color var(--tm-duration-fast) var(--tm-ease-standard);
+
+  &:hover {
+    border-color: var(--tm-text-muted);
+    color: var(--tm-text);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  @media (min-width: 1680px) {
+    display: inline-flex;
   }
 }
