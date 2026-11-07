@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { CheckCircle2, AlertCircle, Send } from 'lucide-react';
 import { leadsEndpoint } from '@/utils/opsapiEnv.mjs';
@@ -31,6 +31,8 @@ const splitName = (fullName) => {
  * Lead form. Optional `projectTypes` (string[]) adds a project-type select;
  * the choice is prefixed to `comments` so the OpsAPI lead schema is unchanged.
  * `projectTypeLabel` / `messageLabel` / `messageHint` override the default copy.
+ * `initialMessage` pre-fills the message (e.g. the AI agent journey's blueprint)
+ * and follows it while the visitor hasn't typed in the field.
  */
 export default function ContactForm({
   apiUrl,
@@ -39,6 +41,7 @@ export default function ContactForm({
   projectTypeLabel,
   messageLabel,
   messageHint,
+  initialMessage,
 }) {
   const t = useTranslations('form');
   const [form, setForm] = useState(EMPTY);
@@ -55,6 +58,13 @@ export default function ContactForm({
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (notes) setForm((f) => (f.comments ? f : { ...f, comments: notes }));
   }, []);
+
+  const lastInitial = useRef('');
+  useEffect(() => {
+    if (!initialMessage) return;
+    setForm((f) => (f.comments && f.comments !== lastInitial.current ? f : { ...f, comments: initialMessage }));
+    lastInitial.current = initialMessage;
+  }, [initialMessage]);
 
   const set = (name) => (e) => setForm((f) => ({ ...f, [name]: e.target.value }));
 

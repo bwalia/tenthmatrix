@@ -3,6 +3,7 @@ import { createRoute } from '@/app/components/sections/createRoute';
 import FeatureRows from '@/app/components/sections/FeatureRows';
 import FeatureGrid from '@/app/components/sections/FeatureGrid';
 import StatsBand from '@/app/components/sections/StatsBand';
+import Steps from '@/app/components/sections/Steps';
 import { localeHref } from '@/app/components/sections/links';
 import { useUiStrings } from '@/app/components/sections/ui';
 
@@ -14,6 +15,25 @@ function AboutUs({ data, locale }) {
   return (
     <>
       <Hero eyebrow={h.title} title={h.tagline || h.title} art />
+      {data.journeyTeaser && (
+        <Section
+          id="ai-agents"
+          eyebrow={data.journeyTeaser.eyebrow}
+          title={data.journeyTeaser.title}
+          lede={data.journeyTeaser.description}
+          tone="sunken"
+        >
+          <Steps steps={data.journeyTeaser.steps} />
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--tm-space-3)', marginTop: 'var(--tm-space-8)' }}>
+            <Button href={localeHref('/ai-agent-journey', locale)} arrow>
+              {data.journeyTeaser.button}
+            </Button>
+            <Button href={localeHref('/jobshout', locale)} variant="secondary" arrow>
+              {data.journeyTeaser.secondary}
+            </Button>
+          </div>
+        </Section>
+      )}
       {data.storyTeaser && (
         <Section
           id="our-story"

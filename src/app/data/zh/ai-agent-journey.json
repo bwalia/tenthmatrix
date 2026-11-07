@@ -1,0 +1,750 @@
+{
+  "meta": {
+    "title": "设计您的 AI 智能体：互动之旅 | TenthMatrix",
+    "description": "像与我们的驻场工程师（FDE）初次会面那样回答九个问题。我们会告诉您，我们将为您的企业构建哪种 AI 模型、哪些智能体以及哪种托管方式。"
+  },
+  "header": {
+    "eyebrow": "AI 智能体之旅",
+    "title": "九个问题，设计您的 AI 智能体",
+    "lede": "我们的每个项目都从您的立场出发，而不是从幻灯片开始。回答驻场工程师在首次会面时会问的问题，看看我们将为您构建怎样的智能体、模型和托管方案。",
+    "start": "开始旅程",
+    "how": "AI 智能体如何工作",
+    "meta": [
+      "约 3 分钟",
+      "无需注册即可查看结果",
+      "Claude、OpenAI、Gemini、Microsoft、Grok 或开源模型"
+    ]
+  },
+  "how": {
+    "eyebrow": "开始之前",
+    "title": "AI 智能体的实际工作方式",
+    "lede": "聊天机器人回答问题，智能体完成工作。它读取您的数据，决定要做什么，使用您的工具执行，并在任何人依赖结果之前进行核查。这个循环的每一轮都会被记录。",
+    "loop": [
+      {
+        "step": "01",
+        "title": "读取",
+        "description": "智能体从您授权的系统中收集所需信息：收件箱、账簿、工单队列、代码仓库。它只能看到其权限允许的内容。"
+      },
+      {
+        "step": "02",
+        "title": "推理",
+        "description": "大语言模型判断任务所需并规划步骤。这是唯一使用智能的环节，因此只用在需要判断的地方。"
+      },
+      {
+        "step": "03",
+        "title": "执行",
+        "description": "智能体通过连接器和 MCP 服务器使用真实工具：起草回复、提交报告、发起拉取请求。基于规则的步骤仍以普通代码实现。"
+      },
+      {
+        "step": "04",
+        "title": "核查",
+        "description": "在发送、支出或删除任何内容之前，智能体都会在审批关口停下。您可以批准，或附上理由拒绝，它会从中学习。每一步都有追踪记录。"
+      }
+    ],
+    "layersTitle": "我们构建的每个智能体都有三层",
+    "layers": [
+      {
+        "title": "您的知识",
+        "description": "我们在调研阶段接入的数据源，权限范围与您员工现有权限一致。"
+      },
+      {
+        "title": "模型",
+        "description": "Claude、GPT、Gemini、Grok 或开放权重模型，根据任务、数据和运行环境进行选择。"
+      },
+      {
+        "title": "控制",
+        "description": "审批关口、预算、停止条件和审计追踪，运行于 Jobshout 智能体框架之上。"
+      }
+    ]
+  },
+  "shoes": {
+    "eyebrow": "需求探索",
+    "title": "我们先站在您的立场",
+    "lede": "大多数 AI 项目失败，是因为自动化了错误的环节。我们的驻场工程师在写下第一行代码之前，会先与实际做事的人坐在一起。",
+    "steps": [
+      {
+        "phase": "第 1 天",
+        "title": "跟岗观察",
+        "description": "我们观察真实的工作日：收件箱、审批流程、支撑业务运转的电子表格。我们记录每一次交接和每一次等待。"
+      },
+      {
+        "phase": "第 2 天",
+        "title": "梳理数据源",
+        "description": "对每个步骤，我们记录数据存放在哪里、归谁所有、如何获取（API、导出、数据库、邮件）以及敏感程度。"
+      },
+      {
+        "phase": "第 3 天",
+        "title": "找出需要判断的环节",
+        "description": "我们将每个流程拆分为规则步骤和判断步骤：前者保留为普通自动化，后者才值得使用 LLM。智能体只用在真正需要智能的地方。"
+      },
+      {
+        "phase": "第 1–2 周",
+        "title": "构建并与您并肩运行",
+        "description": "第一个智能体基于您的真实数据运行，每个有风险的操作都设有审批关口。我们与使用者一起调优，只有在他们信任它之后才扩大其权限。"
+      }
+    ]
+  },
+  "journey": {
+    "eyebrow": "旅程",
+    "title": "介绍一下您的企业",
+    "lede": "这些是我们在首次客户会面时会问的问题。在您选择发送之前，您的答案只保存在您的浏览器中。",
+    "progress": "第 {current} 题，共 {total} 题",
+    "back": "返回",
+    "next": "下一页",
+    "skip": "不确定，跳过",
+    "seeResult": "查看我的 AI 蓝图",
+    "restart": "重新开始",
+    "multiHint": "可多选",
+    "singleHint": "请选择一项",
+    "summaryTitle": "您目前的答案",
+    "summaryEmpty": "您作答时，蓝图会在这里逐步生成。",
+    "questions": [
+      {
+        "id": "role",
+        "type": "single",
+        "title": "智能体首先为谁服务？",
+        "help": "我们从一个人或一个团队开始。见效最快的通常是时间成本最高的人。",
+        "options": [
+          {
+            "value": "ceo",
+            "label": "CEO 或创始人",
+            "description": "收件箱、日程、董事会材料、投资人简报"
+          },
+          {
+            "value": "cto",
+            "label": "CTO 或工程负责人",
+            "description": "拉取请求、故障事件、路线图进展"
+          },
+          {
+            "value": "cfo",
+            "label": "CFO 或财务总监",
+            "description": "月结、支出审批、现金流预测"
+          },
+          {
+            "value": "coo",
+            "label": "COO 或运营",
+            "description": "供应商、订单、排程、异常处理"
+          },
+          {
+            "value": "sales",
+            "label": "销售与市场",
+            "description": "销售线索、方案、CRM 数据维护、内容"
+          },
+          {
+            "value": "support",
+            "label": "客户服务",
+            "description": "工单分流、回复、退款、升级处理"
+          },
+          {
+            "value": "people",
+            "label": "人力资源",
+            "description": "招聘、入职、政策咨询"
+          },
+          {
+            "value": "legal",
+            "label": "法务与合规",
+            "description": "合同审查、政策检查、合规证据"
+          }
+        ]
+      },
+      {
+        "id": "work",
+        "type": "multi",
+        "title": "目前时间都花在哪里？",
+        "help": "选择那些重复但仍需动脑的工作。智能体正是在这里收回成本。",
+        "options": [
+          {
+            "value": "inbox",
+            "label": "邮件与日程",
+            "description": "分拣、回复、会议安排与准备"
+          },
+          {
+            "value": "reporting",
+            "label": "报告与简报",
+            "description": "董事会材料、每周更新、KPI 解读"
+          },
+          {
+            "value": "approvals",
+            "label": "审批与支出",
+            "description": "采购订单、报销、发票、异常处理"
+          },
+          {
+            "value": "customers",
+            "label": "客户咨询",
+            "description": "问题、报价、投诉、跟进"
+          },
+          {
+            "value": "documents",
+            "label": "文件与合同",
+            "description": "阅读、比对、提取、摘要"
+          },
+          {
+            "value": "engineering",
+            "label": "代码与故障事件",
+            "description": "代码评审、值班总结、发布说明"
+          },
+          {
+            "value": "research",
+            "label": "研究",
+            "description": "竞争对手、市场、供应商、尽职调查"
+          },
+          {
+            "value": "data",
+            "label": "系统间数据录入",
+            "description": "从邮件或 PDF 复制到 CRM、ERP 或电子表格"
+          }
+        ]
+      },
+      {
+        "id": "sources",
+        "type": "multi",
+        "title": "数据存放在哪里？",
+        "help": "这是 FDE 在会面中首先梳理的内容。每个数据源都会成为一个拥有独立权限的连接器。",
+        "options": [
+          {
+            "value": "m365",
+            "label": "Microsoft 365",
+            "description": "Outlook、Teams、SharePoint、OneDrive"
+          },
+          {
+            "value": "google",
+            "label": "Google Workspace",
+            "description": "Gmail、Calendar、Drive、Sheets"
+          },
+          {
+            "value": "crm",
+            "label": "CRM",
+            "description": "Salesforce、HubSpot、Dynamics、Pipedrive"
+          },
+          {
+            "value": "finance",
+            "label": "财务与 ERP",
+            "description": "Xero、Sage、QuickBooks、NetSuite、SAP"
+          },
+          {
+            "value": "dev",
+            "label": "工程工具",
+            "description": "GitHub、GitLab、Jira、Linear、Sentry"
+          },
+          {
+            "value": "helpdesk",
+            "label": "服务台",
+            "description": "Zendesk、Freshdesk、ServiceNow、Intercom"
+          },
+          {
+            "value": "chat",
+            "label": "团队聊天",
+            "description": "Slack、Teams 频道、WhatsApp Business"
+          },
+          {
+            "value": "database",
+            "label": "数据库与数据仓库",
+            "description": "PostgreSQL、SQL Server、Snowflake、BigQuery"
+          },
+          {
+            "value": "files",
+            "label": "文件与扫描件",
+            "description": "PDF、电子表格、扫描表单、共享文件夹"
+          },
+          {
+            "value": "legacy",
+            "label": "自研或遗留系统",
+            "description": "定制应用、旧版 API、没有 API 的界面"
+          }
+        ]
+      },
+      {
+        "id": "autonomy",
+        "type": "single",
+        "title": "智能体应自主完成多少工作？",
+        "help": "我们总是从更多审批开始，随着信任增加逐步放宽。您可以按智能体和工具分别调整。",
+        "options": [
+          {
+            "value": "draft",
+            "label": "仅起草",
+            "description": "它准备好一切；由人来发送、付款或发布"
+          },
+          {
+            "value": "gated",
+            "label": "低风险自行处理，高风险先请示",
+            "description": "读取和起草自主运行；发送、支出和删除需等待审批"
+          },
+          {
+            "value": "auto",
+            "label": "在限定范围内自主运行",
+            "description": "预算、白名单和停止条件；由人审阅日志"
+          }
+        ]
+      },
+      {
+        "id": "provider",
+        "type": "single",
+        "title": "您希望与哪家 AI 公司合作？",
+        "help": "我们的工程师已通过所有主流平台认证，因此选择权在您，而非我们。如果您没有偏好，我们将按任务选择。",
+        "options": [
+          {
+            "value": "anthropic",
+            "label": "Anthropic Claude",
+            "description": "擅长长文档、严谨推理、工具使用和代码"
+          },
+          {
+            "value": "openai",
+            "label": "OpenAI",
+            "description": "GPT 模型、广泛生态、语音与视觉"
+          },
+          {
+            "value": "google",
+            "label": "Google Gemini",
+            "description": "长上下文、多模态，与 Google Workspace 紧密结合"
+          },
+          {
+            "value": "microsoft",
+            "label": "Microsoft",
+            "description": "在您的 Microsoft 租户内使用 Azure OpenAI 和 Copilot"
+          },
+          {
+            "value": "xai",
+            "label": "xAI Grok",
+            "description": "实时知识与快速推理"
+          },
+          {
+            "value": "any",
+            "label": "无偏好",
+            "description": "为每个智能体选择最佳模型"
+          }
+        ]
+      },
+      {
+        "id": "openSource",
+        "type": "single",
+        "title": "您是否倾向于使用开源模型？",
+        "help": "Llama、Qwen、Mistral、DeepSeek 和 gpt-oss 等开放权重模型可以在您自己的硬件上运行，无需按 token 付费，数据也不会离开您的网络。",
+        "options": [
+          {
+            "value": "yes",
+            "label": "是，优先开源",
+            "description": "只要够用，就使用开放权重模型"
+          },
+          {
+            "value": "mix",
+            "label": "混合使用",
+            "description": "常规或敏感工作用开源模型，最难的步骤用前沿模型"
+          },
+          {
+            "value": "no",
+            "label": "否，使用最好的商业模型",
+            "description": "质量优先；不要求开源"
+          }
+        ]
+      },
+      {
+        "id": "hosting",
+        "type": "single",
+        "title": "AI 应在哪里运行？",
+        "help": "这决定了可选用哪些模型。完全离线的系统需要在您自己的 AI 工作站上运行开放权重模型。",
+        "options": [
+          {
+            "value": "cloud",
+            "label": "供应商云 API",
+            "description": "启动最快；数据受供应商企业条款保护"
+          },
+          {
+            "value": "tenant",
+            "label": "我们自己的云租户",
+            "description": "由我们掌控的 Azure、AWS 或 Google Cloud 账户，英国或欧盟区域"
+          },
+          {
+            "value": "onprem",
+            "label": "自托管，部署在本地",
+            "description": "自有服务器或 AI 工作站，仍连接互联网"
+          },
+          {
+            "value": "airgap",
+            "label": "自托管且离线",
+            "description": "完全不连接互联网的 AI 工作站"
+          }
+        ]
+      },
+      {
+        "id": "sensitivity",
+        "type": "multi",
+        "title": "智能体将接触哪类数据？",
+        "help": "这决定了防护措施：脱敏、日志存放位置以及谁可以审批什么。",
+        "options": [
+          {
+            "value": "personal",
+            "label": "个人数据",
+            "description": "受 UK GDPR 约束的客户、员工或患者数据"
+          },
+          {
+            "value": "financial",
+            "label": "财务记录",
+            "description": "账簿、付款、薪资"
+          },
+          {
+            "value": "health",
+            "label": "健康数据",
+            "description": "临床数据或特殊类别数据"
+          },
+          {
+            "value": "privileged",
+            "label": "法律或董事会机密",
+            "description": "特权法律意见、并购、董事会文件"
+          },
+          {
+            "value": "ip",
+            "label": "源代码与知识产权",
+            "description": "代码仓库、设计、商业机密"
+          },
+          {
+            "value": "public",
+            "label": "主要为公开或内部数据",
+            "description": "没有特别敏感的内容"
+          }
+        ]
+      },
+      {
+        "id": "speed",
+        "type": "single",
+        "title": "您希望第一个智能体何时投入工作？",
+        "help": "驻场工程师通常能在两周内让第一个智能体基于您的真实数据运行。",
+        "options": [
+          {
+            "value": "now",
+            "label": "两周内",
+            "description": "针对单一流程的聚焦试点"
+          },
+          {
+            "value": "quarter",
+            "label": "本季度",
+            "description": "多个智能体及推广计划"
+          },
+          {
+            "value": "exploring",
+            "label": "我们还在探索",
+            "description": "请先帮我们制定商业论证"
+          }
+        ]
+      }
+    ]
+  },
+  "result": {
+    "eyebrow": "您的 AI 蓝图",
+    "title": "这是我们将为您构建的方案",
+    "lede": "这是驻场工程师在第二次会面时带来的起点。我们会与您一起基于您的数据加以完善。",
+    "agentsTitle": "我们将构建的智能体",
+    "modelTitle": "推荐模型",
+    "primaryLabel": "主导航",
+    "supportLabel": "辅助",
+    "hostingTitle": "运行位置",
+    "connectorsTitle": "连接您数据的连接器",
+    "connectorsNone": "我们会在首次会面时与您一起梳理数据源。",
+    "controlsTitle": "防护措施与审批",
+    "frameworkTitle": "运行于 Jobshout 智能体框架",
+    "frameworkBody": "我们构建的每个智能体都运行在 Jobshout 上——我们的开源智能体框架与任务管理器：每次运行都会成为看板上的一个任务，多智能体协作以依赖图方式运行，重复性工作按计划执行，您的工具通过 MCP 接入。",
+    "frameworkLink": "了解 Jobshout AI 工具与框架",
+    "frameworkAgentsLink": "查看 Jobshout 智能体",
+    "fdeTitle": "您的驻场工程师",
+    "fdeBody": "从第一天起，我们就为您的项目指派一名驻场工程师。他们融入您的团队，拥有 Claude Code、OpenAI、Google、Microsoft 和 Grok 认证，快速构建并部署您的智能体。",
+    "planTitle": "交付计划",
+    "scenarioTitle": "真实一天中的样子",
+    "workstationTitle": "在您自己的 AI 工作站上离线运行",
+    "workstationBody": "对于不联网的系统，我们与姊妹公司 Workstation 一起确定硬件规格并供货：专为本地模型打造的 GPU 工作站和服务器，交付即可运行。",
+    "workstationLink": "AI 工作站请访问 workstation.co.uk",
+    "sendTitle": "将此蓝图发送给驻场工程师",
+    "sendBody": "我们会在一个工作日内回复，询问您的数据源情况并约定首次调研会议的日期。如有需要，您可以编辑下方摘要。",
+    "sendMessageLabel": "您的蓝图",
+    "sendSource": "tenthmatrix_ai_agent_journey",
+    "copy": "复制蓝图",
+    "copied": "已复制",
+    "summaryHeading": "来自 TenthMatrix 之旅的 AI 智能体蓝图"
+  },
+  "recommend": {
+    "roleAgents": {
+      "ceo": {
+        "name": "高管助理智能体",
+        "description": "连夜分拣 CEO 的收件箱，以其口吻起草回复，在每次会议前准备一页简报，并将董事会材料数据整理成董事长报告的初稿。"
+      },
+      "cto": {
+        "name": "工程助理智能体",
+        "description": "按照您的标准评审拉取请求，汇总夜间故障事件及可能原因，并基于 GitHub 和 Jira 撰写每周工程进展，让 CTO 只需阅读，无需整理。"
+      },
+      "cfo": {
+        "name": "财务助理智能体",
+        "description": "根据账簿起草月结差异说明，在发票和采购订单送达 CFO 之前对照政策进行核查，并持续更新滚动现金简报。"
+      },
+      "coo": {
+        "name": "运营智能体",
+        "description": "监控订单、供应商邮件和排程中的异常，用起草好的消息催促延迟交付，只上报需要决策的事项。"
+      },
+      "sales": {
+        "name": "销售管道智能体",
+        "description": "研究每条新线索，起草首次回复和方案，根据邮件往来更新 CRM，并标记已沉寂的商机。"
+      },
+      "support": {
+        "name": "客户服务智能体",
+        "description": "对每张工单分类，基于知识库回答常规问题，为其余工单起草回复，并将投诉和退款转给合适的人。"
+      },
+      "people": {
+        "name": "人力资源智能体",
+        "description": "根据岗位要求筛选求职申请，安排面试，准备入职资料，并依据员工手册回答政策问题并注明出处。"
+      },
+      "legal": {
+        "name": "合同与合规智能体",
+        "description": "阅读收到的合同，对照您的合同手册进行比对，标出非标准条款并给出修订建议，同时为审计保留证据日志。"
+      },
+      "default": {
+        "name": "业务助理智能体",
+        "description": "为您最忙碌的员工分担重复但需要判断的工作，从我们在调研中商定的流程开始。"
+      }
+    },
+    "workAgents": {
+      "inbox": {
+        "name": "邮件智能体",
+        "description": "关注指定发件人，研究邮件往来，并留下回复草稿待审批。"
+      },
+      "reporting": {
+        "name": "简报智能体",
+        "description": "按计划提取数据并撰写解读，注明每个数字的出处。"
+      },
+      "approvals": {
+        "name": "审批智能体",
+        "description": "对照政策和预算核查每项申请，并附上建议转交处理。"
+      },
+      "customers": {
+        "name": "咨询智能体",
+        "description": "回答常规问题，起草报价，并持续跟进直到客户回复。"
+      },
+      "documents": {
+        "name": "文档智能体",
+        "description": "对合同、报告和表单进行提取、比对和摘要，转化为结构化数据。"
+      },
+      "engineering": {
+        "name": "PR 评审与故障事件智能体",
+        "description": "评审拉取请求，并将告警和日志整理成易读的故障事件摘要。"
+      },
+      "research": {
+        "name": "研究智能体",
+        "description": "提供可点开查证的带出处结论：竞争对手、供应商、市场和尽职调查。"
+      },
+      "data": {
+        "name": "数据录入智能体",
+        "description": "读取邮件和 PDF，将字段写入您的 CRM、ERP 或电子表格，保存前会进行核查。"
+      }
+    },
+    "models": {
+      "anthropic": {
+        "name": "Anthropic Claude",
+        "why": "擅长对长文档进行严谨推理，工具调用可靠；是我们编写代码或处理复杂工作流的智能体的首选。"
+      },
+      "openai": {
+        "name": "OpenAI GPT",
+        "why": "生态广泛，通用推理能力强，具备视觉和语音能力，适合面向客户的智能体。"
+      },
+      "google": {
+        "name": "Google Gemini",
+        "why": "超长上下文与多模态输入，如果您使用 Google Workspace，还能贴近数据。"
+      },
+      "microsoft": {
+        "name": "在您的 Microsoft 租户中使用 Azure OpenAI",
+        "why": "在您的 Microsoft 协议和数据边界内使用 OpenAI 模型，与 Copilot 及 Microsoft 365 权限协同。"
+      },
+      "xai": {
+        "name": "xAI Grok",
+        "why": "快速推理并具备实时知识，适合研究和市场监测类智能体。"
+      },
+      "open": {
+        "name": "开放权重模型（Llama、Qwen、Mistral、DeepSeek、gpt-oss）",
+        "why": "通过 vLLM 或 Ollama 在您自己的硬件上运行：无需按 token 付费，数据不出您的网络。"
+      },
+      "openRoutine": {
+        "name": "用于常规步骤的小型开放权重模型",
+        "why": "分类、提取和脱敏在本地低成本运行；只有最难的步骤才交给前沿模型。"
+      }
+    },
+    "hosting": {
+      "cloud": "供应商的企业版 API，在提供时启用零数据保留。启动最快；之后可迁移到您自己的租户，无需重建智能体。",
+      "tenant": "您自己位于英国或欧盟区域的 Azure、AWS 或 Google Cloud 账户。通过您云上的私有端点访问模型，日志保留在您的账户中。",
+      "onprem": "自托管于您自己的服务器或 AI 工作站。Jobshout、模型和日志都在您的网络内运行；我们只连接您允许的服务。",
+      "airgap": "在完全不联网的 AI 工作站上离线运行。开放权重模型在本地运行，更新通过经批准的介质导入，任何数据都不会离开大楼。"
+    },
+    "airgapNote": "{provider} 的云端模型需要联网，因此对于离线系统，我们会在本地使用开放权重模型，并将 {provider} 留给您日后增加的联网工作。",
+    "connectors": {
+      "m365": "Microsoft Graph 连接器（邮件、日历、Teams、SharePoint），使用委派权限",
+      "google": "Google Workspace 连接器（Gmail、Calendar、Drive），按用户限定权限",
+      "crm": "CRM 连接器，可读取和更新记录，写入操作需审批",
+      "finance": "财务连接器，对账簿只读；记账和付款始终需审批",
+      "dev": "通过 MCP 接入 GitHub、GitLab 和 Jira 连接器",
+      "helpdesk": "服务台连接器，用于工单、宏和知识库",
+      "chat": "Slack 或 Teams 机器人，让员工在日常工作的地方向智能体下达任务并审批",
+      "database": "只读数据库或数据仓库连接器，具备行级权限",
+      "files": "带 OCR 的文档处理流水线，适用于 PDF、扫描件和电子表格",
+      "legacy": "为没有可用 API 的系统定制 MCP 服务器或浏览器自动化"
+    },
+    "controls": {
+      "draft": "仅起草模式：智能体从不发送、付款或发布；由人来完成。",
+      "gated": "每次发送、支出、发布或删除都设审批关口。读取和起草自主运行。",
+      "auto": "在预算、白名单和停止条件范围内自主运行，每日审阅运行日志。",
+      "always": "每一步的输入、输出、token 数量和成本都会被追踪并留存以供审计。",
+      "personal": "个人数据在进入您边界之外的任何模型之前都会被脱敏。",
+      "financial": "付款和账簿记账始终需要指定审批人。",
+      "health": "特殊类别数据保留在您掌控的基础设施上，每条记录的访问都会被记录。",
+      "privileged": "特权文件和董事会文件保存在独立工作区，并有专门的审批人。",
+      "ip": "源代码仅在零保留条款下或在自托管模型上处理。"
+    },
+    "plan": {
+      "now": [
+        "第 1 周：现场调研，跟岗观察并梳理数据源",
+        "第 2 周：首个智能体基于您的真实数据上线，并设有审批关口",
+        "第 3–4 周：与使用者一起调优，然后扩大权限"
+      ],
+      "quarter": [
+        "第 1–2 周：跨团队调研，并给出智能体优先级清单",
+        "第 3–6 周：前两个智能体上线，连接器加固",
+        "第 7–12 周：推广、培训并移交给您的团队"
+      ],
+      "exploring": [
+        "与您的管理团队举行一次调研研讨会",
+        "一份书面商业论证，列明每个智能体的成本、节省和风险",
+        "针对回报最明显的流程开展为期两周的试点"
+      ]
+    },
+    "scenarios": {
+      "ceo": "早上 7:30。在 CEO 打开笔记本电脑之前，高管助理智能体已读完 140 封夜间邮件，归档了无关内容，以其口吻起草了 11 封回复，并在最上方放好一页简报：今天需要做出的三项决定、正在等数据的投资人，以及 10:00 董事会电话会议的要点。CEO 在手机上批准了八封回复，修改了三封。",
+      "cto": "02:14，一次部署失败。到 08:00，工程助理智能体已收集日志、关联出问题的提交、写好附带可能原因的故障事件摘要，并以拉取请求形式提交了修复草案。值班工程师只需评审，而不必从零开始。",
+      "cfo": "月结第二个工作日，财务助理智能体已完成银行流水对账，为变动超过 5% 的每个成本中心起草差异说明，并列出违反采购政策的四张发票。CFO 只需花一小时审阅，而不是花三天整理。",
+      "coo": "供应商来信称一批货将延迟一周。运营智能体找出受影响的订单，为涉及的三位客户起草消息，并从您批准的名单中推荐替代供应商。运营经理批准了两条消息，并亲自致电第三位客户。",
+      "sales": "18:00 收到一条新咨询。销售管道智能体研究该公司、评估匹配度、起草附带相关案例的回复，并在客户经理的日程中预订时段待审批。线索当晚就能收到回复。",
+      "support": "周一早上有 300 张工单待处理。客户服务智能体已基于知识库回答了 180 张常规工单，为 90 张起草了回复，并按客户流失风险排序，标记出 30 条投诉交由人工处理。",
+      "people": "某职位收到 400 份申请。人力资源智能体按标准筛选，列出附理由的 25 人候选名单，安排初次面试，并为其余每位申请人准备礼貌回复待审批。",
+      "legal": "客户退回一份 40 页的合同。合同与合规智能体将其与您的合同手册比对，标出六项非标准条款，为每项提出修订建议，并将审查记录到证据日志中。",
+      "default": "FDE 与您的团队共处一天，找出消耗最昂贵工时的流程，并在两周内让智能体基于您的真实数据完成该工作的初稿。"
+    }
+  },
+  "scenarios": {
+    "eyebrow": "真实场景",
+    "title": "我们在客户会面中听到的，以及我们构建的",
+    "lede": "根据我们驻场工程师主持的首次会面综合整理的示例。名称和数字仅作说明。",
+    "items": [
+      {
+        "badge": "CEO · 专业服务",
+        "title": "“我每天的头两个小时都花在邮件上。”",
+        "description": "FDE 梳理了 Outlook、CRM 和董事会门户，发现大多数回复遵循五种模式。如今，高管助理智能体连夜起草回复和会议简报；CEO 在手机上审批。",
+        "list": [
+          "数据：Microsoft 365、HubSpot、董事会门户",
+          "模型：通过公司的 Azure 租户使用 Claude",
+          "管控：每封回复发送前均需审批"
+        ]
+      },
+      {
+        "badge": "CFO · 制造业",
+        "title": "“月结要花九天，大部分时间都在复制粘贴。”",
+        "description": "调研发现，只有差异说明需要判断，匹配和记账都是规则。我们用代码实现了规则自动化，并让智能体负责差异说明和政策核查。",
+        "list": [
+          "数据：Sage、银行流水、采购订单电子表格",
+          "模型：本地模型负责提取，前沿模型负责撰写说明",
+          "管控：无指定审批人，不得记账或付款"
+        ]
+      },
+      {
+        "badge": "CTO · 软件公司",
+        "title": "“我的资深工程师整周都在评审别人的代码。”",
+        "description": "PR 评审智能体按团队标准检查每个拉取请求，另一个智能体根据 Sentry 和日志撰写故障事件摘要。资深工程师只需审阅智能体的备注，而非整个 diff。",
+        "list": [
+          "数据：GitHub、Jira、Sentry、Slack",
+          "模型：Claude Code 负责评审，开放权重模型负责日志分流",
+          "管控：仅限评论；合并仍由人完成"
+        ]
+      },
+      {
+        "badge": "律师事务所 · 离线",
+        "title": "“任何特权信息都绝不能离开大楼。”",
+        "description": "我们与 Workstation 一起确定 AI 工作站规格，并完全离线运行开放权重模型。合同智能体将文件与律所的合同手册比对并起草修订；每一处都由合伙人批准。",
+        "list": [
+          "数据：文档管理系统、先例库",
+          "模型：在本地 GPU 工作站上运行的开放权重模型",
+          "管控：物理隔离，审计日志保存在本地"
+        ]
+      }
+    ]
+  },
+  "fde": {
+    "eyebrow": "驻场工程师",
+    "title": "融入您团队的专家，而不是排队的工单",
+    "lede": "每个项目都配有一名驻场工程师（FDE）。他们参加您的会议，了解您的业务实际如何运作，并与您一起快速构建和部署智能体。",
+    "certsTitle": "已获得您可能选择的各平台认证",
+    "certs": [
+      "Claude Code（Anthropic）",
+      "OpenAI",
+      "Google Cloud 与 Gemini",
+      "Microsoft Azure AI",
+      "xAI Grok"
+    ],
+    "points": [
+      {
+        "title": "提出正确的问题",
+        "description": "数据存放在哪里、归谁所有、出错时会怎样，以及哪一步真正需要判断。"
+      },
+      {
+        "title": "在您的系统中构建",
+        "description": "智能体部署在您的代码仓库和云端或硬件上，连接您团队已在使用的工具。"
+      },
+      {
+        "title": "直到运行顺畅才离开",
+        "description": "他们与使用者一起调优智能体，并移交运维手册，让您的团队无需我们也能运行。"
+      }
+    ]
+  },
+  "framework": {
+    "eyebrow": "框架",
+    "title": "基于 Jobshout——我们的智能体框架与任务管理器",
+    "lede": "Jobshout 是每个 TenthMatrix 智能体运行所依托的开源框架。每个智能体负责自己的通道，使用自己的工具，并在同一个审批关口停下。每次运行都会连同成本和追踪记录出现在任务看板上。",
+    "list": [
+      "包含项目和冲刺的任务看板",
+      "以依赖图呈现的多智能体工作流",
+      "用于每日和每周工作的定时任务",
+      "技能、插件和 MCP 连接器",
+      "自带模型，包括本地模型",
+      "每次运行的成本、延迟和 OpenTelemetry 追踪"
+    ],
+    "primary": "Jobshout AI 工具与框架",
+    "secondary": "Jobshout 智能体"
+  },
+  "offline": {
+    "eyebrow": "自托管 AI",
+    "title": "想要完全不联网的 AI 吗？",
+    "body": "有些数据永远不能离开大楼。我们在您网络内的 AI 工作站上完全离线运行开放权重模型，并在其上构建同样的智能体。硬件由我们的姊妹公司 Workstation 提供。",
+    "link": "Explore AI workstations at workstation.co.uk"
+  },
+  "faq": {
+    "title": "常见问题",
+    "items": [
+      {
+        "question": "聊天机器人和 AI 智能体有什么区别？",
+        "answer": "聊天机器人只回答问题，智能体则完成任务：它读取您的系统、制定计划、使用工具完成工作，并在任何有风险的操作前停下等待审批。您得到的是完成的草稿、报告或更新，而不是一段建议。"
+      },
+      {
+        "question": "我们必须只选一家 AI 公司吗？",
+        "answer": "不必。我们的许多客户用前沿模型处理最难的步骤，用小型开放权重模型处理常规步骤。Jobshout 允许每个智能体使用不同的模型，日后切换也无需重建。"
+      },
+      {
+        "question": "智能体能在完全不联网的情况下运行吗？",
+        "answer": "可以。借助 Workstation 的 AI 工作站和开放权重模型，包括模型、框架和日志在内的整个系统都能在您的大楼内离线运行。"
+      },
+      {
+        "question": "驻场工程师具体做什么？",
+        "answer": "他们与您的团队坐在一起，梳理流程和数据源，判断哪里值得使用 LLM，并在您的环境中构建和部署智能体。他们会一直留到使用者信任智能体为止。"
+      },
+      {
+        "question": "我在这次旅程中给出的答案会怎样处理？",
+        "answer": "在您点击发送之前，什么都不会发生。蓝图在您的浏览器中生成。如果您发送，它将作为咨询提交给我们的团队，以便工程师为首次会面做好准备。"
+      }
+    ]
+  },
+  "cta": {
+    "title": "更想当面聊聊？",
+    "body": "预约一次调研通话，驻场工程师将结合您自己的流程，与您实时探讨同样的问题。",
+    "primary": "启动项目",
+    "secondary": "关于 TenthMatrix"
+  }
+}

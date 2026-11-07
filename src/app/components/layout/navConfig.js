@@ -49,6 +49,7 @@ import {
   Handshake,
   BadgeCheck,
   Send,
+  Route,
 } from 'lucide-react';
 
 export const HARDWARE_URL = 'https://www.workstation.co.uk/ai-workstations';
@@ -63,6 +64,7 @@ export const NAV_GROUPS = [
       { key: 'aiAgentDev', href: '/ai-agent-development', icon: Bot },
       { key: 'genAiDev', href: '/generative-ai-development', icon: Sparkles },
       { key: 'whyAgents', href: '/why-tenthmatrix-agents', icon: BadgeCheck },
+      { key: 'agentJourney', href: '/ai-agent-journey', icon: Route },
       { key: 'startProject', href: '/start-a-project', icon: Send },
     ],
   },
@@ -148,7 +150,7 @@ export const NAV_GROUPS = [
 
 /** Footer columns: group key → item keys/hrefs (labels from nav.items / footer.links). */
 export const FOOTER_COLUMNS = [
-  { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'startProject'] },
+  { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'agentJourney', 'startProject'] },
   { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
   { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
