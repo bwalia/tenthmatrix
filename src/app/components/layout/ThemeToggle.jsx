@@ -5,10 +5,12 @@ import { useTranslations } from 'next-intl';
 import { Monitor, Moon, Sun } from 'lucide-react';
 import s from './ThemeToggle.module.scss';
 
-// Cycles light → dark → system (THEME.prompt.md §3) through window.__tmTheme,
-// which the blocking script in src/app/layout.js installs before first paint.
-const ORDER = ['light', 'dark', 'system'];
-const ICONS = { system: Monitor, light: Sun, dark: Moon };
+// One click always flips what the visitor sees: light ↔ dark. The stored
+// preference starts as "system" (the blocking script in src/app/Document.jsx
+// follows the OS until then); the first click pins the opposite of the theme
+// currently showing. A three-way light → dark → system cycle made one click in
+// three look like it did nothing, whenever "system" resolved to the theme
+// already on screen.
 
 function subscribe(cb) {
   window.addEventListener('tm-theme-change', cb);
@@ -18,14 +20,25 @@ function subscribe(cb) {
     window.removeEventListener('storage', cb);
   };
 }
-const read = () => window.__tmTheme?.get?.() || 'system';
+
+// The theme actually on screen (data-theme is set before first paint).
+const readTheme = () => {
+  const t = document.documentElement.getAttribute('data-theme');
+  return t === 'dark' || t === 'light' ? t : null;
+};
 
 export default function ThemeToggle({ className = '', tone = 'default' }) {
   const t = useTranslations('theme');
-  const pref = useSyncExternalStore(subscribe, read, () => 'system');
-  const next = ORDER[(ORDER.indexOf(pref) + 1) % ORDER.length];
-  const Icon = ICONS[pref] || Monitor;
-  const label = t('toggle', { current: t(pref), next: t(next) });
+  const current = useSyncExternalStore(subscribe, readTheme, () => null);
+  const next = current === 'dark' ? 'light' : 'dark';
+  const Icon = current === 'dark' ? Moon : current === 'light' ? Sun : Monitor;
+  const label = t('toggle', { current: t(current || 'system'), next: t(next) });
+
+  const toggle = () => {
+    // Read the live theme at click time so a stale render can never need a second click.
+    const live = readTheme() || current;
+    window.__tmTheme?.set?.(live === 'dark' ? 'light' : 'dark');
+  };
 
   return (
     <button
@@ -33,7 +46,7 @@ export default function ThemeToggle({ className = '', tone = 'default' }) {
       className={`tm-theme-toggle ${s.toggle} ${tone === 'night' ? s.night : ''} ${className}`.trim()}
       aria-label={label}
       title={label}
-      onClick={() => window.__tmTheme?.set?.(next)}
+      onClick={toggle}
     >
       <Icon aria-hidden="true" size={20} strokeWidth={1.75} />
     </button>
