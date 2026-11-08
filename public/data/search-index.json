@@ -316,6 +316,31 @@
   },
   {
     "type": "blog",
+    "id": "blog-nebuladb-ai-agents-001",
+    "slug": "build-ai-agents-with-nebuladb-semantic-search-rag",
+    "title": "Build AI Agents with NebulaDB: Semantic Search, RAG and a Visa AI Agent",
+    "excerpt": "How we built semantic search, RAG and a Thai Visa AI Agent on NebulaDB, with real queries, query plans and retrieval scores measured on our 8.3M-document production server, and the guards that keep private data and invented numbers out of the answers.",
+    "content": "Most AI agents fail on data, not on the model. They retrieve the wrong document, leak a record the user should not see, or let a language model invent a number that sounds right. We built eight hands-on NebulaDB Labs and a working Visa AI Agent to show how to get that layer right. This post walks through what we built, what we measured, and what we learned. The full technical guide has every query, plan and result. The idea: put the agent's data, search and model calls in one place Cloud databas",
+    "tags": "ai-agents, rag, nebuladb, vector-search, semantic-search, llm, database, mcp, ollama, rust, ai",
+    "date": "2026-11-08",
+    "image": "/img/nebuladb-ai-agents-cover.svg",
+    "author": "Balinder Walia",
+    "category": [
+      "ai-agents",
+      "rag",
+      "nebuladb",
+      "vector-search",
+      "semantic-search",
+      "llm",
+      "database",
+      "mcp",
+      "ollama",
+      "rust",
+      "ai"
+    ]
+  },
+  {
+    "type": "blog",
     "id": "e0aa7116-500a-4f4a-d7a5-2136fd4861f4",
     "slug": "build-cluster-kubernates",
     "title": "Building Production Kubernetes Clusters with RKE2 and Longhorn",
@@ -1900,6 +1925,24 @@
       "sre",
       "kubernetes",
       "ai"
+    ]
+  },
+  {
+    "type": "article",
+    "id": "nebuladb-ai-agents-article-01",
+    "slug": "nebuladb-ai-agents-technical-guide-semantic-search-rag",
+    "title": "Building AI Agents with NebulaDB: A Technical Guide from the Labs",
+    "excerpt": "AlloyDB AI ideas rebuilt for an open-source database: filtered semantic SQL, hybrid search, step-by-step RAG, access control in the query, deterministic agents and RAG freshness, with live results",
+    "content": "This is the long-form technical guide. For a shorter overview, read the companion blog post . 1. Why build agents on the database An AI agent is a loop. It reads a request, decides what it needs to know, fetches it, and writes a reply or takes an action. Most of the hard engineering sits in the \"fetches it\" step: Relevance : finding the right passage when the user's words do not match the document's words. Structure : applying hard constraints such as age, price, stock or date that semantic simi",
+    "tags": "NebulaDB, AI agents, RAG, retrieval augmented generation, semantic search, vector search, hybrid search, BM25, HNSW, semantic SQL, AlloyDB AI alternative, open source vector database, MCP, Ollama, visa AI agent, agentic RAG, access control, hallucination check",
+    "date": "2026-11-08",
+    "image": "/img/nebuladb-ai-agents-cover.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "AI Agents",
+      "Database",
+      "LLM",
+      "Open Source"
     ]
   },
   {
