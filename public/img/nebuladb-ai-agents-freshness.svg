@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="t d">
+  <title id="t">RAG freshness loop</title>
+  <desc id="d">A scheduled crawler fetches official pages and hashes them; on a change it upserts the new text under the same document id with source and as_of; the agent cites the new rule on the next question. No model is retrained.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="520" fill="#0b1020"/>
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="40" y="54" font-size="26" font-weight="700" fill="#ffffff">When the official rules change, update a document, not the model</text>
+    <text x="40" y="86" font-size="17" fill="#94a3b8">Simulated in the RAG Lab: "DTV proof of funds raised from 500,000 to 700,000 THB"</text>
+
+    <rect x="40" y="130" width="250" height="150" rx="14" fill="#1e293b" stroke="#475569"/>
+    <text x="165" y="168" text-anchor="middle" font-size="19" font-weight="700" fill="#f8fafc">1. Fetch + hash</text>
+    <text x="165" y="198" text-anchor="middle" font-size="15" fill="#cbd5e1">official page,</text>
+    <text x="165" y="220" text-anchor="middle" font-size="15" fill="#cbd5e1">on a schedule</text>
+    <text x="165" y="256" text-anchor="middle" font-size="14" fill="#94a3b8">unchanged → stop</text>
+
+    <rect x="340" y="130" width="250" height="150" rx="14" fill="#172554" stroke="#3b82f6"/>
+    <text x="465" y="168" text-anchor="middle" font-size="19" font-weight="700" fill="#dbeafe">2. Upsert, same id</text>
+    <text x="465" y="198" text-anchor="middle" font-size="15" fill="#bfdbfe">rq-dtv-funds, vt-dtv</text>
+    <text x="465" y="220" text-anchor="middle" font-size="15" fill="#bfdbfe">source + as_of</text>
+    <text x="465" y="256" text-anchor="middle" font-size="14" fill="#93c5fd">re-embedded on write</text>
+
+    <rect x="640" y="130" width="250" height="150" rx="14" fill="#1e293b" stroke="#475569"/>
+    <text x="765" y="168" text-anchor="middle" font-size="19" font-weight="700" fill="#f8fafc">3. Review (optional)</text>
+    <text x="765" y="198" text-anchor="middle" font-size="15" fill="#cbd5e1">nebula-cdc webhook</text>
+    <text x="765" y="220" text-anchor="middle" font-size="15" fill="#cbd5e1">to the team</text>
+
+    <rect x="940" y="130" width="220" height="150" rx="14" fill="#14532d" stroke="#22c55e"/>
+    <text x="1050" y="168" text-anchor="middle" font-size="19" font-weight="700" fill="#dcfce7">4. Next answer</text>
+    <text x="1050" y="198" text-anchor="middle" font-size="15" fill="#bbf7d0">cites 700,000 THB</text>
+    <text x="1050" y="220" text-anchor="middle" font-size="15" fill="#bbf7d0">and the new date</text>
+
+    <g stroke="#94a3b8" stroke-width="2.5" fill="none" marker-end="url(#a)">
+      <path d="M290 205 H336"/><path d="M590 205 H636"/><path d="M890 205 H936"/>
+      <path d="M1050 280 V 330 H 165 V 284" stroke-dasharray="7 6"/>
+    </g>
+    <text x="600" y="356" text-anchor="middle" font-size="15" fill="#94a3b8">repeat on the next schedule</text>
+
+    <rect x="40" y="390" width="1120" height="96" rx="14" fill="#1a1530" stroke="#5b21b6"/>
+    <text x="64" y="426" font-size="17" font-weight="700" fill="#ede9fe">Before: "at least 500,000 THB"  →  After: "at least 700,000 THB, up from 500,000 THB"</text>
+    <text x="64" y="458" font-size="15" fill="#c4b5fd">The Lab shows both answers side by side, the source diff, and whether the changed document was retrieved. Revert restores the original.</text>
+  </g>
+</svg>
