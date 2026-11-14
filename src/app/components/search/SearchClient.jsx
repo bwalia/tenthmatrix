@@ -12,7 +12,7 @@ import s from './Search.module.scss';
 const ICONS = { article: FileText, insight: LineChart, blog: Newspaper };
 
 function resultUrl(locale, r) {
-  if (r.type === 'article') return `/${locale}/articles/${r.slug}`;
+  if (r.type === 'article') return `/${locale}/technical-notes/${r.slug}`;
   if (r.type === 'insight') return `/${locale}/insights/${r.slug}`;
   return `/${locale}/docs/blogs/${r.slug}`;
 }
@@ -94,7 +94,7 @@ function SearchInner({ locale, initial, suggestions }) {
       ) : null}
       {active && !loading && !items.length ? (
         <p className={s.hint}>
-          {t('searchPage.tryHint')} <Link href={`/${locale}/articles`}>{t('searchPage.browseArticles')}</Link>
+          {t('searchPage.tryHint')} <Link href={`/${locale}/technical-notes`}>{t('searchPage.browseArticles')}</Link>
         </p>
       ) : null}
     </div>

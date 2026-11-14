@@ -56,7 +56,15 @@ const nextConfig = {
 
 async function redirects() {
     const locale = ':locale(en|es|fr|nl|hi|th|zh|ar|bn|pt|ru|ur|pa)';
+    // Articles became Technical Notes (/technical-notes), same as Workstation;
+    // /tech-notes is a short alias. Un-prefixed /articles and /tech-notes get /en
+    // from the locale proxy first, then land here.
+    const toTechNotes = ['articles', 'tech-notes'].flatMap((from) => [
+        { source: `/${locale}/${from}`, destination: '/:locale/technical-notes', permanent: true },
+        { source: `/${locale}/${from}/:path*`, destination: '/:locale/technical-notes/:path*', permanent: true },
+    ]);
     return [
+        ...toTechNotes,
         { source: `/${locale}/blogs`, destination: '/:locale/docs/blogs', permanent: true },
         { source: `/${locale}/blogs/:path*`, destination: '/:locale/docs/blogs/:path*', permanent: true },
     ];

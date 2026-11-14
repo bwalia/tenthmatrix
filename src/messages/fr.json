@@ -9,7 +9,7 @@
     "products": "Produits",
     "services": "Services",
     "resources": "Ressources",
-    "articles": "Articles",
+    "articles": "Notes techniques",
     "blog": "Blog",
     "insights": "Analyses",
     "search": "Rechercher",
@@ -20,7 +20,7 @@
     "closeMenu": "Fermer le menu",
     "cta": "Démarrer le parcours IA",
     "ctaProject": "Démarrer un projet",
-    "searchPlaceholder": "Rechercher des articles, billets et documents",
+    "searchPlaceholder": "Rechercher des notes techniques, des articles et la documentation",
     "hardware": "Besoin de matériel ? Stations de travail GPU chez Workstation",
     "groups": {
       "work": {
@@ -62,8 +62,8 @@
       "resources": {
         "label": "Ressources",
         "title": "Ressources",
-        "intro": "Articles techniques, le blog, la série d'analyses Jev et notre documentation.",
-        "all": "Lire les articles"
+        "intro": "Notes techniques, le blog, la série d’analyses Jev et notre documentation.",
+        "all": "Lire les notes techniques"
       }
     },
     "items": {
@@ -204,7 +204,7 @@
         "desc": "Formation pour dirigeants et équipes"
       },
       "articles": {
-        "label": "Articles",
+        "label": "Notes techniques",
         "desc": "Articles techniques approfondis"
       },
       "blog": {
@@ -401,7 +401,7 @@
       "production": {
         "title": "Conçu par une équipe qui exploite des agents",
         "body": "Nos propres agents tournent en production sur cette stack. Nous publions leur fonctionnement, y compris ce qui a cassé.",
-        "proof": "Lire les articles"
+        "proof": "Lire les notes techniques"
       }
     },
     "steps": {
@@ -486,8 +486,8 @@
     "latestSection": {
       "eyebrow": "Publications",
       "title": "Les dernières nouvelles de l'équipe",
-      "lede": "Notes d'ingénierie, articles techniques approfondis et la série d'analyses Jev.",
-      "articles": "Tous les articles",
+      "lede": "Articles de blog, notes techniques détaillées et la série d’analyses Jev.",
+      "articles": "Toutes les notes techniques",
       "blog": "Le blog",
       "empty": "De nouveaux articles arrivent bientôt."
     },
@@ -506,11 +506,11 @@
     }
   },
   "articlesPage": {
-    "eyebrow": "Articles",
-    "title": "Articles techniques",
-    "subtitle": "Des articles d'ingénierie approfondis sur les agents, les modèles et les logiciels qui les entourent.",
-    "empty": "Aucun article pour l'instant.",
-    "count": "{count, plural, one {# article} other {# articles}}"
+    "eyebrow": "Pour les développeurs",
+    "title": "Notes techniques",
+    "subtitle": "Notes d’ingénierie détaillées sur les agents, les modèles et les logiciels qui les entourent.",
+    "empty": "Aucune note technique pour le moment.",
+    "count": "{count, plural, one {# note} other {# notes}}"
   },
   "blog": {
     "title": "Blog",
@@ -564,9 +564,9 @@
   "searchPage": {
     "eyebrow": "Rechercher",
     "title": "Rechercher sur TenthMatrix",
-    "subtitle": "Trouvez des articles techniques, des billets de blog et des analyses.",
+    "subtitle": "Trouvez des notes techniques, des articles de blog et des analyses.",
     "label": "Requête de recherche",
-    "placeholder": "Rechercher des articles, billets et analyses",
+    "placeholder": "Rechercher des notes techniques, des articles et des analyses",
     "submit": "Rechercher",
     "searching": "Recherche…",
     "results": "{count} résultats pour « {query} »",
@@ -581,7 +581,7 @@
       "observability"
     ],
     "tryHint": "Essayez un terme plus court ou plus large, ou",
-    "browseArticles": "parcourez tous les articles."
+    "browseArticles": "parcourez toutes les notes techniques."
   },
   "contact": {
     "title": "Contactez-nous",
@@ -618,14 +618,14 @@
   },
   "errors": {
     "notFoundTitle": "Cette page n'existe pas ici",
-    "notFoundBody": "Elle a peut-être été déplacée lors de la séparation entre TenthMatrix et Workstation, ou le lien est mal saisi. Recherchez-la ou commencez par les articles.",
+    "notFoundBody": "Elle a peut-être été déplacée lors de la séparation de TenthMatrix et de Workstation, ou le lien est mal saisi. Recherchez-la ou commencez par les notes techniques.",
     "goHome": "Aller à l'accueil",
     "somethingWrong": "Cette page n'a pas pu se charger",
     "tryAgain": "Réessayer",
     "notFoundEyebrow": "Page introuvable",
-    "browseArticles": "Parcourir les articles",
+    "browseArticles": "Parcourir les notes techniques",
     "errorEyebrow": "Erreur",
-    "errorBody": "Une erreur s'est produite de notre côté. Réessayez ou revenez aux articles."
+    "errorBody": "Une erreur s’est produite de notre côté. Réessayez ou revenez aux notes techniques."
   },
   "theme": {
     "toggle": "Thème de couleur : {current}. Passer à {next}.",
@@ -658,7 +658,7 @@
   },
   "kinds": {
     "blog": "Blog",
-    "article": "Article",
+    "article": "Note technique",
     "insight": "Analyse"
   },
   "article": {
@@ -673,7 +673,7 @@
     "copied": "Copié",
     "copyCode": "Copier le code dans le presse-papiers",
     "morePosts": "Plus d'articles du blog",
-    "moreArticles": "Plus d'articles techniques"
+    "moreArticles": "Plus de notes techniques"
   },
   "docs": {
     "eyebrow": "Documentation",
@@ -685,9 +685,9 @@
     "faqCategories": "Catégories de la FAQ",
     "apisEmpty": "La référence publique de l'API est en cours de préparation. Dites-nous ce que vous voulez intégrer et nous vous enverrons les endpoints utiles.",
     "apisContact": "Se renseigner sur l'API",
-    "articlesTitle": "Articles techniques",
+    "articlesTitle": "Notes techniques",
     "articlesBody": "Des articles approfondis avec schémas d'architecture, code et les compromis derrière chaque décision.",
-    "articlesCta": "Lire les articles",
+    "articlesCta": "Lire les notes techniques",
     "sections": {
       "introduction": {
         "title": "Introduction",

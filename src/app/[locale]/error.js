@@ -20,7 +20,7 @@ export default function Error({ error, reset }) {
       actions={
         <>
           <Button onClick={() => reset()}>{t('tryAgain')}</Button>
-          <Button href={`/${locale}/articles`} variant="secondary">
+          <Button href={`/${locale}/technical-notes`} variant="secondary">
             {t('browseArticles')}
           </Button>
         </>

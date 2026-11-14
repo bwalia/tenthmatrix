@@ -1,0 +1,344 @@
+<article class="article-content">
+
+<p class="lead"><em>This is the long-form technical note for developers and platform engineers. For a shorter overview aimed at business managers, read the <a href="/en/docs/blogs/openshell-cncf-sandbox-ai-agent-runtime-security">companion blog post</a>.</em></p>
+
+<p><img src="/img/openshell-cncf-cover.svg" alt="OpenShell joins the CNCF Sandbox: an AI agent in an isolated sandbox, with a supervisor that allows, asks or denies each request" width="1200" height="630" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
+
+<h2 id="why">1. Why agent security belongs in the runtime</h2>
+
+<p>A coding agent is an untrusted program with a very good reason to run. It executes code it has just written, installs packages it has just chosen, reads files it was not explicitly given and calls APIs with whatever credentials are in its environment. Every guardrail that lives in the prompt or the model ("do not read <code>.env</code>", "only push to feature branches") is advisory. It holds until a model makes a mistake or someone else's text tells it otherwise.</p>
+
+<p>The realistic threats are boring and effective:</p>
+
+<ul>
+  <li><strong>Indirect prompt injection.</strong> A README, issue comment, web page or tool result contains instructions. The agent follows them with your credentials.</li>
+  <li><strong>Supply chain.</strong> A dependency's install script runs with the agent's file and network access.</li>
+  <li><strong>Credential exfiltration.</strong> Tokens in environment variables, <code>~/.config</code> or a <code>.env</code> file are one <code>curl</code> away from an attacker's server.</li>
+  <li><strong>Side channels.</strong> DNS lookups to an attacker-controlled domain, or a request to the cloud metadata service at <code>169.254.169.254</code>.</li>
+  <li><strong>Plain mistakes.</strong> <code>rm -rf</code> in the wrong directory, a force push, a loop against a paid API.</li>
+</ul>
+
+<p>None of these is solved by a better system prompt. They are solved the way we have always handled untrusted code: least privilege, enforced by the kernel and by a network chokepoint the workload cannot bypass. That is OpenShell's job. We use it every day at TenthMatrix to run our own coding agents, and this note is the guide we would give a developer joining the team.</p>
+
+<h2 id="cncf">2. What joined the CNCF, and what it means for you</h2>
+
+<p>On 10 November 2026 the Cloud Native Computing Foundation announced that OpenShell is joining as a Sandbox project, "bringing the secure runtime for autonomous AI agents into vendor-neutral, ecosystem-led stewardship". The announcement describes it as adding "runtime governance and policy enforcement for autonomous agents", and says it governs "how agents execute, which resources and data they can access and where inference requests are routed". It joined alongside other AI infrastructure projects, including Agent Substrate and llm-d, taking the CNCF portfolio to 231 projects (<a href="https://www.cncf.io/announcements/2026/11/10/cncf-hits-major-milestones-with-global-community-growth-record-industry-investment-and-a-new-generation-of-projects-to-build-ai-systems-in-production/" rel="noopener">CNCF announcement</a>).</p>
+
+<p>Practical facts for developers:</p>
+
+<ul>
+  <li><strong>Licence</strong>: Apache 2.0.</li>
+  <li><strong>Code</strong>: <a href="https://github.com/NVIDIA/OpenShell" rel="noopener">github.com/NVIDIA/OpenShell</a> today. The README says development is moving to the <code>ai-openshell</code> GitHub organisation; until the move completes, issues and pull requests stay in the NVIDIA repository.</li>
+  <li><strong>Version</strong>: 0.1.8, released on 10 November 2026. The 0.1.x line introduced a stable release cadence; earlier 0.0.x releases exist, and there is an upgrade guide for 0.1.0.</li>
+  <li><strong>Maturity</strong>: CNCF Sandbox is the entry stage for experimental projects. Pin versions, read release notes, and expect the CLI and policy schema to keep evolving.</li>
+  <li><strong>SDKs</strong>: Python, TypeScript, Go and Rust.</li>
+</ul>
+
+<h2 id="architecture">3. Architecture: the agent asks, the supervisor decides</h2>
+
+<p><img src="/img/openshell-architecture.svg" alt="OpenShell architecture: the gateway control plane manages lifecycle, policy, the prover, the advisor and providers; on the host a sandbox runs the untrusted agent under Landlock and seccomp with no direct network, and a trusted supervisor checks every request, injects credentials and opens approved connections" width="1200" height="720" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
+
+<p>OpenShell splits every deployment into a trusted side and an untrusted side. The components are:</p>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Component</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Side</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">What it does</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Gateway</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Trusted</td><td style="padding:8px;border:1px solid #cbd5e1;">The control plane. Manages sandbox lifecycle and delivers policy and settings. The installer sets up a local gateway at <code>https://127.0.0.1:17670</code> on Linux (<code>https://localhost:17670</code> on macOS).</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Compute driver</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Trusted</td><td style="padding:8px;border:1px solid #cbd5e1;">Provisions the workload and its supervisor, and builds the isolation boundary on Docker, Podman, Kubernetes or a microVM.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Supervisor</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Trusted</td><td style="padding:8px;border:1px solid #cbd5e1;">Checks each request against policy, supplies credentials, resolves DNS, opens approved connections and keeps the link to the gateway.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Sandbox</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Untrusted</td><td style="padding:8px;border:1px solid #cbd5e1;">Shares the boundary with the agent. It reports what the agent is trying to do and never makes policy decisions.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Policy prover</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Trusted</td><td style="padding:8px;border:1px solid #cbd5e1;">Formally checks proposed policy changes before they are approved. Also ships as a standalone <code>openshell-prover</code> command you can run in CI.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Policy advisor</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Trusted</td><td style="padding:8px;border:1px solid #cbd5e1;">Lets the agent propose narrow network rules that a human reviews and approves.</td></tr>
+</tbody>
+</table>
+
+<p>The design principle to remember: <strong>the sandbox is assumed compromised</strong>. Anything that matters, such as real credentials, DNS resolution and the decision to open a socket, happens on the supervisor's side of the boundary.</p>
+
+<h2 id="isolation">4. The isolation layers</h2>
+
+<p>OpenShell stacks several Linux mechanisms rather than relying on one:</p>
+
+<ul>
+  <li><strong>Landlock</strong> limits filesystem access to the paths in the policy. It needs Landlock ABI v3 or later in the kernel.</li>
+  <li><strong>seccomp user notification</strong> intercepts network operations, TCP connection opens and DNS queries, and hands them to the supervisor instead of letting the kernel complete them.</li>
+  <li><strong>No privileges.</strong> The workload runs as a single non-root identity with no Linux capabilities. The policy schema rejects root as a run-as user.</li>
+  <li><strong>No direct network.</strong> With the Docker and Podman drivers the workload container has networking turned off; the supervisor runs in its own container and is the only path out.</li>
+</ul>
+
+<p>The supported compute drivers, as documented for 0.1.8:</p>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Driver</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Requirements and notes</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Docker</td><td style="padding:8px;border:1px solid #cbd5e1;">Docker Desktop or Docker Engine 28.0 or later. The Docker snap package is not compatible.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Podman</td><td style="padding:8px;border:1px solid #cbd5e1;">Podman 5.x with cgroups v2.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Kubernetes</td><td style="padding:8px;border:1px solid #cbd5e1;">Installed with a Helm chart. The multi-tenant supervisor is marked experimental.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">MicroVM</td><td style="padding:8px;border:1px solid #cbd5e1;">Hypervisor.framework on macOS (Apple Silicon), KVM on Linux. A stronger boundary when you do not want to share a kernel.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Windows</td><td style="padding:8px;border:1px solid #cbd5e1;">WSL 2 is experimental; native Windows MXC is in development and not production-qualified.</td></tr>
+</tbody>
+</table>
+
+<p>Linux packages need glibc 2.28 or newer.</p>
+
+<h2 id="install">5. Install and create your first sandbox</h2>
+
+<p>The installer sets up the CLI and a local gateway:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code># Install the CLI and a local gateway (pin a release with OPENSHELL_VERSION)
+curl -LsSf https://raw.githubusercontent.com/NVIDIA/OpenShell/main/install.sh | sh
+
+# Check the gateway is up
+openshell status
+
+# A first, empty sandbox (minimal Ubuntu, no agent installed)
+openshell sandbox create --name demo</code></pre>
+
+<p>On Linux the gateway runs as a user service, so <code>systemctl --user status openshell-gateway</code> shows its state, and <code>openshell-gateway config preflight --path ~/.config/openshell/gateway.toml</code> validates its configuration before a restart.</p>
+
+<p>Two settings to decide on day one:</p>
+
+<ul>
+  <li><strong>Pin the version.</strong> Set <code>OPENSHELL_VERSION</code> to a release tag when installing, so every developer and CI runner gets the same behaviour.</li>
+  <li><strong>Telemetry.</strong> Anonymous telemetry is on by default. Set <code>OPENSHELL_TELEMETRY_ENABLED=false</code> on the gateway if your policy requires it.</li>
+</ul>
+
+<h2 id="agent">6. Run a real agent</h2>
+
+<p>OpenShell runs any agent that is available in a sandbox image. The pattern is always the same: register a <em>provider</em> that holds a credential, then create a sandbox from an image, attach the provider and give the command to run.</p>
+
+<p>The documented quick start runs OpenCode against OpenRouter:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code># 1. Import the provider profile (allowed endpoints, binaries and credential names)
+openshell profile import --url https://raw.githubusercontent.com/NVIDIA/OpenShell/main/providers/openrouter.yaml
+
+# 2. Create a provider from the key already in your local environment
+openshell provider create --name openrouter --type openrouter --from-existing
+
+# 3. Start the agent in a sandbox with that provider attached
+openshell sandbox create --name my-agent \
+  --from ghcr.io/anomalyco/opencode:latest \
+  --provider openrouter \
+  -- opencode -m openrouter/nvidia/nemotron-3.5-lightning:free</code></pre>
+
+<p>For Claude Code, the same shape applies with a <code>claude-code</code> provider, and you can attach several providers at once, for example the model plus GitHub:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code>openshell provider create --name my-claude --type claude-code --from-existing
+openshell sandbox create --from &lt;your-agent-image&gt; \
+  --provider my-claude --provider my-github \
+  -- claude</code></pre>
+
+<p>Day-to-day commands:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code># Attach to the agent (detach with Ctrl-D, or Ctrl-P then Ctrl-Q)
+openshell sandbox connect my-agent
+
+# A second shell in the same sandbox
+openshell sandbox exec -n my-agent --tty -- /bin/bash
+
+# What the agent tried to do in the last five minutes
+openshell logs my-agent --since 5m --source sandbox
+
+# Registered providers and available provider profiles
+openshell provider list
+openshell profile list</code></pre>
+
+<h2 id="policy">7. The policy file, field by field</h2>
+
+<p>A policy is a YAML document (at most 4 MiB). Unknown fields and duplicate keys are rejected, which is exactly what you want from a security config: a typo fails loudly instead of silently widening access. Here is a complete, minimal policy for a coding agent that may read the GitHub API with <code>curl</code>:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code>version: 1
+
+filesystem_policy:            # applied when the sandbox starts
+  include_workdir: true       # defaults to false once this block exists
+  read_only:
+    - /usr
+    - /etc
+  read_write:
+    - /tmp
+
+landlock:
+  compatibility: hard_requirement   # fail closed if the kernel lacks Landlock
+
+process:
+  run_as_user: sandbox        # or a numeric id; root is rejected
+  run_as_group: sandbox
+
+network_policies:             # applied live, no restart
+  github_readonly:
+    endpoints:
+      - host: api.github.com
+        port: 443
+        protocol: rest
+        enforcement: enforce  # the default is audit
+        access: read-only
+    binaries:
+      - path: /usr/bin/curl</code></pre>
+
+<p>What each section controls and when it takes effect:</p>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Section</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Controls</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Applied</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>filesystem_policy</code></td><td style="padding:8px;border:1px solid #cbd5e1;"><code>read_only</code> and <code>read_write</code> path lists, plus <code>include_workdir</code>. Absolute paths only, at most 256 of them; <code>/</code> is not allowed as read-write.</td><td style="padding:8px;border:1px solid #cbd5e1;">At start</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>landlock</code></td><td style="padding:8px;border:1px solid #cbd5e1;"><code>compatibility: best_effort</code> (default) or <code>hard_requirement</code>.</td><td style="padding:8px;border:1px solid #cbd5e1;">At start</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>process</code></td><td style="padding:8px;border:1px solid #cbd5e1;"><code>run_as_user</code> and <code>run_as_group</code>.</td><td style="padding:8px;border:1px solid #cbd5e1;">At creation</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>network_policies</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Named rules, each a list of <code>endpoints</code> and a list of <code>binaries</code>. Every listed binary may reach every listed endpoint.</td><td style="padding:8px;border:1px solid #cbd5e1;">Live (hot reload)</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>network_middlewares</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Request-processing middleware for network traffic.</td><td style="padding:8px;border:1px solid #cbd5e1;">Live</td></tr>
+</tbody>
+</table>
+
+<p>Where the effective policy comes from, in order of precedence: a global policy set by a platform admin, the sandbox's saved policy, a policy baked into the image, then the restrictive default. A sandbox with no rules can reach nothing.</p>
+
+<h2 id="network">8. Network rules: allow, enforce, approve</h2>
+
+<p>Every outbound connection goes through the same path. The agent opens a socket or makes a DNS lookup; seccomp stops it; the sandbox identifies the calling binary and asks the supervisor; the supervisor checks the request against policy, adds credentials if allowed, and opens the real connection. A connection that no rule allows is denied.</p>
+
+<p>An endpoint can be matched on far more than host and port:</p>
+
+<ul>
+  <li><strong><code>protocol</code></strong>: <code>rest</code>, <code>websocket</code>, <code>graphql</code>, <code>mcp</code>, <code>json-rpc</code> or <code>tcp</code>. Request-level checks need one of the application protocols; <code>tcp</code> endpoints get no request-level inspection.</li>
+  <li><strong><code>access</code></strong>: the presets <code>read-only</code>, <code>read-write</code> and <code>full</code>. Use <code>rules</code> and <code>deny_rules</code> instead when you need method and path detail (the two styles cannot be combined). Deny rules always win over allow rules.</li>
+  <li><strong><code>enforcement</code></strong>: <code>audit</code> or <code>enforce</code>. <strong>The default is <code>audit</code></strong>, which logs request-level violations instead of blocking them. Set <code>enforce</code> explicitly on anything that matters.</li>
+  <li><strong><code>binaries</code></strong>: the real path of each program allowed to use the rule, not a symlink. Check with <code>readlink -f $(which curl)</code> inside your image, because <code>python3</code>, <code>node</code> and package managers are often symlinks.</li>
+</ul>
+
+<p>Change rules on a running sandbox without restarting it:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code># Add or change one rule (format: host:port:access:protocol:enforcement)
+openshell policy update my-agent --rule-name github_readonly \
+  --binary /usr/bin/curl \
+  --add-endpoint api.github.com:443:read-only:rest:enforce --wait
+
+# Preview a change without applying it
+openshell policy update my-agent --rule-name github_readonly \
+  --binary /usr/bin/curl --add-endpoint api.github.com:443:read-only:rest:enforce --dry-run
+
+# Replace the whole policy from a file in your repository
+openshell policy set my-agent --policy ./openshell/policy.yaml --wait
+
+# Inspect: base policy, effective policy, revision history
+openshell policy get my-agent --base
+openshell policy get my-agent --full
+openshell policy list my-agent</code></pre>
+
+<p>With <code>--wait</code>, exit code 1 means the sandbox rejected the revision and 124 means the wait timed out, which makes these commands safe to script.</p>
+
+<p>When the agent needs a destination it does not have, the policy advisor lets it propose a narrow rule instead of failing. You review the proposals:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code>openshell rule get my-agent --status pending
+openshell rule approve my-agent --chunk-id &lt;chunk-id&gt;
+openshell rule reject my-agent --chunk-id &lt;chunk-id&gt; --reason "use the internal mirror"</code></pre>
+
+<p>There is also <code>openshell rule approve-all</code>. Treat it like <code>chmod 777</code>: fine on a throwaway sandbox, not on one that holds production credentials.</p>
+
+<p>Built-in protections you do not have to write rules for: connections to loopback, link-local addresses and the cloud metadata address <code>169.254.169.254</code> are never authorised by network policy.</p>
+
+<h2 id="credentials">9. Credentials the agent never sees</h2>
+
+<p>Providers store credentials on the trusted side and bind each one to approved endpoints. Inside the sandbox, the agent's environment holds a placeholder of the form <code>openshell:resolve:env:KEY</code>. When the agent sends a request, the supervisor replaces the placeholder with the real value, but only if three checks pass:</p>
+
+<ol>
+  <li>The network policy allows this binary to reach this destination.</li>
+  <li>The credential's binding covers this host, port and path.</li>
+  <li>The placeholder sits in a declared slot: a header, a query parameter or a path segment.</li>
+</ol>
+
+<p>If any check fails, the request is refused with HTTP 403 and <code>credential_endpoint_mismatch</code>. A prompt-injected agent that tries to post its GitHub token to <code>attacker.example</code> sends a meaningless placeholder, and the request is blocked anyway because no rule allows that host.</p>
+
+<p>Schema options cover the awkward cases: request-body and WebSocket credential rewriting, and request signing for AWS-style <code>sigv4</code>. Provider profiles are YAML too; inspect and reuse them with:</p>
+
+<pre style="background:#0b1220;color:#e2e8f0;padding:1rem;border-radius:10px;overflow:auto;font-size:0.85rem;"><code>openshell profile describe github
+openshell profile export github -o yaml &gt; providers/github.yaml
+openshell profile lint -f providers/github.yaml
+openshell profile import -f providers/github.yaml
+
+# Attach or detach a provider on a running sandbox
+openshell sandbox provider attach my-agent my-github --wait
+openshell sandbox provider detach my-agent my-github --wait</code></pre>
+
+<p>Two caveats to design around. A process that is already running does not receive newly attached variables, so start a new process after attaching. And credential injection does not scrub secrets from upstream <em>responses</em>: if an API echoes your token back, the agent can see it. Prefer scoped, short-lived tokens for anything you attach.</p>
+
+<h2 id="inference">10. Inference: the workload chooses the model</h2>
+
+<p>Earlier OpenShell releases had a workspace-wide managed inference route and <code>openshell inference</code> commands. Current releases removed them. Today the agent calls the model provider's native API directly, and OpenShell treats that call like any other: the provider profile defines the allowed endpoints, and the supervisor injects the key only for those. The docs put it plainly: the workload, not OpenShell, selects the model and the request timeout.</p>
+
+<p>For local models, a provider profile can point at the gateway host through <code>host.openshell.internal</code>, for example an Ollama server with <code>OPENAI_BASE_URL=http://host.openshell.internal:11434/v1</code>. That keeps prompts and data on your own hardware while the agent stays sandboxed. If you run local models on a Mac Studio or a GPU workstation, our earlier post on <a href="/en/docs/blogs/nvidia-openshell-secure-agents-mac-studio">OpenShell on Mac Studio and GPU workstations</a> covers the hardware side; note that it predates the removal of managed inference routes.</p>
+
+<h2 id="benefits">11. The benefits for developers</h2>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Benefit</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Why it matters day to day</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Run agents with fewer prompts for permission</td><td style="padding:8px;border:1px solid #cbd5e1;">With the boundary enforced outside the agent, you can let it run commands without approving each one, and still sleep at night.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Your laptop stays yours</td><td style="padding:8px;border:1px solid #cbd5e1;">SSH keys, browser sessions, cloud credentials and other repositories are outside the sandbox.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Secrets out of <code>.env</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Placeholders in the sandbox, real keys bound to endpoints. Leaked logs and transcripts contain nothing useful.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Read-only by default</td><td style="padding:8px;border:1px solid #cbd5e1;">Method- and path-level rules let an agent read issues and pull requests while writes need a separate, deliberate rule.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Policy as code</td><td style="padding:8px;border:1px solid #cbd5e1;">YAML with a strict schema, revisions, <code>--dry-run</code>, and a prover you can run in CI. Review access changes like any other pull request.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Live changes</td><td style="padding:8px;border:1px solid #cbd5e1;">Network rules hot-reload, so you do not lose the agent's context to widen access.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">One model for every agent</td><td style="padding:8px;border:1px solid #cbd5e1;">Claude Code, OpenCode or your own agent, any model provider, the same controls. Switching vendors does not mean rebuilding guardrails.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Laptop to cluster</td><td style="padding:8px;border:1px solid #cbd5e1;">The same CLI and policy files on Docker, Podman, microVMs and Kubernetes.</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Evidence for security reviews</td><td style="padding:8px;border:1px solid #cbd5e1;">Logs of what the agent attempted and which rule allowed or denied it.</td></tr>
+</tbody>
+</table>
+
+<h2 id="workflow">12. A daily workflow that works</h2>
+
+<p>How we suggest a team adopts OpenShell, based on running it every day:</p>
+
+<ol>
+  <li><strong>One sandbox per task or repository.</strong> Short-lived sandboxes keep the blast radius and the credential set small. Delete them when the work merges.</li>
+  <li><strong>Keep the policy in the repository</strong>, next to the code the agent works on, for example <code>openshell/policy.yaml</code>, and apply it with <code>openshell policy set</code>.</li>
+  <li><strong>Start narrow.</strong> The model provider, the Git host read-only, and the package registry your project uses. Nothing else.</li>
+  <li><strong>Turn proposals into code.</strong> When you approve a rule the agent proposed, copy it into the policy file so the next sandbox starts with it, and so the change is reviewed.</li>
+  <li><strong>Write access is a separate rule.</strong> Pushing branches or commenting on pull requests gets its own rule with <code>enforce</code>, scoped to the paths it needs.</li>
+  <li><strong>Prove changes in CI.</strong> Run <code>openshell-prover</code> on policy changes in your pipeline, the same way you lint Terraform or Kubernetes manifests.</li>
+  <li><strong>Read the logs weekly.</strong> Denied requests show you either a missing rule or an agent doing something it should not. Both are worth knowing.</li>
+</ol>
+
+<h2 id="limits">13. Limits and gotchas</h2>
+
+<ul>
+  <li><strong><code>enforcement</code> defaults to <code>audit</code>.</strong> If you forget <code>enforce</code>, request-level rules log instead of block.</li>
+  <li><strong>Wildcard hosts</strong> such as <code>*.example.com</code> can allow data exfiltration through DNS. The docs recommend exact hostnames.</li>
+  <li><strong>Inspection gaps</strong>: <code>tcp</code> endpoints get no request-level checks, client-to-server WebSocket binary frames are not inspected, and MCP tool arguments are not matched. Do not rely on request-level rules for those.</li>
+  <li><strong>Responses are not scrubbed</strong> of credentials an upstream API echoes back.</li>
+  <li><strong>Kernel requirement</strong>: Landlock ABI v3 or later. With <code>hard_requirement</code> an older kernel fails at startup; with <code>best_effort</code> it degrades. Choose deliberately.</li>
+  <li><strong>Platform maturity</strong>: Windows support is experimental or in development, and the Kubernetes multi-tenant supervisor is experimental.</li>
+  <li><strong><code>include_workdir</code></strong> flips from true to false as soon as you add a <code>filesystem_policy</code> block. Set it explicitly.</li>
+  <li><strong>Fast-moving project</strong>: features change between releases (the managed inference route is one example). Pin versions and read release notes before upgrading.</li>
+</ul>
+
+<h2 id="stack">14. Where OpenShell fits in a wider stack</h2>
+
+<p>OpenShell governs what happens <em>inside and around one agent</em>. A production deployment still needs the layers around it:</p>
+
+<ul>
+  <li><strong>Secrets</strong>: providers decide which agent can use a credential; a secrets platform such as <a href="/en/wsl-vault">Vault10x</a> decides where that credential lives, who can rotate it and how it is audited.</li>
+  <li><strong>Edge and API gateway</strong>: <a href="/en/proxy10x">Proxy10x</a> applies rate limits, a web application firewall and access profiles to the APIs your agents call.</li>
+  <li><strong>Identity and network</strong>: zero-trust access so agents and the people who supervise them reach internal systems over authenticated paths.</li>
+  <li><strong>Least privilege in your own systems</strong>: a read-only token is still the best rule of all.</li>
+</ul>
+
+<h2 id="checklist">15. Checklist</h2>
+
+<ul>
+  <li>Pin <code>OPENSHELL_VERSION</code> and decide on telemetry.</li>
+  <li>Check the kernel supports Landlock ABI v3; use <code>hard_requirement</code> where it does.</li>
+  <li>Use providers for every credential; remove keys from images and <code>.env</code> files.</li>
+  <li>Exact hostnames, <code>enforce</code> on every endpoint, real binary paths.</li>
+  <li>Read-only first; writes as separate, reviewed rules.</li>
+  <li>Policy files in Git, applied with <code>policy set</code>, proven in CI.</li>
+  <li>Review pending rules and denied requests regularly.</li>
+</ul>
+
+<h2 id="references">16. References</h2>
+
+<ul>
+  <li><a href="https://www.cncf.io/announcements/2026/11/10/cncf-hits-major-milestones-with-global-community-growth-record-industry-investment-and-a-new-generation-of-projects-to-build-ai-systems-in-production/" rel="noopener">CNCF announcement, 10 November 2026</a></li>
+  <li><a href="https://github.com/NVIDIA/OpenShell" rel="noopener">OpenShell on GitHub</a> (moving to the <code>ai-openshell</code> organisation)</li>
+  <li><a href="https://docs.nvidia.com/openshell/latest/about/architecture" rel="noopener">Architecture</a>, <a href="https://docs.nvidia.com/openshell/latest/how-it-works/policies/schema" rel="noopener">policy schema</a>, <a href="https://docs.nvidia.com/openshell/latest/how-it-works/policies/network-rules" rel="noopener">network rules</a> and <a href="https://docs.nvidia.com/openshell/latest/how-it-works/providers/overview" rel="noopener">providers</a> in the OpenShell documentation</li>
+</ul>
+
+<p>Want help putting your team's agents inside OpenShell, or designing an agent whose guardrails your security team will sign off? <a href="/en/contact-us">Contact us</a>, or start with the <a href="/en/ai-agent-journey">AI agent journey</a>. See also our <a href="/en/ai-agents">AI agents</a> services.</p>
+
+</article>

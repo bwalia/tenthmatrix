@@ -21,7 +21,7 @@ const canonicalisedAway = new Set(
 
 const corePages = {
   '': { changefreq: 'daily', priority: '1.0' },
-  articles: { changefreq: 'weekly', priority: '0.8' },
+  'technical-notes': { changefreq: 'weekly', priority: '0.8' },
   'docs/blogs': { changefreq: 'daily', priority: '0.8' },
   insights: { changefreq: 'weekly', priority: '0.8' },
   'contact-us': { changefreq: 'monthly', priority: '0.7' },
@@ -90,7 +90,7 @@ function generateSitemap() {
 
   for (const article of readJson(data('en', 'articles.json'))?.data?.content || []) {
     if (!article?.code || isSample(article.code)) continue;
-    push(`articles/${article.code}`, 'monthly', '0.6');
+    push(`technical-notes/${article.code}`, 'monthly', '0.6');
   }
 
   for (const file of listJson(data('en', 'insights', 'articles'))) {

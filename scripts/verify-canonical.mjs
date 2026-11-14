@@ -50,7 +50,7 @@ for (const b of manifest.blogs.filter((x) => x.dest === 'tenthmatrix')) {
   else fail(`blog ${b.slug} has no Workstation canonical`);
 }
 for (const a of manifest.articles.filter((x) => x.dest === 'tenthmatrix')) {
-  const p = `/articles/${a.code}`;
+  const p = `/technical-notes/${a.code}`;
   if (SELF_CANONICAL_CONTENT.has(p)) continue;
   if (resolves(p)) articles++;
   else fail(`article ${a.code} has no Workstation canonical`);

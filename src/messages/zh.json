@@ -9,7 +9,7 @@
     "products": "产品",
     "services": "服务",
     "resources": "资源",
-    "articles": "文章",
+    "articles": "技术笔记",
     "blog": "博客",
     "insights": "洞察",
     "search": "搜索",
@@ -20,7 +20,7 @@
     "closeMenu": "关闭菜单",
     "cta": "开始 AI 之旅",
     "ctaProject": "启动项目",
-    "searchPlaceholder": "搜索文章、博文和文档",
+    "searchPlaceholder": "搜索技术笔记、文章和文档",
     "hardware": "需要硬件?前往 Workstation 选购 GPU 工作站",
     "groups": {
       "work": {
@@ -62,8 +62,8 @@
       "resources": {
         "label": "资源",
         "title": "资源",
-        "intro": "技术文章、博客、Jev 洞察系列及我们的文档。",
-        "all": "阅读文章"
+        "intro": "技术笔记、博客、Jev 洞察系列以及我们的文档。",
+        "all": "阅读技术笔记"
       }
     },
     "items": {
@@ -204,7 +204,7 @@
         "desc": "面向管理者和团队的培训"
       },
       "articles": {
-        "label": "文章",
+        "label": "技术笔记",
         "desc": "长篇工程技术文章"
       },
       "blog": {
@@ -401,7 +401,7 @@
       "production": {
         "title": "由运行智能体的团队打造",
         "body": "我们自己的智能体就在这套技术栈上运行于生产环境。我们公开它们的工作方式,包括出过的故障。",
-        "proof": "阅读文章"
+        "proof": "阅读技术笔记"
       }
     },
     "steps": {
@@ -486,8 +486,8 @@
     "latestSection": {
       "eyebrow": "文章",
       "title": "团队最新动态",
-      "lede": "工程笔记、长篇技术文章和 Jev 洞察系列。",
-      "articles": "全部文章",
+      "lede": "博客文章、长篇技术笔记和 Jev 洞察系列。",
+      "articles": "全部技术笔记",
       "blog": "博客",
       "empty": "新文章即将发布。"
     },
@@ -506,11 +506,11 @@
     }
   },
   "articlesPage": {
-    "eyebrow": "文章",
-    "title": "技术文章",
-    "subtitle": "关于智能体、模型及其周边软件的长篇工程文章。",
-    "empty": "暂无文章。",
-    "count": "{count, plural, one {# article} other {# articles}}"
+    "eyebrow": "面向开发者",
+    "title": "技术笔记",
+    "subtitle": "关于智能体、模型及其周边软件的长篇工程笔记。",
+    "empty": "暂无技术笔记。",
+    "count": "{count, plural, one {# note} other {# notes}}"
   },
   "blog": {
     "title": "博客",
@@ -564,9 +564,9 @@
   "searchPage": {
     "eyebrow": "搜索",
     "title": "搜索 TenthMatrix",
-    "subtitle": "查找技术文章、博客文章和洞察。",
+    "subtitle": "查找技术笔记、博客文章和洞察。",
     "label": "搜索词",
-    "placeholder": "搜索文章、博文和洞察",
+    "placeholder": "搜索技术笔记、文章和洞察",
     "submit": "搜索",
     "searching": "正在搜索…",
     "results": "“{query}”的搜索结果共 {count} 条",
@@ -581,7 +581,7 @@
       "observability"
     ],
     "tryHint": "请尝试更短或更宽泛的关键词,或",
-    "browseArticles": "浏览全部文章。"
+    "browseArticles": "浏览全部技术笔记。"
   },
   "contact": {
     "title": "联系我们",
@@ -618,14 +618,14 @@
   },
   "errors": {
     "notFoundTitle": "该页面不存在",
-    "notFoundBody": "该页面可能在 TenthMatrix 从 Workstation 拆分时被移动,或链接输入有误。请搜索,或从文章页开始浏览。",
+    "notFoundBody": "该页面可能在 TenthMatrix 从 Workstation 拆分时被移动，或链接输入有误。请搜索，或从技术笔记开始浏览。",
     "goHome": "返回首页",
     "somethingWrong": "页面加载失败",
     "tryAgain": "重试",
     "notFoundEyebrow": "页面未找到",
-    "browseArticles": "浏览文章",
+    "browseArticles": "浏览技术笔记",
     "errorEyebrow": "错误",
-    "errorBody": "我们这边出了故障。请重试,或返回文章页。"
+    "errorBody": "我们这边出了问题。请重试，或返回技术笔记。"
   },
   "theme": {
     "toggle": "配色主题:{current}。切换为{next}。",
@@ -658,7 +658,7 @@
   },
   "kinds": {
     "blog": "博客",
-    "article": "文章",
+    "article": "技术笔记",
     "insight": "洞察"
   },
   "article": {
@@ -673,7 +673,7 @@
     "copied": "已复制",
     "copyCode": "复制代码到剪贴板",
     "morePosts": "更多博客文章",
-    "moreArticles": "更多技术文章"
+    "moreArticles": "更多技术笔记"
   },
   "docs": {
     "eyebrow": "文档",
@@ -685,9 +685,9 @@
     "faqCategories": "常见问题分类",
     "apisEmpty": "公开 API 参考正在准备中。告诉我们您想集成什么,我们会发送相关端点。",
     "apisContact": "咨询 API",
-    "articlesTitle": "技术文章",
+    "articlesTitle": "技术笔记",
     "articlesBody": "附架构图、代码及每项决策背后权衡的长篇文章。",
-    "articlesCta": "阅读文章",
+    "articlesCta": "阅读技术笔记",
     "sections": {
       "introduction": {
         "title": "简介",

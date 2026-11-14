@@ -134,9 +134,9 @@ export const NAV_GROUPS = [
   },
   {
     key: 'resources',
-    overview: '/articles',
+    overview: '/technical-notes',
     items: [
-      { key: 'articles', href: '/articles', icon: FileText },
+      { key: 'articles', href: '/technical-notes', icon: FileText },
       { key: 'blog', href: '/docs/blogs', icon: Newspaper },
       { key: 'insights', href: '/insights', icon: LineChart },
       { key: 'docs', href: '/docs', icon: BookOpen },

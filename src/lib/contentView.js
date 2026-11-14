@@ -56,7 +56,7 @@ export function blogCard(b, locale, t) {
 export function articleCard(a, locale, t) {
   return {
     title: a.title,
-    href: `/${locale}/articles/${a.code}`,
+    href: `/${locale}/technical-notes/${a.code}`,
     excerpt: truncate(stripHtml(a.sub_title || a.meta_description || a.content || ''), 170),
     date: articleDate(a),
     image: a.image || undefined,

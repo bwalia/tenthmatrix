@@ -6,7 +6,7 @@ import createMiddleware from 'next-intl/middleware';
 const intlMiddleware = createMiddleware({
   locales: ['en', 'es', 'fr', 'nl', 'hi', 'th', 'zh', 'ar', 'bn', 'pt', 'ru', 'ur', 'pa'],
   defaultLocale: 'en',
-  // Always show the locale in the URL (/en/articles), same as Workstation.
+  // Always show the locale in the URL (/en/technical-notes), same as Workstation.
   localePrefix: 'always',
   // Don't guess from Accept-Language: crawlers and the sitemap expect /en.
   localeDetection: false,

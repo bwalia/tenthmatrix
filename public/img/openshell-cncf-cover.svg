@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+  <title id="t">OpenShell joins the CNCF Sandbox</title>
+  <desc id="d">An AI agent runs inside an isolated sandbox. A supervisor outside it checks every file access, process and network request against policy and adds credentials only for approved destinations.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#10233a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.42" r="0.5">
+      <stop offset="0" stop-color="#76b900" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#76b900" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="72" y="118" font-size="22" font-weight="600" fill="#a3e635" letter-spacing="3">CNCF SANDBOX · NOVEMBER 2026</text>
+    <text x="72" y="196" font-size="58" font-weight="800" fill="#ffffff">OpenShell: safe</text>
+    <text x="72" y="264" font-size="58" font-weight="800" fill="#ffffff">AI agents start</text>
+    <text x="72" y="332" font-size="58" font-weight="800" fill="#ffffff">at the runtime</text>
+    <text x="72" y="388" font-size="24" fill="#cbd5e1">Sandboxes, policy, credentials and network control</text>
+    <text x="72" y="420" font-size="24" fill="#cbd5e1">for every agent, on any model</text>
+
+    <g font-size="19" font-weight="600">
+      <rect x="72" y="462" width="160" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="152" y="492" text-anchor="middle" fill="#e2e8f0">Isolate</text>
+      <rect x="244" y="462" width="160" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="324" y="492" text-anchor="middle" fill="#e2e8f0">Govern</text>
+      <rect x="416" y="462" width="190" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="511" y="492" text-anchor="middle" fill="#e2e8f0">Hide secrets</text>
+      <rect x="72" y="520" width="200" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="172" y="550" text-anchor="middle" fill="#e2e8f0">Mediate network</text>
+      <rect x="284" y="520" width="200" height="46" rx="23" fill="#365314" stroke="#76b900"/>
+      <text x="384" y="550" text-anchor="middle" fill="#ffffff">Apache-2.0</text>
+    </g>
+
+    <!-- sandbox diagram -->
+    <rect x="720" y="150" width="400" height="330" rx="20" fill="#0f172a" stroke="#76b900" stroke-width="2"/>
+    <text x="744" y="184" font-size="16" font-weight="700" fill="#a3e635" letter-spacing="1.5">TRUSTED: SUPERVISOR + POLICY</text>
+    <rect x="752" y="206" width="210" height="160" rx="14" fill="#1e293b" stroke="#475569" stroke-dasharray="6 5"/>
+    <text x="857" y="236" text-anchor="middle" font-size="15" font-weight="700" fill="#fca5a5" letter-spacing="1">UNTRUSTED</text>
+    <text x="857" y="282" text-anchor="middle" font-size="26" font-weight="800" fill="#ffffff">AI agent</text>
+    <text x="857" y="314" text-anchor="middle" font-size="15" fill="#cbd5e1">code · tools · packages</text>
+    <text x="857" y="340" text-anchor="middle" font-size="15" fill="#cbd5e1">placeholder keys only</text>
+    <rect x="990" y="214" width="110" height="40" rx="10" fill="#14532d" stroke="#4ade80"/>
+    <text x="1045" y="240" text-anchor="middle" font-size="15" font-weight="700" fill="#dcfce7">allow</text>
+    <rect x="990" y="270" width="110" height="40" rx="10" fill="#422006" stroke="#fbbf24"/>
+    <text x="1045" y="296" text-anchor="middle" font-size="15" font-weight="700" fill="#fef3c7">ask</text>
+    <rect x="990" y="326" width="110" height="40" rx="10" fill="#450a0a" stroke="#f87171"/>
+    <text x="1045" y="352" text-anchor="middle" font-size="15" font-weight="700" fill="#fee2e2">deny</text>
+    <path d="M962 286 L986 286" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <text x="920" y="410" text-anchor="middle" font-size="16" fill="#94a3b8">every file, process and connection</text>
+    <text x="920" y="436" text-anchor="middle" font-size="16" fill="#94a3b8">is checked outside the agent</text>
+  </g>
+</svg>

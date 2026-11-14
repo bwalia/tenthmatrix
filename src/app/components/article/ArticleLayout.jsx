@@ -26,7 +26,7 @@ function fmtDate(value, locale) {
  * Shared long-form layout for blog posts, technical articles and insights.
  *
  * props:
- *   locale, path (page path for share links, e.g. `/en/articles/x`)
+ *   locale, path (page path for share links, e.g. `/en/technical-notes/x`)
  *   breadcrumbs   [{ label, href? }]
  *   eyebrow       string (series / kind)
  *   tags          [{ label, href? }]

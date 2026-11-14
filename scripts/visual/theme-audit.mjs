@@ -41,10 +41,10 @@ const readJson = (p) => {
 };
 
 function defaultRoutes() {
-  const routes = ['/en', '/en/articles', '/en/docs/blogs', '/en/insights', '/en/docs', '/en/docs/faqs', '/en/search?q=agent', '/en/contact-us', '/en/brand', '/en/this-page-does-not-exist'];
+  const routes = ['/en', '/en/technical-notes', '/en/docs/blogs', '/en/insights', '/en/docs', '/en/docs/faqs', '/en/search?q=agent', '/en/contact-us', '/en/brand', '/en/this-page-does-not-exist'];
   const articles = readJson('src/app/data/en/articles.json')?.data?.content || [];
   const article = articles.find((a) => a?.code && !/^__/.test(a.code)) || articles[0];
-  if (article?.code) routes.splice(2, 0, `/en/articles/${article.code}`);
+  if (article?.code) routes.splice(2, 0, `/en/technical-notes/${article.code}`);
   const page1 = readJson('src/app/data/pages/page-1.json');
   const blogs = Array.isArray(page1) ? page1 : page1?.blogs || page1?.data || [];
   const blog = (Array.isArray(blogs) ? blogs : []).find((b) => b?.slug && !/^__/.test(b.slug)) || blogs[0];

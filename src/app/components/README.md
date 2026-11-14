@@ -16,7 +16,7 @@ component also renders a stable global `tm-*` class (`tm-button`, `tm-card`,
 
 ```jsx
 <Hero eyebrow="Agents" title="AI agents that finish the job" lede="…"
-      actions={[{ label: 'Start a pilot', href: `/${locale}/contact-us` }, { label: 'Read the architecture', href: `/${locale}/articles` }]} art />
+      actions={[{ label: 'Start a pilot', href: `/${locale}/contact-us` }, { label: 'Read the architecture', href: `/${locale}/technical-notes` }]} art />
 <Section id="what" eyebrow="What it does" title="…" lede="…">
   <FeatureGrid items={[{ icon: Bot, title: '…', body: '…' }]} columns={3} />
 </Section>

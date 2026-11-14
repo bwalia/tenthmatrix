@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
     keywords: a.meta_keywords || undefined,
     openGraph: { title, description, type: 'article' },
     twitter: { card: 'summary_large_image', title, description },
-    alternates: seoAlternates(`/articles/${slug}`, locale, { selfCanonical: `/${locale}/articles/${slug}` }),
+    alternates: seoAlternates(`/technical-notes/${slug}`, locale, { selfCanonical: `/${locale}/technical-notes/${slug}` }),
     robots: isSample(slug) ? { index: false, follow: true } : undefined,
   };
 }
@@ -62,10 +62,10 @@ export default async function ArticlePage({ params }) {
     <>
       <ArticleLayout
         locale={locale}
-        path={`/${locale}/articles/${slug}`}
+        path={`/${locale}/technical-notes/${slug}`}
         breadcrumbs={[
           { label: t('common.home'), href: `/${locale}` },
-          { label: t('articlesPage.title'), href: `/${locale}/articles` },
+          { label: t('articlesPage.title'), href: `/${locale}/technical-notes` },
           { label: a.title },
         ]}
         eyebrow={t('kinds.article')}
@@ -82,7 +82,7 @@ export default async function ArticlePage({ params }) {
           articleSchema(a, locale),
           breadcrumbSchema([
             { label: 'Home', path: `/${locale}` },
-            { label: 'Articles', path: `/${locale}/articles` },
+            { label: 'Technical Notes', path: `/${locale}/technical-notes` },
             { label: a.title },
           ]),
         ]}
