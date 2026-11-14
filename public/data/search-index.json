@@ -1232,6 +1232,29 @@
   },
   {
     "type": "blog",
+    "id": "blog-openshell-cncf-001",
+    "slug": "openshell-cncf-sandbox-ai-agent-runtime-security",
+    "title": "OpenShell Joins the CNCF: Why AI Agent Safety Starts at the Runtime",
+    "excerpt": "OpenShell, the secure runtime for AI agents created by NVIDIA, is now a CNCF Sandbox project. What it does in plain English, why runtime controls beat prompt instructions, the business benefits, and how TenthMatrix runs its own agents inside it every day.",
+    "content": "AI agents no longer just write text. They run code, install software, open files and call your business systems with real credentials. A line in a prompt saying \"never touch customer data\" is a request, not a control. On 10 November 2026 the Cloud Native Computing Foundation (CNCF) accepted OpenShell , the secure runtime for AI agents that NVIDIA created, as a Sandbox project. We run our own agents inside OpenShell every day at TenthMatrix. This post explains what it is, why the CNCF move matter",
+    "tags": "openshell, cncf, ai-agents, security, nvidia, open-source, kubernetes, claude-code, ai",
+    "date": "2026-11-14",
+    "image": "/img/openshell-cncf-cover.svg",
+    "author": "Balinder Walia",
+    "category": [
+      "openshell",
+      "cncf",
+      "ai-agents",
+      "security",
+      "nvidia",
+      "open-source",
+      "kubernetes",
+      "claude-code",
+      "ai"
+    ]
+  },
+  {
+    "type": "blog",
     "id": "4bce6240-4b53-7d7b-0555-a822929844b5",
     "slug": "old-blog-slug-4",
     "title": "Optimizing API Performance with MySQL and Node.js",
@@ -1925,6 +1948,24 @@
       "sre",
       "kubernetes",
       "ai"
+    ]
+  },
+  {
+    "type": "article",
+    "id": "openshell-developer-guide-article-01",
+    "slug": "nvidia-openshell-developer-guide-sandbox-policies-credentials",
+    "title": "Running AI Agents Safely with NVIDIA OpenShell: Sandboxes, Policies and Credentials",
+    "excerpt": "A developer's guide to OpenShell 0.1.8: architecture, Landlock and seccomp isolation, policy YAML, live network rules, credential placeholders, inference, a daily workflow and the gotchas",
+    "content": "This is the long-form technical note for developers and platform engineers. For a shorter overview aimed at business managers, read the companion blog post . 1. Why agent security belongs in the runtime A coding agent is an untrusted program with a very good reason to run. It executes code it has just written, installs packages it has just chosen, reads files it was not explicitly given and calls APIs with whatever credentials are in its environment. Every guardrail that lives in the prompt or t",
+    "tags": "OpenShell, NVIDIA OpenShell, CNCF Sandbox, AI agent security, AI agent sandbox, secure runtime for AI agents, agent guardrails, prompt injection, credential isolation, policy as code, Landlock, seccomp, Claude Code, OpenCode, Kubernetes, cloud native AI",
+    "date": "2026-11-14",
+    "image": "/img/openshell-cncf-cover.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "AI Agents",
+      "Security",
+      "DevOps",
+      "Open Source"
     ]
   },
   {

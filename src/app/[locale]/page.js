@@ -75,8 +75,8 @@ const BENEFITS = [
   { key: 'vault', icon: KeyRound, href: '/wsl-vault' },
   { key: 'releases', icon: GitBranch, href: '/ring-promoter' },
   { key: 'edge', icon: Shield, href: '/proxy10x' },
-  { key: 'observe', icon: LineChart, href: '/articles/llm-bottlenecks-observability-otel-cost-control' },
-  { key: 'production', icon: Wrench, href: '/articles' },
+  { key: 'observe', icon: LineChart, href: '/technical-notes/llm-bottlenecks-observability-otel-cost-control' },
+  { key: 'production', icon: Wrench, href: '/technical-notes' },
 ];
 
 const ENGAGEMENTS = [
@@ -290,7 +290,7 @@ export default async function HomePage({ params }) {
         lede={t('home.latestSection.lede')}
         actions={
           <div className={s.writingActions}>
-            <Button href={href('/articles')} variant="secondary" size="sm">
+            <Button href={href('/technical-notes')} variant="secondary" size="sm">
               {t('home.latestSection.articles')}
             </Button>
             <Button href={href('/docs/blogs')} variant="tertiary" size="sm">

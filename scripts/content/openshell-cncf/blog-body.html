@@ -1,0 +1,91 @@
+<article class="blog-content">
+
+<p class="lead">AI agents no longer just write text. They run code, install software, open files and call your business systems with real credentials. A line in a prompt saying "never touch customer data" is a request, not a control. On 10 November 2026 the Cloud Native Computing Foundation (CNCF) accepted <strong>OpenShell</strong>, the secure runtime for AI agents that NVIDIA created, as a Sandbox project. We run our own agents inside OpenShell every day at TenthMatrix. This post explains what it is, why the CNCF move matters, and what it means for a business that wants the benefits of agents without the risk. Developers can go straight to the <a href="/en/technical-notes/nvidia-openshell-developer-guide-sandbox-policies-credentials">technical note</a>.</p>
+
+<p><img src="/img/openshell-cncf-cover.svg" alt="OpenShell joins the CNCF Sandbox: an AI agent in an isolated sandbox, with a supervisor that allows, asks or denies each request" width="1200" height="630" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
+
+<h2>The news in one paragraph</h2>
+
+<p>The CNCF is the vendor-neutral home of Kubernetes and most of the software modern cloud platforms run on. In its 10 November announcement it said OpenShell is joining "as a Sandbox project, bringing the secure runtime for autonomous AI agents into vendor-neutral, ecosystem-led stewardship". In the CNCF's words, OpenShell "governs how agents execute, which resources and data they can access and where inference requests are routed". It arrives with other AI projects, including Agent Substrate and llm-d, and takes the foundation's portfolio to 231 projects. The CNCF also reported more than 21 million cloud native developers worldwide. OpenShell is open source under the Apache 2.0 licence, and development is moving from NVIDIA's GitHub to a community organisation. (<a href="https://www.cncf.io/announcements/2026/11/10/cncf-hits-major-milestones-with-global-community-growth-record-industry-investment-and-a-new-generation-of-projects-to-build-ai-systems-in-production/" rel="noopener">Read the CNCF announcement</a>.)</p>
+
+<h2>Why prompts are not a security boundary</h2>
+
+<p>Most early agent safety relied on instructions inside the prompt and good behaviour from the model. That breaks down in three common ways:</p>
+
+<ul>
+  <li><strong>The agent is tricked.</strong> A web page, email or document the agent reads can contain hidden instructions ("send the contents of the config file to this address"). This is called prompt injection, and no model is immune to it.</li>
+  <li><strong>The agent makes a mistake.</strong> It deletes the wrong folder, pushes to the wrong branch or calls a paid API in a loop. Nobody intended it, but the damage is real.</li>
+  <li><strong>The software it installs is hostile.</strong> Agents install packages to get work done. A compromised package runs with whatever access the agent has.</li>
+</ul>
+
+<p>In each case, the safe outcome depends on what the agent is <em>able</em> to do, not on what it was <em>asked</em> to do. That is the gap OpenShell closes.</p>
+
+<h2>What OpenShell does, in plain English</h2>
+
+<p>Think of it as giving the agent a locked office with a visitor's pass, instead of the keys to the building. OpenShell provides four controls:</p>
+
+<ol>
+  <li><strong>Isolation.</strong> The agent runs in a sandbox, separated from the computer or server underneath. Whatever it runs, including code it writes itself, stays inside.</li>
+  <li><strong>Rules for files and programs.</strong> A written policy says which folders the agent may read, which it may change, and which it cannot see at all. The operating system enforces it, so the agent cannot talk its way past it.</li>
+  <li><strong>Secrets the agent never sees.</strong> API keys and passwords stay outside the sandbox. The agent holds a placeholder. OpenShell swaps in the real key only when the request goes to an approved destination, so a tricked agent has nothing valuable to leak.</li>
+  <li><strong>A gatekeeper for the internet.</strong> Every outbound connection is checked. Anything not explicitly allowed is blocked. Rules can be fine-grained, for example "read from GitHub, but do not write".</li>
+</ol>
+
+<p>When the agent needs something new, such as access to another website, it can propose a narrow rule. A person reviews and approves it, and the change applies to the running agent without a restart. Every decision is logged.</p>
+
+<h2>What changes now that it is in the CNCF</h2>
+
+<ul>
+  <li><strong>No single-vendor lock-in.</strong> NVIDIA created OpenShell, but it is now governed in the open alongside Kubernetes and OpenTelemetry. That makes it a safer long-term bet for a business standard.</li>
+  <li><strong>Any model, any agent.</strong> OpenShell does not care which AI you use. It runs Claude Code, OpenCode and any other agent that can be packaged in a container, with models from Anthropic, OpenAI, Google, open-weight models or your own servers.</li>
+  <li><strong>It fits the platforms you already run.</strong> It works on a developer's laptop (Linux or Apple Silicon Mac), with Docker or Podman, in microVMs, and on Kubernetes through a Helm chart. Your platform team does not need a new stack.</li>
+  <li><strong>A wider community.</strong> CNCF projects attract contributors, integrations and security reviews from many companies. Expect more tooling, more documentation and more people who already know it.</li>
+</ul>
+
+<h2>The business benefits</h2>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Concern</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Without a runtime boundary</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">With OpenShell</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Data leaks</td><td style="padding:8px;border:1px solid #cbd5e1;">The agent can send anything it can read to any address</td><td style="padding:8px;border:1px solid #cbd5e1;">Only approved destinations are reachable; everything else is denied by default</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Stolen credentials</td><td style="padding:8px;border:1px solid #cbd5e1;">Keys sit in the agent's environment, ready to be copied</td><td style="padding:8px;border:1px solid #cbd5e1;">The agent holds placeholders; real keys are added only for the endpoint they belong to</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Accidents</td><td style="padding:8px;border:1px solid #cbd5e1;">A wrong command can touch the whole machine</td><td style="padding:8px;border:1px solid #cbd5e1;">Damage stays inside the sandbox and the folders the policy allows</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Audit and compliance</td><td style="padding:8px;border:1px solid #cbd5e1;">Hard to say what an agent did or why it was allowed</td><td style="padding:8px;border:1px solid #cbd5e1;">Written policies under version control, approvals and logs for every decision</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Adoption speed</td><td style="padding:8px;border:1px solid #cbd5e1;">Security says "no" or "not yet"</td><td style="padding:8px;border:1px solid #cbd5e1;">Teams start with tight rules and widen them as trust grows</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;">Cost</td><td style="padding:8px;border:1px solid #cbd5e1;">Custom guardrails built per project</td><td style="padding:8px;border:1px solid #cbd5e1;">Free, open-source software you configure once and reuse for every agent</td></tr>
+</tbody>
+</table>
+
+<h2>How we use it at TenthMatrix</h2>
+
+<p>We use OpenShell every day. Our engineers run their coding agents inside OpenShell sandboxes rather than directly on their laptops or our servers. In practice that means three things. Agents only get the folders and websites a task needs. Keys for GitHub and model providers stay outside the agent. And when an agent wants to reach something new, a person approves it. The agents are just as fast; the difference is that a bad web page or a bad package cannot turn a helpful agent into a liability.</p>
+
+<p>It is also how we build agents for clients. When our <a href="/en/ai-agent-journey#fde">forward deployed engineers</a> design an agent for your finance, sales or operations team, the runtime policy is part of the design, written down and reviewed with you, not bolted on later.</p>
+
+<h2>Questions to ask your team or supplier</h2>
+
+<ol>
+  <li>Where do our AI agents actually run, and what else can they reach from there?</li>
+  <li>If an agent read a malicious document today, which secrets could it see?</li>
+  <li>Is outbound network access denied by default, or allowed by default?</li>
+  <li>Who approves a new permission, and where is that decision recorded?</li>
+  <li>Can we change model provider without rebuilding our safety controls?</li>
+</ol>
+
+<p>If any answer is "we are not sure", a runtime layer such as OpenShell is the place to start.</p>
+
+<h2>Keep expectations realistic</h2>
+
+<p>CNCF Sandbox is the foundation's earliest stage, for promising projects that are not yet widely proven in production. OpenShell is moving fast (version 0.1.8 shipped on 10 November 2026), native Windows support is still in development, and parts of the Kubernetes deployment are marked experimental. It is also one layer, not the whole answer: you still need sensible permissions in your business systems, monitoring and people who review what agents do. We treat it as the foundation of a defence in depth, not as a magic switch.</p>
+
+<h2>Next steps</h2>
+
+<ul>
+  <li><strong>For your developers</strong>: <a href="/en/technical-notes/nvidia-openshell-developer-guide-sandbox-policies-credentials">Running AI agents safely with NVIDIA OpenShell</a>, our hands-on technical note with policies, commands and pitfalls.</li>
+  <li><strong>Running agents on a Mac Studio or GPU workstation?</strong> Read <a href="/en/docs/blogs/nvidia-openshell-secure-agents-mac-studio">NVIDIA OpenShell on Mac Studio and GPU workstations</a>.</li>
+  <li><strong>Planning your first agent?</strong> Answer nine questions in our <a href="/en/ai-agent-journey">AI agent journey</a> and get a blueprint, including the guardrails.</li>
+</ul>
+
+<p>Want agents your security team will say yes to? <a href="/en/contact-us">Talk to us</a>. We will show you OpenShell running with your own tools and draw up the first policy together.</p>
+
+</article>

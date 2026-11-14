@@ -98,8 +98,8 @@ export function articleSchema(article, locale) {
     publisher: publisher(),
     datePublished,
     inLanguage: locale,
-    url: pageUrl(`/articles/${article.code}`, locale),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl(`/articles/${article.code}`, locale) },
+    url: pageUrl(`/technical-notes/${article.code}`, locale),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl(`/technical-notes/${article.code}`, locale) },
     articleSection: article.industry || '',
     keywords: article.meta_keywords || '',
   };

@@ -9,7 +9,7 @@
     "products": "Producten",
     "services": "Diensten",
     "resources": "Bronnen",
-    "articles": "Artikelen",
+    "articles": "Technische notities",
     "blog": "Blog",
     "insights": "Inzichten",
     "search": "Zoeken",
@@ -20,7 +20,7 @@
     "closeMenu": "Menu sluiten",
     "cta": "Start de AI-reis",
     "ctaProject": "Start een project",
-    "searchPlaceholder": "Zoek artikelen, berichten en documentatie",
+    "searchPlaceholder": "Zoek in technische notities, berichten en documentatie",
     "hardware": "Hardware nodig? GPU-workstations bij Workstation",
     "groups": {
       "work": {
@@ -62,8 +62,8 @@
       "resources": {
         "label": "Bronnen",
         "title": "Bronnen",
-        "intro": "Technische artikelen, de blog, de Jev-inzichtenreeks en onze documentatie.",
-        "all": "Lees de artikelen"
+        "intro": "Technische notities, de blog, de Jev-inzichtenreeks en onze documentatie.",
+        "all": "Lees de technische notities"
       }
     },
     "items": {
@@ -204,7 +204,7 @@
         "desc": "Training voor leidinggevenden en teams"
       },
       "articles": {
-        "label": "Artikelen",
+        "label": "Technische notities",
         "desc": "Uitgebreide technische artikelen"
       },
       "blog": {
@@ -401,7 +401,7 @@
       "production": {
         "title": "Gebouwd door een team dat zelf agents draait",
         "body": "Onze eigen agents draaien in productie op deze stack. We publiceren hoe ze werken, inclusief wat er misging.",
-        "proof": "Lees de artikelen"
+        "proof": "Lees de technische notities"
       }
     },
     "steps": {
@@ -486,8 +486,8 @@
     "latestSection": {
       "eyebrow": "Artikelen",
       "title": "Nieuw van het team",
-      "lede": "Engineeringnotities, uitgebreide technische artikelen en de Jev-inzichtenreeks.",
-      "articles": "Alle artikelen",
+      "lede": "Blogberichten, uitgebreide technische notities en de Jev-inzichtenreeks.",
+      "articles": "Alle technische notities",
       "blog": "De blog",
       "empty": "Nieuwe artikelen zijn onderweg."
     },
@@ -506,11 +506,11 @@
     }
   },
   "articlesPage": {
-    "eyebrow": "Artikelen",
-    "title": "Technische artikelen",
-    "subtitle": "Uitgebreide engineeringartikelen over agents, modellen en de software eromheen.",
-    "empty": "Nog geen artikelen.",
-    "count": "{count, plural, one {# article} other {# articles}}"
+    "eyebrow": "Voor ontwikkelaars",
+    "title": "Technische notities",
+    "subtitle": "Uitgebreide engineeringnotities over agents, modellen en de software eromheen.",
+    "empty": "Nog geen technische notities.",
+    "count": "{count, plural, one {# note} other {# notes}}"
   },
   "blog": {
     "title": "Blog",
@@ -564,9 +564,9 @@
   "searchPage": {
     "eyebrow": "Zoeken",
     "title": "Zoeken op TenthMatrix",
-    "subtitle": "Vind technische artikelen, blogberichten en inzichten.",
+    "subtitle": "Vind technische notities, blogberichten en inzichten.",
     "label": "Zoekopdracht",
-    "placeholder": "Zoek artikelen, berichten en inzichten",
+    "placeholder": "Zoek in technische notities, berichten en inzichten",
     "submit": "Zoeken",
     "searching": "Zoeken…",
     "results": "{count} resultaten voor “{query}”",
@@ -581,7 +581,7 @@
       "observability"
     ],
     "tryHint": "Probeer een kortere of bredere term, of",
-    "browseArticles": "bekijk alle artikelen."
+    "browseArticles": "bekijk alle technische notities."
   },
   "contact": {
     "title": "Contact",
@@ -618,14 +618,14 @@
   },
   "errors": {
     "notFoundTitle": "Deze pagina is er niet",
-    "notFoundBody": "Mogelijk is de pagina verplaatst toen TenthMatrix zich afsplitste van Workstation, of de link bevat een typfout. Zoek ernaar of begin bij de artikelen.",
+    "notFoundBody": "Mogelijk is de pagina verplaatst toen TenthMatrix zich afsplitste van Workstation, of de link bevat een typfout. Zoek ernaar of begin bij de technische notities.",
     "goHome": "Naar de homepage",
     "somethingWrong": "Deze pagina kon niet worden geladen",
     "tryAgain": "Opnieuw proberen",
     "notFoundEyebrow": "Pagina niet gevonden",
-    "browseArticles": "Artikelen bekijken",
+    "browseArticles": "Technische notities bekijken",
     "errorEyebrow": "Fout",
-    "errorBody": "Er ging aan onze kant iets mis. Probeer het opnieuw of ga terug naar de artikelen."
+    "errorBody": "Er ging iets mis aan onze kant. Probeer het opnieuw of ga terug naar de technische notities."
   },
   "theme": {
     "toggle": "Kleurthema: {current}. Wissel naar {next}.",
@@ -658,7 +658,7 @@
   },
   "kinds": {
     "blog": "Blog",
-    "article": "Artikel",
+    "article": "Technische notitie",
     "insight": "Inzicht"
   },
   "article": {
@@ -673,7 +673,7 @@
     "copied": "Gekopieerd",
     "copyCode": "Code naar klembord kopiëren",
     "morePosts": "Meer van de blog",
-    "moreArticles": "Meer technische artikelen"
+    "moreArticles": "Meer technische notities"
   },
   "docs": {
     "eyebrow": "Documentatie",
@@ -685,9 +685,9 @@
     "faqCategories": "FAQ-categorieën",
     "apisEmpty": "De publieke API-referentie wordt voorbereid. Vertel ons wat u wilt integreren en we sturen u de relevante endpoints.",
     "apisContact": "Vraag naar de API",
-    "articlesTitle": "Technische artikelen",
+    "articlesTitle": "Technische notities",
     "articlesBody": "Uitgebreide artikelen met architectuurdiagrammen, code en de afwegingen achter elke beslissing.",
-    "articlesCta": "Lees de artikelen",
+    "articlesCta": "Lees de technische notities",
     "sections": {
       "introduction": {
         "title": "Introductie",

@@ -44,7 +44,7 @@ export default async function DocsHub({ params }) {
             </li>
           ))}
           <li>
-            <Card href={`/${locale}/articles`} className={s.card} tone="accent">
+            <Card href={`/${locale}/technical-notes`} className={s.card} tone="accent">
               <span className={s.icon} aria-hidden="true">
                 <BookOpen size={22} strokeWidth={1.75} />
               </span>

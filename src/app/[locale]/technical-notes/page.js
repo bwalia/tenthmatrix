@@ -8,7 +8,7 @@ export const dynamic = 'force-static';
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const tm = await getTranslations({ locale });
-  return { title: tm('articlesPage.title'), description: tm('articlesPage.subtitle'), alternates: { canonical: `/${locale}/articles` } };
+  return { title: tm('articlesPage.title'), description: tm('articlesPage.subtitle'), alternates: { canonical: `/${locale}/technical-notes` } };
 }
 
 export default async function ArticlesPage({ params }) {

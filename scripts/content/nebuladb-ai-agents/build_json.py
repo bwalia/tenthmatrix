@@ -2,7 +2,7 @@
 """Seed the "Build AI agents with NebulaDB" blog + technical article (EN), seeded to every locale.
 
 Blog:    /docs/blogs/build-ai-agents-with-nebuladb-semantic-search-rag
-Article: /articles/nebuladb-ai-agents-technical-guide-semantic-search-rag
+Article: /technical-notes/nebuladb-ai-agents-technical-guide-semantic-search-rag
 
 Every query, plan, score and model reply in the bodies was run against production
 NebulaDB (v0.1.91, 8,318,710 docs, nomic-embed-text 768-d) on 2026-11-08, through

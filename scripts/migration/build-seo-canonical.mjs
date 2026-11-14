@@ -57,7 +57,7 @@ export const SELF_CANONICAL = new Set([
   '/data-deletion',
   '/security',
   // listing / hub / utility pages (list TenthMatrix's own content)
-  '/articles',
+  '/technical-notes',
   '/docs',
   '/docs/blogs',
   '/docs/blogs/tags',
@@ -110,7 +110,8 @@ export function buildCanonicalMap() {
   }
   for (const a of manifest.articles) {
     if (a.dest !== 'tenthmatrix') continue;
-    add(`/articles/${a.code}`, `/articles/${a.code}`, 'article');
+    // Both sites serve articles as Technical Notes (/technical-notes) since 2026-11.
+    add(`/technical-notes/${a.code}`, `/technical-notes/${a.code}`, 'article');
   }
 
   // Insights: each manifest file's primary slug plus its aliases, all pointing at

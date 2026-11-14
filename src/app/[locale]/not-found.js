@@ -20,7 +20,7 @@ export default async function NotFound() {
           <Button href={`/${locale}`} variant="primary">
             {t('goHome')}
           </Button>
-          <Button href={`/${locale}/articles`} variant="secondary">
+          <Button href={`/${locale}/technical-notes`} variant="secondary">
             {t('browseArticles')}
           </Button>
         </>

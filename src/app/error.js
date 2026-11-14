@@ -16,7 +16,7 @@ export default function Error({ reset }) {
           >
             Try again
           </button>
-          <Link href="/en/articles">Articles</Link>
+          <Link href="/en/technical-notes">Technical Notes</Link>
         </p>
       </div>
     </main>

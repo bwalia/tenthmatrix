@@ -43,7 +43,7 @@ function Specimens({ locale, theme }) {
       <div className={s.row}>
         <Button>Start a pilot</Button>
         <Button variant="secondary">See the products</Button>
-        <Button variant="tertiary" href={`/${locale}/articles`}>
+        <Button variant="tertiary" href={`/${locale}/technical-notes`}>
           Read the architecture
         </Button>
       </div>
@@ -66,7 +66,7 @@ function Specimens({ locale, theme }) {
         />
         <ArticleCard
           title="WSL Vault: zero-trust tenant isolation"
-          href={`/${locale}/articles`}
+          href={`/${locale}/technical-notes`}
           excerpt="Envelope encryption with a key hierarchy per tenant, and what happens when a node is stolen."
           date="2026-10-07"
           locale={locale}

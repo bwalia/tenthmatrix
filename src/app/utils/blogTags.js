@@ -7,6 +7,7 @@ const ACRONYMS = {
   sre: 'SRE', iot: 'IoT', gpu: 'GPU', k8s: 'K8s', ci: 'CI', cd: 'CD', ui: 'UI', ux: 'UX',
   aiops: 'AIOps', nlp: 'NLP', saas: 'SaaS', gitops: 'GitOps', nodejs: 'Node.js',
   golang: 'Go', bun: 'Bun.js', njs: 'njs', lua: 'Lua', rust: 'Rust',
+  openshell: 'OpenShell', cncf: 'CNCF',
 };
 
 export function prettifyTag(slug = '') {
