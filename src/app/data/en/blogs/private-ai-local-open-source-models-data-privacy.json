@@ -1,0 +1,85 @@
+{
+  "uuid": "blog-local-llm-privacy-001",
+  "internal_id": 1048,
+  "slug": "private-ai-local-open-source-models-data-privacy",
+  "title": "Private AI on Your Own Hardware: Local Open-Source Models and Data Privacy",
+  "sub_title": "Why businesses are running open-weight AI models in-house: privacy, cost and control, and the honest trade-offs",
+  "excerpt": "Open-weight AI models now run on hardware you own, so prompts, documents and answers never leave the building. What that means for data protection, cost and control, where it falls short, and how Ollama, vLLM and NVIDIA NIM fit.",
+  "meta_title": "Private AI on Your Own Hardware: Local Models and Data Privacy",
+  "meta_description": "Run open-source AI models in-house so customer data never leaves your building: the privacy, cost and control benefits, the trade-offs, and when to use Ollama, vLLM or NVIDIA NIM.",
+  "meta_keywords": "local LLM, private AI, open-source models, open-weight models, data privacy, UK GDPR, on-premise AI, self-hosted AI, Ollama, vLLM, NVIDIA NIM, Docker, Docker Compose, Open WebUI, llama.cpp, OpenAI-compatible API, offline AI, air-gapped AI",
+  "cover_image": "/img/local-llm/local-llm-cover.svg",
+  "images": [
+    {
+      "url": "/img/local-llm/local-llm-cover.svg",
+      "id": 1047,
+      "is_cover": true,
+      "width": 1200,
+      "height": 630,
+      "alt": "Your AI, your hardware, your data stays in: Ollama, vLLM and NVIDIA NIM run inside your building"
+    }
+  ],
+  "content": "<article class=\"blog-content\">\n\n<p class=\"lead\">Every time a member of staff pastes a contract, a customer complaint or a spreadsheet into a public AI chatbot, that data leaves your business. Open-source AI models have now become good enough, and small enough, to run on hardware you own. The questions, the documents and the answers stay inside your building. This post explains what that means for a business, what it costs, where it falls short, and the three pieces of software most teams use to do it: <strong>Ollama</strong>, <strong>vLLM</strong> and <strong>NVIDIA NIM</strong>. Developers can go straight to the <a href=\"/en/technical-notes/local-llm-docker-ollama-vllm-nvidia-nim-developer-guide\">technical note</a>, which has the Docker set-ups and working examples.</p>\n\n<p><img src=\"/img/local-llm/local-llm-cover.svg\" alt=\"Your AI, your hardware, your data stays in: Ollama, vLLM and NVIDIA NIM run inside your building and nothing crosses the boundary\" width=\"1200\" height=\"630\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>What \"local AI\" means</h2>\n\n<p>A large language model is a file, usually a few gigabytes, plus a program that runs it. Companies such as Meta (Llama), Google (Gemma), Alibaba (Qwen), Mistral and OpenAI (gpt-oss) now publish models whose files anyone can download, which are known as open-weight or open-source models. Once that file is on your own computer or server, you can use it without sending anything to the company that made it. No account, no per-question fee, and no internet connection needed after the download.</p>\n\n<p>To prove the point, we started a model in a Docker container, downloaded it, and then disconnected the container from every network. We asked it why offline AI helps privacy. It answered:</p>\n\n<blockquote><p>\"Running a model without a network connection minimizes the risk of data breaches and unauthorized access because it eliminates the potential for external connections and data transmission.\"</p></blockquote>\n\n<p>That was a one-billion-parameter model, small enough for an ordinary laptop, with its network cable effectively cut.</p>\n\n<h2>Why it matters: the privacy case</h2>\n\n<ul>\n  <li><strong>Data protection law.</strong> Under UK GDPR and the EU GDPR, sending personal data to an AI provider makes them a processor, often in another country. You need contracts, transfer assessments and a clear answer about retention. With a local model, the personal data is processed on your own systems, and that conversation gets much simpler.</li>\n  <li><strong>Client confidentiality.</strong> Law firms, accountants, healthcare providers and anyone under a non-disclosure agreement may simply not be allowed to send client material to a third party. Local AI lets those teams use the technology at all.</li>\n  <li><strong>No training on your data.</strong> A model on your hardware cannot learn from your prompts and show them to someone else, because nothing is sent anywhere.</li>\n  <li><strong>Data residency.</strong> You know exactly which building, and which disk, holds every prompt and answer.</li>\n  <li><strong>A smaller attack surface.</strong> No API keys to leak, and no vendor breach that exposes your conversation history.</li>\n</ul>\n\n<h2>The other benefits</h2>\n\n<table class=\"table\" style=\"width:100%;border-collapse:collapse;font-size:0.9rem;\">\n<thead><tr><th style=\"padding:8px;text-align:left;border:1px solid #cbd5e1;\">Benefit</th><th style=\"padding:8px;text-align:left;border:1px solid #cbd5e1;\">What it means in practice</th></tr></thead>\n<tbody>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">Predictable cost</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">You pay for hardware and electricity, not per word. Heavy, repetitive work such as classifying thousands of emails costs the same whether you run it once or a hundred times.</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">Works offline</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">Keeps working during an internet outage, on a ship, at a remote site or in a secure room with no outside connection.</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">No surprise changes</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">The model you tested is the model you run. A provider cannot retire it, change its behaviour or raise its price overnight.</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">Speed on the local network</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">No round trip to a data centre, and no queue behind other customers.</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">Freedom to customise</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">Give a model your house style, your product names or a specialist skill, and keep the result as your own asset.</td></tr>\n<tr><td style=\"padding:8px;border:1px solid #cbd5e1;\">No lock-in</td><td style=\"padding:8px;border:1px solid #cbd5e1;\">The tools below all speak the same language as OpenAI's API, so you can swap models or move to the cloud later with a settings change.</td></tr>\n</tbody>\n</table>\n\n<h2>The three tools, in plain English</h2>\n\n<div style=\"display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:1.5rem 0;\">\n  <div style=\"background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 24px;display:flex;align-items:center;gap:12px;\"><img src=\"/img/local-llm/ollama-logo.svg\" alt=\"Ollama logo\" width=\"34\" height=\"50\" loading=\"lazy\" style=\"background:#ffffff;border:0;border-radius:0;\" /><strong style=\"color:#111827;font-size:1.25rem;\">Ollama</strong></div>\n  <div style=\"background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 20px;\"><img src=\"/img/local-llm/vllm-logo.png\" alt=\"vLLM logo\" width=\"180\" height=\"52\" loading=\"lazy\" style=\"height:52px;width:auto;background:#ffffff;border:0;border-radius:0;\" /></div>\n  <div style=\"border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;\"><img src=\"/img/local-llm/nvidia-nim-badge.svg\" alt=\"NVIDIA NIM\" width=\"210\" height=\"60\" loading=\"lazy\" style=\"background:#ffffff;border:0;border-radius:0;\" /></div>\n</div>\n\n<ul>\n  <li><strong>Ollama</strong> is the easy one. One command installs it on a laptop, a Mac or a server, and one more downloads a model. It is free and open source (MIT licence) and ideal for a team, an office or a pilot.</li>\n  <li><strong>vLLM</strong> is the heavy lifter. It is open source (Apache 2.0) and designed to serve many people at once from powerful NVIDIA graphics cards. Choose it when a local model becomes a service the whole company relies on.</li>\n  <li><strong>NVIDIA NIM</strong> packages a model with NVIDIA's own optimisations into a ready-made, supported container. It is free to try for development, and production use is licensed through NVIDIA AI Enterprise. It suits organisations that want a vendor to stand behind the software.</li>\n</ul>\n\n<p><img src=\"/img/local-llm/local-llm-choose.svg\" alt=\"Which runtime: Ollama for laptops, Macs and single servers; vLLM for NVIDIA GPU servers with many users; NVIDIA NIM for supported, licensed deployments\" width=\"1200\" height=\"620\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<p>Put a friendly chat screen such as Open WebUI in front of any of them, and your staff get a private assistant that looks and feels like the public ones. Here is ours, running in Docker on a Mac and answering a prompt about itself with a three-billion-parameter Llama model:</p>\n\n<p><img src=\"/img/local-llm/open-webui-local-chat.jpg\" alt=\"Open WebUI running in Docker, chatting with the local llama3.2:3b model: a four-line poem about AI running in the office with no customer data leaving the building\" width=\"1280\" height=\"800\" loading=\"lazy\" decoding=\"async\" style=\"max-width:100%;height:auto;border-radius:12px;\" /></p>\n\n<h2>Be honest about the trade-offs</h2>\n\n<ul>\n  <li><strong>The biggest models are still in the cloud.</strong> For the hardest reasoning and writing, frontier models such as Claude or GPT are ahead of anything that fits on a desk. Many businesses use both: local for sensitive or high-volume work, cloud for the rest.</li>\n  <li><strong>Hardware matters.</strong> Small models run on a modern laptop. Larger models want a workstation with plenty of graphics memory, or a server. Serving a whole company needs proper GPUs.</li>\n  <li><strong>Someone has to look after it.</strong> Updates, monitoring, backups and access control become your job, or your partner's.</li>\n  <li><strong>Local is not automatically safe.</strong> A model on your network still needs access controls, and an AI agent that can run code still needs a sandbox. See our posts on <a href=\"/en/docs/blogs/openshell-cncf-sandbox-ai-agent-runtime-security\">OpenShell and agent safety</a>.</li>\n  <li><strong>Check the licence.</strong> \"Open\" models come with different licences. Most allow commercial use, but some add conditions.</li>\n</ul>\n\n<h2>Where businesses start</h2>\n\n<ol>\n  <li><strong>A private chat assistant</strong> for staff who handle client data: summarising, drafting and translating without anything leaving the office.</li>\n  <li><strong>Redacting before sharing</strong>: a local model strips names, emails and phone numbers from text before it goes anywhere else, including to a cloud model.</li>\n  <li><strong>Document search</strong> over contracts, policies or manuals, answered with citations.</li>\n  <li><strong>Bulk sorting</strong>: tagging support tickets, invoices or CVs by the thousand at no per-item cost.</li>\n  <li><strong>Developer tools</strong>: code assistants that never see your source code leave the building.</li>\n</ol>\n\n<h2>How we can help</h2>\n\n<p>We build private AI set-ups and the agents that run on them. Our sister brand <a href=\"https://www.workstation.co.uk/en/ai-workstations\" rel=\"noopener\">Workstation</a> sizes and supplies the hardware, from a single AI workstation to GPU servers. If you are not sure whether local, cloud or a mix is right, answer nine questions in our <a href=\"/en/ai-agent-journey\">AI agent journey</a>; it asks about offline hosting and open-source preferences, and recommends a set-up.</p>\n\n<ul>\n  <li><strong>For your developers</strong>: <a href=\"/en/technical-notes/local-llm-docker-ollama-vllm-nvidia-nim-developer-guide\">Local open-source models in Docker: Ollama, vLLM and NVIDIA NIM</a>, with ready-to-run set-ups and fun examples.</li>\n  <li><strong>Talk to us</strong>: <a href=\"/en/contact-us\">tell us what data you cannot send to the cloud</a>, and we will show you a model answering questions about it on your own hardware.</li>\n</ul>\n\n<p class=\"text-muted\"><em>Ollama, vLLM, NVIDIA and NIM are trademarks of their respective owners. The Ollama and vLLM logos are taken from the projects' public GitHub repositories. The NIM badge is our own text illustration, not an NVIDIA logo.</em></p>\n\n</article>\n",
+  "user_id": 1,
+  "user": {
+    "id": 1,
+    "uuid": "usr-001",
+    "username": "balinder",
+    "email": "balinder@workstation.co.uk",
+    "first_name": "Balinder",
+    "last_name": "Walia",
+    "active": true,
+    "created_at": "2025-05-19 15:25:06",
+    "updated_at": "2025-05-19 15:25:06"
+  },
+  "tags": [
+    {
+      "name": "local-ai",
+      "id": 946
+    },
+    {
+      "name": "data-privacy",
+      "id": 1077
+    },
+    {
+      "name": "ollama",
+      "id": 944
+    },
+    {
+      "name": "vllm",
+      "id": 1079
+    },
+    {
+      "name": "nvidia-nim",
+      "id": 1078
+    },
+    {
+      "name": "open-weights",
+      "id": 1023
+    },
+    {
+      "name": "docker",
+      "id": 1080
+    },
+    {
+      "name": "nvidia",
+      "id": 1038
+    },
+    {
+      "name": "open-source",
+      "id": 1074
+    },
+    {
+      "name": "llm",
+      "id": 975
+    },
+    {
+      "name": "ai",
+      "id": 956
+    }
+  ],
+  "created_at": "2026-11-14T10:00:00Z",
+  "updated_at": "2026-11-14T10:00:00Z",
+  "published_date": "2026-11-14",
+  "status": true
+}

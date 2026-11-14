@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="t d">
+  <title id="t">Which local runtime should you use?</title>
+  <desc id="d">Decision flow. On a laptop, Mac or a single small server, use Ollama, or llama.cpp for the smallest footprint. On NVIDIA GPU servers serving many users, use vLLM. If you want NVIDIA-built, optimised and supported containers under an NVIDIA AI Enterprise licence, use NVIDIA NIM. All three expose an OpenAI-compatible API, so you can start with one and move later.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" fill="#0b1020"/>
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="40" y="52" font-size="26" font-weight="700" fill="#ffffff">Which runtime? Start simple, move when you need to</text>
+    <text x="40" y="84" font-size="17" fill="#94a3b8">All three speak the OpenAI API, so switching later is a config change, not a rewrite.</text>
+
+    <rect x="420" y="112" width="360" height="72" rx="14" fill="#1e293b" stroke="#64748b"/>
+    <text x="600" y="144" text-anchor="middle" font-size="19" font-weight="700" fill="#f8fafc">Where will the model run?</text>
+    <text x="600" y="168" text-anchor="middle" font-size="14" fill="#cbd5e1">and how many people will use it?</text>
+
+    <path d="M500 184 L200 250" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <path d="M600 184 L600 250" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <path d="M700 184 L1000 250" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <text x="300" y="214" text-anchor="middle" font-size="14" fill="#94a3b8">laptop, Mac, one server</text>
+    <text x="610" y="226" font-size="14" fill="#94a3b8">NVIDIA GPUs,</text>
+    <text x="610" y="244" font-size="14" fill="#94a3b8">many users</text>
+    <text x="900" y="214" text-anchor="middle" font-size="14" fill="#94a3b8">need vendor support</text>
+
+    <!-- ollama -->
+    <rect x="40" y="256" width="340" height="300" rx="16" fill="#0f1f1f" stroke="#14b8a6" stroke-width="2"/>
+    <text x="210" y="298" text-anchor="middle" font-size="28" font-weight="800" fill="#ffffff">Ollama</text>
+    <text x="210" y="326" text-anchor="middle" font-size="14" fill="#5eead4">MIT · one command · :11434</text>
+    <g font-size="15" fill="#e2e8f0">
+      <text x="64" y="366">✓ CPU, NVIDIA, AMD, Apple Silicon</text>
+      <text x="64" y="394">✓ quantised GGUF models, small RAM</text>
+      <text x="64" y="422">✓ model library, Modelfiles</text>
+      <text x="64" y="450">✓ prototypes, teams, offices</text>
+      <text x="64" y="478" fill="#fca5a5">✗ not built for high concurrency</text>
+    </g>
+    <text x="210" y="530" text-anchor="middle" font-size="14" fill="#94a3b8">smallest footprint: llama.cpp server</text>
+
+    <!-- vllm -->
+    <rect x="430" y="256" width="340" height="300" rx="16" fill="#0f172a" stroke="#60a5fa" stroke-width="2"/>
+    <text x="600" y="298" text-anchor="middle" font-size="28" font-weight="800" fill="#ffffff">vLLM</text>
+    <text x="600" y="326" text-anchor="middle" font-size="14" fill="#93c5fd">Apache-2.0 · :8000</text>
+    <g font-size="15" fill="#e2e8f0">
+      <text x="454" y="366">✓ PagedAttention, continuous batching</text>
+      <text x="454" y="394">✓ high throughput, many users</text>
+      <text x="454" y="422">✓ Hugging Face models, multi-GPU</text>
+      <text x="454" y="450">✓ widely used open-source server</text>
+      <text x="454" y="478" fill="#fca5a5">✗ wants a real GPU server</text>
+    </g>
+    <text x="600" y="530" text-anchor="middle" font-size="14" fill="#94a3b8">best for production APIs you run yourself</text>
+
+    <!-- nim -->
+    <rect x="820" y="256" width="340" height="300" rx="16" fill="#0f1a0a" stroke="#76b900" stroke-width="2"/>
+    <text x="990" y="298" text-anchor="middle" font-size="28" font-weight="800" fill="#ffffff">NVIDIA NIM</text>
+    <text x="990" y="326" text-anchor="middle" font-size="14" fill="#bef264">NVIDIA AI Enterprise · :8000</text>
+    <g font-size="15" fill="#e2e8f0">
+      <text x="844" y="366">✓ one container per model</text>
+      <text x="844" y="394">✓ engine tuned for your GPU</text>
+      <text x="844" y="422">✓ health checks, Kubernetes-ready</text>
+      <text x="844" y="450">✓ supported, security-patched</text>
+      <text x="844" y="478" fill="#fca5a5">✗ licence for production use</text>
+    </g>
+    <text x="990" y="530" text-anchor="middle" font-size="14" fill="#94a3b8">best for regulated, supported deployments</text>
+  </g>
+</svg>
