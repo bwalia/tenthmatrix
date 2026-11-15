@@ -1281,6 +1281,30 @@
   },
   {
     "type": "blog",
+    "id": "blog-opsapi-one-backend-001",
+    "slug": "opsapi-one-backend-sign-in-workspaces-business-modules",
+    "title": "One API for Every Product: How OpsAPI Handles Sign-In, Workspaces and Business Modules",
+    "excerpt": "OpsAPI is an open-source, self-hosted API that signs users in once for every app, keeps each customer in its own workspace and switches on only the business modules a product needs. How it works, with diagrams and workflows.",
+    "content": "If you run more than one product, you probably run more than one backend. Each has its own login screen, user table, password reset, roles, admin pages and audit log, and each one is built, patched and secured separately. OpsAPI replaces them with one open-source API. It signs your users in once for every app, keeps each customer's data in its own workspace, and switches on only the business modules a product needs, from CRM and invoicing to a website CMS and UK tax filing. This post explains ho",
+    "tags": "opsapi, multi-tenant, single-sign-on, self-hosted, open-source, kubernetes, lua, platform-engineering, devops, backend",
+    "date": "2026-11-15",
+    "image": "/img/opsapi/opsapi-architecture.svg",
+    "author": "Balinder Walia",
+    "category": [
+      "opsapi",
+      "multi-tenant",
+      "single-sign-on",
+      "self-hosted",
+      "open-source",
+      "kubernetes",
+      "lua",
+      "platform-engineering",
+      "devops",
+      "backend"
+    ]
+  },
+  {
+    "type": "blog",
     "id": "4bce6240-4b53-7d7b-0555-a822929844b5",
     "slug": "old-blog-slug-4",
     "title": "Optimizing API Performance with MySQL and Node.js",
@@ -1999,6 +2023,24 @@
       "sre",
       "kubernetes",
       "ai"
+    ]
+  },
+  {
+    "type": "article",
+    "id": "microsoft-graph-api-guide-article-01",
+    "slug": "microsoft-graph-api-developer-guide-azure-microsoft-365",
+    "title": "Microsoft Graph API: One Endpoint for Entra ID, Microsoft 365 and Intune, Explained End to End",
+    "excerpt": "How Graph works from app registration to response, the cloud-scale problems it solves across Azure and Microsoft 365 services, and how to use it well: permissions, queries, batching, throttling, change notifications, delta query, Data Connect and national clouds",
+    "content": "Microsoft Graph is the single API in front of Microsoft Entra ID, Microsoft 365, Intune, the Microsoft security services and more. Microsoft describes it as \"the gateway to data and intelligence in Microsoft cloud services like Microsoft Entra and Microsoft 365.\" One endpoint, https://graph.microsoft.com , one token and one set of conventions reach users, mail, files, Teams, devices and security alerts. This note explains how it works end to end, how it deals with the hardest problems of running",
+    "tags": "Microsoft Graph, Microsoft Graph API, graph.microsoft.com, Microsoft Entra ID, Azure AD, Microsoft 365 API, Intune API, Teams API, SharePoint API, OneDrive API, Outlook API, delegated permissions, application permissions, client credentials, MSAL, throttling, Retry-After, JSON batching, change notifications, webhooks, delta query, Azure Event Hubs, Event Grid, Microsoft Graph Data Connect, national clouds, Graph PowerShell",
+    "date": "2026-11-15",
+    "image": "/img/microsoft-graph/graph-end-to-end-workflow.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "Microsoft 365",
+      "Azure",
+      "APIs",
+      "Identity"
     ]
   },
   {

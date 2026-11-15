@@ -7,6 +7,7 @@
 // No shop links anywhere: hardware goes to Workstation's marketing pages.
 import {
   Bug,
+  Network,
   Bot,
   Workflow,
   Sparkles,
@@ -100,7 +101,7 @@ export const NAV_GROUPS = [
     items: [
       { key: 'jobshout', href: '/jobshout', icon: Briefcase },
       { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
-      { key: 'opsapi', href: '/opsapi', icon: Server },
+      { key: 'opsapi', href: '/opsapi', icon: Network },
       { key: 'crm', href: '/crm', icon: Users },
       { key: 'marketing', href: '/marketing', icon: Megaphone },
       { key: 'generativeAi', href: '/generative-ai', icon: PenTool },
@@ -114,7 +115,7 @@ export const NAV_GROUPS = [
     items: [
       { key: 'allProducts', href: '/products', icon: LayoutGrid },
       { key: 'fixloop', href: '/fixloop', icon: Bug },
-      { key: 'opsapi', href: '/opsapi', icon: Server },
+      { key: 'opsapi', href: '/opsapi', icon: Network },
       { key: 'solutions', href: '/workstation-ai-solutions', icon: Boxes },
       { key: 'aiSolutions', href: '/ai-solutions', icon: Rocket },
       { key: 'industries', href: '/industries', icon: Factory },
