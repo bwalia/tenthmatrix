@@ -334,3 +334,34 @@
     }
   }
 }
+
+// Hand-written callouts in blog/CMS HTML pin a light inline background
+// (e.g. style="background:#e9f3ee") but inherit the theme's text colour, so in
+// dark mode light text sat on a light box. Re-theme those boxes in dark mode;
+// their inline border colours stay. Images are excluded (logos keep white).
+@mixin prose-dark-light-boxes {
+  .tm-prose :is(div, p, section, aside, blockquote, td, th, li, span)[style*='background:#e'],
+  .tm-prose :is(div, p, section, aside, blockquote, td, th, li, span)[style*='background:#f'],
+  .tm-prose :is(div, p, section, aside, blockquote, td, th, li, span)[style*='background: #e'],
+  .tm-prose :is(div, p, section, aside, blockquote, td, th, li, span)[style*='background: #f'] {
+    background: var(--tm-accent-soft) !important;
+    color: var(--tm-text) !important;
+  }
+
+  // Dark inline text colours (#000–#5xx) without their own light box.
+  @each $d in 0, 1, 2, 3, 4, 5 {
+    .tm-prose :is(p, span, em, small, div, li)[style*='color:##{$d}']:not([style*='background']) {
+      color: var(--tm-text-muted) !important;
+    }
+  }
+}
+
+:root[data-theme='dark'] {
+  @include prose-dark-light-boxes;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    @include prose-dark-light-boxes;
+  }
+}
