@@ -9,6 +9,7 @@ import MediaFigure from '../MediaFigure';
 import VideoGrid from '../VideoGrid';
 import ComparisonTable from '../ComparisonTable';
 import RichText from '../RichText';
+import FaqAccordion from '../FaqAccordion';
 import ActionLink, { heroActions } from '../ActionLink';
 import { localeHref, isShopLink } from '../links';
 import { useUiStrings } from '../ui';
@@ -207,6 +208,12 @@ export default function ProductLanding({ data, locale }) {
       {relatedItems.length > 0 && (
         <Section id="related" title={related?.title || ui.learnMore} lede={related?.intro}>
           <LinkCards items={relatedItems} locale={locale} />
+        </Section>
+      )}
+
+      {data.faq?.items?.length > 0 && (
+        <Section id="faq" title={data.faq.title} lede={data.faq.intro} tone="sunken">
+          <FaqAccordion items={data.faq.items} />
         </Section>
       )}
 
