@@ -195,6 +195,64 @@
       }
     ]
   },
+  "architecture": {
+    "title": "Lua inside Nginx, PostgreSQL underneath",
+    "intro": "OpsAPI is a Lapis application that runs inside OpenResty's Nginx workers. A minimal deployment needs only PostgreSQL; Redis, MinIO, Kafka and an AI model are optional.",
+    "steps": [
+      {
+        "title": "Clients",
+        "text": "The admin dashboard, your web and mobile apps, servers and scripts, all on the same API and the same sign-in."
+      },
+      {
+        "title": "OpenResty workers",
+        "text": "Lua runs in the Nginx worker processes: no proxy hop and no separate app server."
+      },
+      {
+        "title": "Modules per deployment",
+        "text": "The PROJECT_CODE preset decides which modules load. A module that is not loaded has no routes and no tables."
+      },
+      {
+        "title": "Diensten",
+        "text": "PostgreSQL with pgvector for every table, plus optional Redis, MinIO or S3, Kafka, Ollama or a hosted model, and Prometheus."
+      }
+    ]
+  },
+  "roadmap": {
+    "title": "Pick the modules per deployment",
+    "intro": "Choose one preset with PROJECT_CODE, or combine them, for example ecommerce,collaboration. Sign-in, workspaces and roles are always included. There are 16 presets in all.",
+    "items": [
+      {
+        "status": "business",
+        "title": "Running a company",
+        "text": "CRM, timesheets, invoicing, accounting, kanban, notifications and forms."
+      },
+      {
+        "status": "tax_copilot",
+        "title": "UK tax filing",
+        "text": "The HMRC Making Tax Digital module with notifications."
+      },
+      {
+        "status": "ecommerce",
+        "title": "Selling online",
+        "text": "E-commerce, delivery, reviews, shop, notifications and forms."
+      },
+      {
+        "status": "field_service",
+        "title": "Field teams",
+        "text": "Field service, e-commerce, timesheets, invoicing, notifications and forms."
+      },
+      {
+        "status": "hospital",
+        "title": "Care providers",
+        "text": "Hospital and care, notifications and forms."
+      },
+      {
+        "status": "core_only",
+        "title": "Identity only",
+        "text": "Sign-in, workspaces and roles, for a single sign-on service across your own apps."
+      }
+    ]
+  },
   "aiAngle": {
     "title": "Safe by default",
     "intro": "OpsAPI holds the logins and the data of every product that uses it, so the defaults are strict.",
@@ -211,6 +269,13 @@
     "title": "Diagrams and workflows",
     "intro": "From the OpsAPI technical notes on opsapi.org.",
     "items": [
+      {
+        "src": "/img/opsapi/opsapi-org-home.png",
+        "alt": "opsapi.org home page: One API for sign-in, tenants and business modules, with the start.sh, health check and Swagger commands",
+        "caption": "Up and running in three commands. start.sh brings up the API, the dashboard, PostgreSQL and the rest of the stack. /health tells you it is up, and /swagger lists every endpoint.",
+        "width": 1600,
+        "height": 900
+      },
       {
         "src": "/img/opsapi/opsapi-sign-in-flow.svg",
         "alt": "Sign-in sequence between the browser, your app, OpsAPI and Google: nonce, redirect to the hosted sign-in page, optional Google consent, signed JWT, redirect back, then GET /auth/me",
