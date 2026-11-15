@@ -50,7 +50,7 @@ blog = {
     "slug": slug,
     "title": "AI for Tax and VAT Returns: MTD Software for UK Accountancy Firms",
     "sub_title": (
-        "Six recorded scenarios, MTD software setup, HMRC sandbox to production, penetration testing, "
+        "Seven recorded scenarios, MTD software setup, HMRC sandbox to production, penetration testing, "
         "and what the AI costs on hosted models, rented GPUs or bought hardware"
     ),
     "excerpt": (
@@ -60,7 +60,7 @@ blog = {
     ),
     "meta_title": "AI for Tax and VAT Returns: MTD Software for UK Accountancy Firms",
     "meta_description": (
-        "AI-assisted MTD Income Tax and VAT returns for UK accountancy firms: six recorded scenarios, HMRC "
+        "AI-assisted MTD Income Tax and VAT returns for UK accountancy firms: seven recorded scenarios, HMRC "
         "sandbox and production approval, penetration testing, and AI costs from hosted models to private GPUs."
     ),
     "meta_keywords": (
