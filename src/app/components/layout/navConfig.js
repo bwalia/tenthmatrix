@@ -6,6 +6,7 @@
 //
 // No shop links anywhere: hardware goes to Workstation's marketing pages.
 import {
+  Bug,
   Bot,
   Workflow,
   Sparkles,
@@ -111,6 +112,7 @@ export const NAV_GROUPS = [
     overview: '/products',
     items: [
       { key: 'allProducts', href: '/products', icon: LayoutGrid },
+      { key: 'fixloop', href: '/fixloop', icon: Bug },
       { key: 'solutions', href: '/workstation-ai-solutions', icon: Boxes },
       { key: 'aiSolutions', href: '/ai-solutions', icon: Rocket },
       { key: 'industries', href: '/industries', icon: Factory },
@@ -154,7 +156,7 @@ export const NAV_GROUPS = [
 export const FOOTER_COLUMNS = [
   { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'agentJourney', 'startProject'] },
   { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
-  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'jev', 'allProducts'] },
+  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'fixloop', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
   { key: 'resources', items: ['articles', 'blog', 'insights', 'docs', 'faqs', 'news'] },
   { key: 'company', items: ['about', 'whyTenthmatrix', 'partners', 'stories', 'bookOnline', 'contact'] },
