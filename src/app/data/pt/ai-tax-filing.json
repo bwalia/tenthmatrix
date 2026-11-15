@@ -2,7 +2,7 @@
   "meta": {
     "title": "AI Tax Filing — UK tax returns filed with HMRC by an AI agent | TenthMatrix",
     "description": "A UK tax return application with an AI agent built in. It reads bank statements, sorts every transaction into HMRC categories and files Income Tax and VAT through Making Tax Digital. Six recorded scenarios and a downloadable brochure.",
-    "keywords": "AI tax return, Making Tax Digital, MTD ITSA, MTD VAT, HMRC filing software, landlord tax return, self assessment software, AI bookkeeping, white label tax app, TenthMatrix"
+    "keywords": "AI tax return, Making Tax Digital, MTD ITSA, MTD VAT, HMRC filing software, landlord tax return, self assessment software, AI bookkeeping, white label tax app, TenthMatrix, QuickBooks alternative, Xero alternative, accountancy client app, white label accounting app"
   },
   "header": {
     "title": "Declaração de impostos com IA",
@@ -11,7 +11,7 @@
   },
   "intro": {
     "title": "What you are evaluating",
-    "body": "A tax return application for the UK with an AI agent built in. It reads bank statements (PDF or CSV), sorts each transaction into the right HMRC category, works out the figures and files with HMRC through Making Tax Digital for Income Tax and for VAT. The agent does the slow reading and sorting. People make the decisions: the client confirms the figures, an accountant can review any line, and nothing is sent to HMRC until someone ticks the declaration.",
+    "body": "A tax return application for the UK with an AI agent built in. It reads bank statements (PDF or CSV), sorts each transaction into the right HMRC category, works out the figures and files with HMRC through Making Tax Digital for Income Tax and for VAT. The agent does the slow reading and sorting. People make the decisions: the client confirms the figures, an accountant can review any line, and nothing is sent to HMRC until someone ticks the declaration. TenthMatrix licenses it to accountancy firms, and each firm offers it to its own clients under the firm's brand.",
     "links": [
       {
         "label": "Download the brochure (PDF)",
@@ -71,12 +71,12 @@
       "duration": "2:24"
     },
     {
-      "title": "06 · A branded DIY tax return app",
+      "title": "06 · Your own branded tax return app",
       "caption": "The same engine under a separate consumer brand: sign in, upload, extract, classify, reconcile, calculate and file. Your clients see your name, not ours.",
       "embedUrl": "https://www.youtube.com/embed/PEyJKsYIN-c",
       "watchUrl": "https://youtu.be/PEyJKsYIN-c",
-      "thumbnail": "/img/ai-tax-filing/diy-tax-return-app.jpg",
-      "thumbnailAlt": "White-label DIY Tax Return app",
+      "thumbnail": "/img/ai-tax-filing/white-label-tax-app.jpg",
+      "thumbnailAlt": "White-label tax return app under your own brand",
       "duration": "0:27"
     }
   ],
@@ -100,7 +100,7 @@
       },
       {
         "title": "Firms launching their own app",
-        "text": "A white-label consumer tax return app on your domain, with your sign-in and your design.",
+        "text": "Offer the app to your clients as part of your service, on your domain, with your sign-in and your design.",
         "icon": "fas fa-layer-group"
       }
     ]
@@ -164,6 +164,28 @@
       }
     ]
   },
+  "agents": {
+    "title": "Offer it to your own clients",
+    "intro": "TenthMatrix licenses the application to accountancy firms. Your firm rolls it out to its own clients under your brand, as part of your service. Each client gets one application in place of QuickBooks or Xero, email threads and shared Dropbox folders.",
+    "items": [
+      {
+        "title": "One app instead of several",
+        "text": "Bookkeeping, bank statements, documents, messages with your team and the tax return, all in one place. It replaces QuickBooks, Xero and other accounting software, plus the email and Dropbox back-and-forth."
+      },
+      {
+        "title": "Part of your service",
+        "text": "Include the app in your fees or charge for it separately. Your clients sign in to your brand, and their data stays with your firm."
+      },
+      {
+        "title": "iPhone and Android apps",
+        "text": "Mobile apps for iPhone and Android, under your brand, are included in the enterprise licence, so clients can upload statements and answer questions from their phone."
+      },
+      {
+        "title": "Your accountants stay in charge",
+        "text": "What clients upload arrives sorted and linked to the figures, ready for review and sign-off in the same application."
+      }
+    ]
+  },
   "aiAngle": {
     "title": "What it does not do",
     "intro": "Limits worth knowing before you buy.",
@@ -209,5 +231,38 @@
       "label": "Download the brochure",
       "href": "/brochures/tenthmatrix-ai-tax-filing-scenarios.pdf"
     }
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "items": [
+      {
+        "question": "Who buys the application, and who uses it?",
+        "answer": "TenthMatrix licenses it to accountancy firms. Your firm then offers it to your own clients, under your brand, as part of your service. Your accountants and your clients use the same application, each with their own access."
+      },
+      {
+        "question": "Can it replace QuickBooks or Xero for our clients?",
+        "answer": "Yes. Clients keep their records, upload bank statements and documents, message your team and file their returns in one application, instead of using QuickBooks, Xero or other accounting software alongside email and Dropbox. During scoping we go through what your clients use today and map it onto the application."
+      },
+      {
+        "question": "Are there iPhone and Android apps?",
+        "answer": "Yes. Mobile apps for iPhone and Android, under your firm's brand, are included in the enterprise licence."
+      },
+      {
+        "question": "Does the AI file returns on its own?",
+        "answer": "No. The AI reads and sorts transactions. A rules engine works out the figures, HMRC confirms the Income Tax calculation, and nothing is filed until a person confirms the figures and ticks the declaration."
+      },
+      {
+        "question": "Can we file live with HMRC today?",
+        "answer": "The videos were recorded in HMRC's sandbox with test taxpayers. Live filing needs HMRC production approval. HMRC is not currently accepting new production requests for 2026–27 MTD Income Tax quarterly update products, so we agree the right route for your firm during scoping."
+      },
+      {
+        "question": "Where is client data kept?",
+        "answer": "Hosted in the UK by us, or on your own servers. The agent can run on a hosted model or on a local model, so bank statements never leave your network."
+      },
+      {
+        "question": "How is it priced?",
+        "answer": "Your firm takes an enterprise licence, quoted after a 30-minute scoping call and based on how many clients you serve. The branded web application, the mobile apps and the agent setup are part of it."
+      }
+    ]
   }
 }
