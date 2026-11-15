@@ -1,0 +1,320 @@
+{
+  "meta": {
+    "title": "OpsAPI — one open-source API for sign-in, tenants and business modules | TenthMatrix",
+    "description": "OpsAPI is a self-hosted, multi-tenant API platform: one sign-in for every app, each customer's data in its own workspace, and 20 business modules from CRM to UK tax filing, switched on per deployment. OpenResty, Lua and PostgreSQL.",
+    "keywords": "OpsAPI, multi-tenant API, self-hosted API platform, OpenResty, Lua, Lapis, PostgreSQL, SAML SSO, single sign-on, RBAC, CRM API, invoicing API, HMRC MTD API, Helm chart, TypeScript SDK, open source backend, opsapi.org"
+  },
+  "header": {
+    "title": "OpsAPI",
+    "subtitle": "One API for sign-in, tenants and business modules.",
+    "description": "OpsAPI is a self-hosted, multi-tenant API platform. It signs your users in once for every app, keeps each customer's data in its own workspace, and switches on the business modules a product needs, from CRM to UK tax filing. Open source, built on OpenResty, Lua and PostgreSQL."
+  },
+  "intro": {
+    "title": "Stop building a backend per product",
+    "body": "Every product rebuilds the same four things: sign-in, tenants, the business logic and the operations around them. OpsAPI does them once. Lua runs inside OpenResty's Nginx workers, so a request never hops to a separate app server, and each deployment loads only the modules its preset names. It is the platform behind TenthMatrix applications such as AI Tax Filing, and it is open source on GitHub, built and run by Workstation, TenthMatrix's sister brand.",
+    "links": [
+      {
+        "label": "opsapi.org",
+        "href": "https://opsapi.org/"
+      },
+      {
+        "label": "All 48 features",
+        "href": "https://opsapi.org/features/"
+      },
+      {
+        "label": "Architecture",
+        "href": "https://opsapi.org/architecture/"
+      },
+      {
+        "label": "Live demo guide",
+        "href": "https://opsapi.org/demo/"
+      },
+      {
+        "label": "Source on GitHub",
+        "href": "https://github.com/bwalia/opsapi"
+      }
+    ]
+  },
+  "screenshot": {
+    "title": "Up and running in three commands",
+    "caption": "start.sh brings up the API, the dashboard, PostgreSQL and the rest of the stack. /health tells you it is up, and /swagger lists every endpoint.",
+    "src": "/img/opsapi/opsapi-org-home.png",
+    "alt": "opsapi.org home page: One API for sign-in, tenants and business modules, with the start.sh, health check and Swagger commands",
+    "width": 1600,
+    "height": 900
+  },
+  "pillars": {
+    "title": "Four things every product rebuilds, done once",
+    "items": [
+      {
+        "title": "One sign-in for every app",
+        "text": "Passwords with emailed codes, Google and Apple, SAML single sign-on per workspace, and a hosted sign-in page. Apps check a token with one call to /auth/me.",
+        "icon": "fas fa-key"
+      },
+      {
+        "title": "Workspaces from the first table",
+        "text": "Every business row carries its workspace. Roles are module.action permissions per workspace, so one deployment serves many customers without their data mixing.",
+        "icon": "fas fa-layer-group"
+      },
+      {
+        "title": "20 business modules",
+        "text": "CRM, invoicing, accounting, UK tax filing, e-commerce, care, field service and more. Each deployment loads only what its product uses.",
+        "icon": "fas fa-cubes"
+      },
+      {
+        "title": "Built to be run",
+        "text": "One container, a Helm chart, secrets from a vault, health checks, Prometheus metrics and an error catalogue with correlation IDs.",
+        "icon": "fas fa-server"
+      }
+    ]
+  },
+  "architecture": {
+    "title": "Lua inside Nginx, PostgreSQL underneath",
+    "intro": "OpsAPI is a Lapis application that runs inside OpenResty's Nginx workers. A minimal deployment needs only PostgreSQL; Redis, MinIO, Kafka and an AI model are optional.",
+    "steps": [
+      {
+        "title": "Clients",
+        "text": "The admin dashboard, your web and mobile apps, servers and scripts, all on the same API and the same sign-in."
+      },
+      {
+        "title": "OpenResty workers",
+        "text": "Lua runs in the Nginx worker processes: no proxy hop and no separate app server."
+      },
+      {
+        "title": "Modules per deployment",
+        "text": "The PROJECT_CODE preset decides which modules load. A module that is not loaded has no routes and no tables."
+      },
+      {
+        "title": "সেবাসমূহ",
+        "text": "PostgreSQL with pgvector for every table, plus optional Redis, MinIO or S3, Kafka, Ollama or a hosted model, and Prometheus."
+      }
+    ]
+  },
+  "howItWorks": {
+    "title": "One request through OpsAPI",
+    "intro": "Every request follows the same layered path, from the Nginx worker to PostgreSQL.",
+    "flow": [
+      {
+        "title": "1. Before filter",
+        "text": "Public endpoints are let through; everything else needs a valid token or API key."
+      },
+      {
+        "title": "2. Middleware",
+        "text": "The workspace is resolved from a header, the token or the subdomain, and the caller's module.action permission is checked."
+      },
+      {
+        "title": "3. Routes",
+        "text": "Only the route files for the modules this deployment loads exist."
+      },
+      {
+        "title": "4. Queries",
+        "text": "Business logic, validation and SQL, always filtered by workspace."
+      },
+      {
+        "title": "5. Models and PostgreSQL",
+        "text": "Thin table wrappers over one database per deployment, with workspaces separating the tenants."
+      }
+    ]
+  },
+  "features": {
+    "title": "20 business modules, switched on per deployment",
+    "items": [
+      {
+        "title": "CRM",
+        "text": "Accounts, contacts, deals, pipelines, activities and public lead capture."
+      },
+      {
+        "title": "Invoicing",
+        "text": "Invoices, PDFs, payments and templates."
+      },
+      {
+        "title": "Accounting",
+        "text": "Bookkeeping, VAT returns, trial balance and AI-assisted categorisation."
+      },
+      {
+        "title": "UK tax filing (HMRC MTD)",
+        "text": "Bank statement extraction, AI classification and Making Tax Digital submission with HMRC's fraud prevention headers."
+      },
+      {
+        "title": "Bank transactions",
+        "text": "Import and track bank transactions."
+      },
+      {
+        "title": "Timesheets",
+        "text": "Time entry and approval."
+      },
+      {
+        "title": "Kanban",
+        "text": "Projects, boards, sprints, epics, tasks, labels and time tracking."
+      },
+      {
+        "title": "Chat",
+        "text": "Channels, messages, mentions and reactions, with an AI agent."
+      },
+      {
+        "title": "Push notifications",
+        "text": "Device tokens with FCM and APNs delivery."
+      },
+      {
+        "title": "E-commerce",
+        "text": "Stores, products, variants, carts, orders and Stripe payments."
+      },
+      {
+        "title": "Delivery",
+        "text": "Delivery partners, verification, pricing, requests and assignments."
+      },
+      {
+        "title": "Reviews",
+        "text": "Product and store reviews."
+      },
+      {
+        "title": "AI hardware shop",
+        "text": "Configurable catalogue, quotes, carts, Stripe checkout and a chat assistant that answers from the catalogue."
+      },
+      {
+        "title": "Billing and entitlements",
+        "text": "Apps, plans, subscriptions, entitlements and signed licences."
+      },
+      {
+        "title": "Hospital and care",
+        "text": "Hospitals, wards, patients, care plans, medications, care logs and access controls."
+      },
+      {
+        "title": "Field service",
+        "text": "Service requests, jobs, site visits, assets, parts, contracts and reports."
+      },
+      {
+        "title": "Academy LMS",
+        "text": "Courses and lessons with rich content, instructors and paid enrolment."
+      },
+      {
+        "title": "CMS",
+        "text": "Website pages and blog posts with media, categories, tags and rebuild webhooks."
+      },
+      {
+        "title": "Forms",
+        "text": "Public forms, responses and the records created from them."
+      },
+      {
+        "title": "Hiring ATS",
+        "text": "Jobs, candidates and AI first-round interviews."
+      }
+    ]
+  },
+  "aiAngle": {
+    "title": "Sign-in and security, built in",
+    "intro": "The parts every product needs and few get right are always on, in every deployment.",
+    "points": [
+      "Email and password with bcrypt, lockout after failed attempts, per-IP rate limits, and reset links only to trusted origins.",
+      "Six-digit codes by email. Each workspace owner decides whether members need one; platform admins always do.",
+      "Google and Sign in with Apple on web and native apps, and SAML 2.0 single sign-on per workspace with Okta, Entra ID, Google Workspace, OneLogin or Keycloak.",
+      "Rotating refresh tokens, an optional PIN for quick unlock, and API keys scoped to one workspace for servers and scripts.",
+      "A per-workspace audit trail, and an error catalogue where every error has a code, a plain message and a correlation ID."
+    ]
+  },
+  "roadmap": {
+    "title": "Pick the modules per deployment",
+    "intro": "Choose one preset with PROJECT_CODE, or combine them, for example ecommerce,collaboration. Sign-in, workspaces and roles are always included. There are 16 presets in all.",
+    "items": [
+      {
+        "status": "business",
+        "title": "Running a company",
+        "text": "CRM, timesheets, invoicing, accounting, kanban, notifications and forms."
+      },
+      {
+        "status": "tax_copilot",
+        "title": "UK tax filing",
+        "text": "The HMRC Making Tax Digital module with notifications."
+      },
+      {
+        "status": "ecommerce",
+        "title": "Selling online",
+        "text": "E-commerce, delivery, reviews, shop, notifications and forms."
+      },
+      {
+        "status": "field_service",
+        "title": "Field teams",
+        "text": "Field service, e-commerce, timesheets, invoicing, notifications and forms."
+      },
+      {
+        "status": "hospital",
+        "title": "Care providers",
+        "text": "Hospital and care, notifications and forms."
+      },
+      {
+        "status": "core_only",
+        "title": "Identity only",
+        "text": "Sign-in, workspaces and roles, for a single sign-on service across your own apps."
+      }
+    ]
+  },
+  "deploy": {
+    "title": "From one command to a Kubernetes cluster",
+    "body": "Pull bwalia/opsapi from Docker Hub, or clone the repository and run ./start.sh -e local -n -j all to bring up the API, dashboard, PostgreSQL, Redis, MinIO, Kafka, Grafana and Prometheus. For production, the Helm chart runs migrations before each upgrade, takes secrets from a vault and rolls updates with a graceful drain. The @opsapi/client TypeScript SDK and the OpenAPI spec at /openapi.json cover every endpoint.",
+    "ctaLabel": "Read the README",
+    "ctaHref": "https://github.com/bwalia/opsapi#readme"
+  },
+  "externalSite": {
+    "label": "The product site",
+    "text": "Features, architecture, the live demo with five apps in five languages on one sign-in, and the technotes.",
+    "href": "https://opsapi.org/"
+  },
+  "faq": {
+    "title": "সচরাচর জিজ্ঞাসিত প্রশ্ন",
+    "items": [
+      {
+        "question": "Is OpsAPI open source?",
+        "answer": "Yes. The code is on GitHub at bwalia/opsapi and the image is on Docker Hub. You run it on your own infrastructure."
+      },
+      {
+        "question": "What does a minimal deployment need?",
+        "answer": "One container and PostgreSQL. Redis, MinIO or S3, Kafka, an AI model and Prometheus are optional and only needed by the modules and features that use them."
+      },
+      {
+        "question": "Can one customer be limited to certain modules?",
+        "answer": "The hard boundary is the deployment: a deployment's preset decides which modules exist, and a module that is not loaded returns 404 for everyone. Within a deployment, roles control what each member can do in their workspace."
+      },
+      {
+        "question": "Can I add my own module without forking it?",
+        "answer": "Yes. A plugin is a folder of Lua that gets sign-in, workspaces, permissions, migrations, dashboard pages, event listeners and scheduled jobs, and ships in its own image built on bwalia/opsapi."
+      },
+      {
+        "question": "Can TenthMatrix run it for us?",
+        "answer": "Yes. TenthMatrix builds products on OpsAPI and can set it up on your cloud or your own servers, add the modules and integrations you need, and keep it running."
+      }
+    ]
+  },
+  "related": {
+    "title": "Related TenthMatrix products",
+    "items": [
+      {
+        "title": "AI Tax Filing for accountancy firms",
+        "href": "/ai-tax-filing"
+      },
+      {
+        "title": "Jobshout AI agent framework",
+        "href": "/jobshout"
+      },
+      {
+        "title": "Fixloop AI code review",
+        "href": "/fixloop"
+      },
+      {
+        "title": "Proxy10x",
+        "href": "/proxy10x"
+      }
+    ]
+  },
+  "cta": {
+    "title": "One backend for every product you build",
+    "description": "Try the live demo on opsapi.org, or talk to TenthMatrix about building your product on OpsAPI with the modules, integrations and hosting you need.",
+    "primary": {
+      "label": "Open opsapi.org",
+      "href": "https://opsapi.org/"
+    },
+    "secondary": {
+      "label": "TenthMatrix-এর সাথে যোগাযোগ করুন",
+      "href": "/contact-us"
+    }
+  }
+}

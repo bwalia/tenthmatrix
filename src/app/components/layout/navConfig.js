@@ -100,6 +100,7 @@ export const NAV_GROUPS = [
     items: [
       { key: 'jobshout', href: '/jobshout', icon: Briefcase },
       { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
+      { key: 'opsapi', href: '/opsapi', icon: Server },
       { key: 'crm', href: '/crm', icon: Users },
       { key: 'marketing', href: '/marketing', icon: Megaphone },
       { key: 'generativeAi', href: '/generative-ai', icon: PenTool },
@@ -113,6 +114,7 @@ export const NAV_GROUPS = [
     items: [
       { key: 'allProducts', href: '/products', icon: LayoutGrid },
       { key: 'fixloop', href: '/fixloop', icon: Bug },
+      { key: 'opsapi', href: '/opsapi', icon: Server },
       { key: 'solutions', href: '/workstation-ai-solutions', icon: Boxes },
       { key: 'aiSolutions', href: '/ai-solutions', icon: Rocket },
       { key: 'industries', href: '/industries', icon: Factory },
@@ -156,7 +158,7 @@ export const NAV_GROUPS = [
 export const FOOTER_COLUMNS = [
   { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'agentJourney', 'startProject'] },
   { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
-  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'fixloop', 'jev', 'allProducts'] },
+  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'fixloop', 'opsapi', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
   { key: 'resources', items: ['articles', 'blog', 'insights', 'docs', 'faqs', 'news'] },
   { key: 'company', items: ['about', 'whyTenthmatrix', 'partners', 'stories', 'bookOnline', 'contact'] },
