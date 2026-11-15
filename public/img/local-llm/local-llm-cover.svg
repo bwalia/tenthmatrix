@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t d">
+  <title id="t">Private AI on your own hardware</title>
+  <desc id="d">Open-source models run in Docker containers inside your own building: Ollama, vLLM and NVIDIA NIM serve an OpenAI-compatible API, and customer data never crosses the boundary.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1020"/>
+      <stop offset="1" stop-color="#0f2a2a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#14b8a6" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#f87171"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="64" y="112" font-size="22" font-weight="600" fill="#5eead4" letter-spacing="3">LOCAL OPEN-SOURCE MODELS</text>
+    <text x="64" y="188" font-size="58" font-weight="800" fill="#ffffff">Your AI.</text>
+    <text x="64" y="256" font-size="58" font-weight="800" fill="#ffffff">Your hardware.</text>
+    <text x="64" y="324" font-size="58" font-weight="800" fill="#ffffff">Your data stays in.</text>
+    <text x="64" y="384" font-size="24" fill="#cbd5e1">Ollama, vLLM and NVIDIA NIM in Docker,</text>
+    <text x="64" y="416" font-size="24" fill="#cbd5e1">with one OpenAI-compatible API</text>
+    <g font-size="19" font-weight="600">
+      <rect x="64" y="462" width="150" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="139" y="492" text-anchor="middle" fill="#e2e8f0">Private</text>
+      <rect x="226" y="462" width="150" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="301" y="492" text-anchor="middle" fill="#e2e8f0">Offline</text>
+      <rect x="388" y="462" width="190" height="46" rx="23" fill="#1e293b" stroke="#334155"/>
+      <text x="483" y="492" text-anchor="middle" fill="#e2e8f0">Fixed cost</text>
+      <rect x="64" y="520" width="240" height="46" rx="23" fill="#134e4a" stroke="#14b8a6"/>
+      <text x="184" y="550" text-anchor="middle" fill="#ffffff">docker compose up</text>
+    </g>
+
+    <!-- building -->
+    <path d="M700 170 L910 92 L1120 170 Z" fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+    <rect x="700" y="170" width="420" height="360" rx="6" fill="#0f172a" stroke="#14b8a6" stroke-width="2"/>
+    <text x="910" y="150" text-anchor="middle" font-size="15" font-weight="700" fill="#5eead4" letter-spacing="1.5">YOUR BUILDING</text>
+    <g font-size="18" font-weight="700">
+      <rect x="724" y="196" width="372" height="58" rx="10" fill="#1e293b" stroke="#475569"/>
+      <text x="910" y="224" text-anchor="middle" fill="#f8fafc">Apps · agents · Open WebUI</text>
+      <text x="910" y="244" text-anchor="middle" font-size="13" font-weight="400" fill="#94a3b8">POST /v1/chat/completions</text>
+      <rect x="724" y="272" width="116" height="74" rx="10" fill="#1e293b" stroke="#475569"/>
+      <text x="782" y="306" text-anchor="middle" fill="#f8fafc">Ollama</text>
+      <text x="782" y="328" text-anchor="middle" font-size="13" font-weight="400" fill="#94a3b8">:11434</text>
+      <rect x="852" y="272" width="116" height="74" rx="10" fill="#1e293b" stroke="#475569"/>
+      <text x="910" y="306" text-anchor="middle" fill="#f8fafc">vLLM</text>
+      <text x="910" y="328" text-anchor="middle" font-size="13" font-weight="400" fill="#94a3b8">:8000</text>
+      <rect x="980" y="272" width="116" height="74" rx="10" fill="#1e293b" stroke="#475569"/>
+      <text x="1038" y="306" text-anchor="middle" fill="#f8fafc">NIM</text>
+      <text x="1038" y="328" text-anchor="middle" font-size="13" font-weight="400" fill="#94a3b8">:8000</text>
+      <rect x="724" y="364" width="372" height="58" rx="10" fill="#1e293b" stroke="#475569"/>
+      <text x="910" y="392" text-anchor="middle" fill="#f8fafc">Open-weight models on disk</text>
+      <text x="910" y="412" text-anchor="middle" font-size="13" font-weight="400" fill="#94a3b8">Llama · Qwen · Gemma · gpt-oss · Mistral</text>
+      <rect x="724" y="440" width="372" height="62" rx="10" fill="#134e4a" stroke="#14b8a6"/>
+      <text x="910" y="478" text-anchor="middle" fill="#ffffff">GPU · Apple Silicon · CPU</text>
+    </g>
+    <path d="M1120 300 L1168 300" stroke="#f87171" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#a)"/>
+    <line x1="1150" y1="284" x2="1170" y2="316" stroke="#f87171" stroke-width="4"/>
+    <line x1="1170" y1="284" x2="1150" y2="316" stroke="#f87171" stroke-width="4"/>
+    <text x="910" y="570" text-anchor="middle" font-size="16" fill="#94a3b8">Prompts, documents and answers never leave the building</text>
+  </g>
+</svg>

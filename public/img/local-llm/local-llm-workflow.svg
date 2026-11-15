@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="t d">
+  <title id="t">How a request flows through a local model stack</title>
+  <desc id="d">Setup happens once: pull the container image and the model weights, which is the only time the internet is needed. At run time, an app, agent or Open WebUI calls an OpenAI-compatible endpoint on localhost; the runtime container (Ollama, vLLM or NIM) loads the weights from a volume onto the GPU or CPU and streams the answer back. A redaction and logging step sits in front of the model.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5eead4"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="700" fill="#0b1020"/>
+  <g font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="40" y="52" font-size="26" font-weight="700" fill="#ffffff">One-time setup needs the internet. Every request after that does not.</text>
+    <text x="40" y="84" font-size="17" fill="#94a3b8">The same OpenAI-compatible call works against Ollama, vLLM or NIM: only the base URL and model name change.</text>
+
+    <!-- setup band -->
+    <rect x="24" y="108" width="1152" height="150" rx="16" fill="#1a1508" stroke="#a16207"/>
+    <text x="44" y="138" font-size="15" font-weight="700" fill="#fcd34d" letter-spacing="1.5">ONCE: SETUP (ONLINE)</text>
+    <g font-size="16">
+      <rect x="44" y="156" width="250" height="80" rx="12" fill="#1e293b" stroke="#475569"/>
+      <text x="169" y="190" text-anchor="middle" font-weight="700" fill="#f8fafc">1. docker pull</text>
+      <text x="169" y="214" text-anchor="middle" font-size="14" fill="#cbd5e1">ollama · vllm · nvcr.io/nim</text>
+      <rect x="334" y="156" width="270" height="80" rx="12" fill="#1e293b" stroke="#475569"/>
+      <text x="469" y="190" text-anchor="middle" font-weight="700" fill="#f8fafc">2. Pull model weights</text>
+      <text x="469" y="214" text-anchor="middle" font-size="14" fill="#cbd5e1">Ollama library · Hugging Face · NGC</text>
+      <rect x="644" y="156" width="250" height="80" rx="12" fill="#1e293b" stroke="#475569"/>
+      <text x="769" y="190" text-anchor="middle" font-weight="700" fill="#f8fafc">3. Cache on a volume</text>
+      <text x="769" y="214" text-anchor="middle" font-size="14" fill="#cbd5e1">survives restarts and upgrades</text>
+      <rect x="934" y="156" width="222" height="80" rx="12" fill="#134e4a" stroke="#14b8a6"/>
+      <text x="1045" y="190" text-anchor="middle" font-weight="700" fill="#ffffff">4. Cut the cable</text>
+      <text x="1045" y="214" text-anchor="middle" font-size="14" fill="#ccfbf1">--network none, firewall</text>
+    </g>
+    <path d="M294 196 L330 196" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <path d="M604 196 L640 196" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+    <path d="M894 196 L930 196" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+
+    <!-- runtime band -->
+    <rect x="24" y="282" width="1152" height="390" rx="16" fill="#0d1f1f" stroke="#14b8a6"/>
+    <text x="44" y="312" font-size="15" font-weight="700" fill="#5eead4" letter-spacing="1.5">EVERY REQUEST: INSIDE YOUR NETWORK</text>
+
+    <rect x="44" y="336" width="220" height="150" rx="12" fill="#1e293b" stroke="#475569"/>
+    <text x="154" y="372" text-anchor="middle" font-size="18" font-weight="700" fill="#f8fafc">Caller</text>
+    <text x="154" y="402" text-anchor="middle" font-size="14" fill="#cbd5e1">Open WebUI</text>
+    <text x="154" y="424" text-anchor="middle" font-size="14" fill="#cbd5e1">your app or script</text>
+    <text x="154" y="446" text-anchor="middle" font-size="14" fill="#cbd5e1">an agent (in OpenShell)</text>
+
+    <rect x="304" y="336" width="220" height="150" rx="12" fill="#3f1d1d" stroke="#f87171"/>
+    <text x="414" y="372" text-anchor="middle" font-size="18" font-weight="700" fill="#fecaca">Guard (optional)</text>
+    <text x="414" y="402" text-anchor="middle" font-size="14" fill="#fecaca">redact PII</text>
+    <text x="414" y="424" text-anchor="middle" font-size="14" fill="#fecaca">check the output</text>
+    <text x="414" y="446" text-anchor="middle" font-size="14" fill="#fecaca">log locally</text>
+
+    <rect x="564" y="336" width="330" height="150" rx="12" fill="#1e293b" stroke="#475569"/>
+    <text x="729" y="368" text-anchor="middle" font-size="18" font-weight="700" fill="#f8fafc">Runtime container</text>
+    <text x="729" y="396" text-anchor="middle" font-size="14" fill="#cbd5e1">Ollama  http://localhost:11434/v1</text>
+    <text x="729" y="420" text-anchor="middle" font-size="14" fill="#cbd5e1">vLLM    http://localhost:8000/v1</text>
+    <text x="729" y="444" text-anchor="middle" font-size="14" fill="#cbd5e1">NIM     http://localhost:8000/v1</text>
+    <text x="729" y="470" text-anchor="middle" font-size="13" fill="#94a3b8">bound to 127.0.0.1 or a private network</text>
+
+    <rect x="934" y="336" width="222" height="150" rx="12" fill="#134e4a" stroke="#14b8a6"/>
+    <text x="1045" y="372" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">Hardware</text>
+    <text x="1045" y="402" text-anchor="middle" font-size="14" fill="#ccfbf1">NVIDIA GPU (CUDA)</text>
+    <text x="1045" y="424" text-anchor="middle" font-size="14" fill="#ccfbf1">AMD GPU (ROCm)</text>
+    <text x="1045" y="446" text-anchor="middle" font-size="14" fill="#ccfbf1">Apple Silicon · CPU</text>
+
+    <path d="M264 400 L300 400" stroke="#5eead4" stroke-width="2.5" marker-end="url(#g)"/>
+    <path d="M524 400 L560 400" stroke="#5eead4" stroke-width="2.5" marker-end="url(#g)"/>
+    <path d="M894 400 L930 400" stroke="#5eead4" stroke-width="2.5" marker-end="url(#g)"/>
+
+    <path d="M1045 486 L1045 560 L154 560 L154 490" stroke="#5eead4" stroke-width="2.5" fill="none" stroke-dasharray="8 6" marker-end="url(#g)"/>
+    <text x="600" y="586" text-anchor="middle" font-size="16" fill="#5eead4">streamed answer, same JSON shape as the OpenAI API</text>
+    <text x="600" y="640" text-anchor="middle" font-size="17" font-weight="700" fill="#f8fafc">Nothing in this band talks to the internet. Prompts, files and answers stay on your disks.</text>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+# Private ChatGPT-style stack: Ollama + Open WebUI, nothing leaves the host.
+#   docker compose up -d        → http://localhost:3000
+#   docker compose exec ollama ollama pull gemma3:4b
+# NVIDIA GPU: uncomment the deploy block (needs the NVIDIA Container Toolkit).
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "127.0.0.1:11434:11434"   # localhost only
+    restart: unless-stopped
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - open-webui:/app/backend/data
+    ports:
+      - "127.0.0.1:3000:8080"
+    restart: unless-stopped
+
+volumes:
+  ollama:
+  open-webui:

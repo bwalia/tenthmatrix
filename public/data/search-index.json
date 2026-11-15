@@ -1381,6 +1381,31 @@
   },
   {
     "type": "blog",
+    "id": "blog-local-llm-privacy-001",
+    "slug": "private-ai-local-open-source-models-data-privacy",
+    "title": "Private AI on Your Own Hardware: Local Open-Source Models and Data Privacy",
+    "excerpt": "Open-weight AI models now run on hardware you own, so prompts, documents and answers never leave the building. What that means for data protection, cost and control, where it falls short, and how Ollama, vLLM and NVIDIA NIM fit.",
+    "content": "Every time a member of staff pastes a contract, a customer complaint or a spreadsheet into a public AI chatbot, that data leaves your business. Open-source AI models have now become good enough, and small enough, to run on hardware you own. The questions, the documents and the answers stay inside your building. This post explains what that means for a business, what it costs, where it falls short, and the three pieces of software most teams use to do it: Ollama , vLLM and NVIDIA NIM . Developers",
+    "tags": "local-ai, data-privacy, ollama, vllm, nvidia-nim, open-weights, docker, nvidia, open-source, llm, ai",
+    "date": "2026-11-14",
+    "image": "/img/local-llm/local-llm-cover.svg",
+    "author": "Balinder Walia",
+    "category": [
+      "local-ai",
+      "data-privacy",
+      "ollama",
+      "vllm",
+      "nvidia-nim",
+      "open-weights",
+      "docker",
+      "nvidia",
+      "open-source",
+      "llm",
+      "ai"
+    ]
+  },
+  {
+    "type": "blog",
     "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
     "slug": "rag-systems-enterprise-ai",
     "title": "RAG Systems: The Future of Enterprise AI Applications",
@@ -1974,6 +1999,24 @@
       "sre",
       "kubernetes",
       "ai"
+    ]
+  },
+  {
+    "type": "article",
+    "id": "local-llm-docker-guide-article-01",
+    "slug": "local-llm-docker-ollama-vllm-nvidia-nim-developer-guide",
+    "title": "Local Open-Source Models in Docker: Ollama, vLLM and NVIDIA NIM, with Fun Examples",
+    "excerpt": "Six Docker deployments (Ollama, Open WebUI, an offline container, vLLM, NVIDIA NIM, llama.cpp), one OpenAI client for all of them, real fun examples and a privacy hardening checklist",
+    "content": "This is the long-form technical note for developers. For the business case, read the companion blog post . 1. Why run models locally Prompts are data. A developer pastes a stack trace that contains a customer's email address; a support agent pastes a complaint; a script sends a whole contract for summarising. With a hosted API, every one of those requests leaves your network, lands in someone else's logs and is governed by someone else's retention policy. With a local model, the data path ends a",
+    "tags": "local LLM, private AI, open-source models, open-weight models, data privacy, UK GDPR, on-premise AI, self-hosted AI, Ollama, vLLM, NVIDIA NIM, Docker, Docker Compose, Open WebUI, llama.cpp, OpenAI-compatible API, offline AI, air-gapped AI",
+    "date": "2026-11-14",
+    "image": "/img/local-llm/local-llm-cover.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "Local AI",
+      "Data Privacy",
+      "DevOps",
+      "Open Source"
     ]
   },
   {
