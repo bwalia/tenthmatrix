@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "title": "Fixloop — open-source AI code review that closes the bug loop | TenthMatrix",
+    "description": "Fixloop is an open-source AI agent that reviews every pull request, comments on the changed lines and suggests the fix. Self-hosted, any model, including fully local. Issue filing and test-gated fix pull requests are next.",
+    "keywords": "Fixloop, AI code review, pull request review, AI agent, open source, Apache-2.0, Rust, self-hosted code review, local LLM code review, Ollama, GitHub App, fixloop.run"
+  },
+  "header": {
+    "title": "Fixloop",
+    "subtitle": "Open-source AI code review that closes the bug loop.",
+    "description": "Fixloop reviews every pull request, comments on the lines that changed and suggests the fix. It runs on your infrastructure, with the model you choose. Issue filing and test-gated fix pull requests come next."
+  },
+  "intro": {
+    "title": "One agent, from bug to fix",
+    "body": "Most AI review tools stop at a comment. Fixloop is built to carry a bug the whole way: review the pull request, find the problem, file it as an issue, write the fix in a sandbox, check that build, tests and lint pass, then close the issue when the fix is merged. It is open source (Apache-2.0), written in Rust and vendor-neutral. Today it reviews and finds; each next stage ships as its own release.",
+    "links": [
+      {
+        "label": "fixloop.run",
+        "href": "https://www.fixloop.run/"
+      },
+      {
+        "label": "Source on GitHub",
+        "href": "https://github.com/bwalia/fixloop"
+      },
+      {
+        "label": "Getting started guide",
+        "href": "https://github.com/bwalia/fixloop/blob/main/docs/getting-started.md"
+      }
+    ]
+  },
+  "screenshot": {
+    "title": "A review comment on the line that changed",
+    "caption": "Each finding has a severity, a confidence score and a suggested change you can commit in one click. The check on the pull request sums up the review.",
+    "src": "/img/fixloop/fixloop-run-home.png",
+    "alt": "fixloop.run home page: Fixloop flags an off-by-one error in a Rust pull request with a suggested change and a failing review check",
+    "width": 1600,
+    "height": 900
+  },
+  "pillars": {
+    "title": "Who it is for",
+    "items": [
+      {
+        "title": "Developers",
+        "text": "Comments on your changed lines with a suggested fix, and fixloop review checks your branch before you push. Nothing is posted until you want it.",
+        "icon": "fas fa-code"
+      },
+      {
+        "title": "Engineering leads",
+        "text": "A pass, warn or fail check on every pull request, so problems are caught before a human reviewer spends time on them.",
+        "icon": "fas fa-user-check"
+      },
+      {
+        "title": "Security teams",
+        "text": "Secrets are redacted before any model call, a committed secret is a critical finding, and a pull request cannot change its own review rules.",
+        "icon": "fas fa-shield-alt"
+      },
+      {
+        "title": "Teams with private code",
+        "text": "Self-host it, and mark a repository local-only so its code is only ever sent to models you run yourself.",
+        "icon": "fas fa-lock"
+      }
+    ]
+  },
+  "steps": {
+    "title": "Review → Find → File → Fix → Check → Close",
+    "items": [
+      {
+        "n": "01",
+        "title": "Review (available)",
+        "text": "On every opened or updated pull request, or when someone comments /fixloop review."
+      },
+      {
+        "n": "02",
+        "title": "Find (available)",
+        "text": "Bugs, security issues and broken team rules, on the changed lines only."
+      },
+      {
+        "n": "03",
+        "title": "File (next)",
+        "text": "Open an issue in GitHub Issues or Jira, without duplicates."
+      },
+      {
+        "n": "04",
+        "title": "Fix (planned)",
+        "text": "Write the fix in a sandbox: Docker or Podman, Kubernetes Jobs, or NVIDIA OpenShell."
+      },
+      {
+        "n": "05",
+        "title": "Check (planned)",
+        "text": "Build, tests, lint and a second AI review must all pass before a fix pull request opens."
+      },
+      {
+        "n": "06",
+        "title": "Close (planned)",
+        "text": "Link the fix, close the issue when it merges, and record what it cost."
+      }
+    ]
+  },
+  "features": {
+    "title": "What it does today",
+    "items": [
+      {
+        "title": "Comments on the lines you changed",
+        "text": "Each finding sits on the changed line, with a severity, a confidence score and a suggested fix you can commit in one click."
+      },
+      {
+        "title": "Review before you push",
+        "text": "Run fixloop review in your repository. It checks your branch against main and prints the findings. Nothing is posted."
+      },
+      {
+        "title": "Your rules, in plain words",
+        "text": "Write team conventions as short Markdown files in .fixloop/rules. Every review checks against them."
+      },
+      {
+        "title": "Quiet by default",
+        "text": "Findings below your confidence or severity threshold are dropped. No style nits unless you ask for them."
+      },
+      {
+        "title": "Spend you can cap",
+        "text": "Token and dollar budgets per job and per day. The cost of every review is recorded."
+      },
+      {
+        "title": "Any model, with fallback",
+        "text": "Claude, OpenAI, Gemini, OpenRouter, Azure OpenAI, or local models through Ollama, vLLM, llama.cpp, LM Studio and NVIDIA NIM. If the first model is down, the next one takes over."
+      }
+    ]
+  },
+  "aiAngle": {
+    "title": "Safe on untrusted code",
+    "intro": "Pull requests are untrusted input. Fixloop is designed with that in mind.",
+    "points": [
+      "Keys and tokens in a diff are redacted before any model call, and a committed secret is reported as a critical finding.",
+      "Settings and rules are read from the base branch, never from the pull request, so a pull request cannot weaken its own review.",
+      "Code, comments and pull request text go to the model as data, never as instructions. Output is sanitised before it is posted.",
+      "The GitHub App reads code and writes reviews and checks, nothing else. Only people with write access can run its commands.",
+      "It runs code only in sandboxes, never pushes to your default branch and never merges on its own."
+    ]
+  },
+  "roadmap": {
+    "title": "Built in the open, one stage at a time",
+    "intro": "Fixloop is in early development and not yet ready for production. Progress is tracked publicly on GitHub.",
+    "items": [
+      {
+        "status": "Done",
+        "title": "Model layer",
+        "text": "Any provider, routing, fallback and budgets."
+      },
+      {
+        "status": "Done",
+        "title": "Reviewer",
+        "text": "GitHub App, inline reviews and check runs."
+      },
+      {
+        "status": "Next",
+        "title": "Issue filing",
+        "text": "GitHub Issues and Jira, with dedupe and two-way links."
+      },
+      {
+        "status": "Planned",
+        "title": "Fixer",
+        "text": "Sandboxed, test-gated fix pull requests."
+      },
+      {
+        "status": "Planned",
+        "title": "Dashboard",
+        "text": "Findings, costs and audit in one place."
+      },
+      {
+        "status": "Planned",
+        "title": "Cloud native",
+        "text": "Helm, an operator, signed multi-arch images and an SBOM."
+      }
+    ]
+  },
+  "deploy": {
+    "title": "Reviewing your first pull request in about 15 minutes",
+    "body": "Install the fixloop CLI with Cargo, run fixloop init in your repository, pick a model (hosted, or local with Ollama), then connect GitHub with fixloop github create-app. The getting started guide has every command.",
+    "ctaLabel": "Read the getting started guide",
+    "ctaHref": "https://github.com/bwalia/fixloop/blob/main/docs/getting-started.md"
+  },
+  "externalSite": {
+    "label": "The product site",
+    "text": "How it works, model set-up, security and the full roadmap.",
+    "href": "https://www.fixloop.run/"
+  },
+  "related": {
+    "title": "Related TenthMatrix products",
+    "items": [
+      {
+        "title": "Jobshout AI agent framework",
+        "href": "/jobshout"
+      },
+      {
+        "title": "Ring Promoter",
+        "href": "/ring-promoter"
+      },
+      {
+        "title": "Proxy10x",
+        "href": "/proxy10x"
+      },
+      {
+        "title": "NVIDIA OpenShell for developers",
+        "href": "/technical-notes/nvidia-openshell-developer-guide-sandbox-policies-credentials"
+      }
+    ]
+  },
+  "cta": {
+    "title": "Put a reviewer on every pull request",
+    "description": "Fixloop is free and open source. Try it on your own repositories, or talk to TenthMatrix about running it for your team with your models and your rules.",
+    "primary": {
+      "label": "Open fixloop.run",
+      "href": "https://www.fixloop.run/"
+    },
+    "secondary": {
+      "label": "TenthMatrix ਨਾਲ ਸੰਪਰਕ ਕਰੋ",
+      "href": "/contact-us"
+    }
+  }
+}
