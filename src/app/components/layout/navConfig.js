@@ -50,6 +50,7 @@ import {
   BadgeCheck,
   Send,
   Route,
+  Landmark,
 } from 'lucide-react';
 
 export const HARDWARE_URL = 'https://www.workstation.co.uk/ai-workstations';
@@ -97,6 +98,7 @@ export const NAV_GROUPS = [
     overview: '/workstation-ai-solutions',
     items: [
       { key: 'jobshout', href: '/jobshout', icon: Briefcase },
+      { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
       { key: 'crm', href: '/crm', icon: Users },
       { key: 'marketing', href: '/marketing', icon: Megaphone },
       { key: 'generativeAi', href: '/generative-ai', icon: PenTool },
