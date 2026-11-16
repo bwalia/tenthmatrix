@@ -1,6 +1,6 @@
 <article class="blog-content">
 
-<p class="lead">If you run more than one product, you probably run more than one backend. Each has its own login screen, user table, password reset, roles, admin pages and audit log, and each one is built, patched and secured separately. <strong>OpsAPI</strong> replaces them with one open-source API. It signs your users in once for every app, keeps each customer's data in its own workspace, and switches on only the business modules a product needs, from CRM and invoicing to a website CMS and UK tax filing. This post explains how it works, with the diagrams and workflows from the OpsAPI project. The product page is <a href="/en/opsapi">here</a>, and the project lives at <a href="https://opsapi.org/" rel="noopener">opsapi.org</a>.</p>
+<p class="lead">If you run more than one product, you probably run more than one backend. Each has its own login screen, user table, password reset, roles, admin pages and audit log, and each one is built, patched and secured separately. <strong>OpsAPI</strong> replaces them with one API. It signs your users in once for every app, keeps each customer's data in its own workspace, and switches on only the business modules a product needs, from CRM and invoicing to a website CMS and UK tax filing. This post explains how it works, with the diagrams and workflows from the OpsAPI project. The product page is <a href="/en/opsapi">here</a>, and the project lives at <a href="https://opsapi.org/" rel="noopener">opsapi.org</a>.</p>
 
 <p><img src="/img/opsapi/opsapi-architecture.svg" alt="OpsAPI system overview: clients reach an edge proxy, then one OpenResty container where Lua runs in the Nginx workers, backed by PostgreSQL and optional Redis, MinIO, Kafka, an LLM provider, Prometheus and external APIs" width="960" height="520" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
 <p><em>One container, one database. Redis, MinIO, Kafka and the model provider are optional: a minimal deployment needs only PostgreSQL.</em></p>
@@ -93,7 +93,7 @@
 <h2>The honest trade-offs</h2>
 
 <ul>
-  <li><strong>You run it.</strong> OpsAPI is open source and self-hosted, so there is no per-user fee, but you run PostgreSQL, take its backups, upgrade OpsAPI and monitor it.</li>
+  <li><strong>You run it, under a licence.</strong> OpsAPI is self-hosted, so there is no per-user fee, but running it needs a licence, and you run PostgreSQL, take its backups, upgrade OpsAPI and monitor it.</li>
   <li><strong>Modules are per deployment.</strong> If two customers need different module sets, they need different deployments.</li>
   <li><strong>Lua is less common.</strong> Calling OpsAPI needs only HTTP and there is a TypeScript SDK, but writing a plugin means writing Lua.</li>
   <li><strong>Keep the admin side private.</strong> OpsAPI's own guidance is to put admin dashboards behind a VPN or zero-trust broker rather than on the open internet.</li>

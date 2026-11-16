@@ -11,7 +11,7 @@ Diagrams in public/img/opsapi/ were exported from the opsapi.org technical-note 
 opsapi-ci-cd-pipeline.svg is our own drawing of the repository's workflows.
 
 Tags: new multi-tenant 1081, single-sign-on 1082, self-hosted 1083;
-existing opsapi 3, open-source 1074, kubernetes 931, lua 1025, platform-engineering 987,
+existing opsapi 3, kubernetes 931, lua 1025, platform-engineering 987,
 devops 932, backend 1003.
 
 Run from the repo root:
@@ -44,7 +44,7 @@ blog = {
     "title": "One API for Every Product: How OpsAPI Handles Sign-In, Workspaces and Business Modules",
     "sub_title": "Why we stopped building a backend per product, with the diagrams and workflows from the OpsAPI project",
     "excerpt": (
-        "OpsAPI is an open-source, self-hosted API that signs users in once for every app, keeps each customer in its own "
+        "OpsAPI is a self-hosted API that signs users in once for every app, keeps each customer in its own "
         "workspace and switches on only the business modules a product needs. How it works, with diagrams and workflows."
     ),
     "meta_title": "OpsAPI: One Self-Hosted API for Sign-In, Workspaces and Modules",
@@ -54,7 +54,7 @@ blog = {
     ),
     "meta_keywords": (
         "OpsAPI, multi-tenant API, self-hosted backend, single sign-on, SAML, RBAC, workspaces, OpenResty, Lua, Lapis, "
-        "PostgreSQL, Helm, Kubernetes, webhooks, headless CMS, HMRC MTD, MCP server, open source"
+        "PostgreSQL, Helm, Kubernetes, webhooks, headless CMS, HMRC MTD, MCP server"
     ),
     "cover_image": cover,
     "images": [
@@ -85,7 +85,6 @@ blog = {
         {"name": "multi-tenant", "id": 1081},
         {"name": "single-sign-on", "id": 1082},
         {"name": "self-hosted", "id": 1083},
-        {"name": "open-source", "id": 1074},
         {"name": "kubernetes", "id": 931},
         {"name": "lua", "id": 1025},
         {"name": "platform-engineering", "id": 987},
