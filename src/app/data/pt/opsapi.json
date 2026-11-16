@@ -1,13 +1,13 @@
 {
   "meta": {
     "title": "OpsAPI — one self-hosted API for sign-in, workspaces and business modules | TenthMatrix",
-    "description": "OpsAPI is an open-source, multi-tenant API platform: one sign-in for every app, a workspace per customer, and 20 business modules from CRM and invoicing to CMS and UK tax filing. OpenResty, Lua and PostgreSQL, run on your own infrastructure.",
-    "keywords": "OpsAPI, opsapi.org, multi-tenant API, self-hosted backend, single sign-on, SAML SSO, RBAC, workspaces, OpenResty, Lua, Lapis, PostgreSQL, Helm chart, Kubernetes, TypeScript SDK, MCP server, headless CMS, CRM API, invoicing API, HMRC MTD API, open source"
+    "description": "OpsAPI is a self-hosted, multi-tenant API platform: one sign-in for every app, a workspace per customer, and 20 business modules from CRM and invoicing to CMS and UK tax filing. OpenResty, Lua and PostgreSQL, run on your own infrastructure under a licence.",
+    "keywords": "OpsAPI, opsapi.org, multi-tenant API, self-hosted backend, single sign-on, SAML SSO, RBAC, workspaces, OpenResty, Lua, Lapis, PostgreSQL, Helm chart, Kubernetes, TypeScript SDK, MCP server, headless CMS, CRM API, invoicing API, HMRC MTD API"
   },
   "header": {
     "title": "OpsAPI",
     "subtitle": "One self-hosted API for sign-in, workspaces and business modules.",
-    "description": "OpsAPI signs your users in once for every app, keeps each customer's data in its own workspace, and switches on the business modules a product needs, from CRM to UK tax filing. It is open source and runs on your own infrastructure."
+    "description": "OpsAPI signs your users in once for every app, keeps each customer's data in its own workspace, and switches on the business modules a product needs, from CRM to UK tax filing. It is licensed software that runs on your own infrastructure."
   },
   "intro": {
     "title": "Stop building a backend per product",
@@ -351,7 +351,7 @@
     "items": [
       {
         "question": "Is OpsAPI free?",
-        "answer": "OpsAPI is open source and self-hosted, so there is no per-user fee. You run the PostgreSQL database, take its backups, upgrade OpsAPI and monitor it yourself, or ask TenthMatrix to do it for you."
+        "answer": "No. The source is on GitHub to read; running OpsAPI needs a licence. It is self-hosted, so there is no per-user fee. You run the PostgreSQL database, take its backups, upgrade OpsAPI and monitor it yourself, or ask TenthMatrix to do it for you."
       },
       {
         "question": "What does it run on?",
