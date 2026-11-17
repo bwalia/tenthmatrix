@@ -18,6 +18,24 @@
     "title": "Wat een AI-agent eigenlijk is",
     "content": "Zie een agent als software die stappen kan zetten richting een doel: context verzamelen, een volgende stap voorstellen en die soms ook uitvoeren, altijd binnen de regels die u stelt. Het is geen autonomie zonder toezicht. Het is gestructureerde hulp."
   },
+  "offerings": {
+    "title": "Onze AI-agents",
+    "subtitle": "Agents die we zelf bouwen en beheren, met dezelfde regels: een duidelijke taak, beperkte toegang en een mens die alles goedkeurt wat riskant is.",
+    "items": [
+      {
+        "badge": "Nieuw",
+        "title": "Fixloop",
+        "description": "Een opensource AI-agent die elke pull request beoordeelt, commentaar geeft op de gewijzigde regels en de oplossing voorstelt. Hij draait op uw eigen infrastructuur met het model van uw keuze, ook volledig lokale modellen. Issues aanmaken en door tests bewaakte fix-pull requests volgen hierna.",
+        "highlights": [
+          "Beoordeelt elke pull request op de gewijzigde regels",
+          "Zelf gehost, elk model, ook lokaal",
+          "Open source, Apache-2.0"
+        ],
+        "href": "/fixloop",
+        "linkLabel": "Lees meer over Fixloop"
+      }
+    ]
+  },
   "whoFor": {
     "title": "Wie er het meest aan heeft",
     "items": [
@@ -84,6 +102,11 @@
   "related": {
     "title": "Gerelateerd",
     "items": [
+      {
+        "title": "Fixloop",
+        "href": "/fixloop",
+        "label": "AI-agent voor codereview"
+      },
       {
         "title": "Ontwikkeling van AI-agents",
         "href": "/ai-agent-development",

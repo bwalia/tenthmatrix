@@ -18,6 +18,24 @@
     "title": "O que é, de fato, um agente de IA",
     "content": "Pense em um agente como um software capaz de executar ações de várias etapas rumo a um objetivo: reunir contexto, propor o próximo passo e, às vezes, concluí-lo, sempre dentro das regras que você define. Não é autonomia sem supervisão. É ajuda estruturada."
   },
+  "offerings": {
+    "title": "Os nossos agentes de IA",
+    "subtitle": "Agentes que construímos e operamos nós próprios, com as mesmas regras: uma tarefa clara, acesso limitado e uma pessoa a aprovar tudo o que tenha risco.",
+    "items": [
+      {
+        "badge": "Novo",
+        "title": "Fixloop",
+        "description": "Um agente de IA de código aberto que revê cada pull request, comenta as linhas alteradas e sugere a correção. Corre na sua infraestrutura com o modelo que escolher, incluindo modelos totalmente locais. A criação de issues e pull requests de correção validados por testes vêm a seguir.",
+        "highlights": [
+          "Revê cada pull request nas linhas alteradas",
+          "Auto-alojado, qualquer modelo, incluindo local",
+          "Código aberto, Apache-2.0"
+        ],
+        "href": "/fixloop",
+        "linkLabel": "Saiba mais sobre o Fixloop"
+      }
+    ]
+  },
   "whoFor": {
     "title": "Quem mais se beneficia",
     "items": [
@@ -84,6 +102,11 @@
   "related": {
     "title": "Relacionado",
     "items": [
+      {
+        "title": "Fixloop",
+        "href": "/fixloop",
+        "label": "Agente de IA de revisão de código"
+      },
       {
         "title": "Desenvolvimento de agentes de IA",
         "href": "/ai-agent-development",
