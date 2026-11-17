@@ -72,6 +72,12 @@ export default async function SiteFooter({ locale }) {
               © {year} TenthMatrix. {t('rights')}
             </p>
             <p className={s.copy}>{t('entity')}</p>
+            <p className={s.copy}>
+              {t('sponsoredBy')}{' '}
+              <a href="https://www.workstation.co.uk/en" className={s.sponsor}>
+                Workstation
+              </a>
+            </p>
           </div>
         </div>
       </div>
