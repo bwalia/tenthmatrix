@@ -18,6 +18,24 @@
     "title": "What an AI Agent actually is",
     "content": "Think of an agent as software that can take multi-step actions toward a goal: gather context, propose a next step, and sometimes complete the step — always inside rules you set. It is not unsupervised autonomy. It is structured help."
   },
+  "offerings": {
+    "title": "Our AI agents",
+    "subtitle": "Agents we build and run ourselves, with the same rules: a clear job, scoped access and a person approving anything risky.",
+    "items": [
+      {
+        "badge": "New",
+        "title": "Fixloop",
+        "description": "An open-source AI agent that reviews every pull request, comments on the lines that changed and suggests the fix. It runs on your infrastructure with the model you choose, including fully local models. Issue filing and test-gated fix pull requests come next.",
+        "highlights": [
+          "Reviews each pull request on the changed lines",
+          "Self-hosted, any model, including local",
+          "Open source, Apache-2.0"
+        ],
+        "href": "/fixloop",
+        "linkLabel": "Read about Fixloop"
+      }
+    ]
+  },
   "whoFor": {
     "title": "Who benefits most",
     "items": [
@@ -84,6 +102,11 @@
   "related": {
     "title": "Related",
     "items": [
+      {
+        "title": "Fixloop",
+        "href": "/fixloop",
+        "label": "AI code review agent"
+      },
       {
         "title": "AI agent development",
         "href": "/ai-agent-development",

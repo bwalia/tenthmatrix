@@ -76,6 +76,7 @@ export const NAV_GROUPS = [
     overview: '/ai-agents',
     items: [
       { key: 'aiAgents', href: '/ai-agents', icon: Bot },
+      { key: 'fixloop', href: '/fixloop', icon: Bug },
       { key: 'agentBuilding', href: '/agent-building', icon: Wrench },
       { key: 'claudeAgents', href: '/claude-agents', icon: Sparkles },
       { key: 'openaiAgents', href: '/openai-agents', icon: Cpu },
@@ -158,7 +159,7 @@ export const NAV_GROUPS = [
 /** Footer columns: group key → item keys/hrefs (labels from nav.items / footer.links). */
 export const FOOTER_COLUMNS = [
   { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'agentJourney', 'startProject'] },
-  { key: 'agents', items: ['aiAgents', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
+  { key: 'agents', items: ['aiAgents', 'fixloop', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
   { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'fixloop', 'opsapi', 'jev', 'allProducts'] },
   { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
   { key: 'resources', items: ['articles', 'blog', 'insights', 'docs', 'faqs', 'news'] },
