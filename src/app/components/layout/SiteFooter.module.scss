@@ -226,3 +226,13 @@
   font-size: var(--tm-text-2xs);
   color: var(--tm-night-subtle);
 }
+
+.sponsor {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--tm-night-text);
+  }
+}
