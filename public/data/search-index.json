@@ -2026,6 +2026,24 @@
   },
   {
     "type": "article",
+    "id": "claude-code-prompt-caching-article-01",
+    "slug": "reduce-claude-code-usage-prompt-caching-developer-guide",
+    "title": "Reduce Claude Code Usage with Prompt Caching: A Developer's Guide",
+    "excerpt": "How prompt caching works, what it costs, what silently breaks it in Claude Code, and copy-and-paste Python, TypeScript and curl patterns for caching in your own Claude API applications",
+    "content": "Every request Claude Code sends carries the whole conversation: the system prompt, the tool definitions, your CLAUDE.md, every message and every tool result so far. Prompt caching is what stops you paying full price to re-send all of that on every turn. Read from the cache, input costs a tenth of the normal price or less, and the answer starts sooner. This note explains how caching works in our own words, shows what quietly breaks it in Claude Code, and gives copy-and-paste code for getting the ",
+    "tags": "Claude Code, prompt caching, Claude API, reduce Claude Code usage, Claude Code cost, cache_control, cache TTL, cache_read_input_tokens, promptCacheTtl, /usage, /compact, /clear, Anthropic SDK, Claude Opus 5.5, Claude Sonnet 5.5, token cost, AI agent cost optimisation",
+    "date": "2026-11-19",
+    "image": "/img/claude-code-prompt-caching/prompt-cache-prefix-turns.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "AI Agents",
+      "Claude",
+      "Developer Tools",
+      "Cost Optimisation"
+    ]
+  },
+  {
+    "type": "article",
     "id": "microsoft-graph-api-guide-article-01",
     "slug": "microsoft-graph-api-developer-guide-azure-microsoft-365",
     "title": "Microsoft Graph API: One Endpoint for Entra ID, Microsoft 365 and Intune, Explained End to End",
