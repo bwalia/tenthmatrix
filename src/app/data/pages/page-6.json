@@ -1,5 +1,38 @@
 [
   {
+    "uuid": "blog-couchbase-upgrade-runbook-summary-001",
+    "title": "Couchbase upgrades with CAO pause gates: a support-friendly overview",
+    "slug": "couchbase-upgrade-runbook-summary-cao-pause-gate",
+    "excerpt": "A support-friendly, SRE-ready overview of Couchbase Server rolling upgrades under the Couchbase Autonomous Operator (CAO), using spec.paused to gate swap-rebalance one node at a time—so you can stabilize, validate health, and keep rollback options open.",
+    "published_date": "2026-04-22",
+    "tags": [
+      {
+        "name": "database",
+        "slug": "database"
+      },
+      {
+        "name": "kubernetes",
+        "slug": "kubernetes"
+      },
+      {
+        "name": "devops",
+        "slug": "devops"
+      },
+      {
+        "name": "sre",
+        "slug": "sre"
+      },
+      {
+        "name": "observability",
+        "slug": "observability"
+      }
+    ],
+    "cover_image": "/img/couchbase-upgrade-cover.svg",
+    "reading_minutes": 0,
+    "is_featured": false,
+    "user": null
+  },
+  {
     "uuid": "blog-nebuladns-features-002",
     "title": "NebulaDNS Complete Feature Guide: k3s, Route53, Observability, and Enterprise DNS",
     "slug": "nebuladns-complete-features-k3s-route53-integration-guide",
@@ -277,34 +310,5 @@
       "name": "Super User",
       "avatar": null
     }
-  },
-  {
-    "uuid": "blog-nebulacb-enterprise-001",
-    "title": "NebulaCB: Enterprise-Grade Couchbase Management That Saves the Day",
-    "slug": "nebulacb-enterprise-couchbase-management",
-    "excerpt": "How NebulaCB, the open-source Couchbase mission control from nebulacb.org, helps enterprises upgrade fearlessly, validate XDCR and data integrity, run Kubernetes-native operations, and use local AI (Ollama) for RCA—so teams ship changes without losing data or sleep.",
-    "published_date": "2026-04-12",
-    "tags": [
-      {
-        "name": "database",
-        "slug": "database"
-      },
-      {
-        "name": "kubernetes",
-        "slug": "kubernetes"
-      },
-      {
-        "name": "devops",
-        "slug": "devops"
-      },
-      {
-        "name": "backend",
-        "slug": "backend"
-      }
-    ],
-    "cover_image": "/img/nebulacb-cover.svg",
-    "reading_minutes": 0,
-    "is_featured": false,
-    "user": null
   }
 ]

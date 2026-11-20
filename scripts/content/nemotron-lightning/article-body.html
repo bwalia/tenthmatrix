@@ -1,0 +1,489 @@
+<article class="article-content">
+
+<p class="lead">NVIDIA Nemotron 3.5 Lightning is an open 30B mixture-of-experts model with about 3B active parameters per token, a 1M-token context window and training aimed squarely at agent work: tool calls, instruction following and multi-turn tasks. It is now in the Ollama library as <code>nemotron-3.5-lightning</code>. This note is the practical guide: which tag to pull for your hardware, how to size memory and context, how to plug it into Claude Code, OpenCode and your own agent loops, how to get reliable tool calls and structured output, how to route between a local tier and a cloud model, how to serve it to a team safely, and how to measure it on your own workload. For the business view, read the <a href="/en/docs/blogs/nvidia-nemotron-3-5-lightning-ollama-local-ai-agents-business">companion blog post</a>.</p>
+
+<div style="background:#ecfdf5;border-left:4px solid #059669;border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;">
+<strong>In brief.</strong> <code>ollama pull nemotron-3.5-lightning</code> (or <code>:30b-mlx</code> on Apple silicon). Budget 19–25 GB for the default weights plus room for context. Set the context length deliberately (64K is a good start for coding agents; do not default to 1M). Use <code>ollama launch claude|opencode|hermes|openclaw --model nemotron-3.5-lightning</code> for harnesses, the native <code>/api/chat</code> or the OpenAI-compatible <code>/v1</code> endpoint for your own code. Validate every tool call and every JSON answer, cap retries, and escalate failures to a larger model through the same API. Keep port 11434 on localhost unless you put authentication in front of it.
+</div>
+
+<h2 id="what">1. What the model is</h2>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;width:32%;"><strong>Parameters</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">30B total, about 3B active per token (NVIDIA calls it 30B-A3B)</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Architecture</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Hybrid: interleaved Mamba-2 and mixture-of-experts layers with a few attention layers, plus multi-token prediction (MTP) heads</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Context</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Up to 1M tokens (GGUF tags in Ollama); 256K on the MLX tags</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Input / output</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">Text in, text out</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Ollama capabilities</strong></td><td style="padding:8px;border:1px solid #cbd5e1;"><code>tools</code>, <code>thinking</code></td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Training</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">100B-token MTP warm-up, 1T tokens of distillation from Nemotron 3 Super Base, a 21B-token long-context phase to reach 1M, then supervised fine-tuning and reinforcement learning with verifiable rewards (RLVR)</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Speculative decoding</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">MTP, DFlash or DSpark; NVIDIA claims up to 4x the output speed of similar-sized open models</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Licence</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">OpenMDW License Agreement 1.1 (commercial use permitted under its terms)</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><strong>Released</strong></td><td style="padding:8px;border:1px solid #cbd5e1;">11 August 2026</td></tr>
+</tbody>
+</table>
+
+<p><img src="/img/nemotron-lightning/nemotron-moe-active.svg" alt="Mixture of experts: memory holds all 30 billion parameters, while a router activates a few experts per token so only about 3 billion are computed" width="1200" height="520" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
+
+<p>Two properties drive almost every practical decision below:</p>
+
+<ul>
+  <li><strong>MoE: memory scales with 30B, compute with 3B.</strong> You must fit all the experts in memory (or spill some to the CPU, which hurts), but each token only runs about 3B parameters. On a GPU that holds the whole model, generation is fast. On a GPU that does not, it can be slower than a dense model that fits.</li>
+  <li><strong>Hybrid Mamba: long context is cheaper than usual.</strong> Mamba-2 layers carry a fixed-size state rather than a key/value cache that grows with every token. Only the few attention layers build a KV cache, so memory for long contexts grows much more slowly than in a pure transformer of the same size. It still grows, so 1M tokens is not free.</li>
+</ul>
+
+<h2 id="tags">2. Pick the right tag</h2>
+
+<p>The Ollama library lists eleven tags. Several are aliases of the same weights (same digest), so there are really six builds:</p>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Tag(s)</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Format</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Size</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Context</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Use when</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>latest</code>, <code>30b</code>, <code>30b-a3b</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Default build</td><td style="padding:8px;border:1px solid #cbd5e1;">19–25 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">1M</td><td style="padding:8px;border:1px solid #cbd5e1;">Start here on NVIDIA GPUs, Linux and Windows</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-a3b-q4_K_M</code></td><td style="padding:8px;border:1px solid #cbd5e1;">GGUF 4-bit</td><td style="padding:8px;border:1px solid #cbd5e1;">25 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">1M</td><td style="padding:8px;border:1px solid #cbd5e1;">Pin an explicit quantisation in production</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-a3b-q8_0</code></td><td style="padding:8px;border:1px solid #cbd5e1;">GGUF 8-bit</td><td style="padding:8px;border:1px solid #cbd5e1;">35 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">1M</td><td style="padding:8px;border:1px solid #cbd5e1;">48 GB+ GPUs; better fidelity for extraction and code</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-a3b-bf16</code></td><td style="padding:8px;border:1px solid #cbd5e1;">GGUF BF16</td><td style="padding:8px;border:1px solid #cbd5e1;">66 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">1M</td><td style="padding:8px;border:1px solid #cbd5e1;">Reference quality, evaluation baselines, DGX-class memory</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-mlx</code>, <code>30b-a3b-mlx</code>, <code>30b-a3b-nvfp4</code></td><td style="padding:8px;border:1px solid #cbd5e1;">MLX (4-bit)</td><td style="padding:8px;border:1px solid #cbd5e1;">19 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">256K</td><td style="padding:8px;border:1px solid #cbd5e1;">Apple silicon with 32 GB+ unified memory</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-a3b-mxfp8</code></td><td style="padding:8px;border:1px solid #cbd5e1;">MLX 8-bit</td><td style="padding:8px;border:1px solid #cbd5e1;">34 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">256K</td><td style="padding:8px;border:1px solid #cbd5e1;">Apple silicon with 64 GB+</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>30b-a3b-mlx-bf16</code></td><td style="padding:8px;border:1px solid #cbd5e1;">MLX BF16</td><td style="padding:8px;border:1px solid #cbd5e1;">66 GB</td><td style="padding:8px;border:1px solid #cbd5e1;">256K</td><td style="padding:8px;border:1px solid #cbd5e1;">Apple silicon with 96 GB+, evaluation</td></tr>
+</tbody>
+</table>
+
+<p>Sizes and digests are from the Ollama tags page on 20 November 2026. Tags move; in production, pin the explicit quantisation tag (or the digest) rather than <code>latest</code>, so an upstream re-publish does not change your agent's behaviour under you.</p>
+
+<h2 id="sizing">3. Size memory and context</h2>
+
+<p>Total memory ≈ weights + context state + runtime overhead. A practical way to plan:</p>
+
+<ul>
+  <li><strong>Weights:</strong> the tag size above.</li>
+  <li><strong>Context:</strong> small for Mamba layers, growing linearly for the attention layers. Measure it rather than guess: load the model at the context you want and read <code>ollama ps</code>.</li>
+  <li><strong>Headroom:</strong> keep 10–15% free. On a desktop, the display and other apps take graphics memory too.</li>
+</ul>
+
+<pre><code class="language-bash"># Load at a chosen context, then see what it really takes and whether it is all on the GPU
+OLLAMA_CONTEXT_LENGTH=65536 ollama serve &amp;     # or set it in the desktop app settings
+ollama run nemotron-3.5-lightning "Say ready." &gt;/dev/null
+ollama ps
+# NAME                          ID            SIZE     PROCESSOR    CONTEXT   UNTIL
+# nemotron-3.5-lightning:latest 14b60fc91804  ...      100% GPU     65536     4 minutes from now
+</code></pre>
+
+<p>If <code>PROCESSOR</code> shows a CPU/GPU split, some layers are running on the CPU. Reduce the context, choose a smaller quantisation or close other GPU users. For MoE models, a split can cost more speed than you expect, because experts are picked per token and the slow ones get hit constantly.</p>
+
+<p><strong>Choose context by workload, not by the maximum:</strong></p>
+
+<ul>
+  <li>Chat and short tool loops: 16K–32K.</li>
+  <li>Coding agents in Claude Code or OpenCode: 64K or more (Ollama's own guidance for Claude Code).</li>
+  <li>Whole-repository or long-document analysis: 128K–256K, after measuring memory.</li>
+  <li>1M: only on hardware with lots of memory, for genuinely huge inputs, and after checking that retrieval over smaller chunks would not do the job better and faster.</li>
+</ul>
+
+<h2 id="run">4. Install, run and configure</h2>
+
+<pre><code class="language-bash"># 1. Install Ollama from ollama.com/download (macOS, Windows, Linux), then:
+ollama pull nemotron-3.5-lightning            # NVIDIA GPU / Linux / Windows
+ollama pull nemotron-3.5-lightning:30b-mlx    # Apple silicon
+
+# 2. Chat
+ollama run nemotron-3.5-lightning
+
+# 3. Inside the REPL: adjust per session
+/set parameter num_ctx 65536
+/set think false        # turn off visible reasoning for quick tool steps
+/show info              # architecture, context, capabilities, licence
+</code></pre>
+
+<p>Server-wide settings are environment variables on <code>ollama serve</code> (or the system service):</p>
+
+<table class="table" style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Variable</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">What it does</th><th style="padding:8px;text-align:left;border:1px solid #cbd5e1;">Suggested for agents</th></tr></thead>
+<tbody>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>OLLAMA_CONTEXT_LENGTH</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Default context when a request does not set <code>num_ctx</code></td><td style="padding:8px;border:1px solid #cbd5e1;"><code>65536</code></td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>OLLAMA_KEEP_ALIVE</code></td><td style="padding:8px;border:1px solid #cbd5e1;">How long a model stays loaded after the last request</td><td style="padding:8px;border:1px solid #cbd5e1;"><code>24h</code> for always-on agents (avoids reload pauses)</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>OLLAMA_NUM_PARALLEL</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Concurrent requests per loaded model (each needs its own context memory)</td><td style="padding:8px;border:1px solid #cbd5e1;"><code>2</code>–<code>4</code> on a shared server, after measuring</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>OLLAMA_MAX_LOADED_MODELS</code></td><td style="padding:8px;border:1px solid #cbd5e1;">How many models can be resident at once</td><td style="padding:8px;border:1px solid #cbd5e1;"><code>1</code> on a single GPU, so Lightning is never evicted</td></tr>
+<tr><td style="padding:8px;border:1px solid #cbd5e1;"><code>OLLAMA_HOST</code></td><td style="padding:8px;border:1px solid #cbd5e1;">Bind address</td><td style="padding:8px;border:1px solid #cbd5e1;">Leave as <code>127.0.0.1:11434</code> (see §11)</td></tr>
+</tbody>
+</table>
+
+<p>For a reusable agent profile, bake the settings into a Modelfile so every client gets the same behaviour:</p>
+
+<pre><code class="language-text"># Modelfile.agent
+FROM nemotron-3.5-lightning:30b-a3b-q4_K_M
+PARAMETER num_ctx 65536
+PARAMETER temperature 0.2
+SYSTEM """You are a careful execution agent. Use the tools provided. When a tool fails, read the error and try a different approach at most twice, then report what you tried. Never invent file contents or command output."""
+</code></pre>
+
+<pre><code class="language-bash">ollama create lightning-agent -f Modelfile.agent
+ollama run lightning-agent
+</code></pre>
+
+<p>Low temperature suits tool calling and extraction. If NVIDIA's model card or the Ollama template recommends different sampling for reasoning mode, follow it for those tasks.</p>
+
+<h2 id="harnesses">5. Use it inside agent harnesses</h2>
+
+<p><code>ollama launch</code> starts a supported tool already wired to Ollama:</p>
+
+<pre><code class="language-bash">ollama launch claude   --model nemotron-3.5-lightning     # Claude Code
+ollama launch opencode --model nemotron-3.5-lightning     # OpenCode
+ollama launch hermes   --model nemotron-3.5-lightning     # Hermes Agent
+ollama launch openclaw --model nemotron-3.5-lightning     # OpenClaw
+</code></pre>
+
+<h3>Claude Code without <code>launch</code></h3>
+
+<p>Ollama exposes an Anthropic-compatible Messages API, so Claude Code can be pointed at it with three variables. This is useful in scripts, containers and CI:</p>
+
+<pre><code class="language-bash">export ANTHROPIC_BASE_URL=http://localhost:11434
+export ANTHROPIC_AUTH_TOKEN=ollama
+export ANTHROPIC_API_KEY=""
+claude --model nemotron-3.5-lightning
+</code></pre>
+
+<ul>
+  <li>Claude Code settings files can override shell variables. If it still talks to the wrong endpoint, check <code>~/.claude/settings.json</code> and the project settings, then run <code>/status</code>.</li>
+  <li>Set the context to 64K or more: Claude Code's system prompt, tools and file reads fill a small window quickly, and a truncated context produces confused tool calls.</li>
+  <li>Basic chat, file reads, edits and shell tools work with compatible models. Anthropic-hosted server tools such as web search are not provided by Ollama.</li>
+  <li>Features that depend on Anthropic's API (prompt caching prices, specific model aliases) do not apply to the local model.</li>
+</ul>
+
+<h3>Lightning as a headless coding sub-agent</h3>
+
+<p>The most effective use we have found is not to replace the main coding model, but to give routine jobs to a cheap local worker. Run Claude Code non-interactively with Lightning for a bounded task and capture the result:</p>
+
+<pre><code class="language-bash">ollama launch claude --model nemotron-3.5-lightning --yes -- \
+  -p "Run the unit tests. If any fail, list each failing test with the file, the assertion and a one-line likely cause. Do not edit files." \
+  &gt; test-triage.md
+</code></pre>
+
+<p>Your main session (on a larger model) then reads <code>test-triage.md</code> instead of thousands of lines of test output. Keep sub-agent prompts narrow, read-only where possible, and explicit about the output format.</p>
+
+<h2 id="api">6. Call it from your own code</h2>
+
+<h3>Native REST API</h3>
+
+<pre><code class="language-bash">curl -s http://localhost:11434/api/chat -d '{
+  "model": "nemotron-3.5-lightning",
+  "messages": [{"role": "user", "content": "Summarise RFC 9110 section 15.5.1 in two sentences."}],
+  "think": false,
+  "stream": false,
+  "options": {"num_ctx": 32768, "temperature": 0.2}
+}' | jq -r '.message.content'
+</code></pre>
+
+<p><code>think</code> toggles the model's reasoning trace. With <code>"think": true</code> the response carries <code>message.thinking</code> separately from <code>message.content</code>. Turn it on for planning or tricky diagnosis; turn it off for routine tool steps where latency matters more.</p>
+
+<h3>OpenAI-compatible endpoint</h3>
+
+<p>Most agent frameworks speak the OpenAI Chat Completions format. Point them at <code>/v1</code>:</p>
+
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")  # key is required but ignored
+resp = client.chat.completions.create(
+    model="nemotron-3.5-lightning",
+    messages=[{"role": "user", "content": "Give me three names for a log-triage agent."}],
+    temperature=0.2,
+)
+print(resp.choices[0].message.content)
+</code></pre>
+
+<p>The compatibility layer covers the common surface (messages, tools, streaming, JSON mode). For Ollama-specific options such as <code>think</code> or per-request <code>num_ctx</code>, use the native API or the <code>ollama</code> Python/JavaScript libraries.</p>
+
+<h2 id="tools">7. A reliable tool-calling loop</h2>
+
+<p>Small models make more tool-call mistakes than frontier models: wrong argument types, calls to tools that do not exist, loops that repeat the same failing call. The loop below is the shape we use. It validates arguments, returns errors to the model as tool results (so it can correct itself), caps iterations and repeated calls, and reports why it stopped.</p>
+
+<pre><code class="language-python">import json
+import subprocess
+from pathlib import Path
+
+from ollama import chat
+
+MODEL = "nemotron-3.5-lightning"
+ROOT = Path("/srv/agent-workspace").resolve()   # the only directory the agent may touch
+
+
+def read_file(path: str) -&gt; str:
+    """Read a UTF-8 text file inside the workspace.
+
+    Args:
+        path: Path relative to the workspace root.
+    """
+    p = (ROOT / path).resolve()
+    if not p.is_relative_to(ROOT):
+        raise ValueError("path is outside the workspace")
+    return p.read_text(encoding="utf-8")[:20_000]
+
+
+def run_tests(selector: str = "") -&gt; str:
+    """Run the test suite (optionally one test file or test id) and return the tail of the output.
+
+    Args:
+        selector: Optional pytest selector, for example tests/test_api.py::test_login.
+    """
+    cmd = ["pytest", "-q", "--maxfail=5"] + ([selector] if selector else [])
+    out = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=600)
+    return f"exit={out.returncode}\n{(out.stdout + out.stderr)[-6000:]}"
+
+
+TOOLS = {f.__name__: f for f in (read_file, run_tests)}
+
+
+def run_agent(task: str, max_steps: int = 12) -&gt; dict:
+    messages = [
+        {"role": "system", "content": "Use tools to gather facts. Stop and answer as soon as you can."},
+        {"role": "user", "content": task},
+    ]
+    seen_calls: dict[str, int] = {}
+    for step in range(max_steps):
+        resp = chat(model=MODEL, messages=messages, tools=list(TOOLS.values()),
+                    think=False, options={"num_ctx": 65536, "temperature": 0.2})
+        msg = resp.message
+        messages.append(msg)
+        if not msg.tool_calls:
+            return {"status": "done", "steps": step + 1, "answer": msg.content}
+        for call in msg.tool_calls:
+            name, args = call.function.name, dict(call.function.arguments or {})
+            key = name + json.dumps(args, sort_keys=True)
+            seen_calls[key] = seen_calls.get(key, 0) + 1
+            if seen_calls[key] &gt; 2:
+                return {"status": "loop", "steps": step + 1, "repeated": key}
+            fn = TOOLS.get(name)
+            try:
+                if fn is None:
+                    raise KeyError(f"unknown tool {name!r}; available: {sorted(TOOLS)}")
+                result = str(fn(**args))
+            except Exception as exc:   # hand the error back so the model can correct itself
+                result = f"ERROR: {type(exc).__name__}: {exc}"
+            messages.append({"role": "tool", "tool_name": name, "content": result})
+    return {"status": "max_steps", "steps": max_steps}
+
+
+if __name__ == "__main__":
+    print(run_agent("Run the tests and explain the first failure, citing the file and line."))
+</code></pre>
+
+<p>Points that matter more with a small model:</p>
+
+<ul>
+  <li><strong>Few, well-described tools.</strong> Five clear tools beat twenty overlapping ones. The Python library builds the schema from the type hints and the docstring's <code>Args:</code> section, so write them carefully.</li>
+  <li><strong>Return errors, do not raise them.</strong> An error string as a tool result lets the model fix its own arguments. An exception kills the run.</li>
+  <li><strong>Bound everything.</strong> Steps, repeated identical calls, output size per tool result and wall-clock time.</li>
+  <li><strong>Restrict side effects in code, not in the prompt.</strong> The path check in <code>read_file</code> is the control; the system prompt is only a hint.</li>
+  <li><strong>Treat a non-<code>done</code> status as an escalation signal</strong> (see §9).</li>
+</ul>
+
+<h2 id="json">8. Structured output you can trust</h2>
+
+<p>For extraction and classification, constrain the output with a JSON Schema through Ollama's <code>format</code> field and validate it on the way out:</p>
+
+<pre><code class="language-python">from typing import Literal
+
+from ollama import chat
+from pydantic import BaseModel, Field, ValidationError
+
+
+class Triage(BaseModel):
+    severity: Literal["low", "medium", "high", "critical"]
+    category: Literal["auth", "malware", "network", "data-exfiltration", "misconfiguration", "other"]
+    affected_hosts: list[str] = Field(default_factory=list)
+    summary: str = Field(max_length=400)
+    needs_human: bool
+
+
+def triage(alert_text: str) -&gt; Triage | None:
+    for attempt in range(2):
+        resp = chat(
+            model="nemotron-3.5-lightning",
+            messages=[
+                {"role": "system", "content": "Classify the security alert. Use only facts present in the alert."},
+                {"role": "user", "content": alert_text},
+            ],
+            format=Triage.model_json_schema(),
+            think=False,
+            options={"temperature": 0},
+        )
+        try:
+            return Triage.model_validate_json(resp.message.content)
+        except ValidationError:
+            continue
+    return None   # caller escalates to a larger model or a human
+</code></pre>
+
+<p>The schema constrains decoding so the output parses; it does not make the content correct. Add domain checks after validation: do the <code>affected_hosts</code> actually appear in the alert, does the invoice total equal the sum of its lines, does the date fall in the right period. Those checks are cheap and catch most of the errors a small model makes.</p>
+
+<h2 id="routing">9. A local tier with cloud escalation</h2>
+
+<p><img src="/img/nemotron-lightning/nemotron-local-cloud-routing.svg" alt="Local-first routing: an agent harness sends each step through a router to Nemotron 3.5 Lightning on localhost, escalating steps that fail validation, need planning or are marked by policy to a larger cloud model via the same API" width="1200" height="560" loading="lazy" decoding="async" style="max-width:100%;height:auto;border-radius:12px;" /></p>
+
+<p>Because Ollama's cloud models use the same API as local ones, a router is a small amount of code. The rules: default to local, escalate on evidence (failed validation, loop detection, a task class you have marked as hard), never escalate data your policy says must stay local, and log every escalation.</p>
+
+<pre><code class="language-python">import logging
+import os
+from dataclasses import dataclass
+
+from ollama import Client
+
+log = logging.getLogger("router")
+
+LOCAL = Client(host="http://127.0.0.1:11434")
+CLOUD = Client(host="https://ollama.com",
+               headers={"Authorization": "Bearer " + os.environ["OLLAMA_API_KEY"]})
+
+LOCAL_MODEL = "nemotron-3.5-lightning"
+CLOUD_MODEL = os.environ.get("CLOUD_MODEL", "")   # a larger :cloud model you have chosen and tested
+
+HARD_TASKS = {"plan", "architecture", "root-cause"}
+
+
+@dataclass
+class Step:
+    kind: str                 # "extract", "tool", "plan", ...
+    messages: list
+    sensitive: bool = False   # set by policy from the data source, never by the model
+
+
+def run_step(step: Step, validate) -&gt; tuple[str, str]:
+    """Return (tier, content). validate(content) -&gt; bool decides whether to accept the local answer."""
+    if step.kind not in HARD_TASKS or step.sensitive:
+        out = LOCAL.chat(model=LOCAL_MODEL, messages=step.messages, think=False).message.content
+        if validate(out):
+            return "local", out
+        if step.sensitive:
+            log.warning("local answer failed validation; sensitive step kept local, sent to review")
+            return "review", out
+    if not CLOUD_MODEL:
+        return "review", ""
+    log.info("escalating step kind=%s to %s", step.kind, CLOUD_MODEL)
+    out = CLOUD.chat(model=CLOUD_MODEL, messages=step.messages).message.content
+    return "cloud", out
+</code></pre>
+
+<p>Track the escalation rate per step kind. If one kind escalates often, you have three options, in order of effort: improve its prompt and tools, give it more context, or post-train Lightning on examples of that task (§13). If you use a hosted API other than Ollama's cloud for the larger model (for example the Claude API), the router is the same; only the cloud client changes.</p>
+
+<h2 id="team">10. Serve it to a team</h2>
+
+<p>For a shared agent server on a workstation or a DGX Spark, run Ollama in a container with the GPU attached and the API bound to localhost, then put an authenticating proxy in front:</p>
+
+<pre><code class="language-yaml"># compose.yaml
+services:
+  ollama:
+    image: ollama/ollama:latest          # pin a version tag in production
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:11434:11434"          # never 0.0.0.0 without auth in front
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "65536"
+      OLLAMA_KEEP_ALIVE: "24h"
+      OLLAMA_NUM_PARALLEL: "2"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+volumes:
+  ollama:
+</code></pre>
+
+<pre><code class="language-bash">docker compose up -d
+docker compose exec ollama ollama pull nemotron-3.5-lightning:30b-a3b-q4_K_M
+docker compose exec ollama ollama ps
+</code></pre>
+
+<ul>
+  <li><strong>Concurrency costs memory.</strong> Each parallel slot holds its own context. Raise <code>OLLAMA_NUM_PARALLEL</code> only while <code>ollama ps</code> still shows 100% GPU.</li>
+  <li><strong>Authentication.</strong> Ollama's local API has no user authentication. Put a reverse proxy with per-user or per-agent API keys, TLS and rate limits in front of it (we use <a href="/en/proxy10x">Proxy10x</a> for this), and reach it over a private network such as WireGuard rather than the open internet.</li>
+  <li><strong>Monitoring.</strong> Log request counts, latency, tokens per second and escalation rates per agent. A sudden fall in tokens per second usually means the model has partly moved to the CPU.</li>
+  <li><strong>Higher throughput.</strong> When one box serves many concurrent agents, a batching server such as vLLM, or NVIDIA NIM, will generally out-scale Ollama. Our guide to <a href="/en/technical-notes/local-llm-docker-ollama-vllm-nvidia-nim-developer-guide">local LLMs with Docker, Ollama, vLLM and NVIDIA NIM</a> compares them.</li>
+</ul>
+
+<h2 id="security">11. Security: local is private, not safe</h2>
+
+<p>Running the model locally removes one risk (your data going to a model provider) and leaves the others:</p>
+
+<ul>
+  <li><strong>Prompt injection.</strong> An agent that reads email, web pages or tickets can be instructed by them. Smaller models are, if anything, easier to steer. Treat all tool output as untrusted.</li>
+  <li><strong>Over-broad tools.</strong> Give agents the narrowest tools that do the job: a read-only log query, not a shell; a single-directory file reader, not the home folder.</li>
+  <li><strong>Sandbox the agent process.</strong> Run agents in a sandbox with filesystem, network and credential policies enforced outside the model. Our <a href="/en/technical-notes/nvidia-openshell-developer-guide-sandbox-policies-credentials">OpenShell developer guide</a> shows how, including routing inference to a local model.</li>
+  <li><strong>Exposed port 11434.</strong> Scanners look for open Ollama servers. If <code>OLLAMA_HOST=0.0.0.0</code> is set on a machine with a public address, anyone can use your GPU and pull or delete models. Bind to localhost and use a proxy.</li>
+  <li><strong>Model provenance.</strong> Pull from the official library name, pin the digest in production, and record which digest each agent version was tested with.</li>
+  <li><strong>Secrets.</strong> Do not put API keys or passwords in prompts or tool results. Inject them into tools at execution time from a secrets manager.</li>
+</ul>
+
+<h2 id="measure">12. Measure it on your own work</h2>
+
+<p>Vendor benchmarks tell you whether to try a model; only your tasks tell you whether to adopt it. Ollama returns timing data with every non-streamed response (durations are in nanoseconds), which is enough for a quick speed check:</p>
+
+<pre><code class="language-python">import statistics
+
+from ollama import chat
+
+PROMPTS = [
+    "List the HTTP status codes a REST API should return for validation errors and why.",
+    "Write a Python function that parses ISO 8601 durations, with tests.",
+    "Explain what a Mamba state-space layer does in 5 sentences.",
+]
+
+
+def bench(model: str, runs: int = 3, num_ctx: int = 32768) -&gt; None:
+    gen, pre = [], []
+    for prompt in PROMPTS:
+        for _ in range(runs):
+            r = chat(model=model, messages=[{"role": "user", "content": prompt}],
+                     think=False, options={"num_ctx": num_ctx, "temperature": 0})
+            gen.append(r.eval_count / (r.eval_duration / 1e9))
+            pre.append(r.prompt_eval_count / max(r.prompt_eval_duration / 1e9, 1e-9))
+    print(f"{model}: generation {statistics.median(gen):.0f} tok/s (median), "
+          f"prompt processing {statistics.median(pre):.0f} tok/s")
+
+
+bench("nemotron-3.5-lightning")
+</code></pre>
+
+<p>Speed is the easy part. For adoption, build a small task suite from real work (20–50 cases per step kind: extract these fields, classify this alert, find the failing test) with a checker for each, and record pass rate, median steps, escalation rate and wall-clock time for Lightning, for your current cloud model and for the routed combination. Re-run it whenever you change the tag, the prompt or the tools.</p>
+
+<h2 id="customise">13. Post-train a specialist</h2>
+
+<p>Lightning's weights, recipes and much of its training data are open, and NVIDIA positions it for post-training with NVIDIA NeMo on your own domain data, tools, workflows and policies. A typical path:</p>
+
+<ol>
+  <li><strong>Collect examples from your router logs:</strong> the steps that escalated, with the larger model's accepted answer as the target. Remove personal and secret data.</li>
+  <li><strong>Fine-tune</strong> (for example with LoRA) on the BF16 checkpoint using NeMo or another framework that supports the hybrid Mamba-MoE architecture. Check support before you start; not every fine-tuning tool handles Mamba layers.</li>
+  <li><strong>Evaluate</strong> on the task suite from §12, against the base model and the cloud model.</li>
+  <li><strong>Package for Ollama:</strong> export or convert the result to a format Ollama can import for this architecture, then <code>ollama create</code> it from a Modelfile with the same template and parameters as the base model. Keep the base model as a fallback.</li>
+</ol>
+
+<p>Read the OpenMDW 1.1 licence before distributing a derived model.</p>
+
+<h2 id="gotchas">14. Gotchas</h2>
+
+<ul>
+  <li><strong>Context silently too small.</strong> If <code>num_ctx</code> is lower than the conversation, older content is dropped and the agent "forgets" its instructions. Set it explicitly per agent.</li>
+  <li><strong>Context silently too large.</strong> A large default context on a small GPU pushes layers to the CPU. Check <code>ollama ps</code> after every config change.</li>
+  <li><strong>MLX tags stop at 256K.</strong> If a workflow needs more on a Mac, chunk and retrieve instead.</li>
+  <li><strong>Thinking on everywhere.</strong> Reasoning traces add tokens and latency to every step. Enable <code>think</code> for planning and diagnosis only.</li>
+  <li><strong>First call is slow.</strong> Loading 19+ GB takes time. Use <code>OLLAMA_KEEP_ALIVE</code> or send a warm-up request when the agent starts.</li>
+  <li><strong>Harness assumptions.</strong> Tools built for frontier models may send very long system prompts or many tools. Trim them for the local tier where the harness allows.</li>
+  <li><strong>Unpinned tags.</strong> <code>latest</code> can change. Pin the quantisation tag or digest for anything you test and ship.</li>
+  <li><strong>Vendor speed figures.</strong> "Up to 4x" depends on hardware, batch size and decoding method. Measure your own.</li>
+</ul>
+
+<h2 id="sources">Sources</h2>
+
+<ul>
+  <li>Ollama: model page and tags for <code>nemotron-3.5-lightning</code>, Claude Code integration and tool-calling documentation (read 20 November 2026).</li>
+  <li>NVIDIA: Nemotron 3.5 Lightning 30B-A3B model card (build.nvidia.com), the Nemotron 3.5 Super and Lightning research page and technical report, and NVIDIA's launch announcement of 11 August 2026.</li>
+  <li>OpenMDW License Agreement 1.1.</li>
+</ul>
+
+<p style="font-size:0.85rem;color:#5b6d72;">Code samples follow the documented Ollama APIs and Python library; adapt paths, timeouts and model tags to your environment and test them before production use. Nemotron, RTX, DGX and NeMo are trademarks of NVIDIA. TenthMatrix is not affiliated with NVIDIA or Ollama.</p>
+
+</article>
