@@ -1200,6 +1200,30 @@
   },
   {
     "type": "blog",
+    "id": "blog-nemotron-lightning-001",
+    "slug": "nvidia-nemotron-3-5-lightning-ollama-local-ai-agents-business",
+    "title": "NVIDIA Nemotron 3.5 Lightning on Ollama: Fast Local AI Agents That Keep Your Data In-House",
+    "excerpt": "NVIDIA Nemotron 3.5 Lightning is now on Ollama: an open 30B mixture-of-experts model with 3B active parameters and a 1M-token context, built for agents. What it is, where it fits, what it costs to run locally, and how to pair a local tier with the cloud.",
+    "content": "Most of the work an AI agent does is not clever. It reads a file, calls a tool, sorts the result, notices that something failed and tries again. Paying a frontier model in the cloud for every one of those small steps is slow, adds up quickly, and sends your data to someone else's servers each time. NVIDIA's Nemotron 3.5 Lightning is built for exactly those steps, and it is now available on Ollama , so it runs on a workstation, a well-specified PC or a Mac on your own desk. This post explains wha",
+    "tags": "nemotron, nvidia, ollama, ai-agents, local-ai, llm, data-privacy, claude-code, apple-silicon, gpu",
+    "date": "2026-11-20",
+    "image": "/img/nemotron-lightning/nemotron-lightning-cover.svg",
+    "author": "Balinder Walia",
+    "category": [
+      "nemotron",
+      "nvidia",
+      "ollama",
+      "ai-agents",
+      "local-ai",
+      "llm",
+      "data-privacy",
+      "claude-code",
+      "apple-silicon",
+      "gpu"
+    ]
+  },
+  {
+    "type": "blog",
     "id": "blog-nvidia-openshell-001",
     "slug": "nvidia-openshell-secure-agents-mac-studio",
     "title": "NVIDIA OpenShell: Secure Agent Runtime on Mac Studio and GPU Workstations",
@@ -2022,6 +2046,24 @@
       "sre",
       "kubernetes",
       "ai"
+    ]
+  },
+  {
+    "type": "article",
+    "id": "nemotron-lightning-developer-guide-article-01",
+    "slug": "nemotron-3-5-lightning-ollama-developer-guide-local-agents",
+    "title": "Nemotron 3.5 Lightning on Ollama: A Developer's Guide to Local AI Agents",
+    "excerpt": "Tags and hardware sizing, context settings, Claude Code and OpenCode, reliable tool calls and structured output, local-to-cloud routing, team serving, security, benchmarking and post-training",
+    "content": "NVIDIA Nemotron 3.5 Lightning is an open 30B mixture-of-experts model with about 3B active parameters per token, a 1M-token context window and training aimed squarely at agent work: tool calls, instruction following and multi-turn tasks. It is now in the Ollama library as nemotron-3.5-lightning . This note is the practical guide: which tag to pull for your hardware, how to size memory and context, how to plug it into Claude Code, OpenCode and your own agent loops, how to get reliable tool calls ",
+    "tags": "Nemotron 3.5 Lightning, NVIDIA Nemotron, Ollama, local LLM, local AI agents, open model, mixture of experts, 30B-A3B, 1M token context, Mamba-2, agent tool calling, Claude Code Ollama, OpenCode, Hermes Agent, OpenClaw, RTX, DGX Spark, Apple silicon MLX, data privacy, on-premise AI",
+    "date": "2026-11-20",
+    "image": "/img/nemotron-lightning/nemotron-lightning-cover.svg",
+    "author": "TenthMatrix",
+    "category": [
+      "AI Agents",
+      "Local AI",
+      "Developer Tools",
+      "NVIDIA"
     ]
   },
   {
