@@ -32,7 +32,7 @@ const corePages = {
 // Every other static route under src/app/[locale] (no [dynamic] segment).
 // noindex/utility routes are left out; legal pages get a low priority.
 // Redirect-only routes (e.g. wsl-proxy → proxy10x) are left out too.
-const EXCLUDE = new Set(['brand', 'search', 'terms-of-service/privacy-policy', 'wsl-proxy']);
+const EXCLUDE = new Set(['brand', 'search', 'terms-of-service/privacy-policy', 'wsl-proxy', 'stories']);
 const LEGAL = /^(privacy-policy|cookie-policy|terms-of-service|refund-policy|accessibility-statement|data-deletion|sitemap-page)$/;
 function discoverRoutes(dir, base = '') {
   const out = [];
@@ -98,6 +98,14 @@ function generateSitemap() {
     if (isSample(slug)) continue;
     push(`insights/${slug}`, 'monthly', '0.6');
   }
+
+  // Case studies: one page per AI & automation case in our-work.json.
+  for (const c of readJson(data('en', 'our-work.json'))?.cases || []) {
+    if (c?.slug) push(`our-work/${c.slug}`, 'monthly', '0.7');
+  }
+
+  // Solution pages: one per problem area in solutions.json.
+  for (const slug of readJson(data('en', 'solutions.json'))?.slugs || []) push(`solutions/${slug}`, 'monthly', '0.8');
 
   const pageCount = listJson(data('pages')).filter((f) => f.startsWith('page-')).length;
   for (let i = 2; i <= pageCount; i++) push(`docs/blogs/page/${i}`, 'weekly', '0.4');

@@ -6,11 +6,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown, Search, X, ArrowUpRight } from 'lucide-react';
+import { ChevronDown, Search, X } from 'lucide-react';
 import Logo from '@/app/brand-assets/Logo';
 import ThemeToggle from './ThemeToggle';
 import LanguageSwitcher from './LanguageSwitcher';
-import { NAV_GROUPS, HARDWARE_URL } from './navConfig';
+import { NAV_GROUPS, BOOK_CALL_HREF } from './navConfig';
 import s from './MobileNav.module.scss';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), select, input, textarea, [tabindex]:not([tabindex="-1"])';
@@ -160,18 +160,11 @@ export default function MobileNav({ locale, open, onClose }) {
                 </ul>
               </nav>
 
-              <a href={HARDWARE_URL} className={s.hardware} target="_blank" rel="noopener noreferrer">
-                <span>{t('hardware')}</span>
-                <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.75} />
-              </a>
             </div>
 
             <div className={s.bottom}>
-              <Link href={href('/ai-agent-journey')} className={s.cta} onClick={onClose}>
+              <Link href={href(BOOK_CALL_HREF)} className={s.cta} onClick={onClose}>
                 {t('cta')}
-              </Link>
-              <Link href={href('/start-a-project')} className={`${s.cta} ${s.ctaAlt}`} onClick={onClose}>
-                {t('ctaProject')}
               </Link>
               <div className={s.prefs}>
                 <LanguageSwitcher locale={locale} id="tm-lang-mobile" />

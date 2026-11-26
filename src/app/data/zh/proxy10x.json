@@ -9,6 +9,15 @@
     "subtitle": "API 网关、CDN 与企业级 WAF — 产品概览",
     "description": "TenthMatrix Proxy10x(Proxy10x)是 TenthMatrix 完整的 API 网关与 CDN 边缘控制平面。它部署在源站之前,依据实时 JSON 和 MCP 配置逐请求决定处理方式——路由、防护、缓存与观测——每次规则变更都无需重载 nginx。"
   },
+  "plain": {
+    "line": "Proxy10x 是您网站和系统的安全大门：在攻击和过载到达您之前就将其拦下，并让页面快速加载。",
+    "whoTitle": "Who this is for",
+    "who": [
+      "需要保护网站和系统免受攻击的企业",
+      "运营多个网站、希望集中管理的团队",
+      "想自己托管网关的 IT 团队"
+    ]
+  },
   "intro": {
     "title": "什么是 TenthMatrix Proxy10x?",
     "body": "Proxy10x 是基于 OpenResty 的动态 API 网关和反向代理。运维人员可通过管理界面、REST API、MCP 工具或 proxy10x-cli 管理虚拟主机、路由规则、WAF 策略、缓存、流量拆分和边缘 POP。日常规则在热路径上即时生效;仅当服务器级 listen 或 SSL 配置块变更时才重载 nginx。",

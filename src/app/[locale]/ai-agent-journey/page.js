@@ -11,13 +11,15 @@ import s from './journey.module.scss';
 export const dynamic = 'force-static';
 
 /**
- * Interactive AI agent journey: how agents work, how our forward deployed
- * engineers run discovery, then a question-by-question configurator that ends
- * in a blueprint (agents, models, hosting, connectors, guardrails) the visitor
- * can send as a lead. Copy: src/app/data/en/ai-agent-journey.json.
+ * Interactive AI agent journey: the question-by-question configurator first
+ * (it ends in a blueprint of agents, models, hosting, connectors and
+ * guardrails the visitor can send as a lead), then how agents work, what our
+ * forward deployed engineers do, example scenarios (labelled as
+ * examples, not client results), the FAQ, and the Jobshout / offline detail
+ * last. Copy: src/app/data/en/ai-agent-journey.json.
  */
 function AgentJourneyPage({ data, locale }) {
-  const { header = {}, how, shoes, journey, result, recommend, scenarios, fde, framework, offline, faq, cta } = data;
+  const { header = {}, how, journey, result, recommend, scenarios, fde, framework, offline, faq, cta } = data;
   const workstation = `${WORKSTATION_URL}/ai-workstations`;
   const links = {
     jobshout: localeHref('/jobshout#features', locale),
@@ -38,25 +40,19 @@ function AgentJourneyPage({ data, locale }) {
         art
       />
 
-      <Section id="how" eyebrow={how.eyebrow} title={how.title} lede={how.lede}>
-        <Steps steps={how.loop} />
-        <h3 className={s.subhead}>{how.layersTitle}</h3>
-        <FeatureGrid items={how.layers} locale={locale} columns={3} variant="numbered" />
-      </Section>
-
-      <Section id="discovery" eyebrow={shoes.eyebrow} title={shoes.title} lede={shoes.lede} tone="sunken">
-        <Steps steps={shoes.steps} layout="list" />
-      </Section>
-
       <Section id="journey" eyebrow={journey.eyebrow} title={journey.title} lede={journey.lede} width="wide">
         <AgentJourney journey={journey} result={result} rec={recommend} links={links} />
       </Section>
 
-      <Section id="scenarios" eyebrow={scenarios.eyebrow} title={scenarios.title} lede={scenarios.lede} tone="sunken">
+      <Section id="how" eyebrow={how.eyebrow} title={how.title} lede={how.lede} tone="sunken">
+        <Steps steps={how.loop} />
+      </Section>
+
+      <Section id="scenarios" eyebrow={scenarios.eyebrow} title={scenarios.title} lede={scenarios.lede}>
         <FeatureGrid items={scenarios.items} locale={locale} columns={2} />
       </Section>
 
-      <Section id="fde" eyebrow={fde.eyebrow} title={fde.title} lede={fde.lede}>
+      <Section id="fde" eyebrow={fde.eyebrow} title={fde.title} lede={fde.lede} tone="sunken">
         <FeatureGrid items={fde.points} locale={locale} columns={3} variant="plain" />
         <h3 className={s.subhead}>{fde.certsTitle}</h3>
         <ul className={s.certs}>
@@ -65,6 +61,12 @@ function AgentJourneyPage({ data, locale }) {
           ))}
         </ul>
       </Section>
+
+      {faq?.items?.length > 0 && (
+        <Section id="faq" title={faq.title} width="narrow">
+          <FaqAccordion items={faq.items} />
+        </Section>
+      )}
 
       <Section
         id="framework"
@@ -87,12 +89,6 @@ function AgentJourneyPage({ data, locale }) {
           </a>
         </p>
       </Section>
-
-      {faq?.items?.length > 0 && (
-        <Section id="faq" title={faq.title} width="narrow">
-          <FaqAccordion items={faq.items} />
-        </Section>
-      )}
 
       <CTA
         id="cta"

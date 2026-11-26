@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "title": "Oplossingen: AI en software voor de problemen die je team vertragen | TenthMatrix",
+    "description": "Verkoop, marketing, backoffice, klantenservice, maatwerk-apps en platformen. Begin bij het probleem; zie wat we bouwen, een voorbeeld en een klant met hetzelfde probleem."
+  },
+  "header": {
+    "eyebrow": "Oplossingen",
+    "title": "Begin bij het probleem, niet bij de technologie",
+    "subtitle": "Kies wat je team vertraagt. Elke oplossing laat zien wat we bouwen, een voorbeeld van hoe het werkt en een klant met hetzelfde probleem."
+  },
+  "ui": {
+    "see": "Bekijk de oplossing",
+    "problem": "Het probleem",
+    "story": "Een klant met hetzelfde probleem",
+    "storyTrack": "Uit onze staat van dienst",
+    "deliverTitle": "Hoe we het opleveren",
+    "deliverBody": "We beginnen met één taak. Je ziet het werken op je eigen data in een pilot voordat je kiest voor de volledige bouw, en de code en de data zijn in beide gevallen van jou.",
+    "deliverLink": "Hoe wij werken",
+    "related": "Gerelateerde pagina's",
+    "technical": "Technische details voor je IT-team",
+    "glossary": "Een term niet paraat? Bekijk de woordenlijst in gewone taal.",
+    "other": "Andere oplossingen"
+  },
+  "journey": {
+    "title": "Niet zeker waar je moet beginnen?",
+    "body": "Beantwoord negen korte vragen en zie welke agent we voor je zouden bouwen. Het duurt ongeveer 3 minuten en je hoeft je nergens voor aan te melden.",
+    "button": "Ontwerp je agent in 3 minuten",
+    "link": "/ai-agent-journey"
+  },
+  "pages": {
+    "sales": {
+      "icon": "TrendingUp",
+      "meta": {
+        "title": "AI-verkoopagents: volg elke lead op voordat hij afkoelt | TenthMatrix",
+        "description": "AI-verkoopagents die binnen minuten op aanvragen reageren, kopers kwalificeren, bedrijven onderzoeken en je CRM bijhouden. Een mens keurt elke e-mail goed."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Verkoop",
+        "title": "Volg elke lead op voordat hij afkoelt",
+        "subtitle": "Een AI-verkoopagent reageert binnen minuten op aanvragen, ontdekt wat de koper nodig heeft en houdt je CRM bij. Je team besteedt zijn tijd aan mensen die klaar zijn om te kopen."
+      },
+      "pain": "Leads koelen af voordat iemand opvolgt",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "Aanvragen wachten uren of dagen op antwoord en kopers gaan naar een ander.",
+          "Verkopers besteden hun ochtenden aan het bijwerken van het CRM in plaats van aan verkopen.",
+          "Niemand heeft tijd om een bedrijf te onderzoeken voor het gesprek.",
+          "Opvolging glipt weg zodra het team het druk heeft."
+        ]
+      },
+      "does": {
+        "title": "Wat de agent doet",
+        "items": [
+          {
+            "title": "Reageert binnen minuten",
+            "description": "Beantwoordt elke nieuwe aanvraag, dag en nacht, en stelt de vragen die een goede verkoper zou stellen."
+          },
+          {
+            "title": "Vindt de serieuze kopers",
+            "description": "Toetst budget, timing en behoefte aan jouw regels en geeft de goede leads door aan een mens."
+          },
+          {
+            "title": "Bereidt je team voor",
+            "description": "Zoekt het bedrijf op voor het gesprek en schrijft een korte samenvatting."
+          },
+          {
+            "title": "Schrijft de opvolging",
+            "description": "Schrijft de opvolgmail en de CRM-update. Je verkoper controleert het en drukt op verzenden."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldochtend",
+        "intro": "Voorbeeldscenario. Tijden en stappen zijn ter illustratie.",
+        "steps": [
+          {
+            "title": "9:12 · Een koper vult je websiteformulier in",
+            "description": "De agent reageert binnen minuten, vraagt naar budget en timing en biedt een belmoment aan."
+          },
+          {
+            "title": "9:30 · De lead is gekwalificeerd",
+            "description": "De agent beoordeelt de lead aan de hand van jouw regels en schrijft een samenvatting van twee regels in het CRM."
+          },
+          {
+            "title": "10:00 · Je verkoper krijgt een briefing",
+            "description": "Wie de koper is, wat hij vroeg en wat hij nodig heeft, klaar voor het gesprek."
+          },
+          {
+            "title": "Na het gesprek · Opvolging opgesteld",
+            "description": "De agent schrijft de e-mail en de CRM-notitie. Een mens keurt het goed voordat het wordt verstuurd."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI-CRM",
+          "href": "/crm"
+        },
+        {
+          "label": "Hoe onze agents werken",
+          "href": "/ai-agents"
+        },
+        {
+          "label": "Ontwikkeling van AI-agents",
+          "href": "/ai-agent-development"
+        }
+      ],
+      "technical": [
+        "Koppelt aan je CRM, e-mail en agenda (via connectors, vaak MCP genoemd)",
+        "Model naar keuze: Claude, OpenAI, Gemini of een open-weight-model dat je zelf host",
+        "Draait in je cloud, op je eigen machines of beheerd door ons",
+        "Een volledig logboek van elke actie van de agent, met kosten en timing",
+        "Wachtwoorden en sleutels staan in een aparte kluis (WSL Vault), nooit in de agent"
+      ],
+      "storySlug": "workstation"
+    },
+    "marketing": {
+      "icon": "Megaphone",
+      "meta": {
+        "title": "AI-marketingagents: breng content uit zonder knelpunt | TenthMatrix",
+        "description": "Marketingagents die posts, e-mails en campagnes opstellen in jouw merkstem, na goedkeuring publiceren en rapporteren wat werkte."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Marketing",
+        "title": "Breng content uit zonder knelpunt",
+        "subtitle": "Een marketingagent schrijft je posts, e-mails en campagnes in jouw merkstem en rapporteert wat werkte. Een mens geeft akkoord voordat iets live gaat."
+      },
+      "pain": "Content kost eindeloos veel tijd",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "Een blogpost doet er weken over van idee tot publicatie.",
+          "De website, social media en e-mail moeten elke week gevoed worden.",
+          "Een campagnerapport samenstellen kost een hele dag.",
+          "Goede ideeën blijven in een document staan omdat niemand tijd heeft om ze uit te werken."
+        ]
+      },
+      "does": {
+        "title": "Wat de agent doet",
+        "items": [
+          {
+            "title": "Concepten in jouw stem",
+            "description": "Blogposts, social posts, nieuwsbrieven en productteksten, geschreven volgens jouw stijlgids."
+          },
+          {
+            "title": "Maakt van één stuk er veel",
+            "description": "Een casestudy wordt een post, een e-mail en een korte socialmediadraad."
+          },
+          {
+            "title": "Publiceert na goedkeuring",
+            "description": "Niets gaat live voordat een genoemde persoon het heeft goedgekeurd."
+          },
+          {
+            "title": "Rapporteert wat werkte",
+            "description": "Een wekelijks overzicht van wat mensen lazen, aanklikten en vroegen."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldweek",
+        "intro": "Voorbeeldscenario. Stappen zijn ter illustratie.",
+        "steps": [
+          {
+            "title": "Maandag · Je stuurt een briefing van twee regels",
+            "description": "\"Kondig de nieuwe dienst aan bij bestaande klanten.\""
+          },
+          {
+            "title": "Maandagmiddag · De concepten komen binnen",
+            "description": "Een e-mail, een blogpost en drie socialmediaposts, in jouw merkstem."
+          },
+          {
+            "title": "Dinsdag · Je keurt goed en past aan",
+            "description": "Wijzigingen worden genoteerd, zodat de volgende concepten er minder nodig hebben."
+          },
+          {
+            "title": "Vrijdag · Het rapport",
+            "description": "Wat is geopend, gelezen en gedeeld, en wat je volgende week kunt proberen."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI-marketing",
+          "href": "/marketing"
+        },
+        {
+          "label": "Generatieve AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Claude-agents",
+          "href": "/claude-agents"
+        }
+      ],
+      "technical": [
+        "Koppelt aan je website of CMS, e-mailplatform en analysetools",
+        "Merkstem en stijlregels als geschreven instructies die je kunt lezen en aanpassen",
+        "Model naar keuze: Claude, OpenAI, Gemini of een open-weight-model dat je zelf host",
+        "Draait in je cloud, op je eigen machines of beheerd door ons",
+        "Een volledig logboek van elke actie van de agent, met kosten en timing",
+        "Wachtwoorden en sleutels staan in een aparte kluis (WSL Vault), nooit in de agent"
+      ],
+      "storySlug": "europa-components"
+    },
+    "back-office": {
+      "icon": "Workflow",
+      "meta": {
+        "title": "AI-agents voor de backoffice: facturen, bestellingen en administratie voor je geregeld | TenthMatrix",
+        "description": "Agents die facturen, bestellingen en formulieren lezen, invoeren in je boekhoudsysteem, markeren wat niet klopt en op goedkeuring wachten voordat er iets wordt verstuurd of betaald."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Backoffice en administratie",
+        "title": "Haal het routinewerk uit facturen, bestellingen en administratie",
+        "subtitle": "Backofficeagents lezen facturen, bestellingen en e-mails, voeren ze in je systemen in en markeren wat niet klopt. Er wordt niets verstuurd, betaald of verwijderd zonder goedkeuring van een mens."
+      },
+      "pain": "Uren kwijt aan facturen en bestelinvoer",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "Elke week uren aan het intypen van facturen en bestellingen in het boekhoudsysteem.",
+          "Maandafsluiting duurt dagen, en het meeste is overtypen en nakijken.",
+          "Een gedeelde inbox vol verzoeken die allemaal dezelfde paar patronen volgen.",
+          "Rapporten worden elke maand met de hand opnieuw opgebouwd uit dezelfde spreadsheets."
+        ]
+      },
+      "does": {
+        "title": "Wat de agent doet",
+        "items": [
+          {
+            "title": "Leest het papierwerk",
+            "description": "Facturen, bestellingen, pakbonnen en formulieren, uit e-mail of upload."
+          },
+          {
+            "title": "Voert in en koppelt",
+            "description": "Voert de gegevens in je boekhoud- of bestelsysteem in en koppelt facturen aan bestellingen."
+          },
+          {
+            "title": "Markeert de uitzonderingen",
+            "description": "Alles wat niet klopt gaat naar een mens, met de reden erbij."
+          },
+          {
+            "title": "Wacht op goedkeuring",
+            "description": "Geen betaling, boeking of verwijdering gebeurt zonder een genoemde goedkeurder."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldfactuur",
+        "intro": "Voorbeeldscenario. Stappen zijn ter illustratie.",
+        "steps": [
+          {
+            "title": "Een factuur komt binnen per e-mail",
+            "description": "De agent leest hem en haalt de leverancier, regels, totalen en btw eruit."
+          },
+          {
+            "title": "Hij wordt aan de bestelling gekoppeld",
+            "description": "Prijzen en aantallen worden gecontroleerd aan de hand van de inkooporder."
+          },
+          {
+            "title": "Eén regel klopt niet",
+            "description": "De agent meldt het aan je financiële team, met het verschil gemarkeerd."
+          },
+          {
+            "title": "Een mens keurt goed",
+            "description": "Na goedkeuring boekt de agent hem. Alles wat hij deed, wordt vastgelegd."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI-automatisering",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Jobshout",
+          "href": "/jobshout"
+        },
+        {
+          "label": "AI-belastingaangifte",
+          "href": "/ai-tax-filing"
+        },
+        {
+          "label": "Datafundamenten",
+          "href": "/services/data-foundations-ai"
+        }
+      ],
+      "technical": [
+        "Documenten lezen (extractie) met controles aan de hand van je eigen regels",
+        "Koppelt aan financiële systemen, ERP en bestelsystemen via hun API's of exports",
+        "Goedkeuringspunten bij alles wat verstuurt, uitgeeft of verwijdert",
+        "Model naar keuze: Claude, OpenAI, Gemini of een open-weight-model dat je zelf host",
+        "Draait in je cloud, op je eigen machines of beheerd door ons",
+        "Een volledig logboek van elke actie van de agent, met kosten en timing",
+        "Wachtwoorden en sleutels staan in een aparte kluis (WSL Vault), nooit in de agent"
+      ],
+      "storySlug": "cogno-ai"
+    },
+    "customer-support": {
+      "icon": "Headset",
+      "meta": {
+        "title": "AI-supportagents: beantwoord klanten sneller | TenthMatrix",
+        "description": "Supportagents die veelgestelde vragen beantwoorden uit je eigen documenten, antwoorden voor je team opstellen en urgente tickets naar de juiste persoon sturen."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Klantenservice",
+        "title": "Beantwoord klanten sneller, met je team aan het roer",
+        "subtitle": "Een supportagent beantwoordt veelgestelde vragen uit je eigen documenten en stelt antwoorden op voor de lastigere. Je team controleert wat ertoe doet en handelt de rest af."
+      },
+      "pain": "De supportinbox raakt nooit leeg",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "De supportinbox komt nooit op nul.",
+          "Je team beantwoordt elke dag met de hand dezelfde tien vragen.",
+          "Klanten die 's avonds schrijven, wachten tot de ochtend.",
+          "Urgente problemen staan in de wachtrij achter routinezaken."
+        ]
+      },
+      "does": {
+        "title": "Wat de agent doet",
+        "items": [
+          {
+            "title": "Antwoorden uit je documenten",
+            "description": "Zoekt je helppagina's, beleid en eerdere antwoorden op voordat hij antwoordt."
+          },
+          {
+            "title": "Schrijft de lastigere antwoorden",
+            "description": "Bij alles wat ongewoon is, schrijft hij een concept dat een mens controleert."
+          },
+          {
+            "title": "Sorteert de urgente zaken",
+            "description": "Herkent klachten, storingen en VIP-klanten en stuurt ze direct naar een mens."
+          },
+          {
+            "title": "Ziet de gaten",
+            "description": "Als dezelfde vraag steeds terugkomt, stelt hij een nieuwe helppagina voor."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldavond",
+        "intro": "Voorbeeldscenario. Stappen zijn ter illustratie.",
+        "steps": [
+          {
+            "title": "20:40 · Een klant vraagt naar de levering",
+            "description": "De agent controleert de bestelling en jullie leverbeleid en antwoordt meteen."
+          },
+          {
+            "title": "21:15 · Een verzoek om terugbetaling komt binnen",
+            "description": "De agent schrijft een antwoord en laat het voor je team staan, want terugbetalingen vragen om een mens."
+          },
+          {
+            "title": "21:30 · Er komt een klacht binnen",
+            "description": "Ze wordt als urgent gemarkeerd en naar de dienstdoende manager gestuurd."
+          },
+          {
+            "title": "De volgende ochtend · Je team begint met een voorsprong",
+            "description": "De routinevragen zijn afgehandeld; de concepten en de urgente zaak wachten."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI-automatisering",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Generatieve AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Hoe onze agents werken",
+          "href": "/ai-agents"
+        }
+      ],
+      "technical": [
+        "Antwoorden gebaseerd op je eigen documenten (retrieval, vaak RAG genoemd)",
+        "Koppelt aan je helpdesk, e-mail en bestelsysteem",
+        "Regels voor wat de agent zelf mag beantwoorden en wat altijd naar een mens gaat",
+        "Model naar keuze: Claude, OpenAI, Gemini of een open-weight-model dat je zelf host",
+        "Draait in je cloud, op je eigen machines of beheerd door ons",
+        "Een volledig logboek van elke actie van de agent, met kosten en timing",
+        "Wachtwoorden en sleutels staan in een aparte kluis (WSL Vault), nooit in de agent"
+      ],
+      "storySlug": "lexisnexis"
+    },
+    "custom-apps": {
+      "icon": "AppWindow",
+      "meta": {
+        "title": "Maatwerk-apps en koppelingen waarmee je systemen samenwerken | TenthMatrix",
+        "description": "Maatwerk web- en mobiele apps, koppelingen en AI-functies, gebouwd rond hoe je bedrijf werkt. De code is van jou."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Maatwerk-apps en software",
+        "title": "Laat je systemen met elkaar praten",
+        "subtitle": "We bouwen de apps en koppelingen die je bedrijf mist, met AI erin waar dat helpt. Aan het eind is de code van jou."
+      },
+      "pain": "Onze systemen praten niet met elkaar",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "Mensen kopiëren dezelfde data van het ene systeem naar het andere.",
+          "Een spreadsheet houdt het bedrijf bijeen, en maar één persoon begrijpt hem.",
+          "Standaardsoftware past bijna, maar net niet.",
+          "Klanten en medewerkers hebben een app of portaal nodig dat je niet hebt."
+        ]
+      },
+      "does": {
+        "title": "Wat we bouwen",
+        "items": [
+          {
+            "title": "Koppelingen tussen systemen",
+            "description": "Je CRM, boekhoudsysteem, webshop en e-mail delen automatisch data."
+          },
+          {
+            "title": "Maatwerk web- en mobiele apps",
+            "description": "Portalen, interne tools en klant-apps, gebouwd rond hoe jij werkt."
+          },
+          {
+            "title": "AI-functies in de app",
+            "description": "Zoeken, opstellen, samenvatten en documenten lezen waar het tijd bespaart."
+          },
+          {
+            "title": "Dashboards die je kunt vertrouwen",
+            "description": "Eén plek om de cijfers te zien, op basis van data die schoon wordt gehouden."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldbouw",
+        "intro": "Voorbeeldscenario. Doorlooptijden verschillen per opdracht.",
+        "steps": [
+          {
+            "title": "Discovery",
+            "description": "We brengen in kaart welke systemen welke data bevatten en wie ze gebruikt."
+          },
+          {
+            "title": "Een werkende eerste versie",
+            "description": "Je gebruikt hem op je eigen data voordat je kiest voor de volledige bouw."
+          },
+          {
+            "title": "Bouwen",
+            "description": "De complete app, getest, gedocumenteerd en in je eigen coderepository."
+          },
+          {
+            "title": "Beheren of overdragen",
+            "description": "We beheren hem, of dragen hem met training over aan je team."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Softwareontwikkeling",
+          "href": "/services/software-development"
+        },
+        {
+          "label": "OpsAPI",
+          "href": "/opsapi"
+        },
+        {
+          "label": "AI-native engineering",
+          "href": "/services/ai-native-digital-engineering"
+        },
+        {
+          "label": "Ontwikkeling van generatieve AI",
+          "href": "/generative-ai-development"
+        }
+      ],
+      "technical": [
+        "Web- (Next.js, React) en mobiele apps; API's en back-ends",
+        "OpsAPI voor inloggen, gebruikers en bedrijfsdata in één zelfgehoste API",
+        "Elke wijziging wordt in stappen getest voordat hij live gaat (Ring Promoter)",
+        "Draait in je cloud, op je eigen machines of beheerd door ons",
+        "Een volledig logboek van elke actie van de agent, met kosten en timing",
+        "Wachtwoorden en sleutels staan in een aparte kluis (WSL Vault), nooit in de agent"
+      ],
+      "storySlug": "imoderni"
+    },
+    "platforms-devops": {
+      "icon": "Server",
+      "meta": {
+        "title": "Platformen, DevOps en beveiliging: moderne systemen die blijven draaien | TenthMatrix",
+        "description": "Platformmodernisering, geautomatiseerde releases, beveiligingstests en 24/7-monitoring, zodat je systemen blijven draaien en wijzigingen veilig live gaan."
+      },
+      "header": {
+        "eyebrow": "Oplossingen · Platformen en DevOps",
+        "title": "Moderne, veilige systemen die blijven draaien",
+        "subtitle": "We moderniseren oude systemen zonder riskante big-bang-overstap, testen elke update voordat hij live gaat en houden je systemen dag en nacht in de gaten."
+      },
+      "pain": "Releases zijn riskant en storingen komen als een verrassing",
+      "problem": {
+        "title": "Komt het je bekend voor?",
+        "items": [
+          "Elke release is zenuwslopend, dus er zijn weinig releases.",
+          "Een oud systeem draait het bedrijf en niemand durft eraan te komen.",
+          "Klanten merken storingen eerder op dan jij.",
+          "Je weet niet goed hoe kwetsbaar je bent voor een aanval."
+        ]
+      },
+      "does": {
+        "title": "Wat we doen",
+        "items": [
+          {
+            "title": "Stap voor stap moderniseren",
+            "description": "Verhuis oude systemen stuk voor stuk naar moderne, zonder big-bang-overstap."
+          },
+          {
+            "title": "Veilig releasen",
+            "description": "Updates worden in stappen getest en gaan pas live als ze slagen. Bij een fout draait hij zelf terug."
+          },
+          {
+            "title": "Bescherm de voordeur",
+            "description": "Beveiligingstests, bescherming tegen aanvallen en overbelasting, en bewaking van dreigingen."
+          },
+          {
+            "title": "Houd het 24/7 in de gaten",
+            "description": "Controles op uptime, certificaten en DNS, met meldingen voordat klanten het merken."
+          }
+        ]
+      },
+      "example": {
+        "title": "Een voorbeeldrelease",
+        "intro": "Voorbeeldscenario. Stappen zijn ter illustratie.",
+        "steps": [
+          {
+            "title": "Een ontwikkelaar rondt een wijziging af",
+            "description": "Geautomatiseerde tests starten meteen."
+          },
+          {
+            "title": "Het wordt in stappen uitgeprobeerd",
+            "description": "Integratie-, test- en acceptatieomgevingen, elk met gezondheidscontroles."
+          },
+          {
+            "title": "Het gaat live",
+            "description": "Pas als elke controle slaagt. Als er iets misgaat, draait het zelf terug."
+          },
+          {
+            "title": "Het wordt bewaakt",
+            "description": "Monitoring bevestigt dat de wijziging gezond is en waarschuwt een mens als dat niet zo is."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Platformmodernisering",
+          "href": "/services/enterprise-platform-modernisation"
+        },
+        {
+          "label": "DevOps-automatisering",
+          "href": "/services/devops-automation"
+        },
+        {
+          "label": "Cybersecurity",
+          "href": "/services/cyber-security"
+        },
+        {
+          "label": "Autonome operations",
+          "href": "/services/autonomous-operations"
+        },
+        {
+          "label": "SysOps 24/7",
+          "href": "/sysops247"
+        }
+      ],
+      "technical": [
+        "CI/CD met int-, test-, acc- en prod-omgevingen (Ring Promoter)",
+        "API-gateway, webapplicatiefirewall (WAF), rate limits en CDN (Proxy10x)",
+        "Kubernetes, GitOps en infrastructuur als code",
+        "Penetratietests, SIEM en SOC-monitoring",
+        "Geheimen en sleutels in WSL Vault, met een auditlog"
+      ],
+      "storySlug": "hcl-technologies"
+    }
+  },
+  "cta": {
+    "title": "Noem de taak die je team vertraagt",
+    "description": "Een engineer antwoordt binnen één werkdag met wat we zouden bouwen en hoe we het zouden meten.",
+    "button": "Plan een gesprek",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Bekijk ons werk",
+      "link": "/our-work"
+    }
+  },
+  "slugs": [
+    "sales",
+    "marketing",
+    "back-office",
+    "customer-support",
+    "custom-apps",
+    "platforms-devops"
+  ]
+}

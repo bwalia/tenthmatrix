@@ -1,38 +1,16 @@
-import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import {
-  ArrowRight,
-  ArrowUpRight,
-  TrendingUp,
-  Megaphone,
-  Workflow,
-  Check,
-  GitBranch,
-  Shield,
-  KeyRound,
-  Briefcase,
-  Gauge,
-  Database,
-  UserCheck,
-  Server,
-  Lock,
-  LineChart,
-  Wrench,
-  ClipboardCheck,
-  Users,
-  Handshake,
-  ArrowLeftRight,
-} from 'lucide-react';
-import { getPostListPage } from '@/lib/cms';
-import { localizeBlogMetaList } from '@/utils/loadBlog';
-import { loadArticles } from '@/utils/articlesLocale';
-import { blogCard, articleCard } from '@/lib/contentView';
-import { Hero, Section, Card, ProductCard, ArticleCard, CTA, Button, Eyebrow, Reveal, RevealItem } from '@/app/components';
-import { NAV_GROUPS, HARDWARE_URL } from '@/app/components/layout/navConfig';
+import { Check, UserCheck, Lock, Server, Bot } from 'lucide-react';
+import { Hero, Section, CTA, Button, Reveal, RevealItem } from '@/app/components';
+import { loadPage } from '@/app/components/sections/meta';
+import LogoStrip from '@/app/components/work/LogoStrip';
+import ProofStats from '@/app/components/work/ProofStats';
+import CaseCard from '@/app/components/work/CaseCard';
+import SolutionCards, { solutionCardItems } from '@/app/components/solutions/SolutionCards';
+import Term from '@/app/components/glossary/Term';
+import { BOOK_CALL_HREF } from '@/app/components/layout/navConfig';
 import s from './home.module.scss';
 
-// ISR: latest writing refreshes hourly (and on /api/revalidate).
-export const revalidate = 3600;
+export const dynamic = 'force-static';
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -61,57 +39,45 @@ function StepGlyph({ step }) {
   );
 }
 
-const PILLARS = [
-  { key: 'sales', icon: TrendingUp, links: ['crm', 'aiAgents', 'aiAgentDev'] },
-  { key: 'marketing', icon: Megaphone, links: ['marketing', 'generativeAi', 'claudeAgents'] },
-  { key: 'backoffice', icon: Workflow, links: ['aiAutomation', 'jobshout', 'dataFoundations'] },
+// Logo strip under the hero (restructure plan): recognisable clients first.
+const LOGO_SLUGS = ['barclays', 'hcl-technologies', 'lexisnexis', 'elsevier', 'norfolk-county-council', 'sothebys-international-realty'];
+
+// What we build: a real screenshot first, then two "how it works" diagrams.
+const BUILD_MEDIA = [
+  { src: '/img/jobshout-seo-analyst-ai-agent.png', kind: 'screenshot', href: '/jobshout' },
+  { src: '/img/ai-automation/sales-followup-recovery.svg', kind: 'diagram', href: '/solutions/sales' },
+  { src: '/img/ai-automation/human-in-control.svg', kind: 'diagram', href: '/how-we-work#security' },
 ];
 
-// Benefits of TenthMatrix agents: each one links to the thing that proves it.
-const BENEFITS = [
-  { key: 'approval', icon: UserCheck, href: '/jobshout' },
-  { key: 'hosting', icon: Server, href: '/outsource-ai-development#engagement' },
-  { key: 'data', icon: Lock, href: '/outsource-ai-development#security-ip' },
-  { key: 'vault', icon: KeyRound, href: '/wsl-vault' },
-  { key: 'releases', icon: GitBranch, href: '/ring-promoter' },
-  { key: 'edge', icon: Shield, href: '/proxy10x' },
-  { key: 'observe', icon: LineChart, href: '/technical-notes/llm-bottlenecks-observability-otel-cost-control' },
-  { key: 'production', icon: Wrench, href: '/technical-notes' },
-];
+const TRUST_ICONS = [UserCheck, Lock, Server, Bot];
+// Glossary ids for the term each trust point explains (home.trust.points[i].term).
+const TRUST_TERMS = ['approval-gate', null, 'open-weight-model', null];
 
-const ENGAGEMENTS = [
-  { key: 'fixed', icon: ClipboardCheck },
-  { key: 'team', icon: Users },
-  { key: 'embedded', icon: Handshake },
-  { key: 'transfer', icon: ArrowLeftRight },
-];
-
-const PRODUCTS = [
-  { key: 'ringPromoter', name: 'Ring Promoter', href: '/ring-promoter', icon: GitBranch },
-  { key: 'proxy10x', name: 'Proxy10x', href: '/proxy10x', icon: Shield },
-  { key: 'wslVault', name: 'WSL Vault', href: '/wsl-vault', icon: KeyRound, status: 'openSource' },
-  { key: 'jobshout', name: 'Jobshout', href: '/jobshout', icon: Briefcase, status: 'openSource' },
-  { key: 'jev', name: 'Jev', href: '/insights/jev', icon: Gauge, status: 'research' },
-  { key: 'nebula', href: '/products', icon: Database },
-];
-
+/**
+ * Homepage, eight sections (restructure plan, 26 Nov 2026): hero → logos and
+ * headline numbers → problems we solve → featured case studies → what we
+ * build → how it works → why businesses trust us → book a call. Proof sits in
+ * the first screenful; technical depth is one click away.
+ */
 export default async function HomePage({ params }) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale });
   const href = (p) => `/${locale}${p}`;
-  const navHref = (key) => NAV_GROUPS.flatMap((g) => g.items).find((i) => i.key === key)?.href || '/';
 
-  const { blogs } = await getPostListPage({ page: 1 });
-  const articles = await loadArticles(locale);
-  const latest = [
-    ...localizeBlogMetaList(blogs, locale).filter((b) => !/^__/.test(b.slug)).slice(0, 4).map((b) => blogCard(b, locale, t)),
-    ...(articles?.data?.content || []).filter((a) => a?.code && !/^__/.test(a.code)).map((a) => articleCard(a, locale, t)),
-  ]
-    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
-    .slice(0, 3);
+  const [work, solutions, glossary] = await Promise.all([
+    loadPage('our-work.json', locale),
+    loadPage('solutions.json', locale),
+    loadPage('glossary.json', locale),
+  ]);
+  const everyone = [...(work.cases || []), ...(work.track || [])];
+  const logos = LOGO_SLUGS.map((slug) => everyone.find((c) => c.slug === slug)).filter(Boolean);
+  const featured = work.cases.filter((c) => c.featured).slice(0, 3);
+  const tip = (id) => glossary?.terms?.find((g) => g.id === id)?.plain;
 
   const steps = t.raw('home.steps.items');
+  const build = t.raw('home.build.items');
+  const trust = t.raw('home.trust.points');
 
   return (
     <div className="tm-home">
@@ -121,95 +87,90 @@ export default async function HomePage({ params }) {
         title={t('home.hero.title')}
         lede={t('home.hero.lede')}
         actions={[
-          { label: t('home.hero.primary'), href: href('/start-a-project'), arrow: true },
-          { label: t('home.hero.secondary'), href: '#why-10x' },
+          { label: t('home.hero.primary'), href: href(BOOK_CALL_HREF), arrow: true },
+          { label: t('home.hero.secondary'), href: href('/our-work') },
         ]}
-        meta={t.raw('home.hero.meta')}
+        meta={[t('home.hero.name')]}
         art
+        compact
       />
 
-      <section id="why-10x" className={s.name} aria-labelledby="why-10x-title">
-        <div className={s.nameInner}>
-          <p className={s.nameFigure} aria-hidden="true">
-            10<span>×</span>
+      <section id="proof" className={s.proof} aria-labelledby="proof-title">
+        <div className={s.proofInner}>
+          <p className={s.proofEyebrow} id="proof-title">
+            {t('home.proof.eyebrow')}
           </p>
-          <div className={s.nameCopy}>
-            <Eyebrow>{t('home.name.eyebrow')}</Eyebrow>
-            <h2 id="why-10x-title" className={s.nameTitle}>
-              {t('home.name.title')}
-            </h2>
-            <p className={s.nameBody}>{t('home.name.body')}</p>
-            <ul className={s.namePoints}>
-              {t.raw('home.name.points').map((point) => (
-                <li key={point}>
-                  <Check aria-hidden="true" size={18} strokeWidth={2} />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
+          <LogoStrip items={logos} label={t('home.proof.logos')} />
+          <div className={s.proofStats}>
+            <ProofStats items={work.stats} />
           </div>
         </div>
       </section>
 
-      <Section id="build" eyebrow={t('home.pillars.eyebrow')} title={t('home.pillars.title')} lede={t('home.pillars.lede')}>
-        <Reveal as="ul" stagger className={s.pillars}>
-          {PILLARS.map(({ key, icon: Icon, links }, i) => (
-            <RevealItem as="li" key={key}>
-              <Card as="article" className={s.pillar}>
-                <div className={s.pillarTop}>
-                  <span className={s.pillarIcon} aria-hidden="true">
-                    <Icon size={22} strokeWidth={1.75} />
-                  </span>
-                  <span className={s.pillarIndex}>0{i + 1}</span>
-                </div>
-                <h3 className={s.pillarTitle}>{t(`home.pillars.${key}.title`)}</h3>
-                <p className={s.pillarBody}>{t(`home.pillars.${key}.body`)}</p>
-                <ul className={s.pillarLinks}>
-                  {links.map((k) => (
-                    <li key={k}>
-                      <Link href={href(navHref(k))} prefetch={false}>
-                        <span>{t(`nav.items.${k}.label`)}</span>
-                        <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </Card>
-            </RevealItem>
-          ))}
-        </Reveal>
-      </Section>
-
       <Section
-        id="benefits"
-        tone="surface"
-        eyebrow={t('home.benefits.eyebrow')}
-        title={t('home.benefits.title')}
-        lede={t('home.benefits.lede')}
+        id="problems"
+        eyebrow={t('home.problems.eyebrow')}
+        title={t('home.problems.title')}
+        lede={t('home.problems.lede')}
         actions={
-          <Button href={href('/why-tenthmatrix-agents')} variant="tertiary" prefetch={false}>
-            {t('home.benefits.all')}
+          <Button href={href('/solutions')} variant="tertiary" prefetch={false}>
+            {t('home.problems.all')}
           </Button>
         }
       >
-        <Reveal as="ul" stagger className={s.benefits}>
-          {BENEFITS.map(({ key, icon: Icon, href: proof }) => (
-            <RevealItem as="li" key={key} className={s.benefit}>
-              <span className={s.benefitIcon} aria-hidden="true">
-                <Icon size={20} strokeWidth={1.75} />
-              </span>
-              <h3 className={s.benefitTitle}>{t(`home.benefits.${key}.title`)}</h3>
-              <p className={s.benefitBody}>{t(`home.benefits.${key}.body`)}</p>
-              <Link href={href(proof)} className={s.benefitProof} prefetch={false}>
-                <span>{t(`home.benefits.${key}.proof`)}</span>
-                <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
-              </Link>
+        <SolutionCards items={solutionCardItems(solutions)} locale={locale} linkLabel={t('home.problems.see')} />
+      </Section>
+
+      <Section
+        id="case-studies"
+        tone="sunken"
+        eyebrow={t('home.featured.eyebrow')}
+        title={t('home.featured.title')}
+        lede={t('home.featured.lede')}
+        actions={
+          <Button href={href('/our-work')} variant="tertiary" prefetch={false}>
+            {t('home.featured.all')}
+          </Button>
+        }
+      >
+        <Reveal as="ul" stagger className={s.cases}>
+          {featured.map((c) => (
+            <RevealItem as="li" key={c.slug}>
+              <CaseCard item={c} locale={locale} ui={work.ui} />
             </RevealItem>
           ))}
         </Reveal>
       </Section>
 
-      <Section id="process" eyebrow={t('home.steps.eyebrow')} title={t('home.steps.title')} lede={t('home.steps.lede')}>
+      <Section id="what-we-build" eyebrow={t('home.build.eyebrow')} title={t('home.build.title')} lede={t('home.build.lede')}>
+        <ul className={s.build}>
+          {BUILD_MEDIA.map((m, i) => (
+            <li key={m.src}>
+              <a href={href(m.href)} className={s.buildCard}>
+                <span className={`${s.buildMedia} ${m.kind === 'diagram' ? s.buildContain : ''}`}>
+                  <img src={m.src} alt="" loading="lazy" />
+                  <span className={s.buildKind}>{t(`home.build.${m.kind}`)}</span>
+                </span>
+                <span className={s.buildTitle}>{build[i]?.title}</span>
+                <span className={s.buildBody}>{build[i]?.body}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      <Section
+        id="process"
+        tone="sunken"
+        eyebrow={t('home.steps.eyebrow')}
+        title={t('home.steps.title')}
+        lede={t('home.steps.lede')}
+        actions={
+          <Button href={href('/how-we-work')} variant="tertiary" prefetch={false}>
+            {t('home.steps.more')}
+          </Button>
+        }
+      >
         <Reveal as="ol" stagger className={s.steps}>
           {steps.map((step, i) => (
             <RevealItem as="li" key={step.title} className={s.step}>
@@ -222,119 +183,54 @@ export default async function HomePage({ params }) {
             </RevealItem>
           ))}
         </Reveal>
+        <p className={s.reassure}>
+          <Check aria-hidden="true" size={20} strokeWidth={2} />
+          <span>{t('home.steps.reassure')}</span>
+        </p>
       </Section>
 
-      <Section
-        id="engagement"
-        tone="sunken"
-        eyebrow={t('home.engagement.eyebrow')}
-        title={t('home.engagement.title')}
-        lede={t('home.engagement.lede')}
-        actions={
-          <Button href={href('/outsource-ai-development#engagement')} variant="tertiary" prefetch={false}>
-            {t('home.engagement.more')}
-          </Button>
-        }
-      >
-        <Reveal as="ul" stagger className={s.engagements}>
-          {ENGAGEMENTS.map(({ key, icon: Icon }) => (
-            <RevealItem as="li" key={key}>
-              <Card as="article" className={s.engagement}>
-                <span className={s.pillarIcon} aria-hidden="true">
+      <Section id="trust" eyebrow={t('home.trust.eyebrow')} title={t('home.trust.title')}>
+        <ul className={s.trust}>
+          {trust.map((p, i) => {
+            const Icon = TRUST_ICONS[i] || Check;
+            const termId = TRUST_TERMS[i];
+            return (
+              <li key={p.title} className={s.trustItem}>
+                <span className={s.trustIcon} aria-hidden="true">
                   <Icon size={20} strokeWidth={1.75} />
                 </span>
-                <h3 className={s.engagementTitle}>{t(`home.engagement.${key}.title`)}</h3>
-                <p className={s.engagementBody}>{t(`home.engagement.${key}.body`)}</p>
-              </Card>
-            </RevealItem>
-          ))}
-        </Reveal>
-      </Section>
-
-      <Section
-        id="products"
-        eyebrow={t('home.products.eyebrow')}
-        title={t('home.products.title')}
-        lede={t('home.products.lede')}
-        actions={
-          <Button href={href('/products')} variant="tertiary" prefetch={false}>
-            {t('home.products.all')}
-          </Button>
-        }
-      >
-        <Reveal as="ul" stagger className={`tm-grid ${s.products}`}>
-          {PRODUCTS.map((p) => {
-            const name = p.name || t(`home.products.${p.key}.name`);
-            return (
-              <RevealItem as="li" key={p.key}>
-                <ProductCard
-                  name={name}
-                  tagline={t(`home.products.${p.key}.tagline`)}
-                  description={t(`home.products.${p.key}.description`)}
-                  href={href(p.href)}
-                  icon={p.icon}
-                  status={p.status ? t(`home.products.${p.status}`) : undefined}
-                  cta={t('home.products.see', { name })}
-                />
-              </RevealItem>
+                <h3 className={s.trustTitle}>{p.title}</h3>
+                <p className={s.trustBody}>
+                  {p.body}
+                  {termId && p.term && tip(termId) ? (
+                    <>
+                      {' '}
+                      (
+                      <Term id={termId} tip={tip(termId)} locale={locale}>
+                        {p.term}
+                      </Term>
+                      )
+                    </>
+                  ) : null}
+                </p>
+              </li>
             );
           })}
-        </Reveal>
+        </ul>
+        <p className={s.techLink}>
+          <Button href={href('/products')} variant="tertiary" arrow prefetch={false}>
+            {t('home.trust.tech')}
+          </Button>
+        </p>
       </Section>
-
-      <Section
-        id="writing"
-        tone="sunken"
-        eyebrow={t('home.latestSection.eyebrow')}
-        title={t('home.latestSection.title')}
-        lede={t('home.latestSection.lede')}
-        actions={
-          <div className={s.writingActions}>
-            <Button href={href('/technical-notes')} variant="secondary" size="sm">
-              {t('home.latestSection.articles')}
-            </Button>
-            <Button href={href('/docs/blogs')} variant="tertiary" size="sm">
-              {t('home.latestSection.blog')}
-            </Button>
-          </div>
-        }
-      >
-        {latest.length ? (
-          <ul className="tm-grid">
-            {latest.map((c) => (
-              <li key={c.href}>
-                <ArticleCard {...c} locale={locale} />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="tm-empty">{t('home.latestSection.empty')}</p>
-        )}
-      </Section>
-
-      <section className={s.hardware} aria-labelledby="hardware-title">
-        <div className={s.hardwareInner}>
-          <div className={s.hardwareCopy}>
-            <Eyebrow>{t('home.hardware.eyebrow')}</Eyebrow>
-            <h2 id="hardware-title" className={s.hardwareTitle}>
-              {t('home.hardware.title')}
-            </h2>
-            <p className={s.hardwareBody}>{t('home.hardware.body')}</p>
-          </div>
-          <a href={HARDWARE_URL} className={s.hardwareLink} target="_blank" rel="noopener noreferrer">
-            {t('home.hardware.link')}
-            <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.75} />
-          </a>
-        </div>
-      </section>
 
       <CTA
         id="cta"
         eyebrow={t('home.cta.eyebrow')}
         title={t('home.cta.title')}
         body={t('home.cta.body')}
-        primary={{ label: t('home.cta.primary'), href: href('/start-a-project') }}
-        secondary={{ label: t('home.cta.secondary'), href: href('/outsource-ai-development') }}
+        primary={{ label: t('home.cta.primary'), href: href(BOOK_CALL_HREF) }}
+        secondary={{ label: t('home.cta.secondary'), href: href('/ai-agent-journey') }}
       />
     </div>
   );

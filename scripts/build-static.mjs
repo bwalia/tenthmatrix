@@ -25,7 +25,7 @@ const ASIDE = ['src/app/api', 'src/proxy.js', 'src/app/robots.js'];
 const SITE_URL = (process.env.SITE_URL || 'https://www.tenthmatrix.com').replace(/\/$/, '');
 // Old path → new path (no locale). Each src/app/[locale]/<old>/page.js calls
 // permanentRedirect(); this map writes the equivalent static page for S3.
-const REDIRECTS = { '/wsl-proxy': '/proxy10x' };
+const REDIRECTS = { '/wsl-proxy': '/proxy10x', '/stories': '/our-work' };
 // Renamed sections: every page under the old prefix (index + one per item) gets a
 // stub pointing at the same path under the new prefix. Articles became Technical
 // Notes; /tech-notes is a short alias (k3s does the same with 308s in next.config.mjs).

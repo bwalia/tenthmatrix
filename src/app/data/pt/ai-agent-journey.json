@@ -6,7 +6,7 @@
   "header": {
     "eyebrow": "Jornada do agente de IA",
     "title": "Desenhe o seu agente de IA em nove perguntas",
-    "lede": "Começamos cada projeto no seu lugar, não numa apresentação de slides. Responda às perguntas que um forward deployed engineer faz na primeira reunião e veja o agente, o modelo e o alojamento que construiríamos para si.",
+    "lede": "Responda às nove perguntas que os nossos engenheiros fazem numa primeira reunião e veja o agente, o modelo de AI e o alojamento que construiríamos para si.",
     "start": "Iniciar a jornada",
     "how": "Como funcionam os agentes de IA",
     "meta": [
@@ -18,69 +18,27 @@
   "how": {
     "eyebrow": "Antes de começar",
     "title": "Como funciona realmente um agente de IA",
-    "lede": "Um chatbot responde a uma pergunta. Um agente conclui um trabalho. Lê os seus dados, decide o que fazer, usa as suas ferramentas para o fazer e verifica o resultado antes que alguém dependa dele. Cada volta desse ciclo fica registada.",
+    "lede": "Um chatbot responde a uma pergunta. Um agente conclui uma tarefa: lê os seus dados, decide o que fazer, usa as suas ferramentas e consulta uma pessoa antes de qualquer coisa importante.",
     "loop": [
       {
         "step": "01",
         "title": "Ler",
-        "description": "O agente recolhe o que precisa dos sistemas que autorizou: a caixa de entrada, a contabilidade, a fila de tickets, o repositório. Só vê o que as suas permissões lhe permitem."
+        "description": "Reúne o que precisa dos sistemas que autorizar, como a caixa de correio, a contabilidade ou a fila de pedidos, e nada mais."
       },
       {
         "step": "02",
         "title": "Raciocinar",
-        "description": "Um modelo de linguagem de grande dimensão determina o que o trabalho exige e planeia os passos. É o único ponto onde se usa inteligência, por isso é investida onde o discernimento conta."
+        "description": "Um modelo de AI (um modelo de linguagem de grande escala, do tipo que está por trás do ChatGPT e do Claude) decide o que a tarefa exige e planeia os passos."
       },
       {
         "step": "03",
         "title": "Agir",
-        "description": "O agente usa ferramentas reais através de conectores e servidores MCP: redige a resposta, submete o relatório, abre o pull request. Os passos baseados em regras continuam a ser código simples."
+        "description": "Usa as suas ferramentas através de conectores (muitas vezes chamados MCP) para redigir a resposta, arquivar o relatório ou atualizar o registo. Os passos simples, baseados em regras, continuam a ser código normal."
       },
       {
         "step": "04",
         "title": "Verificar",
-        "description": "Antes de enviar, gastar ou eliminar algo, o agente para num ponto de aprovação. Aprova, ou rejeita com um motivo com o qual ele aprende. Cada passo fica rastreado."
-      }
-    ],
-    "layersTitle": "Três camadas em cada agente que construímos",
-    "layers": [
-      {
-        "title": "O seu conhecimento",
-        "description": "As fontes de dados que ligamos durante a fase de descoberta, limitadas às mesmas permissões que a sua equipa já tem."
-      },
-      {
-        "title": "O modelo",
-        "description": "Claude, GPT, Gemini, Grok ou um modelo de pesos abertos, escolhido em função da tarefa, dos dados e de onde tem de ser executado."
-      },
-      {
-        "title": "Controle",
-        "description": "Pontos de aprovação, orçamentos, condições de paragem e um registo de auditoria, executados na framework de agentes Jobshout."
-      }
-    ]
-  },
-  "shoes": {
-    "eyebrow": "Descoberta",
-    "title": "Primeiro colocamo-nos no seu lugar",
-    "lede": "A maioria dos projetos de IA falha porque automatiza o passo errado. Os nossos forward deployed engineers sentam-se com as pessoas que fazem o trabalho antes de escrever uma linha de código.",
-    "steps": [
-      {
-        "phase": "Dia 1",
-        "title": "Acompanhar o trabalho",
-        "description": "Observamos um dia de trabalho real: a caixa de entrada, as aprovações, as folhas de cálculo que sustentam o negócio. Registamos cada passagem de testemunho e cada espera."
-      },
-      {
-        "phase": "Dia 2",
-        "title": "Mapear as fontes de dados",
-        "description": "Para cada passo registamos onde estão os dados, quem é o responsável, como se acede a eles (API, exportação, base de dados, email) e o seu grau de sensibilidade."
-      },
-      {
-        "phase": "Dia 3",
-        "title": "Identificar onde é preciso discernimento",
-        "description": "Dividimos cada processo em passos de regras, que continuam como automação comum, e passos de discernimento, onde um LLM justifica o seu custo. Os agentes só entram onde é necessária inteligência."
-      },
-      {
-        "phase": "Semanas 1–2",
-        "title": "Construir e operar ao seu lado",
-        "description": "O primeiro agente funciona com os seus dados reais e um ponto de aprovação em cada ação de risco. Afinamo-lo com as pessoas que o usam e só alargamos as suas permissões quando confiam nele."
+        "description": "Antes de enviar, gastar ou apagar seja o que for, para e espera pela aprovação de uma pessoa. Cada passo fica registado."
       }
     ]
   },
@@ -199,7 +157,7 @@
         "id": "sources",
         "type": "multi",
         "title": "Onde estão os dados?",
-        "help": "É a primeira coisa que um FDE mapeia numa reunião. Cada fonte torna-se um conector com as suas próprias permissões.",
+        "help": "Este é o primeiro ponto que o nosso engenheiro mapeia numa reunião. Cada fonte tem o seu próprio conector, com as suas próprias permissões.",
         "options": [
           {
             "value": "m365",
@@ -318,7 +276,7 @@
         "id": "openSource",
         "type": "single",
         "title": "Prefere modelos de código aberto?",
-        "help": "Modelos de pesos abertos como Llama, Qwen, Mistral, DeepSeek e gpt-oss podem correr no seu próprio hardware, sem fatura por token e sem que os dados saiam da sua rede.",
+        "help": "Os modelos de pesos abertos (modelos de AI que pode executar nas suas próprias máquinas), como Llama, Qwen, Mistral, DeepSeek e gpt-oss, não têm custo por utilização e mantêm os seus dados dentro do seu edifício.",
         "options": [
           {
             "value": "yes",
@@ -341,7 +299,7 @@
         "id": "hosting",
         "type": "single",
         "title": "Onde deve a IA ser executada?",
-        "help": "Isto decide que modelos são possíveis. Um sistema totalmente offline precisa de modelos de pesos abertos nas suas próprias estações de trabalho de IA.",
+        "help": "Isto determina que modelos são possíveis. Um sistema totalmente offline (air-gapped) precisa de modelos de pesos abertos nas suas próprias estações de trabalho de AI.",
         "options": [
           {
             "value": "cloud",
@@ -407,7 +365,7 @@
         "id": "speed",
         "type": "single",
         "title": "Quando quer o primeiro agente a funcionar?",
-        "help": "Um forward deployed engineer consegue normalmente ter um primeiro agente a funcionar com os seus dados reais em duas semanas.",
+        "help": "O nosso engenheiro consegue normalmente ter um primeiro agente a trabalhar com os seus dados reais em duas semanas.",
         "options": [
           {
             "value": "now",
@@ -447,7 +405,7 @@
     "fdeTitle": "O seu forward deployed engineer",
     "fdeBody": "Atribuímos um forward deployed engineer ao seu projeto desde o primeiro dia. Trabalha dentro da sua equipa, certificado em Claude Code, OpenAI, Google, Microsoft e Grok, para construir e implementar os seus agentes rapidamente.",
     "planTitle": "Plano de entrega",
-    "scenarioTitle": "Como é isto num dia real",
+    "scenarioTitle": "Cenário de exemplo: como pode ser um dia normal",
     "workstationTitle": "A funcionar offline nas suas próprias estações de trabalho de IA",
     "workstationBody": "Para um sistema sem ligação à internet, dimensionamos e fornecemos o hardware com a nossa empresa irmã Workstation: estações de trabalho e servidores GPU concebidos para modelos locais, entregues prontos a funcionar.",
     "workstationLink": "Estações de trabalho de IA em workstation.co.uk",
@@ -622,56 +580,52 @@
     }
   },
   "scenarios": {
-    "eyebrow": "Cenários reais",
+    "eyebrow": "Cenários de exemplo",
     "title": "O que ouvimos nas reuniões com clientes e o que construímos",
-    "lede": "Exemplos compostos a partir do tipo de primeiras reuniões que os nossos forward deployed engineers conduzem. Nomes e números são ilustrativos.",
+    "lede": "Exemplos compostos do que ouvimos nas primeiras reuniões. Não são resultados de clientes: nomes e números são ilustrativos.",
     "items": [
       {
-        "badge": "CEO · serviços profissionais",
+        "badge": "Cenário de exemplo · CEO · serviços profissionais",
         "title": "\"Passo as duas primeiras horas de cada dia no email.\"",
         "description": "O FDE mapeou o Outlook, o CRM e o portal do conselho e descobriu que a maioria das respostas seguia cinco padrões. Um agente assistente executivo redige agora respostas e resumos de reuniões durante a noite; o CEO aprova no telemóvel.",
         "list": [
           "Dados: Microsoft 365, HubSpot, portal do conselho",
-          "Modelo: Claude através do tenant Azure da empresa",
-          "Controlo: cada resposta aprovada antes de ser enviada"
+          "Modelo: Claude através do tenant Azure da empresa"
         ]
       },
       {
-        "badge": "CFO · indústria",
+        "badge": "Cenário de exemplo · CFO · indústria",
         "title": "\"O fecho do mês demora nove dias e quase tudo é copiar.\"",
         "description": "A descoberta mostrou que o discernimento só estava nos comentários de desvios; a reconciliação e os lançamentos eram regras. Automatizámos as regras em código e pusemos um agente nos comentários e nas verificações de políticas.",
         "list": [
           "Dados: Sage, extratos bancários, folhas de cálculo de ordens de compra",
-          "Modelo: uma combinação de um modelo local para extração e um modelo de fronteira para os comentários",
-          "Controlo: nenhum lançamento ou pagamento sem um aprovador designado"
+          "Modelo: uma combinação de um modelo local para extração e um modelo de fronteira para os comentários"
         ]
       },
       {
-        "badge": "CTO · empresa de software",
+        "badge": "Cenário de exemplo · CTO · empresa de software",
         "title": "\"Os meus engenheiros seniores passam a semana a rever o código dos outros.\"",
         "description": "Um agente de revisão de PR verifica cada pull request face aos padrões da equipa e um segundo agente escreve resumos de incidentes a partir do Sentry e dos logs. Os seniores revêem as notas do agente, não o diff completo.",
         "list": [
           "Dados: GitHub, Jira, Sentry, Slack",
-          "Modelo: Claude Code para a revisão, com um modelo de pesos abertos para a triagem de logs",
-          "Controlo: apenas comentários; o merge continua a ser humano"
+          "Modelo: Claude Code para a revisão, com um modelo de pesos abertos para a triagem de logs"
         ]
       },
       {
-        "badge": "Escritório de advogados · offline",
+        "badge": "Cenário de exemplo · Escritório de advogados · offline",
         "title": "\"Nada sob sigilo pode alguma vez sair do edifício.\"",
         "description": "Dimensionámos estações de trabalho de IA com a Workstation e corremos modelos de pesos abertos totalmente offline. Um agente de contratos compara documentos com o playbook do escritório e redige propostas de alterações; os sócios aprovam cada uma.",
         "list": [
           "Dados: sistema de gestão documental, banco de precedentes",
-          "Modelo: modelos de pesos abertos em estações de trabalho GPU locais",
-          "Controlo: isolado da rede, com registos de auditoria guardados no local"
+          "Modelo: modelos de pesos abertos em estações de trabalho GPU locais"
         ]
       }
     ]
   },
   "fde": {
     "eyebrow": "Forward deployed engineers",
-    "title": "Um especialista na sua equipa, não um ticket numa fila",
-    "lede": "Cada projeto tem um forward deployed engineer (FDE). Junta-se às suas reuniões, aprende como o seu negócio funciona realmente e constrói e implementa os agentes consigo, rapidamente.",
+    "title": "Um engenheiro na sua equipa, não um pedido numa fila",
+    "lede": "Cada projeto tem um forward deployed engineer (FDE): um engenheiro que trabalha lado a lado com a sua equipa, dentro dos seus sistemas, até funcionar.",
     "certsTitle": "Certificados nas plataformas que poderá escolher",
     "certs": [
       "Claude Code (Anthropic)",
@@ -683,22 +637,22 @@
     "points": [
       {
         "title": "Faz as perguntas certas",
-        "description": "Onde estão os dados, quem é o responsável, o que acontece quando estão errados e que passo precisa realmente de discernimento."
+        "description": "Onde estão os dados, a quem pertencem, o que acontece quando estão errados e que passo exige mesmo discernimento."
       },
       {
         "title": "Constrói nos seus sistemas",
-        "description": "Os agentes vivem no seu repositório e na sua cloud ou no seu hardware, ligados às ferramentas que a sua equipa já usa."
+        "description": "Os agentes ficam no seu repositório de código e na sua cloud ou nas suas próprias máquinas, ligados às ferramentas que a sua equipa já usa."
       },
       {
         "title": "Fica até funcionar",
-        "description": "Afina o agente com as pessoas que o usam e entrega os runbooks, para que a sua equipa o possa operar sem nós."
+        "description": "Afinam o agente com as pessoas que o utilizam e depois entregam a documentação, para que a sua equipa o possa gerir sem nós."
       }
     ]
   },
   "framework": {
     "eyebrow": "Framework",
     "title": "Construído sobre o Jobshout, a nossa framework de agentes e gestor de tarefas",
-    "lede": "O Jobshout é a framework de código aberto em que corre cada agente TenthMatrix. Cada agente tem a sua própria faixa, usa as suas próprias ferramentas e para no mesmo ponto de aprovação. Cada execução aparece num quadro de tarefas com o seu custo e rastreio.",
+    "lede": "Cada agente da TenthMatrix funciona com o Jobshout, a nossa estrutura de agentes de código aberto. Cada execução aparece num quadro de tarefas, com o custo e um registo completo do que fez.",
     "list": [
       "Quadro de tarefas com projetos e sprints",
       "Fluxos multiagente como grafo de dependências",
@@ -713,16 +667,12 @@
   "offline": {
     "eyebrow": "IA auto-alojada",
     "title": "Quer a sua IA sem qualquer ligação à internet?",
-    "body": "Alguns dados nunca podem sair do edifício. Corremos modelos de pesos abertos em estações de trabalho de IA dentro da sua rede, totalmente offline, e construímos os mesmos agentes por cima. O hardware vem da nossa empresa irmã Workstation.",
+    "body": "Alguns dados nunca podem sair do edifício. Executamos modelos de pesos abertos em estações de trabalho de AI dentro da sua rede, totalmente offline (air-gapped), e construímos os mesmos agentes por cima. O hardware vem da nossa empresa irmã, a Workstation.",
     "link": "Explore AI workstations at workstation.co.uk"
   },
   "faq": {
     "title": "Perguntas frequentes",
     "items": [
-      {
-        "question": "Qual é a diferença entre um chatbot e um agente de IA?",
-        "answer": "Um chatbot responde. Um agente conclui uma tarefa: lê os seus sistemas, planeia, usa ferramentas para fazer o trabalho e para para aprovação antes de qualquer ação de risco. Recebe um rascunho, relatório ou atualização concluídos, não um parágrafo de conselhos."
-      },
       {
         "question": "Temos de escolher uma única empresa de IA?",
         "answer": "Não. Muitos dos nossos clientes usam um modelo de fronteira para os passos mais difíceis e um modelo pequeno de pesos abertos para os rotineiros. O Jobshout permite que cada agente use um modelo diferente, e pode mudar mais tarde sem reconstruir."
@@ -730,10 +680,6 @@
       {
         "question": "Os agentes podem funcionar sem qualquer ligação à internet?",
         "answer": "Sim. Com modelos de pesos abertos em estações de trabalho de IA da Workstation, todo o sistema, incluindo os modelos, a framework e os registos, funciona offline dentro do seu edifício."
-      },
-      {
-        "question": "O que faz realmente um forward deployed engineer?",
-        "answer": "Senta-se com a sua equipa, mapeia os seus processos e fontes de dados, decide onde vale a pena usar um LLM e constrói e implementa os agentes no seu ambiente. Fica até as pessoas que usam o agente confiarem nele."
       },
       {
         "question": "O que acontece às respostas que dou nesta jornada?",

@@ -50,6 +50,21 @@
   max-width: 14ch;
 }
 
+.home.compact .inner {
+  padding-block: clamp(2.5rem, 1.5rem + 3vw, 4.5rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
+}
+
+.home.compact .title {
+  font-size: var(--tm-text-4xl);
+  max-width: 22ch;
+}
+
+.home.compact.withArt .inner {
+  @include up($bp-lg) {
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  }
+}
+
 .lede {
   max-width: 58ch;
   font-size: var(--tm-text-md);

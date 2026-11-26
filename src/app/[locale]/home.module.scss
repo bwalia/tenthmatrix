@@ -1,14 +1,38 @@
 @use '../styles/mixins' as *;
 
-// ------------------------------------------------------------ pillars
-.pillars {
+// ------------------------------------------------------------ hero
+
+// ------------------------------------------------------------ proof band
+// Directly under the hero: client logos, then the three headline numbers.
+.proof {
+  background: var(--tm-sunken);
+  border-block: 1px solid var(--tm-line);
+}
+
+.proofInner {
+  @include container(var(--tm-container-wide));
+  padding-block: var(--tm-space-10);
+}
+
+.proofEyebrow {
+  @include eyebrow;
+  margin-bottom: var(--tm-space-5);
+  text-align: center;
+}
+
+.proofStats {
+  margin-top: var(--tm-space-8);
+}
+
+// ------------------------------------------------------------ case studies
+.cases {
   display: grid;
   gap: var(--tm-grid-gap);
   margin: 0;
   padding: 0;
   list-style: none;
 
-  @include up($bp-md) {
+  @include up($bp-lg) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -17,83 +41,89 @@
   }
 }
 
-.pillar {
-  height: 100%;
-  gap: var(--tm-space-4);
-}
-
-.pillarTop {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.pillarIcon {
-  display: inline-grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--tm-radius-sm);
-  background: var(--tm-accent-soft);
-  color: var(--tm-accent);
-}
-
-.pillarIndex {
-  font-family: var(--tm-font-mono);
-  font-size: var(--tm-text-xs);
-  color: var(--tm-text-subtle);
-}
-
-.pillarTitle {
-  font-size: var(--tm-text-2xl);
-}
-
-.pillarBody {
-  color: var(--tm-text-muted);
-  flex: 1;
-}
-
-.pillarLinks {
-  margin: var(--tm-space-2) 0 0;
+// ------------------------------------------------------------ what we build
+.build {
+  display: grid;
+  gap: var(--tm-grid-gap);
+  margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--tm-line);
 
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--tm-space-3);
-    min-height: 48px;
-    border-bottom: 1px solid var(--tm-line);
-    color: var(--tm-text);
-    font-weight: var(--tm-weight-medium);
-    font-size: var(--tm-text-sm);
-    text-decoration: none;
-
-    svg {
-      color: var(--tm-text-subtle);
-      transition:
-        transform var(--tm-duration-fast) var(--tm-ease-out),
-        color var(--tm-duration-fast) var(--tm-ease-standard);
-    }
-
-    &:hover {
-      color: var(--tm-accent);
-
-      svg {
-        color: var(--tm-accent);
-        transform: translateX(3px);
-      }
-    }
+  @include up($bp-lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  li:last-child a {
-    border-bottom: 0;
+  > li {
+    min-width: 0;
   }
 }
 
-// -------------------------------------------------------------- steps
+.buildCard {
+  display: grid;
+  gap: var(--tm-space-2);
+  color: var(--tm-text);
+  text-decoration: none;
+
+  &:hover .buildTitle {
+    color: var(--tm-accent);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.buildMedia {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  margin-bottom: var(--tm-space-2);
+  overflow: hidden;
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+  }
+}
+
+.buildContain img {
+  object-fit: contain;
+  object-position: center;
+  background: #12112a;
+}
+
+.buildKind {
+  position: absolute;
+  inset-block-end: var(--tm-space-3);
+  inset-inline-start: var(--tm-space-3);
+  padding: 2px var(--tm-space-2);
+  border-radius: var(--tm-radius-xs);
+  background: var(--tm-inverse);
+  color: var(--tm-text-inverse);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tm-tracking-eyebrow);
+}
+
+.buildTitle {
+  font-family: var(--tm-font-display);
+  font-size: var(--tm-text-lg);
+  font-weight: var(--tm-weight-semibold);
+  transition: color var(--tm-duration-fast) var(--tm-ease-standard);
+}
+
+.buildBody {
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+}
+
+// ------------------------------------------------------------ steps
 .steps {
   display: grid;
   gap: var(--tm-space-8) var(--tm-grid-gap);
@@ -154,248 +184,67 @@
   line-height: 1.65;
 }
 
-// ----------------------------------------------------------- products
-.products > li {
-  min-width: 0;
-}
 
-.writingActions {
+.reassure {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: var(--tm-space-4);
+  gap: var(--tm-space-3);
+  margin-top: var(--tm-space-8);
+  padding: var(--tm-space-4) var(--tm-space-5);
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-success-soft);
+  color: var(--tm-text);
+  font-weight: var(--tm-weight-semibold);
+
+  svg {
+    flex: none;
+    color: var(--tm-success);
+  }
 }
 
-// ----------------------------------------------------------- benefits
-// A ruled grid: hairlines between cells, like the lattice, not floating cards.
-.benefits {
+// ------------------------------------------------------------ trust
+.trust {
   display: grid;
+  gap: var(--tm-space-8) var(--tm-grid-gap);
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid var(--tm-line);
-  border-inline-start: 1px solid var(--tm-line);
 
-  @include up($bp-sm) {
+  @include up($bp-md) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @include up($bp-lg) {
+  @include up($bp-xl) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.benefit {
-  display: flex;
-  flex-direction: column;
-  gap: var(--tm-space-3);
+.trustItem {
+  display: grid;
+  gap: var(--tm-space-2);
+  align-content: start;
   min-width: 0;
-  padding: var(--tm-space-6);
-  border-bottom: 1px solid var(--tm-line);
-  border-inline-end: 1px solid var(--tm-line);
 }
 
-.benefitIcon {
+.trustIcon {
   display: inline-grid;
   place-items: center;
   width: 40px;
   height: 40px;
-  margin-bottom: var(--tm-space-1);
+  margin-bottom: var(--tm-space-2);
   border-radius: var(--tm-radius-sm);
   background: var(--tm-accent-soft);
   color: var(--tm-accent);
 }
 
-.benefitTitle {
+.trustTitle {
   font-size: var(--tm-text-lg);
 }
 
-.benefitBody {
-  flex: 1;
+.trustBody {
   color: var(--tm-text-muted);
-  font-size: var(--tm-text-sm);
-  line-height: 1.65;
 }
 
-.benefitProof {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--tm-space-2);
-  align-self: flex-start;
-  min-height: var(--tm-tap-target);
-  font-size: var(--tm-text-sm);
-  font-weight: var(--tm-weight-medium);
-  text-decoration: none;
-
-  svg {
-    flex: none;
-    transition: transform var(--tm-duration-fast) var(--tm-ease-out);
-  }
-
-  &:hover svg {
-    transform: translateX(3px);
-  }
-}
-
-// --------------------------------------------------------- engagement
-.engagements {
-  display: grid;
-  gap: var(--tm-grid-gap);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-
-  @include up($bp-sm) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  @include up($bp-lg) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  > li {
-    min-width: 0;
-  }
-}
-
-.engagement {
-  height: 100%;
-  gap: var(--tm-space-3);
-}
-
-.engagementTitle {
-  font-size: var(--tm-text-lg);
-}
-
-.engagementBody {
-  color: var(--tm-text-muted);
-  font-size: var(--tm-text-sm);
-  line-height: 1.65;
-}
-
-// ----------------------------------------------------------- hardware
-.hardware {
-  border-block: 1px solid var(--tm-line);
-  background: var(--tm-surface);
-}
-
-.hardwareInner {
-  @include container;
-  display: grid;
-  gap: var(--tm-space-6);
-  padding-block: var(--tm-space-10);
-
-  @include up($bp-md) {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--tm-space-12);
-  }
-}
-
-.hardwareCopy {
-  display: grid;
-  gap: var(--tm-space-3);
-}
-
-.hardwareTitle {
-  font-size: var(--tm-text-xl);
-}
-
-.hardwareBody {
-  color: var(--tm-text-muted);
-  max-width: 62ch;
-}
-
-.hardwareLink {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--tm-space-2);
-  justify-self: start;
-  min-height: var(--tm-tap-target);
-  padding: 0 var(--tm-space-5);
-  border: 1px solid var(--tm-line-strong);
-  border-radius: var(--tm-radius-sm);
-  color: var(--tm-text);
-  font-weight: var(--tm-weight-semibold);
-  font-size: var(--tm-text-sm);
-  text-decoration: none;
-  white-space: nowrap;
-
-  svg {
-    color: var(--tm-accent);
-  }
-
-  &:hover {
-    border-color: var(--tm-text);
-    color: var(--tm-text);
-  }
-}
-
-// --------------------------------------------------- name (why 10x)
-.name {
-  border-bottom: 1px solid var(--tm-line);
-  background: var(--tm-surface);
-}
-
-.nameInner {
-  @include container;
-  display: grid;
-  gap: var(--tm-space-6);
-  padding-block: var(--tm-space-12);
-
-  @include up($bp-md) {
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: center;
-    gap: var(--tm-space-12);
-  }
-}
-
-.nameFigure {
-  margin: 0;
-  font-family: var(--tm-font-display);
-  font-weight: var(--tm-weight-display);
-  font-size: clamp(4.5rem, 14vw, 9rem);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-  color: var(--tm-text);
-
-  span {
-    color: var(--tm-accent);
-  }
-}
-
-.nameCopy {
-  display: grid;
-  gap: var(--tm-space-3);
-}
-
-.nameTitle {
-  font-size: var(--tm-text-3xl);
-}
-
-.nameBody {
-  color: var(--tm-text-muted);
-  max-width: 62ch;
-}
-
-.namePoints {
-  display: grid;
-  gap: var(--tm-space-2);
-  margin: var(--tm-space-2) 0 0;
-  padding: 0;
-  list-style: none;
-  font-size: var(--tm-text-sm);
-  font-weight: var(--tm-weight-medium);
-
-  li {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--tm-space-2);
-  }
-
-  svg {
-    flex: none;
-    margin-top: 2px;
-    color: var(--tm-accent);
-  }
+.techLink {
+  margin-top: var(--tm-space-8);
 }

@@ -16,7 +16,7 @@ import s from './ContactForm.module.scss';
    environment and Next inlines NEXT_PUBLIC_* at build time. See
    src/utils/opsapiEnv.mjs and `npm run verify:opsapi`. */
 
-const EMPTY = { name: '', email: '', phone: '', projectType: '', comments: '', website: '' };
+const EMPTY = { name: '', email: '', phone: '', company: '', bestTime: '', projectType: '', comments: '', website: '' };
 const PHONE_ALLOWED = /^[0-9+()\-.\s]*$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -33,6 +33,9 @@ const splitName = (fullName) => {
  * `projectTypeLabel` / `messageLabel` / `messageHint` override the default copy.
  * `initialMessage` pre-fills the message (e.g. the AI agent journey's blueprint)
  * and follows it while the visitor hasn't typed in the field.
+ * `variant="call"` is the short Book a call form: name, company, email, the job
+ * that slows you down and the best time to talk (no phone or project type).
+ * Company and time are folded into `comments`, so the lead schema is unchanged.
  */
 export default function ContactForm({
   apiUrl,
@@ -42,7 +45,9 @@ export default function ContactForm({
   messageLabel,
   messageHint,
   initialMessage,
+  variant = 'default',
 }) {
+  const isCall = variant === 'call';
   const t = useTranslations('form');
   const [form, setForm] = useState(EMPTY);
   const [errors, setErrors] = useState({});
@@ -67,6 +72,19 @@ export default function ContactForm({
   }, [initialMessage]);
 
   const set = (name) => (e) => setForm((f) => ({ ...f, [name]: e.target.value }));
+
+  const composeComments = () => {
+    const body = form.comments.trim();
+    if (isCall) {
+      const head = [
+        '[Book a call]',
+        form.company.trim() && `Company: ${form.company.trim()}`,
+        form.bestTime.trim() && `Best time to talk: ${form.bestTime.trim()}`,
+      ].filter(Boolean);
+      return `${head.join('\n')}\n\n${body}`;
+    }
+    return form.projectType ? `[${form.projectType}]\n${body}` : body;
+  };
 
   const validate = () => {
     const e = {};
@@ -96,7 +114,7 @@ export default function ContactForm({
           ...splitName(form.name),
           email: form.email.trim(),
           phone: form.phone.trim() || undefined,
-          comments: form.projectType ? `[${form.projectType}]\n${form.comments.trim()}` : form.comments.trim(),
+          comments: composeComments(),
           source,
           channel: 'web',
           landing_page_url: window.location.href,
@@ -164,9 +182,10 @@ export default function ContactForm({
   return (
     <form className={`tm-form tm-contact-form ${s.form}`} onSubmit={submit} noValidate>
       {field('name', t('name'), { autoComplete: 'name' })}
-      {field('email', t('email'), { type: 'email', autoComplete: 'email' })}
-      {field('phone', t('phone'), { type: 'tel', autoComplete: 'tel', optional: true, wide: true })}
-      {projectTypes?.length ? (
+      {isCall ? field('company', t('company'), { autoComplete: 'organization', optional: true }) : null}
+      {field('email', t('email'), { type: 'email', autoComplete: 'email', wide: isCall })}
+      {isCall ? null : field('phone', t('phone'), { type: 'tel', autoComplete: 'tel', optional: true, wide: true })}
+      {!isCall && projectTypes?.length ? (
         <div className={`${s.field} ${s.wide}`}>
           <label className="tm-label" htmlFor="tm-projectType">
             {projectTypeLabel || t('projectType')}
@@ -183,6 +202,7 @@ export default function ContactForm({
         </div>
       ) : null}
       {field('comments', messageLabel || t('message'), { multiline: true, wide: true, hint: messageHint || t('messageHint') })}
+      {isCall ? field('bestTime', t('bestTime'), { optional: true, wide: true, hint: t('bestTimeHint') }) : null}
       <div className="tm-visually-hidden" aria-hidden="true">
         <label htmlFor="tm-website">Website</label>
         <input id="tm-website" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={set('website')} />
@@ -190,8 +210,9 @@ export default function ContactForm({
       <div className={s.foot}>
         <button type="submit" className={s.submit} disabled={status === 'sending'}>
           <Send aria-hidden="true" size={18} strokeWidth={1.75} />
-          {status === 'sending' ? t('sending') : t('submit')}
+          {status === 'sending' ? t('sending') : isCall ? t('submitCall') : t('submit')}
         </button>
+        {isCall ? <p className={s.reply}>{t('replyTime')}</p> : null}
         <p className={s.privacy}>{t('privacy')}</p>
       </div>
       <div role="status" aria-live="polite" className={s.statusWrap}>

@@ -44,6 +44,8 @@ export const SELF_CANONICAL = new Set([
   '/generative-ai-development',
   '/why-tenthmatrix-agents',
   '/start-a-project',
+  // site restructure (26 Nov 2026): new or rewritten for business readers
+  '/our-work',
   '/brand',
   '/search',
   '/contact-us',
@@ -70,7 +72,7 @@ export const SELF_CANONICAL = new Set([
  * TenthMatrix path). The new path keeps the Workstation canonical until it is
  * rewritten enough to join SELF_CANONICAL; the old path only redirects.
  */
-export const RENAMED_ROUTES = { '/wsl-proxy': '/proxy10x' };
+export const RENAMED_ROUTES = { '/wsl-proxy': '/proxy10x', '/stories': '/our-work' };
 
 /** Blog / article / insight paths (no locale) rewritten enough to be ours. */
 export const SELF_CANONICAL_CONTENT = new Set([]);

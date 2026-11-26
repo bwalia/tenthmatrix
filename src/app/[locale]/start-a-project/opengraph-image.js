@@ -11,4 +11,4 @@ export function generateStaticParams() {
 }
 export const alt = 'TenthMatrix';
 
-export default ogImage('start-a-project.json', 'TenthMatrix · Work with us');
+export default ogImage('start-a-project.json', 'TenthMatrix · Book a call');

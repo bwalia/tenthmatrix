@@ -9,6 +9,15 @@
     "subtitle": "Steal the server. Not the secrets.",
     "description": "Open-source, self-hosted secrets management built on AES-256-GCM envelope encryption and a per-tenant key hierarchy — so a stolen disk, database dump, or compromised host still leaves attackers with ciphertext they cannot open."
   },
+  "plain": {
+    "line": "WSL Vault keeps passwords and keys locked away, gives each agent only what it needs for a short time, and records every use.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Businesses using AI agents that need access to real systems",
+      "Teams that must show who accessed what, and when",
+      "IT and security teams replacing passwords kept in files and spreadsheets"
+    ]
+  },
   "intro": {
     "title": "What is WSLVault?",
     "body": "WSLVault is a Vault-compatible secrets platform for operators who want encrypted-at-rest multi-tenancy without plaintext on disk. Drive it from the steel/brass web console, CLI, Go/Python/Rust/TypeScript SDKs, or MCP — with Helm/GitOps deploy on Kubernetes.",

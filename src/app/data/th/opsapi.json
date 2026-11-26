@@ -9,6 +9,15 @@
     "subtitle": "One self-hosted API for sign-in, workspaces and business modules.",
     "description": "OpsAPI signs your users in once for every app, keeps each customer's data in its own workspace, and switches on the business modules a product needs, from CRM to UK tax filing. It is licensed software that runs on your own infrastructure."
   },
+  "plain": {
+    "line": "OpsAPI คือระบบเดียวสำหรับการเข้าสู่ระบบ ผู้ใช้ และข้อมูลธุรกิจ เช่น รายชื่อติดต่อ ใบแจ้งหนี้ และเนื้อหาเว็บไซต์ ที่แอปและเว็บไซต์ทั้งหมดของคุณใช้ร่วมกันได้",
+    "whoTitle": "Who this is for",
+    "who": [
+      "ธุรกิจที่ดูแลหลายแอปหรือหลายเว็บไซต์ซึ่งต้องใช้ผู้ใช้และข้อมูลชุดเดียวกัน",
+      "ทีมที่อยากเป็นเจ้าของแพลตฟอร์มแทนการเช่าเครื่องมือมากมาย",
+      "นักพัฒนาที่ต้องการระบบเข้าสู่ระบบและฟีเจอร์ธุรกิจโดยไม่ต้องสร้างเองตั้งแต่ศูนย์"
+    ]
+  },
   "intro": {
     "title": "Stop building a backend per product",
     "body": "Most teams that run several products end up with several backends, each with its own login, user table, roles and admin screens. OpsAPI replaces them with one. Sign-in, two-factor codes, Google, Apple and SAML single sign-on, workspaces, roles and API keys are always on. On top sit 20 business modules: CRM, invoicing, accounting, UK tax filing, kanban, chat, e-commerce, CMS, forms, hiring and more. One setting, PROJECT_CODE, chooses which modules a deployment loads; the rest have no routes and no tables. OpsAPI is built and run by Workstation, the company behind TenthMatrix, and it is the API this website's blog and contact form use.",

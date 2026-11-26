@@ -9,6 +9,15 @@
     "subtitle": "Passerelle API, CDN et WAF d'entreprise — Présentation du produit",
     "description": "TenthMatrix Proxy10x (Proxy10x) est le plan de contrôle complet de TenthMatrix pour la passerelle API et la périphérie CDN. Il se place devant vos origines et décide à chaque requête de ce qui se passe — routage, sécurité, cache et observation — à partir de configurations JSON et MCP dynamiques, sans recharger nginx à chaque modification de règle."
   },
+  "plain": {
+    "line": "Proxy10x est une porte d'entrée sécurisée pour vos sites web et vos systèmes : elle bloque les attaques et les surcharges avant qu'elles ne vous atteignent, et sert les pages rapidement.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Les entreprises qui doivent protéger leur site web et leurs systèmes contre les attaques",
+      "Les équipes qui gèrent plusieurs sites et veulent un seul endroit pour les piloter",
+      "Les équipes informatiques qui veulent une passerelle qu'elles peuvent héberger elles-mêmes"
+    ]
+  },
   "intro": {
     "title": "Qu'est-ce que TenthMatrix Proxy10x ?",
     "body": "Proxy10x est une passerelle API dynamique et un reverse proxy sur OpenResty. Les opérateurs gèrent hôtes virtuels, règles de routage, politiques WAF, cache, répartition du trafic et POP en périphérie depuis une interface d'administration, une API REST, des outils MCP ou proxy10x-cli. Les règles courantes s'appliquent sur le chemin critique ; nginx ne se recharge que lorsque les blocs listen ou SSL au niveau serveur changent.",

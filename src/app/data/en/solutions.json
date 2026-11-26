@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "title": "Solutions: AI and software for the problems slowing your team down | TenthMatrix",
+    "description": "Sales, marketing, back office, customer support, custom apps and platforms. Start from the problem; see what we build, an example and a client with the same problem."
+  },
+  "header": {
+    "eyebrow": "Solutions",
+    "title": "Start from the problem, not the technology",
+    "subtitle": "Pick what slows your team down. Each solution shows what we build, an example of it working and a client who had the same problem."
+  },
+  "ui": {
+    "see": "See the solution",
+    "problem": "The problem",
+    "story": "A client with the same problem",
+    "storyTrack": "From our track record",
+    "deliverTitle": "How we deliver it",
+    "deliverBody": "We start with one job. You see it working on your own data in a pilot before you commit to the full build, and you own the code and the data either way.",
+    "deliverLink": "How we work",
+    "related": "Related pages",
+    "technical": "Technical details for your IT team",
+    "glossary": "New to a term? See the plain-English glossary.",
+    "other": "Other solutions"
+  },
+  "journey": {
+    "title": "Not sure where to start?",
+    "body": "Answer nine short questions and see the agent we would build for you. It takes about 3 minutes and there is no sign-up.",
+    "button": "Design your agent in 3 minutes",
+    "link": "/ai-agent-journey"
+  },
+  "pages": {
+    "sales": {
+      "icon": "TrendingUp",
+      "meta": {
+        "title": "AI sales agents: follow up every lead before it goes cold | TenthMatrix",
+        "description": "AI sales agents that reply to enquiries in minutes, qualify buyers, research accounts and keep your CRM up to date. A person approves every email."
+      },
+      "header": {
+        "eyebrow": "Solutions · Sales",
+        "title": "Follow up every lead before it goes cold",
+        "subtitle": "An AI sales agent replies to enquiries in minutes, finds out what the buyer needs and keeps your CRM up to date. Your team spends its time with people who are ready to buy."
+      },
+      "pain": "Leads go cold before anyone follows up",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "Enquiries wait hours or days for a reply, and buyers go elsewhere.",
+          "Salespeople spend their mornings updating the CRM instead of selling.",
+          "Nobody has time to look into a company before the call.",
+          "Follow-ups slip whenever the team is busy."
+        ]
+      },
+      "does": {
+        "title": "What the agent does",
+        "items": [
+          {
+            "title": "Replies within minutes",
+            "description": "Answers every new enquiry, day or night, and asks the questions a good salesperson would ask."
+          },
+          {
+            "title": "Finds the serious buyers",
+            "description": "Checks budget, timing and need against your rules, and passes the good leads to a person."
+          },
+          {
+            "title": "Prepares your team",
+            "description": "Looks up the company before the call and writes a short brief."
+          },
+          {
+            "title": "Drafts the follow-up",
+            "description": "Writes the follow-up email and the CRM update. Your salesperson checks it and presses send."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example morning",
+        "intro": "Example scenario. Times and steps are illustrative.",
+        "steps": [
+          {
+            "title": "9:12 · A buyer fills in your website form",
+            "description": "The agent replies within minutes, asks about budget and timing, and offers a call slot."
+          },
+          {
+            "title": "9:30 · The lead is qualified",
+            "description": "The agent scores the lead against your rules and writes a two-line summary in the CRM."
+          },
+          {
+            "title": "10:00 · Your salesperson gets a brief",
+            "description": "Who the buyer is, what they asked and what they need, ready before the call."
+          },
+          {
+            "title": "After the call · Follow-up drafted",
+            "description": "The agent drafts the email and the CRM note. A person approves it before it is sent."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI CRM",
+          "href": "/crm"
+        },
+        {
+          "label": "How our agents work",
+          "href": "/ai-agents"
+        },
+        {
+          "label": "AI agent development",
+          "href": "/ai-agent-development"
+        }
+      ],
+      "technical": [
+        "Connects to your CRM, email and calendar (through connectors, often called MCP)",
+        "Model of your choice: Claude, OpenAI, Gemini or an open-weight model you host yourself",
+        "Runs in your cloud, on your own machines, or managed by us",
+        "A full record of every action the agent takes, with cost and timing",
+        "Passwords and keys kept in a separate secrets store (WSL Vault), never in the agent"
+      ],
+      "storySlug": "workstation"
+    },
+    "marketing": {
+      "icon": "Megaphone",
+      "meta": {
+        "title": "AI marketing agents: get content out without the bottleneck | TenthMatrix",
+        "description": "Marketing agents that draft posts, emails and campaigns in your brand voice, publish after approval and report on what worked."
+      },
+      "header": {
+        "eyebrow": "Solutions · Marketing",
+        "title": "Get content out without the bottleneck",
+        "subtitle": "A marketing agent drafts your posts, emails and campaigns in your brand voice, and reports on what worked. A person signs off before anything goes live."
+      },
+      "pain": "Content takes forever to get out",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "A blog post takes weeks to get from idea to published.",
+          "The website, social media and email all need feeding, every week.",
+          "Pulling together a campaign report takes a whole day.",
+          "Good ideas stay in a document because nobody has time to write them up."
+        ]
+      },
+      "does": {
+        "title": "What the agent does",
+        "items": [
+          {
+            "title": "Drafts in your voice",
+            "description": "Blog posts, social posts, newsletters and product copy, written to your style guide."
+          },
+          {
+            "title": "Turns one piece into many",
+            "description": "A case study becomes a post, an email and a short social thread."
+          },
+          {
+            "title": "Publishes after approval",
+            "description": "Nothing goes live until a named person signs it off."
+          },
+          {
+            "title": "Reports on what worked",
+            "description": "A weekly summary of what people read, clicked and asked about."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example week",
+        "intro": "Example scenario. Steps are illustrative.",
+        "steps": [
+          {
+            "title": "Monday · You send a two-line brief",
+            "description": "\"Announce the new service to existing customers.\""
+          },
+          {
+            "title": "Monday afternoon · Drafts arrive",
+            "description": "An email, a blog post and three social posts, in your brand voice."
+          },
+          {
+            "title": "Tuesday · You approve and edit",
+            "description": "Changes are noted, so the next drafts need fewer of them."
+          },
+          {
+            "title": "Friday · The report",
+            "description": "What was opened, read and shared, and what to try next week."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI marketing",
+          "href": "/marketing"
+        },
+        {
+          "label": "Generative AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Claude agents",
+          "href": "/claude-agents"
+        }
+      ],
+      "technical": [
+        "Connects to your website or CMS, email platform and analytics",
+        "Brand voice and style rules held as written instructions you can read and change",
+        "Model of your choice: Claude, OpenAI, Gemini or an open-weight model you host yourself",
+        "Runs in your cloud, on your own machines, or managed by us",
+        "A full record of every action the agent takes, with cost and timing",
+        "Passwords and keys kept in a separate secrets store (WSL Vault), never in the agent"
+      ],
+      "storySlug": "europa-components"
+    },
+    "back-office": {
+      "icon": "Workflow",
+      "meta": {
+        "title": "Back-office AI agents: invoices, orders and admin done for you | TenthMatrix",
+        "description": "Agents that read invoices, orders and forms, enter them into your finance system, flag what doesn't match and stop for approval before anything is sent or paid."
+      },
+      "header": {
+        "eyebrow": "Solutions · Back office & admin",
+        "title": "Take the busywork out of invoices, orders and admin",
+        "subtitle": "Back-office agents read invoices, orders and emails, enter them into your systems and flag what doesn't match. Nothing is sent, paid or deleted without a person's approval."
+      },
+      "pain": "Hours lost to invoices and order entry",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "Hours every week spent typing invoices and orders into the finance system.",
+          "Month-end takes days, and most of it is copying and checking.",
+          "A shared inbox full of requests that all follow the same few patterns.",
+          "Reports are rebuilt by hand from the same spreadsheets every month."
+        ]
+      },
+      "does": {
+        "title": "What the agent does",
+        "items": [
+          {
+            "title": "Reads the paperwork",
+            "description": "Invoices, orders, delivery notes and forms, from email or upload."
+          },
+          {
+            "title": "Enters and matches",
+            "description": "Keys the data into your finance or order system and matches invoices to orders."
+          },
+          {
+            "title": "Flags the exceptions",
+            "description": "Anything that doesn't match goes to a person, with the reason."
+          },
+          {
+            "title": "Waits for approval",
+            "description": "No payment, posting or deletion happens without a named approver."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example invoice",
+        "intro": "Example scenario. Steps are illustrative.",
+        "steps": [
+          {
+            "title": "An invoice arrives by email",
+            "description": "The agent reads it and pulls out the supplier, lines, totals and VAT."
+          },
+          {
+            "title": "It is matched to the order",
+            "description": "Prices and quantities are checked against the purchase order."
+          },
+          {
+            "title": "One line doesn't match",
+            "description": "The agent flags it to your finance team with the difference highlighted."
+          },
+          {
+            "title": "A person approves",
+            "description": "Once approved, the agent posts it. Everything it did is recorded."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI automation",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Jobshout",
+          "href": "/jobshout"
+        },
+        {
+          "label": "AI tax filing",
+          "href": "/ai-tax-filing"
+        },
+        {
+          "label": "Data foundations",
+          "href": "/services/data-foundations-ai"
+        }
+      ],
+      "technical": [
+        "Document reading (extraction) with checks against your own rules",
+        "Connects to finance, ERP and order systems through their APIs or exports",
+        "Approval gates on anything that sends, spends or deletes",
+        "Model of your choice: Claude, OpenAI, Gemini or an open-weight model you host yourself",
+        "Runs in your cloud, on your own machines, or managed by us",
+        "A full record of every action the agent takes, with cost and timing",
+        "Passwords and keys kept in a separate secrets store (WSL Vault), never in the agent"
+      ],
+      "storySlug": "cogno-ai"
+    },
+    "customer-support": {
+      "icon": "Headset",
+      "meta": {
+        "title": "AI customer support agents: answer customers faster | TenthMatrix",
+        "description": "Support agents that answer common questions from your own documents, draft replies for your team and send urgent tickets to the right person."
+      },
+      "header": {
+        "eyebrow": "Solutions · Customer support",
+        "title": "Answer customers faster, with your team in charge",
+        "subtitle": "A support agent answers common questions from your own documents and drafts replies for the harder ones. Your team checks what matters and handles the rest."
+      },
+      "pain": "The support inbox never empties",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "The support inbox never gets to zero.",
+          "Your team answers the same ten questions by hand every day.",
+          "Customers who write in the evening wait until the morning.",
+          "Urgent problems sit in the queue behind routine ones."
+        ]
+      },
+      "does": {
+        "title": "What the agent does",
+        "items": [
+          {
+            "title": "Answers from your documents",
+            "description": "Looks up your help pages, policies and past answers before it replies."
+          },
+          {
+            "title": "Drafts the harder replies",
+            "description": "For anything unusual, it writes a draft for a person to check."
+          },
+          {
+            "title": "Sorts the urgent ones",
+            "description": "Spots complaints, outages and VIP customers and sends them straight to a person."
+          },
+          {
+            "title": "Spots the gaps",
+            "description": "When the same question keeps coming up, it suggests a new help page."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example evening",
+        "intro": "Example scenario. Steps are illustrative.",
+        "steps": [
+          {
+            "title": "8:40pm · A customer asks about delivery",
+            "description": "The agent checks the order and your delivery policy and replies straight away."
+          },
+          {
+            "title": "9:15pm · A refund request comes in",
+            "description": "The agent drafts a reply and leaves it for your team, because refunds need a person."
+          },
+          {
+            "title": "9:30pm · A complaint arrives",
+            "description": "It is marked urgent and sent to the duty manager."
+          },
+          {
+            "title": "Next morning · Your team starts ahead",
+            "description": "Routine questions are done; the drafts and the urgent case are waiting."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI automation",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Generative AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "How our agents work",
+          "href": "/ai-agents"
+        }
+      ],
+      "technical": [
+        "Answers grounded in your own documents (retrieval, often called RAG)",
+        "Connects to your help desk, email and order system",
+        "Rules for what the agent may answer alone and what always goes to a person",
+        "Model of your choice: Claude, OpenAI, Gemini or an open-weight model you host yourself",
+        "Runs in your cloud, on your own machines, or managed by us",
+        "A full record of every action the agent takes, with cost and timing",
+        "Passwords and keys kept in a separate secrets store (WSL Vault), never in the agent"
+      ],
+      "storySlug": "lexisnexis"
+    },
+    "custom-apps": {
+      "icon": "AppWindow",
+      "meta": {
+        "title": "Custom apps and integrations that make your systems work together | TenthMatrix",
+        "description": "Custom web and mobile apps, integrations and AI features built around how your business works. You own the code."
+      },
+      "header": {
+        "eyebrow": "Solutions · Custom apps & software",
+        "title": "Make your systems talk to each other",
+        "subtitle": "We build the apps and connections your business is missing, with AI built in where it helps. You own the code at the end."
+      },
+      "pain": "Our systems don't talk to each other",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "People copy the same data from one system into another.",
+          "A spreadsheet holds the business together, and only one person understands it.",
+          "Off-the-shelf software almost fits, but not quite.",
+          "Customers and staff need an app or portal you don't have."
+        ]
+      },
+      "does": {
+        "title": "What we build",
+        "items": [
+          {
+            "title": "Connections between systems",
+            "description": "Your CRM, finance system, shop and email share data automatically."
+          },
+          {
+            "title": "Custom web and mobile apps",
+            "description": "Portals, internal tools and customer apps, built around how you work."
+          },
+          {
+            "title": "AI features inside the app",
+            "description": "Search, drafting, summaries and document reading where they save time."
+          },
+          {
+            "title": "Dashboards you can trust",
+            "description": "One place to see the numbers, from data that is kept clean."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example build",
+        "intro": "Example scenario. Timings vary with the job.",
+        "steps": [
+          {
+            "title": "Discovery",
+            "description": "We map which systems hold which data, and who uses it."
+          },
+          {
+            "title": "A working first version",
+            "description": "You use it on your own data before you commit to the full build."
+          },
+          {
+            "title": "Build",
+            "description": "The finished app, tested, documented and in your own code repository."
+          },
+          {
+            "title": "Run or hand over",
+            "description": "We look after it, or hand it to your team with training."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Software development",
+          "href": "/services/software-development"
+        },
+        {
+          "label": "OpsAPI",
+          "href": "/opsapi"
+        },
+        {
+          "label": "AI-native engineering",
+          "href": "/services/ai-native-digital-engineering"
+        },
+        {
+          "label": "Generative AI development",
+          "href": "/generative-ai-development"
+        }
+      ],
+      "technical": [
+        "Web (Next.js, React) and mobile apps; APIs and back ends",
+        "OpsAPI for sign-in, users and business data in one self-hosted API",
+        "Every change tested in stages before it goes live (Ring Promoter)",
+        "Runs in your cloud, on your own machines, or managed by us",
+        "A full record of every action the agent takes, with cost and timing",
+        "Passwords and keys kept in a separate secrets store (WSL Vault), never in the agent"
+      ],
+      "storySlug": "imoderni"
+    },
+    "platforms-devops": {
+      "icon": "Server",
+      "meta": {
+        "title": "Platforms, DevOps and security: modern systems that stay up | TenthMatrix",
+        "description": "Platform modernisation, automated releases, security testing and 24/7 monitoring, so your systems stay up and changes go live safely."
+      },
+      "header": {
+        "eyebrow": "Solutions · Platforms & DevOps",
+        "title": "Modern, secure systems that stay up",
+        "subtitle": "We modernise old systems without a risky big switch-over, test every update before it goes live, and watch your systems around the clock."
+      },
+      "pain": "Releases are risky and outages come as a surprise",
+      "problem": {
+        "title": "Sound familiar?",
+        "items": [
+          "Every release is nerve-racking, so releases happen rarely.",
+          "An old system runs the business and nobody wants to touch it.",
+          "Customers notice outages before you do.",
+          "You are not sure how exposed you are to an attack."
+        ]
+      },
+      "does": {
+        "title": "What we do",
+        "items": [
+          {
+            "title": "Modernise step by step",
+            "description": "Move old systems to modern ones a piece at a time, with no big-bang switch-over."
+          },
+          {
+            "title": "Release safely",
+            "description": "Updates are tested in stages and only go live when they pass. Failures roll back on their own."
+          },
+          {
+            "title": "Protect the front door",
+            "description": "Security testing, attack and overload protection, and monitoring for threats."
+          },
+          {
+            "title": "Watch it 24/7",
+            "description": "Uptime, certificate and DNS checks, with alerts before customers notice."
+          }
+        ]
+      },
+      "example": {
+        "title": "An example release",
+        "intro": "Example scenario. Steps are illustrative.",
+        "steps": [
+          {
+            "title": "A developer finishes a change",
+            "description": "Automated tests run straight away."
+          },
+          {
+            "title": "It is tried in stages",
+            "description": "Integration, test and acceptance environments, each with health checks."
+          },
+          {
+            "title": "It goes live",
+            "description": "Only when every check passes. If something fails, it rolls back on its own."
+          },
+          {
+            "title": "It is watched",
+            "description": "Monitoring confirms the change is healthy, and alerts a person if not."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Platform modernisation",
+          "href": "/services/enterprise-platform-modernisation"
+        },
+        {
+          "label": "DevOps automation",
+          "href": "/services/devops-automation"
+        },
+        {
+          "label": "Cyber security",
+          "href": "/services/cyber-security"
+        },
+        {
+          "label": "Autonomous operations",
+          "href": "/services/autonomous-operations"
+        },
+        {
+          "label": "SysOps 24/7",
+          "href": "/sysops247"
+        }
+      ],
+      "technical": [
+        "CI/CD with int, test, acc and prod environments (Ring Promoter)",
+        "API gateway, web application firewall (WAF), rate limits and CDN (Proxy10x)",
+        "Kubernetes, GitOps and infrastructure as code",
+        "Penetration testing, SIEM and SOC monitoring",
+        "Secrets and keys in WSL Vault, with an audit log"
+      ],
+      "storySlug": "hcl-technologies"
+    }
+  },
+  "cta": {
+    "title": "Name the job that slows your team down",
+    "description": "An engineer replies within one working day with what we would build and how we would measure it.",
+    "button": "Book a call",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "See our work",
+      "link": "/our-work"
+    }
+  },
+  "slugs": [
+    "sales",
+    "marketing",
+    "back-office",
+    "customer-support",
+    "custom-apps",
+    "platforms-devops"
+  ]
+}

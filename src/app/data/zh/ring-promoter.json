@@ -9,6 +9,15 @@
     "subtitle": "CI/CD Orbit + Lanes — 每次发布都要凭实力进入生产",
     "description": "Ring Promoter 是 TenthMatrix 的生产级发布推进控制平面。v1.0.2 将 Orbit(集群视图)与 Lanes(APP × INT/TEST/ACC/PROD 矩阵)并排展示,同时按顺序将版本推进各环——int → test → acc → prod——并提供实时健康门控、自动回滚和完整审计记录。"
   },
+  "plain": {
+    "line": "Ring Promoter 会分阶段测试每一次软件更新，只有通过全部检查才会上线。一旦某项检查失败，更新会自动回滚。",
+    "whoTitle": "Who this is for",
+    "who": [
+      "网站或应用经不起一次糟糕更新的企业",
+      "想更频繁、更低风险发布版本的开发团队",
+      "分别运行测试、预发布和正式系统的 IT 团队"
+    ]
+  },
   "intro": {
     "title": "什么是 Ring Promoter?",
     "body": "一个轻量级控制平面,将应用版本推进到共享环中。它以常驻服务形式运行(通常在 k3s 上),提供 JSON REST API 和内嵌 Web UI,并按(应用,环)跟踪当前/上一版本及历史。Kubernetes 应用与 VM/CI 应用共用同一界面——部署器按应用选择。",

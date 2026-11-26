@@ -1,0 +1,618 @@
+{
+  "meta": {
+    "title": "Ons werk: klantresultaten en casestudy's | TenthMatrix",
+    "description": "Wat we bouwden voor Workstation, LexisNexis, HCL, Barclays, Cogno AI en meer, met de resultaten. AI- en automatiseringswerk, 25+ jaar datasystemen en de software die we zelf draaien."
+  },
+  "header": {
+    "eyebrow": "Ons werk",
+    "title": "Resultaten voor bedrijven zoals het jouwe",
+    "subtitle": "AI-agents, automatisering en de datasystemen waar ze van afhangen, gebouwd voor banken, uitgevers, gemeenten, distributeurs en softwarebedrijven. Filter op branche of op het probleem dat je wilt oplossen."
+  },
+  "stats": [
+    {
+      "value": "70%",
+      "label": "snellere uitrol (HCL)"
+    },
+    {
+      "value": "65%",
+      "label": "sneller onderzoek (LexisNexis)"
+    },
+    {
+      "value": "£100m",
+      "label": "aan verkoopaanvragen (Workstation)"
+    }
+  ],
+  "filters": {
+    "label": "Filter ons werk",
+    "industry": "Branche",
+    "problem": "Probleem",
+    "all": "Alle",
+    "clear": "Alles tonen",
+    "count": "{n} van {total} getoond",
+    "none": "Niets voldoet nog aan beide filters. Probeer één filter tegelijk.",
+    "problems": {
+      "sales": "Verkoop",
+      "operations": "Beheer",
+      "data": "Data en documenten",
+      "security": "Beveiliging"
+    }
+  },
+  "groups": {
+    "ai": {
+      "eyebrow": "AI- en automatiseringswerk",
+      "title": "Agents en automatisering in productie",
+      "intro": "Recent werk waarbij AI een deel van de taak doet: opstellen, documenten lezen, kopers kwalificeren, systemen bewaken."
+    },
+    "track": {
+      "eyebrow": "Staat van dienst",
+      "title": "25+ jaar ervaring met data en softwaresystemen",
+      "intro": "Voor de AI-agents bouwden we tientallen jaren de catalogus-, database- en publicatiesystemen waarop bedrijven draaien. Goede AI hangt precies daarvan af: schone data, betrouwbare automatisering en systemen die met elkaar praten."
+    },
+    "inHouse": {
+      "eyebrow": "Zelf gebouwd en zelf in gebruik",
+      "title": "De software waarop onze eigen agents draaien",
+      "intro": "We draaien onze eigen agents dagelijks op deze producten. Ze laten de techniek achter het klantwerk zien; je IT-team kan ze stuk voor stuk inspecteren."
+    }
+  },
+  "ui": {
+    "problem": "Het probleem",
+    "built": "Wat we bouwden",
+    "results": "Resultaten",
+    "quote": "In hun woorden",
+    "duration": "Hoe lang het duurde",
+    "technical": "Technische details",
+    "readCase": "Lees de casestudy",
+    "readStory": "Lees de volledige beschrijving",
+    "visit": "Bezoek {name}",
+    "sector": "Sector",
+    "location": "Locatie",
+    "size": "Omvang",
+    "related": "Meer van ons werk",
+    "back": "Al ons werk",
+    "disclosure": "Over deze klant",
+    "sisterBrand": "Zusterbedrijf"
+  },
+  "cases": [
+    {
+      "slug": "workstation",
+      "company": "Workstation",
+      "logo": "/img/client-logos/workstation.svg",
+      "website": "https://www.workstation.co.uk/",
+      "featured": true,
+      "industryLabel": "Retail en e-commerce",
+      "sector": "AI workstations and GPU hardware",
+      "location": "UK & Brussels",
+      "size": "Zusterbedrijf (Workstation Solutions Ltd)",
+      "summary": "Kopers kwamen met een vraag, niet met een product, en een contactformulier liet ze het alleen uitzoeken.",
+      "problem": "Workstation verkoopt AI-workstations, GPU-servers en clusters. Dat zijn grote aankopen, en de meeste kopers beginnen met een vraag in plaats van een product: \"wat heb ik nodig om dit model te draaien?\" Een brochuresite en een contactformulier laten de koper het moeilijkste deel zelf doen.",
+      "built": "Een nieuwe website en een AI-winkel met een AI-verkoopagent. De agent vraagt wat de koper wil draaien, het budget en waar het geleverd moet worden, stelt dan het winkelmandje samen en geeft een geprijsde aanvraag door aan het verkoopteam. Mensen bij Workstation controleren en versturen elke offerte.",
+      "results": [
+        {
+          "value": "£100m",
+          "label": "aan verkoopaanvragen"
+        },
+        {
+          "value": "£2m",
+          "label": "aan doorverwijzingscommissie"
+        },
+        {
+          "value": "24/7",
+          "label": "de AI-verkoopagent beantwoordt kopers op elk uur"
+        }
+      ],
+      "headline": {
+        "value": "£100m",
+        "label": "aan verkoopaanvragen (Workstation)"
+      },
+      "duration": "Resultaten binnen een paar maanden na de lancering",
+      "disclosure": "Workstation en TenthMatrix zijn allebei merken van Workstation Solutions Ltd, dus dit is ons eigen werk, geen externe klant. Je kunt beide sites bezoeken en controleren wat we zeggen.",
+      "technical": [
+        "AI-verkoopagent waarbij een mens elke offerte goedkeurt",
+        "Content, catalogus en leads in OpsAPI",
+        "Releases gaan van int → test → acc → prod via Ring Promoter, met gezondheidscontroles als drempel",
+        "Statische hoofdsite geleverd via de Proxy10x-gateway en CDN",
+        "Gebouwd met AI-paircoding; een mens controleerde en voegde elke wijziging samen"
+      ],
+      "story": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "groupKey": "ai",
+      "industryKey": "retail",
+      "problemKeys": [
+        "sales"
+      ]
+    },
+    {
+      "slug": "cogno-ai",
+      "company": "Cogno AI",
+      "logo": "/img/client-logos/cognoai.svg",
+      "featured": false,
+      "industryLabel": "Software en AI",
+      "sector": "Kunstmatige intelligentie en bedrijfssoftware",
+      "location": "London, UK",
+      "summary": "Middelgrote bedrijven in gereguleerde sectoren wilden AI-assistenten, maar hun data mocht hun eigen systemen niet verlaten.",
+      "problem": "Cogno AI wilde een platform dat AI van bedrijfsniveau naar het middensegment brengt, ook voor klanten in de zorg, juridische dienstverlening en financiële diensten, van wie de data onder eigen controle moet blijven.",
+      "built": "We ontwierpen en ontwikkelden hun vlaggenschipplatform: meerdere AI-agents die samenwerken, documentverwerking, assistenten getraind op de eigen data van elke klant, workflows die koppelen aan bestaande CRM-, ERP- en e-mailtools, en een no-code-builder waarmee niet-technische teams hun eigen AI-workflows opzetten.",
+      "results": [
+        {
+          "value": "98%",
+          "label": "nauwkeurigheid bij het uitlezen van documenten"
+        },
+        {
+          "value": "60%",
+          "label": "minder handmatige verwerking"
+        },
+        {
+          "value": "On-premise",
+          "label": "of private cloud, zodat de data bij de klant blijft"
+        }
+      ],
+      "quote": {
+        "text": "TenthMatrix ontwierp en ontwikkelde ons vlaggenschipplatform voor AI, dat AI van bedrijfsniveau naar middelgrote bedrijven brengt.",
+        "by": "CEO, Cogno AI Ltd"
+      },
+      "technical": [
+        "Orkestratie van meerdere agents met een kennisgraaf",
+        "Verfijnde taalmodellen, getraind op klantspecifieke data",
+        "Koppelingen met CRM-, ERP- en communicatietools",
+        "No-code builder voor AI-workflows",
+        "Draait on-premise of in een private cloud"
+      ],
+      "groupKey": "ai",
+      "industryKey": "software",
+      "problemKeys": [
+        "operations",
+        "data"
+      ]
+    },
+    {
+      "slug": "lexisnexis",
+      "company": "LexisNexis",
+      "logo": "/img/client-logos/lexisnexis.svg",
+      "featured": true,
+      "industryLabel": "Juridisch",
+      "sector": "Juridische technologie en informatie",
+      "location": "New York, VS en wereldwijd",
+      "summary": "Juristen waren te lang bezig met zoeken in enorme hoeveelheden juridische data naar wat ze nodig hadden.",
+      "problem": "LexisNexis beheert enorme hoeveelheden juridische, regelgevende en zakelijke informatie en had AI nodig waarmee juristen die sneller kunnen vinden en analyseren.",
+      "built": "AI-onderzoeksassistenten die juridische documenten lezen en analyseren, plus voorspellende analyses van zaakuitkomsten, gebouwd op GPT-4- en Claude-modellen.",
+      "results": [
+        {
+          "value": "65%",
+          "label": "sneller juridisch onderzoek"
+        },
+        {
+          "value": "1B+",
+          "label": "juridische documenten geïndexeerd"
+        },
+        {
+          "value": "95%",
+          "label": "voorspellingsnauwkeurigheid"
+        }
+      ],
+      "headline": {
+        "value": "65%",
+        "label": "sneller juridisch onderzoek (LexisNexis)"
+      },
+      "quote": {
+        "text": "De integratie van GPT-4- en Claude-modellen heeft de manier waarop juristen met ons platform werken radicaal veranderd: de onderzoekstijd is met 65% gedaald, terwijl de nauwkeurigheid en relevantie zijn verbeterd.",
+        "by": "Michael Stevens, Chief Technology Officer, LexisNexis Legal Solutions"
+      },
+      "technical": [
+        "Natuurlijke taalverwerking voor analyse van juridische documenten",
+        "Voorspellende analyses van zaakuitkomsten",
+        "GPT-4- en Claude-modellen"
+      ],
+      "groupKey": "ai",
+      "industryKey": "legal",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "hcl-technologies",
+      "company": "TechStart Amsterdam",
+      "logo": "/img/client-logos/hcl.svg",
+      "featured": true,
+      "industryLabel": "IT-diensten",
+      "sector": "IT-diensten en advies",
+      "location": "Noida, India en wereldwijd",
+      "summary": "Releases voor ruim 50 wereldwijde projecten verliepen traag en kostten te veel handwerk.",
+      "problem": "HCL beheert DevOps voor meer dan 50 wereldwijde projecten van zakelijke klanten en wilde snellere releases en systemen die blijven draaien.",
+      "built": "Geautomatiseerde uitrol en monitoring over hun projecten heen, met meldingen en voorspellingen die problemen signaleren voordat gebruikers ze merken.",
+      "results": [
+        {
+          "value": "70%",
+          "label": "snellere uitrol"
+        },
+        {
+          "value": "99.99%",
+          "label": "uptime"
+        },
+        {
+          "value": "50+",
+          "label": "projecten beheerd"
+        }
+      ],
+      "headline": {
+        "value": "70%",
+        "label": "snellere uitrol (HCL)"
+      },
+      "quote": {
+        "text": "De AI-gestuurde automatisering verkortte onze uitrolttijd met 70% en verbeterde de betrouwbaarheid van het systeem tot 99.99% uptime.",
+        "by": "Mark de Jong, Oprichter, TechStart Amsterdam"
+      },
+      "technical": [
+        "CI/CD-automatisering met AI-ondersteuning",
+        "Monitoring en voorspellende analyses"
+      ],
+      "groupKey": "ai",
+      "industryKey": "it-services",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "HCL"
+    },
+    {
+      "slug": "barclays",
+      "company": "Barclays",
+      "logo": "/img/client-logos/barclays.svg",
+      "featured": false,
+      "industryLabel": "Finance",
+      "sector": "Bankwezen en financiële diensten",
+      "location": "Londen, VK en wereldwijd",
+      "summary": "Een bank had snellere incidentafhandeling en auditklare beveiliging nodig zonder verandering af te remmen.",
+      "problem": "In het bankwezen gaan beveiliging en betrouwbaarheid voor, maar digitale verandering moet toch snel blijven gaan.",
+      "built": "Monitoring- en beveiligingstools met realtime meldingen en geautomatiseerde incidentafhandeling.",
+      "results": [
+        {
+          "value": "80%",
+          "label": "snellere oplossing van incidenten"
+        },
+        {
+          "value": "SOC 2",
+          "label": "en ISO 27001-naleving ondersteund"
+        },
+        {
+          "value": "$5M",
+          "label": "jaarlijkse kostenbesparing"
+        }
+      ],
+      "quote": {
+        "text": "De realtime meldingen en geautomatiseerde incidentafhandeling van het platform verlaagden onze MTTR met 80%, zodat de dienstverlening voor onze miljoenen klanten wereldwijd ononderbroken doorgaat.",
+        "by": "James Patterson, Head of Infrastructure, Barclays"
+      },
+      "technical": [
+        "Realtime meldingen",
+        "Geautomatiseerde incidentafhandeling",
+        "Controles ter ondersteuning van SOC 2 en ISO 27001"
+      ],
+      "groupKey": "ai",
+      "industryKey": "finance",
+      "problemKeys": [
+        "security"
+      ]
+    }
+  ],
+  "track": [
+    {
+      "slug": "elsevier",
+      "company": "HealthTech Rotterdam",
+      "logo": "/img/client-logos/elsevier.svg",
+      "industryLabel": "ChatGPT",
+      "sector": "Gezondheidstechnologie",
+      "location": "Rotterdam, Nederland",
+      "results": [
+        {
+          "value": "40% betere tevredenheid",
+          "label": ""
+        },
+        {
+          "value": "24/7 AI-assistentie",
+          "label": ""
+        },
+        {
+          "value": "ChatGPT aangedreven",
+          "label": ""
+        }
+      ],
+      "summary": "Geautomatiseerde catalogusproductie voor een toonaangevende wetenschappelijke uitgever, gekoppeld aan InDesign en hun contentsystemen, waardoor de publicatietijd daalde van weken naar dagen.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "imoderni",
+      "company": "EduLearn Nederland",
+      "logo": "/img/client-logos/imoderni.svg",
+      "industryLabel": "Distributie",
+      "sector": "Onderwijstechnologie",
+      "location": "Utrecht, Nederland",
+      "results": [
+        {
+          "value": "60% beter leren",
+          "label": ""
+        },
+        {
+          "value": "Voice AI-integratie",
+          "label": ""
+        },
+        {
+          "value": "Meertalige ondersteuning",
+          "label": ""
+        }
+      ],
+      "summary": "Prijslijsten van veel meubelfabrikanten samengevoegd in één database, en daarna in minuten opgemaakte, geïllustreerde prijslijsten gepubliceerd.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data",
+        "sales"
+      ]
+    },
+    {
+      "slug": "europa-components",
+      "company": "RetailMax Nederland",
+      "logo": "/img/client-logos/europa.svg",
+      "industryLabel": "Distributie",
+      "sector": "Retail en e-commerce",
+      "location": "Den Haag, Nederland",
+      "results": [
+        {
+          "value": "Vision AI aangedreven",
+          "label": ""
+        },
+        {
+          "value": "Daily website updates",
+          "label": ""
+        },
+        {
+          "value": "5,000+ products managed",
+          "label": ""
+        }
+      ],
+      "summary": "Eén productdatabase die zowel de gedrukte catalogus van 108 pagina's als de website publiceert, zodat nieuwe producten, foto's en technische gegevens moeiteloos live gaan.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "amcham-eu",
+      "company": "AmCham EU",
+      "logo": "/img/client-logos/amcham.svg",
+      "industryLabel": "Verenigingen en publieke sector",
+      "sector": "Business Association",
+      "location": "Amsterdam, Nederland",
+      "results": [
+        {
+          "value": "50% minder support-oproepen",
+          "label": ""
+        },
+        {
+          "value": "RAG AI aangedreven",
+          "label": ""
+        },
+        {
+          "value": "45% betere tevredenheid",
+          "label": ""
+        }
+      ],
+      "summary": "Ledendata en publicaties voor een zakelijke vereniging in Brussel: professionele gidsen geproduceerd uit één database.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "oyezstraker",
+      "company": "OyezStraker",
+      "logo": "/img/client-logos/oyezstraker.svg",
+      "industryLabel": "Distributie",
+      "sector": "Maaltijdbezorging",
+      "location": "Eindhoven, Nederland",
+      "results": [
+        {
+          "value": "3-4 weeks to 1 week",
+          "label": ""
+        },
+        {
+          "value": "150-page catalog",
+          "label": ""
+        },
+        {
+          "value": "75% time savings",
+          "label": ""
+        }
+      ],
+      "summary": "Een complexe catalogus van 150 pagina's in ongeveer een week gemaakt in plaats van drie tot vier, zonder verlies van ontwerpkwaliteit.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "norfolk-county-council",
+      "company": "Norfolk County Council",
+      "logo": "/img/client-logos/norfolk.svg",
+      "industryLabel": "Verenigingen en publieke sector",
+      "sector": "Local Government",
+      "location": "Norfolk, UK",
+      "results": [
+        {
+          "value": "900,000+ served",
+          "label": ""
+        },
+        {
+          "value": "50+ digital services",
+          "label": ""
+        },
+        {
+          "value": "85% citizen satisfaction",
+          "label": ""
+        }
+      ],
+      "summary": "Websitebeheer en klantportaalsystemen waarmee een lokale overheid inwoners betere online dienstverlening biedt.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "Norfolk County Council"
+    },
+    {
+      "slug": "sothebys-international-realty",
+      "company": "Sotheby's International Realty",
+      "logo": "/img/client-logos/sothebys.svg",
+      "industryLabel": "Vastgoed en luxe",
+      "sector": "Luxury Real Estate",
+      "location": "Global",
+      "results": [
+        {
+          "value": "10,000+ listings",
+          "label": ""
+        },
+        {
+          "value": "70+ countries",
+          "label": ""
+        },
+        {
+          "value": "Consistent luxury branding",
+          "label": ""
+        }
+      ],
+      "summary": "Vastgoeddata en cataloguspublicatie op wereldwijde markten, met behoud van de consistentie van een luxemerk.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data",
+        "sales"
+      ],
+      "shortName": "Sotheby's International Realty"
+    },
+    {
+      "slug": "tom-dixon",
+      "company": "Tom Dixon",
+      "logo": "/img/client-logos/tomdixon.svg",
+      "industryLabel": "Vastgoed en luxe",
+      "sector": "Luxury Furniture & Design",
+      "location": "London, UK",
+      "results": [
+        {
+          "value": "20+ product collections",
+          "label": ""
+        },
+        {
+          "value": "Multi-channel publishing",
+          "label": ""
+        },
+        {
+          "value": "Premium design maintained",
+          "label": ""
+        }
+      ],
+      "summary": "Productinformatie voor een designmerk, mooi gepubliceerd in print en online vanuit één bron.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "bm-trada",
+      "company": "BM TRADA",
+      "logo": "/img/client-logos/trada.svg",
+      "industryLabel": "Verenigingen en publieke sector",
+      "sector": "Timber Certification & Testing",
+      "location": "Eindhoven, Nederland",
+      "results": [
+        {
+          "value": "5,000+ certifications managed",
+          "label": ""
+        },
+        {
+          "value": "100% data integrity",
+          "label": ""
+        },
+        {
+          "value": "Automated compliance reports",
+          "label": ""
+        }
+      ],
+      "summary": "Certificerings- en testdata georganiseerd in één systeem, met daaruit professionele nalevingsrapporten.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "watsons-directories",
+      "company": "Watsons Directories",
+      "logo": "/img/client-logos/watsons.svg",
+      "industryLabel": "ChatGPT",
+      "sector": "Business Directory Publishing",
+      "location": "Eindhoven, Nederland",
+      "results": [
+        {
+          "value": "50,000+ businesses",
+          "label": ""
+        },
+        {
+          "value": "25+ regional editions",
+          "label": ""
+        },
+        {
+          "value": "50% faster production",
+          "label": ""
+        }
+      ],
+      "summary": "Duizenden bedrijfsvermeldingen beheerd in één database en gepubliceerd als gedrukte gidsen onder strakke deadlines.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    }
+  ],
+  "inHouse": [
+    {
+      "name": "Jobshout",
+      "href": "/jobshout",
+      "line": "Gespecialiseerde agents die echt werk doen in e-mail, GitHub en websites, en stoppen zodat een mens alles wat belangrijk is kan goedkeuren."
+    },
+    {
+      "name": "Ring Promoter",
+      "href": "/ring-promoter",
+      "line": "Test elke update in stappen en zet hem pas live als hij de controles doorstaat. Draait zelf terug als er iets misgaat."
+    },
+    {
+      "name": "Proxy10x",
+      "href": "/proxy10x",
+      "line": "Een veilige voordeur voor je systemen: houdt aanvallen en overbelasting tegen voordat ze je apps bereiken."
+    },
+    {
+      "name": "WSL Vault",
+      "href": "/wsl-vault",
+      "line": "Bewaart de wachtwoorden en sleutels van elke agent apart en achter slot, en legt elk gebruik vast."
+    },
+    {
+      "name": "Nebula",
+      "href": "/products",
+      "line": "Databases en DNS gebouwd voor AI-workloads, inclusief zoeken in je eigen documenten."
+    }
+  ],
+  "cta": {
+    "title": "Wil je resultaten zoals deze?",
+    "description": "Vertel ons welke taak je team vertraagt. Een engineer antwoordt binnen één werkdag.",
+    "button": "Plan een gesprek",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Hoe wij werken",
+      "link": "/how-we-work"
+    }
+  }
+}

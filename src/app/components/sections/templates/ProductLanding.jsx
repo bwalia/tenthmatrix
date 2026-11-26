@@ -43,6 +43,20 @@ export default function ProductLanding({ data, locale }) {
         {h.description && <p className={s.heroText}>{h.description}</p>}
       </Hero>
 
+      {data.plain?.line && (
+        <Section id="in-plain-english" spacing="compact">
+          <div className={s.plain}>
+            <p className={s.plainLine}>{data.plain.line}</p>
+            {data.plain.who?.length > 0 && (
+              <div className={s.who}>
+                <h2 className={s.whoTitle}>{data.plain.whoTitle}</h2>
+                <CheckList items={data.plain.who} />
+              </div>
+            )}
+          </div>
+        </Section>
+      )}
+
       {data.intro && (
         <Overview title={data.intro.title} content={data.intro.body} links={data.intro.links} locale={locale} />
       )}

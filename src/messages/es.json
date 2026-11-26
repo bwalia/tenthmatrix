@@ -3,11 +3,6 @@
     "skipToContent": "Saltar al contenido",
     "primary": "Principal",
     "home": "Inicio",
-    "agents": "Agentes",
-    "tools": "Herramientas",
-    "applications": "Aplicaciones",
-    "products": "Productos",
-    "services": "Servicios",
     "resources": "Recursos",
     "articles": "Notas técnicas",
     "blog": "Blog",
@@ -18,52 +13,38 @@
     "menu": "Menú del sitio",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
-    "cta": "Inicie el viaje de IA",
-    "ctaProject": "Iniciar un proyecto",
+    "cta": "Reservar una llamada",
     "searchPlaceholder": "Busca notas técnicas, publicaciones y documentación",
-    "hardware": "¿Necesita hardware? Estaciones de trabajo con GPU en Workstation",
     "groups": {
+      "solutions": {
+        "label": "Soluciones",
+        "title": "Lo que podemos hacer por usted",
+        "intro": "Parta del problema que frena a su equipo. Cada página muestra lo que construimos, un ejemplo práctico y un cliente que tuvo el mismo problema.",
+        "all": "Todas las soluciones"
+      },
       "work": {
-        "label": "Trabaje con nosotros",
-        "title": "Externalice su proyecto de IA",
-        "intro": "Encárguenos un agente o un desarrollo de IA generativa. Usted conserva el código, los datos y la última palabra.",
-        "all": "Cómo funciona la externalización"
+        "label": "Nuestro trabajo",
+        "title": "La prueba de que funciona",
+        "intro": "Resultados de clientes, casos de estudio completos y el software que usan a diario nuestros propios agentes.",
+        "all": "Ver todo nuestro trabajo"
       },
-      "agents": {
-        "label": "Agentes",
-        "title": "Agentes de IA",
-        "intro": "Agentes que leen el ticket, hacen el trabajo y esperan su aprobación antes de que nada salga.",
-        "all": "Todo sobre agentes"
+      "how": {
+        "label": "Cómo trabajamos",
+        "title": "Qué ocurre cuando nos contrata",
+        "intro": "Cuatro pasos, las formas de trabajar con nosotros, cuánto cuesta aproximadamente y de quién es cada cosa al final.",
+        "all": "Cómo trabajamos"
       },
-      "tools": {
-        "label": "Herramientas",
-        "title": "Herramientas para desarrolladores",
-        "intro": "La infraestructura sobre la que funcionan los agentes: gateways, secretos, anillos de despliegue y monitorización.",
-        "all": "Ver todos los productos"
-      },
-      "applications": {
-        "label": "Aplicaciones",
-        "title": "Aplicaciones de IA",
-        "intro": "Aplicaciones listas para equipos de ventas, marketing, soporte y operaciones.",
-        "all": "Explorar soluciones"
-      },
-      "products": {
-        "label": "Productos",
-        "title": "Productos",
-        "intro": "Todo lo que construimos y operamos, con precios y los equipos que ya lo usan.",
-        "all": "Ver el catálogo"
-      },
-      "services": {
-        "label": "Servicios",
-        "title": "Servicios",
-        "intro": "Ingenieros que diseñan, refuerzan y operan los sistemas en torno a sus agentes.",
-        "all": "Todos los servicios"
+      "tech": {
+        "label": "Productos y tecnología",
+        "title": "Lo que hay bajo el capó",
+        "intro": "Los productos y la infraestructura sobre los que funcionan nuestros agentes. El detalle que querrá revisar su equipo de TI.",
+        "all": "Todos los productos"
       },
       "resources": {
         "label": "Recursos",
-        "title": "Recursos",
-        "intro": "Notas técnicas, el blog, la serie de análisis Jev y nuestra documentación.",
-        "all": "Lee las notas técnicas"
+        "title": "Más información",
+        "intro": "El blog, notas técnicas, un glosario en lenguaje sencillo de términos de IA y novedades del equipo.",
+        "all": "Leer el blog"
       }
     },
     "items": {
@@ -264,42 +245,104 @@
         "desc": "Beneficios y cómo comprobar cada uno"
       },
       "agentJourney": {
-        "label": "Diseñe su agente de IA",
-        "desc": "Responda a nueve preguntas y obtenga su plan de IA"
+        "label": "Diseñe su agente",
+        "desc": "Nueve preguntas, unos 3 minutos"
       },
       "startProject": {
         "label": "Iniciar un proyecto",
         "desc": "Cuéntenos la tarea. Respondemos en un día laborable."
+      },
+      "solSales": {
+        "label": "Ventas",
+        "desc": "Haga seguimiento a cada contacto antes de que se enfríe"
+      },
+      "solMarketing": {
+        "label": "Marketing",
+        "desc": "Publique contenido sin cuellos de botella"
+      },
+      "solBackOffice": {
+        "label": "Administración y back office",
+        "desc": "Facturas, pedidos y tareas administrativas, resueltos por usted"
+      },
+      "solSupport": {
+        "label": "Customer support",
+        "desc": "Atienda a sus clientes más rápido, con personas al mando"
+      },
+      "solCustomApps": {
+        "label": "Aplicaciones y software a medida",
+        "desc": "Haga que sus sistemas se comuniquen entre sí"
+      },
+      "solPlatforms": {
+        "label": "Plataformas y DevOps",
+        "desc": "Sistemas modernos y seguros que no se caen"
+      },
+      "ourWork": {
+        "label": "Todo nuestro trabajo",
+        "desc": "Resultados y casos de estudio, por sector"
+      },
+      "caseWorkstation": {
+        "label": "Caso de estudio de Workstation",
+        "desc": "Un agente de ventas con IA y £100m en consultas"
+      },
+      "aiWork": {
+        "label": "Trabajo de IA y automatización",
+        "desc": "Agentes y automatización para clientes"
+      },
+      "trackRecord": {
+        "label": "Trayectoria",
+        "desc": "Más de 25 años en sistemas de datos y software"
+      },
+      "inHouse": {
+        "label": "Creado y operado internamente",
+        "desc": "Los productos sobre los que funcionan nuestros propios agentes"
+      },
+      "howWeWork": {
+        "label": "Cómo trabajamos",
+        "desc": "De la primera llamada a un agente que funciona"
+      },
+      "process": {
+        "label": "Los cuatro pasos",
+        "desc": "Descubrimiento, piloto, desarrollo, operación o entrega"
+      },
+      "engagement": {
+        "label": "Formas de trabajar con nosotros",
+        "desc": "Un proyecto, un equipo, ingenieros o una entrega"
+      },
+      "cost": {
+        "label": "Cuánto cuesta",
+        "desc": "Cómo fijamos los precios, con rangos aproximados"
+      },
+      "ownership": {
+        "label": "Seguridad y propiedad",
+        "desc": "El código, los datos y las claves son suyos"
+      },
+      "selfHosted": {
+        "label": "IA autoalojada",
+        "desc": "Modelos de IA en sus propios equipos"
+      },
+      "glossary": {
+        "label": "Glosario",
+        "desc": "Términos de IA en lenguaje sencillo"
+      },
+      "about": {
+        "label": "Sobre nosotros",
+        "desc": "Quiénes somos y cómo empezamos"
       }
     }
   },
   "footer": {
-    "tagline": "Agentes de IA y aplicaciones de IA generativa, creados para usted.",
-    "blurb": "Diseñamos, construimos y operamos agentes de IA y aplicaciones de IA generativa para empresas que externalizan el trabajo, además de los productos de software sobre los que funcionan esos agentes.",
-    "hardware": "¿Necesita hardware? Visite Workstation",
-    "hardwareEyebrow": "¿Necesita hardware?",
-    "hardwareTitle": "Las estaciones de trabajo y clústeres con GPU los construye Workstation.",
-    "hardwareBody": "Our sister brand sizes, builds and supports the machines your models run on.",
-    "hardwareLink": "Visitar Workstation",
-    "rights": "Todos los derechos reservados.",
+    "tagline": "IA que quita la carga de tareas repetitivas a su equipo.",
+    "blurb": "Creamos agentes de IA, automatizaciones y aplicaciones a medida para ventas, marketing, atención al cliente y administración, además del software sobre el que funcionan.",
+    "hardware": "Hardware GPU de Workstation",
     "entity": "TenthMatrix is a brand of Workstation Solutions Ltd, registered in England and Wales.",
-    "sponsoredBy": "Patrocinado por",
     "sitemap": "Pie de página",
     "legal": "Legal",
     "columns": {
-      "work": "Trabaje con nosotros",
-      "agents": "Agentes",
-      "products": "Productos",
-      "services": "Servicios",
-      "resources": "Recursos",
+      "solutions": "Soluciones",
+      "work": "Nuestro trabajo",
       "company": "Empresa"
     },
     "links": {
-      "servicesAll": "Todos los servicios",
-      "about": "Sobre nosotros",
-      "whyTenthmatrix": "Por Qué TenthMatrix",
-      "partners": "Socios",
-      "bookOnline": "Reservar una llamada",
       "contact": "Contacto"
     },
     "legalLinks": {
@@ -329,193 +372,112 @@
   "home": {
     "latest": "Últimas publicaciones",
     "meta": {
-      "title": "TenthMatrix: la agencia de desarrollo de agentes AI-first. Equipos 10x más rápidos.",
-      "description": "TenthMatrix es una agencia de desarrollo de agentes AI-first. Implantamos agentes de IA en la automatización de procesos de cada empresa para vender, hacer marketing y gestionar el back office, y le prometemos multiplicar por 10 la productividad de su equipo."
+      "title": "TenthMatrix: IA que quita la carga repetitiva a su equipo, para que pueda hacer 10 veces más",
+      "description": "Creamos agentes de IA, automatizaciones y aplicaciones a medida para ventas, marketing, administración y atención al cliente. Confían en nosotros Barclays, HCL, LexisNexis y Elsevier. Lo verá funcionando con sus propios datos antes de comprometerse."
     },
     "hero": {
-      "eyebrow": "Agencia de desarrollo de agentes AI-first",
-      "title": "Agentes de IA que hacen a su equipo 10x más rápido",
-      "lede": "Analizamos los procesos de su empresa e implantamos agentes de IA que los automatizan: agentes que venden, hacen marketing y gestionan su back office. Le prometemos multiplicar por 10 la productividad de su equipo. Los agentes hacen el trabajo repetitivo y sus personas toman las decisiones.",
-      "primary": "Iniciar un proyecto",
-      "secondary": "Por qué 10x",
-      "meta": [
-        "Agentes de ventas",
-        "Agentes de marketing",
-        "Agentes de back office"
-      ]
+      "eyebrow": "Agentes de IA, automatizaciones y aplicaciones a medida",
+      "title": "IA que quita la carga repetitiva a su equipo, para que pueda hacer 10 veces más",
+      "lede": "Creamos agentes de IA, automatizaciones y aplicaciones a medida que se encargan del trabajo repetitivo en ventas, marketing, atención al cliente y administración. Sus empleados siguen decidiendo todo lo importante.",
+      "primary": "Reservar una llamada",
+      "secondary": "Ver nuestro trabajo",
+      "name": "TenthMatrix significa 10x: nuestro objetivo es que se haga diez veces más en el trabajo que automatizamos."
     },
-    "name": {
-      "eyebrow": "Por qué el nombre",
-      "title": "TenthMatrix significa 10x más rápido",
-      "body": "El nombre es la promesa: multiplicar por 10 la productividad. En cada empresa analizamos los procesos, implantamos agentes que los automatizan y medimos una sola cifra: ¿cada persona para la que trabajan los agentes es diez veces más productiva en su tarea? Si el piloto no lo demuestra, cambiamos los agentes antes de la construcción completa.",
-      "points": [
-        "Cada proceso analizado, automatizado y medido antes y después",
-        "Los agentes redactan y ejecutan; una persona aprueba lo importante",
-        "El código, los datos y las claves siguen siendo suyos"
-      ]
+    "proof": {
+      "eyebrow": "Con la confianza de",
+      "title": "Clientes que confían en nuestro trabajo",
+      "logos": "Clientes con los que hemos trabajado"
     },
-    "pillars": {
-      "eyebrow": "Agentes que construimos para usted",
-      "title": "Agentes que venden, hacen marketing y gestionan su back office",
-      "lede": "Ante todo somos una agencia de agentes: partimos del trabajo que su equipo hace cada día y construimos agentes que se lo quitan de encima.",
-      "sales": {
-        "title": "Agentes de ventas",
-        "body": "Califican los leads entrantes, investigan cuentas, redactan seguimientos y mantienen el CRM al día, para que su equipo comercial dedique su tiempo a hablar con compradores."
-      },
-      "marketing": {
-        "title": "Agentes de marketing",
-        "body": "Planifican, redactan y publican contenidos, publicaciones en redes y campañas con la voz de su marca, y luego informan de lo que funcionó, con una persona que da el visto bueno antes de que nada se publique."
-      },
-      "backoffice": {
-        "title": "Agentes de back office",
-        "body": "Procesan facturas, pedidos, bandejas de entrada, tickets e informes en sus sistemas ERP, financieros y de soporte, y se detienen para revisión antes de enviar, gastar o eliminar nada."
-      }
+    "problems": {
+      "eyebrow": "Problemas que resolvemos",
+      "title": "Parta de lo que frena a su equipo",
+      "lede": "Cada uno enlaza con lo que construimos, un ejemplo práctico y un cliente que tuvo el mismo problema.",
+      "see": "Ver la solución",
+      "all": "Todas las soluciones"
     },
-    "benefits": {
-      "eyebrow": "Beneficios de los agentes de IA de TenthMatrix",
-      "title": "Lo que obtiene cuando nuestros agentes hacen el trabajo",
-      "lede": "Cada beneficio corresponde a software que construimos y operamos nosotros mismos, así que puede inspeccionarlo antes de firmar nada.",
-      "all": "Comparar con equipo interno y chatbots SaaS",
-      "approval": {
-        "title": "Una persona aprueba lo importante",
-        "body": "Los agentes redactan y preparan. Todo lo que envía, gasta o elimina espera a una persona designada.",
-        "proof": "Ver Jobshout"
-      },
-      "hosting": {
-        "title": "Autoalojado o gestionado",
-        "body": "Ejecute los agentes en su propia nube o centro de datos, o deje que los operemos nosotros. El código es el mismo en ambos casos.",
-        "proof": "Modelos de colaboración"
-      },
-      "data": {
-        "title": "Sus datos y claves se quedan con usted",
-        "body": "Los datos permanecen en sus sistemas y las claves de los modelos en su almacén de secretos. Elija el proveedor de modelos o aloje usted mismo un modelo abierto.",
-        "proof": "Seguridad e IP"
-      },
-      "vault": {
-        "title": "Secretos aislados por agente",
-        "body": "WSL Vault emite credenciales de corta duración y acotadas, cifradas por cliente y registradas en un log de auditoría a prueba de manipulaciones.",
-        "proof": "Ver WSL Vault"
-      },
-      "releases": {
-        "title": "Versiones condicionadas a la salud",
-        "body": "Ring Promoter lleva cada cambio de int a prod solo cuando pasan las comprobaciones de salud, y revierte cuando fallan.",
-        "proof": "Ver Ring Promoter"
-      },
-      "edge": {
-        "title": "Seguridad en el perímetro",
-        "body": "Proxy10x coloca un API gateway, reglas WAF y límites de tasa delante del agente y de las herramientas que invoca.",
-        "proof": "Ver Proxy10x"
-      },
-      "observe": {
-        "title": "Coste y comportamiento visibles",
-        "body": "Una traza por cada ejecución, coste y latencia por agente, y alertas cuando alguno se desvía.",
-        "proof": "Cómo medimos"
-      },
-      "production": {
-        "title": "Creado por un equipo que opera agentes",
-        "body": "Nuestros propios agentes funcionan en producción sobre este stack. Publicamos cómo funcionan, incluido lo que falló.",
-        "proof": "Lee las notas técnicas"
-      }
+    "featured": {
+      "eyebrow": "Casos de estudio",
+      "title": "Lo que construimos y lo que cambió",
+      "lede": "Clientes reales, el problema que tenían, lo que construimos y el resultado.",
+      "all": "Ver todo nuestro trabajo"
     },
-    "steps": {
-      "eyebrow": "Cómo funciona la externalización",
-      "title": "Descubrimiento, piloto, desarrollo y después operación o traspaso",
-      "lede": "Cada etapa termina con algo que usted conserva, aunque se detenga ahí.",
+    "build": {
+      "eyebrow": "Lo que construimos",
+      "title": "Véalo funcionando",
+      "lede": "Agentes y aplicaciones que hacen trabajo real, con una persona al mando.",
+      "screenshot": "Captura de pantalla",
+      "diagram": "Cómo funciona",
       "items": [
         {
-          "title": "Descubrimiento",
-          "body": "Elegimos una tarea, los sistemas que toca y quién comprueba el resultado, y dejamos por escrito lo que el agente nunca debe hacer. Usted recibe un alcance por escrito y un presupuesto cerrado para el piloto."
+          "title": "Un agente especialista en acción",
+          "body": "El agente de SEO de Jobshout revisa un sitio web y propone mejoras. No se publica nada hasta que una persona lo aprueba."
         },
         {
-          "title": "Piloto",
-          "body": "La versión más pequeña que hace el trabajo real con datos reales, tras la aprobación humana y medida frente al alcance. Después, una recomendación de seguir, cambiar o parar."
+          "title": "Un agente de ventas que nunca olvida hacer seguimiento",
+          "body": "Los nuevos contactos reciben respuesta en minutos, se ordenan según su disposición a comprar y los más calientes pasan directo a su equipo."
         },
         {
-          "title": "Construcción",
-          "body": "Código de producción, integraciones, secretos, salvaguardas, tests y un proceso de publicación, todo en su repositorio. Puede leer cada prompt, traza y test."
-        },
-        {
-          "title": "Operar o traspasar",
-          "body": "Lo operamos con monitorización, informes de costes y una revisión periódica, o lo entregamos a su equipo con runbooks y formación."
+          "title": "Las personas conservan el criterio",
+          "body": "El agente se ocupa del trabajo rutinario. Los reembolsos, el lenguaje jurídico, los descuentos grandes y las quejas siempre pasan a una persona."
         }
       ]
     },
-    "engagement": {
-      "eyebrow": "Modelos de colaboración",
-      "title": "Cuatro formas de trabajar con nosotros",
-      "lede": "Elija según lo clara que esté la tarea y cuánto quiera poseer al final.",
-      "more": "Comparar modelos de colaboración",
-      "fixed": {
-        "title": "Proyecto de alcance cerrado",
-        "body": "Un agente, aplicación o integración, con un alcance por escrito y un precio acordado."
-      },
-      "team": {
-        "title": "Equipo de agentes dedicado",
-        "body": "Un equipo pequeño que avanza en su backlog de trabajo de IA, mes a mes."
-      },
-      "embedded": {
-        "title": "Ingenieros integrados",
-        "body": "Nuestros ingenieros se unen a su equipo, trabajan en sus repositorios y transmiten lo que saben."
-      },
-      "transfer": {
-        "title": "Construir, operar, transferir",
-        "body": "Lo construimos, lo operamos durante un periodo acordado y luego lo entregamos con runbooks y formación."
-      }
+    "steps": {
+      "eyebrow": "Cómo funciona",
+      "title": "Descubrimiento, piloto, desarrollo y después operación o traspaso",
+      "lede": "Cada paso termina con algo que usted conserva, aunque se detenga ahí.",
+      "reassure": "Lo ve funcionando con sus propios datos antes de comprometerse con el desarrollo completo.",
+      "more": "Cómo trabajamos",
+      "items": [
+        {
+          "title": "Descubrimiento",
+          "body": "Elegimos una tarea, los sistemas que toca y quién revisa el resultado. Recibe un alcance por escrito y un precio fijo para el piloto."
+        },
+        {
+          "title": "Piloto",
+          "body": "La versión más pequeña que hace el trabajo real con sus datos reales, con una persona que aprueba todo lo importante. Después: seguir adelante, cambiarlo o parar."
+        },
+        {
+          "title": "Construcción",
+          "body": "El sistema terminado, conectado a sus herramientas, probado y en su propio repositorio de código."
+        },
+        {
+          "title": "Operar o traspasar",
+          "body": "Lo operamos por usted con monitorización e informes de costes, o se lo entregamos a su equipo con formación."
+        }
+      ]
     },
-    "products": {
-      "eyebrow": "Pruebas",
-      "title": "Software que construimos y operamos nosotros mismos",
-      "lede": "Los agentes de los clientes funcionan sobre los mismos productos que usamos en producción. Cada uno nació como algo que necesitaban nuestros propios agentes.",
-      "all": "Todos los productos",
-      "see": "Ver {name}",
-      "ringPromoter": {
-        "tagline": "Plano de control de CI/CD",
-        "description": "Promueve cada versión por los anillos int, test, acc y prod. Los controles de salud deciden y, si fallan, se revierte automáticamente."
-      },
-      "proxy10x": {
-        "tagline": "API gateway · CDN · WAF",
-        "description": "Se sitúa delante de sus orígenes con configuración en vivo, caché en el edge y reglas WAF. Un gateway MCP para agentes está en la hoja de ruta."
-      },
-      "wslVault": {
-        "tagline": "Gestor de secretos",
-        "description": "Cifrado por envoltura con jerarquía de claves por cliente, leases dinámicos y un registro de auditoría a prueba de manipulaciones. Pueden robar el servidor, no los secretos."
-      },
-      "jobshout": {
-        "tagline": "Orquestación de agentes",
-        "description": "Agentes especializados que trabajan en Gmail, GitHub y sitios en producción, muestran cada paso en directo y esperan su aprobación antes de que nada salga."
-      },
-      "jev": {
-        "tagline": "Investigación sobre la capa de decisión",
-        "description": "Nuestra serie independiente y laboratorio de benchmarks sobre modelos de decisión rápidos, entornos de agentes, enrutamiento y el coste de la inferencia."
-      },
-      "nebula": {
-        "name": "Familia Nebula",
-        "tagline": "NebulaDB · NebulaDNS · NebulaCR · NebulaCB",
-        "description": "Infraestructura en Rust para cargas de trabajo de agentes, desde NebulaDB, una base de datos con búsqueda vectorial y RAG en streaming, hasta NebulaDNS, DNS autoritativo con métricas de Prometheus."
-      },
-      "openSource": "Código abierto",
-      "research": "Investigación"
-    },
-    "latestSection": {
-      "eyebrow": "Publicaciones",
-      "title": "Lo último del equipo",
-      "lede": "Publicaciones del blog, notas técnicas extensas y la serie de análisis Jev.",
-      "articles": "Todas las notas técnicas",
-      "blog": "El blog",
-      "empty": "Pronto habrá nuevas publicaciones."
-    },
-    "hardware": {
-      "eyebrow": "¿Necesita hardware?",
-      "title": "Las estaciones de trabajo y clústeres con GPU están en Workstation",
-      "body": "Our sister brand sizes, builds and supports the machines that run private models. Tell them what you want to run and they will spec it.",
-      "link": "Visit Workstation"
+    "trust": {
+      "eyebrow": "Por qué las empresas confían en nosotros",
+      "title": "Rápido, con personas al mando",
+      "points": [
+        {
+          "title": "Una persona aprueba todo lo importante",
+          "body": "El agente redacta y prepara. Todo lo que envía, gasta o elimina espera a una persona designada.",
+          "term": "puerta de aprobación"
+        },
+        {
+          "title": "El código y los datos son suyos",
+          "body": "Todo lo que escribimos está en su propio repositorio de código desde el primer día. Sus datos y claves se quedan con usted."
+        },
+        {
+          "title": "Funciona donde usted decida",
+          "body": "En su nube, en sus propios equipos o gestionado por nosotros. Incluso puede mantener el modelo de IA dentro de su empresa.",
+          "term": "modelo alojado por usted"
+        },
+        {
+          "title": "Creado por un equipo que usa sus propios agentes",
+          "body": "Nuestros propios agentes dirigen nuestro negocio a diario, con el mismo software que usamos para los clientes."
+        }
+      ],
+      "tech": "Detalles técnicos para su equipo de TI"
     },
     "cta": {
-      "eyebrow": "Iniciar un proyecto",
+      "eyebrow": "Reservar una llamada",
       "title": "Díganos qué tarea frena a su equipo. La haremos 10x más rápida.",
-      "body": "Envíe la tarea, los sistemas que implica y quién revisa el resultado. En un día laborable un ingeniero le responde con el agente que construiríamos, lo que no debe hacer y cómo mediríamos el 10x.",
-      "primary": "Iniciar un proyecto",
-      "secondary": "Cómo funciona"
+      "body": "Envíenos la tarea, los sistemas que toca y quién revisa el resultado. En un día laborable un ingeniero le responde con lo que construiríamos, lo que no debe hacer y cómo mediríamos el 10x.",
+      "primary": "Reservar una llamada",
+      "secondary": "Diseñe su agente en 3 minutos"
     }
   },
   "articlesPage": {
@@ -627,7 +589,12 @@
     "messageHint": "La tarea, los sistemas que toca y quién revisa el resultado. Con dos o tres frases basta.",
     "privacy": "Usamos sus datos solo para responder a esta consulta.",
     "projectType": "Tipo de proyecto",
-    "projectTypeAny": "Elija una opción"
+    "projectTypeAny": "Elija una opción",
+    "company": "Empresa",
+    "bestTime": "Mejor momento para hablar",
+    "bestTimeHint": "Por ejemplo, “por las mañanas entre semana”. Añada un teléfono si prefiere que le llamemos.",
+    "submitCall": "Reservar una llamada",
+    "replyTime": "Un ingeniero le responde en un día laborable."
   },
   "errors": {
     "notFoundTitle": "Esta página no está aquí",
@@ -672,7 +639,9 @@
   "kinds": {
     "blog": "Blog",
     "article": "Nota técnica",
-    "insight": "Perspectiva"
+    "insight": "Perspectiva",
+    "forBusiness": "Para empresas",
+    "forDevelopers": "Para desarrolladores"
   },
   "article": {
     "contents": "En esta página",

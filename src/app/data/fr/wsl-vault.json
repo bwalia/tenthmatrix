@@ -9,6 +9,15 @@
     "subtitle": "Volez le serveur. Pas les secrets.",
     "description": "Une gestion des secrets open source et auto-hébergée, fondée sur le chiffrement par enveloppe AES-256-GCM et une hiérarchie de clés par locataire — un disque volé, un dump de base de données ou un hôte compromis ne laisse aux attaquants qu'un texte chiffré impossible à ouvrir."
   },
+  "plain": {
+    "line": "WSL Vault garde sous clé les mots de passe et les clés, ne donne à chaque agent que ce dont il a besoin pour une courte durée et enregistre chaque utilisation.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Les entreprises qui utilisent des agents IA ayant besoin d'accéder à de vrais systèmes",
+      "Les équipes qui doivent démontrer qui a accédé à quoi, et quand",
+      "Les équipes informatiques et de sécurité qui remplacent les mots de passe conservés dans des fichiers et des tableurs"
+    ]
+  },
   "intro": {
     "title": "Qu'est-ce que WSLVault ?",
     "body": "WSLVault est une plateforme de secrets compatible Vault pour les opérateurs qui veulent un multi-locataire chiffré au repos, sans texte clair sur disque. Pilotez-la depuis la console web steel/brass, la CLI, les SDK Go/Python/Rust/TypeScript ou MCP — avec déploiement Helm/GitOps sur Kubernetes.",

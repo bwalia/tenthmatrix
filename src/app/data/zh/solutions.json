@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "title": "解决方案：用 AI 和软件解决拖慢团队的问题 | TenthMatrix",
+    "description": "销售、营销、后台、客户支持、定制应用和平台。从问题入手，看看我们做什么、一个案例，以及遇到同样问题的客户。"
+  },
+  "header": {
+    "eyebrow": "解决方案",
+    "title": "从问题出发，而不是从技术出发",
+    "subtitle": "选出拖慢团队的那件事。每个解决方案都会说明我们做什么、实际运行的例子，以及遇到同样问题的客户。"
+  },
+  "ui": {
+    "see": "查看解决方案",
+    "problem": "问题",
+    "story": "遇到同样问题的客户",
+    "storyTrack": "来自我们的业绩",
+    "deliverTitle": "我们如何交付",
+    "deliverBody": "我们从一项具体工作开始。在决定做完整开发之前，您会先在试点中看到它在自己数据上的运行效果；无论如何，代码和数据都归您所有。",
+    "deliverLink": "我们如何合作",
+    "related": "相关页面",
+    "technical": "给您 IT 团队看的技术细节",
+    "glossary": "遇到不懂的术语？看看大白话术语表。",
+    "other": "其他解决方案"
+  },
+  "journey": {
+    "title": "不知道从哪里开始？",
+    "body": "回答九个简短的问题，看看我们会为您打造怎样的智能体。大约 3 分钟，无需注册。",
+    "button": "3 分钟设计您的智能体",
+    "link": "/ai-agent-journey"
+  },
+  "pages": {
+    "sales": {
+      "icon": "TrendingUp",
+      "meta": {
+        "title": "AI 销售智能体：每条线索都及时跟进，不让客户变冷 | TenthMatrix",
+        "description": "AI 销售智能体几分钟内回复询盘、筛选买家、调研客户公司，并让 CRM 保持最新。每封邮件都由人批准。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 销售",
+        "title": "每条线索都及时跟进，不让客户变冷",
+        "subtitle": "AI 销售智能体几分钟内回复询盘，弄清买家需要什么，并让 CRM 保持最新。您的团队把时间花在真正准备购买的人身上。"
+      },
+      "pain": "没人及时跟进，线索就凉了",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "询盘要等几小时甚至几天才有回复，买家转头就去别家了。",
+          "销售员一早上都在更新 CRM，而不是在卖东西。",
+          "没人有时间在通话前先了解一下对方公司。",
+          "团队一忙，跟进就被落下。"
+        ]
+      },
+      "does": {
+        "title": "智能体做什么",
+        "items": [
+          {
+            "title": "几分钟内回复",
+            "description": "不分昼夜回复每一条新询盘，并问出好销售会问的问题。"
+          },
+          {
+            "title": "找出真正的买家",
+            "description": "按您的规则核对预算、时间和需求，把优质线索交给人。"
+          },
+          {
+            "title": "帮团队做好准备",
+            "description": "通话前先调研对方公司，并写出一份简短的情况说明。"
+          },
+          {
+            "title": "起草跟进内容",
+            "description": "写好跟进邮件和 CRM 更新，销售员检查后点击发送。"
+          }
+        ]
+      },
+      "example": {
+        "title": "一个上午的例子",
+        "intro": "示例场景。时间和步骤仅作说明。",
+        "steps": [
+          {
+            "title": "9:12 · 买家填写了您网站上的表单",
+            "description": "智能体几分钟内回复，询问预算和时间安排，并提供可约的通话时段。"
+          },
+          {
+            "title": "9:30 · 线索完成筛选",
+            "description": "智能体按您的规则给线索打分，并在 CRM 里写下两行摘要。"
+          },
+          {
+            "title": "10:00 · 销售员拿到了情况简报",
+            "description": "买家是谁、问了什么、需要什么，通话前就已备好。"
+          },
+          {
+            "title": "通话后 · 跟进内容已起草",
+            "description": "智能体起草邮件和 CRM 备注，发送前由人批准。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI CRM",
+          "href": "/crm"
+        },
+        {
+          "label": "我们的智能体如何工作",
+          "href": "/ai-agents"
+        },
+        {
+          "label": "AI 智能体开发",
+          "href": "/ai-agent-development"
+        }
+      ],
+      "technical": [
+        "通过连接器（常称为 MCP）接入您的 CRM、邮箱和日历",
+        "模型由您选择：Claude、OpenAI、Gemini，或您自己托管的开放权重模型",
+        "运行在您的云上、您自己的机器上，或由我们托管",
+        "完整记录智能体的每一步操作，包括成本和耗时",
+        "密码和密钥存放在独立的密钥库（WSL Vault）中，绝不放在智能体里"
+      ],
+      "storySlug": "workstation"
+    },
+    "marketing": {
+      "icon": "Megaphone",
+      "meta": {
+        "title": "AI 营销智能体：内容产出不再卡壳 | TenthMatrix",
+        "description": "营销智能体以您的品牌口吻起草帖子、邮件和营销活动，经批准后发布，并汇报哪些做法有效。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 营销",
+        "title": "内容产出不再卡壳",
+        "subtitle": "营销智能体以您的品牌口吻起草帖子、邮件和营销活动，并汇报哪些做法有效。任何内容上线前都由人签字确认。"
+      },
+      "pain": "内容出得太慢",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "一篇博客从想法到发布要花好几周。",
+          "网站、社交媒体和邮件，每周都得有内容喂进去。",
+          "整理一份营销活动报告要花一整天。",
+          "好点子一直躺在文档里，因为没人有时间把它写出来。"
+        ]
+      },
+      "does": {
+        "title": "智能体做什么",
+        "items": [
+          {
+            "title": "用您的口吻写初稿",
+            "description": "博客文章、社交媒体帖子、新闻邮件和产品文案，都按您的风格指南来写。"
+          },
+          {
+            "title": "一份素材，多种用法",
+            "description": "一个案例可以变成一篇文章、一封邮件和一组简短的社交媒体帖子。"
+          },
+          {
+            "title": "批准后才发布",
+            "description": "在指定的人签字之前，什么都不会上线。"
+          },
+          {
+            "title": "汇报哪些有效",
+            "description": "每周总结：大家读了什么、点了什么、问了什么。"
+          }
+        ]
+      },
+      "example": {
+        "title": "一周的例子",
+        "intro": "示例场景。步骤仅作说明。",
+        "steps": [
+          {
+            "title": "周一 · 您发来两行简短的需求",
+            "description": "“向现有客户宣布这项新服务。”"
+          },
+          {
+            "title": "周一下午 · 初稿送到",
+            "description": "一封邮件、一篇博客文章和三条社交媒体帖子，全部是您的品牌口吻。"
+          },
+          {
+            "title": "周二 · 您批准并修改",
+            "description": "您的修改会被记下来，所以之后的初稿需要改的地方会越来越少。"
+          },
+          {
+            "title": "周五 · 报告",
+            "description": "哪些被打开、阅读和转发，以及下周可以尝试什么。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI 营销",
+          "href": "/marketing"
+        },
+        {
+          "label": "生成式 AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Claude 智能体",
+          "href": "/claude-agents"
+        }
+      ],
+      "technical": [
+        "接入您的网站或 CMS、邮件平台和数据分析工具",
+        "品牌口吻和风格规则以书面说明的形式保存，您可以随时查看和修改",
+        "模型由您选择：Claude、OpenAI、Gemini，或您自己托管的开放权重模型",
+        "运行在您的云上、您自己的机器上，或由我们托管",
+        "完整记录智能体的每一步操作，包括成本和耗时",
+        "密码和密钥存放在独立的密钥库（WSL Vault）中，绝不放在智能体里"
+      ],
+      "storySlug": "europa-components"
+    },
+    "back-office": {
+      "icon": "Workflow",
+      "meta": {
+        "title": "后台 AI 智能体：发票、订单和行政事务，我们替您搞定 | TenthMatrix",
+        "description": "智能体阅读发票、订单和表单，录入您的财务系统，标出对不上的地方，并在发送或付款之前等待批准。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 后台与行政",
+        "title": "把发票、订单和行政事务里的琐事交出去",
+        "subtitle": "后台智能体阅读发票、订单和邮件，把数据录入您的系统，并标出对不上的地方。没有人批准，什么都不会发送、付款或删除。"
+      },
+      "pain": "时间都耗在发票和订单录入上",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "每周都有好几个小时花在把发票和订单敲进财务系统上。",
+          "月末结账要花好几天，大部分时间都在复制和核对。",
+          "共用邮箱里堆满了请求，其实翻来覆去就那么几种。",
+          "报表每个月都要从同样的几张表格里手工重做一遍。"
+        ]
+      },
+      "does": {
+        "title": "智能体做什么",
+        "items": [
+          {
+            "title": "阅读单据",
+            "description": "发票、订单、送货单和表单，来自邮件或上传。"
+          },
+          {
+            "title": "录入并核对",
+            "description": "把数据录入您的财务或订单系统，并将发票与订单核对。"
+          },
+          {
+            "title": "标出异常",
+            "description": "凡是对不上的，都会连同原因一起交给人处理。"
+          },
+          {
+            "title": "等待批准",
+            "description": "没有指定审批人的批准，不会有任何付款、记账或删除。"
+          }
+        ]
+      },
+      "example": {
+        "title": "发票示例",
+        "intro": "示例场景。步骤仅作说明。",
+        "steps": [
+          {
+            "title": "一张发票通过邮件到达",
+            "description": "智能体读取发票，提取供应商、明细行、合计和 VAT。"
+          },
+          {
+            "title": "与订单核对",
+            "description": "价格和数量与采购订单逐一核对。"
+          },
+          {
+            "title": "有一行对不上",
+            "description": "智能体通知您的财务团队，并把差异突出标示出来。"
+          },
+          {
+            "title": "由人批准",
+            "description": "批准后，智能体再入账。它做过的每一步都有记录。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI 自动化",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Jobshout",
+          "href": "/jobshout"
+        },
+        {
+          "label": "AI 报税",
+          "href": "/ai-tax-filing"
+        },
+        {
+          "label": "数据基础",
+          "href": "/services/data-foundations-ai"
+        }
+      ],
+      "technical": [
+        "文档读取（信息提取），并按您自己的规则做校验",
+        "通过 API 或导出文件，对接财务、ERP 和订单系统",
+        "凡是发送、花钱或删除的操作，都设有审批关卡",
+        "模型由您选择：Claude、OpenAI、Gemini，或您自己托管的开放权重模型",
+        "运行在您的云上、您自己的机器上，或由我们托管",
+        "完整记录智能体的每一步操作，包括成本和耗时",
+        "密码和密钥存放在独立的密钥库（WSL Vault）中，绝不放在智能体里"
+      ],
+      "storySlug": "cogno-ai"
+    },
+    "customer-support": {
+      "icon": "Headset",
+      "meta": {
+        "title": "AI 客服智能体：更快回复客户 | TenthMatrix",
+        "description": "客服智能体根据您自己的文档回答常见问题，为团队起草回复，并把紧急工单转给合适的人。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 客户支持",
+        "title": "更快回复客户，团队依然掌舵",
+        "subtitle": "客服智能体根据您自己的文档回答常见问题，并为较难的问题起草回复。您的团队检查重要的部分，处理其余事务。"
+      },
+      "pain": "客服收件箱永远清不空",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "客服的待办永远清不到零。",
+          "您的团队每天都在手工回答同样的那十个问题。",
+          "晚上来咨询的客户，要等到第二天早上才有回复。",
+          "紧急问题排在例行问题后面干等着。"
+        ]
+      },
+      "does": {
+        "title": "智能体做什么",
+        "items": [
+          {
+            "title": "答案出自您的文档",
+            "description": "回复之前，先查阅您的帮助页面、政策和以往的答复。"
+          },
+          {
+            "title": "起草较难的回复",
+            "description": "遇到不寻常的情况，就写一份草稿，交给人检查。"
+          },
+          {
+            "title": "挑出紧急的",
+            "description": "识别投诉、故障和 VIP 客户，直接转给人。"
+          },
+          {
+            "title": "发现缺口",
+            "description": "同一个问题反复被问到时，它会建议新增一个帮助页面。"
+          }
+        ]
+      },
+      "example": {
+        "title": "一个晚上的例子",
+        "intro": "示例场景。步骤仅作说明。",
+        "steps": [
+          {
+            "title": "晚上 8:40 · 客户询问配送",
+            "description": "智能体查看订单和您的配送政策，立刻回复。"
+          },
+          {
+            "title": "晚上 9:15 · 收到退款申请",
+            "description": "智能体起草回复后留给您的团队，因为退款需要人来决定。"
+          },
+          {
+            "title": "晚上 9:30 · 收到一条投诉",
+            "description": "它被标为紧急，并转给值班经理。"
+          },
+          {
+            "title": "第二天早上 · 团队已经领先一步",
+            "description": "例行问题已经处理完；草稿和那条紧急投诉在等您。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "AI 自动化",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "生成式 AI",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "我们的智能体如何工作",
+          "href": "/ai-agents"
+        }
+      ],
+      "technical": [
+        "答案以您自己的文档为依据（检索增强，常称为 RAG）",
+        "接入您的客服系统、邮箱和订单系统",
+        "规则：哪些问题智能体可以自己回答，哪些一律转给人",
+        "模型由您选择：Claude、OpenAI、Gemini，或您自己托管的开放权重模型",
+        "运行在您的云上、您自己的机器上，或由我们托管",
+        "完整记录智能体的每一步操作，包括成本和耗时",
+        "密码和密钥存放在独立的密钥库（WSL Vault）中，绝不放在智能体里"
+      ],
+      "storySlug": "lexisnexis"
+    },
+    "custom-apps": {
+      "icon": "AppWindow",
+      "meta": {
+        "title": "定制应用与集成，让您的各个系统协同工作 | TenthMatrix",
+        "description": "按您的业务方式量身打造的网页和移动应用、系统集成与 AI 功能。代码归您所有。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 定制应用与软件",
+        "title": "让您的各个系统互相打通",
+        "subtitle": "我们开发您的业务缺少的应用和系统连接，并在有用的地方加入 AI。最终代码归您所有。"
+      },
+      "pain": "我们的系统互不相通",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "员工把同样的数据从一个系统复制到另一个系统。",
+          "整个业务靠一张表格撑着，而且只有一个人看得懂。",
+          "现成的软件差不多能用，但总差那么一点。",
+          "客户和员工需要一个您还没有的应用或门户。"
+        ]
+      },
+      "does": {
+        "title": "我们构建什么",
+        "items": [
+          {
+            "title": "系统之间的连接",
+            "description": "您的 CRM、财务系统、商店和邮件自动共享数据。"
+          },
+          {
+            "title": "定制网页与移动应用",
+            "description": "门户、内部工具和客户应用，围绕您的工作方式来构建。"
+          },
+          {
+            "title": "应用内的 AI 功能",
+            "description": "在能省时间的地方加入搜索、起草、摘要和文档读取。"
+          },
+          {
+            "title": "值得信赖的数据看板",
+            "description": "数字集中在一处查看，数据始终保持干净。"
+          }
+        ]
+      },
+      "example": {
+        "title": "开发流程示例",
+        "intro": "示例场景。时间因项目而异。",
+        "steps": [
+          {
+            "title": "需求探索",
+            "description": "我们梳理清楚哪些系统存放哪些数据，以及谁在使用。"
+          },
+          {
+            "title": "可用的第一版",
+            "description": "在决定做完整开发之前，您先用自己的数据试用。"
+          },
+          {
+            "title": "构建",
+            "description": "完整的应用：经过测试、附有文档，并存放在您自己的代码仓库里。"
+          },
+          {
+            "title": "运行或移交",
+            "description": "我们负责维护，或连同培训一起移交给您的团队。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "软件开发",
+          "href": "/services/software-development"
+        },
+        {
+          "label": "OpsAPI",
+          "href": "/opsapi"
+        },
+        {
+          "label": "AI 原生工程",
+          "href": "/services/ai-native-digital-engineering"
+        },
+        {
+          "label": "生成式 AI 开发",
+          "href": "/generative-ai-development"
+        }
+      ],
+      "technical": [
+        "网页（Next.js、React）和移动应用；API 与后端",
+        "OpsAPI：登录、用户和业务数据集于一个可自托管的 API",
+        "每次改动上线之前都分阶段测试（Ring Promoter）",
+        "运行在您的云上、您自己的机器上，或由我们托管",
+        "完整记录智能体的每一步操作，包括成本和耗时",
+        "密码和密钥存放在独立的密钥库（WSL Vault）中，绝不放在智能体里"
+      ],
+      "storySlug": "imoderni"
+    },
+    "platforms-devops": {
+      "icon": "Server",
+      "meta": {
+        "title": "平台、DevOps 与安全：稳定运行的现代系统 | TenthMatrix",
+        "description": "平台现代化、自动化发布、安全测试和 24/7 监控，让系统保持在线，变更安全上线。"
+      },
+      "header": {
+        "eyebrow": "解决方案 · 平台与 DevOps",
+        "title": "现代、安全、稳定运行的系统",
+        "subtitle": "我们逐步改造老旧系统，不搞冒险的一次性切换；每次更新上线前都先测试，并全天候监控您的系统。"
+      },
+      "pain": "发布有风险，故障总是突如其来",
+      "problem": {
+        "title": "是不是很熟悉？",
+        "items": [
+          "每次发布都提心吊胆，所以很少发布。",
+          "一套老系统支撑着整个业务，谁都不敢碰。",
+          "客户比您更早发现故障。",
+          "您不确定自己有多容易遭受攻击。"
+        ]
+      },
+      "does": {
+        "title": "我们做什么",
+        "items": [
+          {
+            "title": "逐步现代化",
+            "description": "把老系统一块一块迁移到现代系统，不搞一次性大切换。"
+          },
+          {
+            "title": "安全发布",
+            "description": "更新分阶段测试，通过检查才会上线。失败的会自动回滚。"
+          },
+          {
+            "title": "守好大门",
+            "description": "安全测试、攻击与过载防护，以及威胁监控。"
+          },
+          {
+            "title": "24/7 全天候监控",
+            "description": "检查服务是否在线、证书和 DNS，在客户察觉之前就发出告警。"
+          }
+        ]
+      },
+      "example": {
+        "title": "一次发布的例子",
+        "intro": "示例场景。步骤仅作说明。",
+        "steps": [
+          {
+            "title": "开发人员完成了一处改动",
+            "description": "自动测试立即运行。"
+          },
+          {
+            "title": "分阶段验证",
+            "description": "集成、测试和验收环境，每个环境都有健康检查。"
+          },
+          {
+            "title": "正式上线",
+            "description": "只有全部检查通过才会上线。一旦出现失败，会自动回滚。"
+          },
+          {
+            "title": "持续监控",
+            "description": "监控确认这次改动运行正常；如果不正常，就通知相关人员。"
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "平台现代化",
+          "href": "/services/enterprise-platform-modernisation"
+        },
+        {
+          "label": "DevOps 自动化",
+          "href": "/services/devops-automation"
+        },
+        {
+          "label": "网络安全",
+          "href": "/services/cyber-security"
+        },
+        {
+          "label": "自主运维",
+          "href": "/services/autonomous-operations"
+        },
+        {
+          "label": "SysOps 24/7",
+          "href": "/sysops247"
+        }
+      ],
+      "technical": [
+        "带 int、test、acc 和 prod 环境的 CI/CD（Ring Promoter）",
+        "API 网关、Web 应用防火墙（WAF）、限流和 CDN（Proxy10x）",
+        "Kubernetes、GitOps 与基础设施即代码",
+        "渗透测试、SIEM 与 SOC 监控",
+        "密钥和密码存放在 WSL Vault，附审计日志"
+      ],
+      "storySlug": "hcl-technologies"
+    }
+  },
+  "cta": {
+    "title": "说说是哪项工作在拖慢您的团队",
+    "description": "工程师会在一个工作日内回复：我们会做什么，以及如何衡量效果。",
+    "button": "预约通话",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "查看我们的作品",
+      "link": "/our-work"
+    }
+  },
+  "slugs": [
+    "sales",
+    "marketing",
+    "back-office",
+    "customer-support",
+    "custom-apps",
+    "platforms-devops"
+  ]
+}

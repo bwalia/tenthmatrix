@@ -9,16 +9,16 @@ import { ArrowRight, ChevronDown, Menu, Search } from 'lucide-react';
 import Logo from '@/app/brand-assets/Logo';
 import ThemeToggle from './ThemeToggle';
 import MobileNav from './MobileNav';
-import { NAV_GROUPS } from './navConfig';
+import { NAV_GROUPS, BOOK_CALL_HREF } from './navConfig';
 import s from './SiteHeader.module.scss';
 
 const HOVER_OPEN_MS = 110;
 const HOVER_CLOSE_MS = 220;
 
 /**
- * Sticky header: logo, mega-menu (Work with us · Agents · Tools · Applications ·
- * Products · Services · Resources), search, theme toggle, contact, and the mobile drawer
- * trigger. Mega-menu = disclosure pattern: each trigger is a button with
+ * Sticky header: logo, mega-menu (Solutions · Our work · How we work ·
+ * Products & tech · Resources), search, theme toggle, one primary action
+ * (Book a call) and the mobile drawer trigger. Mega-menu = disclosure pattern: each trigger is a button with
  * aria-expanded/aria-controls; its panel follows it in the DOM so Tab moves
  * straight into the open panel. Opens on click, Enter/Space/ArrowDown, or
  * hover (mouse only); Esc / outside click / focus leaving / navigation close it.
@@ -213,10 +213,7 @@ export default function SiteHeader({ locale }) {
             <Search aria-hidden="true" size={20} strokeWidth={1.75} />
           </Link>
           <ThemeToggle />
-          <Link href={href('/start-a-project')} className={s.contactAlt} prefetch={false}>
-            {t('ctaProject')}
-          </Link>
-          <Link href={href('/ai-agent-journey')} className={s.contact} prefetch={false}>
+          <Link href={href(BOOK_CALL_HREF)} className={s.contact} prefetch={false}>
             {t('cta')}
           </Link>
           <button

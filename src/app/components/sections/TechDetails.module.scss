@@ -1,0 +1,60 @@
+@use '../../styles/mixins' as *;
+
+.details {
+  max-width: 52rem;
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tm-space-3);
+  min-height: var(--tm-tap-target);
+  padding: var(--tm-space-4) var(--tm-space-5);
+  font-weight: var(--tm-weight-semibold);
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.chev {
+  flex: none;
+  color: var(--tm-text-subtle);
+
+  @include motion {
+    transition: transform var(--tm-duration-fast) var(--tm-ease-standard);
+  }
+
+  .details[open] & {
+    transform: rotate(180deg);
+  }
+}
+
+.body {
+  padding: 0 var(--tm-space-5) var(--tm-space-5);
+  border-top: 1px solid var(--tm-line);
+}
+
+.intro {
+  margin-top: var(--tm-space-4);
+  color: var(--tm-text-muted);
+}
+
+.list {
+  margin: var(--tm-space-4) 0 0;
+  padding-inline-start: 1.2em;
+  display: grid;
+  gap: var(--tm-space-2);
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+}

@@ -9,6 +9,15 @@
     "subtitle": "CI/CD Orbit + Lanes — elke release verdient productie",
     "description": "Ring Promoter is het productieklare promotie-controlplane van TenthMatrix. v1.0.2 toont Orbit (vlootoverzicht) en Lanes (APP × INT/TEST/ACC/PROD-matrix) naast elkaar en promoot versies via geordende rings — int → test → acc → prod — met live health gates, automatische rollback en een volledig audittrail."
   },
+  "plain": {
+    "line": "Ring Promoter test elke software-update in stappen en zet hem pas live als hij de controles doorstaat. Mislukt een controle, dan wordt de update zelf teruggedraaid.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Bedrijven die zich geen slechte update op hun website of app kunnen veroorloven",
+      "Ontwikkelteams die vaker willen releasen, met minder risico",
+      "IT-teams met aparte test-, staging- en live-systemen"
+    ]
+  },
   "intro": {
     "title": "Wat is Ring Promoter?",
     "body": "Een klein controlplane dat applicatieversies via gedeelde rings promoot. Het draait als langlopende service (meestal op k3s), biedt een JSON REST API en een ingebouwde web-UI, en houdt huidige/vorige versies en historie bij per (applicatie, ring). Kubernetes-apps en VM/CI-apps delen één interface — de deployer wordt per app gekozen.",

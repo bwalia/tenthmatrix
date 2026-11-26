@@ -6,173 +6,138 @@
 //
 // No shop links anywhere: hardware goes to Workstation's marketing pages.
 import {
+  AppWindow,
+  BookA,
+  Headset,
+  ListChecks,
+  TrendingUp,
   Bug,
   Network,
   Bot,
   Workflow,
-  Sparkles,
   Cpu,
-  MessageSquare,
   Zap,
   Shield,
   KeyRound,
   GitBranch,
-  Activity,
   Gauge,
-  Code2,
   Briefcase,
   Users,
   Megaphone,
-  PenTool,
-  Lightbulb,
   Building2,
   LayoutGrid,
   Boxes,
-  Factory,
   Tag,
   Trophy,
-  Layers,
-  Wrench,
   Database,
-  Radar,
-  Lock,
   ShieldCheck,
   Server,
-  Laptop,
-  GraduationCap,
   FileText,
   Newspaper,
   BookOpen,
   LineChart,
   HelpCircle,
-  Video,
   Search,
-  Rocket,
   Handshake,
   BadgeCheck,
-  Send,
   Route,
   Landmark,
 } from 'lucide-react';
 
 export const HARDWARE_URL = 'https://www.workstation.co.uk/ai-workstations';
 
-/** Mega-menu groups, in header order. `overview` is the group's landing link. */
+/**
+ * Mega-menu groups, in header order. Five menus, each named after the question
+ * the visitor is asking (restructure plan, 26 Nov 2026):
+ *   Solutions        what can you do for me?
+ *   Our work         can you prove it?
+ *   How we work      what happens if I sign up?
+ *   Products & tech  what's under the hood?
+ *   Resources        where can I learn more?
+ * plus one primary button, Book a call (BOOK_CALL_HREF). `overview` is the
+ * group's landing link.
+ */
 export const NAV_GROUPS = [
   {
-    key: 'work',
-    overview: '/outsource-ai-development',
+    key: 'solutions',
+    overview: '/solutions',
     items: [
-      { key: 'outsource', href: '/outsource-ai-development', icon: Handshake },
-      { key: 'aiAgentDev', href: '/ai-agent-development', icon: Bot },
-      { key: 'genAiDev', href: '/generative-ai-development', icon: Sparkles },
-      { key: 'whyAgents', href: '/why-tenthmatrix-agents', icon: BadgeCheck },
+      { key: 'solSales', href: '/solutions/sales', icon: TrendingUp },
+      { key: 'solMarketing', href: '/solutions/marketing', icon: Megaphone },
+      { key: 'solBackOffice', href: '/solutions/back-office', icon: Workflow },
+      { key: 'solSupport', href: '/solutions/customer-support', icon: Headset },
+      { key: 'solCustomApps', href: '/solutions/custom-apps', icon: AppWindow },
+      { key: 'solPlatforms', href: '/solutions/platforms-devops', icon: Server },
       { key: 'agentJourney', href: '/ai-agent-journey', icon: Route },
-      { key: 'startProject', href: '/start-a-project', icon: Send },
     ],
   },
   {
-    key: 'agents',
-    overview: '/ai-agents',
+    key: 'work',
+    overview: '/our-work',
     items: [
-      { key: 'aiAgents', href: '/ai-agents', icon: Bot },
-      { key: 'fixloop', href: '/fixloop', icon: Bug },
-      { key: 'agentBuilding', href: '/agent-building', icon: Wrench },
-      { key: 'claudeAgents', href: '/claude-agents', icon: Sparkles },
-      { key: 'openaiAgents', href: '/openai-agents', icon: Cpu },
-      { key: 'grokBot', href: '/grok-bot', icon: MessageSquare },
-      { key: 'aiAutomation', href: '/ai-automation', icon: Workflow },
+      { key: 'ourWork', href: '/our-work', icon: Trophy },
+      { key: 'caseWorkstation', href: '/our-work/workstation', icon: BadgeCheck },
+      { key: 'aiWork', href: '/our-work#ai-work', icon: Bot },
+      { key: 'trackRecord', href: '/our-work#track-record', icon: Database },
+      { key: 'inHouse', href: '/our-work#in-house', icon: Boxes },
     ],
   },
   {
-    key: 'tools',
+    key: 'how',
+    overview: '/how-we-work',
+    items: [
+      { key: 'howWeWork', href: '/how-we-work', icon: Handshake },
+      { key: 'process', href: '/how-we-work#process', icon: ListChecks },
+      { key: 'engagement', href: '/how-we-work#engagement', icon: Users },
+      { key: 'cost', href: '/how-we-work#cost', icon: Tag },
+      { key: 'ownership', href: '/how-we-work#security', icon: ShieldCheck },
+      { key: 'faqs', href: '/how-we-work#faq', icon: HelpCircle },
+    ],
+  },
+  {
+    key: 'tech',
     overview: '/products',
-    items: [
-      { key: 'proxy10x', href: '/proxy10x', icon: Shield },
-      { key: 'wslVault', href: '/wsl-vault', icon: KeyRound },
-      { key: 'ringPromoter', href: '/ring-promoter', icon: GitBranch },
-      { key: 'sysops', href: '/sysops247', icon: Activity },
-      { key: 'jev', href: '/insights/jev', icon: Gauge },
-      { key: 'apis', href: '/docs/apis', icon: Code2 },
-    ],
-  },
-  {
-    key: 'applications',
-    overview: '/workstation-ai-solutions',
     items: [
       { key: 'jobshout', href: '/jobshout', icon: Briefcase },
-      { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
-      { key: 'opsapi', href: '/opsapi', icon: Network },
-      { key: 'crm', href: '/crm', icon: Users },
-      { key: 'marketing', href: '/marketing', icon: Megaphone },
-      { key: 'generativeAi', href: '/generative-ai', icon: PenTool },
-      { key: 'appliedAi', href: '/applied-ai', icon: Lightbulb },
-      { key: 'enterpriseAi', href: '/enterprise-ai', icon: Building2 },
-    ],
-  },
-  {
-    key: 'products',
-    overview: '/products',
-    items: [
-      { key: 'allProducts', href: '/products', icon: LayoutGrid },
+      { key: 'ringPromoter', href: '/ring-promoter', icon: GitBranch },
+      { key: 'proxy10x', href: '/proxy10x', icon: Shield },
+      { key: 'wslVault', href: '/wsl-vault', icon: KeyRound },
       { key: 'fixloop', href: '/fixloop', icon: Bug },
       { key: 'opsapi', href: '/opsapi', icon: Network },
-      { key: 'solutions', href: '/workstation-ai-solutions', icon: Boxes },
-      { key: 'aiSolutions', href: '/ai-solutions', icon: Rocket },
-      { key: 'industries', href: '/industries', icon: Factory },
-      { key: 'pricing', href: '/pricing', icon: Tag },
-      { key: 'stories', href: '/stories', icon: Trophy },
-    ],
-  },
-  {
-    key: 'services',
-    overview: '/services',
-    items: [
-      { key: 'modernisation', href: '/services/enterprise-platform-modernisation', icon: Layers },
-      { key: 'aiNative', href: '/services/ai-native-digital-engineering', icon: Code2 },
-      { key: 'dataFoundations', href: '/services/data-foundations-ai', icon: Database },
-      { key: 'autonomousOps', href: '/services/autonomous-operations', icon: Radar },
-      { key: 'consultancy', href: '/services/ai-solutions-consultancy', icon: Lightbulb },
-      { key: 'devops', href: '/services/devops-automation', icon: Server },
-      { key: 'cyberSecurity', href: '/services/cyber-security', icon: Lock },
-      { key: 'securityFundamentals', href: '/services/cybersecurity-fundamentals', icon: ShieldCheck },
-      { key: 'softwareDevelopment', href: '/services/software-development', icon: Laptop },
-      { key: 'upskilling', href: '/ai-upskilling', icon: GraduationCap },
+      { key: 'jev', href: '/insights/jev', icon: Gauge },
+      { key: 'selfHosted', href: '/agent-building', icon: Cpu },
+      { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
+      { key: 'allProducts', href: '/products', icon: LayoutGrid },
     ],
   },
   {
     key: 'resources',
-    overview: '/technical-notes',
+    overview: '/docs/blogs',
     items: [
-      { key: 'articles', href: '/technical-notes', icon: FileText },
       { key: 'blog', href: '/docs/blogs', icon: Newspaper },
+      { key: 'articles', href: '/technical-notes', icon: FileText },
+      { key: 'glossary', href: '/glossary', icon: BookA },
       { key: 'insights', href: '/insights', icon: LineChart },
-      { key: 'docs', href: '/docs', icon: BookOpen },
-      { key: 'faqs', href: '/docs/faqs', icon: HelpCircle },
       { key: 'news', href: '/news', icon: Zap },
-      { key: 'videos', href: '/video-gallery', icon: Video },
+      { key: 'docs', href: '/docs', icon: BookOpen },
+      { key: 'about', href: '/about-us', icon: Building2 },
       { key: 'search', href: '/search', icon: Search },
     ],
   },
 ];
 
-/** Footer columns: group key → item keys/hrefs (labels from nav.items / footer.links). */
+/** The one primary action, everywhere: header, drawer, homepage, page CTAs. */
+export const BOOK_CALL_HREF = '/start-a-project';
+
+/** Footer: four columns (Solutions, Our work, Company, Legal). Labels from nav.items / footer.links / footer.legalLinks. */
 export const FOOTER_COLUMNS = [
-  { key: 'work', items: ['outsource', 'aiAgentDev', 'genAiDev', 'whyAgents', 'agentJourney', 'startProject'] },
-  { key: 'agents', items: ['aiAgents', 'fixloop', 'agentBuilding', 'claudeAgents', 'openaiAgents', 'aiAutomation'] },
-  { key: 'products', items: ['ringPromoter', 'proxy10x', 'wslVault', 'jobshout', 'fixloop', 'opsapi', 'jev', 'allProducts'] },
-  { key: 'services', items: ['modernisation', 'aiNative', 'devops', 'cyberSecurity', 'softwareDevelopment', 'servicesAll'] },
-  { key: 'resources', items: ['articles', 'blog', 'insights', 'docs', 'faqs', 'news'] },
-  { key: 'company', items: ['about', 'whyTenthmatrix', 'partners', 'stories', 'bookOnline', 'contact'] },
+  { key: 'solutions', items: ['solSales', 'solMarketing', 'solBackOffice', 'solSupport', 'solCustomApps', 'solPlatforms'] },
+  { key: 'work', items: ['ourWork', 'caseWorkstation', 'aiWork', 'trackRecord', 'inHouse', 'allProducts'] },
+  { key: 'company', items: ['howWeWork', 'about', 'blog', 'articles', 'glossary', 'contact'] },
 ];
 
 /** Extra hrefs used only by the footer. */
 export const EXTRA_LINKS = {
-  servicesAll: '/services',
-  about: '/about-us',
-  whyTenthmatrix: '/why-tenthmatrix',
-  partners: '/partners',
-  bookOnline: '/book-online',
   contact: '/contact-us',
 };
 

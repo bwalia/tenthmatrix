@@ -39,6 +39,20 @@ export function articleDate(a) {
   return a?.published_date || null;
 }
 
+// Tags that mark a post as written for business readers (owners, managers);
+// everything else on the blog is for developers. A post can set
+// `audience: "business" | "developers"` to override.
+const BUSINESS_TAGS = new Set(['business', 'case-study']);
+
+/** 'business' | 'developers' for a blog post (meta or detail). */
+export function blogAudience(b) {
+  if (b?.audience === 'business' || b?.audience === 'developers') return b.audience;
+  const tags = (Array.isArray(b?.tags) ? b.tags : []).map((t) => tagSlug(typeof t === 'string' ? { name: t } : t));
+  return tags.some((x) => BUSINESS_TAGS.has(x)) ? 'business' : 'developers';
+}
+
+const audienceLabel = (aud, t) => t(aud === 'business' ? 'kinds.forBusiness' : 'kinds.forDevelopers');
+
 export function blogCard(b, locale, t) {
   return {
     title: b.title,
@@ -46,7 +60,7 @@ export function blogCard(b, locale, t) {
     excerpt: b.excerpt,
     date: b.published_date,
     image: blogCover(b),
-    kind: t('kinds.blog'),
+    kind: `${t('kinds.blog')} · ${audienceLabel(blogAudience(b), t)}`,
     readingTime: b.reading_minutes ? t('common.minRead', { minutes: b.reading_minutes }) : undefined,
     tags: tagLabels(b.tags),
     badge: isSample(b.slug) ? t('common.sample') : undefined,
@@ -60,7 +74,7 @@ export function articleCard(a, locale, t) {
     excerpt: truncate(stripHtml(a.sub_title || a.meta_description || a.content || ''), 170),
     date: articleDate(a),
     image: a.image || undefined,
-    kind: t('kinds.article'),
+    kind: `${t('kinds.article')} · ${audienceLabel('developers', t)}`,
     tags: (a.cats || []).map((c) => c.cat_name).filter(Boolean),
     badge: isSample(a.code) ? t('common.sample') : undefined,
   };

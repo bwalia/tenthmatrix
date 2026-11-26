@@ -56,7 +56,7 @@ export default async function StartProjectPage({ params }) {
           <div className={s.next}>
             <h2 className={s.nextTitle}>{data.modelsTitle}</h2>
             <p className={s.note}>{data.modelsBody}</p>
-            <Link href={`/${locale}/outsource-ai-development#engagement`} className={s.more} prefetch={false}>
+            <Link href={`/${locale}/how-we-work#engagement`} className={s.more} prefetch={false}>
               {data.modelsLink}
               <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
             </Link>
@@ -69,8 +69,7 @@ export default async function StartProjectPage({ params }) {
           <h2 className={s.formTitle}>{data.formTitle}</h2>
           <ContactForm
             source="tenthmatrix_start_project"
-            projectTypes={data.projectTypes}
-            projectTypeLabel={data.projectTypeLabel}
+            variant="call"
             messageLabel={data.messageLabel}
             messageHint={data.messageHint}
           />
