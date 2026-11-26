@@ -7,6 +7,7 @@
 // No shop links anywhere: hardware goes to Workstation's marketing pages.
 import {
   AppWindow,
+  Calculator,
   BookA,
   Headset,
   ListChecks,
@@ -106,6 +107,7 @@ export const NAV_GROUPS = [
       { key: 'opsapi', href: '/opsapi', icon: Network },
       { key: 'jev', href: '/insights/jev', icon: Gauge },
       { key: 'selfHosted', href: '/agent-building', icon: Cpu },
+      { key: 'daybook', href: '/daybook', icon: Calculator },
       { key: 'aiTaxFiling', href: '/ai-tax-filing', icon: Landmark },
       { key: 'allProducts', href: '/products', icon: LayoutGrid },
     ],
