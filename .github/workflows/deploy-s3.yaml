@@ -4,13 +4,25 @@ name: "PROD → S3 (reusable)"
 # www.tenthmatrix.com + apex (and tenthmatrix.co.uk) are served by wslproxy
 # (rule tm-website-s3-proxy) from the bucket's website endpoint.
 #
-# Called by build-and-deploy.yaml (code: every push to main, or dispatch with
-# TARGET_ENV=prod) and content-refresh.yaml (OpsAPI CMS posts changed, or a
-# manual refresh). Prebuild pulls the published posts of the `tenthmatrix`
-# CMS namespace on top of the committed blog JSON (scripts/fetchBlogs.mjs);
-# if OpsAPI is down the committed set ships unchanged.
+# Releases go through Ring Promoter (rp.workstation.co.uk, app
+# tenthmatrix-website): its prod promotion dispatches build-and-deploy.yaml
+# with TARGET_ENV=prod, which calls this with sha=<the promoted image tag>.
+# Ring Promoter then reads /version.json (written last) and checks it reports
+# that tag.
+#
+# content-refresh.yaml calls this with no sha when OpsAPI CMS posts change:
+# it rebuilds the release prod already runs (the commit in the bucket's
+# version.json), never unpromoted code from main. Prebuild pulls the published
+# posts of the `tenthmatrix` CMS namespace on top of the committed blog JSON
+# (scripts/fetchBlogs.mjs); if OpsAPI is down the committed set ships unchanged.
 on:
   workflow_call:
+    inputs:
+      sha:
+        type: string
+        description: "Commit / image tag to export (empty = what prod runs now)"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -40,6 +52,32 @@ jobs:
         run: find "$GITHUB_WORKSPACE" -mindepth 1 -delete
 
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the release may be any commit on main
+
+      # Export exactly the promoted release: the given sha, else the commit prod
+      # serves now (version.json in the bucket), else main with a warning (first
+      # export, before any version.json exists).
+      - name: Check out the release
+        id: release
+        env:
+          WANT_SHA: ${{ inputs.sha }}
+        run: |
+          set -euo pipefail
+          SRC=promotion
+          SHA="${WANT_SHA}"
+          if [ -z "$SHA" ]; then
+            SRC=content-refresh
+            SHA=$(curl -fsS --max-time 20 "https://tenthmatrix-website.s3.eu-west-2.amazonaws.com/version.json" | sed -n 's/.*"commit":"\([0-9a-f]*\)".*/\1/p' || true)
+            if [ -z "$SHA" ]; then
+              echo "::warning::No version.json in the bucket yet: exporting main."
+              SHA=$(git rev-parse HEAD)
+            fi
+          fi
+          git checkout --quiet "$SHA"
+          echo "version=$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
+          echo "source=$SRC" >> "$GITHUB_OUTPUT"
+          echo "Exporting $(git rev-parse --short=7 HEAD) ($SRC)" | tee -a "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/setup-node@v4
         with:
@@ -69,6 +107,26 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.TM_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TM_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: eu-west-2
+
+      # Ring Promoter (app tenthmatrix-website, ring prod) health-checks this
+      # file: `version` must equal the release it promoted (image tag = SHA7).
+      # Written here, not by the release's deploy-s3.sh, so exporting an older
+      # commit still publishes it. Last, so the version only flips once the
+      # site is live.
+      - name: Publish version.json (no-cache)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TM_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TM_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: eu-west-2
+          VERSION: ${{ steps.release.outputs.version }}
+          SOURCE: ${{ steps.release.outputs.source }}
+        run: |
+          set -euo pipefail
+          printf '{"version":"%s","commit":"%s","exported_at":"%s","source":"%s"}\n' \
+            "$VERSION" "$(git rev-parse HEAD)" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$SOURCE" > version.json
+          aws s3 cp version.json s3://tenthmatrix-website/version.json \
+            --cache-control "no-cache, no-store, must-revalidate" --content-type application/json
+          cat version.json
 
       - name: Smoke test www.tenthmatrix.com
         run: |

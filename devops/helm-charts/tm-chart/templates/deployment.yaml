@@ -56,14 +56,16 @@ spec:
                 name: {{ include "tm-chart.secretName" . | quote }}
                 optional: true
           {{- end }}
-          {{- with .Values.appConfig }}
           # Non-secret runtime config. Explicit env wins over envFrom on overlap.
           env:
-            {{- range $k, $v := . }}
+            # Ring Promoter reads this back from /api/health to confirm the
+            # ring runs the image tag it promoted.
+            - name: APP_VERSION
+              value: {{ .Values.image.tag | default .Chart.AppVersion | quote }}
+            {{- range $k, $v := .Values.appConfig }}
             - name: {{ $k }}
               value: {{ $v | quote }}
             {{- end }}
-          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.targetPort }}
