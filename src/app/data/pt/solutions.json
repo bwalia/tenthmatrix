@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "title": "Soluções: AI e software para os problemas que atrasam a sua equipa | TenthMatrix",
+    "description": "Vendas, marketing, back office, apoio ao cliente, aplicações à medida e plataformas. Comece pelo problema; veja o que construímos, um exemplo e um cliente com o mesmo problema."
+  },
+  "header": {
+    "eyebrow": "Soluções",
+    "title": "Comece pelo problema, não pela tecnologia",
+    "subtitle": "Escolha o que atrasa a sua equipa. Cada solução mostra o que construímos, um exemplo a funcionar e um cliente que teve o mesmo problema."
+  },
+  "ui": {
+    "see": "Ver a solução",
+    "problem": "O problema",
+    "story": "Um cliente com o mesmo problema",
+    "storyTrack": "Do nosso historial",
+    "deliverTitle": "Como o entregamos",
+    "deliverBody": "Começamos com uma tarefa. Vê tudo a funcionar com os seus próprios dados num piloto antes de avançar para a construção completa, e o código e os dados são seus em qualquer caso.",
+    "deliverLink": "Como trabalhamos",
+    "related": "Páginas relacionadas",
+    "technical": "Detalhes técnicos para a sua equipa de TI",
+    "glossary": "Não conhece algum termo? Consulte o glossário em linguagem simples.",
+    "other": "Outras soluções"
+  },
+  "journey": {
+    "title": "Não sabe por onde começar?",
+    "body": "Responda a nove perguntas curtas e veja o agente que construiríamos para si. Demora cerca de 3 minutos e não precisa de se registar.",
+    "button": "Desenhe o seu agente em 3 minutos",
+    "link": "/ai-agent-journey"
+  },
+  "pages": {
+    "sales": {
+      "icon": "TrendingUp",
+      "meta": {
+        "title": "Agentes de vendas com AI: acompanhe cada lead antes de ele arrefecer | TenthMatrix",
+        "description": "Agentes de vendas com AI que respondem a pedidos em minutos, qualificam compradores, pesquisam empresas e mantêm o seu CRM atualizado. Uma pessoa aprova cada e-mail."
+      },
+      "header": {
+        "eyebrow": "Soluções · Vendas",
+        "title": "Acompanhe cada lead antes de ele arrefecer",
+        "subtitle": "Um agente de vendas com AI responde a pedidos em minutos, descobre o que o comprador precisa e mantém o seu CRM atualizado. A sua equipa passa o tempo com quem está pronto para comprar."
+      },
+      "pain": "Os leads arrefecem antes de alguém dar seguimento",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "Os pedidos esperam horas ou dias por uma resposta e os compradores vão para outro lado.",
+          "Os vendedores passam as manhãs a atualizar o CRM em vez de vender.",
+          "Ninguém tem tempo para pesquisar a empresa antes da chamada.",
+          "O seguimento fica esquecido sempre que a equipa está ocupada."
+        ]
+      },
+      "does": {
+        "title": "O que o agente faz",
+        "items": [
+          {
+            "title": "Responde em minutos",
+            "description": "Responde a cada novo pedido, de dia ou de noite, e faz as perguntas que um bom vendedor faria."
+          },
+          {
+            "title": "Encontra os compradores sérios",
+            "description": "Avalia orçamento, prazos e necessidade segundo as suas regras e passa os bons leads a uma pessoa."
+          },
+          {
+            "title": "Prepara a sua equipa",
+            "description": "Pesquisa a empresa antes da chamada e escreve um breve resumo."
+          },
+          {
+            "title": "Redige o seguimento",
+            "description": "Escreve o e-mail de seguimento e a atualização do CRM. O seu vendedor verifica e carrega em enviar."
+          }
+        ]
+      },
+      "example": {
+        "title": "Uma manhã de exemplo",
+        "intro": "Cenário de exemplo. Horários e passos são ilustrativos.",
+        "steps": [
+          {
+            "title": "9:12 · Um comprador preenche o formulário do seu site",
+            "description": "O agente responde em minutos, pergunta pelo orçamento e pelos prazos e propõe um horário para uma chamada."
+          },
+          {
+            "title": "9:30 · O lead está qualificado",
+            "description": "O agente avalia o lead segundo as suas regras e escreve um resumo de duas linhas no CRM."
+          },
+          {
+            "title": "10:00 · O seu vendedor recebe um resumo",
+            "description": "Quem é o comprador, o que pediu e do que precisa, pronto antes da chamada."
+          },
+          {
+            "title": "Depois da chamada · Seguimento redigido",
+            "description": "O agente redige o e-mail e a nota no CRM. Uma pessoa aprova antes de serem enviados."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "CRM com AI",
+          "href": "/crm"
+        },
+        {
+          "label": "Como funcionam os nossos agentes",
+          "href": "/ai-agents"
+        },
+        {
+          "label": "Desenvolvimento de agentes de IA",
+          "href": "/ai-agent-development"
+        }
+      ],
+      "technical": [
+        "Liga-se ao seu CRM, e-mail e calendário (através de conectores, muitas vezes chamados MCP)",
+        "Modelo à sua escolha: Claude, OpenAI, Gemini ou um modelo de pesos abertos alojado por si",
+        "Funciona na sua cloud, nas suas próprias máquinas ou gerido por nós",
+        "Um registo completo de cada ação do agente, com custos e tempos",
+        "Palavras-passe e chaves guardadas num cofre separado (WSL Vault), nunca dentro do agente"
+      ],
+      "storySlug": "workstation"
+    },
+    "marketing": {
+      "icon": "Megaphone",
+      "meta": {
+        "title": "Agentes de marketing com AI: publique conteúdo sem estrangulamentos | TenthMatrix",
+        "description": "Agentes de marketing que redigem publicações, e-mails e campanhas no tom da sua marca, publicam após aprovação e reportam o que funcionou."
+      },
+      "header": {
+        "eyebrow": "Soluções · Marketing",
+        "title": "Publique conteúdo sem estrangulamentos",
+        "subtitle": "Um agente de marketing redige as suas publicações, e-mails e campanhas no tom da sua marca e reporta o que funcionou. Uma pessoa dá o aval antes de qualquer coisa ir para o ar."
+      },
+      "pain": "O conteúdo demora uma eternidade a sair",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "Um artigo de blogue demora semanas a passar da ideia à publicação.",
+          "O site, as redes sociais e o e-mail precisam de conteúdo todas as semanas.",
+          "Preparar um relatório de campanha leva um dia inteiro.",
+          "As boas ideias ficam num documento porque ninguém tem tempo para as desenvolver."
+        ]
+      },
+      "does": {
+        "title": "O que o agente faz",
+        "items": [
+          {
+            "title": "Rascunhos na sua voz",
+            "description": "Artigos de blogue, publicações sociais, newsletters e textos de produto, escritos segundo o seu guia de estilo."
+          },
+          {
+            "title": "Transforma um conteúdo em vários",
+            "description": "Um caso de estudo transforma-se numa publicação, num e-mail e num pequeno fio nas redes sociais."
+          },
+          {
+            "title": "Publica após aprovação",
+            "description": "Nada vai para o ar antes de uma pessoa identificada o aprovar."
+          },
+          {
+            "title": "Reporta o que funcionou",
+            "description": "Um resumo semanal do que as pessoas leram, clicaram e perguntaram."
+          }
+        ]
+      },
+      "example": {
+        "title": "Uma semana de exemplo",
+        "intro": "Cenário de exemplo. Os passos são ilustrativos.",
+        "steps": [
+          {
+            "title": "Segunda-feira · Envia um resumo de duas linhas",
+            "description": "\"Anuncie o novo serviço aos clientes existentes.\""
+          },
+          {
+            "title": "Segunda à tarde · Chegam os rascunhos",
+            "description": "Um e-mail, um artigo de blogue e três publicações para redes sociais, no tom da sua marca."
+          },
+          {
+            "title": "Terça-feira · Aprova e ajusta",
+            "description": "As alterações ficam registadas, para que os próximos rascunhos precisem de menos."
+          },
+          {
+            "title": "Sexta-feira · O relatório",
+            "description": "O que foi aberto, lido e partilhado, e o que experimentar na próxima semana."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Marketing com AI",
+          "href": "/marketing"
+        },
+        {
+          "label": "IA generativa",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Agentes Claude",
+          "href": "/claude-agents"
+        }
+      ],
+      "technical": [
+        "Liga-se ao seu site ou CMS, à plataforma de e-mail e às ferramentas de análise",
+        "Tom de voz e regras de estilo guardados como instruções escritas que pode ler e alterar",
+        "Modelo à sua escolha: Claude, OpenAI, Gemini ou um modelo de pesos abertos alojado por si",
+        "Funciona na sua cloud, nas suas próprias máquinas ou gerido por nós",
+        "Um registo completo de cada ação do agente, com custos e tempos",
+        "Palavras-passe e chaves guardadas num cofre separado (WSL Vault), nunca dentro do agente"
+      ],
+      "storySlug": "europa-components"
+    },
+    "back-office": {
+      "icon": "Workflow",
+      "meta": {
+        "title": "Agentes de AI para o back office: faturas, encomendas e administração tratadas por si | TenthMatrix",
+        "description": "Agentes que leem faturas, encomendas e formulários, os registam no seu sistema financeiro, assinalam o que não bate certo e esperam pela aprovação antes de enviar ou pagar o que quer que seja."
+      },
+      "header": {
+        "eyebrow": "Soluções · Back office e administração",
+        "title": "Elimine o trabalho repetitivo das faturas, encomendas e administração",
+        "subtitle": "Os agentes de back office leem faturas, encomendas e e-mails, registam-nos nos seus sistemas e assinalam o que não bate certo. Nada é enviado, pago ou apagado sem a aprovação de uma pessoa."
+      },
+      "pain": "Horas perdidas com faturas e registo de encomendas",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "Todas as semanas, horas a digitar faturas e encomendas no sistema financeiro.",
+          "O fecho do mês demora dias, e a maior parte é copiar e conferir.",
+          "Uma caixa de correio partilhada cheia de pedidos que seguem todos os mesmos poucos padrões.",
+          "Todos os meses, os relatórios são refeitos à mão a partir das mesmas folhas de cálculo."
+        ]
+      },
+      "does": {
+        "title": "O que o agente faz",
+        "items": [
+          {
+            "title": "Lê a documentação",
+            "description": "Faturas, encomendas, guias de remessa e formulários, a partir de e-mail ou carregamento."
+          },
+          {
+            "title": "Regista e faz a correspondência",
+            "description": "Introduz os dados no seu sistema financeiro ou de encomendas e faz corresponder as faturas às encomendas."
+          },
+          {
+            "title": "Assinala as exceções",
+            "description": "Tudo o que não bate certo vai para uma pessoa, com o motivo."
+          },
+          {
+            "title": "Espera pela aprovação",
+            "description": "Nenhum pagamento, lançamento ou eliminação acontece sem um aprovador identificado."
+          }
+        ]
+      },
+      "example": {
+        "title": "Uma fatura de exemplo",
+        "intro": "Cenário de exemplo. Os passos são ilustrativos.",
+        "steps": [
+          {
+            "title": "Chega uma fatura por e-mail",
+            "description": "O agente lê-a e extrai o fornecedor, as linhas, os totais e o IVA."
+          },
+          {
+            "title": "É associada à encomenda",
+            "description": "Preços e quantidades são verificados face à ordem de compra."
+          },
+          {
+            "title": "Uma linha não bate certo",
+            "description": "O agente avisa a sua equipa financeira, com a diferença destacada."
+          },
+          {
+            "title": "Uma pessoa aprova",
+            "description": "Depois de aprovada, o agente lança-a. Tudo o que fez fica registado."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Automação com IA",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Jobshout",
+          "href": "/jobshout"
+        },
+        {
+          "label": "Declaração de impostos com AI",
+          "href": "/ai-tax-filing"
+        },
+        {
+          "label": "Fundamentos de dados",
+          "href": "/services/data-foundations-ai"
+        }
+      ],
+      "technical": [
+        "Leitura de documentos (extração) com verificações segundo as suas próprias regras",
+        "Liga-se a sistemas financeiros, ERP e de encomendas através das suas APIs ou exportações",
+        "Pontos de aprovação para tudo o que envia, gasta ou apaga",
+        "Modelo à sua escolha: Claude, OpenAI, Gemini ou um modelo de pesos abertos alojado por si",
+        "Funciona na sua cloud, nas suas próprias máquinas ou gerido por nós",
+        "Um registo completo de cada ação do agente, com custos e tempos",
+        "Palavras-passe e chaves guardadas num cofre separado (WSL Vault), nunca dentro do agente"
+      ],
+      "storySlug": "cogno-ai"
+    },
+    "customer-support": {
+      "icon": "Headset",
+      "meta": {
+        "title": "Agentes de apoio ao cliente com AI: responda mais depressa aos clientes | TenthMatrix",
+        "description": "Agentes de apoio que respondem às perguntas frequentes com base nos seus próprios documentos, redigem respostas para a sua equipa e encaminham os pedidos urgentes para a pessoa certa."
+      },
+      "header": {
+        "eyebrow": "Soluções · Apoio ao cliente",
+        "title": "Responda mais depressa aos clientes, com a sua equipa no comando",
+        "subtitle": "Um agente de apoio responde às perguntas frequentes com base nos seus próprios documentos e redige respostas para as mais difíceis. A sua equipa verifica o que importa e trata do resto."
+      },
+      "pain": "A caixa de apoio nunca esvazia",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "A caixa de apoio nunca chega a zero.",
+          "A sua equipa responde todos os dias, à mão, às mesmas dez perguntas.",
+          "Os clientes que escrevem à noite esperam até de manhã.",
+          "Os problemas urgentes ficam na fila atrás dos pedidos de rotina."
+        ]
+      },
+      "does": {
+        "title": "O que o agente faz",
+        "items": [
+          {
+            "title": "Respostas a partir dos seus documentos",
+            "description": "Consulta as suas páginas de ajuda, políticas e respostas anteriores antes de responder."
+          },
+          {
+            "title": "Redige as respostas mais difíceis",
+            "description": "Para tudo o que seja fora do normal, escreve um rascunho para uma pessoa verificar."
+          },
+          {
+            "title": "Separa os casos urgentes",
+            "description": "Reconhece reclamações, falhas e clientes VIP e envia-os diretamente para uma pessoa."
+          },
+          {
+            "title": "Identifica as lacunas",
+            "description": "Quando a mesma pergunta continua a aparecer, sugere uma nova página de ajuda."
+          }
+        ]
+      },
+      "example": {
+        "title": "Uma noite de exemplo",
+        "intro": "Cenário de exemplo. Os passos são ilustrativos.",
+        "steps": [
+          {
+            "title": "20:40 · Um cliente pergunta pela entrega",
+            "description": "O agente verifica a encomenda e a sua política de entregas e responde logo."
+          },
+          {
+            "title": "21:15 · Chega um pedido de reembolso",
+            "description": "O agente redige uma resposta e deixa-a para a sua equipa, porque os reembolsos exigem uma pessoa."
+          },
+          {
+            "title": "21:30 · Chega uma reclamação",
+            "description": "É marcada como urgente e enviada ao gestor de serviço."
+          },
+          {
+            "title": "Na manhã seguinte · A sua equipa começa com vantagem",
+            "description": "As perguntas de rotina estão resolvidas; os rascunhos e o caso urgente estão à espera."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Automação com IA",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "IA generativa",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Como funcionam os nossos agentes",
+          "href": "/ai-agents"
+        }
+      ],
+      "technical": [
+        "Respostas baseadas nos seus próprios documentos (recuperação, muitas vezes chamada RAG)",
+        "Liga-se ao seu helpdesk, e-mail e sistema de encomendas",
+        "Regras sobre o que o agente pode responder sozinho e o que vai sempre para uma pessoa",
+        "Modelo à sua escolha: Claude, OpenAI, Gemini ou um modelo de pesos abertos alojado por si",
+        "Funciona na sua cloud, nas suas próprias máquinas ou gerido por nós",
+        "Um registo completo de cada ação do agente, com custos e tempos",
+        "Palavras-passe e chaves guardadas num cofre separado (WSL Vault), nunca dentro do agente"
+      ],
+      "storySlug": "lexisnexis"
+    },
+    "custom-apps": {
+      "icon": "AppWindow",
+      "meta": {
+        "title": "Aplicações à medida e integrações que fazem os seus sistemas trabalhar em conjunto | TenthMatrix",
+        "description": "Aplicações web e móveis à medida, integrações e funcionalidades de AI, construídas à volta da forma como o seu negócio funciona. O código é seu."
+      },
+      "header": {
+        "eyebrow": "Soluções · Aplicações e software à medida",
+        "title": "Faça os seus sistemas comunicarem entre si",
+        "subtitle": "Construímos as aplicações e ligações que faltam ao seu negócio, com AI incorporada onde ajuda. No final, o código é seu."
+      },
+      "pain": "Os nossos sistemas não comunicam entre si",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "As pessoas copiam os mesmos dados de um sistema para outro.",
+          "Uma folha de cálculo mantém o negócio de pé e só uma pessoa a percebe.",
+          "O software de prateleira quase serve, mas não totalmente.",
+          "Os clientes e os colaboradores precisam de uma aplicação ou portal que não tem."
+        ]
+      },
+      "does": {
+        "title": "O que construímos",
+        "items": [
+          {
+            "title": "Ligações entre sistemas",
+            "description": "O seu CRM, sistema financeiro, loja online e e-mail partilham dados automaticamente."
+          },
+          {
+            "title": "Aplicações web e móveis à medida",
+            "description": "Portais, ferramentas internas e aplicações para clientes, construídos à volta da sua forma de trabalhar."
+          },
+          {
+            "title": "Funcionalidades de AI na aplicação",
+            "description": "Pesquisa, redação, resumos e leitura de documentos onde poupam tempo."
+          },
+          {
+            "title": "Painéis em que pode confiar",
+            "description": "Um só lugar para ver os números, com dados mantidos limpos."
+          }
+        ]
+      },
+      "example": {
+        "title": "Um exemplo de construção",
+        "intro": "Cenário de exemplo. Os prazos variam consoante o trabalho.",
+        "steps": [
+          {
+            "title": "Descoberta",
+            "description": "Mapeamos que sistemas guardam que dados e quem os usa."
+          },
+          {
+            "title": "Uma primeira versão a funcionar",
+            "description": "Usa-a com os seus próprios dados antes de avançar para a construção completa."
+          },
+          {
+            "title": "Construção",
+            "description": "A aplicação completa, testada, documentada e no seu próprio repositório de código."
+          },
+          {
+            "title": "Operar ou transferir",
+            "description": "Cuidamos dela ou entregamo-la à sua equipa com formação."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Desenvolvimento de software",
+          "href": "/services/software-development"
+        },
+        {
+          "label": "OpsAPI",
+          "href": "/opsapi"
+        },
+        {
+          "label": "Engenharia nativa de IA",
+          "href": "/services/ai-native-digital-engineering"
+        },
+        {
+          "label": "Desenvolvimento de IA generativa",
+          "href": "/generative-ai-development"
+        }
+      ],
+      "technical": [
+        "Aplicações web (Next.js, React) e móveis; APIs e back ends",
+        "OpsAPI para início de sessão, utilizadores e dados do negócio numa única API alojada por si",
+        "Cada alteração é testada por fases antes de entrar no ar (Ring Promoter)",
+        "Funciona na sua cloud, nas suas próprias máquinas ou gerido por nós",
+        "Um registo completo de cada ação do agente, com custos e tempos",
+        "Palavras-passe e chaves guardadas num cofre separado (WSL Vault), nunca dentro do agente"
+      ],
+      "storySlug": "imoderni"
+    },
+    "platforms-devops": {
+      "icon": "Server",
+      "meta": {
+        "title": "Plataformas, DevOps e segurança: sistemas modernos que não falham | TenthMatrix",
+        "description": "Modernização de plataformas, versões automatizadas, testes de segurança e monitorização 24/7, para que os seus sistemas não falhem e as alterações entrem no ar em segurança."
+      },
+      "header": {
+        "eyebrow": "Soluções · Plataformas e DevOps",
+        "title": "Sistemas modernos e seguros que não falham",
+        "subtitle": "Modernizamos sistemas antigos sem uma mudança brusca e arriscada, testamos cada atualização antes de entrar no ar e vigiamos os seus sistemas a toda a hora."
+      },
+      "pain": "As versões são arriscadas e as falhas apanham-nos de surpresa",
+      "problem": {
+        "title": "Soa-lhe familiar?",
+        "items": [
+          "Cada versão dá nervos, por isso quase não há versões.",
+          "Um sistema antigo faz o negócio funcionar e ninguém quer mexer-lhe.",
+          "Os clientes notam as falhas antes de si.",
+          "Não sabe bem quão exposto está a um ataque."
+        ]
+      },
+      "does": {
+        "title": "O que fazemos",
+        "items": [
+          {
+            "title": "Modernize passo a passo",
+            "description": "Passe os sistemas antigos para sistemas modernos, uma peça de cada vez, sem mudança brusca."
+          },
+          {
+            "title": "Publique versões em segurança",
+            "description": "As atualizações são testadas por fases e só entram no ar quando passam. Se falharem, revertem sozinhas."
+          },
+          {
+            "title": "Proteja a porta de entrada",
+            "description": "Testes de segurança, proteção contra ataques e sobrecargas e vigilância de ameaças."
+          },
+          {
+            "title": "Vigie 24/7",
+            "description": "Verificações de disponibilidade, certificados e DNS, com alertas antes de os clientes darem por isso."
+          }
+        ]
+      },
+      "example": {
+        "title": "Um exemplo de versão",
+        "intro": "Cenário de exemplo. Os passos são ilustrativos.",
+        "steps": [
+          {
+            "title": "Um programador conclui uma alteração",
+            "description": "Os testes automáticos arrancam logo."
+          },
+          {
+            "title": "É experimentada por fases",
+            "description": "Ambientes de integração, teste e aceitação, cada um com verificações de saúde."
+          },
+          {
+            "title": "Entra no ar",
+            "description": "Só quando todas as verificações passam. Se algo falhar, reverte sozinha."
+          },
+          {
+            "title": "É vigiada",
+            "description": "A monitorização confirma que a alteração está saudável e avisa uma pessoa se não estiver."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Modernização de plataformas",
+          "href": "/services/enterprise-platform-modernisation"
+        },
+        {
+          "label": "Automação DevOps",
+          "href": "/services/devops-automation"
+        },
+        {
+          "label": "Cibersegurança",
+          "href": "/services/cyber-security"
+        },
+        {
+          "label": "Operações autônomas",
+          "href": "/services/autonomous-operations"
+        },
+        {
+          "label": "SysOps 24/7",
+          "href": "/sysops247"
+        }
+      ],
+      "technical": [
+        "CI/CD com ambientes int, test, acc e prod (Ring Promoter)",
+        "Gateway de API, firewall de aplicações web (WAF), limites de pedidos e CDN (Proxy10x)",
+        "Kubernetes, GitOps e infraestrutura como código",
+        "Testes de intrusão, SIEM e monitorização SOC",
+        "Segredos e chaves no WSL Vault, com registo de auditoria"
+      ],
+      "storySlug": "hcl-technologies"
+    }
+  },
+  "cta": {
+    "title": "Diga-nos qual é a tarefa que atrasa a sua equipa",
+    "description": "Um engenheiro responde em um dia útil com o que construiríamos e como o mediríamos.",
+    "button": "Agendar uma chamada",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Ver o nosso trabalho",
+      "link": "/our-work"
+    }
+  },
+  "slugs": [
+    "sales",
+    "marketing",
+    "back-office",
+    "customer-support",
+    "custom-apps",
+    "platforms-devops"
+  ]
+}

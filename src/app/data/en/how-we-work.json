@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "title": "How we work: from first call to a working AI agent | TenthMatrix",
+    "description": "Four steps from discovery to a running agent, the ways you can work with us, how we price, and who owns what. You see it working on your own data before you commit."
+  },
+  "header": {
+    "eyebrow": "How we work",
+    "title": "From first call to a working agent, in four steps",
+    "subtitle": "You see it working on your own data before you commit to the full build, and you own the code and the data at every stage.",
+    "cta": [
+      {
+        "label": "Book a call",
+        "link": "/start-a-project"
+      },
+      {
+        "label": "See our work",
+        "link": "/our-work"
+      }
+    ]
+  },
+  "sections": [
+    {
+      "type": "overview",
+      "id": "summary",
+      "title": "What to expect",
+      "content": "You tell us the job that slows your team down. We work out whether an AI agent, an automation or a custom app is the right fix, build the smallest version that does the real job, and only build the rest when it has proved itself.",
+      "points": [
+        "An engineer, not a salesperson, replies within one working day",
+        "A written scope and a fixed price for the pilot",
+        "You see it working on your own data before the full build",
+        "You own the code, the data and the keys"
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "process",
+      "title": "The four steps",
+      "intro": "Each step ends with something you keep, even if you stop there.",
+      "steps": [
+        {
+          "title": "Discovery",
+          "description": "We pick one job, the systems it touches and who checks the result, and write down what the agent must never do. You get a written scope and a fixed price for the pilot."
+        },
+        {
+          "title": "Pilot",
+          "description": "The smallest version that does the real job on your real data, with a person approving anything important. Then a clear recommendation: go ahead, change it or stop."
+        },
+        {
+          "title": "Build",
+          "description": "The finished system, connected to your tools, tested and in your own code repository. You can read every instruction the agent follows and every action it takes."
+        },
+        {
+          "title": "Run or hand over",
+          "description": "We run it for you, with monitoring, cost reports and regular reviews, or hand it to your team with documentation and training."
+        }
+      ]
+    },
+    {
+      "type": "grid",
+      "id": "engagement",
+      "title": "Ways to work with us",
+      "intro": "Choose by how clear the job is and how much you want to own at the end. You can switch later.",
+      "columns": 2,
+      "items": [
+        {
+          "icon": "clipboard-check",
+          "title": "A fixed-scope project",
+          "description": "One agent, app or integration, with a written scope and an agreed price. Best when the job is clear."
+        },
+        {
+          "icon": "users",
+          "title": "A dedicated team",
+          "description": "A small team working through your list of AI work, month by month. Best when you have several jobs to automate."
+        },
+        {
+          "icon": "user-check",
+          "title": "Engineers in your team",
+          "description": "Our engineers join your team, work in your tools and pass on what they know. Best when you have developers who need AI experience."
+        },
+        {
+          "icon": "exchange-alt",
+          "title": "Build, run, then hand over",
+          "description": "We build it, run it for an agreed period, then hand it to your team with documentation and training. Best when you want to own it without the early risk."
+        }
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "cost",
+      "title": "What it costs",
+      "intro": "Every job is different, so we price after a short discovery instead of guessing. You always know the price before each stage starts.",
+      "columns": 1,
+      "items": [
+        "Discovery: we look at the job, the systems and the risks, and write it all down.",
+        "Pilot: a fixed price, agreed before we start.",
+        "Full build: priced from what the pilot showed, so there are no surprises.",
+        "Running it: a monthly fee if we run it for you, or a one-off hand-over if your team takes it on.",
+        "Our products, such as Jobshout and Proxy10x, have their own prices on the pricing page."
+      ]
+    },
+    {
+      "type": "checklist",
+      "id": "security",
+      "title": "Security, and who owns what",
+      "intro": "The questions clients usually ask first, answered in plain words. Your IT team can find the technical detail on our product pages.",
+      "columns": 2,
+      "items": [
+        "You own the code and everything we write for you. It is in your own code repository from day one.",
+        "We sign your NDA before you share any detail.",
+        "It runs where you choose: your cloud, your own machines, or managed by us.",
+        "Passwords and keys stay locked away in a separate secrets store (WSL Vault), never inside the agent.",
+        "You choose the AI model, including models that run on your own machines so your data never leaves.",
+        "Every action the agent takes is recorded, and anything that sends, spends or deletes waits for a person."
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "title": "Questions clients ask",
+      "items": [
+        {
+          "question": "How much does an outsourced AI project cost?",
+          "answer": "It depends on the job, so we price it after a short discovery rather than guessing. Discovery ends with a fixed price for the pilot, and the full build is priced from what the pilot showed. Prices for our products are on the pricing page."
+        },
+        {
+          "question": "How soon will we see a working agent?",
+          "answer": "The pilot is designed to do the real job on real data as early as possible. We agree the timeline in the written scope, once we know which systems are involved, rather than promising a number before we've looked."
+        },
+        {
+          "question": "Do we need our own AI engineers?",
+          "answer": "No. We can build and run the whole thing. If you want to own it later, choose embedded engineers or build-operate-transfer and we'll train your team as we go."
+        },
+        {
+          "question": "What is a forward deployed engineer?",
+          "answer": "An engineer who works alongside your team, inside your systems, until the agent does the job. They run the first meeting, map the work and stay with it through the pilot."
+        },
+        {
+          "question": "Which models do you use?",
+          "answer": "Whichever fits the job and your rules about data: Claude, OpenAI models, or open-weight models (AI models you can run on your own machines, such as Llama, Mistral, Qwen or Kimi). We keep the model behind a single connection point, so you can switch later."
+        },
+        {
+          "question": "What happens if we want to stop?",
+          "answer": "You already have the code, docs and runbooks in your repository. We hand back access and anything else we hold, and help your team or your next supplier pick it up."
+        },
+        {
+          "question": "Can you deliver for our agency's client?",
+          "answer": "Yes, as your delivery partner. We agree in writing how the work is presented to your client before we start."
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "id": "more",
+      "title": "More detail",
+      "items": [
+        {
+          "title": "Outsource AI development",
+          "label": "The full outsourcing guide, with who it suits and what to hand us",
+          "href": "/outsource-ai-development"
+        },
+        {
+          "title": "Why TenthMatrix agents",
+          "label": "Each benefit, and how to check it",
+          "href": "/why-tenthmatrix-agents"
+        },
+        {
+          "title": "Pricing",
+          "label": "Prices for our products and services",
+          "href": "/pricing"
+        },
+        {
+          "title": "Glossary",
+          "label": "AI terms in plain English",
+          "href": "/glossary"
+        }
+      ]
+    }
+  ],
+  "cta": {
+    "title": "Name the job that slows your team down. We will make it 10x faster.",
+    "description": "Send the task, the systems it touches and who checks the result. An engineer replies within one working day.",
+    "button": "Book a call",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "See our work",
+      "link": "/our-work"
+    }
+  }
+}

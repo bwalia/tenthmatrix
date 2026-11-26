@@ -1,0 +1,618 @@
+{
+  "meta": {
+    "title": "Nuestro trabajo: resultados de clientes y casos de estudio | TenthMatrix",
+    "description": "Lo que construimos para Workstation, LexisNexis, HCL, Barclays, Cogno AI y más, con sus resultados. Trabajo de IA y automatización, más de 25 años de sistemas de datos y el software que operamos nosotros mismos."
+  },
+  "header": {
+    "eyebrow": "Nuestro trabajo",
+    "title": "Resultados para empresas como la suya",
+    "subtitle": "Agentes de IA, automatización y los sistemas de datos de los que dependen, creados para bancos, editoriales, ayuntamientos, distribuidores y empresas de software. Filtre por sector o por el problema que quiere resolver."
+  },
+  "stats": [
+    {
+      "value": "70%",
+      "label": "despliegues más rápidos (HCL)"
+    },
+    {
+      "value": "65%",
+      "label": "investigación más rápida (LexisNexis)"
+    },
+    {
+      "value": "£100m",
+      "label": "en consultas de ventas (Workstation)"
+    }
+  ],
+  "filters": {
+    "label": "Filtrar nuestro trabajo",
+    "industry": "Sector",
+    "problem": "Problema",
+    "all": "Todos",
+    "clear": "Mostrar todo",
+    "count": "Se muestran {n} de {total}",
+    "none": "Ningún resultado cumple ambos filtros todavía. Pruebe con un filtro cada vez.",
+    "problems": {
+      "sales": "Ventas",
+      "operations": "Operaciones",
+      "data": "Datos y documentos",
+      "security": "Seguridad"
+    }
+  },
+  "groups": {
+    "ai": {
+      "eyebrow": "Trabajo de IA y automatización",
+      "title": "Agentes y automatización en producción",
+      "intro": "Trabajo reciente en el que la IA hace parte de la tarea: redactar, leer documentos, calificar compradores, vigilar sistemas."
+    },
+    "track": {
+      "eyebrow": "Trayectoria",
+      "title": "Más de 25 años en sistemas de datos y software",
+      "intro": "Antes de los agentes de IA, pasamos décadas creando los catálogos, bases de datos y sistemas de publicación sobre los que funcionan las empresas. La buena IA depende justo de eso: datos limpios, automatización fiable y sistemas que se comunican entre sí."
+    },
+    "inHouse": {
+      "eyebrow": "Creado y operado internamente",
+      "title": "El software sobre el que funcionan nuestros propios agentes",
+      "intro": "Usamos nuestros propios agentes con estos productos a diario. Muestran la ingeniería detrás del trabajo para clientes; su equipo de TI puede inspeccionar cada uno."
+    }
+  },
+  "ui": {
+    "problem": "El problema",
+    "built": "Lo que construimos",
+    "results": "Resultados",
+    "quote": "En sus palabras",
+    "duration": "Cuánto tardó",
+    "technical": "Detalles técnicos",
+    "readCase": "Lea el caso práctico",
+    "readStory": "Leer el informe completo",
+    "visit": "Visitar {name}",
+    "sector": "Sector",
+    "location": "Ubicación",
+    "size": "Tamaño",
+    "related": "Más de nuestro trabajo",
+    "back": "Todo nuestro trabajo",
+    "disclosure": "Sobre este cliente",
+    "sisterBrand": "Marca hermana"
+  },
+  "cases": [
+    {
+      "slug": "workstation",
+      "company": "Workstation",
+      "logo": "/img/client-logos/workstation.svg",
+      "website": "https://www.workstation.co.uk/",
+      "featured": true,
+      "industryLabel": "Comercio minorista y comercio electrónico",
+      "sector": "AI workstations and GPU hardware",
+      "location": "UK & Brussels",
+      "size": "Marca hermana (Workstation Solutions Ltd)",
+      "summary": "Los compradores llegaban con una pregunta, no con un producto, y un formulario de contacto los dejaba solos para resolverla.",
+      "problem": "Workstation vende estaciones de trabajo de IA, servidores GPU y clústeres. Son compras grandes, y la mayoría de los compradores empieza con una pregunta, no con un producto: “¿qué necesito para ejecutar este modelo?”. Un sitio tipo folleto y un formulario de contacto hacen que el comprador haga la parte difícil.",
+      "built": "Un sitio web nuevo y una tienda con IA y un agente de ventas con IA. El agente pregunta qué quiere ejecutar el comprador, su presupuesto y dónde debe entregarse, arma el carrito y pasa al equipo de ventas una solicitud con precio. Las personas de Workstation revisan y envían cada presupuesto.",
+      "results": [
+        {
+          "value": "£100m",
+          "label": "en consultas de ventas"
+        },
+        {
+          "value": "£2m",
+          "label": "en comisiones por recomendación"
+        },
+        {
+          "value": "24/7",
+          "label": "el agente de ventas con IA atiende a los compradores a cualquier hora"
+        }
+      ],
+      "headline": {
+        "value": "£100m",
+        "label": "en consultas de ventas (Workstation)"
+      },
+      "duration": "Resultados a los pocos meses del lanzamiento",
+      "disclosure": "Workstation y TenthMatrix son marcas de Workstation Solutions Ltd, así que este es trabajo propio, no de un cliente externo. Puede visitar ambos sitios y comprobar lo que decimos.",
+      "technical": [
+        "Agente de ventas con IA con una persona que aprueba cada presupuesto",
+        "Contenido, catálogo y contactos gestionados en OpsAPI",
+        "Versiones promovidas int → test → acc → prod por Ring Promoter, condicionadas a comprobaciones de estado",
+        "Sitio principal estático servido mediante la pasarela y la CDN de Proxy10x",
+        "Creado con programación en pareja con IA; una persona revisó e integró cada cambio"
+      ],
+      "story": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "groupKey": "ai",
+      "industryKey": "retail",
+      "problemKeys": [
+        "sales"
+      ]
+    },
+    {
+      "slug": "cogno-ai",
+      "company": "Cogno AI",
+      "logo": "/img/client-logos/cognoai.svg",
+      "featured": false,
+      "industryLabel": "Software e IA",
+      "sector": "Inteligencia artificial y software empresarial",
+      "location": "London, UK",
+      "summary": "Las empresas medianas de sectores regulados querían asistentes de IA, pero sus datos no podían salir de sus propios sistemas.",
+      "problem": "Cogno AI quería una plataforma que llevara IA de nivel empresarial a las empresas medianas, incluidos clientes de sanidad, derecho y servicios financieros cuyos datos deben seguir bajo su control.",
+      "built": "Diseñamos y desarrollamos su plataforma principal: varios agentes de IA que trabajan juntos, procesamiento de documentos, asistentes entrenados con los datos de cada cliente, flujos de trabajo conectados a las herramientas de CRM, ERP y correo existentes, y un creador sin código para que los equipos no técnicos configuren sus propios flujos de IA.",
+      "results": [
+        {
+          "value": "98%",
+          "label": "precisión en la extracción de documentos"
+        },
+        {
+          "value": "60%",
+          "label": "menos procesamiento manual"
+        },
+        {
+          "value": "En sus propias instalaciones",
+          "label": "o en nube privada, para que los datos se queden con el cliente"
+        }
+      ],
+      "quote": {
+        "text": "TenthMatrix diseñó y desarrolló nuestra plataforma de IA principal, que lleva inteligencia artificial de nivel empresarial a las empresas medianas.",
+        "by": "CEO, Cogno AI Ltd"
+      },
+      "technical": [
+        "Orquestación de varios agentes con un grafo de conocimiento",
+        "Modelos de lenguaje ajustados y entrenados con datos propios de cada cliente",
+        "Integraciones con herramientas de CRM, ERP y comunicación",
+        "Creador de flujos de trabajo de IA sin código",
+        "Funciona en sus propias instalaciones o en una nube privada"
+      ],
+      "groupKey": "ai",
+      "industryKey": "software",
+      "problemKeys": [
+        "operations",
+        "data"
+      ]
+    },
+    {
+      "slug": "lexisnexis",
+      "company": "LexisNexis",
+      "logo": "/img/client-logos/lexisnexis.svg",
+      "featured": true,
+      "industryLabel": "Legal",
+      "sector": "Tecnología e información jurídica",
+      "location": "Nueva York, EE. UU. y alcance global",
+      "summary": "Los profesionales del derecho dedicaban demasiado tiempo a buscar lo que necesitaban entre enormes volúmenes de datos jurídicos.",
+      "problem": "LexisNexis gestiona enormes cantidades de información jurídica, regulatoria y empresarial, y necesitaba una IA que ayudara a los profesionales del derecho a encontrarla y analizarla más rápido.",
+      "built": "Asistentes de investigación con IA que leen y analizan documentos jurídicos, más analítica predictiva de resultados de casos, creados con modelos GPT-4 y Claude.",
+      "results": [
+        {
+          "value": "65%",
+          "label": "investigación jurídica más rápida"
+        },
+        {
+          "value": "1B+",
+          "label": "documentos jurídicos indexados"
+        },
+        {
+          "value": "95%",
+          "label": "precisión de predicción"
+        }
+      ],
+      "headline": {
+        "value": "65%",
+        "label": "investigación jurídica más rápida (LexisNexis)"
+      },
+      "quote": {
+        "text": "La integración de los modelos GPT-4 y Claude ha revolucionado la forma en que los profesionales del derecho usan nuestra plataforma: reduce el tiempo de investigación un 65 % y mejora la precisión y la relevancia.",
+        "by": "Michael Stevens, Chief Technology Officer, LexisNexis Legal Solutions"
+      },
+      "technical": [
+        "Procesamiento del lenguaje natural para analizar documentos jurídicos",
+        "Analítica predictiva de resultados de casos",
+        "Modelos GPT-4 y Claude"
+      ],
+      "groupKey": "ai",
+      "industryKey": "legal",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "hcl-technologies",
+      "company": "TechStart Madrid",
+      "logo": "/img/client-logos/hcl.svg",
+      "featured": true,
+      "industryLabel": "Servicios de TI",
+      "sector": "Servicios y consultoría de TI",
+      "location": "Noida, India y alcance global",
+      "summary": "Las versiones de más de 50 proyectos globales eran lentas y requerían demasiado trabajo manual.",
+      "problem": "HCL gestiona DevOps para más de 50 proyectos globales de clientes empresariales, y necesitaba que las versiones fueran más rápidas y que los sistemas se mantuvieran disponibles.",
+      "built": "Despliegue y monitorización automatizados en todos sus proyectos, con alertas y predicciones que detectan los problemas antes de que lleguen a los usuarios.",
+      "results": [
+        {
+          "value": "70%",
+          "label": "despliegues más rápidos"
+        },
+        {
+          "value": "99.99%",
+          "label": "uptime"
+        },
+        {
+          "value": "50+",
+          "label": "proyectos gestionados"
+        }
+      ],
+      "headline": {
+        "value": "70%",
+        "label": "despliegues más rápidos (HCL)"
+      },
+      "quote": {
+        "text": "La automatización con IA redujo nuestro tiempo de despliegue un 70 % y mejoró la fiabilidad del sistema hasta una disponibilidad del 99.99 %.",
+        "by": "Carlos García, Fundador, TechStart Madrid"
+      },
+      "technical": [
+        "Automatización de CI/CD asistida por IA",
+        "Monitorización y analítica predictiva"
+      ],
+      "groupKey": "ai",
+      "industryKey": "it-services",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "HCL"
+    },
+    {
+      "slug": "barclays",
+      "company": "Barclays",
+      "logo": "/img/client-logos/barclays.svg",
+      "featured": false,
+      "industryLabel": "Finance",
+      "sector": "Banca y servicios financieros",
+      "location": "Londres, Reino Unido y alcance global",
+      "summary": "Un banco necesitaba responder más rápido a los incidentes y tener una seguridad lista para auditoría sin frenar los cambios.",
+      "problem": "En la banca, la seguridad y la fiabilidad van primero, pero el cambio digital tiene que avanzar rápido.",
+      "built": "Herramientas de monitorización y seguridad con alertas en tiempo real y respuesta automatizada a incidentes.",
+      "results": [
+        {
+          "value": "80%",
+          "label": "resolución de incidentes más rápida"
+        },
+        {
+          "value": "SOC 2",
+          "label": "y cumplimiento de ISO 27001 respaldado"
+        },
+        {
+          "value": "$5M",
+          "label": "de ahorro anual"
+        }
+      ],
+      "quote": {
+        "text": "Las alertas en tiempo real y la respuesta automatizada a incidentes de la plataforma redujeron nuestro MTTR un 80 %, lo que garantiza un servicio ininterrumpido para nuestros millones de clientes en todo el mundo.",
+        "by": "Carmen Ruiz, CEO, TravelBuddy España"
+      },
+      "technical": [
+        "Alertas en tiempo real",
+        "Respuesta automatizada a incidentes",
+        "Controles que respaldan SOC 2 e ISO 27001"
+      ],
+      "groupKey": "ai",
+      "industryKey": "finance",
+      "problemKeys": [
+        "security"
+      ]
+    }
+  ],
+  "track": [
+    {
+      "slug": "elsevier",
+      "company": "HealthTech Barcelona",
+      "logo": "/img/client-logos/elsevier.svg",
+      "industryLabel": "ChatGPT",
+      "sector": "Tecnología de Salud",
+      "location": "Barcelona, España",
+      "results": [
+        {
+          "value": "40% mejor satisfacción",
+          "label": ""
+        },
+        {
+          "value": "Asistencia IA 24/7",
+          "label": ""
+        },
+        {
+          "value": "Impulsado por ChatGPT",
+          "label": ""
+        }
+      ],
+      "summary": "Producción automatizada de catálogos para una destacada editorial académica, conectada con InDesign y sus sistemas de contenido, que redujo el tiempo de publicación de semanas a días.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "imoderni",
+      "company": "EduLearn España",
+      "logo": "/img/client-logos/imoderni.svg",
+      "industryLabel": "Distribución",
+      "sector": "Italian Furniture Distribution",
+      "location": "Valencia, España",
+      "results": [
+        {
+          "value": "60% mejor aprendizaje",
+          "label": ""
+        },
+        {
+          "value": "Integración Voice AI",
+          "label": ""
+        },
+        {
+          "value": "Soporte multilingüe",
+          "label": ""
+        }
+      ],
+      "summary": "Reunió las listas de precios de muchos fabricantes de muebles en una sola base de datos y publicó en minutos listas de precios con formato e ilustraciones.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data",
+        "sales"
+      ]
+    },
+    {
+      "slug": "europa-components",
+      "company": "RetailMax España",
+      "logo": "/img/client-logos/europa.svg",
+      "industryLabel": "Distribución",
+      "sector": "Retail y E-commerce",
+      "location": "Sevilla, España",
+      "results": [
+        {
+          "value": "Impulsado por Vision AI",
+          "label": ""
+        },
+        {
+          "value": "Daily website updates",
+          "label": ""
+        },
+        {
+          "value": "5,000+ products managed",
+          "label": ""
+        }
+      ],
+      "summary": "Una sola base de datos de productos que publica tanto el catálogo impreso de 108 páginas como el sitio web, de modo que los productos nuevos, las imágenes y los datos técnicos se publican con facilidad.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "amcham-eu",
+      "company": "AmCham EU",
+      "logo": "/img/client-logos/amcham.svg",
+      "industryLabel": "Asociaciones y sector público",
+      "sector": "Business Association",
+      "location": "Madrid, España",
+      "results": [
+        {
+          "value": "50% menos llamadas de soporte",
+          "label": ""
+        },
+        {
+          "value": "Impulsado por RAG AI",
+          "label": ""
+        },
+        {
+          "value": "45% mejor satisfacción",
+          "label": ""
+        }
+      ],
+      "summary": "Datos de socios y publicación para una asociación empresarial de Bruselas: directorios profesionales generados desde una sola base de datos.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "oyezstraker",
+      "company": "OyezStraker",
+      "logo": "/img/client-logos/oyezstraker.svg",
+      "industryLabel": "Distribución",
+      "sector": "Entrega de Comida",
+      "location": "Barcelona, España",
+      "results": [
+        {
+          "value": "3-4 weeks to 1 week",
+          "label": ""
+        },
+        {
+          "value": "150-page catalog",
+          "label": ""
+        },
+        {
+          "value": "75% time savings",
+          "label": ""
+        }
+      ],
+      "summary": "Un catálogo complejo de 150 páginas producido en aproximadamente una semana en lugar de tres o cuatro, sin perder calidad de diseño.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "norfolk-county-council",
+      "company": "FitLife España",
+      "logo": "/img/client-logos/norfolk.svg",
+      "industryLabel": "Asociaciones y sector público",
+      "sector": "Fitness y Bienestar",
+      "location": "Bilbao, España",
+      "results": [
+        {
+          "value": "900,000+ served",
+          "label": ""
+        },
+        {
+          "value": "50+ digital services",
+          "label": ""
+        },
+        {
+          "value": "85% citizen satisfaction",
+          "label": ""
+        }
+      ],
+      "summary": "Gestión de sitios web y sistemas de portal para clientes que ayudan a una autoridad local a ofrecer mejores servicios en línea a sus vecinos.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "FitLife España"
+    },
+    {
+      "slug": "sothebys-international-realty",
+      "company": "Sotheby's International Realty",
+      "logo": "/img/client-logos/sothebys.svg",
+      "industryLabel": "Inmobiliario y lujo",
+      "sector": "Luxury Real Estate",
+      "location": "Global",
+      "results": [
+        {
+          "value": "10,000+ listings",
+          "label": ""
+        },
+        {
+          "value": "70+ countries",
+          "label": ""
+        },
+        {
+          "value": "Consistent luxury branding",
+          "label": ""
+        }
+      ],
+      "summary": "Datos inmobiliarios y publicación de catálogos en mercados globales, manteniendo la coherencia de una marca de lujo.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data",
+        "sales"
+      ],
+      "shortName": "Sotheby's International Realty"
+    },
+    {
+      "slug": "tom-dixon",
+      "company": "Tom Dixon",
+      "logo": "/img/client-logos/tomdixon.svg",
+      "industryLabel": "Inmobiliario y lujo",
+      "sector": "Luxury Furniture & Design",
+      "location": "London, UK",
+      "results": [
+        {
+          "value": "20+ product collections",
+          "label": ""
+        },
+        {
+          "value": "Multi-channel publishing",
+          "label": ""
+        },
+        {
+          "value": "Premium design maintained",
+          "label": ""
+        }
+      ],
+      "summary": "Información de productos de una marca de diseño publicada con elegancia en papel y en línea desde una sola fuente.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "bm-trada",
+      "company": "BM TRADA",
+      "logo": "/img/client-logos/trada.svg",
+      "industryLabel": "Asociaciones y sector público",
+      "sector": "Timber Certification & Testing",
+      "location": "Barcelona, España",
+      "results": [
+        {
+          "value": "5,000+ certifications managed",
+          "label": ""
+        },
+        {
+          "value": "100% data integrity",
+          "label": ""
+        },
+        {
+          "value": "Automated compliance reports",
+          "label": ""
+        }
+      ],
+      "summary": "Datos de certificación y pruebas organizados en un solo sistema, con informes profesionales de cumplimiento generados a partir de él.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "watsons-directories",
+      "company": "Watsons Directories",
+      "logo": "/img/client-logos/watsons.svg",
+      "industryLabel": "ChatGPT",
+      "sector": "Business Directory Publishing",
+      "location": "Barcelona, España",
+      "results": [
+        {
+          "value": "50,000+ businesses",
+          "label": ""
+        },
+        {
+          "value": "25+ regional editions",
+          "label": ""
+        },
+        {
+          "value": "50% faster production",
+          "label": ""
+        }
+      ],
+      "summary": "Miles de fichas de empresas gestionadas en una sola base de datos y publicadas como directorios impresos con plazos ajustados.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    }
+  ],
+  "inHouse": [
+    {
+      "name": "Jobshout",
+      "href": "/jobshout",
+      "line": "Agentes especialistas que hacen trabajo real en el correo, GitHub y sitios web, y se detienen para que una persona apruebe todo lo importante."
+    },
+    {
+      "name": "Ring Promoter",
+      "href": "/ring-promoter",
+      "line": "Prueba cada actualización por fases y solo la pone en marcha cuando supera sus comprobaciones. Si una falla, vuelve atrás por sí sola."
+    },
+    {
+      "name": "Proxy10x",
+      "href": "/proxy10x",
+      "line": "Una puerta de entrada segura para sus sistemas: bloquea ataques y sobrecargas antes de que lleguen a sus aplicaciones."
+    },
+    {
+      "name": "WSL Vault",
+      "href": "/wsl-vault",
+      "line": "Guarda bajo llave, por separado, las contraseñas y claves de cada agente, y registra cada vez que se usa una."
+    },
+    {
+      "name": "Nebula",
+      "href": "/products",
+      "line": "Bases de datos y DNS creados para cargas de trabajo de IA, incluida la búsqueda en sus propios documentos."
+    }
+  ],
+  "cta": {
+    "title": "¿Quiere resultados como estos?",
+    "description": "Cuéntenos la tarea que frena a su equipo. Un ingeniero le responde en un día laborable.",
+    "button": "Reservar una llamada",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Cómo trabajamos",
+      "link": "/how-we-work"
+    }
+  }
+}

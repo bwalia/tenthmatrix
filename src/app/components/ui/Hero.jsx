@@ -16,12 +16,13 @@ import s from './Hero.module.scss';
  *   meta     string[] — mono facts under the actions ("Self-hosted", "Open source" …)
  *   art      true (lattice illustration) | false | node (custom media)
  *   align    'start' (default) | 'center'  (center ignores art)
+ *   compact  home variant only: smaller title and padding, so content below the hero shows in the first screenful
  *   children extra content under the lede
  */
-export default function Hero({ variant = 'page', eyebrow, title, lede, actions, meta, art = variant === 'home', align = 'start', className, children }) {
+export default function Hero({ variant = 'page', eyebrow, title, lede, actions, meta, art = variant === 'home', align = 'start', compact = false, className, children }) {
   const showArt = art && align !== 'center';
   return (
-    <section className={cx('tm-hero', s.hero, s[variant], align === 'center' && s.center, showArt && s.withArt, className)}>
+    <section className={cx('tm-hero', s.hero, s[variant], compact && s.compact, align === 'center' && s.center, showArt && s.withArt, className)}>
       <div className={s.inner}>
         <div className={s.copy}>
           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}

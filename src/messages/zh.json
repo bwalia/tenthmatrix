@@ -3,11 +3,6 @@
     "skipToContent": "跳到主要内容",
     "primary": "主导航",
     "home": "首页",
-    "agents": "智能体",
-    "tools": "工具",
-    "applications": "应用",
-    "products": "产品",
-    "services": "服务",
     "resources": "资源",
     "articles": "技术笔记",
     "blog": "博客",
@@ -18,52 +13,38 @@
     "menu": "网站菜单",
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
-    "cta": "开始 AI 之旅",
-    "ctaProject": "启动项目",
+    "cta": "预约通话",
     "searchPlaceholder": "搜索技术笔记、文章和文档",
-    "hardware": "需要硬件?前往 Workstation 选购 GPU 工作站",
     "groups": {
+      "solutions": {
+        "label": "解决方案",
+        "title": "我们能为您做什么",
+        "intro": "从拖慢团队的问题入手。每个页面都会告诉您我们做什么、给出一个实际案例，以及一位遇到过同样问题的客户。",
+        "all": "全部解决方案"
+      },
       "work": {
-        "label": "与我们合作",
-        "title": "外包您的 AI 项目",
-        "intro": "把智能体或生成式 AI 项目交给我们。代码、数据和最终决定权都归您。",
-        "all": "外包如何运作"
+        "label": "我们的作品",
+        "title": "效果有据可查",
+        "intro": "客户成果、完整案例，以及我们自己的智能体每天都在使用的软件。",
+        "all": "查看全部作品"
       },
-      "agents": {
-        "label": "智能体",
-        "title": "AI 智能体",
-        "intro": "智能体读取工单、完成工作,并在任何内容上线前等待您的审批。",
-        "all": "智能体全解"
+      "how": {
+        "label": "我们如何合作",
+        "title": "您报名之后会发生什么",
+        "intro": "四个步骤、合作方式、大致费用，以及最终成果归谁所有。",
+        "all": "我们如何合作"
       },
-      "tools": {
-        "label": "工具",
-        "title": "开发者工具",
-        "intro": "智能体运行所依赖的基础设施:网关、密钥、发布环和监控。",
-        "all": "查看全部产品"
-      },
-      "applications": {
-        "label": "应用",
-        "title": "AI 应用",
-        "intro": "面向销售、市场、客服和运营团队的成品应用。",
-        "all": "浏览解决方案"
-      },
-      "products": {
-        "label": "产品",
-        "title": "产品",
-        "intro": "我们构建和运营的一切,附定价及已在使用的团队。",
-        "all": "查看产品目录"
-      },
-      "services": {
-        "label": "服务",
-        "title": "服务",
-        "intro": "为您的智能体设计、加固并运维周边系统的工程师。",
-        "all": "全部服务"
+      "tech": {
+        "label": "产品与技术",
+        "title": "技术底层",
+        "intro": "我们的智能体所依赖的产品和基础设施，以及您的 IT 团队会想核对的细节。",
+        "all": "全部产品"
       },
       "resources": {
         "label": "资源",
-        "title": "资源",
-        "intro": "技术笔记、博客、Jev 洞察系列以及我们的文档。",
-        "all": "阅读技术笔记"
+        "title": "了解更多",
+        "intro": "博客、技术笔记、用大白话解释的 AI 术语表，以及团队动态。",
+        "all": "阅读博客"
       }
     },
     "items": {
@@ -264,42 +245,104 @@
         "desc": "优势,以及如何逐项验证"
       },
       "agentJourney": {
-        "label": "设计您的 AI 智能体",
-        "desc": "回答九个问题，获取您的 AI 蓝图"
+        "label": "设计您的智能体",
+        "desc": "九个问题，约 3 分钟"
       },
       "startProject": {
         "label": "启动项目",
         "desc": "告诉我们要做什么。我们会在一个工作日内回复。"
+      },
+      "solSales": {
+        "label": "销售",
+        "desc": "每条线索都及时跟进，不让客户变冷"
+      },
+      "solMarketing": {
+        "label": "营销",
+        "desc": "内容产出不再卡壳"
+      },
+      "solBackOffice": {
+        "label": "后台与行政",
+        "desc": "发票、订单和行政事务，我们替您搞定"
+      },
+      "solSupport": {
+        "label": "Customer support",
+        "desc": "更快回复客户，决定权仍在人手里"
+      },
+      "solCustomApps": {
+        "label": "定制应用与软件",
+        "desc": "让您的各个系统互相打通"
+      },
+      "solPlatforms": {
+        "label": "平台与 DevOps",
+        "desc": "现代、安全、稳定运行的系统"
+      },
+      "ourWork": {
+        "label": "全部作品",
+        "desc": "按行业查看成果与案例"
+      },
+      "caseWorkstation": {
+        "label": "Workstation 案例",
+        "desc": "AI 销售智能体与 £100m 的询盘"
+      },
+      "aiWork": {
+        "label": "AI 与自动化项目",
+        "desc": "为客户打造的智能体与自动化"
+      },
+      "trackRecord": {
+        "label": "过往业绩",
+        "desc": "25+ 年数据与软件系统经验"
+      },
+      "inHouse": {
+        "label": "自己开发、自己运行",
+        "desc": "我们自己的智能体所用的产品"
+      },
+      "howWeWork": {
+        "label": "我们如何合作",
+        "desc": "从第一次通话到上线运行的智能体"
+      },
+      "process": {
+        "label": "四个步骤",
+        "desc": "调研、试点、开发、运行或移交"
+      },
+      "engagement": {
+        "label": "合作方式",
+        "desc": "项目制、专属团队、驻场工程师或移交"
+      },
+      "cost": {
+        "label": "费用",
+        "desc": "我们如何报价，附大致区间"
+      },
+      "ownership": {
+        "label": "安全与所有权",
+        "desc": "代码、数据和密钥都归您"
+      },
+      "selfHosted": {
+        "label": "自托管 AI",
+        "desc": "在您自己的机器上运行 AI 模型"
+      },
+      "glossary": {
+        "label": "术语表",
+        "desc": "用大白话讲 AI 术语"
+      },
+      "about": {
+        "label": "关于我们",
+        "desc": "我们是谁，如何起步"
       }
     }
   },
   "footer": {
-    "tagline": "为您打造的 AI 智能体和生成式 AI 应用。",
-    "blurb": "我们为外包这项工作的公司设计、构建并运行 AI 智能体和生成式 AI 应用,同时提供这些智能体所依托的软件产品。",
-    "hardware": "需要硬件?访问 Workstation",
-    "hardwareEyebrow": "需要硬件?",
-    "hardwareTitle": "GPU 工作站和集群由 Workstation 打造。",
-    "hardwareBody": "Our sister brand sizes, builds and supports the machines your models run on.",
-    "hardwareLink": "访问 Workstation",
-    "rights": "保留所有权利。",
+    "tagline": "让 AI 接手团队的琐碎工作。",
+    "blurb": "我们为销售、营销、客服和后台打造 AI 智能体、自动化和定制应用，也提供它们所运行的软件。",
+    "hardware": "来自 Workstation 的 GPU 硬件",
     "entity": "TenthMatrix is a brand of Workstation Solutions Ltd, registered in England and Wales.",
-    "sponsoredBy": "赞助方",
     "sitemap": "页脚",
     "legal": "法律",
     "columns": {
-      "work": "与我们合作",
-      "agents": "智能体",
-      "products": "产品",
-      "services": "服务",
-      "resources": "资源",
+      "solutions": "解决方案",
+      "work": "我们的作品",
       "company": "公司"
     },
     "links": {
-      "servicesAll": "全部服务",
-      "about": "关于我们",
-      "whyTenthmatrix": "为什么选择TenthMatrix",
-      "partners": "合作伙伴",
-      "bookOnline": "预约通话",
       "contact": "联系"
     },
     "legalLinks": {
@@ -329,193 +372,112 @@
   "home": {
     "latest": "最新文章",
     "meta": {
-      "title": "TenthMatrix：AI 优先的智能体开发机构。让团队效率提升 10 倍。",
-      "description": "TenthMatrix 是一家 AI 优先的智能体开发机构。我们为每家企业在流程自动化中部署 AI 智能体，负责销售、营销和后台运营，并承诺让您员工的生产力提升 10 倍。"
+      "title": "TenthMatrix：让 AI 接手团队的琐碎工作，让大家的产出提升 10 倍",
+      "description": "我们为销售、营销、后台和客户支持打造 AI 智能体、自动化和定制应用。Barclays、HCL、LexisNexis 和 Elsevier 都信任我们。在您做决定之前，先用您自己的数据看它跑起来。"
     },
     "hero": {
-      "eyebrow": "AI 优先的智能体开发机构",
-      "title": "让您的团队效率提升 10 倍的 AI 智能体",
-      "lede": "我们梳理您企业的业务流程，并部署 AI 智能体实现自动化：负责销售、营销和后台运营的智能体。我们承诺让您员工的生产力提升 10 倍。重复性工作交给智能体，决策留给您的团队。",
-      "primary": "启动项目",
-      "secondary": "为什么是 10 倍",
-      "meta": [
-        "销售智能体",
-        "营销智能体",
-        "后台运营智能体"
-      ]
+      "eyebrow": "AI 智能体、自动化与定制应用",
+      "title": "让 AI 接手团队的琐碎工作，让大家的产出提升 10 倍",
+      "lede": "我们打造 AI 智能体、自动化和定制应用，接手销售、营销、客服和后台里重复性的工作。每一个重要决定，仍由您的员工来做。",
+      "primary": "预约通话",
+      "secondary": "查看我们的作品",
+      "name": "TenthMatrix 的意思是 10x：在我们自动化的工作上，目标是产出提升十倍。"
     },
-    "name": {
-      "eyebrow": "名字的由来",
-      "title": "TenthMatrix 意味着快 10 倍",
-      "body": "名字就是承诺：生产力提升 10 倍。我们为每家企业梳理流程、部署智能体实现自动化，并只衡量一个数字：智能体所服务的每个人在这项工作上的生产力是否提升了十倍？如果试点没有体现这一点，我们会在完整构建之前调整智能体。",
-      "points": [
-        "每个流程都经过梳理、自动化，并在前后进行衡量",
-        "智能体负责起草和执行；关键事项由人审批",
-        "代码、数据和密钥始终归您所有"
-      ]
+    "proof": {
+      "eyebrow": "受到信赖",
+      "title": "依赖我们的客户",
+      "logos": "我们服务过的客户"
     },
-    "pillars": {
-      "eyebrow": "我们为您打造的智能体",
-      "title": "负责销售、营销和后台运营的智能体",
-      "lede": "我们首先是一家智能体机构：从员工每天的实际工作出发，打造能替他们接手这些工作的智能体。",
-      "sales": {
-        "title": "销售智能体",
-        "body": "筛选入站线索、调研客户、起草跟进邮件并保持 CRM 实时更新，让销售团队把时间花在与买家沟通上。"
-      },
-      "marketing": {
-        "title": "营销智能体",
-        "body": "以您的品牌语调策划、撰写并发布内容、社交媒体帖子和营销活动，再汇报效果；任何内容上线前都由人工审批。"
-      },
-      "backoffice": {
-        "title": "后台运营智能体",
-        "body": "在 ERP、财务和客服系统中处理发票、订单、收件箱、工单和报表，在发送、支出或删除任何内容前暂停等待审核。"
-      }
+    "problems": {
+      "eyebrow": "我们解决的问题",
+      "title": "从拖慢团队的事情入手",
+      "lede": "每一项都链接到我们构建的内容、一个实际案例，以及一位遇到同样问题的客户。",
+      "see": "查看解决方案",
+      "all": "全部解决方案"
     },
-    "benefits": {
-      "eyebrow": "TenthMatrix AI 智能体的优势",
-      "title": "让我们的智能体来做事,您能得到什么",
-      "lede": "每项优势都对应我们自己构建和运行的软件,您可以在签约前先行查验。",
-      "all": "与自建团队和聊天机器人 SaaS 对比",
-      "approval": {
-        "title": "重要操作由人来审批",
-        "body": "智能体负责起草和准备。任何发送、花费或删除操作都要等待指定人员审批。",
-        "proof": "查看 Jobshout"
-      },
-      "hosting": {
-        "title": "自托管或托管服务",
-        "body": "智能体可以运行在您自己的云或数据中心,也可以由我们来运行。两种方式代码相同。",
-        "proof": "合作模式"
-      },
-      "data": {
-        "title": "您的数据和密钥留在您手中",
-        "body": "数据留在您的系统中,模型密钥保存在您的密钥库中。您可以选择模型提供商,也可以自行托管开放权重模型。",
-        "proof": "安全与知识产权"
-      },
-      "vault": {
-        "title": "按智能体隔离密钥",
-        "body": "WSL Vault 签发短期、限定范围的凭据,按租户加密,并记录在防篡改的审计日志中。",
-        "proof": "了解 WSL Vault"
-      },
-      "releases": {
-        "title": "健康门控发布",
-        "body": "Ring Promoter 仅在健康检查通过时才将每项变更从 int 推进到 prod,检查失败时自动回滚。",
-        "proof": "查看 Ring Promoter"
-      },
-      "edge": {
-        "title": "边缘安全",
-        "body": "Proxy10x 在智能体及其调用的工具前部署 API 网关、WAF 规则和速率限制。",
-        "proof": "查看 Proxy10x"
-      },
-      "observe": {
-        "title": "可见的成本与行为",
-        "body": "每次运行都有追踪记录,按智能体统计成本和延迟,任一指标偏离时发出告警。",
-        "proof": "我们如何衡量"
-      },
-      "production": {
-        "title": "由运行智能体的团队打造",
-        "body": "我们自己的智能体就在这套技术栈上运行于生产环境。我们公开它们的工作方式,包括出过的故障。",
-        "proof": "阅读技术笔记"
-      }
+    "featured": {
+      "eyebrow": "案例",
+      "title": "我们做了什么，带来了什么改变",
+      "lede": "真实客户：他们的问题、我们的方案和最终结果。",
+      "all": "查看全部作品"
     },
-    "steps": {
-      "eyebrow": "外包如何运作",
-      "title": "需求探索、试点、构建,然后运行或移交",
-      "lede": "每个阶段结束时都有您可以保留的成果,即使您就此止步。",
+    "build": {
+      "eyebrow": "我们构建什么",
+      "title": "看它如何运作",
+      "lede": "真正干活的智能体和应用，始终由人把关。",
+      "screenshot": "截图",
+      "diagram": "运作方式",
       "items": [
         {
-          "title": "需求探索",
-          "body": "我们选定一项工作、它涉及的系统以及由谁检查结果,并写明智能体绝不能做的事。您会拿到书面范围说明和试点的固定报价。"
+          "title": "专业智能体工作中",
+          "body": "Jobshout 的 SEO 智能体会检查网站并提出修改建议。在有人批准之前，什么都不会发布。"
         },
         {
-          "title": "试点",
-          "body": "用最小的版本在真实数据上完成真实工作,置于审批关卡之后,并对照范围进行衡量。然后给出继续、调整或停止的建议。"
+          "title": "从不忘记跟进的销售智能体",
+          "body": "新线索几分钟内就有回复，按购买意向排好序，最热的直接转给您的团队。"
         },
         {
-          "title": "构建",
-          "body": "生产级代码、集成、密钥、防护措施、测试和发布流程,全部在您的代码仓库中。每一条提示词、追踪记录和测试您都能查看。"
-        },
-        {
-          "title": "运行或移交",
-          "body": "我们负责运行,提供监控、成本报告和定期评审,或者连同运维手册和培训一起移交给您的团队。"
+          "title": "判断权留给人",
+          "body": "例行工作由智能体完成。退款、法律措辞、大额折扣和投诉，一律交给人处理。"
         }
       ]
     },
-    "engagement": {
-      "eyebrow": "合作模式",
-      "title": "与我们合作的四种方式",
-      "lede": "根据工作的明确程度,以及最终您想掌握多少来选择。",
-      "more": "比较合作模式",
-      "fixed": {
-        "title": "固定范围项目",
-        "body": "一个智能体、应用或集成,附有书面范围说明和约定价格。"
-      },
-      "team": {
-        "title": "专属智能体团队",
-        "body": "一支小团队按月处理您的 AI 工作待办事项。"
-      },
-      "embedded": {
-        "title": "嵌入式工程师",
-        "body": "我们的工程师加入您的团队,在您的仓库中工作,并传授他们的经验。"
-      },
-      "transfer": {
-        "title": "建设、运营、移交",
-        "body": "我们构建它,在约定期限内运行,然后连同运维手册和培训一起移交。"
-      }
+    "steps": {
+      "eyebrow": "运作方式",
+      "title": "需求探索、试点、构建,然后运行或移交",
+      "lede": "每一步都会留下成果归您所有，哪怕您在这里就停下。",
+      "reassure": "在决定做完整开发之前，您会先看到它在自己数据上的运行效果。",
+      "more": "我们如何合作",
+      "items": [
+        {
+          "title": "需求探索",
+          "body": "我们先选定一项工作、涉及的系统，以及负责检查结果的人。您会拿到书面范围说明和试点的固定价格。"
+        },
+        {
+          "title": "试点",
+          "body": "最精简的版本，在您的真实数据上完成真实的工作，重要事项由人批准。之后再决定：继续、调整，或者到此为止。"
+        },
+        {
+          "title": "构建",
+          "body": "完整的系统：已接入您的工具、经过测试，并存放在您自己的代码仓库里。"
+        },
+        {
+          "title": "运行或移交",
+          "body": "我们替您运行，并提供监控和成本报告；或者连同培训一起移交给您的团队。"
+        }
+      ]
     },
-    "products": {
-      "eyebrow": "实证",
-      "title": "我们自己构建和运行的软件",
-      "lede": "客户的智能体运行在我们自己生产环境所用的同一批产品上。每个产品最初都源于我们自己的智能体的需要。",
-      "all": "全部产品",
-      "see": "查看 {name}",
-      "ringPromoter": {
-        "tagline": "CI/CD 控制平面",
-        "description": "将每次发布依次推进到 int、test、acc 和 prod 环。由健康门控决定,检查失败会自动回滚。"
-      },
-      "proxy10x": {
-        "tagline": "API 网关 · CDN · WAF",
-        "description": "部署在您的源站前端,提供实时配置、边缘缓存和 WAF 规则。面向智能体的 MCP 网关已列入路线图。"
-      },
-      "wslVault": {
-        "tagline": "密钥管理器",
-        "description": "信封加密、按租户的密钥层级、动态租约和防篡改审计日志。偷得走服务器,偷不走密钥。"
-      },
-      "jobshout": {
-        "tagline": "智能体编排",
-        "description": "专业智能体在 Gmail、GitHub 和线上网站中工作,实时展示每一步,并在任何内容发出前等待您的批准。"
-      },
-      "jev": {
-        "tagline": "决策层研究",
-        "description": "我们的独立系列与基准测试实验室,聚焦快速决策模型、智能体框架、路由及推理成本。"
-      },
-      "nebula": {
-        "name": "Nebula 系列",
-        "tagline": "NebulaDB · NebulaDNS · NebulaCR · NebulaCB",
-        "description": "面向智能体工作负载的 Rust 基础设施:从支持向量搜索和流式 RAG 的数据库 NebulaDB,到带 Prometheus 指标的权威 DNS NebulaDNS。"
-      },
-      "openSource": "开源",
-      "research": "研究"
-    },
-    "latestSection": {
-      "eyebrow": "文章",
-      "title": "团队最新动态",
-      "lede": "博客文章、长篇技术笔记和 Jev 洞察系列。",
-      "articles": "全部技术笔记",
-      "blog": "博客",
-      "empty": "新文章即将发布。"
-    },
-    "hardware": {
-      "eyebrow": "需要硬件?",
-      "title": "GPU 工作站和集群请访问 Workstation",
-      "body": "Our sister brand sizes, builds and supports the machines that run private models. Tell them what you want to run and they will spec it.",
-      "link": "Visit Workstation"
+    "trust": {
+      "eyebrow": "企业为什么信任我们",
+      "title": "速度快，且由人把关",
+      "points": [
+        {
+          "title": "重要事项由人批准",
+          "body": "智能体负责起草和准备。凡是发送、花钱或删除的操作，都要等指定的人确认。",
+          "term": "审批关卡"
+        },
+        {
+          "title": "代码和数据归您所有",
+          "body": "我们写的所有代码，从第一天起就在您自己的代码仓库里。您的数据和密钥也留在您手中。"
+        },
+        {
+          "title": "运行在您选择的地方",
+          "body": "在您的云上、您自己的机器上，或由我们托管。甚至可以把 AI 模型留在公司内部。",
+          "term": "自托管模型"
+        },
+        {
+          "title": "出自自己也在用智能体的团队",
+          "body": "我们自己的智能体每天都在运营我们的业务，用的就是提供给客户的同一套软件。"
+        }
+      ],
+      "tech": "给您 IT 团队看的技术细节"
     },
     "cta": {
-      "eyebrow": "启动项目",
+      "eyebrow": "预约通话",
       "title": "告诉我们哪项工作拖慢了团队。我们让它快 10 倍。",
-      "body": "发送任务内容、涉及的系统以及由谁检查结果。一个工作日内，工程师会回复我们将打造的智能体、它不能做什么，以及我们将如何衡量 10 倍提升。",
-      "primary": "启动项目",
-      "secondary": "运作方式"
+      "body": "请告诉我们任务内容、涉及的系统，以及谁来检查结果。一个工作日内，工程师会回复：我们会做什么、系统绝不能做什么，以及如何衡量 10x。",
+      "primary": "预约通话",
+      "secondary": "3 分钟设计您的智能体"
     }
   },
   "articlesPage": {
@@ -627,7 +589,12 @@
     "messageHint": "任务内容、涉及的系统以及由谁检查结果。两三句话就够了。",
     "privacy": "您的信息仅用于回复本次咨询。",
     "projectType": "项目类型",
-    "projectTypeAny": "请选择一项"
+    "projectTypeAny": "请选择一项",
+    "company": "公司",
+    "bestTime": "方便沟通的时间",
+    "bestTimeHint": "例如“工作日上午”。如果希望我们打电话，请留下电话号码。",
+    "submitCall": "预约通话",
+    "replyTime": "工程师会在一个工作日内回复。"
   },
   "errors": {
     "notFoundTitle": "该页面不存在",
@@ -672,7 +639,9 @@
   "kinds": {
     "blog": "博客",
     "article": "技术笔记",
-    "insight": "洞察"
+    "insight": "洞察",
+    "forBusiness": "企业版",
+    "forDevelopers": "面向开发者"
   },
   "article": {
     "contents": "本页内容",

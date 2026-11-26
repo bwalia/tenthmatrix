@@ -1,0 +1,618 @@
+{
+  "meta": {
+    "title": "Our work: client results and case studies | TenthMatrix",
+    "description": "What we built for Workstation, LexisNexis, HCL, Barclays, Cogno AI and more, with the results. AI and automation work, 25+ years of data systems, and the software we run ourselves."
+  },
+  "header": {
+    "eyebrow": "Our work",
+    "title": "Results for businesses like yours",
+    "subtitle": "AI agents, automation and the data systems they depend on, built for banks, publishers, councils, distributors and software firms. Filter by industry or by the problem you want solved."
+  },
+  "stats": [
+    {
+      "value": "70%",
+      "label": "faster deployments (HCL)"
+    },
+    {
+      "value": "65%",
+      "label": "faster research (LexisNexis)"
+    },
+    {
+      "value": "£100m",
+      "label": "in sales enquiries (Workstation)"
+    }
+  ],
+  "filters": {
+    "label": "Filter our work",
+    "industry": "Industry",
+    "problem": "Problem",
+    "all": "All",
+    "clear": "Show everything",
+    "count": "{n} of {total} shown",
+    "none": "Nothing matches both filters yet. Try one filter at a time.",
+    "problems": {
+      "sales": "Sales",
+      "operations": "Operations",
+      "data": "Data & documents",
+      "security": "Security"
+    }
+  },
+  "groups": {
+    "ai": {
+      "eyebrow": "AI & automation work",
+      "title": "Agents and automation in production",
+      "intro": "Recent work where AI does part of the job: drafting, reading documents, qualifying buyers, watching systems."
+    },
+    "track": {
+      "eyebrow": "Track record",
+      "title": "25+ years of data and software systems",
+      "intro": "Before AI agents, we spent decades building the catalogue, database and publishing systems that businesses run on. Good AI depends on exactly that: clean data, reliable automation and systems that talk to each other."
+    },
+    "inHouse": {
+      "eyebrow": "Built and run in-house",
+      "title": "The software our own agents run on",
+      "intro": "We run our own agents on these products every day. They show the engineering behind client work; your IT team can inspect each one."
+    }
+  },
+  "ui": {
+    "problem": "The problem",
+    "built": "What we built",
+    "results": "Results",
+    "quote": "In their words",
+    "duration": "How long it took",
+    "technical": "Technical details",
+    "readCase": "Read the case study",
+    "readStory": "Read the full write-up",
+    "visit": "Visit {name}",
+    "sector": "Sector",
+    "location": "Location",
+    "size": "Size",
+    "related": "More of our work",
+    "back": "All our work",
+    "disclosure": "About this client",
+    "sisterBrand": "Sister brand"
+  },
+  "cases": [
+    {
+      "slug": "workstation",
+      "company": "Workstation",
+      "logo": "/img/client-logos/workstation.svg",
+      "website": "https://www.workstation.co.uk/",
+      "featured": true,
+      "industryLabel": "Retail & e-commerce",
+      "sector": "AI workstations and GPU hardware",
+      "location": "UK & Brussels",
+      "size": "Sister brand (Workstation Solutions Ltd)",
+      "summary": "Buyers arrived with a question, not a product, and a contact form left them to work it out alone.",
+      "problem": "Workstation sells AI workstations, GPU servers and clusters. These are big purchases, and most buyers start with a question rather than a product: \"what do I need to run this model?\" A brochure site and a contact form make the buyer do the hard part.",
+      "built": "A new website and an AI shop with an AI Sales Agent. The agent asks what the buyer wants to run, their budget and where it should be delivered, then builds the basket and hands a priced request to the sales team. People at Workstation check and send every quote.",
+      "results": [
+        {
+          "value": "£100m",
+          "label": "in sales enquiries"
+        },
+        {
+          "value": "£2m",
+          "label": "in referral commission"
+        },
+        {
+          "value": "24/7",
+          "label": "the AI Sales Agent answers buyers at any hour"
+        }
+      ],
+      "headline": {
+        "value": "£100m",
+        "label": "in sales enquiries (Workstation)"
+      },
+      "duration": "Results within a couple of months of launch",
+      "disclosure": "Workstation and TenthMatrix are both brands of Workstation Solutions Ltd, so this is our own work, not an outside client. You can visit both sites and check what we say.",
+      "technical": [
+        "AI Sales Agent with a person approving every quote",
+        "Content, catalogue and leads held in OpsAPI",
+        "Releases promoted int → test → acc → prod by Ring Promoter, gated on health checks",
+        "Static main site served through the Proxy10x gateway and CDN",
+        "Built with AI pair coding; a person reviewed and merged every change"
+      ],
+      "story": "/docs/blogs/workstation-case-study-ai-shop-2m-leads",
+      "groupKey": "ai",
+      "industryKey": "retail",
+      "problemKeys": [
+        "sales"
+      ]
+    },
+    {
+      "slug": "cogno-ai",
+      "company": "Cogno AI",
+      "logo": "/img/client-logos/cognoai.svg",
+      "featured": false,
+      "industryLabel": "Software & AI",
+      "sector": "Artificial intelligence & enterprise software",
+      "location": "London, UK",
+      "summary": "Mid-market firms in regulated industries wanted AI assistants, but their data could not leave their own systems.",
+      "problem": "Cogno AI wanted a platform that brings enterprise-grade AI to mid-market businesses, including clients in healthcare, legal and financial services whose data has to stay under their control.",
+      "built": "We designed and developed their flagship platform: several AI agents working together, document processing, assistants trained on each client's own data, workflows that connect to existing CRM, ERP and email tools, and a no-code builder so non-technical teams can set up their own AI workflows.",
+      "results": [
+        {
+          "value": "98%",
+          "label": "document extraction accuracy"
+        },
+        {
+          "value": "60%",
+          "label": "less manual processing"
+        },
+        {
+          "value": "On-premise",
+          "label": "or private cloud, so data stays with the client"
+        }
+      ],
+      "quote": {
+        "text": "TenthMatrix designed and developed our flagship AI platform that brings enterprise-grade artificial intelligence to mid-market businesses.",
+        "by": "CEO, Cogno AI Ltd"
+      },
+      "technical": [
+        "Multi-agent orchestration with a knowledge graph",
+        "Fine-tuned language models trained on client-specific data",
+        "Integrations with CRM, ERP and communication tools",
+        "No-code AI workflow builder",
+        "Runs on-premise or in a private cloud"
+      ],
+      "groupKey": "ai",
+      "industryKey": "software",
+      "problemKeys": [
+        "operations",
+        "data"
+      ]
+    },
+    {
+      "slug": "lexisnexis",
+      "company": "LexisNexis",
+      "logo": "/img/client-logos/lexisnexis.svg",
+      "featured": true,
+      "industryLabel": "Legal",
+      "sector": "Legal technology & information",
+      "location": "New York, USA & global",
+      "summary": "Legal professionals spent too long searching vast amounts of legal data for what they needed.",
+      "problem": "LexisNexis manages vast amounts of legal, regulatory and business information, and needed AI that could help legal professionals find and analyse it faster.",
+      "built": "AI research assistants that read and analyse legal documents, plus predictive analytics for case outcomes, built on GPT-4 and Claude models.",
+      "results": [
+        {
+          "value": "65%",
+          "label": "faster legal research"
+        },
+        {
+          "value": "1B+",
+          "label": "legal documents indexed"
+        },
+        {
+          "value": "95%",
+          "label": "prediction accuracy"
+        }
+      ],
+      "headline": {
+        "value": "65%",
+        "label": "faster legal research (LexisNexis)"
+      },
+      "quote": {
+        "text": "The integration of GPT-4 and Claude models has revolutionized how legal professionals interact with our platform, reducing research time by 65% while improving accuracy and relevance.",
+        "by": "Michael Stevens, Chief Technology Officer, LexisNexis Legal Solutions"
+      },
+      "technical": [
+        "Natural-language processing for legal document analysis",
+        "Predictive analytics for case outcomes",
+        "GPT-4 and Claude models"
+      ],
+      "groupKey": "ai",
+      "industryKey": "legal",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "hcl-technologies",
+      "company": "HCL Technologies",
+      "logo": "/img/client-logos/hcl.svg",
+      "featured": true,
+      "industryLabel": "IT services",
+      "sector": "IT services & consulting",
+      "location": "Noida, India & global",
+      "summary": "Releases across 50+ global projects were slow and took too much hands-on work.",
+      "problem": "HCL runs DevOps for more than 50 global projects for enterprise clients, and needed releases to be faster and systems to stay up.",
+      "built": "Automated deployment and monitoring across their projects, with alerts and predictions that flag problems before they reach users.",
+      "results": [
+        {
+          "value": "70%",
+          "label": "faster deployments"
+        },
+        {
+          "value": "99.99%",
+          "label": "uptime"
+        },
+        {
+          "value": "50+",
+          "label": "projects managed"
+        }
+      ],
+      "headline": {
+        "value": "70%",
+        "label": "faster deployments (HCL)"
+      },
+      "quote": {
+        "text": "The AI-powered automation reduced our deployment time by 70% and improved system reliability to 99.99% uptime.",
+        "by": "Rajesh Kumar, VP of Engineering, HCL Technologies"
+      },
+      "technical": [
+        "AI-assisted CI/CD automation",
+        "Monitoring and predictive analytics"
+      ],
+      "groupKey": "ai",
+      "industryKey": "it-services",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "HCL"
+    },
+    {
+      "slug": "barclays",
+      "company": "Barclays",
+      "logo": "/img/client-logos/barclays.svg",
+      "featured": false,
+      "industryLabel": "Finance",
+      "sector": "Banking & financial services",
+      "location": "London, UK & global",
+      "summary": "A bank needed faster incident response and audit-ready security without slowing change down.",
+      "problem": "In banking, security and reliability come first, but digital change still has to move quickly.",
+      "built": "Monitoring and security tooling with real-time alerts and automated incident response.",
+      "results": [
+        {
+          "value": "80%",
+          "label": "faster incident resolution"
+        },
+        {
+          "value": "SOC 2",
+          "label": "& ISO 27001 compliance supported"
+        },
+        {
+          "value": "$5M",
+          "label": "annual cost savings"
+        }
+      ],
+      "quote": {
+        "text": "The platform's real-time alerting and automated incident response reduced our MTTR by 80%, ensuring uninterrupted service for our millions of customers globally.",
+        "by": "James Patterson, Head of Infrastructure, Barclays"
+      },
+      "technical": [
+        "Real-time alerting",
+        "Automated incident response",
+        "Controls supporting SOC 2 and ISO 27001"
+      ],
+      "groupKey": "ai",
+      "industryKey": "finance",
+      "problemKeys": [
+        "security"
+      ]
+    }
+  ],
+  "track": [
+    {
+      "slug": "elsevier",
+      "company": "Elsevier",
+      "logo": "/img/client-logos/elsevier.svg",
+      "industryLabel": "Publishing",
+      "sector": "Academic Publishing & Research",
+      "location": "Amsterdam, Netherlands",
+      "results": [
+        {
+          "value": "80% faster publishing",
+          "label": ""
+        },
+        {
+          "value": "99.9% data accuracy",
+          "label": ""
+        },
+        {
+          "value": "500+ catalogs automated",
+          "label": ""
+        }
+      ],
+      "summary": "Automated catalogue production for a leading academic publisher, linked to InDesign and their content systems, cutting publishing time from weeks to days.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "imoderni",
+      "company": "iModerni",
+      "logo": "/img/client-logos/imoderni.svg",
+      "industryLabel": "Distribution",
+      "sector": "Italian Furniture Distribution",
+      "location": "Miami, USA",
+      "results": [
+        {
+          "value": "90% time savings",
+          "label": ""
+        },
+        {
+          "value": "50+ manufacturer catalogs",
+          "label": ""
+        },
+        {
+          "value": "100% automated pricing",
+          "label": ""
+        }
+      ],
+      "summary": "Combined price lists from many furniture manufacturers into one database, then published formatted, illustrated price lists in minutes.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data",
+        "sales"
+      ]
+    },
+    {
+      "slug": "europa-components",
+      "company": "Europa Components",
+      "logo": "/img/client-logos/europa.svg",
+      "industryLabel": "Distribution",
+      "sector": "Electrical Components Distribution",
+      "location": "Luton, UK",
+      "results": [
+        {
+          "value": "108-page catalog automated",
+          "label": ""
+        },
+        {
+          "value": "Daily website updates",
+          "label": ""
+        },
+        {
+          "value": "5,000+ products managed",
+          "label": ""
+        }
+      ],
+      "summary": "One product database that publishes both the 108-page printed catalogue and the website, so new products, pictures and technical data go live with ease.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "amcham-eu",
+      "company": "AmCham EU",
+      "logo": "/img/client-logos/amcham.svg",
+      "industryLabel": "Associations & public sector",
+      "sector": "Business Association",
+      "location": "Brussels, Belgium",
+      "results": [
+        {
+          "value": "150+ companies",
+          "label": ""
+        },
+        {
+          "value": "Quarterly directories",
+          "label": ""
+        },
+        {
+          "value": "75% time reduction",
+          "label": ""
+        }
+      ],
+      "summary": "Member data and publishing for a Brussels business association: professional directories produced from one database.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "oyezstraker",
+      "company": "OyezStraker",
+      "logo": "/img/client-logos/oyezstraker.svg",
+      "industryLabel": "Distribution",
+      "sector": "Office Supplies & Business Products",
+      "location": "UK",
+      "results": [
+        {
+          "value": "3-4 weeks to 1 week",
+          "label": ""
+        },
+        {
+          "value": "150-page catalog",
+          "label": ""
+        },
+        {
+          "value": "75% time savings",
+          "label": ""
+        }
+      ],
+      "summary": "A complex 150-page catalogue produced in about a week instead of three to four, without losing design quality.",
+      "groupKey": "track",
+      "industryKey": "distribution",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "norfolk-county-council",
+      "company": "Norfolk County Council",
+      "logo": "/img/client-logos/norfolk.svg",
+      "industryLabel": "Associations & public sector",
+      "sector": "Local Government",
+      "location": "Norfolk, UK",
+      "results": [
+        {
+          "value": "900,000+ served",
+          "label": ""
+        },
+        {
+          "value": "50+ digital services",
+          "label": ""
+        },
+        {
+          "value": "85% citizen satisfaction",
+          "label": ""
+        }
+      ],
+      "summary": "Website management and customer portal systems that help a local authority deliver better online services to residents.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "operations"
+      ],
+      "shortName": "Norfolk County Council"
+    },
+    {
+      "slug": "sothebys-international-realty",
+      "company": "Sotheby's International Realty",
+      "logo": "/img/client-logos/sothebys.svg",
+      "industryLabel": "Property & luxury",
+      "sector": "Luxury Real Estate",
+      "location": "Global",
+      "results": [
+        {
+          "value": "10,000+ listings",
+          "label": ""
+        },
+        {
+          "value": "70+ countries",
+          "label": ""
+        },
+        {
+          "value": "Consistent luxury branding",
+          "label": ""
+        }
+      ],
+      "summary": "Property data and catalogue publishing across global markets, keeping a luxury brand consistent.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data",
+        "sales"
+      ],
+      "shortName": "Sotheby's International Realty"
+    },
+    {
+      "slug": "tom-dixon",
+      "company": "Tom Dixon",
+      "logo": "/img/client-logos/tomdixon.svg",
+      "industryLabel": "Property & luxury",
+      "sector": "Luxury Furniture & Design",
+      "location": "London, UK",
+      "results": [
+        {
+          "value": "20+ product collections",
+          "label": ""
+        },
+        {
+          "value": "Multi-channel publishing",
+          "label": ""
+        },
+        {
+          "value": "Premium design maintained",
+          "label": ""
+        }
+      ],
+      "summary": "Product information for a design brand published beautifully in print and online from one source.",
+      "groupKey": "track",
+      "industryKey": "property",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "bm-trada",
+      "company": "BM TRADA",
+      "logo": "/img/client-logos/trada.svg",
+      "industryLabel": "Associations & public sector",
+      "sector": "Timber Certification & Testing",
+      "location": "UK",
+      "results": [
+        {
+          "value": "5,000+ certifications managed",
+          "label": ""
+        },
+        {
+          "value": "100% data integrity",
+          "label": ""
+        },
+        {
+          "value": "Automated compliance reports",
+          "label": ""
+        }
+      ],
+      "summary": "Certification and test data organised in one system, with professional compliance reports produced from it.",
+      "groupKey": "track",
+      "industryKey": "associations",
+      "problemKeys": [
+        "data"
+      ]
+    },
+    {
+      "slug": "watsons-directories",
+      "company": "Watsons Directories",
+      "logo": "/img/client-logos/watsons.svg",
+      "industryLabel": "Publishing",
+      "sector": "Business Directory Publishing",
+      "location": "UK",
+      "results": [
+        {
+          "value": "50,000+ businesses",
+          "label": ""
+        },
+        {
+          "value": "25+ regional editions",
+          "label": ""
+        },
+        {
+          "value": "50% faster production",
+          "label": ""
+        }
+      ],
+      "summary": "Thousands of business listings managed in one database and published as print directories on tight deadlines.",
+      "groupKey": "track",
+      "industryKey": "publishing",
+      "problemKeys": [
+        "data"
+      ]
+    }
+  ],
+  "inHouse": [
+    {
+      "name": "Jobshout",
+      "href": "/jobshout",
+      "line": "Specialist agents that do real work in email, GitHub and websites, and stop for a person to approve anything important."
+    },
+    {
+      "name": "Ring Promoter",
+      "href": "/ring-promoter",
+      "line": "Tests every update in stages and only puts it live when it passes its checks. Rolls back on its own if one fails."
+    },
+    {
+      "name": "Proxy10x",
+      "href": "/proxy10x",
+      "line": "A secure front door for your systems: blocks attacks and overload before they reach your apps."
+    },
+    {
+      "name": "WSL Vault",
+      "href": "/wsl-vault",
+      "line": "Keeps every agent's passwords and keys locked away separately, and records every time one is used."
+    },
+    {
+      "name": "Nebula",
+      "href": "/products",
+      "line": "Databases and DNS built for AI workloads, including search over your own documents."
+    }
+  ],
+  "cta": {
+    "title": "Want results like these?",
+    "description": "Tell us the job that slows your team down. An engineer replies within one working day.",
+    "button": "Book a call",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "How we work",
+      "link": "/how-we-work"
+    }
+  }
+}

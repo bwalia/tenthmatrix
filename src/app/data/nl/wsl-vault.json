@@ -9,6 +9,15 @@
     "subtitle": "Steel de server. Niet de secrets.",
     "description": "Open source, self-hosted secretsbeheer op basis van AES-256-GCM envelope-encryptie en een sleutelhiërarchie per tenant — een gestolen schijf, databasedump of gecompromitteerde host laat aanvallers alleen ciphertext over die ze niet kunnen openen."
   },
+  "plain": {
+    "line": "WSL Vault houdt wachtwoorden en sleutels achter slot, geeft elke agent alleen wat hij kort nodig heeft en legt elk gebruik vast.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Bedrijven die AI-agents gebruiken die toegang tot echte systemen nodig hebben",
+      "Teams die moeten kunnen aantonen wie waar wanneer bij kwam",
+      "IT- en beveiligingsteams die wachtwoorden in bestanden en spreadsheets willen vervangen"
+    ]
+  },
   "intro": {
     "title": "Wat is WSLVault?",
     "body": "WSLVault is een Vault-compatibel secretsplatform voor operators die encrypted-at-rest multi-tenancy willen zonder plaintext op schijf. Bedien het via de steel/brass-webconsole, CLI, Go/Python/Rust/TypeScript-SDK's of MCP — met Helm/GitOps-deploy op Kubernetes.",

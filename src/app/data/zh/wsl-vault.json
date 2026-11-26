@@ -9,6 +9,15 @@
     "subtitle": "偷得走服务器,偷不走密钥。",
     "description": "基于 AES-256-GCM 信封加密和按租户密钥层级构建的开源自托管密钥管理——即便磁盘被盗、数据库被导出或主机被攻破,攻击者拿到的也只是无法解开的密文。"
   },
+  "plain": {
+    "line": "WSL Vault 把密码和密钥锁好保管，只在短时间内给每个智能体它所需要的部分，并记录每一次使用。",
+    "whoTitle": "Who this is for",
+    "who": [
+      "AI 智能体需要访问真实系统的企业",
+      "必须能证明谁在何时访问了什么的团队",
+      "想取代文件和表格里明文密码的 IT 与安全团队"
+    ]
+  },
   "intro": {
     "title": "什么是 WSLVault?",
     "body": "WSLVault 是兼容 Vault 的密钥平台,面向希望实现静态加密多租户、磁盘上不留明文的运维人员。可通过 steel/brass Web 控制台、CLI、Go/Python/Rust/TypeScript SDK 或 MCP 操作——并支持在 Kubernetes 上以 Helm/GitOps 部署。",

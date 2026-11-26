@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "title": "术语表：用大白话讲 AI 术语 | TenthMatrix",
+    "description": "用大白话解释我们网站上的 AI 智能体、审批关卡、开放权重模型、MCP、RAG、WAF、CI/CD 等术语是什么意思。"
+  },
+  "header": {
+    "eyebrow": "资源 · 术语表",
+    "title": "用大白话讲 AI 术语",
+    "subtitle": "我们网站上的技术词汇，用日常语言解释。如果缺少某个术语，告诉我们，我们会补上。"
+  },
+  "ui": {
+    "term": "术语",
+    "meaning": "含义",
+    "jump": "跳转到术语"
+  },
+  "terms": [
+    {
+      "id": "ai-agent",
+      "term": "AI 智能体",
+      "plain": "替您完成某项任务的软件，比如起草回复或处理发票，遇到重要事项会先请示人。"
+    },
+    {
+      "id": "approval-gate",
+      "term": "审批关卡",
+      "plain": "在智能体发送、花钱或删除任何东西之前，由人点头确认的环节。"
+    },
+    {
+      "id": "llm",
+      "term": "大语言模型（LLM）",
+      "plain": "ChatGPT、Claude 和 Gemini 背后的那类 AI。它能读写文字，是智能体的“大脑”。"
+    },
+    {
+      "id": "open-weight-model",
+      "term": "开放权重或自托管模型",
+      "plain": "在您自己机器上运行的 AI 模型，数据不会外流。"
+    },
+    {
+      "id": "fde",
+      "term": "前线部署工程师（FDE）",
+      "plain": "与您的团队并肩工作、深入您的系统，直到一切跑通的工程师。"
+    },
+    {
+      "id": "mcp",
+      "term": "MCP 与连接器",
+      "plain": "AI 接入您现有工具（如 CRM、邮箱或财务系统）的方式。MCP（Model Context Protocol）是这方面的通用标准。"
+    },
+    {
+      "id": "api",
+      "term": "API",
+      "plain": "让两个软件直接互相通信的方式，不用人在中间来回搬运数据。"
+    },
+    {
+      "id": "rag",
+      "term": "RAG 与向量搜索",
+      "plain": "让 AI 先在您自己的文档里查找，再作答，这样答案就以您的事实为依据。"
+    },
+    {
+      "id": "hallucination",
+      "term": "幻觉",
+      "plain": "AI 说出听起来合理、实际上不对的内容。让它先查您的文档，再由人核对重要的答案，就能把这个问题控制住。"
+    },
+    {
+      "id": "waf",
+      "term": "WAF、限流与 CDN",
+      "plain": "兼顾安全与速度：在攻击和过载到达您的系统之前将其拦下，并让页面快速加载。"
+    },
+    {
+      "id": "api-gateway",
+      "term": "API 网关",
+      "plain": "您系统的安全大门：每个请求都要先经过它，并接受检查。"
+    },
+    {
+      "id": "ci-cd",
+      "term": "CI/CD 与 int、test、acc、prod 环境",
+      "plain": "更新要分阶段测试（集成、测试、验收），之后才会进入您的正式系统（生产环境）。"
+    },
+    {
+      "id": "envelope-encryption",
+      "term": "信封加密与审计日志",
+      "plain": "密码和密钥被锁好保管，每次使用都有记录。"
+    },
+    {
+      "id": "observability",
+      "term": "可观测性与追踪",
+      "plain": "我们能看到每个智能体做了什么、花了多长时间、花了多少成本。"
+    },
+    {
+      "id": "air-gapped",
+      "term": "物理隔离（air-gapped）",
+      "plain": "完全离线运行，不连接互联网。"
+    },
+    {
+      "id": "pilot",
+      "term": "试点",
+      "plain": "最精简的版本，在您的真实数据上完成真实的工作，让您在做完整开发之前先看到效果。"
+    },
+    {
+      "id": "10x",
+      "term": "10x",
+      "plain": "我们的目标：在我们自动化的工作上，每个人的产出提升十倍。"
+    }
+  ],
+  "cta": {
+    "title": "还不确定自己需要什么？",
+    "description": "用您自己的话说说是什么工作。工程师会在一个工作日内回复，不说行话。",
+    "button": "预约通话",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "查看我们的解决方案",
+      "link": "/solutions"
+    }
+  }
+}

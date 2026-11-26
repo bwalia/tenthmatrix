@@ -109,6 +109,7 @@ function extractMeta(blog) {
     cover_image: coverImageUrl(blog),
     reading_minutes: blog.reading_minutes || 0,
     is_featured: !!blog.is_featured,
+    ...(blog.audience ? { audience: blog.audience } : {}),
     user: name ? { name, avatar: blog.user?.avatar || null } : null,
   };
 }

@@ -218,3 +218,32 @@
   max-width: 40rem;
   margin-top: var(--tm-space-2);
 }
+
+// Product pages: plain-English line + "Who this is for" (layer 1, above the technical detail).
+.plain {
+  display: grid;
+  gap: var(--tm-space-6);
+  padding: var(--tm-space-6) var(--tm-space-8);
+  border: 1px solid var(--tm-line);
+  border-radius: var(--tm-radius);
+  background: var(--tm-surface);
+
+  @media (min-width: $bp-lg) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: var(--tm-space-12);
+    align-items: start;
+  }
+}
+
+.plainLine {
+  font-family: var(--tm-font-display);
+  font-size: var(--tm-text-xl);
+  line-height: var(--tm-leading-snug);
+  color: var(--tm-text);
+}
+
+.whoTitle {
+  @include eyebrow;
+  margin-bottom: var(--tm-space-3);
+  font-size: var(--tm-text-xs);
+}

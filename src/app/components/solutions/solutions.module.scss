@@ -1,0 +1,201 @@
+@use '../../styles/mixins' as *;
+
+.cards {
+  display: grid;
+  gap: var(--tm-grid-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include up($bp-lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  > li {
+    min-width: 0;
+  }
+}
+
+.card {
+  @include card-surface;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tm-space-3);
+  height: 100%;
+  padding: var(--tm-space-6);
+  color: var(--tm-text);
+  text-decoration: none;
+
+  @include motion {
+    transition:
+      border-color var(--tm-duration-fast) var(--tm-ease-standard),
+      transform var(--tm-duration-fast) var(--tm-ease-out);
+  }
+
+  &:hover {
+    border-color: var(--tm-accent-line);
+    color: var(--tm-text);
+
+    @include motion {
+      transform: translateY(-2px);
+    }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.cardIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--tm-radius-sm);
+  background: var(--tm-accent-soft);
+  color: var(--tm-accent);
+}
+
+.cardPain {
+  font-size: var(--tm-text-xl);
+  line-height: var(--tm-leading-snug);
+}
+
+.cardBody {
+  flex: 1;
+  color: var(--tm-text-muted);
+  font-size: var(--tm-text-sm);
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tm-space-2);
+  padding-top: var(--tm-space-3);
+  border-top: 1px solid var(--tm-line);
+  font-weight: var(--tm-weight-semibold);
+  font-size: var(--tm-text-sm);
+  color: var(--tm-accent);
+}
+
+// ------------------------------------------------------------ journey panel
+.journey {
+  display: grid;
+  gap: var(--tm-space-4);
+  align-items: center;
+  margin-top: var(--tm-space-10);
+  padding: var(--tm-space-6) var(--tm-space-8);
+  border: 1px dashed var(--tm-accent-line);
+  border-radius: var(--tm-radius);
+
+  @include up($bp-md) {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  h3 {
+    font-size: var(--tm-text-xl);
+    margin-bottom: var(--tm-space-1);
+  }
+
+  p {
+    color: var(--tm-text-muted);
+  }
+}
+
+// ------------------------------------------------------------ solution page
+.problems {
+  display: grid;
+  gap: var(--tm-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @include up($bp-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  li {
+    padding: var(--tm-space-4) var(--tm-space-5);
+    border-inline-start: 3px solid var(--tm-warn);
+    background: var(--tm-surface);
+    border-radius: 0 var(--tm-radius-sm) var(--tm-radius-sm) 0;
+  }
+}
+
+.exampleNote {
+  display: inline-block;
+  margin-bottom: var(--tm-space-6);
+  padding: var(--tm-space-1) var(--tm-space-3);
+  border-radius: var(--tm-radius-pill);
+  background: var(--tm-warn-soft);
+  font-family: var(--tm-font-mono);
+  font-size: var(--tm-text-xs);
+}
+
+.storyRow {
+  display: grid;
+  gap: var(--tm-grid-gap);
+
+  @include up($bp-lg) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.deliver {
+  display: grid;
+  gap: var(--tm-space-3);
+  align-content: start;
+
+  h3 {
+    font-size: var(--tm-text-xl);
+  }
+
+  p {
+    color: var(--tm-text-muted);
+  }
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tm-space-2);
+  margin: var(--tm-space-6) 0 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 var(--tm-space-4);
+    border: 1px solid var(--tm-line-strong);
+    border-radius: var(--tm-radius-pill);
+    color: var(--tm-text);
+    font-size: var(--tm-text-sm);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--tm-accent);
+      color: var(--tm-accent);
+    }
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+}
+
+.glossaryNote {
+  margin-top: var(--tm-space-4);
+  font-size: var(--tm-text-sm);
+  color: var(--tm-text-muted);
+
+  a {
+    color: var(--tm-accent);
+  }
+}

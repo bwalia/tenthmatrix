@@ -9,6 +9,15 @@
     "subtitle": "Open-source AI code review that closes the bug loop.",
     "description": "Fixloop reviews every pull request, comments on the lines that changed and suggests the fix. It runs on your infrastructure, with the model you choose. Issue filing and test-gated fix pull requests come next."
   },
+  "plain": {
+    "line": "Fixloop ایک AI کوڈ ریویوئر ہے: آپ کے سافٹ ویئر کی ہر تبدیلی کو جانچتا ہے، بگز کی نشاندہی کرتا ہے اور حل تجویز کرتا ہے۔ کیا شامل ہوگا یہ آپ کے ڈویلپرز طے کرتے ہیں۔",
+    "whoTitle": "Who this is for",
+    "who": [
+      "سافٹ ویئر ٹیمیں جو ہر تبدیلی کا جائزہ چاہتی ہیں، رفتار کم کیے بغیر",
+      "وہ کاروبار جن کی اپنی ایپ اور چھوٹی ڈویلپمنٹ ٹیم ہے",
+      "انجینئرنگ لیڈز جو چاہتے ہیں کہ کم بگز گاہکوں تک پہنچیں"
+    ]
+  },
   "intro": {
     "title": "One agent, from bug to fix",
     "body": "Most AI review tools stop at a comment. Fixloop is built to carry a bug the whole way: review the pull request, find the problem, file it as an issue, write the fix in a sandbox, check that build, tests and lint pass, then close the issue when the fix is merged. It is open source (Apache-2.0), written in Rust and vendor-neutral. Today it reviews and finds; each next stage ships as its own release.",

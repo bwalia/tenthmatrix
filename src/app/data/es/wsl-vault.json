@@ -9,6 +9,15 @@
     "subtitle": "Pueden robar el servidor. No los secretos.",
     "description": "Gestión de secretos de código abierto y autoalojada basada en cifrado por envoltura AES-256-GCM y una jerarquía de claves por cliente: un disco robado, un volcado de base de datos o un host comprometido solo deja a los atacantes texto cifrado que no pueden abrir."
   },
+  "plain": {
+    "line": "WSL Vault guarda bajo llave las contraseñas y claves, da a cada agente solo lo que necesita durante poco tiempo y registra cada uso.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Empresas que usan agentes de IA que necesitan acceso a sistemas reales",
+      "Equipos que deben demostrar quién accedió a qué y cuándo",
+      "Equipos de TI y de seguridad que sustituyen las contraseñas guardadas en archivos y hojas de cálculo"
+    ]
+  },
   "intro": {
     "title": "¿Qué es WSLVault?",
     "body": "WSLVault es una plataforma de secretos compatible con Vault para operadores que quieren multicliente cifrado en reposo sin texto plano en disco. Contrólela desde la consola web steel/brass, la CLI, los SDK de Go/Python/Rust/TypeScript o MCP, con despliegue Helm/GitOps en Kubernetes.",

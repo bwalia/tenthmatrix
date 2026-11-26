@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { ArrowUpRight } from 'lucide-react';
 import Logo from '@/app/brand-assets/Logo';
 import LanguageSwitcher from './LanguageSwitcher';
 import EmailAddress from '@/app/components/contact/EmailAddress';
 import { FOOTER_COLUMNS, LEGAL_LINKS, HARDWARE_URL, hrefFor } from './navConfig';
 import s from './SiteFooter.module.scss';
 
-/** Footer: dark in both themes (--tm-night-*). Sitemap, legal, language, hardware cross-link. No shop links. */
+/**
+ * Footer: dark in both themes (--tm-night-*). Brand + four columns (Solutions,
+ * Our work, Company, Legal), one language dropdown and a one-line Workstation
+ * credit. No shop links.
+ */
 export default async function SiteFooter({ locale }) {
   const t = await getTranslations({ locale, namespace: 'footer' });
   const nav = await getTranslations({ locale, namespace: 'nav' });
@@ -17,16 +20,6 @@ export default async function SiteFooter({ locale }) {
   return (
     <footer className={`tm-footer ${s.footer}`}>
       <div className={s.inner}>
-        <a href={HARDWARE_URL} className={s.hardware} target="_blank" rel="noopener noreferrer">
-          <span className={s.hwEyebrow}>{t('hardwareEyebrow')}</span>
-          <span className={s.hwTitle}>{t('hardwareTitle')}</span>
-          <span className={s.hwBody}>{t('hardwareBody')}</span>
-          <span className={s.hwLink}>
-            {t('hardwareLink')}
-            <ArrowUpRight aria-hidden="true" size={18} strokeWidth={1.75} />
-          </span>
-        </a>
-
         <div className={s.grid}>
           <div className={s.brand}>
             <Link href={`/${locale}`} className={s.logo} aria-label={nav('homeLabel')}>
@@ -51,34 +44,29 @@ export default async function SiteFooter({ locale }) {
                 </ul>
               </div>
             ))}
+            <div className={s.col}>
+              <h2 className={s.colTitle}>{t('legal')}</h2>
+              <ul>
+                {LEGAL_LINKS.map((l) => (
+                  <li key={l.key}>
+                    <Link href={`/${locale}${l.href}`} prefetch={false}>
+                      {t(`legalLinks.${l.key}`)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
         </div>
 
         <div className={s.bottom}>
-          <nav aria-label={t('legal')}>
-            <ul className={s.legal}>
-              {LEGAL_LINKS.map((l) => (
-                <li key={l.key}>
-                  <Link href={`/${locale}${l.href}`} prefetch={false}>
-                    {t(`legalLinks.${l.key}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className={s.meta}>
-            <LanguageSwitcher locale={locale} tone="night" id="tm-lang-footer" />
-            <p className={s.copy}>
-              © {year} TenthMatrix. {t('rights')}
-            </p>
-            <p className={s.copy}>{t('entity')}</p>
-            <p className={s.copy}>
-              {t('sponsoredBy')}{' '}
-              <a href="https://www.workstation.co.uk/en" className={s.sponsor}>
-                Workstation
-              </a>
-            </p>
-          </div>
+          <LanguageSwitcher locale={locale} tone="night" id="tm-lang-footer" />
+          <p className={s.copy}>
+            © {year} TenthMatrix. {t('entity')}{' '}
+            <a href={HARDWARE_URL} className={s.sponsor} target="_blank" rel="noopener noreferrer">
+              {t('hardware')}
+            </a>
+          </p>
         </div>
       </div>
     </footer>

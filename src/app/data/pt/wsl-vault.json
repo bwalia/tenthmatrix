@@ -9,6 +9,15 @@
     "subtitle": "Roubem o servidor. Não os segredos.",
     "description": "Gerenciamento de segredos de código aberto e auto-hospedado, baseado em criptografia de envelope AES-256-GCM e uma hierarquia de chaves por tenant — um disco roubado, um dump de banco de dados ou um host comprometido deixa os atacantes apenas com texto cifrado que não conseguem abrir."
   },
+  "plain": {
+    "line": "O WSL Vault guarda as palavras-passe e as chaves em segurança, dá a cada agente apenas o que precisa por pouco tempo e regista cada utilização.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Empresas que usam agentes de AI com necessidade de acesso a sistemas reais",
+      "Equipas que têm de mostrar quem acedeu a quê e quando",
+      "Equipas de TI e segurança que querem substituir palavras-passe guardadas em ficheiros e folhas de cálculo"
+    ]
+  },
   "intro": {
     "title": "O que é o WSLVault?",
     "body": "O WSLVault é uma plataforma de segredos compatível com Vault para operadores que querem multi-tenancy criptografado em repouso, sem texto puro em disco. Opere pelo console web steel/brass, CLI, SDKs Go/Python/Rust/TypeScript ou MCP — com implantação Helm/GitOps no Kubernetes.",

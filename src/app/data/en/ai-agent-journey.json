@@ -6,77 +6,39 @@
   "header": {
     "eyebrow": "AI agent journey",
     "title": "Design your AI agent in nine questions",
-    "lede": "We start every project in your shoes, not in a slide deck. Answer the questions a forward deployed engineer asks in the first meeting, and see the agent, the model and the hosting we would build for you.",
+    "lede": "Answer the nine questions our engineers ask in a first meeting, and see the agent, the AI model and the hosting we would build for you.",
     "start": "Start the journey",
     "how": "How AI agents work",
-    "meta": ["About 3 minutes", "No sign-up to see your result", "Claude, OpenAI, Gemini, Microsoft, Grok or open source"]
+    "meta": [
+      "About 3 minutes",
+      "No sign-up to see your result",
+      "Claude, OpenAI, Gemini, Microsoft, Grok or open source"
+    ]
   },
   "how": {
     "eyebrow": "Before you start",
     "title": "How an AI agent actually works",
-    "lede": "A chatbot answers a question. An agent finishes a job. It reads your data, decides what to do, uses your tools to do it, and checks the result before anyone relies on it. Each turn of that loop is logged.",
+    "lede": "A chatbot answers a question. An agent finishes a job: it reads your data, works out what to do, uses your tools, and checks with a person before anything important.",
     "loop": [
       {
         "step": "01",
         "title": "Read",
-        "description": "The agent collects what it needs from the systems you allowed: the inbox, the ledger, the ticket queue, the repository. It sees only what its permissions allow."
+        "description": "It collects what it needs from the systems you allow, such as the inbox, the accounts or the ticket queue, and nothing more."
       },
       {
         "step": "02",
         "title": "Reason",
-        "description": "A large language model works out what the job needs and plans the steps. This is the only place intelligence is used, so it is spent where judgement matters."
+        "description": "An AI model (a large language model, the kind behind ChatGPT and Claude) works out what the job needs and plans the steps."
       },
       {
         "step": "03",
         "title": "Act",
-        "description": "The agent uses real tools through connectors and MCP servers: it drafts the reply, files the report, raises the pull request. Rule-based steps stay as plain code."
+        "description": "It uses your tools through connectors (often called MCP) to draft the reply, file the report or update the record. Simple rule-based steps stay as ordinary code."
       },
       {
         "step": "04",
         "title": "Check",
-        "description": "Before anything is sent, spent or deleted the agent stops at an approval gate. You approve, or reject with a reason it learns from. Every step is traced."
-      }
-    ],
-    "layersTitle": "Three layers in every agent we build",
-    "layers": [
-      {
-        "title": "Your knowledge",
-        "description": "The data sources we connect during discovery, scoped to the same permissions your staff already have."
-      },
-      {
-        "title": "The model",
-        "description": "Claude, GPT, Gemini, Grok or an open-weight model, chosen for the task, the data and where it must run."
-      },
-      {
-        "title": "Control",
-        "description": "Approval gates, budgets, stop conditions and an audit trail, run on the Jobshout agent framework."
-      }
-    ]
-  },
-  "shoes": {
-    "eyebrow": "Discovery",
-    "title": "We get into your shoes first",
-    "lede": "Most AI projects fail because they automate the wrong step. Our forward deployed engineers sit with the people who do the work before writing a line of code.",
-    "steps": [
-      {
-        "phase": "Day 1",
-        "title": "Shadow the work",
-        "description": "We watch a real working day: the inbox, the approvals, the spreadsheets that hold the business together. We note every hand-off and every wait."
-      },
-      {
-        "phase": "Day 2",
-        "title": "Map the data sources",
-        "description": "For each step we record where the data lives, who owns it, how it is reached (API, export, database, email) and how sensitive it is."
-      },
-      {
-        "phase": "Day 3",
-        "title": "Find where judgement is needed",
-        "description": "We split each process into rule steps, which stay as ordinary automation, and judgement steps, where an LLM earns its cost. Agents go only where intelligence is required."
-      },
-      {
-        "phase": "Week 1–2",
-        "title": "Build and run beside you",
-        "description": "The first agent runs on your real data with an approval gate on every risky action. We tune it with the people who use it, then widen its permissions only when they trust it."
+        "description": "Before anything is sent, spent or deleted, it stops for a person to approve. Every step is recorded."
       }
     ]
   },
@@ -101,14 +63,46 @@
         "title": "Who is the agent working for first?",
         "help": "We start with one person or team. The quickest wins are usually the people whose time is most expensive.",
         "options": [
-          { "value": "ceo", "label": "CEO or founder", "description": "Inbox, diary, board packs, investor updates" },
-          { "value": "cto", "label": "CTO or head of engineering", "description": "Pull requests, incidents, roadmap status" },
-          { "value": "cfo", "label": "CFO or finance director", "description": "Month-end, spend approvals, cash forecasts" },
-          { "value": "coo", "label": "COO or operations", "description": "Suppliers, orders, scheduling, exceptions" },
-          { "value": "sales", "label": "Sales and marketing", "description": "Leads, proposals, CRM hygiene, content" },
-          { "value": "support", "label": "Customer service", "description": "Ticket triage, replies, refunds, escalations" },
-          { "value": "people", "label": "HR and people", "description": "Recruitment, onboarding, policy questions" },
-          { "value": "legal", "label": "Legal and compliance", "description": "Contract review, policy checks, evidence" }
+          {
+            "value": "ceo",
+            "label": "CEO or founder",
+            "description": "Inbox, diary, board packs, investor updates"
+          },
+          {
+            "value": "cto",
+            "label": "CTO or head of engineering",
+            "description": "Pull requests, incidents, roadmap status"
+          },
+          {
+            "value": "cfo",
+            "label": "CFO or finance director",
+            "description": "Month-end, spend approvals, cash forecasts"
+          },
+          {
+            "value": "coo",
+            "label": "COO or operations",
+            "description": "Suppliers, orders, scheduling, exceptions"
+          },
+          {
+            "value": "sales",
+            "label": "Sales and marketing",
+            "description": "Leads, proposals, CRM hygiene, content"
+          },
+          {
+            "value": "support",
+            "label": "Customer service",
+            "description": "Ticket triage, replies, refunds, escalations"
+          },
+          {
+            "value": "people",
+            "label": "HR and people",
+            "description": "Recruitment, onboarding, policy questions"
+          },
+          {
+            "value": "legal",
+            "label": "Legal and compliance",
+            "description": "Contract review, policy checks, evidence"
+          }
         ]
       },
       {
@@ -117,32 +111,104 @@
         "title": "Where does the time go today?",
         "help": "Pick the work that is repetitive but still needs someone to think. That is where an agent pays for itself.",
         "options": [
-          { "value": "inbox", "label": "Email and diary", "description": "Triage, replies, meeting scheduling and preparation" },
-          { "value": "reporting", "label": "Reports and briefings", "description": "Board packs, weekly updates, KPI commentary" },
-          { "value": "approvals", "label": "Approvals and spend", "description": "Purchase orders, expenses, invoices, exceptions" },
-          { "value": "customers", "label": "Customer enquiries", "description": "Questions, quotes, complaints, follow-ups" },
-          { "value": "documents", "label": "Documents and contracts", "description": "Reading, comparing, extracting, summarising" },
-          { "value": "engineering", "label": "Code and incidents", "description": "Reviews, on-call summaries, release notes" },
-          { "value": "research", "label": "Research", "description": "Competitors, markets, suppliers, due diligence" },
-          { "value": "data", "label": "Data entry between systems", "description": "Copying from email or PDF into CRM, ERP or spreadsheets" }
+          {
+            "value": "inbox",
+            "label": "Email and diary",
+            "description": "Triage, replies, meeting scheduling and preparation"
+          },
+          {
+            "value": "reporting",
+            "label": "Reports and briefings",
+            "description": "Board packs, weekly updates, KPI commentary"
+          },
+          {
+            "value": "approvals",
+            "label": "Approvals and spend",
+            "description": "Purchase orders, expenses, invoices, exceptions"
+          },
+          {
+            "value": "customers",
+            "label": "Customer enquiries",
+            "description": "Questions, quotes, complaints, follow-ups"
+          },
+          {
+            "value": "documents",
+            "label": "Documents and contracts",
+            "description": "Reading, comparing, extracting, summarising"
+          },
+          {
+            "value": "engineering",
+            "label": "Code and incidents",
+            "description": "Reviews, on-call summaries, release notes"
+          },
+          {
+            "value": "research",
+            "label": "Research",
+            "description": "Competitors, markets, suppliers, due diligence"
+          },
+          {
+            "value": "data",
+            "label": "Data entry between systems",
+            "description": "Copying from email or PDF into CRM, ERP or spreadsheets"
+          }
         ]
       },
       {
         "id": "sources",
         "type": "multi",
         "title": "Where does the data live?",
-        "help": "This is the first thing an FDE maps in a meeting. Every source becomes a connector with its own permissions.",
+        "help": "This is the first thing our engineer maps in a meeting. Each source gets its own connector, with its own permissions.",
         "options": [
-          { "value": "m365", "label": "Microsoft 365", "description": "Outlook, Teams, SharePoint, OneDrive" },
-          { "value": "google", "label": "Google Workspace", "description": "Gmail, Calendar, Drive, Sheets" },
-          { "value": "crm", "label": "CRM", "description": "Salesforce, HubSpot, Dynamics, Pipedrive" },
-          { "value": "finance", "label": "Finance and ERP", "description": "Xero, Sage, QuickBooks, NetSuite, SAP" },
-          { "value": "dev", "label": "Engineering tools", "description": "GitHub, GitLab, Jira, Linear, Sentry" },
-          { "value": "helpdesk", "label": "Help desk", "description": "Zendesk, Freshdesk, ServiceNow, Intercom" },
-          { "value": "chat", "label": "Team chat", "description": "Slack, Teams channels, WhatsApp Business" },
-          { "value": "database", "label": "Databases and warehouse", "description": "PostgreSQL, SQL Server, Snowflake, BigQuery" },
-          { "value": "files", "label": "Files and scans", "description": "PDFs, spreadsheets, scanned forms, file shares" },
-          { "value": "legacy", "label": "In-house or legacy systems", "description": "Custom apps, old APIs, screens with no API" }
+          {
+            "value": "m365",
+            "label": "Microsoft 365",
+            "description": "Outlook, Teams, SharePoint, OneDrive"
+          },
+          {
+            "value": "google",
+            "label": "Google Workspace",
+            "description": "Gmail, Calendar, Drive, Sheets"
+          },
+          {
+            "value": "crm",
+            "label": "CRM",
+            "description": "Salesforce, HubSpot, Dynamics, Pipedrive"
+          },
+          {
+            "value": "finance",
+            "label": "Finance and ERP",
+            "description": "Xero, Sage, QuickBooks, NetSuite, SAP"
+          },
+          {
+            "value": "dev",
+            "label": "Engineering tools",
+            "description": "GitHub, GitLab, Jira, Linear, Sentry"
+          },
+          {
+            "value": "helpdesk",
+            "label": "Help desk",
+            "description": "Zendesk, Freshdesk, ServiceNow, Intercom"
+          },
+          {
+            "value": "chat",
+            "label": "Team chat",
+            "description": "Slack, Teams channels, WhatsApp Business"
+          },
+          {
+            "value": "database",
+            "label": "Databases and warehouse",
+            "description": "PostgreSQL, SQL Server, Snowflake, BigQuery"
+          },
+          {
+            "value": "files",
+            "label": "Files and scans",
+            "description": "PDFs, spreadsheets, scanned forms, file shares"
+          },
+          {
+            "value": "legacy",
+            "label": "In-house or legacy systems",
+            "description": "Custom apps, old APIs, screens with no API"
+          }
         ]
       },
       {
@@ -151,9 +217,21 @@
         "title": "How much should the agent do on its own?",
         "help": "We always start with more approval and loosen it as trust grows. You can change this per agent and per tool.",
         "options": [
-          { "value": "draft", "label": "Draft only", "description": "It prepares everything; a person sends, pays or posts" },
-          { "value": "gated", "label": "Act on low risk, ask on high risk", "description": "Reads and drafts run alone; sending, spending and deleting wait for approval" },
-          { "value": "auto", "label": "Run on its own within limits", "description": "Budgets, allow-lists and stop conditions; people review the log" }
+          {
+            "value": "draft",
+            "label": "Draft only",
+            "description": "It prepares everything; a person sends, pays or posts"
+          },
+          {
+            "value": "gated",
+            "label": "Act on low risk, ask on high risk",
+            "description": "Reads and drafts run alone; sending, spending and deleting wait for approval"
+          },
+          {
+            "value": "auto",
+            "label": "Run on its own within limits",
+            "description": "Budgets, allow-lists and stop conditions; people review the log"
+          }
         ]
       },
       {
@@ -162,35 +240,87 @@
         "title": "Which AI company would you like to work with?",
         "help": "Our engineers are certified across all the major platforms, so this is your choice, not ours. If you have no preference we choose per task.",
         "options": [
-          { "value": "anthropic", "label": "Anthropic Claude", "description": "Strong at long documents, careful reasoning, tool use and code" },
-          { "value": "openai", "label": "OpenAI", "description": "GPT models, broad ecosystem, voice and vision" },
-          { "value": "google", "label": "Google Gemini", "description": "Long context, multimodal, close to Google Workspace" },
-          { "value": "microsoft", "label": "Microsoft", "description": "Azure OpenAI and Copilot inside your Microsoft tenant" },
-          { "value": "xai", "label": "xAI Grok", "description": "Real-time knowledge and fast reasoning" },
-          { "value": "any", "label": "No preference", "description": "Choose the best model for each agent" }
+          {
+            "value": "anthropic",
+            "label": "Anthropic Claude",
+            "description": "Strong at long documents, careful reasoning, tool use and code"
+          },
+          {
+            "value": "openai",
+            "label": "OpenAI",
+            "description": "GPT models, broad ecosystem, voice and vision"
+          },
+          {
+            "value": "google",
+            "label": "Google Gemini",
+            "description": "Long context, multimodal, close to Google Workspace"
+          },
+          {
+            "value": "microsoft",
+            "label": "Microsoft",
+            "description": "Azure OpenAI and Copilot inside your Microsoft tenant"
+          },
+          {
+            "value": "xai",
+            "label": "xAI Grok",
+            "description": "Real-time knowledge and fast reasoning"
+          },
+          {
+            "value": "any",
+            "label": "No preference",
+            "description": "Choose the best model for each agent"
+          }
         ]
       },
       {
         "id": "openSource",
         "type": "single",
         "title": "Would you prefer open-source models?",
-        "help": "Open-weight models such as Llama, Qwen, Mistral, DeepSeek and gpt-oss can run on your own hardware, with no per-token bill and no data leaving your network.",
+        "help": "Open-weight models (AI models you can run on your own machines), such as Llama, Qwen, Mistral, DeepSeek and gpt-oss, have no per-use bill and keep your data in your building.",
         "options": [
-          { "value": "yes", "label": "Yes, open source first", "description": "Use open-weight models wherever they are good enough" },
-          { "value": "mix", "label": "A mix", "description": "Open source for routine or sensitive work, a frontier model for the hardest steps" },
-          { "value": "no", "label": "No, use the best commercial model", "description": "Quality first; open source is not a requirement" }
+          {
+            "value": "yes",
+            "label": "Yes, open source first",
+            "description": "Use open-weight models wherever they are good enough"
+          },
+          {
+            "value": "mix",
+            "label": "A mix",
+            "description": "Open source for routine or sensitive work, a frontier model for the hardest steps"
+          },
+          {
+            "value": "no",
+            "label": "No, use the best commercial model",
+            "description": "Quality first; open source is not a requirement"
+          }
         ]
       },
       {
         "id": "hosting",
         "type": "single",
         "title": "Where should the AI run?",
-        "help": "This decides which models are possible. A fully offline system needs open-weight models on your own AI workstations.",
+        "help": "This decides which models are possible. A fully offline (air-gapped) system needs open-weight models on your own AI workstations.",
         "options": [
-          { "value": "cloud", "label": "Provider cloud API", "description": "Fastest to start; data covered by the provider's enterprise terms" },
-          { "value": "tenant", "label": "Our own cloud tenant", "description": "Azure, AWS or Google Cloud account we control, UK or EU region" },
-          { "value": "onprem", "label": "Self-hosted, on our premises", "description": "Our own servers or AI workstations, still connected to the internet" },
-          { "value": "airgap", "label": "Self-hosted and offline", "description": "AI workstations with no internet connection at all" }
+          {
+            "value": "cloud",
+            "label": "Provider cloud API",
+            "description": "Fastest to start; data covered by the provider's enterprise terms"
+          },
+          {
+            "value": "tenant",
+            "label": "Our own cloud tenant",
+            "description": "Azure, AWS or Google Cloud account we control, UK or EU region"
+          },
+          {
+            "value": "onprem",
+            "label": "Self-hosted, on our premises",
+            "description": "Our own servers or AI workstations, still connected to the internet"
+          },
+          {
+            "value": "airgap",
+            "label": "Self-hosted and offline",
+            "description": "AI workstations with no internet connection at all"
+          }
         ]
       },
       {
@@ -199,23 +329,59 @@
         "title": "What kind of data will the agent touch?",
         "help": "This sets the guardrails: redaction, where logs are kept and who can approve what.",
         "options": [
-          { "value": "personal", "label": "Personal data", "description": "Customers, staff or patients under UK GDPR" },
-          { "value": "financial", "label": "Financial records", "description": "Ledgers, payments, payroll" },
-          { "value": "health", "label": "Health data", "description": "Clinical or special category data" },
-          { "value": "privileged", "label": "Legal or board confidential", "description": "Privileged advice, M&A, board papers" },
-          { "value": "ip", "label": "Source code and IP", "description": "Repositories, designs, trade secrets" },
-          { "value": "public", "label": "Mostly public or internal", "description": "Nothing particularly sensitive" }
+          {
+            "value": "personal",
+            "label": "Personal data",
+            "description": "Customers, staff or patients under UK GDPR"
+          },
+          {
+            "value": "financial",
+            "label": "Financial records",
+            "description": "Ledgers, payments, payroll"
+          },
+          {
+            "value": "health",
+            "label": "Health data",
+            "description": "Clinical or special category data"
+          },
+          {
+            "value": "privileged",
+            "label": "Legal or board confidential",
+            "description": "Privileged advice, M&A, board papers"
+          },
+          {
+            "value": "ip",
+            "label": "Source code and IP",
+            "description": "Repositories, designs, trade secrets"
+          },
+          {
+            "value": "public",
+            "label": "Mostly public or internal",
+            "description": "Nothing particularly sensitive"
+          }
         ]
       },
       {
         "id": "speed",
         "type": "single",
         "title": "When do you want the first agent working?",
-        "help": "A forward deployed engineer can usually have a first agent on your real data within two weeks.",
+        "help": "Our engineer can usually have a first agent working on your real data within two weeks.",
         "options": [
-          { "value": "now", "label": "Within two weeks", "description": "A focused pilot on one process" },
-          { "value": "quarter", "label": "This quarter", "description": "Several agents and a rollout plan" },
-          { "value": "exploring", "label": "We are exploring", "description": "Help us build the business case first" }
+          {
+            "value": "now",
+            "label": "Within two weeks",
+            "description": "A focused pilot on one process"
+          },
+          {
+            "value": "quarter",
+            "label": "This quarter",
+            "description": "Several agents and a rollout plan"
+          },
+          {
+            "value": "exploring",
+            "label": "We are exploring",
+            "description": "Help us build the business case first"
+          }
         ]
       }
     ]
@@ -239,7 +405,7 @@
     "fdeTitle": "Your forward deployed engineer",
     "fdeBody": "We allocate a forward deployed engineer to your project from day one. They work inside your team, certified across Claude Code, OpenAI, Google, Microsoft and Grok, to build and deploy your agents fast.",
     "planTitle": "Delivery plan",
-    "scenarioTitle": "What this looks like on a real day",
+    "scenarioTitle": "Example scenario: what a typical day could look like",
     "workstationTitle": "Running offline on your own AI workstations",
     "workstationBody": "For a system with no internet connection we size and supply the hardware with our sister company Workstation: GPU workstations and servers built for local models, delivered ready to run.",
     "workstationLink": "AI workstations at workstation.co.uk",
@@ -291,23 +457,68 @@
       }
     },
     "workAgents": {
-      "inbox": { "name": "Mail agent", "description": "Watches chosen senders, researches the thread and leaves a reply draft for approval." },
-      "reporting": { "name": "Briefing agent", "description": "Pulls the numbers on a schedule and writes the commentary, citing where each figure came from." },
-      "approvals": { "name": "Approvals agent", "description": "Checks each request against policy and budget, then routes it with a recommendation." },
-      "customers": { "name": "Enquiry agent", "description": "Answers routine questions, drafts quotes and follows up until the customer replies." },
-      "documents": { "name": "Document agent", "description": "Extracts, compares and summarises contracts, reports and forms into structured data." },
-      "engineering": { "name": "PR review and incident agent", "description": "Reviews pull requests and turns alerts and logs into a readable incident summary." },
-      "research": { "name": "Research agent", "description": "Returns cited findings you can open: competitors, suppliers, markets and due diligence." },
-      "data": { "name": "Data entry agent", "description": "Reads emails and PDFs and writes the fields into your CRM, ERP or spreadsheet, with a check before saving." }
+      "inbox": {
+        "name": "Mail agent",
+        "description": "Watches chosen senders, researches the thread and leaves a reply draft for approval."
+      },
+      "reporting": {
+        "name": "Briefing agent",
+        "description": "Pulls the numbers on a schedule and writes the commentary, citing where each figure came from."
+      },
+      "approvals": {
+        "name": "Approvals agent",
+        "description": "Checks each request against policy and budget, then routes it with a recommendation."
+      },
+      "customers": {
+        "name": "Enquiry agent",
+        "description": "Answers routine questions, drafts quotes and follows up until the customer replies."
+      },
+      "documents": {
+        "name": "Document agent",
+        "description": "Extracts, compares and summarises contracts, reports and forms into structured data."
+      },
+      "engineering": {
+        "name": "PR review and incident agent",
+        "description": "Reviews pull requests and turns alerts and logs into a readable incident summary."
+      },
+      "research": {
+        "name": "Research agent",
+        "description": "Returns cited findings you can open: competitors, suppliers, markets and due diligence."
+      },
+      "data": {
+        "name": "Data entry agent",
+        "description": "Reads emails and PDFs and writes the fields into your CRM, ERP or spreadsheet, with a check before saving."
+      }
     },
     "models": {
-      "anthropic": { "name": "Anthropic Claude", "why": "Careful reasoning over long documents and reliable tool use; our first choice for agents that write code or handle complex workflows." },
-      "openai": { "name": "OpenAI GPT", "why": "A broad ecosystem with strong general reasoning, vision and voice for customer-facing agents." },
-      "google": { "name": "Google Gemini", "why": "Very long context and multimodal input, and close to the data if you run on Google Workspace." },
-      "microsoft": { "name": "Azure OpenAI in your Microsoft tenant", "why": "OpenAI models under your Microsoft agreement and data boundary, alongside Copilot and Microsoft 365 permissions." },
-      "xai": { "name": "xAI Grok", "why": "Fast reasoning with real-time knowledge, useful for research and market-watching agents." },
-      "open": { "name": "Open-weight models (Llama, Qwen, Mistral, DeepSeek, gpt-oss)", "why": "Run on your own hardware through vLLM or Ollama: no per-token bill and no data leaving your network." },
-      "openRoutine": { "name": "A small open-weight model for routine steps", "why": "Classification, extraction and redaction run locally and cheaply; only the hardest steps go to the frontier model." }
+      "anthropic": {
+        "name": "Anthropic Claude",
+        "why": "Careful reasoning over long documents and reliable tool use; our first choice for agents that write code or handle complex workflows."
+      },
+      "openai": {
+        "name": "OpenAI GPT",
+        "why": "A broad ecosystem with strong general reasoning, vision and voice for customer-facing agents."
+      },
+      "google": {
+        "name": "Google Gemini",
+        "why": "Very long context and multimodal input, and close to the data if you run on Google Workspace."
+      },
+      "microsoft": {
+        "name": "Azure OpenAI in your Microsoft tenant",
+        "why": "OpenAI models under your Microsoft agreement and data boundary, alongside Copilot and Microsoft 365 permissions."
+      },
+      "xai": {
+        "name": "xAI Grok",
+        "why": "Fast reasoning with real-time knowledge, useful for research and market-watching agents."
+      },
+      "open": {
+        "name": "Open-weight models (Llama, Qwen, Mistral, DeepSeek, gpt-oss)",
+        "why": "Run on your own hardware through vLLM or Ollama: no per-token bill and no data leaving your network."
+      },
+      "openRoutine": {
+        "name": "A small open-weight model for routine steps",
+        "why": "Classification, extraction and redaction run locally and cheaply; only the hardest steps go to the frontier model."
+      }
     },
     "hosting": {
       "cloud": "The provider's enterprise API, with zero data retention where it is offered. Fastest to start; we can move to your own tenant later without rebuilding the agents.",
@@ -340,9 +551,21 @@
       "ip": "Source code is processed under zero-retention terms or on self-hosted models only."
     },
     "plan": {
-      "now": ["Week 1: discovery on site, shadowing the work and mapping the data sources", "Week 2: first agent live on your real data with approval gates", "Weeks 3–4: tune with the people who use it, then widen permissions"],
-      "quarter": ["Weeks 1–2: discovery across the teams and a ranked list of agents", "Weeks 3–6: first two agents live, connectors hardened", "Weeks 7–12: rollout, training and handover to your team"],
-      "exploring": ["One discovery workshop with your leadership team", "A written business case with costs, savings and risks per agent", "A two-week pilot on the process with the clearest return"]
+      "now": [
+        "Week 1: discovery on site, shadowing the work and mapping the data sources",
+        "Week 2: first agent live on your real data with approval gates",
+        "Weeks 3–4: tune with the people who use it, then widen permissions"
+      ],
+      "quarter": [
+        "Weeks 1–2: discovery across the teams and a ranked list of agents",
+        "Weeks 3–6: first two agents live, connectors hardened",
+        "Weeks 7–12: rollout, training and handover to your team"
+      ],
+      "exploring": [
+        "One discovery workshop with your leadership team",
+        "A written business case with costs, savings and risks per agent",
+        "A two-week pilot on the process with the clearest return"
+      ]
     },
     "scenarios": {
       "ceo": "It is 7:30. Before the CEO opens the laptop, the Executive PA agent has read 140 overnight emails, archived the noise, drafted 11 replies in their voice and put a one-page brief on top: the three decisions needed today, the investor who is waiting on numbers, and the notes for the 10:00 board call. The CEO approves eight replies from their phone and edits three.",
@@ -357,78 +580,99 @@
     }
   },
   "scenarios": {
-    "eyebrow": "Real-world scenarios",
+    "eyebrow": "Example scenarios",
     "title": "What we hear in customer meetings, and what we build",
-    "lede": "Composite examples from the kind of first meetings our forward deployed engineers run. Names and numbers are illustrative.",
+    "lede": "Composite examples of what we hear in first meetings. They are not client results: names and numbers are illustrative.",
     "items": [
       {
-        "badge": "CEO · professional services",
+        "badge": "Example scenario · CEO · professional services",
         "title": "\"I spend my first two hours every day on email.\"",
         "description": "The FDE mapped Outlook, the CRM and the board portal, and found that most replies followed five patterns. An Executive PA agent now drafts replies and meeting briefs overnight; the CEO approves from a phone.",
-        "list": ["Data: Microsoft 365, HubSpot, board portal", "Model: Claude through the company's Azure tenant", "Control: every reply approved before it is sent"]
+        "list": [
+          "Data: Microsoft 365, HubSpot, board portal",
+          "Model: Claude through the company's Azure tenant"
+        ]
       },
       {
-        "badge": "CFO · manufacturing",
+        "badge": "Example scenario · CFO · manufacturing",
         "title": "\"Month-end takes nine days and most of it is copying.\"",
         "description": "Discovery showed the judgement was only in the variance commentary; matching and posting were rules. We automated the rules in code and put an agent on the commentary and the policy checks.",
-        "list": ["Data: Sage, bank feeds, purchase order spreadsheets", "Model: a mix of a local model for extraction and a frontier model for commentary", "Control: no posting or payment without a named approver"]
+        "list": [
+          "Data: Sage, bank feeds, purchase order spreadsheets",
+          "Model: a mix of a local model for extraction and a frontier model for commentary"
+        ]
       },
       {
-        "badge": "CTO · software company",
+        "badge": "Example scenario · CTO · software company",
         "title": "\"My senior engineers spend their week reviewing other people's code.\"",
         "description": "A PR review agent checks every pull request against the team's standards and a second agent writes incident summaries from Sentry and logs. Seniors review the agent's notes, not the whole diff.",
-        "list": ["Data: GitHub, Jira, Sentry, Slack", "Model: Claude Code for review, with an open-weight model for log triage", "Control: comments only; merging stays human"]
+        "list": [
+          "Data: GitHub, Jira, Sentry, Slack",
+          "Model: Claude Code for review, with an open-weight model for log triage"
+        ]
       },
       {
-        "badge": "Law firm · offline",
+        "badge": "Example scenario · Law firm · offline",
         "title": "\"Nothing privileged can ever leave the building.\"",
         "description": "We sized AI workstations with Workstation and ran open-weight models fully offline. A contracts agent compares documents to the firm's playbook and drafts redlines; partners approve each one.",
-        "list": ["Data: document management system, precedent bank", "Model: open-weight models on local GPU workstations", "Control: air-gapped, with audit logs kept on site"]
+        "list": [
+          "Data: document management system, precedent bank",
+          "Model: open-weight models on local GPU workstations"
+        ]
       }
     ]
   },
   "fde": {
     "eyebrow": "Forward deployed engineers",
-    "title": "An expert in your team, not a ticket in a queue",
-    "lede": "Every project gets a forward deployed engineer (FDE). They join your meetings, learn how your business really works and build and deploy the agents with you, fast.",
+    "title": "An engineer in your team, not a ticket in a queue",
+    "lede": "Every project gets a forward deployed engineer (FDE): an engineer who works alongside your team, inside your systems, until it works.",
     "certsTitle": "Certified across the platforms you might choose",
-    "certs": ["Claude Code (Anthropic)", "OpenAI", "Google Cloud and Gemini", "Microsoft Azure AI", "xAI Grok"],
+    "certs": [
+      "Claude Code (Anthropic)",
+      "OpenAI",
+      "Google Cloud and Gemini",
+      "Microsoft Azure AI",
+      "xAI Grok"
+    ],
     "points": [
       {
         "title": "Asks the right questions",
-        "description": "Where does the data live, who owns it, what happens when it is wrong, and which step really needs judgement."
+        "description": "Where the data lives, who owns it, what happens when it is wrong, and which step really needs judgement."
       },
       {
         "title": "Builds in your systems",
-        "description": "The agents live in your repository and your cloud or your hardware, connected to the tools your team already uses."
+        "description": "The agents live in your code repository and your cloud or your own machines, connected to the tools your team already uses."
       },
       {
         "title": "Stays until it works",
-        "description": "They tune the agent with the people who use it and hand over runbooks, so your team can run it without us."
+        "description": "They tune the agent with the people who use it, then hand over documentation so your team can run it without us."
       }
     ]
   },
   "framework": {
     "eyebrow": "Framework",
     "title": "Built on Jobshout, our agent framework and task manager",
-    "lede": "Jobshout is the open-source framework every TenthMatrix agent runs on. Each agent owns a lane, uses its own tools and stops at the same approval gate. Every run lands on a task board with its cost and trace.",
-    "list": ["Task board with projects and sprints", "Multi-agent workflows as a dependency graph", "Scheduled jobs for daily and weekly work", "Skills, plugins and MCP connectors", "Bring your own model, including local models", "Per-run cost, latency and OpenTelemetry traces"],
+    "lede": "Every TenthMatrix agent runs on Jobshout, our open-source agent framework. Each run lands on a task board with its cost and a full record of what it did.",
+    "list": [
+      "Task board with projects and sprints",
+      "Multi-agent workflows as a dependency graph",
+      "Scheduled jobs for daily and weekly work",
+      "Skills, plugins and MCP connectors",
+      "Bring your own model, including local models",
+      "Per-run cost, latency and OpenTelemetry traces"
+    ],
     "primary": "Jobshout AI tools and framework",
     "secondary": "Jobshout agents"
   },
   "offline": {
     "eyebrow": "Self-hosted AI",
     "title": "Want your AI with no internet connection at all?",
-    "body": "Some data can never leave the building. We run open-weight models on AI workstations inside your network, fully offline, and build the same agents on top. The hardware comes from our sister company Workstation.",
+    "body": "Some data can never leave the building. We run open-weight models on AI workstations inside your network, fully offline (air-gapped), and build the same agents on top. The hardware comes from our sister company Workstation.",
     "link": "Explore AI workstations at workstation.co.uk"
   },
   "faq": {
     "title": "Questions we are often asked",
     "items": [
-      {
-        "question": "What is the difference between a chatbot and an AI agent?",
-        "answer": "A chatbot answers. An agent completes a task: it reads your systems, plans, uses tools to do the work and stops for approval before anything risky. You get a finished draft, report or update, not a paragraph of advice."
-      },
       {
         "question": "Do we have to choose one AI company?",
         "answer": "No. Many of our clients use a frontier model for the hardest steps and a small open-weight model for routine ones. Jobshout lets each agent use a different model, and you can switch later without rebuilding."
@@ -436,10 +680,6 @@
       {
         "question": "Can the agents run without any internet connection?",
         "answer": "Yes. With open-weight models on AI workstations from Workstation, the whole system, including the models, the framework and the logs, runs offline inside your building."
-      },
-      {
-        "question": "What does a forward deployed engineer actually do?",
-        "answer": "They sit with your team, map your processes and data sources, decide where an LLM is worth using, and build and deploy the agents in your environment. They stay until the people who use the agent trust it."
       },
       {
         "question": "What happens to the answers I give in this journey?",

@@ -3,11 +3,6 @@
     "skipToContent": "Skip to content",
     "primary": "Primary",
     "home": "Home",
-    "agents": "Agents",
-    "tools": "Tools",
-    "applications": "Applications",
-    "products": "Products",
-    "services": "Services",
     "resources": "Resources",
     "articles": "Technical Notes",
     "blog": "Blog",
@@ -18,52 +13,38 @@
     "menu": "Site menu",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "cta": "Start AI Journey",
-    "ctaProject": "Start a project",
+    "cta": "Book a call",
     "searchPlaceholder": "Search technical notes, posts and docs",
-    "hardware": "Need the hardware? GPU workstations at Workstation",
     "groups": {
+      "solutions": {
+        "label": "Solutions",
+        "title": "What we can do for you",
+        "intro": "Start from the problem slowing your team down. Each page shows what we build, a worked example and a client who had the same problem.",
+        "all": "All solutions"
+      },
       "work": {
-        "label": "Work with us",
-        "title": "Outsource your AI project",
-        "intro": "Hand us an agent or a generative AI build. You keep the code, the data and the final say.",
-        "all": "How outsourcing works"
+        "label": "Our work",
+        "title": "Proof that it works",
+        "intro": "Client results, full case studies, and the software we run on our own agents every day.",
+        "all": "See all our work"
       },
-      "agents": {
-        "label": "Agents",
-        "title": "AI agents",
-        "intro": "Agents that read the ticket, do the work and stop for your approval before anything ships.",
-        "all": "All about agents"
+      "how": {
+        "label": "How we work",
+        "title": "What happens when you sign up",
+        "intro": "Four steps, the ways you can work with us, what it roughly costs and who owns what at the end.",
+        "all": "How we work"
       },
-      "tools": {
-        "label": "Tools",
-        "title": "Developer tools",
-        "intro": "The infrastructure agents run on: gateways, secrets, release rings and monitoring.",
-        "all": "See all products"
-      },
-      "applications": {
-        "label": "Applications",
-        "title": "AI applications",
-        "intro": "Finished applications for sales, marketing, support and operations teams.",
-        "all": "Browse solutions"
-      },
-      "products": {
-        "label": "Products",
-        "title": "Products",
-        "intro": "Everything we build and run, with pricing and the teams already using it.",
-        "all": "View the catalogue"
-      },
-      "services": {
-        "label": "Services",
-        "title": "Services",
-        "intro": "Engineers who design, harden and operate the systems around your agents.",
-        "all": "All services"
+      "tech": {
+        "label": "Products & tech",
+        "title": "What's under the hood",
+        "intro": "The products and infrastructure our agents run on. The detail your IT team will want to check.",
+        "all": "All products"
       },
       "resources": {
         "label": "Resources",
-        "title": "Resources",
-        "intro": "Technical notes, the blog, the Jev insights series and our documentation.",
-        "all": "Read the technical notes"
+        "title": "Learn more",
+        "intro": "The blog, technical notes, a plain-English glossary of AI terms, and news from the team.",
+        "all": "Read the blog"
       }
     },
     "items": {
@@ -264,42 +245,104 @@
         "desc": "Benefits, and how to check each one"
       },
       "agentJourney": {
-        "label": "Design your AI agent",
-        "desc": "Answer nine questions, get your AI blueprint"
+        "label": "Design your agent",
+        "desc": "Nine questions, about 3 minutes"
       },
       "startProject": {
         "label": "Start a project",
         "desc": "Tell us the job. We reply within a working day."
+      },
+      "solSales": {
+        "label": "Sales",
+        "desc": "Follow up every lead before it goes cold"
+      },
+      "solMarketing": {
+        "label": "Marketing",
+        "desc": "Get content out without the bottleneck"
+      },
+      "solBackOffice": {
+        "label": "Back office & admin",
+        "desc": "Invoices, orders and admin, done for you"
+      },
+      "solSupport": {
+        "label": "Customer support",
+        "desc": "Answer customers faster, with people in charge"
+      },
+      "solCustomApps": {
+        "label": "Custom apps & software",
+        "desc": "Make your systems talk to each other"
+      },
+      "solPlatforms": {
+        "label": "Platforms & DevOps",
+        "desc": "Modern, secure systems that stay up"
+      },
+      "ourWork": {
+        "label": "All our work",
+        "desc": "Results and case studies, by industry"
+      },
+      "caseWorkstation": {
+        "label": "Workstation case study",
+        "desc": "An AI sales agent and £100m in enquiries"
+      },
+      "aiWork": {
+        "label": "AI & automation work",
+        "desc": "Agents and automation for clients"
+      },
+      "trackRecord": {
+        "label": "Track record",
+        "desc": "25+ years of data and software systems"
+      },
+      "inHouse": {
+        "label": "Built and run in-house",
+        "desc": "The products our own agents run on"
+      },
+      "howWeWork": {
+        "label": "How we work",
+        "desc": "From first call to a working agent"
+      },
+      "process": {
+        "label": "The four steps",
+        "desc": "Discovery, pilot, build, run or hand over"
+      },
+      "engagement": {
+        "label": "Ways to work with us",
+        "desc": "A project, a team, engineers or a hand-over"
+      },
+      "cost": {
+        "label": "What it costs",
+        "desc": "How we price, with rough ranges"
+      },
+      "ownership": {
+        "label": "Security & ownership",
+        "desc": "You own the code, the data and the keys"
+      },
+      "selfHosted": {
+        "label": "Self-hosted AI",
+        "desc": "AI models on your own machines"
+      },
+      "glossary": {
+        "label": "Glossary",
+        "desc": "AI terms in plain English"
+      },
+      "about": {
+        "label": "About us",
+        "desc": "Who we are and how we started"
       }
     }
   },
   "footer": {
-    "tagline": "AI agents and generative AI applications, built for you.",
-    "blurb": "We design, build and run AI agents and generative AI applications for companies that outsource the work, plus the software products those agents run on.",
-    "hardware": "Need the hardware? Visit Workstation",
-    "hardwareEyebrow": "Need the hardware?",
-    "hardwareTitle": "GPU workstations and clusters are built by Workstation.",
-    "hardwareBody": "Our sister brand sizes, builds and supports the machines your models run on.",
-    "hardwareLink": "Visit Workstation",
-    "rights": "All rights reserved.",
+    "tagline": "AI that takes the busywork off your team.",
+    "blurb": "We build AI agents, automations and custom apps for sales, marketing, support and the back office, plus the software they run on.",
+    "hardware": "GPU hardware from Workstation",
     "entity": "TenthMatrix is a brand of Workstation Solutions Ltd, registered in England and Wales.",
-    "sponsoredBy": "Sponsored by",
     "sitemap": "Footer",
     "legal": "Legal",
     "columns": {
-      "work": "Work with us",
-      "agents": "Agents",
-      "products": "Products",
-      "services": "Services",
-      "resources": "Resources",
+      "solutions": "Solutions",
+      "work": "Our work",
       "company": "Company"
     },
     "links": {
-      "servicesAll": "All services",
-      "about": "About us",
-      "whyTenthmatrix": "Why TenthMatrix",
-      "partners": "Partners",
-      "bookOnline": "Book a call",
       "contact": "Contact"
     },
     "legalLinks": {
@@ -329,193 +372,112 @@
   "home": {
     "latest": "Latest writing",
     "meta": {
-      "title": "TenthMatrix: the AI-first agent development agency. 10x faster teams.",
-      "description": "TenthMatrix is an AI-first agent development agency. We set up AI agents in the process automation of each business to sell, market and run the back office, and we promise a 10x increase in your staff's productivity."
+      "title": "TenthMatrix: AI that takes the busywork off your team, so they can do 10x more",
+      "description": "We build AI agents, automations and custom apps for sales, marketing, the back office and customer support. Trusted by Barclays, HCL, LexisNexis and Elsevier. You see it working on your own data before you commit."
     },
     "hero": {
-      "eyebrow": "AI-first agent development agency",
-      "title": "AI agents that make your team 10x faster",
-      "lede": "We map the processes in your business and set up AI agents to automate them: agents that sell, market and run your back office. We promise a 10x increase in your staff's productivity. The agents do the repetitive work, your people make the decisions.",
-      "primary": "Start a project",
-      "secondary": "Why 10x",
-      "meta": [
-        "Sales agents",
-        "Marketing agents",
-        "Back-office agents"
-      ]
+      "eyebrow": "AI agents, automations and custom apps",
+      "title": "AI that takes the busywork off your team, so they can do 10x more",
+      "lede": "We build AI agents, automations and custom apps that do the repetitive work in sales, marketing, support and the back office. Your people stay in charge of every decision that matters.",
+      "primary": "Book a call",
+      "secondary": "See our work",
+      "name": "TenthMatrix means 10x: our target is ten times more done on the work we automate."
     },
-    "name": {
-      "eyebrow": "Why the name",
-      "title": "TenthMatrix means 10x faster",
-      "body": "The name is the promise: a 10x increase in productivity. For each business we map the processes, set up agents to automate them and measure one number: is each person the agents work for ten times more productive at the job? If the pilot does not show it, we change the agents before the full build.",
-      "points": [
-        "Every process mapped, automated and measured before and after",
-        "Agents draft and do; a person approves what matters",
-        "Code, data and keys stay yours"
-      ]
+    "proof": {
+      "eyebrow": "Trusted by",
+      "title": "Clients who rely on our work",
+      "logos": "Clients we have worked with"
     },
-    "pillars": {
-      "eyebrow": "Agents we build for you",
-      "title": "Agents that sell, market and run your back office",
-      "lede": "We are an agent agency first: we start from the work your staff do every day and build agents that take it off their desks.",
-      "sales": {
-        "title": "Sales agents",
-        "body": "Qualify inbound leads, research accounts, draft follow-ups and keep the CRM up to date, so your sales team spends its time talking to buyers."
-      },
-      "marketing": {
-        "title": "Marketing agents",
-        "body": "Plan, draft and publish content, social posts and campaigns in your brand voice, then report on what worked, with a person signing off before anything goes live."
-      },
-      "backoffice": {
-        "title": "Back-office agents",
-        "body": "Work through invoices, orders, inboxes, tickets and reports across your ERP, finance and support systems, and stop for review before anything is sent, spent or deleted."
-      }
+    "problems": {
+      "eyebrow": "Problems we solve",
+      "title": "Start from what slows your team down",
+      "lede": "Each one links to what we build, a worked example and a client who had the same problem.",
+      "see": "See the solution",
+      "all": "All solutions"
     },
-    "benefits": {
-      "eyebrow": "Benefits of TenthMatrix AI agents",
-      "title": "What you get when our agents do the work",
-      "lede": "Each benefit maps to software we build and run ourselves, so you can inspect it before you sign anything.",
-      "all": "Compare with in-house and chatbot SaaS",
-      "approval": {
-        "title": "A person approves what matters",
-        "body": "Agents draft and prepare. Anything that sends, spends or deletes waits for a named person.",
-        "proof": "See Jobshout"
-      },
-      "hosting": {
-        "title": "Self-hosted or managed",
-        "body": "Run the agents in your own cloud or data centre, or have us run them. The code is the same either way.",
-        "proof": "Engagement models"
-      },
-      "data": {
-        "title": "Your data and keys stay with you",
-        "body": "Data stays in your systems and model keys stay in your secrets store. Pick the model provider, or host an open-weight model yourself.",
-        "proof": "Security and IP"
-      },
-      "vault": {
-        "title": "Secrets isolated per agent",
-        "body": "WSL Vault issues short-lived, scoped credentials, encrypted per tenant and recorded in a tamper-evident audit log.",
-        "proof": "See WSL Vault"
-      },
-      "releases": {
-        "title": "Releases gated on health",
-        "body": "Ring Promoter moves each change from int to prod only when health checks pass, and rolls back when they fail.",
-        "proof": "See Ring Promoter"
-      },
-      "edge": {
-        "title": "Security at the edge",
-        "body": "Proxy10x puts an API gateway, WAF rules and rate limits in front of the agent and the tools it calls.",
-        "proof": "See Proxy10x"
-      },
-      "observe": {
-        "title": "Cost and behaviour you can see",
-        "body": "A trace for every run, cost and latency per agent, and alerts when either drifts.",
-        "proof": "How we measure"
-      },
-      "production": {
-        "title": "Built by a team that runs agents",
-        "body": "Our own agents run in production on this stack. We publish how they work, including what broke.",
-        "proof": "Read the technical notes"
-      }
+    "featured": {
+      "eyebrow": "Case studies",
+      "title": "What we built, and what it changed",
+      "lede": "Real clients, the problem they had, what we built and the result.",
+      "all": "See all our work"
     },
-    "steps": {
-      "eyebrow": "How outsourcing works",
-      "title": "Discovery, pilot, build, then run or hand over",
-      "lede": "Each stage ends with something you keep, even if you stop there.",
+    "build": {
+      "eyebrow": "What we build",
+      "title": "See it working",
+      "lede": "Agents and apps that do real work, with a person in charge.",
+      "screenshot": "Screenshot",
+      "diagram": "How it works",
       "items": [
         {
-          "title": "Discovery",
-          "body": "We pick one job, the systems it touches and who checks the result, and write down what the agent must never do. You get a written scope and a fixed quote for the pilot."
+          "title": "A specialist agent at work",
+          "body": "Jobshout's SEO agent checks a website and proposes fixes. Nothing is published until a person approves it."
         },
         {
-          "title": "Pilot",
-          "body": "The smallest version that does the real job on real data, behind approval gates, measured against the scope. Then a go, change or stop recommendation."
+          "title": "A sales agent that never forgets to follow up",
+          "body": "New leads are answered in minutes, sorted by how ready they are to buy, and the hot ones go straight to your team."
         },
         {
-          "title": "Build",
-          "body": "Production code, integrations, secrets, guardrails, tests and a release path, all in your repository. You can read every prompt, trace and test."
-        },
-        {
-          "title": "Run or hand over",
-          "body": "We operate it with monitoring, cost reports and a regular review, or hand it to your team with runbooks and training."
+          "title": "People keep the judgement",
+          "body": "Routine work is done by the agent. Refunds, legal wording, big discounts and complaints always go to a person."
         }
       ]
     },
-    "engagement": {
-      "eyebrow": "Engagement models",
-      "title": "Four ways to work with us",
-      "lede": "Choose by how clear the job is and how much you want to own at the end.",
-      "more": "Compare engagement models",
-      "fixed": {
-        "title": "Fixed-scope project",
-        "body": "One agent, application or integration, with a written scope and an agreed price for it."
-      },
-      "team": {
-        "title": "Dedicated agent team",
-        "body": "A small team working through your backlog of AI work, month by month."
-      },
-      "embedded": {
-        "title": "Embedded engineers",
-        "body": "Our engineers join your team, work in your repos and pass on what they know."
-      },
-      "transfer": {
-        "title": "Build, operate, transfer",
-        "body": "We build it, run it for an agreed period, then hand it over with runbooks and training."
-      }
+    "steps": {
+      "eyebrow": "How it works",
+      "title": "Discovery, pilot, build, then run or hand over",
+      "lede": "Each step ends with something you keep, even if you stop there.",
+      "reassure": "You see it working on your own data before you commit to the full build.",
+      "more": "How we work",
+      "items": [
+        {
+          "title": "Discovery",
+          "body": "We pick one job, the systems it touches and who checks the result. You get a written scope and a fixed price for the pilot."
+        },
+        {
+          "title": "Pilot",
+          "body": "The smallest version that does the real job on your real data, with a person approving anything important. Then: go ahead, change it or stop."
+        },
+        {
+          "title": "Build",
+          "body": "The finished system, connected to your tools, tested and in your own code repository."
+        },
+        {
+          "title": "Run or hand over",
+          "body": "We run it for you with monitoring and cost reports, or hand it to your team with training."
+        }
+      ]
     },
-    "products": {
-      "eyebrow": "Proof",
-      "title": "Software we build and run ourselves",
-      "lede": "Client agents run on the same products we use in production. Each one started as something our own agents needed.",
-      "all": "All products",
-      "see": "See {name}",
-      "ringPromoter": {
-        "tagline": "CI/CD control plane",
-        "description": "Promotes every release through int, test, acc and prod rings. Health gates decide, and failed checks roll back on their own."
-      },
-      "proxy10x": {
-        "tagline": "API gateway · CDN · WAF",
-        "description": "Sits in front of your origins with live configuration, an edge cache and WAF rules. An MCP gateway for agents is on the roadmap."
-      },
-      "wslVault": {
-        "tagline": "Secrets manager",
-        "description": "Envelope encryption with a key hierarchy per tenant, dynamic leases and a tamper-evident audit log. Steal the server, not the secrets."
-      },
-      "jobshout": {
-        "tagline": "Agent orchestration",
-        "description": "Specialist agents that work in Gmail, GitHub and live sites, stream every step and stop for your approval before anything goes out."
-      },
-      "jev": {
-        "tagline": "Decision-layer research",
-        "description": "Our independent series and benchmark lab on fast decision models, agent harnesses, routing and the cost of inference."
-      },
-      "nebula": {
-        "name": "Nebula family",
-        "tagline": "NebulaDB · NebulaDNS · NebulaCR · NebulaCB",
-        "description": "Rust infrastructure for agent workloads, from NebulaDB, a database with vector search and streaming RAG, to NebulaDNS, authoritative DNS with Prometheus metrics."
-      },
-      "openSource": "Open source",
-      "research": "Research"
-    },
-    "latestSection": {
-      "eyebrow": "Writing",
-      "title": "Latest from the team",
-      "lede": "Blog posts, long-form technical notes and the Jev insights series.",
-      "articles": "All technical notes",
-      "blog": "The blog",
-      "empty": "New writing is on its way."
-    },
-    "hardware": {
-      "eyebrow": "Need the hardware?",
-      "title": "GPU workstations and clusters live at Workstation",
-      "body": "Our sister brand sizes, builds and supports the machines that run private models. Tell them what you want to run and they will spec it.",
-      "link": "Visit Workstation"
+    "trust": {
+      "eyebrow": "Why businesses trust us",
+      "title": "Fast, with people in charge",
+      "points": [
+        {
+          "title": "A person approves anything important",
+          "body": "The agent drafts and prepares. Anything that sends, spends or deletes waits for a named person.",
+          "term": "approval gate"
+        },
+        {
+          "title": "You own the code and the data",
+          "body": "Everything we write is in your own code repository from day one. Your data and keys stay with you."
+        },
+        {
+          "title": "It runs where you choose",
+          "body": "In your cloud, on your own machines, or managed by us. You can even keep the AI model in-house.",
+          "term": "self-hosted model"
+        },
+        {
+          "title": "Built by a team that runs its own agents",
+          "body": "Our own agents run our business every day, on the same software we use for clients."
+        }
+      ],
+      "tech": "Technical details for your IT team"
     },
     "cta": {
-      "eyebrow": "Start a project",
+      "eyebrow": "Book a call",
       "title": "Name the job that slows your team down. We will make it 10x faster.",
-      "body": "Send the task, the systems it touches and who checks the result. Within one working day an engineer replies with the agent we would build, what it must not do and how we would measure the 10x.",
-      "primary": "Start a project",
-      "secondary": "How it works"
+      "body": "Send the task, the systems it touches and who checks the result. Within one working day an engineer replies with what we would build, what it must not do and how we would measure the 10x.",
+      "primary": "Book a call",
+      "secondary": "Design your agent in 3 minutes"
     }
   },
   "articlesPage": {
@@ -627,7 +589,12 @@
     "messageHint": "The task, the systems it touches and who checks the result. Two or three sentences is plenty.",
     "privacy": "We use your details only to reply to this enquiry.",
     "projectType": "Project type",
-    "projectTypeAny": "Choose one"
+    "projectTypeAny": "Choose one",
+    "company": "Company",
+    "bestTime": "Best time to talk",
+    "bestTimeHint": "For example \"weekday mornings\". Add a phone number if you would rather we call.",
+    "submitCall": "Book a call",
+    "replyTime": "An engineer replies within one working day."
   },
   "errors": {
     "notFoundTitle": "That page isn't here",
@@ -672,7 +639,9 @@
   "kinds": {
     "blog": "Blog",
     "article": "Technical note",
-    "insight": "Insight"
+    "insight": "Insight",
+    "forBusiness": "For business",
+    "forDevelopers": "For developers"
   },
   "article": {
     "contents": "On this page",

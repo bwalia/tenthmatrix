@@ -9,6 +9,15 @@
     "subtitle": "API Gateway, CDN e WAF empresarial — Visão geral do produto",
     "description": "O TenthMatrix Proxy10x (Proxy10x) é o plano de controle completo de API gateway e borda CDN da TenthMatrix. Ele fica na frente das suas origens e decide a cada requisição o que acontece — rotear, proteger, cachear e observar — a partir de configurações JSON e MCP ao vivo, sem recarregar o nginx a cada mudança de regra."
   },
+  "plain": {
+    "line": "O Proxy10x é uma porta de entrada segura para os seus sites e sistemas: bloqueia ataques e sobrecargas antes de o atingirem e serve as páginas rapidamente.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Empresas que precisam de proteger o seu site e sistemas contra ataques",
+      "Equipas com vários sites que querem controlá-los num só lugar",
+      "Equipas de TI que querem um gateway que possam alojar por si"
+    ]
+  },
   "intro": {
     "title": "O que é o TenthMatrix Proxy10x?",
     "body": "O Proxy10x é um API gateway dinâmico e proxy reverso sobre OpenResty. Os operadores gerenciam hosts virtuais, regras de roteamento, políticas de WAF, cache, divisão de tráfego e POPs de borda por uma interface de administração, API REST, ferramentas MCP ou o proxy10x-cli. As regras do dia a dia entram em vigor no caminho crítico; o nginx só recarrega quando blocos listen ou SSL no nível do servidor mudam.",

@@ -9,6 +9,15 @@
     "subtitle": "Open-source AI code review that closes the bug loop.",
     "description": "Fixloop reviews every pull request, comments on the lines that changed and suggests the fix. It runs on your infrastructure, with the model you choose. Issue filing and test-gated fix pull requests come next."
   },
+  "plain": {
+    "line": "Fixloop es un revisor de código con IA: revisa cada cambio de su software, señala los errores y sugiere la corrección. Sus desarrolladores deciden qué se incorpora.",
+    "whoTitle": "Who this is for",
+    "who": [
+      "Equipos de software que quieren que se revise cada cambio sin ir más lento",
+      "Empresas con una aplicación propia y un equipo de desarrollo pequeño",
+      "Responsables de ingeniería que quieren que lleguen menos errores a los clientes"
+    ]
+  },
   "intro": {
     "title": "One agent, from bug to fix",
     "body": "Most AI review tools stop at a comment. Fixloop is built to carry a bug the whole way: review the pull request, find the problem, file it as an issue, write the fix in a sandbox, check that build, tests and lint pass, then close the issue when the fix is merged. It is open source (Apache-2.0), written in Rust and vendor-neutral. Today it reviews and finds; each next stage ships as its own release.",

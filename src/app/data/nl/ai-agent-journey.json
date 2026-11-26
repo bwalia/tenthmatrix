@@ -6,7 +6,7 @@
   "header": {
     "eyebrow": "AI-agentreis",
     "title": "Ontwerp uw AI-agent in negen vragen",
-    "lede": "Wij beginnen elk project vanuit uw situatie, niet vanuit een presentatie. Beantwoord de vragen die een forward deployed engineer in het eerste gesprek stelt en zie welke agent, welk model en welke hosting wij voor u zouden bouwen.",
+    "lede": "Beantwoord de negen vragen die onze engineers in een eerste gesprek stellen en zie welke agent, welk AI-model en welke hosting we voor je zouden bouwen.",
     "start": "Start de reis",
     "how": "Hoe AI-agents werken",
     "meta": [
@@ -18,69 +18,27 @@
   "how": {
     "eyebrow": "Voordat u begint",
     "title": "Hoe een AI-agent echt werkt",
-    "lede": "Een chatbot beantwoordt een vraag. Een agent maakt een taak af. Hij leest uw data, beslist wat er moet gebeuren, gebruikt uw tools om het te doen en controleert het resultaat voordat iemand erop vertrouwt. Elke ronde van die cyclus wordt vastgelegd.",
+    "lede": "Een chatbot beantwoordt een vraag. Een agent rondt een taak af: hij leest je data, bepaalt wat er moet gebeuren, gebruikt je tools en gaat bij een mens na voordat er iets belangrijks gebeurt.",
     "loop": [
       {
         "step": "01",
         "title": "Lezen",
-        "description": "De agent verzamelt wat hij nodig heeft uit de systemen die u hebt toegestaan: de inbox, het grootboek, de ticketwachtrij, de repository. Hij ziet alleen wat zijn rechten toelaten."
+        "description": "Hij verzamelt wat hij nodig heeft uit de systemen die je toestaat, zoals de inbox, de boekhouding of de ticketwachtrij, en niets meer."
       },
       {
         "step": "02",
         "title": "Redeneren",
-        "description": "Een groot taalmodel bepaalt wat de taak vraagt en plant de stappen. Alleen hier wordt intelligentie ingezet, dus die wordt besteed waar oordeelsvermogen ertoe doet."
+        "description": "Een AI-model (een groot taalmodel, het soort achter ChatGPT en Claude) bepaalt wat de taak nodig heeft en plant de stappen."
       },
       {
         "step": "03",
         "title": "Handelen",
-        "description": "De agent gebruikt echte tools via connectoren en MCP-servers: hij stelt het antwoord op, dient het rapport in, maakt de pull request aan. Regelgebaseerde stappen blijven gewone code."
+        "description": "Hij gebruikt je tools via connectors (vaak MCP genoemd) om het antwoord op te stellen, het rapport te archiveren of het record bij te werken. Eenvoudige regelgebaseerde stappen blijven gewone code."
       },
       {
         "step": "04",
         "title": "Controleren",
-        "description": "Voordat er iets wordt verzonden, uitgegeven of verwijderd, stopt de agent bij een goedkeuringsmoment. U keurt goed, of wijst af met een reden waarvan hij leert. Elke stap wordt getraceerd."
-      }
-    ],
-    "layersTitle": "Drie lagen in elke agent die wij bouwen",
-    "layers": [
-      {
-        "title": "Uw kennis",
-        "description": "De databronnen die wij tijdens de verkenning koppelen, met dezelfde rechten die uw medewerkers al hebben."
-      },
-      {
-        "title": "Het model",
-        "description": "Claude, GPT, Gemini, Grok of een open-weight model, gekozen op basis van de taak, de data en waar het moet draaien."
-      },
-      {
-        "title": "Controle",
-        "description": "Goedkeuringsmomenten, budgetten, stopcondities en een audittrail, op het Jobshout agent framework."
-      }
-    ]
-  },
-  "shoes": {
-    "eyebrow": "Discovery",
-    "title": "Wij verplaatsen ons eerst in uw situatie",
-    "lede": "De meeste AI-projecten mislukken omdat ze de verkeerde stap automatiseren. Onze forward deployed engineers zitten naast de mensen die het werk doen, voordat ze één regel code schrijven.",
-    "steps": [
-      {
-        "phase": "Dag 1",
-        "title": "Het werk meekijken",
-        "description": "Wij volgen een echte werkdag: de inbox, de goedkeuringen, de spreadsheets die het bedrijf bij elkaar houden. Wij noteren elke overdracht en elk wachtmoment."
-      },
-      {
-        "phase": "Dag 2",
-        "title": "De databronnen in kaart brengen",
-        "description": "Voor elke stap leggen wij vast waar de data staat, wie de eigenaar is, hoe die bereikbaar is (API, export, database, e-mail) en hoe gevoelig die is."
-      },
-      {
-        "phase": "Dag 3",
-        "title": "Bepalen waar oordeelsvermogen nodig is",
-        "description": "Wij splitsen elk proces in regelstappen, die gewone automatisering blijven, en oordeelsstappen, waar een LLM zijn kosten waard is. Agents komen alleen waar intelligentie nodig is."
-      },
-      {
-        "phase": "Week 1–2",
-        "title": "Bouwen en naast u draaien",
-        "description": "De eerste agent draait op uw echte data, met een goedkeuringsmoment bij elke risicovolle actie. Wij stemmen hem af met de mensen die hem gebruiken en verruimen zijn rechten pas als zij hem vertrouwen."
+        "description": "Voordat er iets wordt verstuurd, uitgegeven of verwijderd, stopt hij voor goedkeuring door een mens. Elke stap wordt vastgelegd."
       }
     ]
   },
@@ -199,7 +157,7 @@
         "id": "sources",
         "type": "multi",
         "title": "Waar staat de data?",
-        "help": "Dit brengt een FDE als eerste in kaart tijdens een gesprek. Elke bron wordt een connector met eigen rechten.",
+        "help": "Dit brengt onze engineer als eerste in kaart in een gesprek. Elke bron krijgt zijn eigen connector, met eigen rechten.",
         "options": [
           {
             "value": "m365",
@@ -318,7 +276,7 @@
         "id": "openSource",
         "type": "single",
         "title": "Heeft u een voorkeur voor open-source modellen?",
-        "help": "Open-weight modellen zoals Llama, Qwen, Mistral, DeepSeek en gpt-oss kunnen op uw eigen hardware draaien, zonder kosten per token en zonder dat data uw netwerk verlaat.",
+        "help": "Open-weight-modellen (AI-modellen die je op je eigen machines kunt draaien), zoals Llama, Qwen, Mistral, DeepSeek en gpt-oss, kennen geen kosten per gebruik en houden je data in je eigen gebouw.",
         "options": [
           {
             "value": "yes",
@@ -341,7 +299,7 @@
         "id": "hosting",
         "type": "single",
         "title": "Waar moet de AI draaien?",
-        "help": "Dit bepaalt welke modellen mogelijk zijn. Een volledig offline systeem vraagt om open-weight modellen op uw eigen AI-workstations.",
+        "help": "Dit bepaalt welke modellen mogelijk zijn. Een volledig offline (air-gapped) systeem heeft open-weight-modellen nodig op je eigen AI-workstations.",
         "options": [
           {
             "value": "cloud",
@@ -407,7 +365,7 @@
         "id": "speed",
         "type": "single",
         "title": "Wanneer wilt u de eerste agent aan het werk hebben?",
-        "help": "Een forward deployed engineer heeft meestal binnen twee weken een eerste agent op uw echte data draaien.",
+        "help": "Onze engineer heeft meestal binnen twee weken een eerste agent aan het werk op je echte data.",
         "options": [
           {
             "value": "now",
@@ -447,7 +405,7 @@
     "fdeTitle": "Uw forward deployed engineer",
     "fdeBody": "Wij wijzen vanaf dag één een forward deployed engineer toe aan uw project. Die werkt binnen uw team, is gecertificeerd voor Claude Code, OpenAI, Google, Microsoft en Grok, en bouwt en implementeert uw agents snel.",
     "planTitle": "Opleveringsplan",
-    "scenarioTitle": "Hoe dit eruitziet op een echte dag",
+    "scenarioTitle": "Voorbeeldscenario: hoe een gewone dag eruit kan zien",
     "workstationTitle": "Offline draaien op uw eigen AI-workstations",
     "workstationBody": "Voor een systeem zonder internetverbinding dimensioneren en leveren wij de hardware met ons zusterbedrijf Workstation: GPU-workstations en servers gebouwd voor lokale modellen, klaar voor gebruik geleverd.",
     "workstationLink": "AI-workstations op workstation.co.uk",
@@ -622,56 +580,52 @@
     }
   },
   "scenarios": {
-    "eyebrow": "Praktijkscenario's",
+    "eyebrow": "Voorbeeldscenario's",
     "title": "Wat wij horen in klantgesprekken, en wat wij bouwen",
-    "lede": "Samengestelde voorbeelden uit het soort eerste gesprekken dat onze forward deployed engineers voeren. Namen en cijfers zijn illustratief.",
+    "lede": "Samengestelde voorbeelden van wat we in eerste gesprekken horen. Het zijn geen klantresultaten: namen en cijfers zijn ter illustratie.",
     "items": [
       {
-        "badge": "CEO · zakelijke dienstverlening",
+        "badge": "Voorbeeldscenario · CEO · zakelijke dienstverlening",
         "title": "\"Ik besteed elke dag mijn eerste twee uur aan e-mail.\"",
         "description": "De FDE bracht Outlook, het CRM en het bestuursportaal in kaart en ontdekte dat de meeste antwoorden vijf patronen volgden. Een Executive PA-agent stelt nu 's nachts antwoorden en vergaderbriefings op; de CEO keurt goed vanaf de telefoon.",
         "list": [
           "Data: Microsoft 365, HubSpot, bestuursportaal",
-          "Model: Claude via de Azure-tenant van het bedrijf",
-          "Controle: elk antwoord goedgekeurd voordat het wordt verzonden"
+          "Model: Claude via de Azure-tenant van het bedrijf"
         ]
       },
       {
-        "badge": "CFO · maakindustrie",
+        "badge": "Voorbeeldscenario · CFO · industrie",
         "title": "\"De maandafsluiting duurt negen dagen en het meeste is kopiëren.\"",
         "description": "De verkenning liet zien dat het oordeelsvermogen alleen in de toelichting op afwijkingen zat; matchen en boeken waren regels. Wij automatiseerden de regels in code en zetten een agent op de toelichting en de beleidscontroles.",
         "list": [
           "Data: Sage, bankfeeds, spreadsheets met inkooporders",
-          "Model: een combinatie van een lokaal model voor extractie en een frontiermodel voor de toelichting",
-          "Controle: geen boeking of betaling zonder benoemde goedkeurder"
+          "Model: een combinatie van een lokaal model voor extractie en een frontiermodel voor de toelichting"
         ]
       },
       {
-        "badge": "CTO · softwarebedrijf",
+        "badge": "Voorbeeldscenario · CTO · softwarebedrijf",
         "title": "\"Mijn senior engineers zijn hun hele week kwijt aan het reviewen van andermans code.\"",
         "description": "Een PR-review-agent toetst elke pull request aan de standaarden van het team en een tweede agent schrijft incidentsamenvattingen vanuit Sentry en logs. Seniors beoordelen de notities van de agent, niet de hele diff.",
         "list": [
           "Data: GitHub, Jira, Sentry, Slack",
-          "Model: Claude Code voor reviews, met een open-weight model voor logtriage",
-          "Controle: alleen opmerkingen; mergen blijft mensenwerk"
+          "Model: Claude Code voor reviews, met een open-weight model voor logtriage"
         ]
       },
       {
-        "badge": "Advocatenkantoor · offline",
+        "badge": "Voorbeeldscenario · Advocatenkantoor · offline",
         "title": "\"Niets vertrouwelijks mag ooit het gebouw verlaten.\"",
         "description": "Wij dimensioneerden AI-workstations met Workstation en draaiden open-weight modellen volledig offline. Een contractagent vergelijkt documenten met het playbook van het kantoor en stelt redlines op; partners keuren elk ervan goed.",
         "list": [
           "Data: documentmanagementsysteem, precedentenbank",
-          "Model: open-weight modellen op lokale GPU-workstations",
-          "Controle: air-gapped, met auditlogs op locatie bewaard"
+          "Model: open-weight modellen op lokale GPU-workstations"
         ]
       }
     ]
   },
   "fde": {
     "eyebrow": "Forward deployed engineers",
-    "title": "Een expert in uw team, geen ticket in een wachtrij",
-    "lede": "Elk project krijgt een forward deployed engineer (FDE). Die schuift aan bij uw overleggen, leert hoe uw bedrijf echt werkt en bouwt en implementeert de agents snel samen met u.",
+    "title": "Een engineer in je team, geen ticket in een wachtrij",
+    "lede": "Elk project krijgt een forward deployed engineer (FDE): een engineer die naast je team werkt, binnen je systemen, tot het werkt.",
     "certsTitle": "Gecertificeerd op de platforms waarvoor u kunt kiezen",
     "certs": [
       "Claude Code (Anthropic)",
@@ -683,22 +637,22 @@
     "points": [
       {
         "title": "Stelt de juiste vragen",
-        "description": "Waar staat de data, wie is de eigenaar, wat gebeurt er als die fout is, en welke stap vraagt echt om oordeelsvermogen."
+        "description": "Waar de data staat, van wie ze is, wat er gebeurt als ze niet klopt en welke stap echt oordeelsvermogen vraagt."
       },
       {
         "title": "Bouwt in uw systemen",
-        "description": "De agents staan in uw repository en uw cloud of op uw hardware, gekoppeld aan de tools die uw team al gebruikt."
+        "description": "De agents staan in je coderepository en in je cloud of op je eigen machines, gekoppeld aan de tools die je team al gebruikt."
       },
       {
         "title": "Blijft tot het werkt",
-        "description": "Ze stemmen de agent af met de mensen die hem gebruiken en dragen runbooks over, zodat uw team hem zonder ons kan draaien."
+        "description": "Ze stemmen de agent af met de mensen die hem gebruiken en leveren dan documentatie op, zodat je team het zonder ons kan draaien."
       }
     ]
   },
   "framework": {
     "eyebrow": "Framework",
     "title": "Gebouwd op Jobshout, ons agent framework en taakbeheer",
-    "lede": "Jobshout is het open-source framework waarop elke TenthMatrix-agent draait. Elke agent heeft een eigen baan, gebruikt zijn eigen tools en stopt bij hetzelfde goedkeuringsmoment. Elke run komt op een taakbord terecht met de bijbehorende kosten en trace.",
+    "lede": "Elke TenthMatrix-agent draait op Jobshout, ons open-source agentframework. Elke run belandt op een taakbord met de kosten en een volledig verslag van wat hij deed.",
     "list": [
       "Taakbord met projecten en sprints",
       "Workflows met meerdere agents als afhankelijkheidsgraaf",
@@ -713,16 +667,12 @@
   "offline": {
     "eyebrow": "Zelf gehoste AI",
     "title": "Wilt u AI zonder enige internetverbinding?",
-    "body": "Sommige data mag het gebouw nooit verlaten. Wij draaien open-weight modellen op AI-workstations binnen uw netwerk, volledig offline, en bouwen daar dezelfde agents op. De hardware komt van ons zusterbedrijf Workstation.",
+    "body": "Sommige data mag het gebouw nooit verlaten. We draaien open-weight-modellen op AI-workstations binnen je netwerk, volledig offline (air-gapped), en bouwen dezelfde agents erbovenop. De hardware komt van ons zusterbedrijf Workstation.",
     "link": "Explore AI workstations at workstation.co.uk"
   },
   "faq": {
     "title": "Veelgestelde vragen",
     "items": [
-      {
-        "question": "Wat is het verschil tussen een chatbot en een AI-agent?",
-        "answer": "Een chatbot antwoordt. Een agent voltooit een taak: hij leest uw systemen, plant, gebruikt tools om het werk te doen en stopt voor goedkeuring voordat er iets riskants gebeurt. U krijgt een afgerond concept, rapport of update, geen alinea advies."
-      },
       {
         "question": "Moeten wij voor één AI-bedrijf kiezen?",
         "answer": "Nee. Veel van onze klanten gebruiken een frontiermodel voor de moeilijkste stappen en een klein open-weight model voor routinewerk. Met Jobshout kan elke agent een ander model gebruiken en kunt u later wisselen zonder opnieuw te bouwen."
@@ -730,10 +680,6 @@
       {
         "question": "Kunnen de agents zonder internetverbinding draaien?",
         "answer": "Ja. Met open-weight modellen op AI-workstations van Workstation draait het hele systeem, inclusief de modellen, het framework en de logs, offline in uw gebouw."
-      },
-      {
-        "question": "Wat doet een forward deployed engineer eigenlijk?",
-        "answer": "Die werkt naast uw team, brengt uw processen en databronnen in kaart, bepaalt waar een LLM de moeite waard is en bouwt en implementeert de agents in uw omgeving. Die blijft tot de mensen die de agent gebruiken hem vertrouwen."
       },
       {
         "question": "Wat gebeurt er met de antwoorden die ik in deze reis geef?",

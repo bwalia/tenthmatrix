@@ -1,0 +1,594 @@
+{
+  "meta": {
+    "title": "Solutions : IA et logiciels pour les problèmes qui ralentissent votre équipe | TenthMatrix",
+    "description": "Ventes, marketing, back-office, support client, applications sur mesure et plateformes. Partez du problème ; voyez ce que nous construisons, un exemple et un client ayant le même problème."
+  },
+  "header": {
+    "eyebrow": "Solutions",
+    "title": "Nous partons du problème, pas de la technologie",
+    "subtitle": "Choisissez ce qui ralentit votre équipe. Chaque solution montre ce que nous construisons, un exemple en fonctionnement et un client qui a eu le même problème."
+  },
+  "ui": {
+    "see": "Voir la solution",
+    "problem": "Le problème",
+    "story": "Un client avec le même problème",
+    "storyTrack": "Issu de notre expérience",
+    "deliverTitle": "Comment nous le livrons",
+    "deliverBody": "Nous commençons par une seule tâche. Vous la voyez fonctionner sur vos propres données dans un pilote avant de vous engager dans le développement complet, et le code comme les données vous appartiennent dans tous les cas.",
+    "deliverLink": "Notre façon de travailler",
+    "related": "Pages associées",
+    "technical": "Détails techniques pour votre équipe informatique",
+    "glossary": "Un terme vous est inconnu ? Consultez le glossaire en langage simple.",
+    "other": "Autres solutions"
+  },
+  "journey": {
+    "title": "Vous ne savez pas par où commencer ?",
+    "body": "Répondez à neuf courtes questions et découvrez l'agent que nous construirions pour vous. Cela prend environ 3 minutes, sans inscription.",
+    "button": "Concevez votre agent en 3 minutes",
+    "link": "/ai-agent-journey"
+  },
+  "pages": {
+    "sales": {
+      "icon": "TrendingUp",
+      "meta": {
+        "title": "Agents commerciaux IA : relancez chaque prospect avant qu'il ne refroidisse | TenthMatrix",
+        "description": "Des agents commerciaux IA qui répondent aux demandes en quelques minutes, qualifient les acheteurs, étudient les comptes et tiennent votre CRM à jour. Une personne approuve chaque e-mail."
+      },
+      "header": {
+        "eyebrow": "Solutions · Ventes",
+        "title": "Relancez chaque prospect avant qu'il ne refroidisse",
+        "subtitle": "Un agent commercial IA répond aux demandes en quelques minutes, découvre ce dont l'acheteur a besoin et tient votre CRM à jour. Votre équipe consacre son temps aux personnes prêtes à acheter."
+      },
+      "pain": "Les prospects refroidissent avant que quelqu'un ne les relance",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "Les demandes attendent des heures, voire des jours, une réponse, et les acheteurs vont voir ailleurs.",
+          "Les commerciaux passent leurs matinées à mettre à jour le CRM au lieu de vendre.",
+          "Personne n'a le temps de se renseigner sur une entreprise avant l'appel.",
+          "Les relances tombent à l'eau dès que l'équipe est occupée."
+        ]
+      },
+      "does": {
+        "title": "Ce que fait l'agent",
+        "items": [
+          {
+            "title": "Répond en quelques minutes",
+            "description": "Répond à chaque nouvelle demande, de jour comme de nuit, et pose les questions qu'un bon commercial poserait."
+          },
+          {
+            "title": "Repère les acheteurs sérieux",
+            "description": "Vérifie budget, calendrier et besoin selon vos règles, et transmet les bons prospects à une personne."
+          },
+          {
+            "title": "Prépare votre équipe",
+            "description": "Se renseigne sur l'entreprise avant l'appel et rédige une courte fiche."
+          },
+          {
+            "title": "Rédige la relance",
+            "description": "Rédige l'e-mail de relance et la mise à jour du CRM. Votre commercial relit et clique sur envoyer."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de matinée",
+        "intro": "Scénario d'exemple. Les horaires et les étapes sont illustratifs.",
+        "steps": [
+          {
+            "title": "9:12 · Un acheteur remplit le formulaire de votre site web",
+            "description": "L'agent répond en quelques minutes, pose des questions sur le budget et le calendrier, et propose un créneau d'appel."
+          },
+          {
+            "title": "9:30 · Le prospect est qualifié",
+            "description": "L'agent note le prospect selon vos règles et rédige un résumé de deux lignes dans le CRM."
+          },
+          {
+            "title": "10:00 · Votre commercial reçoit une fiche",
+            "description": "Qui est l'acheteur, ce qu'il a demandé et ce dont il a besoin, prêt avant l'appel."
+          },
+          {
+            "title": "Après l'appel · Relance rédigée",
+            "description": "L'agent rédige l'e-mail et la note du CRM. Une personne les approuve avant l'envoi."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "CRM IA",
+          "href": "/crm"
+        },
+        {
+          "label": "Comment fonctionnent nos agents",
+          "href": "/ai-agents"
+        },
+        {
+          "label": "Développement d'agents IA",
+          "href": "/ai-agent-development"
+        }
+      ],
+      "technical": [
+        "Se connecte à votre CRM, à votre messagerie et à votre agenda (via des connecteurs, souvent appelés MCP)",
+        "Modèle de votre choix : Claude, OpenAI, Gemini ou un modèle à poids ouverts que vous hébergez vous-même",
+        "Fonctionne dans votre cloud, sur vos propres machines ou géré par nous",
+        "Un historique complet de chaque action de l'agent, avec son coût et sa durée",
+        "Les mots de passe et les clés sont conservés dans un coffre de secrets distinct (WSL Vault), jamais dans l'agent"
+      ],
+      "storySlug": "workstation"
+    },
+    "marketing": {
+      "icon": "Megaphone",
+      "meta": {
+        "title": "Agents marketing IA : publiez du contenu sans goulot d'étranglement | TenthMatrix",
+        "description": "Des agents marketing qui rédigent publications, e-mails et campagnes dans le ton de votre marque, publient après validation et rendent compte de ce qui a fonctionné."
+      },
+      "header": {
+        "eyebrow": "Solutions · Marketing",
+        "title": "Publiez du contenu sans goulot d'étranglement",
+        "subtitle": "Un agent marketing rédige vos publications, e-mails et campagnes dans le ton de votre marque, et rend compte de ce qui a fonctionné. Une personne donne son accord avant toute mise en ligne."
+      },
+      "pain": "Publier du contenu prend une éternité",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "Un article de blog met des semaines à passer de l'idée à la publication.",
+          "Le site web, les réseaux sociaux et les e-mails demandent du contenu neuf chaque semaine.",
+          "Préparer un rapport de campagne prend une journée entière.",
+          "Les bonnes idées restent dans un document parce que personne n'a le temps de les rédiger."
+        ]
+      },
+      "does": {
+        "title": "Ce que fait l'agent",
+        "items": [
+          {
+            "title": "Des brouillons dans votre ton",
+            "description": "Articles de blog, publications sociales, newsletters et textes produit, rédigés selon votre charte éditoriale."
+          },
+          {
+            "title": "D'un contenu, plusieurs",
+            "description": "Une étude de cas devient une publication, un e-mail et un court fil sur les réseaux sociaux."
+          },
+          {
+            "title": "Publie après validation",
+            "description": "Rien n'est mis en ligne tant qu'une personne désignée ne l'a pas validé."
+          },
+          {
+            "title": "Rend compte de ce qui a fonctionné",
+            "description": "Un récapitulatif hebdomadaire de ce que les gens ont lu, cliqué et demandé."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de semaine",
+        "intro": "Scénario d'exemple. Les étapes sont illustratives.",
+        "steps": [
+          {
+            "title": "Lundi · Vous envoyez un brief de deux lignes",
+            "description": "« Annoncer le nouveau service aux clients existants. »"
+          },
+          {
+            "title": "Lundi après-midi · Les brouillons arrivent",
+            "description": "Un e-mail, un article de blog et trois publications sociales, dans le ton de votre marque."
+          },
+          {
+            "title": "Mardi · Vous validez et corrigez",
+            "description": "Les modifications sont notées, donc les prochains brouillons en demanderont moins."
+          },
+          {
+            "title": "Vendredi · Le rapport",
+            "description": "Ce qui a été ouvert, lu et partagé, et ce qu'il faut essayer la semaine suivante."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Marketing IA",
+          "href": "/marketing"
+        },
+        {
+          "label": "IA générative",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Agents Claude",
+          "href": "/claude-agents"
+        }
+      ],
+      "technical": [
+        "Se connecte à votre site web ou CMS, à votre plateforme d'e-mailing et à vos outils d'analyse",
+        "Le ton de marque et les règles de style sont conservés sous forme d'instructions écrites que vous pouvez lire et modifier",
+        "Modèle de votre choix : Claude, OpenAI, Gemini ou un modèle à poids ouverts que vous hébergez vous-même",
+        "Fonctionne dans votre cloud, sur vos propres machines ou géré par nous",
+        "Un historique complet de chaque action de l'agent, avec son coût et sa durée",
+        "Les mots de passe et les clés sont conservés dans un coffre de secrets distinct (WSL Vault), jamais dans l'agent"
+      ],
+      "storySlug": "europa-components"
+    },
+    "back-office": {
+      "icon": "Workflow",
+      "meta": {
+        "title": "Agents IA de back-office : factures, commandes et administratif pris en charge pour vous | TenthMatrix",
+        "description": "Des agents qui lisent factures, commandes et formulaires, les saisissent dans votre système financier, signalent ce qui ne correspond pas et attendent une validation avant d'envoyer ou de payer quoi que ce soit."
+      },
+      "header": {
+        "eyebrow": "Solutions · Administration et back-office",
+        "title": "Libérez-vous du travail répétitif des factures, des commandes et de l'administratif",
+        "subtitle": "Les agents de back-office lisent factures, commandes et e-mails, les saisissent dans vos systèmes et signalent ce qui ne correspond pas. Rien n'est envoyé, payé ni supprimé sans l'accord d'une personne."
+      },
+      "pain": "Des heures perdues sur les factures et les commandes",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "Des heures chaque semaine à saisir des factures et des commandes dans le système financier.",
+          "La clôture mensuelle prend des jours, et c'est surtout du copier-coller et de la vérification.",
+          "Une boîte partagée remplie de demandes qui suivent toujours les mêmes schémas.",
+          "Les rapports sont refaits à la main chaque mois à partir des mêmes tableurs."
+        ]
+      },
+      "does": {
+        "title": "Ce que fait l'agent",
+        "items": [
+          {
+            "title": "Lit les documents",
+            "description": "Factures, commandes, bons de livraison et formulaires, reçus par e-mail ou téléversés."
+          },
+          {
+            "title": "Saisit et rapproche",
+            "description": "Saisit les données dans votre système financier ou de commandes et rapproche les factures des commandes."
+          },
+          {
+            "title": "Signale les exceptions",
+            "description": "Tout ce qui ne correspond pas va à une personne, avec la raison."
+          },
+          {
+            "title": "Attend la validation",
+            "description": "Aucun paiement, enregistrement ni suppression n'a lieu sans un valideur désigné."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de facture",
+        "intro": "Scénario d'exemple. Les étapes sont illustratives.",
+        "steps": [
+          {
+            "title": "Une facture arrive par e-mail",
+            "description": "L'agent la lit et en extrait le fournisseur, les lignes, les totaux et la TVA."
+          },
+          {
+            "title": "Elle est rapprochée de la commande",
+            "description": "Les prix et les quantités sont vérifiés par rapport au bon de commande."
+          },
+          {
+            "title": "Une ligne ne correspond pas",
+            "description": "L'agent la signale à votre équipe financière, avec l'écart mis en évidence."
+          },
+          {
+            "title": "Une personne valide",
+            "description": "Une fois validée, l'agent l'enregistre. Tout ce qu'il a fait est consigné."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Automatisation IA",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "Jobshout",
+          "href": "/jobshout"
+        },
+        {
+          "label": "Déclaration fiscale IA",
+          "href": "/ai-tax-filing"
+        },
+        {
+          "label": "Fondations de données",
+          "href": "/services/data-foundations-ai"
+        }
+      ],
+      "technical": [
+        "Lecture de documents (extraction) avec contrôles selon vos propres règles",
+        "Se connecte aux systèmes financiers, ERP et de commandes via leurs API ou leurs exports",
+        "Points de validation sur tout ce qui envoie, dépense ou supprime",
+        "Modèle de votre choix : Claude, OpenAI, Gemini ou un modèle à poids ouverts que vous hébergez vous-même",
+        "Fonctionne dans votre cloud, sur vos propres machines ou géré par nous",
+        "Un historique complet de chaque action de l'agent, avec son coût et sa durée",
+        "Les mots de passe et les clés sont conservés dans un coffre de secrets distinct (WSL Vault), jamais dans l'agent"
+      ],
+      "storySlug": "cogno-ai"
+    },
+    "customer-support": {
+      "icon": "Headset",
+      "meta": {
+        "title": "Agents de support client IA : répondez plus vite à vos clients | TenthMatrix",
+        "description": "Des agents de support qui répondent aux questions courantes à partir de vos propres documents, rédigent des réponses pour votre équipe et orientent les tickets urgents vers la bonne personne."
+      },
+      "header": {
+        "eyebrow": "Solutions · Support client",
+        "title": "Répondez plus vite à vos clients, avec votre équipe aux commandes",
+        "subtitle": "Un agent de support répond aux questions courantes à partir de vos propres documents et rédige des réponses pour les cas plus difficiles. Votre équipe vérifie ce qui compte et s'occupe du reste."
+      },
+      "pain": "La boîte de support ne se vide jamais",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "La boîte de support n'arrive jamais à zéro.",
+          "Votre équipe répond à la main aux mêmes dix questions chaque jour.",
+          "Les clients qui écrivent le soir attendent jusqu'au lendemain matin.",
+          "Les problèmes urgents attendent dans la file derrière les demandes de routine."
+        ]
+      },
+      "does": {
+        "title": "Ce que fait l'agent",
+        "items": [
+          {
+            "title": "Des réponses à partir de vos documents",
+            "description": "Consulte vos pages d'aide, vos politiques et vos réponses précédentes avant de répondre."
+          },
+          {
+            "title": "Rédige les réponses les plus difficiles",
+            "description": "Pour tout cas inhabituel, il rédige un brouillon qu'une personne vérifie."
+          },
+          {
+            "title": "Trie les urgences",
+            "description": "Repère les réclamations, les pannes et les clients VIP et les envoie directement à une personne."
+          },
+          {
+            "title": "Repère les lacunes",
+            "description": "Quand la même question revient sans cesse, il suggère une nouvelle page d'aide."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de soirée",
+        "intro": "Scénario d'exemple. Les étapes sont illustratives.",
+        "steps": [
+          {
+            "title": "20 h 40 · Un client pose une question sur la livraison",
+            "description": "L'agent consulte la commande et votre politique de livraison et répond aussitôt."
+          },
+          {
+            "title": "21 h 15 · Une demande de remboursement arrive",
+            "description": "L'agent rédige une réponse et la laisse à votre équipe, car les remboursements exigent une personne."
+          },
+          {
+            "title": "21 h 30 · Une réclamation arrive",
+            "description": "Elle est marquée comme urgente et envoyée au responsable de permanence."
+          },
+          {
+            "title": "Le lendemain matin · Votre équipe a de l'avance",
+            "description": "Les questions de routine sont réglées ; les brouillons et le cas urgent attendent."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Automatisation IA",
+          "href": "/ai-automation"
+        },
+        {
+          "label": "IA générative",
+          "href": "/generative-ai"
+        },
+        {
+          "label": "Comment fonctionnent nos agents",
+          "href": "/ai-agents"
+        }
+      ],
+      "technical": [
+        "Des réponses fondées sur vos propres documents (recherche documentaire, souvent appelée RAG)",
+        "Se connecte à votre service d'assistance, à votre messagerie et à votre système de commandes",
+        "Des règles sur ce que l'agent peut traiter seul et ce qui va toujours à une personne",
+        "Modèle de votre choix : Claude, OpenAI, Gemini ou un modèle à poids ouverts que vous hébergez vous-même",
+        "Fonctionne dans votre cloud, sur vos propres machines ou géré par nous",
+        "Un historique complet de chaque action de l'agent, avec son coût et sa durée",
+        "Les mots de passe et les clés sont conservés dans un coffre de secrets distinct (WSL Vault), jamais dans l'agent"
+      ],
+      "storySlug": "lexisnexis"
+    },
+    "custom-apps": {
+      "icon": "AppWindow",
+      "meta": {
+        "title": "Applications sur mesure et intégrations qui font travailler vos systèmes ensemble | TenthMatrix",
+        "description": "Applications web et mobiles sur mesure, intégrations et fonctions d'IA conçues autour du fonctionnement de votre entreprise. Le code vous appartient."
+      },
+      "header": {
+        "eyebrow": "Solutions · Applications et logiciels sur mesure",
+        "title": "Faites dialoguer vos systèmes entre eux",
+        "subtitle": "Nous construisons les applications et les connexions qui manquent à votre entreprise, avec de l'IA intégrée là où elle aide. À la fin, le code vous appartient."
+      },
+      "pain": "Nos systèmes ne communiquent pas entre eux",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "Les gens recopient les mêmes données d'un système à l'autre.",
+          "Un tableur fait tenir l'entreprise, et une seule personne le comprend.",
+          "Le logiciel du commerce convient presque, mais pas tout à fait.",
+          "Clients et employés ont besoin d'une application ou d'un portail que vous n'avez pas."
+        ]
+      },
+      "does": {
+        "title": "Ce que nous construisons",
+        "items": [
+          {
+            "title": "Connexions entre systèmes",
+            "description": "Votre CRM, votre système financier, votre boutique et votre messagerie partagent leurs données automatiquement."
+          },
+          {
+            "title": "Applications web et mobiles sur mesure",
+            "description": "Portails, outils internes et applications clients, conçus selon votre façon de travailler."
+          },
+          {
+            "title": "Des fonctions d'IA dans l'application",
+            "description": "Recherche, rédaction, synthèses et lecture de documents là où ils font gagner du temps."
+          },
+          {
+            "title": "Des tableaux de bord fiables",
+            "description": "Un seul endroit pour voir les chiffres, à partir de données tenues propres."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de développement",
+        "intro": "Scénario d'exemple. Les délais varient selon le travail.",
+        "steps": [
+          {
+            "title": "Découverte",
+            "description": "Nous cartographions quels systèmes contiennent quelles données et qui les utilise."
+          },
+          {
+            "title": "Une première version qui fonctionne",
+            "description": "Vous l'essayez sur vos propres données avant de vous engager dans le développement complet."
+          },
+          {
+            "title": "Construction",
+            "description": "L'application terminée, testée, documentée et placée dans votre propre dépôt de code."
+          },
+          {
+            "title": "Exploiter ou transmettre",
+            "description": "Nous nous en occupons, ou nous la remettons à votre équipe avec une formation."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Développement logiciel",
+          "href": "/services/software-development"
+        },
+        {
+          "label": "OpsAPI",
+          "href": "/opsapi"
+        },
+        {
+          "label": "Ingénierie native IA",
+          "href": "/services/ai-native-digital-engineering"
+        },
+        {
+          "label": "Développement d'IA générative",
+          "href": "/generative-ai-development"
+        }
+      ],
+      "technical": [
+        "Applications web (Next.js, React) et mobiles ; API et back-ends",
+        "OpsAPI pour la connexion, les utilisateurs et les données métier dans une seule API auto-hébergée",
+        "Chaque modification est testée par étapes avant sa mise en ligne (Ring Promoter)",
+        "Fonctionne dans votre cloud, sur vos propres machines ou géré par nous",
+        "Un historique complet de chaque action de l'agent, avec son coût et sa durée",
+        "Les mots de passe et les clés sont conservés dans un coffre de secrets distinct (WSL Vault), jamais dans l'agent"
+      ],
+      "storySlug": "imoderni"
+    },
+    "platforms-devops": {
+      "icon": "Server",
+      "meta": {
+        "title": "Plateformes, DevOps et sécurité : des systèmes modernes toujours disponibles | TenthMatrix",
+        "description": "Modernisation de plateformes, mises en production automatisées, tests de sécurité et supervision 24/7, pour que vos systèmes restent disponibles et que les changements soient mis en ligne en toute sécurité."
+      },
+      "header": {
+        "eyebrow": "Solutions · Plateformes et DevOps",
+        "title": "Des systèmes modernes et sûrs, toujours disponibles",
+        "subtitle": "Nous modernisons les anciens systèmes sans bascule brutale et risquée, testons chaque mise à jour avant sa mise en ligne et surveillons vos systèmes en permanence."
+      },
+      "pain": "Les mises en production sont risquées et les pannes arrivent par surprise",
+      "problem": {
+        "title": "Ça vous dit quelque chose ?",
+        "items": [
+          "Chaque mise en production fait peur, alors on en fait rarement.",
+          "Un vieux système fait tourner l'entreprise et personne n'ose y toucher.",
+          "Vos clients remarquent les pannes avant vous.",
+          "Vous ne savez pas vraiment à quel point vous êtes exposé à une attaque."
+        ]
+      },
+      "does": {
+        "title": "Ce que nous faisons",
+        "items": [
+          {
+            "title": "Modernisez pas à pas",
+            "description": "Passez des anciens systèmes aux modernes morceau par morceau, sans bascule brutale."
+          },
+          {
+            "title": "Mettez en ligne en toute sécurité",
+            "description": "Les mises à jour sont testées par étapes et ne sont mises en ligne que si elles réussissent. Les échecs sont annulés automatiquement."
+          },
+          {
+            "title": "Protégez la porte d'entrée",
+            "description": "Tests de sécurité, protection contre les attaques et les surcharges, et surveillance des menaces."
+          },
+          {
+            "title": "Surveillez-le 24/7",
+            "description": "Contrôles de disponibilité, de certificats et de DNS, avec des alertes avant que vos clients ne s'en aperçoivent."
+          }
+        ]
+      },
+      "example": {
+        "title": "Un exemple de mise en production",
+        "intro": "Scénario d'exemple. Les étapes sont illustratives.",
+        "steps": [
+          {
+            "title": "Un développeur termine une modification",
+            "description": "Les tests automatiques se lancent immédiatement."
+          },
+          {
+            "title": "Elle est testée par étapes",
+            "description": "Des environnements d'intégration, de test et de recette, chacun avec des contrôles de santé."
+          },
+          {
+            "title": "Elle est mise en ligne",
+            "description": "Uniquement quand tous les contrôles sont réussis. Si quelque chose échoue, elle est annulée automatiquement."
+          },
+          {
+            "title": "Elle est surveillée",
+            "description": "La supervision confirme que la modification se porte bien et prévient une personne dans le cas contraire."
+          }
+        ]
+      },
+      "related": [
+        {
+          "label": "Modernisation de plateformes",
+          "href": "/services/enterprise-platform-modernisation"
+        },
+        {
+          "label": "Automatisation DevOps",
+          "href": "/services/devops-automation"
+        },
+        {
+          "label": "Cybersécurité",
+          "href": "/services/cyber-security"
+        },
+        {
+          "label": "Opérations autonomes",
+          "href": "/services/autonomous-operations"
+        },
+        {
+          "label": "SysOps 24/7",
+          "href": "/sysops247"
+        }
+      ],
+      "technical": [
+        "CI/CD avec des environnements int, test, acc et prod (Ring Promoter)",
+        "Passerelle d'API, pare-feu applicatif web (WAF), limites de débit et CDN (Proxy10x)",
+        "Kubernetes, GitOps et infrastructure as code",
+        "Tests d'intrusion, SIEM et supervision SOC",
+        "Secrets et clés dans WSL Vault, avec un journal d'audit"
+      ],
+      "storySlug": "hcl-technologies"
+    }
+  },
+  "cta": {
+    "title": "Dites-nous quelle tâche ralentit votre équipe",
+    "description": "Un ingénieur vous répond sous un jour ouvré avec ce que nous construirions et la façon dont nous le mesurerions.",
+    "button": "Réserver un appel",
+    "link": "/start-a-project",
+    "secondary": {
+      "label": "Voir nos réalisations",
+      "link": "/our-work"
+    }
+  },
+  "slugs": [
+    "sales",
+    "marketing",
+    "back-office",
+    "customer-support",
+    "custom-apps",
+    "platforms-devops"
+  ]
+}

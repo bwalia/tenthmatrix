@@ -44,6 +44,8 @@ export const NON_TRANSLATABLE_KEYS = new Set([
   'created', 'created_at', 'updated', 'updated_at', 'publish_date', 'published_date',
   'status', 'blog_type', 'step', 'number', 'emoji', 'site', 'creator',
   'email', 'phone', 'siteName', 'publisher', 'author',
+  // our-work.json / solutions.json identifiers
+  'slugs', 'storySlug', 'groupKey', 'industryKey', 'problemKeys',
 ]);
 
 /** A value is only worth translating if it contains actual prose. */
