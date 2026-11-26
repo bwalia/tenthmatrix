@@ -265,6 +265,20 @@ asserts the table.
 Prod (`www.tenthmatrix.com` + apex) is a **static export on S3**, like
 Workstation's prod; int/test/acc run the standalone image on k3s.
 
+- **Releases go through Ring Promoter**
+  (`https://rp.workstation.co.uk/?app=tenthmatrix-website`), like
+  www.workstation.co.uk. A merge to main verifies and builds `tm-frontend:<sha7>`
+  and seeds that tag into the int ring (`seed-ring-promoter`, repo secret
+  `RING_PROMOTER_TOKEN`); it deploys nothing itself. Promote int → test → acc
+  → prod in the RP UI (prod needs the prod password). RP dispatches
+  `build-and-deploy.yaml` with `DEPLOYMENT_TYPE=deploy`, `IMAGE_TAG=<sha7>`,
+  then checks the ring reports that tag: `/api/health` (`APP_VERSION`, set
+  from `image.tag` by tm-chart) on `int|test|acc.tenthmatrix.com`, and the
+  bucket's `/version.json` for prod. A prod promotion rolls `tm-prod` (the
+  chat API) and then exports that same commit to S3, writing `version.json`
+  last. The app is defined in bwalia/ring-promoter `deploy/k8s/configmap.yaml`.
+  A hand dispatch is break-glass only: it bypasses RP's gate and record.
+
 - **Prod → S3:** `scripts/deploy-s3.sh` runs `npm run verify`, then
   `scripts/build-static.mjs` (sets `TM_STATIC_EXPORT=1` → `output: 'export'`,
   `trailingSlash`; moves `src/app/api`, `src/proxy.js` and `src/app/robots.js`
@@ -272,8 +286,8 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   and a `/` → `/en/` redirect page into `out/`), checks one `<h1>` per page and
   syncs `out/` to bucket **`tenthmatrix-website`** (eu-west-2, website hosting,
   public read; assets cached, HTML `no-cache`). No versioned copies in the
-  bucket (they'd be public duplicates). The `deploy-s3` job runs it on every
-  push to `main` with secrets `TM_AWS_ACCESS_KEY_ID`/`TM_AWS_SECRET_ACCESS_KEY`
+  bucket (they'd be public duplicates). The `deploy-s3` job runs it on a prod
+  promotion (for the promoted sha) with secrets `TM_AWS_ACCESS_KEY_ID`/`TM_AWS_SECRET_ACCESS_KEY`
   (IAM user `tm-website-deploy`, write access to this bucket only).
 - **What the export can't do:** no API routes, so likes/comments are hidden,
   search uses the prebuilt Fuse index, CMS posts appear only at build time
@@ -287,7 +301,8 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   OpsAPI is down, the committed set ships. With `TM_STATIC_EXPORT=1`,
   `src/lib/cms.js` reads disk only (no per-page CMS fetch), so listings and
   exported pages always agree. `.github/workflows/content-refresh.yaml` runs
-  every 15 min: `scripts/cms-fingerprint.mjs` (no npm deps, shares
+  every 15 min and rebuilds the release prod already runs (the commit in the
+  bucket's `version.json`, never unpromoted main): `scripts/cms-fingerprint.mjs` (no npm deps, shares
   `scripts/lib/cmsSource.mjs` with fetchBlogs) hashes the published posts and
   the job rebuilds only if that hash isn't already live (an Actions cache key
   `tm-cms-<hash>` saved by every successful S3 deploy). "Run workflow" on it
@@ -299,8 +314,8 @@ Workstation's prod; int/test/acc run the standalone image on k3s.
   The brand fonts are Latin-only, so non-Latin titles fall back to the English
   title (`renderOgImage({ fallbackTitle })`).
 - **int/test/acc → k3s:** `Dockerfile.prod` builds one standalone image
-  (`tm-frontend`); `deploy-k3s.yaml` deploys int on push, test/acc by dispatch.
-  `devops/helm-charts/tm-chart/`. Prod pages are on S3; release `tm-prod` (namespace `prod`, `values-prod.yaml`, job `deploy-prod-api` after INT on push) serves only `/api/chat`, which the edge rule `tm-website-chat-api` sends to k3s (backend Host pinned to www.tenthmatrix.com) while every other path stays on S3.
+  (`tm-frontend`); `deploy-k3s.yaml` deploys each ring when Ring Promoter dispatches it.
+  `devops/helm-charts/tm-chart/`. Prod pages are on S3; release `tm-prod` (namespace `prod`, `values-prod.yaml`, job `deploy-prod-api` on a prod promotion) serves only `/api/chat`, which the edge rule `tm-website-chat-api` sends to k3s (backend Host pinned to www.tenthmatrix.com) while every other path stays on S3.
 - **Edge:** Cloudflare CNAMEs (grey cloud → `lon1.pop0.uk`). wslproxy rules in
   `.github/wslproxy/data/`: `tm-website-s3-proxy` (www + apex →
   `http://tenthmatrix-website.s3-website.eu-west-2.amazonaws.com`; plain HTTP

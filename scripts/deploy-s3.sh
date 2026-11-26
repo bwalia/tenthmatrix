@@ -27,7 +27,7 @@ node scripts/verify-headings.mjs out
 # re-upload the whole ~2 GB export. Scripts/CSS are content-hashed and images
 # rarely change in place. HTML and the per-page .txt RSC payloads (not hashed)
 # always sync on timestamp with no-cache.
-aws s3 sync out/ "s3://$BUCKET/" --size-only --exclude "*.html" --exclude "*.txt" --exclude "*opengraph-image" \
+aws s3 sync out/ "s3://$BUCKET/" --size-only --exclude "*.html" --exclude "*.txt" --exclude "*opengraph-image" --exclude "version.json" \
   --cache-control "public, max-age=86400"
 # Social cards are extensionless PNGs (…/opengraph-image); S3 would guess
 # binary/octet-stream, which some platforms refuse to render.
@@ -36,8 +36,11 @@ aws s3 sync out/ "s3://$BUCKET/" --size-only --exclude "*" --include "*opengraph
 aws s3 sync out/ "s3://$BUCKET/" --delete --exclude "*" --include "*.html" --include "*.txt" \
   --cache-control "no-cache, no-store, must-revalidate"
 # Remove assets that no longer exist in this build (hashed chunks, old images).
-aws s3 sync out/ "s3://$BUCKET/" --size-only --delete --exclude "*.html" --exclude "*.txt" \
+aws s3 sync out/ "s3://$BUCKET/" --size-only --delete --exclude "*.html" --exclude "*.txt" --exclude "version.json" \
   --cache-control "public, max-age=86400"
+
+# version.json (Ring Promoter's prod health check) is published by
+# .github/workflows/deploy-s3.yaml after this script, so the syncs above leave it alone.
 
 # No versioned copies inside this bucket: the website endpoint would serve them
 # publicly as duplicate content. Rollback = redeploy the previous commit.

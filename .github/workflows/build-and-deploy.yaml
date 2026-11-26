@@ -4,9 +4,21 @@ name: "Build and Deploy TenthMatrix Website"
 #   - prod = static export → S3 (deploy-s3.yaml, also run by content-refresh.yaml)
 #   - int/test/acc on k3s; no shop jobs
 #   - image tm-frontend, chart devops/helm-charts/tm-chart, releases tm-<env>
-# Flow: compute-version → build (npm verify + docker) → dns → wslproxy →
-#       deploy-int (auto on push) → test / acc (manual dispatch);
-#       deploy-s3 (prod) on every push.
+#
+# Releases go through Ring Promoter (https://rp.workstation.co.uk/?app=tenthmatrix-website),
+# like www.workstation.co.uk:
+#   push to main    → verify + build the image (tm-frontend:<sha7>) → seed that
+#                     tag into Ring Promoter's int ring. Nothing on a push
+#                     deploys by itself.
+#   promote         → int → test → acc → prod from the Ring Promoter UI. Each is
+#                     a deploy-only dispatch of this workflow (TARGET_ENV=<ring>,
+#                     DEPLOYMENT_TYPE=deploy, IMAGE_TAG=<sha7>) of the exact
+#                     image the ring before ran; Ring Promoter then checks the
+#                     ring reports that tag (k3s: /api/health; prod: the S3
+#                     bucket's /version.json).
+#   prod            → the chat API release on k3s (tm-prod), then the static
+#                     export of that same commit to S3 (deploy-s3.yaml).
+#   manual dispatch → break-glass only: it bypasses Ring Promoter's record.
 
 on:
   push:
@@ -210,7 +222,48 @@ jobs:
             echo "tag=latest" >> "$GITHUB_OUTPUT"
           fi
 
-  # ── Stage 1: INT (auto on push) ───────────────────────────────────────
+  # ── Merge to main: hand the new image to Ring Promoter's int ring ──────
+  # Ring Promoter (rp.workstation.co.uk, app tenthmatrix-website) dispatches
+  # this workflow with TARGET_ENV=int + IMAGE_TAG, checks /api/health reports
+  # that tag and records it; int → test → acc → prod are promoted from the RP
+  # UI. Needs repo secret RING_PROMOTER_TOKEN (the RP_API_TOKEN of the
+  # workstation-ring-promoter instance), same as bwalia/workstation-website.
+  seed-ring-promoter:
+    name: "💍 Seed Ring Promoter (tenthmatrix-website → int)"
+    runs-on: k3s-linux
+    needs: [build]
+    timeout-minutes: 10
+    if: >-
+      !cancelled() &&
+      github.event_name == 'push' &&
+      needs.build.result == 'success'
+    steps:
+      - name: Seed int with this image
+        env:
+          RP_BASE: https://rp.workstation.co.uk
+          RP_TOKEN: ${{ secrets.RING_PROMOTER_TOKEN }}
+          TAG: ${{ needs.build.outputs.image_tag }}
+        run: |
+          set -euo pipefail
+          [ -n "${RP_TOKEN:-}" ] || { echo "::error::Secret RING_PROMOTER_TOKEN is missing: ${TAG} is built but NOT deploying. Seed it into int at ${RP_BASE}/?app=tenthmatrix-website."; exit 1; }
+          [ -n "${TAG:-}" ] || { echo "::error::build produced no image_tag: nothing to seed"; exit 1; }
+          echo "Seeding tenthmatrix-website int with ${TAG}"
+          # async=true: RP validates synchronously (4xx on a bad ring/version)
+          # and returns a job id; the deploy itself is the run RP dispatches.
+          BODY=$(mktemp)
+          CODE=$(curl -sS --max-time 60 -o "$BODY" -w "%{http_code}" \
+            -X POST "${RP_BASE}/api/apps/tenthmatrix-website/seed?async=true" \
+            -H "Authorization: Bearer ${RP_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "{\"ring\":\"int\",\"version\":\"${TAG}\"}" || echo 000)
+          echo "HTTP $CODE"; cat "$BODY"; echo
+          case "$CODE" in
+            200|202) echo "::notice::Ring Promoter accepted ${TAG} for int: ${RP_BASE}/?app=tenthmatrix-website" ;;
+            000) echo "::error::could not reach ${RP_BASE}: ${TAG} is pushed but NOT deploying. Seed it in the RP UI."; exit 1 ;;
+            *) echo "::error::Ring Promoter rejected the seed (HTTP $CODE). ${TAG} is pushed; seed it by hand once fixed."; exit 1 ;;
+          esac
+
+  # ── Stage 1: INT (Ring Promoter dispatch) ─────────────────────────────
   deploy-int:
     name: "🧪 INT → K3S"
     needs: [resolve-tag, wslproxy]
@@ -218,10 +271,9 @@ jobs:
       always() &&
       needs.resolve-tag.result == 'success' &&
       (needs.wslproxy.result == 'success' || needs.wslproxy.result == 'skipped') &&
-      (github.event_name == 'push' ||
-       (github.event_name == 'workflow_dispatch' &&
-        github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
-        github.event.inputs.TARGET_ENV == 'int'))
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+      github.event.inputs.TARGET_ENV == 'int'
     uses: ./.github/workflows/deploy-k3s.yaml
     with:
       environment: int
@@ -236,18 +288,19 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  # ── PROD API on k3s (auto on push, after INT) ─────────────────────────
+  # ── PROD 1/2: API on k3s (Ring Promoter prod promotion) ───────────────
   # Prod pages are the S3 export; this release serves only what the export
   # can't: the edge sends www.tenthmatrix.com/api/chat here (rule
   # tm-website-chat-api), everything else stays on S3.
   deploy-prod-api:
     name: "🛰️ PROD API → K3S"
-    needs: [resolve-tag, deploy-int]
+    needs: [resolve-tag]
     if: >-
       always() &&
       needs.resolve-tag.result == 'success' &&
-      needs.deploy-int.result == 'success' &&
-      github.event_name == 'push'
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
+      github.event.inputs.TARGET_ENV == 'prod'
     uses: ./.github/workflows/deploy-k3s.yaml
     with:
       environment: prod
@@ -262,7 +315,7 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  # ── Stage 2: TEST (manual) ────────────────────────────────────────────
+  # ── Stage 2: TEST (Ring Promoter dispatch) ────────────────────────────────────────
   deploy-test:
     name: "🔍 TEST → K3S"
     needs: [resolve-tag]
@@ -286,7 +339,7 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  # ── Stage 3: ACC (manual, client sign-off gate) ───────────────────────
+  # ── Stage 3: ACC (Ring Promoter dispatch, client sign-off gate) ───────
   deploy-acc:
     name: "✅ ACC → K3S"
     needs: [resolve-tag]
@@ -310,19 +363,21 @@ jobs:
       DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
 
-  # ── PROD: static export → S3 (tenthmatrix-website) ───────────────────
+  # ── PROD 2/2: static export of the same commit → S3 ───────────────────
   # www.tenthmatrix.com + apex are served by wslproxy (rule
-  # tm-website-s3-proxy) from the bucket's website endpoint, like Workstation's
-  # prod. Runs on every push to main (and on dispatch with TARGET_ENV=prod);
-  # independent of the Docker image, which only int/test/acc use. The job lives
-  # in deploy-s3.yaml, shared with content-refresh.yaml (OpsAPI CMS posts).
+  # tm-website-s3-proxy) from the bucket's website endpoint. Exports the
+  # promoted image tag (= git SHA7) and writes /version.json last, which is
+  # what Ring Promoter's prod ring health-checks. The job lives in
+  # deploy-s3.yaml, shared with content-refresh.yaml (which re-exports the
+  # release prod already runs).
   deploy-s3:
+    needs: [resolve-tag, deploy-prod-api]
     if: >-
-      github.event_name == 'push' ||
-      (github.event_name == 'workflow_dispatch' &&
-       github.event.inputs.DEPLOYMENT_TYPE != 'build' &&
-       github.event.inputs.TARGET_ENV == 'prod')
+      always() &&
+      needs.deploy-prod-api.result == 'success'
     uses: ./.github/workflows/deploy-s3.yaml
+    with:
+      sha: ${{ needs.resolve-tag.outputs.image_tag }}
     secrets: inherit
 
   # ── Cut the release tag LAST (only after the image is pushed) ─────────
